@@ -54,3 +54,7 @@ To run the example, use the following commands:
 ```bash
 ./bin_examples/application
 ```
+
+# Screenshots
+
+![Application Example](./images/ApplicationWithSpriteRenderer.png)
