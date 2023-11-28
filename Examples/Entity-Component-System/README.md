@@ -41,7 +41,7 @@ class GravitySystem : public EntitySystem {
         virtual void Update(World *world, Timestep ts) override
         {
             world->ForEach<Transform>([&](Entity *entity, ComponentHandle<Transform> transform) {
-                transform->Translation.y += _GravityAmount * ts;
+                transform.Get().Translation.y += _GravityAmount * ts;
             });
         }
 
@@ -65,7 +65,7 @@ The downside is that it will not directly expose components as arguments, but yo
 ```cpp
 for (Entity *entity : world->ForEach<Transform>()) {
     entity->CallFunctionWithComponents<Transform>([&](ComponentHandle<Transform> transform) {
-	    transform->Translation.y += _GravityAmount * ts;
+	    transform.Get().Translation.y += _GravityAmount * ts;
 	});
 }
 ```
@@ -76,7 +76,7 @@ Alternatively, you may retrieve a single component at a time with `Entity::GetCo
 ```cpp
 ComponentHandle<Transform> transform = entity->GetComponent<Transform>();
 
-transform->Translation.y += _GravityAmount * ts; // this will crash if there is no position component on the entity
+transform.Get().Translation.y += _GravityAmount * ts; // this will crash if there is no position component on the entity
 ```
 
 `CallFunctionWithComponents<Components>()` only runs the given function if the entity has the listed components.
@@ -143,7 +143,7 @@ ComponentHandle<Transform> transform = entity->GetComponent<Transform>();
 
 // ComponentHandle::operator bool() will return false if the handle is invalid
 if (transform /* or transform.IsValid() */)
-    std::cout << "My position is " << transform->Translation.x << ", " << transform->Translation.y << std::endl;
+    std::cout << "My position is " << transform.Get().Translation.x << ", " << transform.Get().Translation.y << std::endl;
 else
     std::cout << "I don't have a Transform component !" << std::endl;
 ```
@@ -211,7 +211,7 @@ class FortniteZone : public EntitySystem, public EventSubscriber<TakeDamageEvent
         virtual void Update(World *world, Timestep ts) override
         {
             world->ForEach<Health>([&](Entity *entity, ComponentHandle<Health> health) {
-                health->CurrentHealth -= _DamagePerSecond * ts;
+                health.Get().CurrentHealth -= _DamagePerSecond * ts;
             });
         }
 

@@ -7,7 +7,7 @@
 
 // External includes
 #define STB_IMAGE_IMPLEMENTATION
-    #include <stb_image.h>
+    #include "stb_image.h"
 
 // OpenGL
 #include "OpenGLTexture.hpp"
@@ -82,8 +82,8 @@ namespace Exodia {
             // Create OpenGL texture and set parameters
             glCreateTextures(GL_TEXTURE_2D, 1, &_RendererID);
             glTextureStorage2D(_RendererID, 1, internalFormat, _Width, _Height);
-            glTextureParameteri(_RendererID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-            glTextureParameteri(_RendererID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+            glTextureParameteri(_RendererID, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+            glTextureParameteri(_RendererID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
             glTextureParameteri(_RendererID, GL_TEXTURE_WRAP_S, GL_REPEAT);
             glTextureParameteri(_RendererID, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
