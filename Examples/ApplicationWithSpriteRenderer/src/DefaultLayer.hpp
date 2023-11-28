@@ -27,8 +27,9 @@ namespace Exodia {
         /////////////
         public:
 
+            void OnAttach()            override;
+            void OnDetach()            override;
             void OnUpdate(Timestep ts) override;
-            void OnImGUIRender()       override;
             void OnEvent(Event &event) override;
 
         ////////////////
@@ -36,7 +37,7 @@ namespace Exodia {
         ////////////////
         private:
             OrthographicCameraController _CameraController;
-            glm::vec4                    _SquareColor;
+            World                       *_World;
     };
 };
 
