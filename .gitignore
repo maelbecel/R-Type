@@ -30,3 +30,16 @@
 *.exe
 *.out
 *.app
+
+# Build
+build/
+lib/
+bin_examples/
+
+# Ignore all logfiles and tempfiles.
+*.log
+*.json
+
+# Binaries for programs and plugins
+r-type_client
+r-type_server

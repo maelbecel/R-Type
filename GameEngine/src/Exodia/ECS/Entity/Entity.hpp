@@ -1,0 +1,135 @@
+/*
+** EPITECH PROJECT, 2023
+** ECS
+** File description:
+** Entity
+*/
+
+#ifndef ENTITY_HPP_
+    #define ENTITY_HPP_
+
+    // Exodia ECS Component includes
+    #include "Component/ComponentHandle.hpp"
+
+    // Exodia ECS Internal includes
+    #include "Interface/IComponentContainer.hpp"
+
+    // Exodia ECS Utils includes
+    #include "Utils/TypeIndex.hpp"
+
+    // Exodia Utils includes
+    #include "Utils/CrossPlatform.hpp"
+
+    // External includes
+    #include <unordered_map>
+    #include <functional>
+    #include <cstdint>
+
+namespace Exodia {
+
+    class World;
+
+    class EXODIA_API Entity {
+
+        /////////////
+        // Defines //
+        /////////////
+        public:
+
+            const static uint64_t InvalidEntityID = 0;
+
+        //////////////////////////////
+        // Constructor & Destructor //
+        //////////////////////////////
+        public:
+
+            Entity(World *world, uint64_t id);
+
+            ~Entity();
+
+        /////////////
+        // Methods //
+        /////////////
+        public:
+
+            template<typename Component, typename ...Args>
+            ComponentHandle<Component> AddComponent(Args && ...args);
+
+            template<typename Component>
+            bool RemoveComponent()
+            {
+                auto found = _Components.find(GetTypeIndex<Component>());
+
+                if (found != _Components.end()) {
+                    found->second->Removed(this);
+                    found->second->Destroy(_World);
+
+                    _Components.erase(found);
+
+                    return true;
+                }
+                return false;
+            }
+
+            void RemoveAllComponents();
+
+            template<typename ...Components>
+            bool CallFunctionWithComponents(typename std::common_type<std::function<void(ComponentHandle<Components>...)>>::type view)
+            {
+                if (!HasComponent<Components ...>())
+                    return false;
+
+                view(GetComponent<Components>()...);
+                return true;
+            }
+
+        ///////////////////////
+        // Getters & Setters //
+        ///////////////////////
+        public:
+
+            World *GetWorld() const;
+
+            template<typename Component>
+            bool HasComponent() const
+            {
+                TypeIndex index = GetTypeIndex<Component>();
+
+                return _Components.find(index) != _Components.end();
+            }
+
+            template<typename Required, typename Additional, typename... Remaining>
+            bool HasComponent() const
+            {
+                return HasComponent<Required>() && HasComponent<Additional, Remaining...>();
+            }
+
+            template<typename Component>
+            ComponentHandle<Component> GetComponent();
+
+            uint64_t GetEntityID() const;
+
+            bool IsPendingDestroy() const;
+
+            void SetPendingDestroy(bool pendingDestroy);
+
+        ////////////////
+        // Attributes //
+        ////////////////
+        private:
+
+            World   *_World;
+            uint64_t _ID;
+            bool     _PendingDestroy;
+
+            std::unordered_map<TypeIndex, IComponentContainer *> _Components;
+
+        /////////////
+        // Friends //
+        /////////////
+
+        friend class World;
+    };
+};
+
+#endif /* !ENTITY_HPP_ */
