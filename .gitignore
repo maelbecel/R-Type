@@ -43,3 +43,6 @@ bin_examples/
 # Binaries for programs and plugins
 r-type_client
 r-type_server
+
+# ImGui
+imgui.ini
