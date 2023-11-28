@@ -45,6 +45,7 @@ target_link_libraries(r-type_client GameEngine glad glfw glm imgui)
 
 target_include_directories(r-type_client PRIVATE ${glad_INCLUDE_DIRS})
 target_include_directories(r-type_client PRIVATE ${CMAKE_BINARY_DIR}/_deps/opengl-src/GLAD/include)
+target_include_directories(r-type_client PRIVATE ${CMAKE_BINARY_DIR}/_deps/opengl-src/stb_image)
 target_include_directories(r-type_client PRIVATE ${CMAKE_BINARY_DIR}/_deps/glfw-src/include)
 target_include_directories(r-type_client PRIVATE ${CMAKE_BINARY_DIR}/_deps/glm-src)
 target_include_directories(r-type_client PRIVATE ${CMAKE_BINARY_DIR}/_deps/imgui-src)
