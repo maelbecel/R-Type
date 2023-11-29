@@ -14,6 +14,12 @@
     // Exodia Renderer
     #include "Renderer/Texture/SubTexture2D.hpp"
 
+    // Exodia Scene
+    #include "Scene/Camera/SceneCamera.hpp"
+
+    // Exodia Script
+    #include "Script/ScriptableEntity.hpp"
+
     // GLM includes
     #include <glm/glm.hpp>
     #include <glm/gtc/matrix_transform.hpp>
@@ -82,6 +88,28 @@ namespace Exodia {
 
         CameraComponent(const CameraComponent &) = default;
         CameraComponent() : Primary(true), FixedAspectRatio(false) {};
+    };
+
+    struct ScriptComponent {
+        ScriptableEntity *Instance = nullptr;
+
+        ScriptableEntity *(*InstantiateScript)();
+        void              (*DestroyScript)(ScriptComponent *);
+
+        template<typename ScriptClass>
+        void Bind()
+        {
+            InstantiateScript = []() {
+                return static_cast<ScriptableEntity *>(new ScriptClass());
+            };
+
+            DestroyScript = [](ScriptComponent *script) {
+                if (script->Instance != nullptr) {
+                    delete script->Instance;
+                    script->Instance = nullptr;
+                }
+            };
+        }
     };
 };
 

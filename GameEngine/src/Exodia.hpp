@@ -41,6 +41,10 @@
 
     #include "Exodia/Scene/Scene.hpp"
 
+    // -- Exodia Script --------------------------------------------------------
+
+    #include "Exodia/Script/ScriptableEntity.hpp"
+
     // -- Exodia Debug ---------------------------------------------------------
 
     #include "Exodia/Debug/Profiling.hpp"
