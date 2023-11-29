@@ -17,8 +17,8 @@ namespace Exodia {
         //////////////////////////////
         public:
 
-            ViewportImgui() = default;
-            ~ViewportImgui() = default;
+            ViewportImGui() = default;
+            ~ViewportImGui() = default;
 
         /////////////
         // Methods //

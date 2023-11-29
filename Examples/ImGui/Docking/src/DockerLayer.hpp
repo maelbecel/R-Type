@@ -43,7 +43,7 @@ namespace Exodia {
 
             Ref<Framebuffer>             _Framebuffer;
             Ref<StatImGui>               _Stats;
-            Ref<ViewportImgui>           _Viewport;
+            Ref<ViewportImGui>           _Viewport;
     };
 };
 

@@ -247,6 +247,11 @@ void OnImGuiRender(Ref<Framebuffer> framebuffer)
 Here is the result :
 ![Viewport](./img/viewport.png)
 
+## Go further
+
+If you want to go further, do not hesitate to look the imgui documentation :
+- [ImGui Docking](https://github.com/ocornut/imgui/tree/docking)
+
 # Running the example
 
 To run the example, you can use the following commands:
