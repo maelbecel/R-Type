@@ -37,6 +37,10 @@
 
     #include "Exodia/Renderer/Render.hpp"
 
+    // -- Exodia Scene ---------------------------------------------------------
+
+    #include "Exodia/Scene/Scene.hpp"
+
     // -- Exodia Debug ---------------------------------------------------------
 
     #include "Exodia/Debug/Profiling.hpp"

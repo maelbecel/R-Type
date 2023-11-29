@@ -74,6 +74,15 @@ namespace Exodia {
         CircleRendererComponent(const CircleRendererComponent &) = default;
         CircleRendererComponent(const glm::vec4 &color = glm::vec4(1.0f)) : Color(color), Thickness(1.0f), Fade(0.005f) {};
     };
+
+    struct CameraComponent {
+        SceneCamera Camera;
+        bool        Primary;
+        bool        FixedAspectRatio;
+
+        CameraComponent(const CameraComponent &) = default;
+        CameraComponent() : Primary(true), FixedAspectRatio(false) {};
+    };
 };
 
 #endif /* !COMPONENTS_HPP_ */

@@ -55,6 +55,10 @@ set(SOURCES_GAME_ENGINE
     src/Exodia/ECS/Entity/Entity.cpp
     src/Exodia/ECS/World/World.cpp
 
+        # -- Scene source files
+
+    src/Exodia/Scene/Camera/SceneCamera.cpp
+
         # -- Exodia ImGui source files
 
     src/Exodia/ImGui/ImGuiLayer.cpp
