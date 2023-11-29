@@ -1,6 +1,6 @@
 Exodia
 Request for comments: 1
-29 november 2022
+29 november 2023
 Author: Axel Rohee
 
 
@@ -53,7 +53,7 @@ Each command is prefixed with a header define below representing the command. Th
 following commands command inferior to 0x80 are server commands and superior
 to 0x80 are client commands.
 Header
-    Content: [Command][Timestamp]
+    Content: [Command][Timestamp][Id]
 
 Special commands
     0x00 - Send number of packets received and send since last second
@@ -66,10 +66,12 @@ ServerCommand
     0x0b - Send list of entities with their components
         Content: [Entity][Component][Content_of_a_component]
     0x0c - Send list of deleted entities
-        Content: [Entity]
+        Content: [Id][Entity]
     0x0d - Send list of deleted components on entities
-        Content: [Entity][Component][Content_of_a_component]
+        Content: [Id][Entity][Component][Content_of_a_component]
 ClientCommand
+    0x80 - Acknowledge
+        Content: [Id]
     0x81 - Connect
     0x82 - Disconnect
     0x8a - Send events
