@@ -1,0 +1,97 @@
+Exodia
+Request for comments: 1
+29 november 2022
+Author: Axel Rohee
+
+
+        (EOUDP) - Exodia On UDP
+
+
+Introduction
+------------
+
+Abstract
+
+EOUDP (Exodia On UDP)is a simple protocol for sending and receiving data over UDP.
+It is designed to be simple and easy to use. It is also designed to be fast and efficient.
+It is designed to be used to transmit ECS data over UDP. It take in account the
+unreliability of UDP and the fact that UDP packet can be lost, duplicated or arrive
+out of order. It also take in account the (MTU) Maximum Transmission Unit of the
+network (1500 bytes).
+
+
+Terminology
+
+World - A world is a collection of entities and systems.
+Entity - An entity is a unique identifier
+Component - A component is a piece of data that is attached to an entity.
+System - A system is a updater of entities with certain components.
+Timestamp - A float representing the time in seconds.
+
+
+Representation
+
+EOUDP is designed to be fast and efficient as so it will use binary data.
+In this section we will define the binary representation of the data.
+Command - 8 bits (1 byte) bitfield representing the command.
+Int - 32 bits (4 bytes) signed integer.
+Entity - 64 bits (8 bytes) unsigned integer.
+Component - Null terminated string prefixed with a 32 bit (4 bytes) unsigned
+    integer representing the length of the string.
+Content_of_a_component - 32 bit (4 bytes) unsigned integer representing the
+    length of the content followed by the content.
+System - Null terminated string prefixed with a 32 bit (4 bytes) unsigned
+    integer representing the length of the string.
+Timestamp - 32 bit (4 bytes) float representing the time in seconds.
+Event - 32 bit (4 bytes) unsigned integer representing the event type.
+Id - 64 bit (8 bytes) unsigned integer representing the id of the command
+    use for implementing acknoledgement.
+
+Commands
+
+Each command is prefixed with a header define below representing the command. There are the
+following commands command inferior to 0x80 are server commands and superior
+to 0x80 are client commands.
+Header
+    Content: [Command][Timestamp]
+
+Special commands
+    0x00 - Send number of packets received and send since last second
+        Content: [Id][Int][Int]
+ServerCommand
+    0x01 - Accept client connection
+    0x02 - Reject client connection
+    0x0a - Send list of system to load
+        Content: [System][System]...
+    0x0b - Send list of entities with their components
+        Content: [Entity][Component][Content_of_a_component]
+    0x0c - Send list of deleted entities
+        Content: [Entity]
+    0x0d - Send list of deleted components on entities
+        Content: [Entity][Component][Content_of_a_component]
+ClientCommand
+    0x81 - Connect
+    0x82 - Disconnect
+    0x8a - Send events
+        Content: [Event]
+
+
+Usage
+
+The protocol is designed to be used in a certain way.
+this section will show an example of how to use the protocol.
+
+Initiation:
+    Client -> [0x81][Timestamp]
+    Server -> [0x01][Timestamp]
+    Server -> [0x0a][System][System]...
+    Server -> [0x0b][Entity][Component][Content_of_a_component]...
+loop:
+    Client -> [0x8a][Event]
+    Server -> [0x0b][Entity][Component][Content_of_a_component]...
+    Server -> [0x0c][Entity]
+    Server -> [0x0d][Entity][Component][Content_of_a_component]...
+End:
+    one or the other:
+        Client -> [0x82][Timestamp]
+        Server -> [0x02][Timestamp]
