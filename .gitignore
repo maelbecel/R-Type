@@ -34,7 +34,7 @@
 # Build
 build/
 lib/
-bin_examples/
+bin*
 
 # Ignore all logfiles and tempfiles.
 *.log
