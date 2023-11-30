@@ -48,6 +48,8 @@ Timestamp - 32 bit (4 bytes) float representing the time in seconds.
 Event - 32 bit (4 bytes) unsigned integer representing the event type.
 Id - 64 bit (8 bytes) unsigned integer representing the id of the command
     use for implementing acknoledgement.
+GameEvents - - Null terminated string prefixed with a 32 bit (4 bytes) unsigned
+    integer representing the length of the string.
 
 
 Commands
@@ -65,16 +67,18 @@ ServerCommand
     0x01 - Accept client connection
     0x02 - Reject client connection
     0x0a - Send list of system to load
-        Content: [System][System]...
+        Content: [Id][System][System]...
     0x0b - Send list of entities with their components
-        Content: [Entity][Component][Content_of_a_component]
-    0x0c - Send list of deleted entities
-        Content: [Id][Entity]
-    0x0d - Send list of deleted components on entities
         Content: [Id][Entity][Component][Content_of_a_component]
-    0x0e - Acknowledge
+    0x0c - Send list of GameEvents
+        Content: [Id][GameEvents][GameEvents]...
+    0x0d - Send list of deleted entities
+        Content: [Id][Entity]
+    0x0e - Send list of deleted components on entities
+        Content: [Id][Entity][Component][Content_of_a_component]
+    0x10 - Acknowledge
         Content: [Id]
-    0x0f - Send events
+    0x11 - Send events
         Content: [Id][Event]
 ClientCommand
     0x80 - Acknowledge
