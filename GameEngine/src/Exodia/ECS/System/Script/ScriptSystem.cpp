@@ -5,7 +5,11 @@
 ** ScriptSystem
 */
 
+// Exodia ECS System includes
 #include "ScriptSystem.hpp"
+
+// Exodia Debug includes
+#include "Debug/Profiling.hpp"
 
 namespace Exodia {
 
@@ -15,6 +19,8 @@ namespace Exodia {
 
     void ScriptSystem::Update(World *world, Timestep ts)
     {
+        EXODIA_PROFILE_FUNCTION();
+
         world->ForEach<ScriptComponent>([&](Entity *entity, ComponentHandle<ScriptComponent> script) {
             auto &sc = script.Get();
         

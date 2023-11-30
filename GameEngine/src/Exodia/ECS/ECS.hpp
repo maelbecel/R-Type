@@ -35,6 +35,7 @@
     #include "System/Collision/CollisionDetection2DSystem.hpp"
     #include "System/Script/ScriptSystem.hpp"
     #include "System/Physics/GravitySystem.hpp"
+    #include "System/Physics/MovingSystem.hpp"
 
     // -- Exodia ECS Interface -------------------------------------------------
 

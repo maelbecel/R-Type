@@ -5,7 +5,11 @@
 ** GravitySystem
 */
 
+// Exodia ECS System includes
 #include "GravitySystem.hpp"
+
+// Exodia Debug includes
+#include "Debug/Profiling.hpp"
 
 namespace Exodia {
 
@@ -21,6 +25,8 @@ namespace Exodia {
 
     void GravitySystem::Update(World *world, Timestep ts)
     {
+        EXODIA_PROFILE_FUNCTION();
+
         world->ForEach<RigidBody2DComponent>([&](Entity *entity, ComponentHandle<RigidBody2DComponent> rigidBody) {
             if (rigidBody.Get().Type == RigidBody2DComponent::BodyType::Static)
                 return;

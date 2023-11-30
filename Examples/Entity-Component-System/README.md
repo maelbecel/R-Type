@@ -244,6 +244,7 @@ There are a handful of built-in events. Here is the list:
 - OnEntityDestroyed  - called when an entity is being destroyed (including when a world is beind deleted).
 - OnComponentAdded   - called when a component is added to an entity. This might mean the component is new to the entity, or there's just a new assignment of the component to that entity overwriting an old one.
 - OnComponentRemoved - called when a component is removed from an entity. This happens upon manual removal `Entity::RemoveComponent()` and `Entity::RemoveAllComponents()` or upon entity destruction (which can also happen as a result of the world being destroyed).
+- OnCollisionEnter  - called when an entity collides with another entity. This event is emitted by the CollisionSystem.
 
 # Running the example
 
