@@ -83,3 +83,11 @@ if (IMPORT_IMGUI)
 
     target_include_directories(imgui PUBLIC ${imgui_SOURCE_DIR} ${imgui_SOURCE_DIR}/backends)
 endif ()
+
+FetchContent_Declare(
+  asio
+  GIT_REPOSITORY https://github.com/chriskohlhoff/asio.git
+  GIT_TAG asio-1-18-0
+)
+
+FetchContent_MakeAvailable(asio)
