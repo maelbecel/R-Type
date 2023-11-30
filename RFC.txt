@@ -63,33 +63,30 @@ Header
 Special commands
     0x00 - Send number of packets received and send since last second
         Content: [Int][Int]
-ServerCommand
-    0x01 - Accept client connection
-    0x02 - Reject client connection
-    0x0a - Send list of system to load
-        Content: [System][System]...
-    0x0b - Send list of entities with their components
-        Content: [Entity][Component][Content_of_a_component]
-    0x0c - Send list of GameEvents
-        Content: [GameEvents][GameEvents]...
-    0x0d - Send list of deleted entities
-        Content: [Entity]
-    0x0e - Send list of deleted components on entities
-        Content: [Entity][Component][Content_of_a_component]
-    0x10 - Acknowledge
+    0x01 - Acknowledge
         Content: [Id]
+ServerCommand
+    0x02 - Accept client connection
+    0x03 - Reject client connection
+    0x0b - Send list of system to load MUST get an acknowledge
+        Content: [System][System]...
+    0x0c - Send list of entities with their components MUST get an acknowledge
+        Content: [Entity][Component][Content_of_a_component]
+    0x0d - Send list of GameEvents MUST get an acknowledge
+        Content: [GameEvents][GameEvents]...
+    0x0e - Send list of deleted entities MUST get an acknowledge
+        Content: [Entity]
+    0x10 - Send list of deleted components on entities MUST get an acknowledge
+        Content: [Entity][Component][Content_of_a_component]
     0x11 - Send events
         Content: [Event]
 ClientCommand
-    0x80 - Acknowledge
-        Content: [Id]
-    0x81 - Connect
+    0x81 - Connect MUST get an acknowledge
     0x82 - Disconnect
-        Content: [Id]
     0x8a - Send events
         Content: [Event]
-    0x8b - Send important events
-        Content: [Id][Event]
+    0x8b - Send important events MUST get an acknowledge
+        Content: [Event]
 
 Usage
 
@@ -98,22 +95,22 @@ this section will show an example of how to use the protocol.
 
 Initiation:events
     Client -> [0x81][Timestamp][Id]
-    Server -> [0x01][Timestamp][Id]
-    Server -> [0x0a][Timestamp][Id][System][System]...
-    Client -> [0x80][Timestamp][Id][Id]
-    Server -> [0x0b][Timestamp][Id][GameEvents][GameEvents]...
-    Client -> [0x80][Timestamp][Id][Id]
-    Server -> [0x0b][Timestamp][Id][Entity][Component][Content_of_a_component]...
-    Client -> [0x80][Timestamp][Id][Id]
+    Server -> [0x02][Timestamp][Id]
+    Server -> [0x0b][Timestamp][Id][System][System]...
+    Client -> [0x01][Timestamp][Id][Id]
+    Server -> [0x0c][Timestamp][Id][GameEvents][GameEvents]...
+    Client -> [0x01][Timestamp][Id][Id]
+    Server -> [0x0c][Timestamp][Id][Entity][Component][Content_of_a_component]...
+    Client -> [0x01][Timestamp][Id][Id]
 loop:
     Client -> [0x8a][Timestamp][Id][KeyEvent]
-    Server -> [0x0b][Timestamp][Id][Id][Entity][Component][Content_of_a_component]...
-    Client -> [0x80][Timestamp][Id][Id]
-    Server -> [0x0d][Timestamp][Id][Id][Entity]...
-    Client -> [0x80][Timestamp][Id][Id]
-    Server -> [0x0b][Timestamp][Id][Entity][Component][Content_of_a_component]...
-    Client -> [0x80][Timestamp][Id][Id]
+    Server -> [0x0c][Timestamp][Id][Id][Entity][Component][Content_of_a_component]...
+    Client -> [0x01][Timestamp][Id][Id]
+    Server -> [0x0e][Timestamp][Id][Id][Entity]...
+    Client -> [0x01][Timestamp][Id][Id]
+    Server -> [0x0c][Timestamp][Id][Entity][Component][Content_of_a_component]...
+    Client -> [0x01][Timestamp][Id][Id]
 End:
     one or the other:
-        Client -> [0x82][Timestamp][Id][Id] and Server -> [0x10][Timestamp][Id][Id]
-        Server -> [0x02][Timestamp][Id]
+        Client -> [0x82][Timestamp][Id][Id] and Server -> [0x11][Timestamp][Id][Id]
+        Server -> [0x03][Timestamp][Id]
