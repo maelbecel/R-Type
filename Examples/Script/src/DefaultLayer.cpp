@@ -40,6 +40,8 @@ namespace Exodia {
         Entity *hello = _World->CreateEntity();
 
         hello->AddComponent<ScriptComponent>().Get().Bind<ExampleScript>();
+
+        _World->RegisterSystem(new ScriptSystem());
     }
 
     void DefaultLayer::OnDetach()
@@ -52,7 +54,7 @@ namespace Exodia {
         // Update
         _CameraController.OnUpdate(ts);
 
-        _World->ForEach<ScriptComponent>([&](Entity *entity, ComponentHandle<ScriptComponent> script)
+        /*_World->ForEach<ScriptComponent>([&](Entity *entity, ComponentHandle<ScriptComponent> script)
         {
             auto &sc = script.Get();
         
@@ -63,7 +65,9 @@ namespace Exodia {
             }
 
             sc.Instance->OnUpdate(ts);
-        });
+        });*/
+
+        _World->Update(ts);
 
         // Renderer Prep
         Exodia::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });

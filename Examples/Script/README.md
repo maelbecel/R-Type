@@ -124,8 +124,17 @@ _World->ForEach<ScriptComponent>([&](Entity *entity, ComponentHandle<ScriptCompo
 });
 ```
 
-Now have fun with scripting !
-Don't forget to ask to `PharaEthan` for new features on the scripting API.
+Note this code is a system that run the scriptable entity, you can create your own system.
+Currently this system already exist in the game engine. It's the `ScriptSystem`.
+If you want to use it, you have to add it to the world.
+
+```cpp
+_World->RegisterSystem(new ScriptSystem());
+
+_World->Update(ts);
+```
+
+If you need more information about how Entity Component System work, you can read the ECS guide.
 
 ## Running the example
 

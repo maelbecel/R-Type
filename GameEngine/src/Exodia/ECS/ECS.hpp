@@ -32,7 +32,8 @@
 
     // -- Exodia ECS System ----------------------------------------------------
 
-    #include "System/CollisionDetection2DSystem.hpp"
+    #include "System/Collision/CollisionDetection2DSystem.hpp"
+    #include "System/Script/ScriptSystem.hpp"
 
     // -- Exodia ECS Interface -------------------------------------------------
 
