@@ -53,6 +53,7 @@ target_include_directories(r-type_client PRIVATE ${CMAKE_BINARY_DIR}/_deps/openg
 target_include_directories(r-type_client PRIVATE ${CMAKE_BINARY_DIR}/_deps/glfw-src/include)
 target_include_directories(r-type_client PRIVATE ${CMAKE_BINARY_DIR}/_deps/glm-src)
 target_include_directories(r-type_client PRIVATE ${CMAKE_BINARY_DIR}/_deps/imgui-src)
+target_include_directories(r-type_client PRIVATE ${CMAKE_BINARY_DIR}/_deps/asio-src/asio/include)
 
 set_target_properties(r-type_client PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../
