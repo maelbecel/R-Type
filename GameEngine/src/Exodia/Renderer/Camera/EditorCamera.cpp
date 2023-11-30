@@ -37,7 +37,7 @@ namespace Exodia {
     {
         (void)ts;
 
-        if (Input::IsKeyPressed(EXODIA_KEY_LEFT_ALT)) {
+        if (Input::IsKeyPressed(Exodia::Key::LEFTALT)) {
             const glm::vec2 &mouse{
                 Input::GetMouseX(),
                 Input::GetMouseY()
@@ -47,13 +47,12 @@ namespace Exodia {
 
             _InitialMousePosition = mouse;
 
-            (void)delta;
-            //IsMouseButtonPressed
-            if (Input::IsMouseButtonPressed(EXODIA_MOUSE_BUTTON_MIDDLE) || Input::IsKeyPressed(EXODIA_KEY_V))
+            //(void)delta;
+            if (Input::IsMouseButtonPressed(Exodia::Mouse::BUTTONRIGHT) || Input::IsKeyPressed(Exodia::Key::V))
                 MousePan(delta);
-            else if (Input::IsMouseButtonPressed(EXODIA_MOUSE_BUTTON_LEFT) || Input::IsKeyPressed(EXODIA_KEY_C))
+            else if (Input::IsMouseButtonPressed(Exodia::Mouse::BUTTONLEFT) || Input::IsKeyPressed(Exodia::Key::C))
                 MouseRotate(delta);
-            else if (Input::IsMouseButtonPressed(EXODIA_MOUSE_BUTTON_RIGHT) || Input::IsKeyPressed(EXODIA_KEY_B))
+            else if (Input::IsMouseButtonPressed(Exodia::Mouse::BUTTONRIGHT) || Input::IsKeyPressed(Exodia::Key::B))
                 MouseZoom(delta.y);
         }
         UpdateView();
