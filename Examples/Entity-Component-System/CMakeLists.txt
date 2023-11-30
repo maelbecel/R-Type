@@ -38,6 +38,7 @@ target_link_libraries(ecs GameEngine glad glfw glm imgui)
 
 target_include_directories(ecs PRIVATE ${glad_INCLUDE_DIRS})
 target_include_directories(ecs PRIVATE ${CMAKE_BINARY_DIR}/_deps/opengl-src/GLAD/include)
+target_include_directories(ecs PRIVATE ${CMAKE_BINARY_DIR}/_deps/opengl-src/stb_image)
 target_include_directories(ecs PRIVATE ${CMAKE_BINARY_DIR}/_deps/glfw-src/include)
 target_include_directories(ecs PRIVATE ${CMAKE_BINARY_DIR}/_deps/glm-src)
 target_include_directories(ecs PRIVATE ${CMAKE_BINARY_DIR}/_deps/imgui-src)

@@ -46,7 +46,7 @@ namespace Exodia {
             virtual void Update(World *world, Timestep ts) override
             {
                 world->ForEach<Health>([&](UNUSED Entity *entity, ComponentHandle<Health> health) {
-                    health->CurrentHealth -= _DamagePerSecond * ts;
+                    health.Get().CurrentHealth -= _DamagePerSecond * ts;
                 });
             }
 

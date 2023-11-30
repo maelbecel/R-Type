@@ -4,3 +4,4 @@ project(examples)
 
 add_subdirectory(Application)
 add_subdirectory(Entity-Component-System)
+add_subdirectory(ApplicationWithSpriteRenderer)

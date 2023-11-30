@@ -38,7 +38,7 @@ int main()
     transform = entity->GetComponent<Transform>();
 
     if (transform /* or transform.IsValid() */)
-        std::cout << "My position is " << transform->Translation.x << ", " << transform->Translation.y << std::endl;
+        std::cout << "My position is " << transform.Get().Translation.x << ", " << transform.Get().Translation.y << std::endl;
     else
         std::cout << "I don't have a Transform component !" << std::endl;
 
@@ -51,7 +51,7 @@ int main()
     ComponentHandle<Health> health = entity->GetComponent<Health>();
 
     if (health /* or health.IsValid() */)
-        std::cout << "My health is " << health->CurrentHealth << std::endl;
+        std::cout << "My health is " << health.Get().CurrentHealth << std::endl;
     else
         std::cout << "I don't have a Health component !" << std::endl;
 
