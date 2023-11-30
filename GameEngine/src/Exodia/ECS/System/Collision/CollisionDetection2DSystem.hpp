@@ -28,6 +28,15 @@ namespace Exodia {
 
     class EXODIA_API CollisionDetection2DSystem : public EntitySystem {
 
+        ////////////
+        // Struct //
+        ////////////
+        public:
+            struct BoundingBox {
+                glm::vec2 min;
+                glm::vec2 max;
+            };
+
         ///////////////////////////////
         // Constructors & Destructor //
         ///////////////////////////////
@@ -47,6 +56,9 @@ namespace Exodia {
             bool CheckCollision(ComponentHandle<BoxCollider2DComponent> collider1, ComponentHandle<TransformComponent> transform1, ComponentHandle<BoxCollider2DComponent> collider2, ComponentHandle<TransformComponent> transform2);
             bool CheckCollision(ComponentHandle<BoxCollider2DComponent> collider1, ComponentHandle<TransformComponent> transform1, ComponentHandle<CircleCollider2DComponent> collider2, ComponentHandle<TransformComponent> transform2);
             bool CheckCollision(ComponentHandle<CircleCollider2DComponent> collider1, ComponentHandle<TransformComponent> transform1, ComponentHandle<CircleCollider2DComponent> collider2, ComponentHandle<TransformComponent> transform2);
+
+            BoundingBox CalculateTransformedBoundingBox(const BoxCollider2DComponent &collider, const TransformComponent &transform);
+            bool IntersectBoundingBoxes(const BoundingBox &box1, const BoundingBox &box2);
 
             void EmitCollisionEvent(Entity *entityA, Entity *entityB);
     };
