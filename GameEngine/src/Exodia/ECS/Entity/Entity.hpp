@@ -113,6 +113,14 @@ namespace Exodia {
 
             void SetPendingDestroy(bool pendingDestroy);
 
+        /////////////////
+        // Comparators //
+        /////////////////
+        public:
+
+            bool operator==(const Entity &other) const;
+            bool operator!=(const Entity &other) const;
+
         ////////////////
         // Attributes //
         ////////////////
