@@ -127,6 +127,21 @@ namespace Exodia {
         CircleCollider2DComponent(const CircleCollider2DComponent &) = default;
         CircleCollider2DComponent() : Offset(glm::vec2(0.0f)), Radius(0.5f) {};
     };
+
+    struct RigidBody2DComponent {
+        enum class BodyType {
+            Static,
+            Dynamic
+        };
+
+        BodyType Type;
+        glm::vec2 Velocity;
+        float GravityScale;
+        float Mass;
+
+        RigidBody2DComponent(const RigidBody2DComponent &) = default;
+        RigidBody2DComponent() : Type(BodyType::Static), Velocity(glm::vec2(0.0f)), GravityScale(1.0f), Mass(1.0f) {};
+    };
 };
 
 #endif /* !COMPONENTS_HPP_ */
