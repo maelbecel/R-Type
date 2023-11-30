@@ -57,4 +57,19 @@ namespace Exodia {
     {
         _PendingDestroy = pendingDestroy;
     }
+
+    /////////////////
+    // Comparators //
+    /////////////////
+
+    bool Entity::operator==(const Entity &other) const
+    {
+        return _ID == other._ID;
+    }
+
+    bool Entity::operator!=(const Entity &other) const
+    {
+        return !(other == *this);
+    }
+    
 };

@@ -14,6 +14,12 @@
     // Exodia Renderer
     #include "Renderer/Texture/SubTexture2D.hpp"
 
+    // Exodia Scene
+    #include "Scene/Camera/SceneCamera.hpp"
+
+    // Exodia Script
+    #include "Script/ScriptableEntity.hpp"
+
     // GLM includes
     #include <glm/glm.hpp>
     #include <glm/gtc/matrix_transform.hpp>
@@ -74,7 +80,68 @@ namespace Exodia {
         CircleRendererComponent(const CircleRendererComponent &) = default;
         CircleRendererComponent(const glm::vec4 &color = glm::vec4(1.0f)) : Color(color), Thickness(1.0f), Fade(0.005f) {};
     };
+
+    struct CameraComponent {
+        SceneCamera Camera;
+        bool        Primary;
+        bool        FixedAspectRatio;
+
+        CameraComponent(const CameraComponent &) = default;
+        CameraComponent() : Primary(true), FixedAspectRatio(false) {};
+    };
+
+    struct ScriptComponent {
+        ScriptableEntity *Instance = nullptr;
+
+        ScriptableEntity *(*InstantiateScript)();
+        void              (*DestroyScript)(ScriptComponent *);
+
+        template<typename ScriptClass>
+        void Bind()
+        {
+            InstantiateScript = []() {
+                return static_cast<ScriptableEntity *>(new ScriptClass());
+            };
+
+            DestroyScript = [](ScriptComponent *script) {
+                if (script->Instance != nullptr) {
+                    delete script->Instance;
+                    script->Instance = nullptr;
+                }
+            };
+        }
+    };
+
+    struct BoxCollider2DComponent {
+        glm::vec2 Offset;
+        glm::vec2 Size;
+
+        BoxCollider2DComponent(const BoxCollider2DComponent &) = default;
+        BoxCollider2DComponent() : Offset(glm::vec2(0.0f)), Size(glm::vec2(0.5f)) {};
+    };
+
+    struct CircleCollider2DComponent {
+        glm::vec2 Offset;
+        float     Radius;
+
+        CircleCollider2DComponent(const CircleCollider2DComponent &) = default;
+        CircleCollider2DComponent() : Offset(glm::vec2(0.0f)), Radius(0.5f) {};
+    };
+
+    struct RigidBody2DComponent {
+        enum class BodyType {
+            Static,
+            Dynamic
+        };
+
+        BodyType Type;
+        glm::vec2 Velocity;
+        float GravityScale;
+        float Mass;
+
+        RigidBody2DComponent(const RigidBody2DComponent &) = default;
+        RigidBody2DComponent() : Type(BodyType::Static), Velocity(glm::vec2(0.0f)), GravityScale(1.0f), Mass(1.0f) {};
+    };
 };
 
 #endif /* !COMPONENTS_HPP_ */
-
