@@ -30,6 +30,10 @@
 
     #include "Events/Events.hpp"
 
+    // -- Exodia ECS System ----------------------------------------------------
+
+    #include "System/CollisionDetection2DSystem.hpp"
+
     // -- Exodia ECS Interface -------------------------------------------------
 
     #include "Interface/IComponentContainer.hpp"

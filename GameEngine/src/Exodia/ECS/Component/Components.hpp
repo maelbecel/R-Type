@@ -111,7 +111,22 @@ namespace Exodia {
             };
         }
     };
+
+    struct BoxCollider2DComponent {
+        glm::vec2 Offset;
+        glm::vec2 Size;
+
+        BoxCollider2DComponent(const BoxCollider2DComponent &) = default;
+        BoxCollider2DComponent() : Offset(glm::vec2(0.0f)), Size(glm::vec2(0.5f)) {};
+    };
+
+    struct CircleCollider2DComponent {
+        glm::vec2 Offset;
+        float     Radius;
+
+        CircleCollider2DComponent(const CircleCollider2DComponent &) = default;
+        CircleCollider2DComponent() : Offset(glm::vec2(0.0f)), Radius(0.5f) {};
+    };
 };
 
 #endif /* !COMPONENTS_HPP_ */
-
