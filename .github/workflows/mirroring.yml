@@ -18,6 +18,7 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
+      - uses: seanmiddleditch/gha-setup-ninja@v4
       - run: |
           echo "make re" | ./make.sh && [ -f r-type_client ] && [ -f r-type_server ]
 
