@@ -46,6 +46,12 @@ namespace Exodia {
         auto &boxTransform2 = transform2.Get();
         auto &boxCollider2  = collider2.Get();
 
+        uint32_t colliderMask1 = boxCollider1.ColliderMask;
+        uint32_t colliderMask2 = boxCollider2.ColliderMask;
+
+        if ((colliderMask1 & colliderMask2) == 0)
+            return false;
+
         glm::vec2 position1 = glm::vec2(boxTransform1.Translation.x, boxTransform1.Translation.y);
         glm::vec2 position2 = glm::vec2(boxTransform2.Translation.x, boxTransform2.Translation.y);
         glm::vec2 size1     = boxCollider1.Size;
@@ -70,6 +76,12 @@ namespace Exodia {
         auto &circleTransform = transform2.Get();
         auto &circleCollider  = collider2.Get();
 
+        uint32_t colliderMask1 = boxCollider.ColliderMask;
+        uint32_t colliderMask2 = circleCollider.ColliderMask;
+
+        if ((colliderMask1 & colliderMask2) == 0)
+            return false;
+
         glm::vec2 boxPosition    = glm::vec2(boxTransform.Translation.x, boxTransform.Translation.y);
         glm::vec2 boxSize        = boxCollider.Size;
         glm::vec2 circlePosition = glm::vec2(circleTransform.Translation.x, circleTransform.Translation.y);
@@ -91,6 +103,12 @@ namespace Exodia {
         auto &circleCollider1  = collider1.Get();
         auto &circleTransform2 = transform2.Get();
         auto &circleCollider2  = collider2.Get();
+
+        uint32_t colliderMask1 = circleCollider1.ColliderMask;
+        uint32_t colliderMask2 = circleCollider2.ColliderMask;
+
+        if ((colliderMask1 & colliderMask2) == 0)
+            return false;
 
         glm::vec2 position1 = glm::vec2(circleTransform1.Translation.x, circleTransform1.Translation.y);
         float radius1       = circleCollider1.Radius;
