@@ -5,7 +5,7 @@ project(sandbox)
 file(GLOB SUBDIRECTORIES LIST_DIRECTORIES true ${CMAKE_SOURCE_DIR}/SandBox/*)
 
 foreach(SUBDIR ${SUBDIRECTORIES})
-    if(${SUBDIR} STREQUAL ${CMAKE_SOURCE_DIR}/build)
+    if(${SUBDIR} STREQUAL ${CMAKE_SOURCE_DIR}/SandBox/bin)
         continue()
     endif()
 
