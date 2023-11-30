@@ -13,6 +13,8 @@ namespace Exodia {
     // Constructor & Destructor //
     //////////////////////////////
 
+    Entity::Entity() {};
+
     Entity::Entity(World *world, uint64_t id) : _World(world), _ID(id), _PendingDestroy(false) {};
 
     Entity::~Entity()
@@ -41,6 +43,11 @@ namespace Exodia {
     World *Entity::GetWorld() const
     {
         return _World;
+    }
+
+    void Entity::SetWorld(World *world)
+    {
+        _World = world;
     }
 
     uint64_t Entity::GetEntityID() const

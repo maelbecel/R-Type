@@ -67,7 +67,7 @@ namespace Exodia {
 
             void DestroyWorld();
 
-            Entity *CreateEntity();
+            Entity *CreateEntity(const std::string &name = std::string());
 
             void DestroyEntity(Entity *entity, bool immediate = false);
 
@@ -156,8 +156,8 @@ namespace Exodia {
             size_t GetCount() const;
 
             Entity *GetEntityByIndex(size_t index);
-
             Entity *GetEntityByID(uint64_t id) const;
+            Entity *GetEntityByTag(const std::string &tag) const;
 
             EntityAllocator &GetPrimaryAllocator();
 
@@ -173,8 +173,6 @@ namespace Exodia {
             std::vector<EntitySystem *>                     _DisabledSystems;
 
             std::unordered_map<TypeIndex, std::vector<IEventSubscriber *, SubscriberPtrAllocator>, std::hash<TypeIndex>, std::equal_to<TypeIndex>, SubscriberPairAllocator> _Subscribers;
-
-            uint64_t _LastEntityID;
     };
 
 };
