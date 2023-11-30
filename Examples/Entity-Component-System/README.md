@@ -103,12 +103,13 @@ World *world = World::CreateWorld();
 
 world->RegisterSystem(new GravitySystem(-6.9f));
 
-Entity *entity = world->CreateEntity();
+Entity *entity = world->CreateEntity("Player");
 
 entity->AddComponent<Transform>();
 entity->AddComponent<Health>();
 ```
 
+Note `CreateEntity()` returns a pointer to the entity, know that this entity have default component (TagComponent, IDComponent, TransformComponent).
 Note `AddComponent()` can take any arguments that the component's constructor takes, so you can do this instead:
 
 ```cpp

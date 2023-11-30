@@ -13,7 +13,7 @@ namespace Exodia {
     // Constructor & Destructor //
     //////////////////////////////
 
-    World::World(Allocator allocator) : _EntityAllocator(allocator), _SystemAllocator(allocator), _Entities({}, EntityPtrAllocator(allocator)), _Systems({}, SystemPtrAllocator(allocator)), _Subscribers({}, 0, std::hash<TypeIndex>(), std::equal_to<TypeIndex>(), SubscriberPtrAllocator(allocator)), _LastEntityID(0) {};
+    World::World(Allocator allocator) : _EntityAllocator(allocator), _SystemAllocator(allocator), _Entities({}, EntityPtrAllocator(allocator)), _Systems({}, SystemPtrAllocator(allocator)), _Subscribers({}, 0, std::hash<TypeIndex>(), std::equal_to<TypeIndex>(), SubscriberPtrAllocator(allocator)) {};
 
     World::~World()
     {
@@ -60,13 +60,18 @@ namespace Exodia {
         std::allocator_traits<WorldAllocator>::deallocate(allocator, this, 1);
     }
 
-    Entity *World::CreateEntity()
+    Entity *World::CreateEntity(const std::string &name)
     {
-        _LastEntityID++;
-
         Entity *entity = std::allocator_traits<EntityAllocator>::allocate(_EntityAllocator, 1);
+        UUID entityID = UUID();
 
-        std::allocator_traits<EntityAllocator>::construct(_EntityAllocator, entity, this, _LastEntityID);
+        std::allocator_traits<EntityAllocator>::construct(_EntityAllocator, entity, this, entityID);
+
+        entity->AddComponent<IDComponent>(entityID);
+        entity->AddComponent<TransformComponent>();
+        auto tag = entity->AddComponent<TagComponent>();
+
+        tag.Get().Tag = name.empty() ? "Entity" : name;
 
         _Entities.push_back(entity);
 
@@ -133,8 +138,6 @@ namespace Exodia {
             std::allocator_traits<EntityAllocator>::deallocate(_EntityAllocator, entity, 1);
         }
         _Entities.clear();
-
-        _LastEntityID = 0;
     }
 
     EntitySystem *World::RegisterSystem(EntitySystem *system)
@@ -225,12 +228,23 @@ namespace Exodia {
 
     Entity *World::GetEntityByID(uint64_t id) const
     {
-        if (id == Entity::InvalidEntityID || id > _LastEntityID)
+        if (id == Entity::InvalidEntityID)
             return nullptr;
 
         for (auto *entity : _Entities)
             if (entity->GetEntityID() == id)
                 return entity;
+        return nullptr;
+    }
+
+    Entity *World::GetEntityByTag(const std::string &name) const
+    {
+        for (auto *entity : _Entities) {
+            auto tag = entity->GetComponent<TagComponent>();
+
+            if (tag && tag.Get().Tag == name)
+                return entity;
+        }
         return nullptr;
     }
 

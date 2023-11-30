@@ -9,11 +9,16 @@
     #define SCRIPTABLEENTITY_HPP_
 
     // Exodia ECS includes
-    #include "Exodia/ECS/ECS.hpp"
+    #include "ECS.hpp"
+
+    // Exodia Utils
+    #include "Utils/CrossPlatform.hpp"
 
 namespace Exodia {
 
-    class ScriptableEntity {
+    class Entity;
+
+    class EXODIA_API ScriptableEntity {
 
         //////////////////////////////
         // Constructor & Destructor //
@@ -25,7 +30,7 @@ namespace Exodia {
         /////////////
         // Methods //
         /////////////
-        protected:
+        public:
 
             /**
              * @brief Called when the scriptable entity is created.
@@ -50,16 +55,16 @@ namespace Exodia {
         public:
 
             template<typename Component>
-            ComponentHandle<Component> &GetComponent()
+            ComponentHandle<Component> GetComponent()
             {
-                return _Entity.GetComponent<Component>();
+                return HandleEntity.GetComponent<Component>();
             }
 
         ////////////////
         // Attributes //
         ////////////////
-        private:
-            Entity _Entity; /* !< The entity that owns the scriptable entity. */
+        public:
+            Entity HandleEntity; /* !< The entity that owns the scriptable entity. */
     };
 };
 
