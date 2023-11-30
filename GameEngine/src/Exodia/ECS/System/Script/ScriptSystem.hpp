@@ -17,8 +17,6 @@
 
 namespace Exodia {
 
-    struct ScriptComponent;
-
     class ScriptSystem : public EntitySystem {
 
         ///////////////////////////////

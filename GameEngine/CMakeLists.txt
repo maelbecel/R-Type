@@ -56,6 +56,7 @@ set(SOURCES_GAME_ENGINE
     src/Exodia/ECS/World/World.cpp
     src/Exodia/ECS/System/Collision/CollisionDetection2DSystem.cpp
     src/Exodia/ECS/System/Script/ScriptSystem.cpp
+    src/Exodia/ECS/System/Physics/GravitySystem.cpp
 
         # -- Scene source files
 
