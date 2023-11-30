@@ -27,6 +27,8 @@ Entity - An entity is a unique identifier
 Component - A component is a piece of data that is attached to an entity.
 System - A system is a updater of entities with certain components.
 Timestamp - A float representing the time in seconds.
+Event - An event is a message that is sent to the server generaly to
+    represent a key press or a key release.
 
 
 Representation
@@ -46,6 +48,7 @@ Timestamp - 32 bit (4 bytes) float representing the time in seconds.
 Event - 32 bit (4 bytes) unsigned integer representing the event type.
 Id - 64 bit (8 bytes) unsigned integer representing the id of the command
     use for implementing acknoledgement.
+
 
 Commands
 
@@ -69,6 +72,10 @@ ServerCommand
         Content: [Id][Entity]
     0x0d - Send list of deleted components on entities
         Content: [Id][Entity][Component][Content_of_a_component]
+    0x0e - Acknowledge
+        Content: [Id]
+    0x0f - Send events
+        Content: [Id][Event]
 ClientCommand
     0x80 - Acknowledge
         Content: [Id]
@@ -76,20 +83,21 @@ ClientCommand
     0x82 - Disconnect
     0x8a - Send events
         Content: [Event]
-
+    0x8b - Send important events
+        Content: [Id][Event]
 
 Usage
 
 The protocol is designed to be used in a certain way.
 this section will show an example of how to use the protocol.
 
-Initiation:
+Initiation:events
     Client -> [0x81][Timestamp]
     Server -> [0x01][Timestamp]
     Server -> [0x0a][System][System]...
     Server -> [0x0b][Entity][Component][Content_of_a_component]...
 loop:
-    Client -> [0x8a][Event]
+    Client -> [0x8a][KeyEvent]
     Server -> [0x0b][Entity][Component][Content_of_a_component]...
     Server -> [0x0c][Entity]
     Server -> [0x0d][Entity][Component][Content_of_a_component]...
