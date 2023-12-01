@@ -8,6 +8,9 @@
 #ifndef ENTITY_HPP_
     #define ENTITY_HPP_
 
+    // Exodia Core includes
+    #include "Core/ID/UUID.hpp"
+
     // Exodia ECS Component includes
     #include "Component/ComponentHandle.hpp"
 
@@ -43,7 +46,8 @@ namespace Exodia {
         //////////////////////////////
         public:
 
-            Entity(World *world, uint64_t id);
+            Entity();
+            Entity(World *world, uint64_t id = UUID());
 
             ~Entity();
 
@@ -89,6 +93,7 @@ namespace Exodia {
         public:
 
             World *GetWorld() const;
+            void SetWorld(World *world);
 
             template<typename Component>
             bool HasComponent() const
