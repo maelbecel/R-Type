@@ -32,6 +32,16 @@ namespace Exodia {
         Health(const Health &) = default;
         Health(int maxHealth = 100) : CurrentHealth(maxHealth), MaxHealth(maxHealth) {};
     };
+
+    struct Animation {
+        int CurrentFrame;
+        int MaxFrame;
+        float FrameTime;
+        float CurrentTime;
+
+        Animation(const Animation &) = default;
+        Animation(int maxFrame = 0, float frameTime = 0.0f) : CurrentFrame(0), MaxFrame(maxFrame), FrameTime(frameTime), CurrentTime(0.0f) {};
+    };
 };
 
 #endif /* !COMPONENTEXAMPLE_HPP_ */

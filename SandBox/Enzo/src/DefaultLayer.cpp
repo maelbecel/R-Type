@@ -9,6 +9,7 @@
 #include "Script/Player.hpp"
 #include "Script/ExampleScript.hpp"
 #include "ComponentExample.hpp"
+#include "AnimationSystem.hpp"
 
 namespace Exodia {
 
@@ -30,6 +31,8 @@ namespace Exodia {
 
         _World = World::CreateWorld();
 
+        _World->RegisterSystem(new AnimationSystem());
+
         Entity *entity = _World->CreateEntity("Player");
 
         entity->AddComponent<IDComponent>();
@@ -37,14 +40,17 @@ namespace Exodia {
         entity->AddComponent<Health>(185);
         entity->AddComponent<ScriptComponent>().Get().Bind<Player>();
         entity->AddComponent<SpriteRendererComponent>();
+        entity->AddComponent<Animation>();
 
         auto sprite = entity->GetComponent<SpriteRendererComponent>();
 
         Ref<Texture2D> texture = Texture2D::Create("Assets/Textures/Player.png");
 
-        sprite->Texture = SubTexture2D::CreateFromCoords(texture, { 2.0f, 4.0f }, { 33.2f, 17.2f }, { 1.0f, 1.0f });
+        sprite.Get().Texture = SubTexture2D::CreateFromCoords(texture, { 2.0f, 4.0f }, { 33.2f, 17.2f }, { 1.0f, 1.0f });
 
         entity->GetComponent<TransformComponent>().Get().Scale.y = 0.5f;
+
+        _CameraController.SetZoomLevel(5.0f);
     }
 
     void DefaultLayer::OnDetach()
@@ -56,6 +62,8 @@ namespace Exodia {
     {
         // Update
         _CameraController.OnUpdate(ts);
+
+        _World->Update(ts);
 
         _World->ForEach<ScriptComponent>([&](Entity *entity, ComponentHandle<ScriptComponent> script)
         {

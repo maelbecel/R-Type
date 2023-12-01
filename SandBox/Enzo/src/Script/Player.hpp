@@ -15,6 +15,19 @@ namespace Exodia {
 
     class Player : public ScriptableEntity {
 
+        //////////////
+        //  Enums   //
+        //////////////
+        public:
+            enum class State {
+                IDLE = 0,
+                MOVE_UP,
+                MOVE_DOWN,
+                ATTACK,
+                CHARGE,
+                DEAD
+            };
+
         /////////////
         // Methods //
         /////////////
@@ -23,6 +36,9 @@ namespace Exodia {
             void OnCreate() override
             {
                 _Speed = 5.0f;
+                _State = State::IDLE;
+
+                std::cout << "Player created" << std::endl;
             }
 
             void OnUpdate(Timestep ts) override
@@ -30,22 +46,40 @@ namespace Exodia {
                 auto transform = GetComponent<TransformComponent>();
 
                 if (transform) {
-                    if (Input::IsKeyPressed(Key::A))
-                        transform->Translation.x -= _Speed * ts;
-                    if (Input::IsKeyPressed(Key::D))
-                        transform->Translation.x += _Speed * ts;
-                    if (Input::IsKeyPressed(Key::W))
-                        transform->Translation.y += _Speed * ts;
-                    if (Input::IsKeyPressed(Key::S))
-                        transform->Translation.y -= _Speed * ts;
+                    auto &tc = transform.Get();
+                    if (Input::IsKeyPressed(Key::A)) {
+                        tc.Translation.x -= _Speed * ts;
+                        _State = State::IDLE;
+                    }
+                    else if (Input::IsKeyPressed(Key::D)) {
+                        tc.Translation.x += _Speed * ts;
+                        _State = State::IDLE;
+                    }
+                    else if (Input::IsKeyPressed(Key::W)) {
+                        tc.Translation.y += _Speed * ts;
+                        _State = State::MOVE_UP;
+                    }
+                    else if (Input::IsKeyPressed(Key::S)) {
+                        tc.Translation.y -= _Speed * ts;
+                        _State = State::MOVE_DOWN;
+                    }
+                    else {
+                        _State = State::IDLE;
+                    }
                 }
             }
-        
+
+            State GetState() const
+            {
+                return _State;
+            }
+
         ////////////////
         // Attributes //
         ////////////////
         private:
             float _Speed;
+            State _State;
     };
 };
 
