@@ -10,6 +10,7 @@
 
     // External includes
     #include <string>
+    #include <cstdint>
 
 namespace Exodia {
 
