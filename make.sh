@@ -1,18 +1,37 @@
 #!/usr/bin/env bash
 
-# This script is used to build the project.
-
-echo "Command to execute (make, make re, make examples, make clean, make fclean)"
-echo "Please enter the command to execute :"
-
-read command
-
 make() {
-    mkdir build ; cd build ; cmake .. -G Ninja ; ninja ; cd ..
+    local compile_type="$1"
+    # Vérifier si le répertoire "build" n'existe pas
+    if [ ! -d "build" ]; then
+        # Créer le répertoire "build" s'il n'existe pas
+        mkdir build
+    fi
+
+    # Se déplacer dans le répertoire "build"
+    cd build
+
+    # Exécuter les commandes cmake et ninja
+    if [ "$compile_examples" == "examples" ]; then
+        cmake .. -G Ninja -DCOMPILE_EXAMPLES=ON
+    elif [ "$compile_type" == "sandbox" ]; then
+        cmake .. -G Ninja -DCOMPILE_SANDBOX=ON
+    else
+        cmake .. -G Ninja
+    fi
+
+    ninja
+
+    # Revenir au répertoire parent
+    cd ..
 }
 
 makeexamples() {
-    mkdir build ; cd build ; cmake .. -DCOMPILE_EXAMPLES=ON -G Ninja ; ninja ; cd ..
+    make "examples"
+}
+
+makesandbox() {
+    make "sandbox"
 }
 
 makeclean() {
@@ -29,23 +48,139 @@ makefclean() {
 }
 
 makere() {
+    local compile_type="$1"
     makefclean
-    make
+    make "$compile_type"
 }
 
-if [ "$command" = "make" ]
-then
-    make
-elif [ "$command" = "make re" ]
-then
-    makere
-elif [ "$command" = "make examples" ]
-then
-    makeexamples
-elif [ "$command" = "make clean" ]
-then
-    makeclean
-elif [ "$command" = "make fclean" ]
-then
-    makefclean
-fi
+# Fonction pour afficher le menu principal
+display_menu() {
+    echo "Menu Make:"
+    echo "1. make"
+    echo "2. make re"
+    echo "3. make clean"
+    echo "4. make fclean"
+    echo "5. Examples"
+    echo "6. Sandbox"
+    echo "0. Quitter"
+}
+
+# Fonction pour afficher le menu Examples
+display_examples_menu() {
+    echo "Menu Examples:"
+    echo "1. make"
+    echo "2. make re"
+    echo "3. make clean"
+    echo "4. make fclean"
+    echo "0. Retour au menu principal"
+    echo "00. Quitter"
+}
+
+# Fonction pour afficher le menu Sandbox
+display_sandbox_menu() {
+    echo "Menu Sandbox:"
+    echo "1. make"
+    echo "2. make re"
+    echo "3. make clean"
+    echo "4. make fclean"
+    echo "0. Retour au menu principal"
+    echo "00. Quitter"
+}
+
+# Boucle principale
+while true; do
+    display_menu
+
+    # Demander à l'utilisateur de choisir une option
+    read -p "Choisissez une option (0-6): " choice
+
+    case $choice in
+        0)
+            echo "Au revoir!"
+            break
+            ;;
+        1)
+            make
+            exit
+            ;;
+        2)
+            makere
+            exit
+            ;;
+        3)
+            makeclean
+            ;;
+        4)
+            makefclean
+            ;;
+        5)
+            # Menu Examples
+            while true; do
+                display_examples_menu
+                read -p "Choisissez une option (0-4): " examples_choice
+
+                case $examples_choice in
+                    0)
+                        break
+                        ;;
+                    1)
+                        makeexamples
+                        exit
+                        ;;
+                    2)
+                        makere "examples"
+                        exit
+                        ;;
+                    3)
+                        makeclean
+                        ;;
+                    4)
+                        makefclean
+                        ;;
+                    00)
+                        exit
+                        ;;
+                    *)
+                        echo "Option invalide. Veuillez choisir une option valide."
+                        ;;
+                esac
+            done
+            ;;
+        6)
+            # Menu Sandbox
+            while true; do
+                display_sandbox_menu
+                read -p "Choisissez une option (0-4): " sandbox_choice
+
+                case $sandbox_choice in
+                    0)
+                        break
+                        ;;
+                    1)
+                        makesandbox
+                        exit
+                        ;;
+                    2)
+                        makere "sandbox"
+                        exit
+                        ;;
+                    3)
+                        makeclean
+                        ;;
+                    4)
+                        makefclean
+                        ;;
+                    00)
+                        exit
+                        ;;
+                    *)
+                        echo "Option invalide. Veuillez choisir une option valide."
+                        ;;
+                esac
+            done
+            ;;
+        *)
+            echo "Option invalide. Veuillez choisir une option valide."
+            ;;
+    esac
+done
