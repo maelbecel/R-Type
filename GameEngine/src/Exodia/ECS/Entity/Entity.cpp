@@ -15,7 +15,7 @@ namespace Exodia {
 
     Entity::Entity() {};
 
-    Entity::Entity(World *world, uint64_t id) : _World(world), _ID(id), _PendingDestroy(false) {};
+    Entity::Entity(Ref<World> world, uint64_t id) : _World(world), _ID(id), _PendingDestroy(false) {};
 
     Entity::~Entity()
     {
@@ -40,12 +40,12 @@ namespace Exodia {
     // Getters & Setters //
     ///////////////////////
 
-    World *Entity::GetWorld() const
+    Ref<World> Entity::GetWorld() const
     {
         return _World;
     }
 
-    void Entity::SetWorld(World *world)
+    void Entity::SetWorld(Ref<World> world)
     {
         _World = world;
     }

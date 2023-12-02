@@ -148,14 +148,17 @@ namespace Exodia {
 
             void Update(Timestep ts);
 
+        private:
+            void SortUUIDMap();
+
         ///////////////////////
         // Getters & Setters //
         ///////////////////////
         public:
 
-            size_t GetCount() const;
+            uint64_t GetCount() const;
 
-            Entity *GetEntityByIndex(size_t index);
+            Entity *GetEntityByIndex(uint64_t index);
             Entity *GetEntityByID(uint64_t id) const;
             Entity *GetEntityByTag(const std::string &tag) const;
 
@@ -171,6 +174,8 @@ namespace Exodia {
             std::vector<Entity       *, EntityPtrAllocator> _Entities;
             std::vector<EntitySystem *, SystemPtrAllocator> _Systems;
             std::vector<EntitySystem *>                     _DisabledSystems;
+
+            std::unordered_map<uint64_t, uint64_t> _IndexToUUIDMap;
 
             std::unordered_map<TypeIndex, std::vector<IEventSubscriber *, SubscriberPtrAllocator>, std::hash<TypeIndex>, std::equal_to<TypeIndex>, SubscriberPairAllocator> _Subscribers;
     };

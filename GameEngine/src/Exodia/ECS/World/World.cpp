@@ -6,6 +6,7 @@
 */
 
 #include "ECS.hpp"
+#include "Exodia/Debug/Logs.hpp"
 
 namespace Exodia {
 
@@ -30,6 +31,8 @@ namespace Exodia {
             std::allocator_traits<EntityAllocator>::destroy(_EntityAllocator, entity);
             std::allocator_traits<EntityAllocator>::deallocate(_EntityAllocator, entity, 1);
         }
+
+        _IndexToUUIDMap.clear();
 
         for (auto *system : _Systems) {
             std::allocator_traits<SystemAllocator>::destroy(_SystemAllocator, system);
@@ -65,7 +68,9 @@ namespace Exodia {
         Entity *entity = std::allocator_traits<EntityAllocator>::allocate(_EntityAllocator, 1);
         UUID entityID = UUID();
 
-        std::allocator_traits<EntityAllocator>::construct(_EntityAllocator, entity, this, entityID);
+        std::allocator_traits<EntityAllocator>::construct(_EntityAllocator, entity, CreateRef<World>(*this), entityID);
+
+        _IndexToUUIDMap[GetCount()] = entityID;
 
         entity->AddComponent<IDComponent>(entityID);
         entity->AddComponent<TransformComponent>();
@@ -89,6 +94,10 @@ namespace Exodia {
             if (immediate) {
                 _Entities.erase(std::remove(_Entities.begin(), _Entities.end(), entity), _Entities.end());
 
+                _IndexToUUIDMap.erase(_IndexToUUIDMap.find(entity->GetEntityID()));
+
+                SortUUIDMap();
+
                 std::allocator_traits<EntityAllocator>::destroy(_EntityAllocator, entity);
                 std::allocator_traits<EntityAllocator>::deallocate(_EntityAllocator, entity, 1);
             }
@@ -101,6 +110,10 @@ namespace Exodia {
         if (immediate) {
             _Entities.erase(std::remove(_Entities.begin(), _Entities.end(), entity), _Entities.end());
 
+            _IndexToUUIDMap.erase(_IndexToUUIDMap.find(entity->GetEntityID()));
+
+            SortUUIDMap();
+
             std::allocator_traits<EntityAllocator>::destroy(_EntityAllocator, entity);
             std::allocator_traits<EntityAllocator>::deallocate(_EntityAllocator, entity, 1);
         }
@@ -108,10 +121,14 @@ namespace Exodia {
 
     bool World::CleanUp()
     {
-        size_t count = 0;
+        uint64_t count = 0;
 
         _Entities.erase(std::remove_if(_Entities.begin(), _Entities.end(), [&, this](Entity *entity) {
             if (entity->IsPendingDestroy()) {
+                _IndexToUUIDMap.erase(_IndexToUUIDMap.find(entity->GetEntityID()));
+
+                SortUUIDMap();
+
                 std::allocator_traits<EntityAllocator>::destroy(_EntityAllocator, entity);
                 std::allocator_traits<EntityAllocator>::deallocate(_EntityAllocator, entity, 1);
 
@@ -133,6 +150,9 @@ namespace Exodia {
 
                 Emit<Events::OnEntityDestroyed>({ entity });
             }
+            _IndexToUUIDMap.erase(_IndexToUUIDMap.find(entity->GetEntityID()));
+
+            SortUUIDMap();
 
             std::allocator_traits<EntityAllocator>::destroy(_EntityAllocator, entity);
             std::allocator_traits<EntityAllocator>::deallocate(_EntityAllocator, entity, 1);
@@ -210,20 +230,34 @@ namespace Exodia {
             system->Update(this, ts);
     }
 
+    void World::SortUUIDMap()
+    {
+        std::unordered_map<uint64_t, uint64_t> newMap;
+        uint64_t index = 0;
+
+        for (auto &pair : _IndexToUUIDMap) {
+            newMap[index] = pair.second;
+            index++;
+        }
+        _IndexToUUIDMap = newMap;
+    }
+
     ///////////////////////
     // Getters & Setters //
     ///////////////////////
 
-    size_t World::GetCount() const
+    uint64_t World::GetCount() const
     {
         return _Entities.size();
     }
 
-    Entity *World::GetEntityByIndex(size_t index)
+    Entity *World::GetEntityByIndex(uint64_t index)
     {
-        if (index >= GetCount())
-            return nullptr;
-        return _Entities[index];
+        auto it = _IndexToUUIDMap.find(index);
+
+        EXODIA_ASSERT(it != _IndexToUUIDMap.end(), "Entity not found for the given index");
+
+        return GetEntityByID(it->second);
     }
 
     Entity *World::GetEntityByID(uint64_t id) const

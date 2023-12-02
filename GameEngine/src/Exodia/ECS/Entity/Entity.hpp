@@ -22,6 +22,7 @@
 
     // Exodia Utils includes
     #include "Utils/CrossPlatform.hpp"
+    #include "Utils/Memory.hpp"
 
     // External includes
     #include <unordered_map>
@@ -47,7 +48,7 @@ namespace Exodia {
         public:
 
             Entity();
-            Entity(World *world, uint64_t id = UUID());
+            Entity(Ref<World> world, uint64_t id = UUID());
 
             ~Entity();
 
@@ -92,8 +93,8 @@ namespace Exodia {
         ///////////////////////
         public:
 
-            World *GetWorld() const;
-            void SetWorld(World *world);
+            Ref<World> GetWorld() const;
+            void SetWorld(Ref<World> world);
 
             template<typename Component>
             bool HasComponent() const
@@ -131,9 +132,9 @@ namespace Exodia {
         ////////////////
         private:
 
-            World   *_World;
-            uint64_t _ID;
-            bool     _PendingDestroy;
+            Ref<World> _World;
+            uint64_t   _ID;
+            bool       _PendingDestroy;
 
             std::unordered_map<TypeIndex, IComponentContainer *> _Components;
 

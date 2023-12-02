@@ -140,9 +140,28 @@ namespace Exodia {
         glm::vec2 Velocity;
         float GravityScale;
         float Mass;
+    };
 
-        RigidBody2DComponent(const RigidBody2DComponent &) = default;
-        RigidBody2DComponent() : Type(BodyType::Static), Velocity(glm::vec2(0.0f)), GravityScale(1.0f), Mass(1.0f) {};
+    struct ChildrenComponent {
+        std::vector<UUID> Children;
+
+        ChildrenComponent(const ChildrenComponent &) = default;
+        ChildrenComponent() : Children(std::vector<UUID>()) {};
+
+        void AddChild(const UUID &child)
+        {
+            Children.push_back(child);
+        }
+
+        void RemoveChild(const UUID &child)
+        {
+            Children.erase(std::remove(Children.begin(), Children.end(), child), Children.end());
+        }
+
+        void HasChild(const UUID &child)
+        {
+            std::find(Children.begin(), Children.end(), child) != Children.end();
+        }
     };
 };
 
