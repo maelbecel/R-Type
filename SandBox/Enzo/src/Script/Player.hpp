@@ -47,23 +47,25 @@ namespace Exodia {
 
                 if (transform) {
                     auto &tc = transform.Get();
+
                     if (Input::IsKeyPressed(Key::A)) {
                         tc.Translation.x -= _Speed * ts;
                         _State = State::IDLE;
                     }
-                    else if (Input::IsKeyPressed(Key::D)) {
+                    if (Input::IsKeyPressed(Key::D)) {
                         tc.Translation.x += _Speed * ts;
                         _State = State::IDLE;
                     }
-                    else if (Input::IsKeyPressed(Key::W)) {
+                    if (Input::IsKeyPressed(Key::W)) {
                         tc.Translation.y += _Speed * ts;
                         _State = State::MOVE_UP;
                     }
-                    else if (Input::IsKeyPressed(Key::S)) {
+                    if (Input::IsKeyPressed(Key::S)) {
                         tc.Translation.y -= _Speed * ts;
                         _State = State::MOVE_DOWN;
                     }
-                    else {
+                    if (Input::IsKeyPressed(Key::Unknown)) {
+                        std::cout << "Unknown key pressed" << std::endl;
                         _State = State::IDLE;
                     }
                 }
@@ -84,4 +86,3 @@ namespace Exodia {
 };
 
 #endif /* !PLAYER_HPP_ */
-

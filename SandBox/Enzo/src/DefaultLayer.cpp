@@ -7,6 +7,7 @@
 
 #include "DefaultLayer.hpp"
 #include "Script/Player.hpp"
+#include "Script/Pata-pata.hpp"
 #include "Script/ExampleScript.hpp"
 #include "ComponentExample.hpp"
 #include "AnimationSystem.hpp"
@@ -29,10 +30,11 @@ namespace Exodia {
     {
         EXODIA_PROFILE_FUNCTION();
 
+        // Create world
         _World = World::CreateWorld();
-
         _World->RegisterSystem(new AnimationSystem());
 
+        // Create entities
         Entity *entity = _World->CreateEntity("Player");
 
         entity->AddComponent<IDComponent>();
@@ -41,15 +43,29 @@ namespace Exodia {
         entity->AddComponent<ScriptComponent>().Get().Bind<Player>();
         entity->AddComponent<SpriteRendererComponent>();
         entity->AddComponent<Animation>();
-
-        auto sprite = entity->GetComponent<SpriteRendererComponent>();
-
-        Ref<Texture2D> texture = Texture2D::Create("Assets/Textures/Player.png");
-
-        sprite.Get().Texture = SubTexture2D::CreateFromCoords(texture, { 2.0f, 4.0f }, { 33.2f, 17.2f }, { 1.0f, 1.0f });
-
         entity->GetComponent<TransformComponent>().Get().Scale.y = 0.5f;
 
+        // Set entity sprite
+        auto sprite = entity->GetComponent<SpriteRendererComponent>();
+        Ref<Texture2D> texture = Texture2D::Create("Assets/Textures/Player.png");
+        sprite.Get().Texture = SubTexture2D::CreateFromCoords(texture, { 2.0f, 4.0f }, { 33.2f, 17.2f }, { 1.0f, 1.0f });
+
+        Entity *patata = _World->CreateEntity("Patata");
+
+        patata->AddComponent<IDComponent>();
+        patata->AddComponent<SpriteRendererComponent>(glm::vec4{ 0.8f, 0.2f, 0.3f, 1.0f });
+        patata->AddComponent<Health>(185);
+        patata->AddComponent<ScriptComponent>().Get().Bind<PataPata>();
+        patata->AddComponent<SpriteRendererComponent>();
+        patata->AddComponent<Animation>();
+        // patata->GetComponent<TransformComponent>().Get().Scale.y = 0.5f;
+
+        // Set entity sprite
+        auto sprite2 = patata->GetComponent<SpriteRendererComponent>();
+        Ref<Texture2D> texture2 = Texture2D::Create("Assets/Textures/Pata-Pata.png");
+        sprite2.Get().Texture = SubTexture2D::CreateFromCoords(texture2, { 0.0f, 0.0f }, { 33.3125f, 36.0f }, { 1.0f, 1.0f });
+
+        // Create camera
         _CameraController.SetZoomLevel(5.0f);
     }
 
