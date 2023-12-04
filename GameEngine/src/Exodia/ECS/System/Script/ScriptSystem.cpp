@@ -22,18 +22,17 @@ namespace Exodia {
     {
         EXODIA_PROFILE_FUNCTION();
 
-        int count = 0;
-
-        world->ForEach<ScriptComponent>([&](Entity *entity, ComponentHandle<ScriptComponent> script) {
-            auto &sc = script.Get();
+        world->ForEach<ScriptComponent>([&](Entity *entity, World *w, ComponentHandle<ScriptComponent> script) {
+            /*auto &sc = script.Get();
 
             if (!sc.Instance) {
                 sc.Instance = sc.InstantiateScript();
-                sc.Instance->HandleEntity = *entity;
+                sc.Instance->HandleEntity = entity;
                 sc.Instance->OnCreate();
             }
 
-            sc.Instance->OnUpdate(ts);
+            sc.Instance->OnUpdate(ts);*/
+            w->CreateEntity("Dobkeratops");
         });
     }
 };

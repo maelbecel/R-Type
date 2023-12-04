@@ -31,14 +31,14 @@ namespace Exodia {
         {
             EXODIA_PROFILE_SCOPE("CollisionDetection2DSystem::Update::BoxCollider2D");
 
-            world->ForEach<BoxCollider2DComponent, TransformComponent>([&](Entity *entityA, ComponentHandle<BoxCollider2DComponent> colliderA, ComponentHandle<TransformComponent> transformA) {
-                world->ForEach<BoxCollider2DComponent, TransformComponent>([&](Entity *entityB, ComponentHandle<BoxCollider2DComponent> colliderB, ComponentHandle<TransformComponent> transformB) {
+            world->ForEach<BoxCollider2DComponent, TransformComponent>([&](Entity *entityA, UNUSED World *w1, ComponentHandle<BoxCollider2DComponent> colliderA, ComponentHandle<TransformComponent> transformA) {
+                world->ForEach<BoxCollider2DComponent, TransformComponent>([&](Entity *entityB, UNUSED World *w2, ComponentHandle<BoxCollider2DComponent> colliderB, ComponentHandle<TransformComponent> transformB) {
                     if (entityA != entityB && CheckCollision(colliderA, transformA, colliderB, transformB)) {
                         EmitCollisionEvent(entityA, entityB);
                     }
                 });
 
-                world->ForEach<CircleCollider2DComponent, TransformComponent>([&](Entity *entityB, ComponentHandle<CircleCollider2DComponent> colliderB, ComponentHandle<TransformComponent> transformB) {
+                world->ForEach<CircleCollider2DComponent, TransformComponent>([&](Entity *entityB, UNUSED World *w2, ComponentHandle<CircleCollider2DComponent> colliderB, ComponentHandle<TransformComponent> transformB) {
                     if (CheckCollision(colliderA, transformA, colliderB, transformB))
                         EmitCollisionEvent(entityA, entityB);
                 });
@@ -48,8 +48,8 @@ namespace Exodia {
         {
             EXODIA_PROFILE_SCOPE("CollisionDetection2DSystem::Update::CircleCollider2D");
 
-            world->ForEach<CircleCollider2DComponent, TransformComponent>([&](Entity *entityA, ComponentHandle<CircleCollider2DComponent> colliderA, ComponentHandle<TransformComponent> transformA) {
-                world->ForEach<CircleCollider2DComponent, TransformComponent>([&](Entity *entityB, ComponentHandle<CircleCollider2DComponent> colliderB, ComponentHandle<TransformComponent> transformB) {
+            world->ForEach<CircleCollider2DComponent, TransformComponent>([&](Entity *entityA, UNUSED World *w1, ComponentHandle<CircleCollider2DComponent> colliderA, ComponentHandle<TransformComponent> transformA) {
+                world->ForEach<CircleCollider2DComponent, TransformComponent>([&](Entity *entityB, UNUSED World *w2, ComponentHandle<CircleCollider2DComponent> colliderB, ComponentHandle<TransformComponent> transformB) {
                     if (entityA != entityB && CheckCollision(colliderA, transformA, colliderB, transformB))
                         EmitCollisionEvent(entityA, entityB);
                 });

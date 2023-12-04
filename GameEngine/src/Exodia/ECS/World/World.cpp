@@ -68,7 +68,7 @@ namespace Exodia {
         Entity *entity = std::allocator_traits<EntityAllocator>::allocate(_EntityAllocator, 1);
         UUID entityID = UUID();
 
-        std::allocator_traits<EntityAllocator>::construct(_EntityAllocator, entity, CreateRef<World>(*this), entityID);
+        std::allocator_traits<EntityAllocator>::construct(_EntityAllocator, entity, this, entityID);
 
         _IndexToUUIDMap[GetCount()] = entityID;
 
@@ -264,7 +264,6 @@ namespace Exodia {
     {
         if (id == Entity::InvalidEntityID)
             return nullptr;
-
         for (auto *entity : _Entities)
             if (entity->GetEntityID() == id)
                 return entity;

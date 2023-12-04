@@ -34,7 +34,7 @@ namespace Exodia {
             ComponentContainer(const Component &data) : Data(data) {};
 
         protected:
-            virtual void Destroy(Ref<World> world)
+            virtual void Destroy(World * world)
             {
                 using ComponentAllocator = std::allocator_traits<World::EntityAllocator>::template rebind_alloc<ComponentContainer<Component>>;
 

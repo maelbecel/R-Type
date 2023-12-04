@@ -48,7 +48,7 @@ namespace Exodia {
         public:
 
             Entity();
-            Entity(Ref<World> world, uint64_t id = UUID());
+            Entity(World * world, uint64_t id = UUID());
 
             ~Entity();
 
@@ -93,8 +93,8 @@ namespace Exodia {
         ///////////////////////
         public:
 
-            Ref<World> GetWorld() const;
-            void SetWorld(Ref<World> world);
+            World *GetWorld() const;
+            void SetWorld(World *world);
 
             template<typename Component>
             bool HasComponent() const
@@ -132,7 +132,7 @@ namespace Exodia {
         ////////////////
         private:
 
-            Ref<World> _World;
+            World *_World;
             uint64_t   _ID;
             bool       _PendingDestroy;
 

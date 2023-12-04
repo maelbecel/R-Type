@@ -109,7 +109,6 @@ namespace Exodia {
 
         if (found == _Components.end() || found->second == nullptr)
             return ComponentHandle<Component>();
-
         return ComponentHandle<Component>(&reinterpret_cast<ComponentContainer<Component> *>(found->second)->Data);
     }
 

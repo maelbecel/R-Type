@@ -127,10 +127,10 @@ namespace Exodia {
             }
 
             template<typename ...Entities>
-            void ForEach(typename std::common_type<std::function<void(Entity*, ComponentHandle<Entities>...)>>::type function, bool includePendingDestroy = false)
+            void ForEach(typename std::common_type<std::function<void(Entity *, World *, ComponentHandle<Entities>...)>>::type function, bool includePendingDestroy = false)
             {
                 for (auto *entity : View<Entities ...>(includePendingDestroy))
-                    function(entity, entity->template GetComponent<Entities>()...);
+                    function(entity, this, entity->template GetComponent<Entities>()...);
             }
 
             void ForAll(std::function<void(Entity *)> function, bool includePendingDestroy = false);
