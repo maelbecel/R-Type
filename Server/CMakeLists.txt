@@ -18,6 +18,7 @@ set(R_TYPE_DIR  ${CMAKE_SOURCE_DIR}/R-Type)
 set(SOURCES
 
     src/Main.cpp
+    src/Server.cpp
 )
 
 # Set include directories for the Exodia Game Engine Application
