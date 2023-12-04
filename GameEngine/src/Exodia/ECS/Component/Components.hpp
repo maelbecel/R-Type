@@ -115,17 +115,19 @@ namespace Exodia {
     struct BoxCollider2DComponent {
         glm::vec2 Offset;
         glm::vec2 Size;
+        uint32_t  ColliderMask;
 
         BoxCollider2DComponent(const BoxCollider2DComponent &) = default;
-        BoxCollider2DComponent() : Offset(glm::vec2(0.0f)), Size(glm::vec2(0.5f)) {};
+        BoxCollider2DComponent() : Offset(glm::vec2(0.0f)), Size(glm::vec2(0.5f)), ColliderMask(0xFFFFFFFF) {};
     };
 
     struct CircleCollider2DComponent {
         glm::vec2 Offset;
         float     Radius;
+        uint32_t  ColliderMask;
 
         CircleCollider2DComponent(const CircleCollider2DComponent &) = default;
-        CircleCollider2DComponent() : Offset(glm::vec2(0.0f)), Radius(0.5f) {};
+        CircleCollider2DComponent() : Offset(glm::vec2(0.0f)), Radius(0.5f), ColliderMask(0xFFFFFFFF) {};
     };
 
     struct RigidBody2DComponent {
@@ -138,9 +140,28 @@ namespace Exodia {
         glm::vec2 Velocity;
         float GravityScale;
         float Mass;
+    };
 
-        RigidBody2DComponent(const RigidBody2DComponent &) = default;
-        RigidBody2DComponent() : Type(BodyType::Static), Velocity(glm::vec2(0.0f)), GravityScale(1.0f), Mass(1.0f) {};
+    struct ChildrenComponent {
+        std::vector<UUID> Children;
+
+        ChildrenComponent(const ChildrenComponent &) = default;
+        ChildrenComponent() : Children(std::vector<UUID>()) {};
+
+        void AddChild(const UUID &child)
+        {
+            Children.push_back(child);
+        }
+
+        void RemoveChild(const UUID &child)
+        {
+            Children.erase(std::remove(Children.begin(), Children.end(), child), Children.end());
+        }
+
+        void HasChild(const UUID &child)
+        {
+            std::find(Children.begin(), Children.end(), child) != Children.end();
+        }
     };
 };
 

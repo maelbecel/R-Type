@@ -57,14 +57,14 @@ namespace Exodia {
             template<typename Component>
             ComponentHandle<Component> GetComponent()
             {
-                return HandleEntity.GetComponent<Component>();
+                return HandleEntity->GetComponent<Component>();
             }
 
         ////////////////
         // Attributes //
         ////////////////
         public:
-            Entity HandleEntity; /* !< The entity that owns the scriptable entity. */
+            Entity *HandleEntity; /* !< The entity that owns the scriptable entity. */
     };
 };
 

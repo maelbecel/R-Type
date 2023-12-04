@@ -30,6 +30,15 @@ namespace Exodia {
         return state == GLFW_PRESS;
     }
 
+    bool Input::IsKeyReleased(int keycode)
+    {
+        GLFWwindow *window = static_cast<GLFWwindow *>(Application::Get().GetWindow().GetNativeWindow());
+
+        int state = glfwGetKey(window, keycode);
+
+        return state == GLFW_RELEASE;
+    }
+
     bool Input::IsMouseButtonPressed(int button)
     {
         GLFWwindow *window = static_cast<GLFWwindow *>(Application::Get().GetWindow().GetNativeWindow());

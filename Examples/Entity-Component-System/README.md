@@ -129,6 +129,16 @@ Once you are done with the world, make sure to destroy it (this will also deallo
 world->DestroyWorld();
 ```
 
+## Create Entities
+
+You saw in the last examples that you can create entities with `World::CreateEntity()`.
+But if you want to create like a script for spawning entities, you can use `World::CreateEntity()` but that will segfault because you will edit the world during is iteration.
+So for that you can use `World::CreateNewEntity()` that will store the entity create in a merge list and will merge it at the end of the iteration.
+
+```cpp
+Entity *entity = world->CreateNewEntity("Player");
+```
+
 ## Working with components
 
 You may retrieve a component handle (for example, to print out the position of your entity) with `GetComponents()`:
@@ -244,6 +254,7 @@ There are a handful of built-in events. Here is the list:
 - OnEntityDestroyed  - called when an entity is being destroyed (including when a world is beind deleted).
 - OnComponentAdded   - called when a component is added to an entity. This might mean the component is new to the entity, or there's just a new assignment of the component to that entity overwriting an old one.
 - OnComponentRemoved - called when a component is removed from an entity. This happens upon manual removal `Entity::RemoveComponent()` and `Entity::RemoveAllComponents()` or upon entity destruction (which can also happen as a result of the world being destroyed).
+- OnCollisionEnter  - called when an entity collides with another entity. This event is emitted by the CollisionSystem.
 
 # Running the example
 
