@@ -91,6 +91,9 @@ set(INCLUDE_DIRS_GAME_ENGINE
 
     # Game Engine Platform include directories
     src/Platform
+
+    # Network include directories
+    src/Network
 )
 
 # Create the Game Engine Static Library
