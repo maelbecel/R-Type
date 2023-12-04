@@ -10,6 +10,7 @@
 
 // Exodia Debug includes
 #include "Debug/Profiling.hpp"
+#include "Debug/Logs.hpp"
 
 namespace Exodia {
 
@@ -21,12 +22,12 @@ namespace Exodia {
     {
         EXODIA_PROFILE_FUNCTION();
 
-        world->ForEach<ScriptComponent>([&](Entity *entity, ComponentHandle<ScriptComponent> script) {
+        world->ForEach<ScriptComponent>([&](UNUSED Entity *entity, UNUSED ComponentHandle<ScriptComponent> script) {
             auto &sc = script.Get();
-        
+
             if (!sc.Instance) {
                 sc.Instance = sc.InstantiateScript();
-                sc.Instance->HandleEntity = *entity;
+                sc.Instance->HandleEntity = entity;
                 sc.Instance->OnCreate();
             }
 
