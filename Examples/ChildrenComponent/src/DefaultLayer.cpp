@@ -59,47 +59,13 @@ namespace Exodia {
 
         Renderer2D::BeginScene(_CameraController.GetCamera());
 
-        /*_World->ForEach<SpriteRendererComponent, TransformComponent>([&](Entity *entity, auto sprite, auto transform) {
+        _World->ForEach<SpriteRendererComponent, TransformComponent>([&](Entity *entity, auto sprite, auto transform) {
             Renderer2D::DrawSprite(
                 transform.Get().GetTransform(), // Transform
                 sprite.Get(),                   // SpriteRendererComponent
                 (int)entity->GetEntityID()      // Entity ID
             );
-        });*/
-
-        /*_World->ForEach<ChildrenComponent>([&](Entity *entity, auto children) {
-            auto &cc = children.Get();
-
-            for (auto &child : cc.Children) {
-                //Entity *childEntity = entity->GetWorld()->GetEntityByID(child);
-
-                if (_World->GetEntityByID(child) != nullptr)
-                    continue;
-                _World->AddEntity(childEntity);
-
-                if (childEntity) {
-                    auto transform = childEntity->GetComponent<TransformComponent>();
-                    auto id        = childEntity->GetComponent<IDComponent>();
-                    auto sprite    = childEntity->GetComponent<SpriteRendererComponent>();
-
-                    if (transform && id && sprite) {
-                        Renderer2D::DrawSprite(
-                            transform.Get().GetTransform(), // Transform
-                            sprite.Get(),                   // SpriteRendererComponent
-                            (int)id.Get().ID                // Entity ID
-                        );
-                    }
-                }
-            }
-        });*/
-
-        /*_World->ForEach<TransformComponent, SpriteRendererComponent>([&](Entity *entity, auto transform, auto sprite) {
-            Renderer2D::DrawSprite(
-                transform.Get().GetTransform(), // Transform
-                sprite.Get(),                   // SpriteRendererComponent
-                (int)entity->GetEntityID()      // Entity ID
-            );
-        });*/
+        });
 
         Renderer2D::EndScene();
     }

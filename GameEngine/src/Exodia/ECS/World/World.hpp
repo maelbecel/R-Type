@@ -24,6 +24,9 @@
     // Exodia Utils includes
     #include "Utils/CrossPlatform.hpp"
 
+    // Exodia Debug includes
+    #include "Debug/Logs.hpp"
+
     // External includes
     #include <unordered_map>
     #include <functional>
@@ -68,6 +71,7 @@ namespace Exodia {
             void DestroyWorld();
 
             Entity *CreateEntity(const std::string &name = std::string());
+            Entity *CreateNewEntity(const std::string &name = std::string());
 
             void DestroyEntity(Entity *entity, bool immediate = false);
 
@@ -127,10 +131,11 @@ namespace Exodia {
             }
 
             template<typename ...Entities>
-            void ForEach(typename std::common_type<std::function<void(Entity *, World *, ComponentHandle<Entities>...)>>::type function, bool includePendingDestroy = false)
+            void ForEach(typename std::common_type<std::function<void(Entity *, ComponentHandle<Entities>...)>>::type function, bool includePendingDestroy = false)
             {
                 for (auto *entity : View<Entities ...>(includePendingDestroy))
-                    function(entity, this, entity->template GetComponent<Entities>()...);
+                    function(entity, entity->template GetComponent<Entities>()...);
+                MergeEntities();
             }
 
             void ForAll(std::function<void(Entity *)> function, bool includePendingDestroy = false);
@@ -149,6 +154,7 @@ namespace Exodia {
             void Update(Timestep ts);
 
         private:
+            void MergeEntities();
             void SortUUIDMap();
 
         ///////////////////////
@@ -172,6 +178,8 @@ namespace Exodia {
             SystemAllocator _SystemAllocator;
 
             std::vector<Entity       *, EntityPtrAllocator> _Entities;
+            std::vector<Entity       *, EntityPtrAllocator> _MergedEntities;
+
             std::vector<EntitySystem *, SystemPtrAllocator> _Systems;
             std::vector<EntitySystem *>                     _DisabledSystems;
 

@@ -27,7 +27,7 @@ namespace Exodia {
     {
         EXODIA_PROFILE_FUNCTION();
 
-        world->ForEach<RigidBody2DComponent>([&](Entity *entity, UNUSED World *w, ComponentHandle<RigidBody2DComponent> rigidBody) {
+        world->ForEach<RigidBody2DComponent>([&](Entity *entity, ComponentHandle<RigidBody2DComponent> rigidBody) {
             if (rigidBody.Get().Type == RigidBody2DComponent::BodyType::Static)
                 return;
             ApplyGravity(rigidBody, ts);

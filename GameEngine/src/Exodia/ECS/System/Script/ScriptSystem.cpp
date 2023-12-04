@@ -22,8 +22,8 @@ namespace Exodia {
     {
         EXODIA_PROFILE_FUNCTION();
 
-        world->ForEach<ScriptComponent>([&](Entity *entity, World *w, ComponentHandle<ScriptComponent> script) {
-            /*auto &sc = script.Get();
+        world->ForEach<ScriptComponent>([&](UNUSED Entity *entity, UNUSED ComponentHandle<ScriptComponent> script) {
+            auto &sc = script.Get();
 
             if (!sc.Instance) {
                 sc.Instance = sc.InstantiateScript();
@@ -31,8 +31,7 @@ namespace Exodia {
                 sc.Instance->OnCreate();
             }
 
-            sc.Instance->OnUpdate(ts);*/
-            w->CreateEntity("Dobkeratops");
+            sc.Instance->OnUpdate(ts);
         });
     }
 };

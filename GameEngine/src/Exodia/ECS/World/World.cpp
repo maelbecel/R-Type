@@ -63,6 +63,28 @@ namespace Exodia {
         std::allocator_traits<WorldAllocator>::deallocate(allocator, this, 1);
     }
 
+    Entity *World::CreateNewEntity(const std::string &name)
+    {
+        Entity *entity = std::allocator_traits<EntityAllocator>::allocate(_EntityAllocator, 1);
+        UUID entityID = UUID();
+
+        std::allocator_traits<EntityAllocator>::construct(_EntityAllocator, entity, this, entityID);
+
+        _IndexToUUIDMap[GetCount() + _MergedEntities.size()] = entityID;
+
+        entity->AddComponent<IDComponent>(entityID);
+        entity->AddComponent<TransformComponent>();
+        auto tag = entity->AddComponent<TagComponent>();
+
+        tag.Get().Tag = name.empty() ? "Entity" : name;
+
+        _MergedEntities.push_back(entity);
+
+        Emit<Events::OnEntityCreated>({ entity });
+
+        return entity;
+    }
+
     Entity *World::CreateEntity(const std::string &name)
     {
         Entity *entity = std::allocator_traits<EntityAllocator>::allocate(_EntityAllocator, 1);
@@ -228,6 +250,13 @@ namespace Exodia {
 
         for (auto *system : _Systems)
             system->Update(this, ts);
+    }
+
+    void World::MergeEntities()
+    {
+        for (auto *entity : _MergedEntities)
+            _Entities.push_back(entity);
+        _MergedEntities.clear();
     }
 
     void World::SortUUIDMap()

@@ -33,7 +33,7 @@ namespace Exodia {
             {
                 auto &children = HandleEntity->GetComponent<ChildrenComponent>().Get();
 
-                Entity *tail = HandleEntity->GetWorld()->CreateEntity("DobkeratopsTail - #" + std::to_string(0));
+                Entity *tail = HandleEntity->GetWorld()->CreateNewEntity("DobkeratopsTail - #" + std::to_string(0));
 
                 auto &tc = tail->GetComponent<TransformComponent>().Get();
                 

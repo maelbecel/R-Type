@@ -27,7 +27,7 @@ namespace Exodia {
     {
         EXODIA_PROFILE_FUNCTION();
 
-        world->ForEach<RigidBody2DComponent, TransformComponent>([&](Entity *entity, UNUSED World *w, ComponentHandle<RigidBody2DComponent> rigidBody, ComponentHandle<TransformComponent> transform)
+        world->ForEach<RigidBody2DComponent, TransformComponent>([&](Entity *entity, ComponentHandle<RigidBody2DComponent> rigidBody, ComponentHandle<TransformComponent> transform)
         {
             if (rigidBody.Get().Type == RigidBody2DComponent::BodyType::Static)
                 return;
