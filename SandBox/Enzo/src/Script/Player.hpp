@@ -64,10 +64,10 @@ namespace Exodia {
                         tc.Translation.y -= _Speed * ts;
                         _State = State::MOVE_DOWN;
                     }
-                    if (Input::IsKeyPressed(Key::Unknown)) {
-                        std::cout << "Unknown key pressed" << std::endl;
-                        _State = State::IDLE;
-                    }
+                    // if (Input::IsKeyReleased(Key::Unknown)) {
+                    //     std::cout << "Unknown key pressed" << std::endl;
+                    //     _State = State::IDLE;
+                    // }
                 }
             }
 

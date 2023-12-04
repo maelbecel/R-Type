@@ -34,13 +34,13 @@ namespace Exodia {
     };
 
     struct Animation {
-        int CurrentFrame;
-        int MaxFrame;
+        float CurrentFrame;
+        float MaxFrame;
         float FrameTime;
-        float CurrentTime;
+        float elapsedTime = 0.0f;
 
         Animation(const Animation &) = default;
-        Animation(int maxFrame = 0, float frameTime = 0.0f) : CurrentFrame(0), MaxFrame(maxFrame), FrameTime(frameTime), CurrentTime(0.0f) {};
+        Animation(float CurrentFrame = 0.0f, float MaxFrame = 0.0f, float FrameTime = 0.0f) : CurrentFrame(CurrentFrame), MaxFrame(MaxFrame), FrameTime(FrameTime) {};
     };
 };
 

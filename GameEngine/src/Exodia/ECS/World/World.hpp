@@ -51,7 +51,7 @@ namespace Exodia {
 
             using SubscriberPtrAllocator  = std::allocator_traits<Allocator>::template rebind_alloc<IEventSubscriber *>;
             using SubscriberPairAllocator = std::allocator_traits<Allocator>::template rebind_alloc<std::pair<const TypeIndex, std::vector<IEventSubscriber *, SubscriberPtrAllocator>>>;
-        
+
         //////////////////////////////
         // Constructor & Destructor //
         //////////////////////////////

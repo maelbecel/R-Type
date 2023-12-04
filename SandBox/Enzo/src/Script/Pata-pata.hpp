@@ -27,21 +27,21 @@ namespace Exodia {
                 std::cout << "PataPata created" << std::endl;
             }
 
-            void OnUpdate(Timestep ts) override
+            void OnUpdate(UNUSED Timestep ts) override
             {
                 auto transform = GetComponent<TransformComponent>();
 
                 if (transform) {
-                    auto &tc = transform.Get();
+                    // auto &tc = transform.Get();
 
-                     // Amplitude du mouvement sinusoidal
-                    float amplitude = 1.0f;
+                    //  // Amplitude du mouvement sinusoidal
+                    // float amplitude = 1.0f;
 
-                    // Fréquence du mouvement sinusoidal (plus la fréquence est élevée, plus le mouvement est rapide)
-                    float frequency = 1.0f;
+                    // // Fréquence du mouvement sinusoidal (plus la fréquence est élevée, plus le mouvement est rapide)
+                    // float frequency = 1.0f;
 
-                    // Mise à jour de la position en fonction du temps et du mouvement sinusoidal
-                    tc.Translation.y += amplitude * sin(frequency * ts.GetSeconds());
+                    // // Mise à jour de la position en fonction du temps et du mouvement sinusoidal
+                    // tc.Translation.y += amplitude * sin(frequency * ts.GetSeconds());
                 }
             }
 
