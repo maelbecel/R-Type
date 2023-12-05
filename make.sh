@@ -34,6 +34,10 @@ makesandbox() {
     make "sandbox"
 }
 
+makesandbox() {
+    mkdir build ; cd build ; cmake .. -DCOMPILE_SANDBOX=ON -G Ninja ; ninja ; cd ..
+}
+
 makeclean() {
     rm -rf *.log
 }
