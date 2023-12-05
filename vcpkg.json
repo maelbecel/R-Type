@@ -5,6 +5,13 @@
         "glm",
         "glfw3",
         "glad",
-        "stb"
+        "stb",
+        "openal-soft",
+        "spdlog",
+        "catch2",
+        "sol2",
+        "nativefiledialog",
+        "yaml-cpp",
+        "imguizmo"
     ]
 }

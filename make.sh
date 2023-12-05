@@ -15,13 +15,10 @@ make() {
 
     # Exécuter les commandes cmake et ninja
     if [ "$compile_type" == "examples" ]; then
-        echo "compile examples !!!!!!"
         cmake .. -G Ninja -DCOMPILE_EXAMPLES=ON --preset=vcpkg
     elif [ "$compile_type" == "sandbox" ]; then
-        echo "compile sandbox !!!!!!"
         cmake .. -G Ninja -DCOMPILE_SANDBOX=ON --preset=vcpkg
     else
-        echo "compile !!!!!!"
         cmake .. -G Ninja --preset=vcpkg
     fi
 
