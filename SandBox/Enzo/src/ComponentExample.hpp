@@ -57,10 +57,22 @@ namespace Exodia {
         float CurrentFrame;
         float MaxFrame;
         float FrameTime;
-        float elapsedTime = 0.0f;
+        float ElapsedTime = 0.0f;
 
         Animation(const Animation &) = default;
         Animation(float CurrentFrame = 0.0f, float MaxFrame = 0.0f, float FrameTime = 0.0f) : CurrentFrame(CurrentFrame), MaxFrame(MaxFrame), FrameTime(FrameTime) {};
+    };
+
+    /**
+     * @brief Clock component.
+     *
+     * @param ElapsedTime Elapsed time of the entity.
+     */
+    struct Clock {
+        float ElapsedTime;
+
+        Clock(const Clock &) = default;
+        Clock(float ElapsedTime = 0.0f) : ElapsedTime(ElapsedTime) {};
     };
 };
 
