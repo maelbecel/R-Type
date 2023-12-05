@@ -22,7 +22,7 @@ jobs:
       - uses: seanmiddleditch/gha-setup-ninja@v4
       - run: |
           cmake --version
-          echo "make re" | ./make.sh && [ -f r-type_client ] && [ -f r-type_server ]
+          echo "2" | ./make.sh && [ -f r-type_client ] && [ -f r-type_server ]
 
   tests:
     name: Testing...
