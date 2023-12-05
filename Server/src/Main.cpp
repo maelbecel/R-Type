@@ -9,10 +9,19 @@
 #include <boost/asio.hpp>
 #include "Exodia.hpp"
 
+
+void my_callback(const std::string &message)
+{
+    (void)message;
+    std::cout << "Message received: " << message << std::endl;
+}
+
 int main(int ac, char **av)
 {
     (void)ac;
     (void)av;
+
+    Exodia::Log::Init();
 
     std::cout << "Asio World !" << std::endl;
 
@@ -20,17 +29,13 @@ int main(int ac, char **av)
         // Server main
         Exodia::Network::IOContextManager ioContextManager;
 
-        // Create a UDPSocket object for the server
-        Exodia::Network::UDPSocket serverSocket(ioContextManager);
-
         // Define a local endpoint to listen on
         boost::asio::ip::udp::endpoint localEndpoint(boost::asio::ip::address::from_string("127.0.0.1"), 8080);
 
-        // Bind the socket to the local endpoint
-        serverSocket.open(localEndpoint);
+        // Create a UDPSocket object for the server
+        Exodia::Network::UDPSocket serverSocket(ioContextManager, localEndpoint);
 
-        // Start receiving data asynchronously
-        serverSocket.receive();
+        serverSocket.receive(my_callback);
 
         // Run the IO context to initiate asynchronous operations
         ioContextManager.run();

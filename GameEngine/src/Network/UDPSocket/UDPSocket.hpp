@@ -23,13 +23,30 @@ class UDPSocket {
 
         /**
          * @brief Construct a new UDPSocket object
+         * Construct a new UDPSocket object using the provided IOContextManager
          *
-         * @param ioContextManager
+         * @param ioContextManager (Type: IOContextManager &) The IOContextManager to use
          */
-        UDPSocket(IOContextManager& ioContextManager)
+        UDPSocket(IOContextManager& ioContextManager, const boost::asio::ip::udp::endpoint& endpoint)
             : _socket(ioContextManager.getIOContext()), _senderEndpoint() {
             // Construct the UDP socket using the provided IOContextManager
             _socket = boost::asio::ip::udp::socket(ioContextManager.getIOContext());
+            boost::system::error_code error;
+            if (_socket.is_open())
+                EXODIA_CORE_ERROR("Socket already open");
+            _socket.open(endpoint.protocol(), error);
+            if (!error) {
+                _socket.bind(endpoint, error);
+                if (!error) {
+                    EXODIA_CORE_INFO("Socket opened successfully");
+                } else {
+                    EXODIA_CORE_ERROR("Error binding socket: ", error.message());
+                    throw std::runtime_error("Error binding socket");
+                }
+            } else {
+                EXODIA_CORE_ERROR("Error opening socket: ", error.message());
+                throw std::runtime_error("Error opening socket");
+            }
         }
 
         /**
@@ -37,21 +54,20 @@ class UDPSocket {
          *
          */
         ~UDPSocket() {
-            _socket.close();
+            if (_socket.is_open())
+                _socket.close();
         }
 
         /**
          * @brief Send data asynchronously
          *
-         * @param message
-         * @param endpoint
+         * @param message (Type: std::string &) The message to send
+         * @param endpoint (Type: const boost::asio::ip::udp::endpoint &) The endpoint to send the message to
          */
         void send(const std::string& message, const boost::asio::ip::udp::endpoint& endpoint) {
             _socket.async_send_to(boost::asio::buffer(message), endpoint,
                 [](const boost::system::error_code& error, std::size_t /*bytes_sent*/) {
-                    if (!error) {
-                        EXODIA_CORE_INFO("Message sent successfully");
-                    } else {
+                    if (error) {
                         EXODIA_CORE_ERROR("Error sending message: ", error.message());
                     }
                 });
@@ -60,14 +76,14 @@ class UDPSocket {
         /**
          * @brief Receive data asynchronously
          *
+         * @param callback (Type: void (*)(const std::string&)) The callback to call when a message is received
          */
-        void receive() {
+        void receive(void (*callback)(const std::string&)) {
             _socket.async_receive_from(boost::asio::buffer(_receiveBuffer), _senderEndpoint,
-                [this](const boost::system::error_code& error, std::size_t bytes_received) {
+                [this, callback](const boost::system::error_code& error, std::size_t bytes_received) {
                     if (!error) {
                         std::string receivedMessage(_receiveBuffer.begin(), _receiveBuffer.begin() + bytes_received);
-                        EXODIA_CORE_INFO("Received message: ", receivedMessage);
-                        receive();
+                        callback(receivedMessage);
                     } else {
                         EXODIA_CORE_ERROR("Error receiving message: ", error.message());
                     }
@@ -75,27 +91,8 @@ class UDPSocket {
         }
 
         /**
-         * @brief Open the UDP socket
-         *
-         * @param endpoint The endpoint to bind the socket to
-         */
-        void open(const boost::asio::ip::udp::endpoint& endpoint) {
-            boost::system::error_code error;
-            _socket.open(endpoint.protocol(), error);
-            if (!error) {
-                _socket.bind(endpoint, error);
-                if (!error) {
-                    EXODIA_CORE_INFO("Socket opened successfully");
-                } else {
-                    EXODIA_CORE_ERROR("Error binding socket: ", error.message());
-                }
-            } else {
-                EXODIA_CORE_ERROR("Error opening socket: ", error.message());
-            }
-        }
-
-        /**
          * @brief Get the Sender Endpoint object
+         * call this function to get the sender endpoint
          *
          * @return boost::asio::ip::udp::endpoint
          */
@@ -105,6 +102,7 @@ class UDPSocket {
 
         /**
          * @brief Get the Socket object
+         * call this function to get the socket
          *
          * @return boost::asio::ip::udp::socket&
          */
@@ -113,9 +111,9 @@ class UDPSocket {
         }
 
     private:
-        boost::asio::ip::udp::socket _socket;
-        boost::asio::ip::udp::endpoint _senderEndpoint;
-        std::array<char, MTU> _receiveBuffer;
+        boost::asio::ip::udp::socket _socket; /*!< The UDP socket */
+        boost::asio::ip::udp::endpoint _senderEndpoint; /*!< The sender endpoint */
+        std::array<char, MTU> _receiveBuffer; /*!< The receive buffer */
     };
     }; // namespace Network
 }; // namespace Exodia

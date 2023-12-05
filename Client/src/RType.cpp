@@ -9,6 +9,13 @@
 #include "Layer/RTypeLayer.hpp"
 #include <iostream>
 
+
+void my_callback(const std::string &message)
+{
+    (void)message;
+    std::cout << "Message received: " << message << std::endl;
+}
+
 namespace Exodia {
 
     class RType : public Application {
@@ -32,29 +39,13 @@ namespace Exodia {
 
     Application *CreateApplication(ApplicationCommandLineArgs args)
     {
-        (void)args;
-        Exodia::Network::IOContextManager ioContextManager;
+        EXODIA_PROFILE_FUNCTION();
 
-        // Create a UDPSocket object for the server
-        Exodia::Network::UDPSocket serverSocket(ioContextManager);
+        ApplicationSpecification spec;
 
-        // Define a local endpoint to listen on
-        boost::asio::ip::udp::endpoint localEndpoint(boost::asio::ip::address::from_string("127.0.0.1"), 8081);
+        spec.Name = "Application Example";
+        spec.CommandLineArgs = args;
 
-        // Bind the socket to the local endpoint
-        serverSocket.getSocket().open(localEndpoint.protocol());
-        serverSocket.getSocket().bind(localEndpoint);
-
-        // Start receiving data asynchronously
-        serverSocket.receive();
-
-        // the other server is in the same machine but on port 8080
-        boost::asio::ip::udp::endpoint remoteEndpoint(boost::asio::ip::address::from_string("127.0.0.1"), 8080);
-
-        serverSocket.send("Hello World 9999", remoteEndpoint);
-        // Run the IO context to initiate asynchronous operations
-        ioContextManager.run();
-
-        return 0;
+        return new RType(spec);
     }
 };
