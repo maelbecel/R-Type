@@ -2,7 +2,7 @@
 
 # This script is used to build the project.
 
-echo "Command to execute (make, make re, make examples, make clean, make fclean)"
+echo "Command to execute (make, make re, make examples, make sandbox, make clean, make fclean)"
 echo "Please enter the command to execute :"
 
 read command
@@ -13,6 +13,10 @@ make() {
 
 makeexamples() {
     mkdir build ; cd build ; cmake .. -DCOMPILE_EXAMPLES=ON -G Ninja ; ninja ; cd ..
+}
+
+makesandbox() {
+    mkdir build ; cd build ; cmake .. -DCOMPILE_SANDBOX=ON -G Ninja ; ninja ; cd ..
 }
 
 makeclean() {
@@ -42,6 +46,9 @@ then
 elif [ "$command" = "make examples" ]
 then
     makeexamples
+elif [ "$command" = "make sandbox" ]
+then
+    makesandbox
 elif [ "$command" = "make clean" ]
 then
     makeclean
