@@ -16,12 +16,6 @@ namespace Exodia {
 
 #define MTU 1468
 
-#define ERROR "\033[1;31m[ERROR]\033[0m "
-#define SUCCESS "\033[1;32m[SUCCESS]\033[0m "
-#define WARNING "\033[1;33m[WARNING]\033[0m "   
-#define INFO "\033[1;34m[INFO]\033[0m "
-#define DEBUG "\033[1;35m[DEBUG]\033[0m "
-
 class UDPSocket {
     public:
 
@@ -31,9 +25,9 @@ class UDPSocket {
          * @param ioContextManager 
          */
         UDPSocket(IOContextManager& ioContextManager)
-            : socket_(ioContextManager.getIOContext()), senderEndpoint_() {
+            : _socket(ioContextManager.getIOContext()), _senderEndpoint() {
             // Construct the UDP socket using the provided IOContextManager
-            socket_ = boost::asio::ip::udp::socket(ioContextManager.getIOContext());
+            _socket = boost::asio::ip::udp::socket(ioContextManager.getIOContext());
         }
 
         /**
@@ -41,7 +35,7 @@ class UDPSocket {
          * 
          */
         ~UDPSocket() {
-            socket_.close();
+            _socket.close();
         }
 
         /**
@@ -51,9 +45,10 @@ class UDPSocket {
          * @param endpoint 
          */
         void send(const std::string& message, const boost::asio::ip::udp::endpoint& endpoint) {
-            socket_.async_send_to(boost::asio::buffer(message), endpoint,
+            _socket.async_send_to(boost::asio::buffer(message), endpoint,
                 [](const boost::system::error_code& error, std::size_t /*bytes_sent*/) {
                     if (!error) {
+                        EXODIA_ERROR
                         std::cout << SUCCESS << "Message sent successfully" << std::endl;
                     } else {
                         std::cerr << ERROR << "Error sending message: " << error.message() << std::endl;
@@ -66,10 +61,10 @@ class UDPSocket {
          * 
          */
         void receive() {
-            socket_.async_receive_from(boost::asio::buffer(receiveBuffer_), senderEndpoint_,
+            _socket.async_receive_from(boost::asio::buffer(_receiveBuffer), _senderEndpoint,
                 [this](const boost::system::error_code& error, std::size_t bytes_received) {
                     if (!error) {
-                        std::string receivedMessage(receiveBuffer_.begin(), receiveBuffer_.begin() + bytes_received);
+                        std::string receivedMessage(_receiveBuffer.begin(), _receiveBuffer.begin() + bytes_received);
                         std::cout << INFO << "Received message: " << receivedMessage << std::endl;
                         // Continue receiving more data
                         receive();
@@ -80,12 +75,32 @@ class UDPSocket {
         }
 
         /**
+         * @brief Open the UDP socket
+         *
+         * @param endpoint The endpoint to bind the socket to
+         */
+        void open(const boost::asio::ip::udp::endpoint& endpoint) {
+            boost::system::error_code error;
+            _socket.open(endpoint.protocol(), error);
+            if (!error) {
+                _socket.bind(endpoint, error);
+                if (!error) {
+                    std::cout << SUCCESS << "Socket opened successfully" << std::endl;
+                } else {
+                    std::cerr << ERROR << "Error binding socket: " << error.message() << std::endl;
+                }
+            } else {
+                std::cerr << ERROR << "Error opening socket: " << error.message() << std::endl;
+            }
+        }
+
+        /**
          * @brief Get the Sender Endpoint object
          * 
          * @return boost::asio::ip::udp::endpoint 
          */
         boost::asio::ip::udp::endpoint getSenderEndpoint() const {
-            return senderEndpoint_;
+            return _senderEndpoint;
         }
 
         /**
@@ -94,13 +109,13 @@ class UDPSocket {
          * @return boost::asio::ip::udp::socket& 
          */
         boost::asio::ip::udp::socket& getSocket() {
-            return socket_;
+            return _socket;
         }
 
     private:
-        boost::asio::ip::udp::socket socket_;
-        boost::asio::ip::udp::endpoint senderEndpoint_;
-        std::array<char, MTU> receiveBuffer_;
+        boost::asio::ip::udp::socket _socket;
+        boost::asio::ip::udp::endpoint _senderEndpoint;
+        std::array<char, MTU> _receiveBuffer;
     };
 
 }; // namespace Exodia
