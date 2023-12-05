@@ -44,5 +44,7 @@ bin*
 r-type_client
 r-type_server
 
+# ImGui
+imgui.ini
 # Segfault error files
 vgcore.*
