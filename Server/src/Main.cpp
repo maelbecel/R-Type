@@ -18,10 +18,10 @@ int main(int ac, char **av)
 
     try {
         // Server main
-        Exodia::IOContextManager ioContextManager;
+        Exodia::Network::IOContextManager ioContextManager;
 
         // Create a UDPSocket object for the server
-        Exodia::UDPSocket serverSocket(ioContextManager);
+        Exodia::Network::UDPSocket serverSocket(ioContextManager);
 
         // Define a local endpoint to listen on
         boost::asio::ip::udp::endpoint localEndpoint(boost::asio::ip::address::from_string("127.0.0.1"), 8080);

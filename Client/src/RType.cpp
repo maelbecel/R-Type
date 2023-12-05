@@ -32,13 +32,29 @@ namespace Exodia {
 
     Application *CreateApplication(ApplicationCommandLineArgs args)
     {
-        EXODIA_PROFILE_FUNCTION();
+        (void)args;
+        Exodia::Network::IOContextManager ioContextManager;
 
-        ApplicationSpecification spec;
+        // Create a UDPSocket object for the server
+        Exodia::Network::UDPSocket serverSocket(ioContextManager);
 
-        spec.Name = "R-Type";
-        spec.CommandLineArgs = args;
+        // Define a local endpoint to listen on
+        boost::asio::ip::udp::endpoint localEndpoint(boost::asio::ip::address::from_string("127.0.0.1"), 8081);
 
-        return new RType(spec);
+        // Bind the socket to the local endpoint
+        serverSocket.getSocket().open(localEndpoint.protocol());
+        serverSocket.getSocket().bind(localEndpoint);
+
+        // Start receiving data asynchronously
+        serverSocket.receive();
+
+        // the other server is in the same machine but on port 8080
+        boost::asio::ip::udp::endpoint remoteEndpoint(boost::asio::ip::address::from_string("127.0.0.1"), 8080);
+
+        serverSocket.send("Hello World 9999", remoteEndpoint);
+        // Run the IO context to initiate asynchronous operations
+        ioContextManager.run();
+
+        return 0;
     }
 };

@@ -14,7 +14,9 @@
 
 namespace Exodia {
 
-#define MTU 1468
+    namespace Network {
+
+    #define MTU 1468
 
 class UDPSocket {
     public:
@@ -115,7 +117,7 @@ class UDPSocket {
         boost::asio::ip::udp::endpoint _senderEndpoint;
         std::array<char, MTU> _receiveBuffer;
     };
-
+    }; // namespace Network
 }; // namespace Exodia
 
 #endif // UDP_SOCKET_HPP

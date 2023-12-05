@@ -13,53 +13,55 @@
 
 namespace Exodia {
 
-class IOContextManager {
-    public:
+    namespace Network {
 
-        /**
-         * @brief Construct a new IOContextManager object and initialize the io_context_
-         * 
-         */
-        IOContextManager() : io_context_() {}
+    class IOContextManager {
+        public:
 
-        ~IOContextManager()
-        {
-            if (isRunning_)
+            /**
+             * @brief Construct a new IOContextManager object and initialize the io_context_
+             *
+             */
+            IOContextManager() : io_context_() {}
+
+            ~IOContextManager()
+            {
+                if (isRunning_)
+                    io_context_.stop();
+            };
+
+            /**
+             * @brief Getter for the io_context_
+             *
+             * @return boost::asio::io_context&
+             */
+            boost::asio::io_context& getIOContext() {
+                return io_context_;
+            }
+
+            /**
+             * @brief Run the io_context_
+             *
+             */
+            void run() {
+                isRunning_ = true;
+                io_context_.run();
+            }
+
+            /**
+             * @brief Stop the io_context_
+             *
+             */
+            void stop() {
+                isRunning_ = false;
                 io_context_.stop();
+            }
+
+        private:
+            boost::asio::io_context io_context_;
+            bool isRunning_;
         };
-
-        /**
-         * @brief Getter for the io_context_
-         * 
-         * @return boost::asio::io_context& 
-         */
-        boost::asio::io_context& getIOContext() {
-            return io_context_;
-        }
-
-        /**
-         * @brief Run the io_context_
-         * 
-         */ 
-        void run() {
-            isRunning_ = true;
-            io_context_.run();
-        }
-
-        /**
-         * @brief Stop the io_context_
-         * 
-         */
-        void stop() {
-            isRunning_ = false;
-            io_context_.stop();
-        }
-
-    private:
-        boost::asio::io_context io_context_;
-        bool isRunning_;
-    };
-
+    } // namespace Network
 } // namespace Exodia
 
 #endif // IO_CONTEXT_MANAGER_HPP
