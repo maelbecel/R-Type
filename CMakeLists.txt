@@ -5,7 +5,10 @@ project(r-type)
 # Option for compiling examples
 option(COMPILE_EXAMPLES "Compile examples" OFF)
 
+# Find Packages
 find_package(Boost REQUIRED)
+find_package(glm REQUIRED)
+find_package(glfw3 REQUIRED)
 
 add_subdirectory(3rd-party)
 add_subdirectory(GameEngine)

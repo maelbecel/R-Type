@@ -45,7 +45,7 @@ target_link_libraries(r-type_server PRIVATE
     glad
     glfw
     imgui
-    glm
+    glm::glm
     Boost::boost
 )
 
@@ -55,7 +55,7 @@ target_include_directories(r-type_server PRIVATE ${CMAKE_BINARY_DIR}/_deps/openg
 target_include_directories(r-type_server PRIVATE ${CMAKE_BINARY_DIR}/_deps/opengl-src/stb_image)
 target_include_directories(r-type_server PRIVATE ${CMAKE_BINARY_DIR}/_deps/imgui-src)
 target_include_directories(r-type_server PRIVATE ${CMAKE_BINARY_DIR}/_deps/glfw-src/include)
-target_include_directories(r-type_server PRIVATE ${CMAKE_BINARY_DIR}/_deps/glm-src)
+#target_include_directories(r-type_server PRIVATE ${CMAKE_BINARY_DIR}/_deps/glm-src)
 
 set_target_properties(r-type_server PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../
