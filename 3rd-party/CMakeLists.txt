@@ -83,13 +83,3 @@ if (IMPORT_IMGUI)
 
     target_include_directories(imgui PUBLIC ${imgui_SOURCE_DIR} ${imgui_SOURCE_DIR}/backends)
 endif ()
-
-include(FetchContent)
-
-FetchContent_Declare(
-  Boost
-  GIT_REPOSITORY https://github.com/boostorg/asio.git
-  GIT_TAG develop
-)
-
-FetchContent_MakeAvailable(Boost)

@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.12)
 
-project(r-type_client)
+project(r-type_client LANGUAGES CXX VERSION 1.0.1)
 
 set(CMAKE_BUILD_TYPE Debug)
 
@@ -45,15 +45,22 @@ include_directories(${INCLUDE_DIRS})
 # Add an executable for the r-type_client
 add_executable(r-type_client ${SOURCES})
 
-target_link_libraries(r-type_client GameEngine glad glfw glm imgui)
+target_link_libraries(r-type_client PRIVATE
+    GameEngine
+    glad
+    glfw
+    imgui
+    glm
+    Boost::boost
+)
 
+target_include_directories(r-type_client PRIVATE ${Boost_INCLUDE_DIRS})
 target_include_directories(r-type_client PRIVATE ${glad_INCLUDE_DIRS})
 target_include_directories(r-type_client PRIVATE ${CMAKE_BINARY_DIR}/_deps/opengl-src/GLAD/include)
 target_include_directories(r-type_client PRIVATE ${CMAKE_BINARY_DIR}/_deps/opengl-src/stb_image)
 target_include_directories(r-type_client PRIVATE ${CMAKE_BINARY_DIR}/_deps/glfw-src/include)
-target_include_directories(r-type_client PRIVATE ${CMAKE_BINARY_DIR}/_deps/glm-src)
 target_include_directories(r-type_client PRIVATE ${CMAKE_BINARY_DIR}/_deps/imgui-src)
-target_include_directories(r-type_client PRIVATE ${CMAKE_BINARY_DIR}/_deps/boost-src/include)
+target_include_directories(r-type_client PRIVATE ${CMAKE_BINARY_DIR}/_deps/glm-src)
 
 set_target_properties(r-type_client PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../

@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.12)
 
-project(GameEngine)
+project(GameEngine LANGUAGES CXX VERSION 1.0.1)
 
 set(CMAKE_BUILD_TYPE Debug)
 
@@ -104,13 +104,17 @@ set(INCLUDE_DIRS_GAME_ENGINE
 # Create the Game Engine Static Library
 add_library(GameEngine STATIC ${SOURCES_GAME_ENGINE})
 
+target_link_libraries(GameEngine PRIVATE
+    Boost::boost
+)
+
+target_include_directories(GameEngine PRIVATE ${Boost_INCLUDE_DIRS})
 target_include_directories(GameEngine PRIVATE ${INCLUDE_DIRS_GAME_ENGINE})
 target_include_directories(GameEngine PRIVATE ${CMAKE_BINARY_DIR}/_deps/opengl-src/GLAD/include)
 target_include_directories(GameEngine PRIVATE ${CMAKE_BINARY_DIR}/_deps/opengl-src/stb_image)
+target_include_directories(GameEngine PRIVATE ${CMAKE_BINARY_DIR}/_deps/imgui-src)
 target_include_directories(GameEngine PRIVATE ${CMAKE_BINARY_DIR}/_deps/glfw-src/include)
 target_include_directories(GameEngine PRIVATE ${CMAKE_BINARY_DIR}/_deps/glm-src)
-target_include_directories(GameEngine PRIVATE ${CMAKE_BINARY_DIR}/_deps/imgui-src)
-target_include_directories(GameEngine PRIVATE ${CMAKE_BINARY_DIR}/_deps/boost-src/include)
 
 set_target_properties(GameEngine PROPERTIES
     ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../lib
