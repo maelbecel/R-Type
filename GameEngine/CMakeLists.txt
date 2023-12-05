@@ -108,15 +108,13 @@ target_link_libraries(GameEngine PRIVATE
     Boost::boost
     glm::glm
     glfw
+    glad::glad
+    imgui
 )
 
-target_include_directories(GameEngine PRIVATE ${Boost_INCLUDE_DIRS})
 target_include_directories(GameEngine PRIVATE ${INCLUDE_DIRS_GAME_ENGINE})
-target_include_directories(GameEngine PRIVATE ${CMAKE_BINARY_DIR}/_deps/opengl-src/GLAD/include)
-target_include_directories(GameEngine PRIVATE ${CMAKE_BINARY_DIR}/_deps/opengl-src/stb_image)
+target_include_directories(GameEngine PRIVATE ${Stb_INCLUDE_DIR})
 target_include_directories(GameEngine PRIVATE ${CMAKE_BINARY_DIR}/_deps/imgui-src)
-#target_include_directories(GameEngine PRIVATE ${CMAKE_BINARY_DIR}/_deps/glfw-src/include)
-#target_include_directories(GameEngine PRIVATE ${CMAKE_BINARY_DIR}/_deps/glm-src)
 
 set_target_properties(GameEngine PROPERTIES
     ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../lib

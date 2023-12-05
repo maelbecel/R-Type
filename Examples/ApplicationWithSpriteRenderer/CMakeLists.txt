@@ -35,13 +35,16 @@ include_directories(${INCLUDE_DIRS})
 # Add an executable for the applicationRenderer
 add_executable(applicationRenderer ${SOURCES})
 
-target_link_libraries(applicationRenderer GameEngine glad glfw glm imgui)
+target_link_libraries(applicationRenderer PRIVATE
+    GameEngine
+    glad::glad
+    glfw
+    imgui
+    glm::glm
+    Boost::boost
+)
 
-target_include_directories(applicationRenderer PRIVATE ${glad_INCLUDE_DIRS})
-target_include_directories(applicationRenderer PRIVATE ${CMAKE_BINARY_DIR}/_deps/opengl-src/GLAD/include)
-target_include_directories(applicationRenderer PRIVATE ${CMAKE_BINARY_DIR}/_deps/opengl-src/stb_image)
-target_include_directories(applicationRenderer PRIVATE ${CMAKE_BINARY_DIR}/_deps/glfw-src/include)
-target_include_directories(applicationRenderer PRIVATE ${CMAKE_BINARY_DIR}/_deps/glm-src)
+target_include_directories(applicationRenderer PRIVATE ${Stb_INCLUDE_DIR})
 target_include_directories(applicationRenderer PRIVATE ${CMAKE_BINARY_DIR}/_deps/imgui-src)
 
 set_target_properties(applicationRenderer PROPERTIES

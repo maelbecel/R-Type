@@ -9,6 +9,8 @@ option(COMPILE_EXAMPLES "Compile examples" OFF)
 find_package(Boost REQUIRED)
 find_package(glm REQUIRED)
 find_package(glfw3 REQUIRED)
+find_package(glad REQUIRED)
+find_package(Stb REQUIRED)
 
 add_subdirectory(3rd-party)
 add_subdirectory(GameEngine)

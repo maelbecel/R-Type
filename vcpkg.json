@@ -3,6 +3,8 @@
     "dependencies": [
         "boost-asio",
         "glm",
-        "glfw3"
+        "glfw3",
+        "glad",
+        "stb"
     ]
 }

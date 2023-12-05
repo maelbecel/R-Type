@@ -35,13 +35,16 @@ include_directories(${INCLUDE_DIRS})
 # Add an executable for the imgui_Docking
 add_executable(imgui_Docking ${SOURCES})
 
-target_link_libraries(imgui_Docking GameEngine glad glfw glm imgui)
+target_link_libraries(imgui_Docking PRIVATE
+    GameEngine
+    glad::glad
+    glfw
+    imgui
+    glm::glm
+    Boost::boost
+)
 
-target_include_directories(imgui_Docking PRIVATE ${glad_INCLUDE_DIRS})
-target_include_directories(imgui_Docking PRIVATE ${CMAKE_BINARY_DIR}/_deps/opengl-src/GLAD/include)
-target_include_directories(imgui_Docking PRIVATE ${CMAKE_BINARY_DIR}/_deps/opengl-src/stb_image)
-target_include_directories(imgui_Docking PRIVATE ${CMAKE_BINARY_DIR}/_deps/glfw-src/include)
-target_include_directories(imgui_Docking PRIVATE ${CMAKE_BINARY_DIR}/_deps/glm-src)
+target_include_directories(imgui_Docking PRIVATE ${Stb_INCLUDE_DIR})
 target_include_directories(imgui_Docking PRIVATE ${CMAKE_BINARY_DIR}/_deps/imgui-src)
 
 set_target_properties(imgui_Docking PROPERTIES
