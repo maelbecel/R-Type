@@ -43,7 +43,7 @@ namespace Exodia {
         entity->AddComponent<Health>(185);
         entity->AddComponent<ScriptComponent>().Get().Bind<Player>();
         entity->AddComponent<SpriteRendererComponent>();
-        entity->AddComponent<Animation>();
+        entity->AddComponent<Animation>(1.0f, 2.0f, 1.0f);
         entity->GetComponent<TransformComponent>().Get().Scale.y = 0.5f;
 
         // Set entity sprite

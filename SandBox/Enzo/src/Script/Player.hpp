@@ -59,15 +59,12 @@ namespace Exodia {
                     if (Input::IsKeyPressed(Key::W)) {
                         tc.Translation.y += _Speed * ts;
                         _State = State::MOVE_UP;
-                    }
-                    if (Input::IsKeyPressed(Key::S)) {
+                    } else if (Input::IsKeyPressed(Key::S)) {
                         tc.Translation.y -= _Speed * ts;
                         _State = State::MOVE_DOWN;
+                    } else {
+                        _State = State::IDLE;
                     }
-                    // if (Input::IsKeyReleased(Key::Unknown)) {
-                    //     std::cout << "Unknown key pressed" << std::endl;
-                    //     _State = State::IDLE;
-                    // }
                 }
             }
 

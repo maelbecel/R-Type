@@ -30,28 +30,44 @@ namespace Exodia {
                 world->ForEach<SpriteRendererComponent, Animation>([&](Entity *entity, auto sprite, ComponentHandle<Animation> animation) {
                     // check if entity is player
                     if (entity->GetComponent<TagComponent>().Get().Tag == "Player") {
-                        UpdateAnimation<Player>(entity, [&](Player *player) {
+                        UpdateAnimation<Player>(entity, [&](UNUSED Player *player) {
                             switch (player->GetState()) {
                                 case Player::State::MOVE_UP:
-                                    animation.Get().CurrentFrame = 3;
                                     animation.Get().MaxFrame = 4;
-                                    animation.Get().FrameTime = 0.0f;
                                     break;
                                 case Player::State::MOVE_DOWN:
-                                    animation.Get().CurrentFrame = 1;
                                     animation.Get().MaxFrame = 0;
-                                    animation.Get().FrameTime = 0.0f;
                                     break;
                                 case Player::State::IDLE:
-                                    animation.Get().CurrentFrame = 2;
                                     animation.Get().MaxFrame = 2;
-                                    animation.Get().FrameTime = 0.0f;
                                     break;
                                 default:
                                     break;
                             }
                             auto &anim = animation.Get();
-                            sprite.Get().Texture->SetCoords({ (float)anim.CurrentFrame, 4.0f });
+                            // sprite.Get().Texture->SetCoords({ (float)anim.CurrentFrame, 4.0f });
+
+                            anim.elapsedTime += ts.GetSeconds();
+
+                            if (anim.elapsedTime >= 0.1f) {
+
+                                if (anim.MaxFrame > anim.CurrentFrame) {
+                                    anim.CurrentFrame += 1;
+
+                                    if (anim.CurrentFrame >= anim.MaxFrame)
+                                        anim.CurrentFrame = anim.MaxFrame;
+                                } else {
+                                    anim.CurrentFrame -= 1;
+
+                                    if (anim.CurrentFrame <= anim.MaxFrame)
+                                        anim.CurrentFrame = anim.MaxFrame;
+                                }
+
+
+                                sprite.Get().Texture->SetCoords({ anim.CurrentFrame, 4.0f });
+
+                                anim.elapsedTime = 0.0f;
+                            }
                         });
                     }
                     else if (entity->GetComponent<TagComponent>().Get().Tag == "Pata-pata") {

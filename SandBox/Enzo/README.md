@@ -2,6 +2,8 @@
 
 The player can be move with the zqsd keys.
 
+![Player](./images/player.gif)
+
 # Pata-Pata
 
 The pata-pata move randomly on the map, with a cosinus function for y axis.
