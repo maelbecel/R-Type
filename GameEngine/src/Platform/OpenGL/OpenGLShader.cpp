@@ -202,7 +202,7 @@ namespace Exodia {
 
         GLuint program = glCreateProgram();
 
-        EXODIA_CORE_ASSERT(shaderSources.size() <= MAX_SHADER_SUPPORTED, "We only support " + MAX_SHADER_SUPPORTED + " shaders for now");
+        EXODIA_CORE_ASSERT(shaderSources.size() <= MAX_SHADER_SUPPORTED, std::string("We only support " + std::to_string(MAX_SHADER_SUPPORTED) + " shaders for now !").c_str());
 
         std::array<GLenum, MAX_SHADER_SUPPORTED> glShaderIDs;
         int glShaderIDIndex = 0;

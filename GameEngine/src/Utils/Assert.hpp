@@ -24,9 +24,9 @@
 
 #ifndef EXODIA_ENABLE_ASSERTS
     #define EXODIA_ASSERT(x, ...) \
-            {                          \
+            {                     \
                 if (!(x)) {                 \
-                    EXODIA_CORE_ERROR("Assertion Failed: ", __VA_ARGS__); \
+                    EXODIA_ERROR("Assertion Failed: ", __VA_ARGS__); \
                     EXODIA_DEBUGBREAK();    \
                 }                           \
             }

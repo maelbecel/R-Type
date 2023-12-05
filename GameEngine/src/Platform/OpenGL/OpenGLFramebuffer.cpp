@@ -149,7 +149,7 @@ namespace Exodia {
             }
         }
         if (_ColorAttachments.size() > 1) {
-            EXODIA_CORE_ASSERT(_ColorAttachments.size() <= 4);
+            EXODIA_CORE_ASSERT(_ColorAttachments.size() <= 4, "Only 4 color attachments are supported !");
 
             GLenum buffers[4] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3 };
 
