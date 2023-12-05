@@ -5,7 +5,7 @@ project(GameEngine LANGUAGES CXX VERSION 1.0.1)
 set(CMAKE_BUILD_TYPE Debug)
 
 # Set compiler flags
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 
 set(GLAD_INCLUDE_DIRS ${CMAKE_BINARY_DIR}/GLAD/include CACHE STRING "GLAD Include directories")
 

@@ -1,5 +1,7 @@
 # Find packages with vcpkg
 
+message(STATUS "Searching for packages with vcpkg...")
+
    # -- Network Library --------------------------------------------------------
 find_package(Boost REQUIRED) # Boost::boost
 
@@ -28,5 +30,10 @@ find_package(sol2     CONFIG REQUIRED) # sol2
 find_package(unofficial-nativefiledialog CONFIG REQUIRED) # unofficial::nativefiledialog::nfd
 find_package(imguizmo                    CONFIG REQUIRED) # imguizmo::imguizmo
 
+message(STATUS "Searching for packages with vcpkg... done")
+message(STATUS "Searching for 3rd-party libraries with FetchContent...")
+
 # Find dependencies with FetchContent
 add_subdirectory(3rd-party)
+
+message(STATUS "Searching for 3rd-party libraries with FetchContent... done")
