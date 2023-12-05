@@ -110,6 +110,7 @@ target_include_directories(GameEngine PRIVATE ${CMAKE_BINARY_DIR}/_deps/opengl-s
 target_include_directories(GameEngine PRIVATE ${CMAKE_BINARY_DIR}/_deps/glfw-src/include)
 target_include_directories(GameEngine PRIVATE ${CMAKE_BINARY_DIR}/_deps/glm-src)
 target_include_directories(GameEngine PRIVATE ${CMAKE_BINARY_DIR}/_deps/imgui-src)
+target_include_directories(GameEngine PRIVATE ${CMAKE_BINARY_DIR}/_deps/boost-src/include)
 
 set_target_properties(GameEngine PROPERTIES
     ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../lib
