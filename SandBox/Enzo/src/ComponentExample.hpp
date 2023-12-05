@@ -16,6 +16,13 @@
 
 namespace Exodia {
 
+    /**
+     * @brief Transform component.
+     *
+     * @param Translation Translation of the entity.
+     * @param Rotation Rotation of the entity.
+     * @param Scale Scale of the entity.
+     */
     struct Transform {
         glm::vec3 Translation;
         glm::vec3 Rotation;
@@ -25,6 +32,12 @@ namespace Exodia {
         Transform(const glm::vec3 &translation = glm::vec3(0.0f)) : Translation(translation), Rotation(glm::vec3(0.0f)), Scale(glm::vec3(1.0f)) {};
     };
 
+    /**
+     * @brief Health component.
+     *
+     * @param CurrentHealth Current health of the entity.
+     * @param MaxHealth Max health of the entity.
+     */
     struct Health {
         int CurrentHealth;
         int MaxHealth;
@@ -33,6 +46,13 @@ namespace Exodia {
         Health(int maxHealth = 100) : CurrentHealth(maxHealth), MaxHealth(maxHealth) {};
     };
 
+    /**
+     * @brief Animation component.
+     *
+     * @param CurrentFrame Current frame of the animation.
+     * @param MaxFrame Max frame of the animation.
+     * @param FrameTime Time between each frame.
+     */
     struct Animation {
         float CurrentFrame;
         float MaxFrame;
