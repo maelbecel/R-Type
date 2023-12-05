@@ -19,28 +19,29 @@ namespace Exodia {
     class ComponentHandle;
 
     namespace Events {
-        struct EXODIA_API OnEntityCreated
-        {
+        struct EXODIA_API OnEntityCreated {
             Exodia::Entity *Entity;
         };
 
-        struct EXODIA_API OnEntityDestroyed
-        {
+        struct EXODIA_API OnEntityDestroyed {
             Exodia::Entity *Entity;
         };
 
         template<typename Component>
-        struct EXODIA_API OnComponentAdded
-        {
-            Exodia::Entity                      *Entity;
+        struct EXODIA_API OnComponentAdded {
+            Exodia::Entity                    *Entity;
             Exodia::ComponentHandle<Component> AddedComponent;
         };
 
         template<typename Component>
-        struct EXODIA_API OnComponentRemoved
-        {
+        struct EXODIA_API OnComponentRemoved {
             Exodia::Entity                    *Entity;
             Exodia::ComponentHandle<Component> RemovedComponent;
+        };
+
+        struct EXODIA_API OnCollisionEntered {
+            Exodia::Entity *EntityA;
+            Exodia::Entity *EntityB;
         };
     };
 };

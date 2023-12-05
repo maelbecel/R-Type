@@ -13,138 +13,153 @@
     // Compatible only with Linux and MacOS now     //
     // Windows version will be added soon           //
     // Example :                                    //
-    //   - Window : EXODIA_KEY_TAB  0x09            //
-    //   - Linux  : EXODIA_KEY_TAB  258             //
+    //   - Window : Exodia::Key::TAB  0x09          //
+    //   - Linux  : Exodia::Key::TAB  258           //
     //////////////////////////////////////////////////
 
-    // QWERTY Keyboard
+namespace Exodia::Key {
 
-    #define EXODIA_KEY_UNKNOWN            -1
-    #define EXODIA_KEY_SPACE              32
-    #define EXODIA_KEY_APOSTROPHE         39  /* ' */
-    #define EXODIA_KEY_COMMA              44  /* , */
-    #define EXODIA_KEY_MINUS              45  /* - */
-    #define EXODIA_KEY_PERIOD             46  /* . */
-    #define EXODIA_KEY_SLASH              47  /* / */
-    #define EXODIA_KEY_0                  48
-    #define EXODIA_KEY_1                  49
-    #define EXODIA_KEY_2                  50
-    #define EXODIA_KEY_3                  51
-    #define EXODIA_KEY_4                  52
-    #define EXODIA_KEY_5                  53
-    #define EXODIA_KEY_6                  54
-    #define EXODIA_KEY_7                  55
-    #define EXODIA_KEY_8                  56
-    #define EXODIA_KEY_9                  57
-    #define EXODIA_KEY_SEMICOLON          59  /* ; */
-    #define EXODIA_KEY_EQUAL              61  /* = */
-    #define EXODIA_KEY_A                  65
-    #define EXODIA_KEY_B                  66
-    #define EXODIA_KEY_C                  67
-    #define EXODIA_KEY_D                  68
-    #define EXODIA_KEY_E                  69
-    #define EXODIA_KEY_F                  70
-    #define EXODIA_KEY_G                  71
-    #define EXODIA_KEY_H                  72
-    #define EXODIA_KEY_I                  73
-    #define EXODIA_KEY_J                  74
-    #define EXODIA_KEY_K                  75
-    #define EXODIA_KEY_L                  76
-    #define EXODIA_KEY_M                  77
-    #define EXODIA_KEY_N                  78
-    #define EXODIA_KEY_O                  79
-    #define EXODIA_KEY_P                  80
-    #define EXODIA_KEY_Q                  81
-    #define EXODIA_KEY_R                  82
-    #define EXODIA_KEY_S                  83
-    #define EXODIA_KEY_T                  84
-    #define EXODIA_KEY_U                  85
-    #define EXODIA_KEY_V                  86
-    #define EXODIA_KEY_W                  87
-    #define EXODIA_KEY_X                  88
-    #define EXODIA_KEY_Y                  89
-    #define EXODIA_KEY_Z                  90
-    #define EXODIA_KEY_LEFT_BRACKET       91  /* [ */
-    #define EXODIA_KEY_BACKSLASH          92  /* \ */
-    #define EXODIA_KEY_RIGHT_BRACKET      93  /* ] */
-    #define EXODIA_KEY_GRAVE_ACCENT       96  /* ` */
-    #define EXODIA_KEY_WORLD_1            161 /* non-US #1 */
-    #define EXODIA_KEY_WORLD_2            162 /* non-US #2 */
+    using KeyCode = int;
+
+    // QWERTY Keyboard (From glfw3.h)
+    enum : KeyCode {
+        Unknown      = -1,
+        SPACE        = 32,
+        APOSTROPHE   = 39, /* ' */
+        COMMA        = 44, /* , */
+        MINUS        = 45, /* - */
+        PERIOD       = 46, /* . */
+        SLASH        = 47, /* / */
+
+        D0           = 48, /* 0 */
+        D1           = 49, /* 1 */
+        D2           = 50, /* 2 */
+        D3           = 51, /* 3 */
+        D4           = 52, /* 4 */
+        D5           = 53, /* 5 */
+        D6           = 54, /* 6 */
+        D7           = 55, /* 7 */
+        D8           = 56, /* 8 */
+        D9           = 57, /* 9 */
+
+        SEMICOLON    = 59, /* ; */
+        EQUAL        = 61, /* = */
+
+        A            = 65,
+        B            = 66,
+        C            = 67,
+        D            = 68,
+        E            = 69,
+        F            = 70,
+        G            = 71,
+        H            = 72,
+        I            = 73,
+        J            = 74,
+        K            = 75,
+        L            = 76,
+        M            = 77,
+        N            = 78,
+        O            = 79,
+        P            = 80,
+        Q            = 81,
+        R            = 82,
+        S            = 83,
+        T            = 84,
+        U            = 85,
+        V            = 86,
+        W            = 87,
+        X            = 88,
+        Y            = 89,
+        Z            = 90,
+
+        LEFTBRACKET  = 91,  /* [ */
+        BACKSLASH    = 92,  /* \ */
+        RIGHTBRACKET = 93,  /* ] */
+        GRAVEACCENT  = 96,  /* ` */
+
+        WORLD1       = 161, /* non-US #1 */
+        WORLD2       = 162, /* non-US #2 */
 
         ///////////////////
         // Function keys //
         ///////////////////
+        ESCAPE      = 256,
+        ENTER       = 257,
+        TAB         = 258,
+        BACKSPACE   = 259,
+        INSERT      = 260,
+        DELETE      = 261,
+        RIGHT       = 262,
+        LEFT        = 263,
+        DOWN        = 264,
+        UP          = 265,
+        PAGEUP      = 266,
+        PAGEDOWN    = 267,
+        HOME        = 268,
+        END         = 269,
+        CAPSLOCK    = 280,
+        SCROLLLOCK  = 281,
+        NUMLOCK     = 282,
+        PRINTSCREEN = 283,
+        PAUSE       = 284,
+        F1          = 290,
+        F2          = 291,
+        F3          = 292,
+        F4          = 293,
+        F5          = 294,
+        F6          = 295,
+        F7          = 296,
+        F8          = 297,
+        F9          = 298,
+        F10         = 299,
+        F11         = 300,
+        F12         = 301,
+        F13         = 302,
+        F14         = 303,
+        F15         = 304,
+        F16         = 305,
+        F17         = 306,
+        F18         = 307,
+        F19         = 308,
+        F20         = 309,
+        F21         = 310,
+        F22         = 311,
+        F23         = 312,
+        F24         = 313,
+        F25         = 314,
 
-    #define EXODIA_KEY_ESCAPE             256
-    #define EXODIA_KEY_ENTER              257
-    #define EXODIA_KEY_TAB                258
-    #define EXODIA_KEY_BACKSPACE          259
-    #define EXODIA_KEY_INSERT             260
-    #define EXODIA_KEY_DELETE             261
-    #define EXODIA_KEY_RIGHT              262
-    #define EXODIA_KEY_LEFT               263
-    #define EXODIA_KEY_DOWN               264
-    #define EXODIA_KEY_UP                 265
-    #define EXODIA_KEY_PAGE_UP            266
-    #define EXODIA_KEY_PAGE_DOWN          267
-    #define EXODIA_KEY_HOME               268
-    #define EXODIA_KEY_END                269
-    #define EXODIA_KEY_CAPS_LOCK          280
-    #define EXODIA_KEY_SCROLL_LOCK        281
-    #define EXODIA_KEY_NUM_LOCK           282
-    #define EXODIA_KEY_PRINT_SCREEN       283
-    #define EXODIA_KEY_PAUSE              284
-    #define EXODIA_KEY_F1                 290
-    #define EXODIA_KEY_F2                 291
-    #define EXODIA_KEY_F3                 292
-    #define EXODIA_KEY_F4                 293
-    #define EXODIA_KEY_F5                 294
-    #define EXODIA_KEY_F6                 295
-    #define EXODIA_KEY_F7                 296
-    #define EXODIA_KEY_F8                 297
-    #define EXODIA_KEY_F9                 298
-    #define EXODIA_KEY_F10                299
-    #define EXODIA_KEY_F11                300
-    #define EXODIA_KEY_F12                301
-    #define EXODIA_KEY_F13                302
-    #define EXODIA_KEY_F14                303
-    #define EXODIA_KEY_F15                304
-    #define EXODIA_KEY_F16                305
-    #define EXODIA_KEY_F17                306
-    #define EXODIA_KEY_F18                307
-    #define EXODIA_KEY_F19                308
-    #define EXODIA_KEY_F20                309
-    #define EXODIA_KEY_F21                310
-    #define EXODIA_KEY_F22                311
-    #define EXODIA_KEY_F23                312
-    #define EXODIA_KEY_F24                313
-    #define EXODIA_KEY_F25                314
-    #define EXODIA_KEY_KP_0               320
-    #define EXODIA_KEY_KP_1               321
-    #define EXODIA_KEY_KP_2               322
-    #define EXODIA_KEY_KP_3               323
-    #define EXODIA_KEY_KP_4               324
-    #define EXODIA_KEY_KP_5               325
-    #define EXODIA_KEY_KP_6               326
-    #define EXODIA_KEY_KP_7               327
-    #define EXODIA_KEY_KP_8               328
-    #define EXODIA_KEY_KP_9               329
-    #define EXODIA_KEY_KP_DECIMAL         330
-    #define EXODIA_KEY_KP_DIVIDE          331
-    #define EXODIA_KEY_KP_MULTIPLY        332
-    #define EXODIA_KEY_KP_SUBTRACT        333
-    #define EXODIA_KEY_KP_ADD             334
-    #define EXODIA_KEY_KP_ENTER           335
-    #define EXODIA_KEY_KP_EQUAL           336
-    #define EXODIA_KEY_LEFT_SHIFT         340
-    #define EXODIA_KEY_LEFT_CONTROL       341
-    #define EXODIA_KEY_LEFT_ALT           342
-    #define EXODIA_KEY_LEFT_SUPER         343
-    #define EXODIA_KEY_RIGHT_SHIFT        344
-    #define EXODIA_KEY_RIGHT_CONTROL      345
-    #define EXODIA_KEY_RIGHT_ALT          346
-    #define EXODIA_KEY_RIGHT_SUPER        347
-    #define EXODIA_KEY_MENU               348
-    #define EXODIA_KEY_LAST               EXODIA_KEY_MENU
+        ////////////
+        // Keypad //
+        ////////////
+        KP0          = 320,
+        KP1          = 321,
+        KP2          = 322,
+        KP3          = 323,
+        KP4          = 324,
+        KP5          = 325,
+        KP6          = 326,
+        KP7          = 327,
+        KP8          = 328,
+        KP9          = 329,
+        KPDECIMAL    = 330,
+        KPDIVIDE     = 331,
+        KPMULTIPLY   = 332,
+        KPSUBSTRACT  = 333,
+        KPADD        = 334,
+        KPENTER      = 335,
+        KPEQUAL      = 336,
+
+        LEFTSHIFT    = 340,
+        LEFTCONTROL  = 341,
+        LEFTALT      = 342,
+        LEFTSUPER    = 343,
+        RIGHTSHIFT   = 344,
+        RIGHTCONTROL = 345,
+        RIGHTALT     = 346,
+        RIGHTSUPER   = 347,
+        MENU         = 348,
+        LAST         = MENU
+    };
+};
 
 #endif /* !KEYCODES_HPP_ */

@@ -8,6 +8,9 @@
 #ifndef ENTITY_HPP_
     #define ENTITY_HPP_
 
+    // Exodia Core includes
+    #include "Core/ID/UUID.hpp"
+
     // Exodia ECS Component includes
     #include "Component/ComponentHandle.hpp"
 
@@ -19,6 +22,7 @@
 
     // Exodia Utils includes
     #include "Utils/CrossPlatform.hpp"
+    #include "Utils/Memory.hpp"
 
     // External includes
     #include <unordered_map>
@@ -43,7 +47,8 @@ namespace Exodia {
         //////////////////////////////
         public:
 
-            Entity(World *world, uint64_t id);
+            Entity();
+            Entity(World * world, uint64_t id = UUID());
 
             ~Entity();
 
@@ -89,6 +94,7 @@ namespace Exodia {
         public:
 
             World *GetWorld() const;
+            void SetWorld(World *world);
 
             template<typename Component>
             bool HasComponent() const
@@ -113,14 +119,22 @@ namespace Exodia {
 
             void SetPendingDestroy(bool pendingDestroy);
 
+        /////////////////
+        // Comparators //
+        /////////////////
+        public:
+
+            bool operator==(const Entity &other) const;
+            bool operator!=(const Entity &other) const;
+
         ////////////////
         // Attributes //
         ////////////////
         private:
 
-            World   *_World;
-            uint64_t _ID;
-            bool     _PendingDestroy;
+            World *_World;
+            uint64_t   _ID;
+            bool       _PendingDestroy;
 
             std::unordered_map<TypeIndex, IComponentContainer *> _Components;
 

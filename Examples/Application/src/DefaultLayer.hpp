@@ -35,8 +35,8 @@ namespace Exodia {
         // Attributes //
         ////////////////
         private:
-            Exodia::OrthographicCameraController _CameraController;
-            glm::vec4 _SquareColor;
+            OrthographicCameraController _CameraController;
+            glm::vec4                    _SquareColor;
     };
 };
 
