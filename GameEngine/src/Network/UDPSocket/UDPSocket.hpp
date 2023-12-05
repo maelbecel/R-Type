@@ -21,8 +21,8 @@ class UDPSocket {
 
         /**
          * @brief Construct a new UDPSocket object
-         * 
-         * @param ioContextManager 
+         *
+         * @param ioContextManager
          */
         UDPSocket(IOContextManager& ioContextManager)
             : _socket(ioContextManager.getIOContext()), _senderEndpoint() {
@@ -32,7 +32,7 @@ class UDPSocket {
 
         /**
          * @brief Destroy the UDPSocket object
-         * 
+         *
          */
         ~UDPSocket() {
             _socket.close();
@@ -40,36 +40,34 @@ class UDPSocket {
 
         /**
          * @brief Send data asynchronously
-         * 
-         * @param message 
-         * @param endpoint 
+         *
+         * @param message
+         * @param endpoint
          */
         void send(const std::string& message, const boost::asio::ip::udp::endpoint& endpoint) {
             _socket.async_send_to(boost::asio::buffer(message), endpoint,
                 [](const boost::system::error_code& error, std::size_t /*bytes_sent*/) {
                     if (!error) {
-                        EXODIA_ERROR
-                        std::cout << SUCCESS << "Message sent successfully" << std::endl;
+                        EXODIA_CORE_INFO("Message sent successfully");
                     } else {
-                        std::cerr << ERROR << "Error sending message: " << error.message() << std::endl;
+                        EXODIA_CORE_ERROR("Error sending message: ", error.message());
                     }
                 });
         }
 
         /**
          * @brief Receive data asynchronously
-         * 
+         *
          */
         void receive() {
             _socket.async_receive_from(boost::asio::buffer(_receiveBuffer), _senderEndpoint,
                 [this](const boost::system::error_code& error, std::size_t bytes_received) {
                     if (!error) {
                         std::string receivedMessage(_receiveBuffer.begin(), _receiveBuffer.begin() + bytes_received);
-                        std::cout << INFO << "Received message: " << receivedMessage << std::endl;
-                        // Continue receiving more data
+                        EXODIA_CORE_INFO("Received message: ", receivedMessage);
                         receive();
                     } else {
-                        std::cerr << ERROR << "Error receiving message: " << error.message() << std::endl;
+                        EXODIA_CORE_ERROR("Error receiving message: ", error.message());
                     }
                 });
         }
@@ -85,19 +83,19 @@ class UDPSocket {
             if (!error) {
                 _socket.bind(endpoint, error);
                 if (!error) {
-                    std::cout << SUCCESS << "Socket opened successfully" << std::endl;
+                    EXODIA_CORE_INFO("Socket opened successfully");
                 } else {
-                    std::cerr << ERROR << "Error binding socket: " << error.message() << std::endl;
+                    EXODIA_CORE_ERROR("Error binding socket: ", error.message());
                 }
             } else {
-                std::cerr << ERROR << "Error opening socket: " << error.message() << std::endl;
+                EXODIA_CORE_ERROR("Error opening socket: ", error.message());
             }
         }
 
         /**
          * @brief Get the Sender Endpoint object
-         * 
-         * @return boost::asio::ip::udp::endpoint 
+         *
+         * @return boost::asio::ip::udp::endpoint
          */
         boost::asio::ip::udp::endpoint getSenderEndpoint() const {
             return _senderEndpoint;
@@ -105,8 +103,8 @@ class UDPSocket {
 
         /**
          * @brief Get the Socket object
-         * 
-         * @return boost::asio::ip::udp::socket& 
+         *
+         * @return boost::asio::ip::udp::socket&
          */
         boost::asio::ip::udp::socket& getSocket() {
             return _socket;

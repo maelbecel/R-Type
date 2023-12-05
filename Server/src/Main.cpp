@@ -27,8 +27,7 @@ int main(int ac, char **av)
         boost::asio::ip::udp::endpoint localEndpoint(boost::asio::ip::address::from_string("127.0.0.1"), 8080);
 
         // Bind the socket to the local endpoint
-        serverSocket.getSocket().open(localEndpoint.protocol());
-        serverSocket.getSocket().bind(localEndpoint);
+        serverSocket.open(localEndpoint);
 
         // Start receiving data asynchronously
         serverSocket.receive();
