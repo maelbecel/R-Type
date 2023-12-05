@@ -12,6 +12,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Werror")
 
 set(GAME_ENGINE_DIR  ${CMAKE_SOURCE_DIR}/GameEngine)
+set(R_TYPE_DIR  ${CMAKE_SOURCE_DIR}/R-Type)
 
 # Set source files for the Exodia Game Engine Application
 set(SOURCES
@@ -27,6 +28,9 @@ set(SOURCES
 set(INCLUDE_DIRS
     # Exodia-App include directories
     src/
+
+    # R-Type include directories
+    ${R_TYPE_DIR}
 
     # GameEngine include directories
     ${GAME_ENGINE_DIR}/src
@@ -49,6 +53,7 @@ target_include_directories(r-type_client PRIVATE ${CMAKE_BINARY_DIR}/_deps/openg
 target_include_directories(r-type_client PRIVATE ${CMAKE_BINARY_DIR}/_deps/glfw-src/include)
 target_include_directories(r-type_client PRIVATE ${CMAKE_BINARY_DIR}/_deps/glm-src)
 target_include_directories(r-type_client PRIVATE ${CMAKE_BINARY_DIR}/_deps/imgui-src)
+target_include_directories(r-type_client PRIVATE ${CMAKE_BINARY_DIR}/_deps/boost-src/include)
 
 set_target_properties(r-type_client PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../
