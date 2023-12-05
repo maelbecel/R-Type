@@ -59,6 +59,7 @@ namespace Exodia {
         patata->AddComponent<ScriptComponent>().Get().Bind<PataPata>();
         patata->AddComponent<SpriteRendererComponent>();
         patata->AddComponent<Animation>(1.0f, 8.0f, 1.0f);
+        patata->AddComponent<Clock>();
 
         // Set entity sprite
         auto sprite2 = patata->GetComponent<SpriteRendererComponent>();
