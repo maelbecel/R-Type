@@ -53,6 +53,6 @@ namespace Exodia {
             EntityComponentIterator<Components ...> _FirstIterator;
             EntityComponentIterator<Components ...> _LastIterator;
     };
-};
+    };
 
 #endif /* !ENTITYCOMPONENTVIEW_HPP_ */

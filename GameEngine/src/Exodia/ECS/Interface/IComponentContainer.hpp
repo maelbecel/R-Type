@@ -10,6 +10,7 @@
 
     // Exodia Utils includes
     #include "Utils/CrossPlatform.hpp"
+    #include "Utils/Memory.hpp"
 
 namespace Exodia {
 
@@ -28,7 +29,7 @@ namespace Exodia {
         // Methods //
         /////////////
         public:
-            virtual void Destroy(World  *world)  = 0;
+            virtual void Destroy(World * world) = 0;
             virtual void Removed(Entity *entity) = 0;
     };
 };

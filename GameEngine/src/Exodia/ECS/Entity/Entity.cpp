@@ -13,7 +13,9 @@ namespace Exodia {
     // Constructor & Destructor //
     //////////////////////////////
 
-    Entity::Entity(World *world, uint64_t id) : _World(world), _ID(id), _PendingDestroy(false) {};
+    Entity::Entity() {};
+
+    Entity::Entity(World * world, uint64_t id) : _World(world), _ID(id), _PendingDestroy(false) {};
 
     Entity::~Entity()
     {
@@ -38,9 +40,14 @@ namespace Exodia {
     // Getters & Setters //
     ///////////////////////
 
-    World *Entity::GetWorld() const
+    World * Entity::GetWorld() const
     {
         return _World;
+    }
+
+    void Entity::SetWorld(World * world)
+    {
+        _World = world;
     }
 
     uint64_t Entity::GetEntityID() const
@@ -57,4 +64,19 @@ namespace Exodia {
     {
         _PendingDestroy = pendingDestroy;
     }
+
+    /////////////////
+    // Comparators //
+    /////////////////
+
+    bool Entity::operator==(const Entity &other) const
+    {
+        return _ID == other._ID;
+    }
+
+    bool Entity::operator!=(const Entity &other) const
+    {
+        return !(other == *this);
+    }
+    
 };
