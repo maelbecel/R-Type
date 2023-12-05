@@ -19,7 +19,7 @@ int main()
 
     std::cout << "Creating entity..." << std::endl;
 
-    Entity *entity = world->CreateEntity();
+    Entity *entity = world->CreateEntity("Player");
 
     entity->AddComponent<Transform>(glm::vec3(0.0f, 5.0f, 0.0f));
     entity->AddComponent<Health>(175);

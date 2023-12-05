@@ -54,6 +54,14 @@ set(SOURCES_GAME_ENGINE
     src/Exodia/ECS/Entity/EntityView.cpp
     src/Exodia/ECS/Entity/Entity.cpp
     src/Exodia/ECS/World/World.cpp
+    src/Exodia/ECS/System/Collision/CollisionDetection2DSystem.cpp
+    src/Exodia/ECS/System/Script/ScriptSystem.cpp
+    src/Exodia/ECS/System/Physics/GravitySystem.cpp
+    src/Exodia/ECS/System/Physics/MovingSystem.cpp
+
+        # -- Scene source files
+
+    src/Exodia/Scene/Camera/SceneCamera.cpp
 
         # -- Exodia ImGui source files
 

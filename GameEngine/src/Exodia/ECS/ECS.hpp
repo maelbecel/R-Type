@@ -30,6 +30,13 @@
 
     #include "Events/Events.hpp"
 
+    // -- Exodia ECS System ----------------------------------------------------
+
+    #include "System/Collision/CollisionDetection2DSystem.hpp"
+    #include "System/Script/ScriptSystem.hpp"
+    #include "System/Physics/GravitySystem.hpp"
+    #include "System/Physics/MovingSystem.hpp"
+
     // -- Exodia ECS Interface -------------------------------------------------
 
     #include "Interface/IComponentContainer.hpp"
@@ -42,6 +49,10 @@
     #include "Utils/TypeIndex.hpp"
 
     // -------------------------------------------------------------------------
+
+    #include "Utils/Assert.hpp"
+
+    #include <iostream>
 
 namespace Exodia {
 
@@ -93,9 +104,12 @@ namespace Exodia {
     {
         auto found = _Components.find(GetTypeIndex<Component>());
 
-        if (found != _Components.end())
-            return ComponentHandle<Component>(&reinterpret_cast<ComponentContainer<Component> *>(found->second)->Data);    
-        return ComponentHandle<Component>();
+        EXODIA_ASSERT(found != _Components.end(), "Component not found in _Components map");
+        EXODIA_ASSERT(found->second != nullptr  , "ComponentContainer is nullptr");
+
+        if (found == _Components.end() || found->second == nullptr)
+            return ComponentHandle<Component>();
+        return ComponentHandle<Component>(&reinterpret_cast<ComponentContainer<Component> *>(found->second)->Data);
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -129,7 +143,6 @@ namespace Exodia {
         _Index++;
 
         for (; _Index < _World->GetCount() && (Get() == nullptr || !Get()->template HasComponent<Components ...>() || (Get()->IsPendingDestroy() && !_IncludePendingDestroy)); _Index++);
-
 
         if (_Index >= _World->GetCount())
             _IsEnd = true;

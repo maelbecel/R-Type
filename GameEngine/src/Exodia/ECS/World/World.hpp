@@ -24,6 +24,9 @@
     // Exodia Utils includes
     #include "Utils/CrossPlatform.hpp"
 
+    // Exodia Debug includes
+    #include "Debug/Logs.hpp"
+
     // External includes
     #include <unordered_map>
     #include <functional>
@@ -67,7 +70,8 @@ namespace Exodia {
 
             void DestroyWorld();
 
-            Entity *CreateEntity();
+            Entity *CreateEntity(const std::string &name = std::string());
+            Entity *CreateNewEntity(const std::string &name = std::string());
 
             void DestroyEntity(Entity *entity, bool immediate = false);
 
@@ -127,10 +131,11 @@ namespace Exodia {
             }
 
             template<typename ...Entities>
-            void ForEach(typename std::common_type<std::function<void(Entity*, ComponentHandle<Entities>...)>>::type function, bool includePendingDestroy = false)
+            void ForEach(typename std::common_type<std::function<void(Entity *, ComponentHandle<Entities>...)>>::type function, bool includePendingDestroy = false)
             {
                 for (auto *entity : View<Entities ...>(includePendingDestroy))
                     function(entity, entity->template GetComponent<Entities>()...);
+                MergeEntities();
             }
 
             void ForAll(std::function<void(Entity *)> function, bool includePendingDestroy = false);
@@ -148,16 +153,20 @@ namespace Exodia {
 
             void Update(Timestep ts);
 
+        private:
+            void MergeEntities();
+            void SortUUIDMap();
+
         ///////////////////////
         // Getters & Setters //
         ///////////////////////
         public:
 
-            size_t GetCount() const;
+            uint64_t GetCount() const;
 
-            Entity *GetEntityByIndex(size_t index);
-
+            Entity *GetEntityByIndex(uint64_t index);
             Entity *GetEntityByID(uint64_t id) const;
+            Entity *GetEntityByTag(const std::string &tag) const;
 
             EntityAllocator &GetPrimaryAllocator();
 
@@ -169,12 +178,14 @@ namespace Exodia {
             SystemAllocator _SystemAllocator;
 
             std::vector<Entity       *, EntityPtrAllocator> _Entities;
+            std::vector<Entity       *, EntityPtrAllocator> _MergedEntities;
+
             std::vector<EntitySystem *, SystemPtrAllocator> _Systems;
             std::vector<EntitySystem *>                     _DisabledSystems;
 
-            std::unordered_map<TypeIndex, std::vector<IEventSubscriber *, SubscriberPtrAllocator>, std::hash<TypeIndex>, std::equal_to<TypeIndex>, SubscriberPairAllocator> _Subscribers;
+            std::unordered_map<uint64_t, uint64_t> _IndexToUUIDMap;
 
-            uint64_t _LastEntityID;
+            std::unordered_map<TypeIndex, std::vector<IEventSubscriber *, SubscriberPtrAllocator>, std::hash<TypeIndex>, std::equal_to<TypeIndex>, SubscriberPairAllocator> _Subscribers;
     };
 
 };
