@@ -38,4 +38,11 @@ namespace Exodia {
     {
         return _uuid;
     }
+
+    UUID &UUID::operator=(const UUID &uuid)
+    {
+        _uuid = uuid._uuid;
+
+        return *this;
+    }
 };

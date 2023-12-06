@@ -163,6 +163,13 @@ namespace Exodia {
             std::find(Children.begin(), Children.end(), child) != Children.end();
         }
     };
+
+    struct ParentComponent {
+        UUID Parent;
+
+        ParentComponent(const ParentComponent &) = default;
+        ParentComponent() = default;
+    };
 };
 
 #endif /* !COMPONENTS_HPP_ */

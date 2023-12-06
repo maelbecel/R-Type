@@ -185,7 +185,7 @@ namespace Exodia {
     EntitySystem *World::RegisterSystem(EntitySystem *system)
     {
         _Systems.push_back(system);
-        
+
         system->Configure(this);
 
         return system;
@@ -295,6 +295,8 @@ namespace Exodia {
             return nullptr;
         for (auto *entity : _Entities)
             if (entity->GetEntityID() == id)
+                return entity;
+            else if (entity->GetComponent<IDComponent>().Get().ID == id)
                 return entity;
         return nullptr;
     }

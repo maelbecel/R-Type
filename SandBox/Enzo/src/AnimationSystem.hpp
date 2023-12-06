@@ -25,12 +25,12 @@ namespace Exodia {
 
         public:
             // Methods
-            virtual void Update(World *world, UNUSED Timestep ts) override
+            virtual void Update(World *world, Timestep ts) override
             {
                 world->ForEach<SpriteRendererComponent, Animation>([&](Entity *entity, auto sprite, ComponentHandle<Animation> animation) {
                     // check if entity is player
-                    if (entity->GetComponent<TagComponent>().Get().Tag == "Player") {
-                        UpdateAnimation<Player>(entity, [&](UNUSED Player *player) {
+                    if (entity->GetComponent<TagComponent>().Get().Tag.rfind("Player", 0) == 0) {
+                        UpdateAnimation<Player>(entity, [&](Player *player) {
                             switch (player->GetState()) {
                                 case Player::State::MOVE_UP:
                                     animation.Get().MaxFrame = 4;
@@ -69,8 +69,7 @@ namespace Exodia {
                                 anim.ElapsedTime = 0.0f;
                             }
                         });
-                    }
-                    else if (entity->GetComponent<TagComponent>().Get().Tag == "Pata-pata") {
+                    } else if (entity->GetComponent<TagComponent>().Get().Tag == "Pata-pata") {
                         auto &anim = animation.Get();
 
                         // Incrémenter le compteur avec le temps écoulé depuis la dernière mise à jour
@@ -82,6 +81,24 @@ namespace Exodia {
 
                             if (anim.CurrentFrame >= anim.MaxFrame)
                                 anim.CurrentFrame = 0;
+
+                            sprite.Get().Texture->SetCoords({ anim.CurrentFrame, 0.0f });
+
+                            // Réinitialiser le compteur
+                            anim.ElapsedTime = 0.0f;
+                        }
+                    } else if (entity->GetComponent<TagComponent>().Get().Tag.rfind("Bullet", 0) == 0) {
+                        auto &anim = animation.Get();
+
+                        // Incrémenter le compteur avec le temps écoulé depuis la dernière mise à jour
+                        anim.ElapsedTime += ts.GetSeconds();
+
+                        // Vérifier si 0.5 seconde s'est écoulée
+                        if (anim.ElapsedTime >= 0.075f) {
+                            anim.CurrentFrame += 1;
+
+                            if (anim.CurrentFrame >= anim.MaxFrame)
+                                anim.CurrentFrame = anim.MaxFrame;
 
                             sprite.Get().Texture->SetCoords({ anim.CurrentFrame, 0.0f });
 

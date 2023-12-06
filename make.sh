@@ -108,7 +108,7 @@ while true; do
     display_menu
 
     # Demander à l'utilisateur de choisir une option
-    read -p "Choisissez une option (0-6): " choice
+    read -p "Choisissez une option (0-7): " choice
 
     case $choice in
         0)

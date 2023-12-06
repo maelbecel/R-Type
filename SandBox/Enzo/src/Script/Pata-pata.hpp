@@ -49,9 +49,11 @@ const double PI = 3.14159265358979323846;
                     tc.Translation.x -= _Speed * ts;
 
                     // Affichage des coordonnées
-                    std::cout << "Temps : " << mytime << " s\tPosition Y : " << tc.Translation.y << std::endl;
 
                 }
+
+                if (transform.Get().Translation.x < -10.0f)
+                    transform.Get().Translation.x = 10.0f;
             }
 
         ////////////////
