@@ -41,7 +41,7 @@ target_link_libraries(application PRIVATE
     glfw
     imgui
     glm::glm
-    Boost::boost
+    asio::asio
     OpenAL::OpenAL
     spdlog::spdlog
     Catch2::Catch2 Catch2::Catch2WithMain
