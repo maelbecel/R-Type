@@ -2,18 +2,14 @@ cmake_minimum_required(VERSION 3.12)
 
 project(r-type)
 
-# Option for compiling examples
-option(COMPILE_EXAMPLES "Compile examples" OFF)
-option(COMPILE_SANDBOX "Compile sandbox" OFF)
+set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/CMake" ${CMAKE_MODULE_PATH})
 
-add_subdirectory(3rd-party)
-add_subdirectory(GameEngine)
+# Dependencies (find_package (vcpkg))
+include(Dependencies)
 
-if(COMPILE_EXAMPLES)
-    add_subdirectory(Examples)
-elseif(COMPILE_SANDBOX)
-    add_subdirectory(SandBox)
-else()
-    add_subdirectory(Client)
-    add_subdirectory(Server)
-endif()
+# Project
+include(BuildEngine)
+include(BuildBinaries)
+
+# Compilation Flags
+include(CompileFlags)
