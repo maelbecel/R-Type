@@ -160,7 +160,7 @@ namespace Exodia {
             in.read(&contents[0], contents.size());
             in.close();
         } else
-            EXODIA_CORE_ERROR("Could not open file '", filepath, "'");
+            EXODIA_CORE_ERROR("Could not open file '{0}'", filepath);
 
         return contents;
     }

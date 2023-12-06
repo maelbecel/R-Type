@@ -45,7 +45,6 @@ set(SOURCES_GAME_ENGINE
 
     src/Exodia/Debug/Profiling/InstrumentorTimer.cpp
     src/Exodia/Debug/Profiling/Instrumentor.cpp
-    src/Exodia/Debug/Logger/Logger.cpp
     src/Exodia/Debug/Logger/Log.cpp
 
         # -- Entity Component System (ECS) source files
