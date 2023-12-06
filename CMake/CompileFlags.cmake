@@ -24,3 +24,13 @@ if(COMPILE_EXAMPLES)
 
     add_subdirectory(Examples)
 endif()
+
+    # -- SandBox ---------------------------------------------------------------
+# Option for compiling sandbox
+option(COMPILE_SANDBOX "Compile sandbox" OFF)
+
+if(COMPILE_SANDBOX)
+    message(STATUS "Sandbox enabled")
+
+    add_subdirectory(SandBox)
+endif()

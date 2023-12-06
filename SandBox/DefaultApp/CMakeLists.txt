@@ -34,13 +34,23 @@ include_directories(${INCLUDE_DIRS})
 # Add an executable for the test
 add_executable(test ${SOURCES})
 
-target_link_libraries(test GameEngine glad glfw glm imgui)
+target_link_libraries(test PRIVATE
+    GameEngine
+    glad::glad
+    glfw
+    imgui
+    glm::glm
+    Boost::boost
+    OpenAL::OpenAL
+    spdlog::spdlog
+    Catch2::Catch2 Catch2::Catch2WithMain
+    sol2
+    unofficial::nativefiledialog::nfd
+    yaml-cpp::yaml-cpp
+    imguizmo::imguizmo
+)
 
-target_include_directories(test PRIVATE ${glad_INCLUDE_DIRS})
-target_include_directories(test PRIVATE ${CMAKE_BINARY_DIR}/_deps/opengl-src/GLAD/include)
-target_include_directories(test PRIVATE ${CMAKE_BINARY_DIR}/_deps/opengl-src/stb_image)
-target_include_directories(test PRIVATE ${CMAKE_BINARY_DIR}/_deps/glfw-src/include)
-target_include_directories(test PRIVATE ${CMAKE_BINARY_DIR}/_deps/glm-src)
+target_include_directories(test PRIVATE ${Stb_INCLUDE_DIR})
 target_include_directories(test PRIVATE ${CMAKE_BINARY_DIR}/_deps/imgui-src)
 
 set_target_properties(test PROPERTIES
