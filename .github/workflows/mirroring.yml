@@ -20,6 +20,14 @@ jobs:
         with:
           fetch-depth: 5
       - uses: seanmiddleditch/gha-setup-ninja@v4
+      - name: Set up SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "$GITLAB_SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+        env:
+          GITLAB_SSH_PRIVATE_KEY: ${{ secrets.GITLAB_SSH_PRIVATE_KEY }}
       - run: |
           cmake --version
           git config --global --add safe.directory /__w/R-Type/R-Type
