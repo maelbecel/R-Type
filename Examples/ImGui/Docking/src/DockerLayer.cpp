@@ -39,7 +39,7 @@ namespace Exodia {
         _Framebuffer = Framebuffer::Create(fbSpec);
 
         _Stats    = CreateRef<StatImGui>();
-        _Viewport = CreateRef<ViewportImgui>();
+        _Viewport = CreateRef<ViewportImGui>();
     }
 
     void DockerLayer::OnUpdate(Timestep ts)
