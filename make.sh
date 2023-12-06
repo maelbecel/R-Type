@@ -11,13 +11,17 @@ make() {
     # Se déplacer dans le répertoire "build"
     cd build
 
+    echo "compile_type: $compile_type"
+
     # Exécuter les commandes cmake et ninja
-    if [ "$compile_examples" == "examples" ]; then
-        cmake .. -G Ninja -DCOMPILE_EXAMPLES=ON
+    if [ "$compile_type" == "debug" ]; then
+        cmake .. -G Ninja -DCOMPILE_DEBUG=ON --preset=vcpkg
+    elif [ "$compile_type" == "examples" ]; then
+        cmake .. -G Ninja -DCOMPILE_EXAMPLES=ON --preset=vcpkg
     elif [ "$compile_type" == "sandbox" ]; then
-        cmake .. -G Ninja -DCOMPILE_SANDBOX=ON
+        cmake .. -G Ninja -DCOMPILE_SANDBOX=ON --preset=vcpkg
     else
-        cmake .. -G Ninja
+        cmake .. -G Ninja --preset=vcpkg
     fi
 
     ninja
@@ -28,6 +32,10 @@ make() {
 
 makeexamples() {
     make "examples"
+}
+
+makedebug() {
+    make "debug"
 }
 
 makesandbox() {
@@ -58,10 +66,11 @@ display_menu() {
     echo "Menu Make:"
     echo "1. make"
     echo "2. make re"
-    echo "3. make clean"
-    echo "4. make fclean"
-    echo "5. Examples"
-    echo "6. Sandbox"
+    echo "3. make debug"
+    echo "4. make clean"
+    echo "5. make fclean"
+    echo "6. Examples"
+    echo "7. Sandbox"
     echo "0. Quitter"
 }
 
@@ -108,12 +117,15 @@ while true; do
             exit
             ;;
         3)
+            makedebug
+            exit;;
+        4)
             makeclean
             ;;
-        4)
+        5)
             makefclean
             ;;
-        5)
+        6)
             # Menu Examples
             while true; do
                 display_examples_menu

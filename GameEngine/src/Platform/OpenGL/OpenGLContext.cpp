@@ -49,9 +49,9 @@ namespace Exodia {
 
         // -- Log the renderer information -- //
         EXODIA_CORE_INFO("OpenGL Renderer :");
-        EXODIA_CORE_INFO("  Vendor   : ", glGetString(GL_VENDOR));
-        EXODIA_CORE_INFO("  Renderer : ", glGetString(GL_RENDERER));
-        EXODIA_CORE_INFO("  Version  : ", glGetString(GL_VERSION));
+        EXODIA_CORE_INFO("  Vendor   : {}", reinterpret_cast<const char *>(glGetString(GL_VENDOR)));
+        EXODIA_CORE_INFO("  Renderer : {}", reinterpret_cast<const char *>(glGetString(GL_RENDERER)));
+        EXODIA_CORE_INFO("  Version  : {}", reinterpret_cast<const char *>(glGetString(GL_VERSION)));
 
         // -- OpenGL version check -- //
         int versionMajor;
