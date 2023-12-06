@@ -2,8 +2,9 @@ name: Clone Repository
 on:
   push:
     branches:
-      - main
-      - dev
+      #- main
+      #- dev
+      - test/workflows
 
 env:
   MIRROR_URL:
@@ -20,11 +21,6 @@ jobs:
         with:
           fetch-depth: 5
       - uses: seanmiddleditch/gha-setup-ninja@v4
-      - name: Install vcpkg
-        run: |
-          git clone https://github.com/microsoft/vcpkg.git
-          cd vcpkg
-          ./bootstrap-vcpkg.sh
       - run: |
           cmake --version
           echo "2" | ./make.sh && [ -f r-type_client ] && [ -f r-type_server ]
