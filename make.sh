@@ -165,7 +165,7 @@ while true; do
                 esac
             done
             ;;
-        6)
+        7)
             # Menu Sandbox
             while true; do
                 display_sandbox_menu

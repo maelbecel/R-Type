@@ -75,14 +75,25 @@ include_directories(${INCLUDE_DIRS})
 # Add an executable for the {{PROJECT_NAME}}
 add_executable({{PROJECT_NAME}} ${SOURCES})
 
-target_link_libraries({{PROJECT_NAME}} GameEngine glad glfw glm imgui)
+target_link_libraries({{PROJECT_NAME}} PRIVATE
+    GameEngine
+    glad::glad
+    glfw
+    imgui
+    glm::glm
+    Boost::boost
+    OpenAL::OpenAL
+    spdlog::spdlog
+    Catch2::Catch2 Catch2::Catch2WithMain
+    sol2
+    unofficial::nativefiledialog::nfd
+    yaml-cpp::yaml-cpp
+    imguizmo::imguizmo
+)
 
-target_include_directories({{PROJECT_NAME}} PRIVATE ${glad_INCLUDE_DIRS})
-target_include_directories({{PROJECT_NAME}} PRIVATE ${CMAKE_BINARY_DIR}/_deps/opengl-src/GLAD/include)
-target_include_directories({{PROJECT_NAME}} PRIVATE ${CMAKE_BINARY_DIR}/_deps/opengl-src/stb_image)
-target_include_directories({{PROJECT_NAME}} PRIVATE ${CMAKE_BINARY_DIR}/_deps/glfw-src/include)
-target_include_directories({{PROJECT_NAME}} PRIVATE ${CMAKE_BINARY_DIR}/_deps/glm-src)
+target_include_directories({{PROJECT_NAME}} PRIVATE ${Stb_INCLUDE_DIR})
 target_include_directories({{PROJECT_NAME}} PRIVATE ${CMAKE_BINARY_DIR}/_deps/imgui-src)
+
 
 set_target_properties({{PROJECT_NAME}} PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../SandBox/bin/{{PROJECT_NAME}}
