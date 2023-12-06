@@ -5,7 +5,15 @@
 ** Log
 */
 
+// Exodia Debug
 #include "Log.hpp"
+
+// spdlog includes
+#include <spdlog/sinks/stdout_color_sinks.h>
+#include <spdlog/sinks/basic_file_sink.h>
+
+// External includes
+#include <vector>
 
 namespace Exodia {
 
@@ -13,23 +21,38 @@ namespace Exodia {
     // Attributes //
     ////////////////
 
-    Ref<Logger> Log::_CoreLogger;   /*!< The logger for the core */
-    Ref<Logger> Log::_ClientLogger; /*!< The logger for the client */
+    Ref<spdlog::logger> Log::_CoreLogger;   /*!< The logger for the core */
+    Ref<spdlog::logger> Log::_ClientLogger; /*!< The logger for the client */
 
     /////////////
     // Methods //
     /////////////
 
-    void Log::Init(const std::string &logFile)
+    void Log::Init(const std::string &appName)
     {
-        // -- Init the core logger ---------------------------------------------
-        _CoreLogger = CreateRef<Logger>("Exodia");
+        // -- Init spdlog ------------------------------------------------------
+        std::vector<spdlog::sink_ptr> logSinks;
 
-        _CoreLogger->Init("Exodia.log");
+        logSinks.emplace_back(std::make_shared<spdlog::sinks::stdout_color_sink_mt>());
+        logSinks.emplace_back(std::make_shared<spdlog::sinks::basic_file_sink_mt>("Exodia.log", true));
+
+        logSinks[0]->set_pattern("%^[%T] %n: %v%$");
+        logSinks[1]->set_pattern("[%T] [%l] %n: %v");
+
+        // -- Init the core logger ---------------------------------------------
+        _CoreLogger = CreateRef<spdlog::logger>("EXODIA", begin(logSinks), end(logSinks));
+
+        _CoreLogger->set_level(spdlog::level::trace);
+        _CoreLogger->flush_on(spdlog::level::trace);
+
+        spdlog::register_logger(_CoreLogger);
 
         // -- Init the client logger -------------------------------------------
-        _ClientLogger = CreateRef<Logger>(logFile);
+        _ClientLogger = CreateRef<spdlog::logger>(appName, begin(logSinks), end(logSinks));
 
-        _ClientLogger->Init("R-Type.log");
+        _ClientLogger->set_level(spdlog::level::trace);
+        _ClientLogger->flush_on(spdlog::level::trace);
+
+        spdlog::register_logger(_ClientLogger);
     }
 };

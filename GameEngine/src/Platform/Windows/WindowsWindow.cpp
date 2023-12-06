@@ -38,7 +38,7 @@ namespace Exodia {
      */
     static void GLFWErrorCallback(int error, char const *description)
     {
-        EXODIA_CORE_ERROR("GLFW Error (", error, "): ", description);
+        EXODIA_CORE_ERROR("GLFW Error ({0}): {1}", error, description);
     }
 
     /////////////
@@ -82,7 +82,7 @@ namespace Exodia {
         _Data.Height = props.Height;
 
         // Log the window creation
-        EXODIA_CORE_INFO("Creating window ", props.Title, " (", props.Width, ", ", props.Height, ")");
+        EXODIA_CORE_INFO("Creating window {0} ({1}, {2})", props.Title, props.Width, props.Height);
 
         // Check if GLFW is initialized and initialize it if not
         if (GLFWWindowCount == 0) {
