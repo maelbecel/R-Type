@@ -9,7 +9,7 @@
 #ifndef IO_CONTEXT_MANAGER_HPP
     #define IO_CONTEXT_MANAGER_HPP
 
-#include <boost/asio.hpp>
+#include <asio.hpp>
 
 namespace Exodia {
 
@@ -35,7 +35,7 @@ namespace Exodia {
              *
              * @return boost::asio::io_context&
              */
-            boost::asio::io_context& getIOContext() {
+            asio::io_context& getIOContext() {
                 return io_context_;
             }
 
@@ -58,7 +58,7 @@ namespace Exodia {
             }
 
         private:
-            boost::asio::io_context io_context_;
+            asio::io_context io_context_;
             bool isRunning_;
         };
     } // namespace Network

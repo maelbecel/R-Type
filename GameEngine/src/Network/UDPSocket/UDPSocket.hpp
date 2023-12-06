@@ -9,7 +9,7 @@
     #define UDP_SOCKET_HPP
 
 #include <iostream>
-#include <boost/asio.hpp>
+#include <asio.hpp>
 #include "Network/IOContextManager/IOContextManager.hpp"
 #include "Debug/Logs.hpp"
 
@@ -28,10 +28,10 @@ class UDPSocket {
          *
          * @param ioContextManager (Type: IOContextManager &) The IOContextManager to use
          */
-        UDPSocket(IOContextManager& ioContextManager, const boost::asio::ip::udp::endpoint& endpoint)
+        UDPSocket(IOContextManager& ioContextManager, const asio::ip::udp::endpoint& endpoint)
             : _socket(ioContextManager.getIOContext()), _senderEndpoint() {
             // Construct the UDP socket using the provided IOContextManager
-            boost::system::error_code error;
+            asio::error_code error;
             if (_socket.is_open())
                 EXODIA_CORE_ERROR("Socket already open");
             _socket.open(endpoint.protocol(), error);
@@ -62,11 +62,11 @@ class UDPSocket {
          * @brief Send data asynchronously
          *
          * @param message (Type: std::string &) The message to send
-         * @param endpoint (Type: const boost::asio::ip::udp::endpoint &) The endpoint to send the message to
+         * @param endpoint (Type: const asio::ip::udp::endpoint &) The endpoint to send the message to
          */
-        void send(const std::string& message, const boost::asio::ip::udp::endpoint& endpoint) {
-            _socket.async_send_to(boost::asio::buffer(message), endpoint,
-                [](const boost::system::error_code& error, std::size_t /*bytes_sent*/) {
+        void send(const std::string& message, const asio::ip::udp::endpoint& endpoint) {
+            _socket.async_send_to(asio::buffer(message), endpoint,
+                [](const asio::error_code& error, std::size_t /*bytes_sent*/) {
                     if (error) {
                         EXODIA_CORE_ERROR("Error sending message: ", error.message());
                     }
@@ -79,8 +79,8 @@ class UDPSocket {
          * @param callback (Type: void (*)(const std::string&)) The callback to call when a message is received
          */
         void receive(void (*callback)(const std::string&)) {
-            _socket.async_receive_from(boost::asio::buffer(_receiveBuffer), _senderEndpoint,
-                [this, callback](const boost::system::error_code& error, std::size_t bytes_received) {
+            _socket.async_receive_from(asio::buffer(_receiveBuffer), _senderEndpoint,
+                [this, callback](const asio::error_code& error, std::size_t bytes_received) {
                     if (!error) {
                         std::string receivedMessage(_receiveBuffer.begin(), _receiveBuffer.begin() + bytes_received);
                         callback(receivedMessage);
@@ -94,9 +94,9 @@ class UDPSocket {
          * @brief Get the Sender Endpoint object
          * call this function to get the sender endpoint
          *
-         * @return boost::asio::ip::udp::endpoint
+         * @return asio::ip::udp::endpoint
          */
-        boost::asio::ip::udp::endpoint getSenderEndpoint() const {
+        asio::ip::udp::endpoint getSenderEndpoint() const {
             return _senderEndpoint;
         }
 
@@ -104,15 +104,15 @@ class UDPSocket {
          * @brief Get the Socket object
          * call this function to get the socket
          *
-         * @return boost::asio::ip::udp::socket&
+         * @return asio::ip::udp::socket&
          */
-        boost::asio::ip::udp::socket& getSocket() {
+        asio::ip::udp::socket& getSocket() {
             return _socket;
         }
 
     private:
-        boost::asio::ip::udp::socket _socket; /*!< The UDP socket */
-        boost::asio::ip::udp::endpoint _senderEndpoint; /*!< The sender endpoint */
+        asio::ip::udp::socket _socket; /*!< The UDP socket */
+        asio::ip::udp::endpoint _senderEndpoint; /*!< The sender endpoint */
         std::array<char, MTU> _receiveBuffer; /*!< The receive buffer */
     };
     }; // namespace Network

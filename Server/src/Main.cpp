@@ -6,7 +6,7 @@
 */
 
 #include <iostream>
-#include <boost/asio.hpp>
+#include <asio.hpp>
 #include "Exodia.hpp"
 
 
@@ -30,7 +30,7 @@ int main(int ac, char **av)
         Exodia::Network::IOContextManager ioContextManager;
 
         // Define a local endpoint to listen on
-        boost::asio::ip::udp::endpoint localEndpoint(boost::asio::ip::address::from_string("127.0.0.1"), 8080);
+        asio::ip::udp::endpoint localEndpoint(asio::ip::address::from_string("127.0.0.1"), 8080);
 
         // Create a UDPSocket object for the server
         Exodia::Network::UDPSocket serverSocket(ioContextManager, localEndpoint);
