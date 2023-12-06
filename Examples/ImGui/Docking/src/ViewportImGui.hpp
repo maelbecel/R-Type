@@ -8,9 +8,13 @@
 #ifndef VIEWPORTIMGUI_HPP_
     #define VIEWPORTIMGUI_HPP_
 
+    #include "Exodia.hpp"
+    #include <imgui.h>
+    #include <glm/glm.hpp>
+
 namespace Exodia {
 
-    class ViewportImgui {
+    class ViewportImGui {
 
         //////////////////////////////
         // Constructor & Destructor //
@@ -62,7 +66,6 @@ namespace Exodia {
             bool                         _ViewportHovered;
             glm::vec2                    _ViewportSize;
             glm::vec2                    _ViewportBounds[2];
-
     };
 };
 

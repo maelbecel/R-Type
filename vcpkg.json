@@ -1,0 +1,17 @@
+{
+    "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg-tool/main/docs/vcpkg.schema.json",
+    "dependencies": [
+        "boost-asio",
+        "glm",
+        "glfw3",
+        "glad",
+        "stb",
+        "openal-soft",
+        "spdlog",
+        "catch2",
+        "sol2",
+        "nativefiledialog",
+        "yaml-cpp",
+        "imguizmo"
+    ]
+}
