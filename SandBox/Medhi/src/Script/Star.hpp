@@ -30,7 +30,7 @@ namespace Exodia {
             {
                 // set random seed to 4
 
-                _Speed = random() % 10 + 2;
+                _Speed = random() % 8 + 1;
                 _size = 0.01f + static_cast<float>(random() % 8) / 100.0f;
                 _intensity = random() % 255 + 1;
                 _State = random() % 2 ? State::GROWING : State::SHRINKING;

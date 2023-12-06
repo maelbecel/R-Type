@@ -62,6 +62,16 @@ namespace Exodia {
         patata->AddComponent<Animation>(1.0f, 8.0f, 1.0f);
         patata->AddComponent<Clock>();
 
+        Entity *background = _World->CreateEntity("Background");
+
+        background->AddComponent<IDComponent>();
+        background->AddComponent<CircleRendererComponent>(glm::vec4{ 0.0f, 0.0f, 0.005f, 1.0f });
+        background->GetComponent<TransformComponent>().Get().Scale.y = 100.0f;
+        background->GetComponent<TransformComponent>().Get().Scale.x = 100.0f;
+        background->GetComponent<TransformComponent>().Get().Translation.z = -0.5f;
+
+        std::cout << background->GetComponent<TransformComponent>().Get().Translation.z << std::endl;
+
         // Set entity sprite
         auto sprite2 = patata->GetComponent<SpriteRendererComponent>();
         Ref<Texture2D> texture2 = Texture2D::Create("Assets/Textures/Pata-Pata.png");
@@ -100,19 +110,6 @@ namespace Exodia {
 
         Renderer2D::BeginScene(_CameraController.GetCamera());
 
-        _World->ForEach<SpriteRendererComponent>([&](Entity *entity, ComponentHandle<SpriteRendererComponent> sprite) {
-            auto transform = entity->GetComponent<TransformComponent>();
-            auto id = entity->GetComponent<IDComponent>();
-
-            if (transform && id) {
-                Renderer2D::DrawSprite(
-                    transform.Get().GetTransform(), // Transform
-                    sprite.Get(),                   // SpriteRendererComponent
-                    (int)id.Get().ID                // Entity ID
-                );
-            }
-        });
-
 		_World->ForEach<CircleRendererComponent>([&](Entity *entity, ComponentHandle<CircleRendererComponent> circle) {
             auto transform = entity->GetComponent<TransformComponent>();
             auto id = entity->GetComponent<IDComponent>();
@@ -123,6 +120,19 @@ namespace Exodia {
 					circle.Get().Color, // CircleRendererComponent
                     circle.Get().Thickness, // CircleRendererComponent
                     circle.Get().Fade, // CircleRendererComponent
+                    (int)id.Get().ID                // Entity ID
+                );
+            }
+        });
+
+         _World->ForEach<SpriteRendererComponent>([&](Entity *entity, ComponentHandle<SpriteRendererComponent> sprite) {
+            auto transform = entity->GetComponent<TransformComponent>();
+            auto id = entity->GetComponent<IDComponent>();
+
+            if (transform && id) {
+                Renderer2D::DrawSprite(
+                    transform.Get().GetTransform(), // Transform
+                    sprite.Get(),                   // SpriteRendererComponent
                     (int)id.Get().ID                // Entity ID
                 );
             }
