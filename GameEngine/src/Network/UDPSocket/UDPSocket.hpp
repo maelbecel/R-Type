@@ -11,6 +11,7 @@
 #include <iostream>
 #include <boost/asio.hpp>
 #include "Network/IOContextManager/IOContextManager.hpp"
+#include "Debug/Logs.hpp"
 
 namespace Exodia {
 
@@ -30,7 +31,6 @@ class UDPSocket {
         UDPSocket(IOContextManager& ioContextManager, const boost::asio::ip::udp::endpoint& endpoint)
             : _socket(ioContextManager.getIOContext()), _senderEndpoint() {
             // Construct the UDP socket using the provided IOContextManager
-            _socket = boost::asio::ip::udp::socket(ioContextManager.getIOContext());
             boost::system::error_code error;
             if (_socket.is_open())
                 EXODIA_CORE_ERROR("Socket already open");
