@@ -22,6 +22,7 @@ jobs:
       - uses: seanmiddleditch/gha-setup-ninja@v4
       - run: |
           cmake --version
+          git submodule update --init --recursive
           echo "2" | ./make.sh && [ -f r-type_client ] && [ -f r-type_server ]
 
   tests:
