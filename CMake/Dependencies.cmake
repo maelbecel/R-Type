@@ -3,7 +3,7 @@
 message(STATUS "Searching for packages with vcpkg...")
 
    # -- Network Library --------------------------------------------------------
-find_package(Boost REQUIRED) # Boost::boost
+find_package(asio  CONFIG REQUIRED) # asio::asio
 
     # -- Graphics Library -------------------------------------------------------
 find_package(Stb          REQUIRED) # ${Stb_INCLUDE_DIRS}
