@@ -104,7 +104,7 @@ set(INCLUDE_DIRS_GAME_ENGINE
 add_library(GameEngine STATIC ${SOURCES_GAME_ENGINE})
 
 target_link_libraries(GameEngine PRIVATE
-    Boost::boost
+    asio::asio
     glm::glm
     glfw
     glad::glad
