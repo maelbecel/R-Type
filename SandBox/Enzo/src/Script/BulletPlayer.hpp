@@ -25,7 +25,7 @@ namespace Exodia {
 
             void OnCreate() override
             {
-                _Speed = 10.0f;
+                _Speed = 15.0f;
 
                 std::cout << "Bullet created" << std::endl;
             }
@@ -49,7 +49,7 @@ namespace Exodia {
                     if (animation.Get().CurrentFrame == animation.Get().MaxFrame)
                         tc.Translation.x += _Speed * ts;
                     else {
-                        tc.Translation.x = entity->GetComponent<TransformComponent>().Get().Translation.x + 0.7f;
+                        tc.Translation.x = entity->GetComponent<TransformComponent>().Get().Translation.x + 0.69f;
                         tc.Translation.y = entity->GetComponent<TransformComponent>().Get().Translation.y;
                     }
                 }

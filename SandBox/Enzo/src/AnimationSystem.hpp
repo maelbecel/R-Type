@@ -109,6 +109,12 @@ namespace Exodia {
                 });
             }
 
+        //    virtual void OnCollisionEnter(Entity *entity) override
+        //    {
+
+        //    }
+
+
         private:
             template<typename T, typename F>
             void UpdateAnimation(Entity *entity, F &&func)
