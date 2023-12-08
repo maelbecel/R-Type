@@ -56,6 +56,16 @@ const double PI = 3.14159265358979323846;
                     transform.Get().Translation.x = 10.0f;
             }
 
+            void OnDestroy() override
+            {
+                std::cout << "PataPata destroyed" << std::endl;
+            }
+
+            void OnCollisionEnter(Entity *entity) override
+            {
+                EXODIA_INFO("Collision with {0}", entity->GetComponent<TagComponent>().Get().Tag);
+            }
+
         ////////////////
         // Attributes //
         ////////////////

@@ -25,7 +25,7 @@ namespace Exodia {
 
             void OnCreate() override
             {
-                _Speed = 15.0f;
+                _Speed = 50.0f;
 
                 std::cout << "Bullet created" << std::endl;
             }
@@ -46,13 +46,14 @@ namespace Exodia {
                 if (transform && animation) {
                     auto &tc = transform.Get();
                     // Mise à jour de la position en fonction du temps et du mouvement sinusoidal
-                    if (animation.Get().CurrentFrame == animation.Get().MaxFrame)
+                    if (animation.Get().CurrentFrame == animation.Get().MaxFrame) {
                         tc.Translation.x += _Speed * ts;
-                    else {
-                        tc.Translation.x = entity->GetComponent<TransformComponent>().Get().Translation.x + 0.69f;
-                        tc.Translation.y = entity->GetComponent<TransformComponent>().Get().Translation.y;
                     }
                 }
+
+                // Remove bullet if out of screen
+                // if (transform.Get().Translation.x > 10.0f)
+                    // HandleEntity->GetWorld()->DestroyEntity(HandleEntity);
             }
 
         ////////////////

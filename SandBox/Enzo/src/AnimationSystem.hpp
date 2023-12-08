@@ -10,7 +10,7 @@
 
     #include "Exodia.hpp"
     #include "ComponentExample.hpp"
-    #include "Script/Player.hpp"
+    #include "Script/Player/Player.hpp"
     #include "Script/Pata-pata.hpp"
 
 namespace Exodia {
