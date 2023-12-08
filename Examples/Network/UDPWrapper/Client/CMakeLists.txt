@@ -36,11 +36,11 @@ add_executable(UDPWrapper_client ${SOURCES})
 
 target_link_libraries(UDPWrapper_client PRIVATE
     GameEngine
-    glad::glad
-    glfw
-    imgui
+    asio::asio
     glm::glm
-    Boost::boost
+    glfw
+    glad::glad
+    imgui
     OpenAL::OpenAL
     spdlog::spdlog
     Catch2::Catch2 Catch2::Catch2WithMain
