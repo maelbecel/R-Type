@@ -6,7 +6,7 @@
 */
 
 #include "DefaultLayer.hpp"
-#include "Script/Player.hpp"
+#include "Script/Player/Player.hpp"
 #include "Script/Pata-pata.hpp"
 #include "Script/Star.hpp"
 #include "Script/ExampleScript.hpp"
@@ -31,35 +31,35 @@ namespace Exodia {
     {
         EXODIA_PROFILE_FUNCTION();
 
+
         // Create world
         _World = World::CreateWorld();
         _World->RegisterSystem(new AnimationSystem());
         _World->RegisterSystem(new ScriptSystem());
 
-        // Create entities
-        Entity *entity = _World->CreateEntity("Player");
+        // CollisionSystem *collisionSystem = new CollisionSystem();
+        // _World->RegisterSystem(collisionSystem);
+        // _World->Subscribe<Events::OnCollisionEntered>(collisionSystem);
 
-        entity->AddComponent<IDComponent>();
-        entity->AddComponent<SpriteRendererComponent>();
-        entity->AddComponent<Health>(185);
-        entity->AddComponent<ScriptComponent>().Get().Bind<Player>();
-        entity->AddComponent<Animation>(1.0f, 2.0f, 1.0f);
-        entity->GetComponent<TransformComponent>().Get().Scale.y = 0.5f;
+        // Create player
+        CreatePlayer();
 
-        // Set entity sprite
-        auto sprite = entity->GetComponent<SpriteRendererComponent>();
-        Ref<Texture2D> texture = Texture2D::Create("Assets/Textures/Player.png");
-        sprite.Get().Texture = SubTexture2D::CreateFromCoords(texture, { 2.0f, 4.0f }, { 33.2f, 17.2f }, { 1.0f, 1.0f });
-
+        // Create pata-pata
         Entity *patata = _World->CreateEntity("Pata-pata");
 
-        patata->AddComponent<IDComponent>();
-        patata->AddComponent<SpriteRendererComponent>();
-        patata->AddComponent<Health>(185);
+        auto sprite = patata->AddComponent<SpriteRendererComponent>();
+        patata->AddComponent<Health>(1);
         patata->AddComponent<ScriptComponent>().Get().Bind<PataPata>();
         patata->AddComponent<Animation>(1.0f, 8.0f, 1.0f);
         patata->AddComponent<Clock>();
+        patata->AddComponent<BoxCollider2DComponent>();
 
+        // Set entity sprite
+        Ref<Texture2D> texture = Texture2D::Create("Assets/Textures/Pata-Pata.png");
+        sprite.Get().Texture = SubTexture2D::CreateFromCoords(texture, { 0.0f, 0.0f }, { 33.3125f, 36.0f }, { 1.0f, 1.0f });
+
+
+        // Create background
         Entity *background = _World->CreateEntity("Background");
 
         background->AddComponent<IDComponent>();
@@ -70,22 +70,19 @@ namespace Exodia {
 
         std::cout << background->GetComponent<TransformComponent>().Get().Translation.z << std::endl;
 
-        // Set entity sprite
-        auto sprite2 = patata->GetComponent<SpriteRendererComponent>();
-        Ref<Texture2D> texture2 = Texture2D::Create("Assets/Textures/Pata-Pata.png");
-        sprite2.Get().Texture = SubTexture2D::CreateFromCoords(texture2, { 0.0f, 0.0f }, { 33.3125f, 36.0f }, { 1.0f, 1.0f });
 
-
+        // Create stars
 		for(int i = 0; i < 60; i++) {
             Entity *star = _World->CreateEntity("Star" + std::to_string(i));
 
-            star->AddComponent<IDComponent>();
             star->AddComponent<ScriptComponent>().Get().Bind<Star>();
             star->GetComponent<TransformComponent>().Get().Scale.y = 0.1f;
             star->GetComponent<TransformComponent>().Get().Scale.x = 0.1f;
             star->AddComponent<Clock>();
 			star->AddComponent<CircleRendererComponent>(glm::vec4{ 0.9f, 0.9f, 0.9f + static_cast<float>(random() % 100) / 10000.0f, 0.9f });
         }
+
+
         // Create camera
         _CameraController.SetZoomLevel(5.0f);
     }
@@ -142,5 +139,23 @@ namespace Exodia {
     void DefaultLayer::OnEvent(Exodia::Event &event)
     {
         _CameraController.OnEvent(event);
+    }
+
+    // ------------------------------------------------------------------
+
+    void DefaultLayer::CreatePlayer()
+    {
+        Entity *entity = _World->CreateEntity("Player");
+
+        entity->AddComponent<Health>(1);
+        entity->AddComponent<ScriptComponent>().Get().Bind<Player>();
+        entity->AddComponent<Animation>(1.0f, 2.0f, 1.0f);
+        entity->GetComponent<TransformComponent>().Get().Scale.y = 0.5f;
+        entity->AddComponent<BoxCollider2DComponent>();
+        auto sprite = entity->AddComponent<SpriteRendererComponent>();
+
+        // Set entity sprite
+        Ref<Texture2D> texture = Texture2D::Create("Assets/Textures/Player.png");
+        sprite.Get().Texture = SubTexture2D::CreateFromCoords(texture, { 2.0f, 4.0f }, { 33.2f, 17.2f }, { 1.0f, 1.0f });
     }
 };

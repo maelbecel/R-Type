@@ -32,6 +32,9 @@ namespace Exodia {
             void OnUpdate(Timestep ts) override;
             void OnEvent(Event &event) override;
 
+        public:
+            void CreatePlayer();
+
         ////////////////
         // Attributes //
         ////////////////
