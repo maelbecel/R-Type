@@ -2,11 +2,11 @@
 ** EPITECH PROJECT, 2023
 ** R-Type
 ** File description:
-** CollisionDetection2DSystem
+** CollisionSystem
 */
 
 // Exodia ECS System includes
-#include "CollisionDetection2DSystem.hpp"
+#include "CollisionSystem.hpp"
 
 // Exodia ECS Events includes
 #include "Events/Events.hpp"
@@ -18,46 +18,86 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/norm.hpp>
 
+// External includes
+#include <algorithm>
+
 namespace Exodia {
 
     /////////////
     // Methods //
     /////////////
 
-    void CollisionDetection2DSystem::Update(World *world, Timestep ts)
+    void CollisionSystem::Update(World *world, Timestep ts)
     {
         EXODIA_PROFILE_FUNCTION();
 
+        std::vector<std::pair<Entity *, Entity *>> collisions;
+
         {
-            EXODIA_PROFILE_SCOPE("CollisionDetection2DSystem::Update::BoxCollider2D");
+            EXODIA_PROFILE_SCOPE("CollisionSystem::Update::BoxCollider2D");
 
             world->ForEach<BoxCollider2DComponent, TransformComponent>([&](Entity *entityA, ComponentHandle<BoxCollider2DComponent> colliderA, ComponentHandle<TransformComponent> transformA) {
                 world->ForEach<BoxCollider2DComponent, TransformComponent>([&](Entity *entityB, ComponentHandle<BoxCollider2DComponent> colliderB, ComponentHandle<TransformComponent> transformB) {
-                    if (entityA != entityB && CheckCollision(colliderA, transformA, colliderB, transformB)) {
-                        EmitCollisionEvent(entityA, entityB);
-                    }
+                    if (std::find(collisions.begin(), collisions.end(), std::make_pair(entityB, entityA)) != collisions.end())
+                        return;
+
+                    if (entityA != entityB && CheckCollision(colliderA, transformA, colliderB, transformB))
+                        collisions.push_back(std::make_pair(entityA, entityB));
                 });
 
                 world->ForEach<CircleCollider2DComponent, TransformComponent>([&](Entity *entityB, ComponentHandle<CircleCollider2DComponent> colliderB, ComponentHandle<TransformComponent> transformB) {
+                    if (std::find(collisions.begin(), collisions.end(), std::make_pair(entityB, entityA)) != collisions.end())
+                        return;
+
                     if (CheckCollision(colliderA, transformA, colliderB, transformB))
-                        EmitCollisionEvent(entityA, entityB);
+                        collisions.push_back(std::make_pair(entityA, entityB));
                 });
             });
         }
 
         {
-            EXODIA_PROFILE_SCOPE("CollisionDetection2DSystem::Update::CircleCollider2D");
+            EXODIA_PROFILE_SCOPE("CollisionSystem::Update::CircleCollider2D");
 
             world->ForEach<CircleCollider2DComponent, TransformComponent>([&](Entity *entityA, ComponentHandle<CircleCollider2DComponent> colliderA, ComponentHandle<TransformComponent> transformA) {
                 world->ForEach<CircleCollider2DComponent, TransformComponent>([&](Entity *entityB, ComponentHandle<CircleCollider2DComponent> colliderB, ComponentHandle<TransformComponent> transformB) {
+                    if (std::find(collisions.begin(), collisions.end(), std::make_pair(entityB, entityA)) != collisions.end())
+                        return;
+
                     if (entityA != entityB && CheckCollision(colliderA, transformA, colliderB, transformB))
-                        EmitCollisionEvent(entityA, entityB);
+                        collisions.push_back(std::make_pair(entityA, entityB));
                 });
             });
         }
+
+        CompareCollisions(collisions);
     }
 
-    bool CollisionDetection2DSystem::CheckCollision(ComponentHandle<BoxCollider2DComponent> collider1, ComponentHandle<TransformComponent> transform1, ComponentHandle<BoxCollider2DComponent> collider2, ComponentHandle<TransformComponent> transform2)
+    void CollisionSystem::Receive(World *world, const Events::OnCollisionEntered &event)
+    {
+        EXODIA_PROFILE_FUNCTION();
+
+        Entity *entityA = event.EntityA;
+        Entity *entityB = event.EntityB;
+
+        auto scriptA = entityA->GetComponent<ScriptComponent>();
+        auto scriptB = entityB->GetComponent<ScriptComponent>();
+
+        if (scriptA) {
+            auto instance = scriptA.Get().Instance;
+
+            if (instance)
+                instance->OnCollisionEnter(entityB);
+        }
+
+        if (scriptB) {
+            auto instance = scriptB.Get().Instance;
+
+            if (instance)
+                instance->OnCollisionEnter(entityA);
+        }
+    }
+
+    bool CollisionSystem::CheckCollision(ComponentHandle<BoxCollider2DComponent> collider1, ComponentHandle<TransformComponent> transform1, ComponentHandle<BoxCollider2DComponent> collider2, ComponentHandle<TransformComponent> transform2)
     {
         auto &boxTransform1 = transform1.Get();
         auto &boxCollider1 = collider1.Get();
@@ -79,7 +119,7 @@ namespace Exodia {
         return collisionDetected;
     }
 
-    bool CollisionDetection2DSystem::CheckCollision(ComponentHandle<BoxCollider2DComponent> collider1, ComponentHandle<TransformComponent> transform1, ComponentHandle<CircleCollider2DComponent> collider2, ComponentHandle<TransformComponent> transform2)
+    bool CollisionSystem::CheckCollision(ComponentHandle<BoxCollider2DComponent> collider1, ComponentHandle<TransformComponent> transform1, ComponentHandle<CircleCollider2DComponent> collider2, ComponentHandle<TransformComponent> transform2)
     {
         auto &boxTransform    = transform1.Get();
         auto &boxCollider     = collider1.Get();
@@ -122,7 +162,7 @@ namespace Exodia {
         return (distance <= circleRadius);
     }
 
-    bool CollisionDetection2DSystem::CheckCollision(ComponentHandle<CircleCollider2DComponent> collider1, ComponentHandle<TransformComponent> transform1, ComponentHandle<CircleCollider2DComponent> collider2, ComponentHandle<TransformComponent> transform2)
+    bool CollisionSystem::CheckCollision(ComponentHandle<CircleCollider2DComponent> collider1, ComponentHandle<TransformComponent> transform1, ComponentHandle<CircleCollider2DComponent> collider2, ComponentHandle<TransformComponent> transform2)
     {
         auto &circleTransform1 = transform1.Get();
         auto &circleCollider1  = collider1.Get();
@@ -166,7 +206,7 @@ namespace Exodia {
         return false; // No collision
     }
 
-    CollisionDetection2DSystem::BoundingBox CollisionDetection2DSystem::CalculateTransformedBoundingBox(const BoxCollider2DComponent &collider, const TransformComponent &transform)
+    CollisionSystem::BoundingBox CollisionSystem::CalculateTransformedBoundingBox(const BoxCollider2DComponent &collider, const TransformComponent &transform)
     {
         // Get the size and offset from the collider
         glm::vec2 size = collider.Size;
@@ -189,7 +229,7 @@ namespace Exodia {
         return bbox;
     }
 
-    bool CollisionDetection2DSystem::IntersectBoundingBoxes(const BoundingBox &box1, const BoundingBox &box2)
+    bool CollisionSystem::IntersectBoundingBoxes(const BoundingBox &box1, const BoundingBox &box2)
     {
         // Check for intersection along each axis (x, y)
         bool collisionX = (box1.max.x >= box2.min.x) && (box1.min.x <= box2.max.x);
@@ -199,7 +239,7 @@ namespace Exodia {
         return collisionX && collisionY;
     }
 
-    void CollisionDetection2DSystem::EmitCollisionEvent(Entity *entityA, Entity *entityB)
+    void CollisionSystem::EmitOnCollisionEnterEvent(Entity *entityA, Entity *entityB)
     {
         Events::OnCollisionEntered event;
 
@@ -207,5 +247,29 @@ namespace Exodia {
         event.EntityB = entityB;
 
         entityA->GetWorld()->Emit<Events::OnCollisionEntered>(event);
+    }
+
+    void CollisionSystem::CompareCollisions(const std::vector<std::pair<Entity *, Entity *>> &collisions)
+    {
+        if (_LastCollisions.empty()) {
+            for (auto &collision : collisions)
+                EmitOnCollisionEnterEvent(collision.first, collision.second);
+        } else {
+            for (auto &collision : _LastCollisions) {
+                bool found = false;
+
+                for (auto &newCollision : collisions) {
+                    if ((collision.first == newCollision.first && collision.second == newCollision.second) || (collision.first == newCollision.second && collision.second == newCollision.first)) {
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (found == false)
+                    EmitOnCollisionEnterEvent(collision.first, collision.second);
+            }
+        }
+
+        _LastCollisions = collisions;
     }
 };
