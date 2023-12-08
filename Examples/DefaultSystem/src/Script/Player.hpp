@@ -40,7 +40,18 @@ namespace Exodia {
                         transform->Translation.y -= _Speed * ts;
                 }
             }
-        
+
+            void OnCollisionEnter(Entity *entity) override
+            {
+                EXODIA_INFO("Collision with {0}", entity->GetComponent<TagComponent>().Get().Tag);
+
+                auto &body = GetComponent<RigidBody2DComponent>().Get();
+
+                if (body.Type == RigidBody2DComponent::BodyType::Dynamic)
+                    body.Velocity = glm::vec2{ 0.0f, 0.0f };
+                body.GravityScale = 0.0f;
+            }
+
         ////////////////
         // Attributes //
         ////////////////
