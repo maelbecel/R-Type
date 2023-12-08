@@ -17,10 +17,13 @@ set(SOURCES
 
     src/ApplicationExample.cpp
     src/DefaultLayer.cpp
+    src/Script/Player/Player.cpp
 )
 
 set(INCLUDE_DIRS
     src/
+    src/Script/
+    src/Script/Player/
 
     # GameEngine include directories
     ${GAME_ENGINE_DIR}/src
