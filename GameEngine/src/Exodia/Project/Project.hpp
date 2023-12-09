@@ -25,6 +25,7 @@ namespace Exodia {
 
         std::filesystem::path StartScene;
         std::filesystem::path AssetsDirectory;
+        std::filesystem::path AssetRegistryPath;
         std::filesystem::path ScriptsDirectory;
     };
 
@@ -56,6 +57,7 @@ namespace Exodia {
             static const std::filesystem::path &GetProjectDirectory();
             static std::filesystem::path        GetAssetDirectory();
             static std::filesystem::path        GetAssetFilePath(const std::filesystem::path &path);
+            static std::filesystem::path        GetAssetRegistryPath();
             static Ref<Project>                 GetActive();
 
             Ref<IAssetManager>       GetAssetManager()        const;

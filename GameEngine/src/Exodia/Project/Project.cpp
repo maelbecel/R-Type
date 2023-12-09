@@ -37,6 +37,12 @@ namespace Exodia {
 
         _ActiveProject = project;
 
+        Ref<EditorAssetManager> editorAssetManager = CreateRef<EditorAssetManager>();
+
+        _ActiveProject->_AssetManager = editorAssetManager;
+
+        editorAssetManager->DeserializeAssetRegistry();
+
         return project;
     }
 
@@ -73,6 +79,13 @@ namespace Exodia {
         EXODIA_CORE_ASSERT(_ActiveProject, "Project::GetAssetFilePath() - No active project !");
 
         return GetAssetDirectory() / path;
+    }
+
+    std::filesystem::path Project::GetAssetRegistryPath()
+    {
+        EXODIA_CORE_ASSERT(_ActiveProject, "Project::GetAssetRegistryPath() - No active project !");
+
+        return GetAssetDirectory() / _ActiveProject->_Config.AssetRegistryPath;
     }
 
     Ref<Project> Project::GetActive()

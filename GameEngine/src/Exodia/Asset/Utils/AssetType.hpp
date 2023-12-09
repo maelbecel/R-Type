@@ -11,6 +11,9 @@
     // Exodia Core ID includes
     #include "Core/ID/UUID.hpp"
 
+    // Exodia Utils
+    #include "Utils/Assert.hpp"
+
     // External includes
     #include <filesystem>
 
@@ -32,6 +35,41 @@ namespace Exodia {
         operator bool() const
         {
             return Type != AssetType::None;
+        }
+    };
+
+    namespace Utils {
+
+        inline static std::string_view AssetTypeToString(AssetType type)
+        {
+            switch (type) {
+                case AssetType::None:
+                    return "AssetType::None";
+                case AssetType::Scene:
+                    return "AssetType::Scene";
+                case AssetType::Texture2D:
+                    return "AssetType::Texture2D";
+                // TODO: Add more asset types
+                default:
+                    break;
+            }
+
+            EXODIA_CORE_ASSERT(false, "Unknown asset type !");
+            return "AssetType::None";
+        }
+
+        inline static AssetType StringToAssetType(std::string_view type)
+        {
+            if (type == "AssetType::None")
+                return AssetType::None;
+            if (type == "AssetType::Scene")
+                return AssetType::Scene;
+            if (type == "AssetType::Texture2D")
+                return AssetType::Texture2D;
+            // TODO: Add more asset types
+
+            EXODIA_CORE_ASSERT(false, "Unknown asset type !");
+            return AssetType::None;
         }
     };
 

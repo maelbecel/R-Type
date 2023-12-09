@@ -20,6 +20,24 @@ namespace Exodia {
 
     class EditorAssetManager : public IAssetManager {
 
+        //////////////////////////////
+        // Constructor & Destructor //
+        //////////////////////////////
+        public:
+
+            EditorAssetManager() = default;
+            ~EditorAssetManager() = default;
+
+        /////////////
+        // Methods //
+        /////////////
+        public:
+
+            void ImportAsset(const std::filesystem::path &path);
+
+            void SerializeAssetRegistry();
+            bool DeserializeAssetRegistry();
+
         ///////////////////////
         // Getters & Setters //
         ///////////////////////
@@ -30,6 +48,7 @@ namespace Exodia {
             virtual bool       IsAssetLoaded(AssetHandle handle)      const override;
 
             const AssetSpecification &GetAssetSpecification(AssetHandle handle) const;
+            const AssetRegistry      &GetAssetRegistry()                        const;
         
         ////////////////
         // Attributes //

@@ -72,7 +72,7 @@ set(SOURCES_GAME_ENGINE
     src/Exodia/ImGui/ImGuiLayer.cpp
 
         # -- Exodia Asset source files
-    
+
     src/Exodia/Asset/Importer/TextureImporter.cpp
     src/Exodia/Asset/Importer/AssetImporter.cpp
     src/Exodia/Asset/Manager/EditorAssetManager.cpp

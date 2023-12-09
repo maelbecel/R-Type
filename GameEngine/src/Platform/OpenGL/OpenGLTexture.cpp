@@ -5,10 +5,6 @@
 ** OpenGLTexture
 */
 
-// External includes
-#define STB_IMAGE_IMPLEMENTATION
-    #include "stb_image.h"
-
 // OpenGL
 #include "OpenGLTexture.hpp"
 #include "OpenGLTextureUtils.hpp"

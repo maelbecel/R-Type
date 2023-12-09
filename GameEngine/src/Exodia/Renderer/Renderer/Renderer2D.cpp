@@ -309,6 +309,9 @@ namespace Exodia {
     {
         EXODIA_PROFILE_FUNCTION(); // Performance instrumentation profiling for the function
 
+        if (texture == nullptr)
+            return DrawQuad(transform, tintColor, entityID);
+
         constexpr uint32_t quadVertexCount = 4;
         constexpr glm::vec2 textureCoords[] = {
             { 0.0f, 0.0f },

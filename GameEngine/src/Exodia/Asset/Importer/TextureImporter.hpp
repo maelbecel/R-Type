@@ -26,6 +26,7 @@ namespace Exodia {
         public:
 
             static Ref<Texture2D> ImportTexture2D(AssetHandle handle, const AssetSpecification &spec);
+            static Ref<Texture2D> LoadTexture2D(const std::filesystem::path &path);
     };
 };
 

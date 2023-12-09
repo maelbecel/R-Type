@@ -37,10 +37,11 @@ namespace Exodia {
             out << YAML::Key << "Project" << YAML::Value;
             {
                 out << YAML::BeginMap;
-                out << YAML::Key << "Name"             << YAML::Value << config.Name;
-                out << YAML::Key << "StartScene"       << YAML::Value << config.StartScene;
-                out << YAML::Key << "AssetsDirectory"  << YAML::Value << config.AssetsDirectory;
-                out << YAML::Key << "ScriptsDirectory" << YAML::Value << config.ScriptsDirectory;
+                out << YAML::Key << "Name"              << YAML::Value << config.Name;
+                out << YAML::Key << "StartScene"        << YAML::Value << config.StartScene;
+                out << YAML::Key << "AssetsDirectory"   << YAML::Value << config.AssetsDirectory;
+                out << YAML::Key << "AssetRegistryPath" << YAML::Value << config.AssetRegistryPath;
+                out << YAML::Key << "ScriptsDirectory"  << YAML::Value << config.ScriptsDirectory;
                 out << YAML::EndMap;
             }
             out << YAML::EndMap;
@@ -71,13 +72,14 @@ namespace Exodia {
 
         if (!project)
             return false;
-        if (!project["Name"] || !project["StartScene"] || !project["AssetsDirectory"] || !project["ScriptsDirectory"])
+        if (!project["Name"] || !project["StartScene"] || !project["AssetsDirectory"] || !project["AssetRegistryPath"] || !project["ScriptsDirectory"])
             return false;
 
-        config.Name             = project["Name"].as<std::string>();
-        config.StartScene       = project["StartScene"].as<std::string>();
-        config.AssetsDirectory  = project["AssetsDirectory"].as<std::string>();
-        config.ScriptsDirectory = project["ScriptsDirectory"].as<std::string>();
+        config.Name              = project["Name"].as<std::string>();
+        config.StartScene        = project["StartScene"].as<std::string>();
+        config.AssetsDirectory   = project["AssetsDirectory"].as<std::string>();
+        config.AssetRegistryPath = project["AssetRegistryPath"].as<std::string>();
+        config.ScriptsDirectory  = project["ScriptsDirectory"].as<std::string>();
 
         return true;
     }

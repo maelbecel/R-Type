@@ -11,6 +11,9 @@
 // Exodia Buffer includes
 #include "Core/Buffer/Buffer.hpp"
 
+// Exodia Project includes
+#include "Project/Project.hpp"
+
 // Exodia Utils
 #include "Utils/Assert.hpp"
 
@@ -27,11 +30,16 @@ namespace Exodia {
     // Methods //
     /////////////
 
-    Ref<Texture2D> TextureImporter::ImportTexture2D(AssetHandle handle, const AssetSpecification &spec)
+    Ref<Texture2D> TextureImporter::ImportTexture2D(UNUSED AssetHandle handle, const AssetSpecification &spec)
     {
         EXODIA_PROFILE_FUNCTION();
 
-        std::string path = spec.Path.string();
+        return LoadTexture2D(Project::GetAssetDirectory() / spec.Path);
+    }
+
+    Ref<Texture2D> TextureImporter::LoadTexture2D(const std::filesystem::path &path)
+    {
+        EXODIA_PROFILE_FUNCTION();
 
         Buffer data;
         int width    = 0;
@@ -40,9 +48,9 @@ namespace Exodia {
 
         stbi_set_flip_vertically_on_load(1);
         {
-            EXODIA_PROFILE_SCOPE("stbi_load - TextureImporter::ImportTexture2D");
+            EXODIA_PROFILE_SCOPE("stbi_load - TextureImporter::LoadTexture2D");
 
-            data.Data = stbi_load(path.c_str(), &width, &height, &channels, 0);
+            data.Data = stbi_load(path.string().c_str(), &width, &height, &channels, 0);
         }
 
         EXODIA_CORE_ASSERT(data.Data, "Failed to load image !");
@@ -66,7 +74,7 @@ namespace Exodia {
                 break;
         }
 
-        Ref<Texture2D> texture = Texture2D::Create(textureSpec);
+        Ref<Texture2D> texture = Texture2D::Create(textureSpec, data);
 
         data.Release();
         return texture;
