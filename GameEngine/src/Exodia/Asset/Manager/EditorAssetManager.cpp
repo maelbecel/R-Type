@@ -137,12 +137,19 @@ namespace Exodia {
         for (const auto &node : assetRegistry) {
             if (!node["Handle"] || !node["Path"] || !node["Type"])
                 continue;
-            AssetHandle handle = node["Handle"].as<uint64_t>();
 
-            auto &spec = _AssetRegistry[handle];
+            try {
+                AssetHandle handle = node["Handle"].as<uint64_t>();
 
-            spec.Path = node["Path"].as<std::string>();
-            spec.Type = Utils::StringToAssetType(node["Type"].as<std::string>());
+                auto &spec = _AssetRegistry[handle];
+
+                spec.Path = node["Path"].as<std::string>();
+                spec.Type = Utils::StringToAssetType(node["Type"].as<std::string>());
+            } catch (const YAML::Exception &e) {
+                EXODIA_CORE_ERROR("Failed to deserialize asset registry `{}`:\n\t{}", path.string(), e.what());
+
+                continue;
+            }
         }
         return true;
     }

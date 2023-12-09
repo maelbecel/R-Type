@@ -87,6 +87,7 @@ set(SOURCES_GAME_ENGINE
     src/Platform/Windows/WindowsPlatformUtils.cpp
     src/Platform/Windows/WindowsWindow.cpp
     src/Platform/Windows/WindowsInput.cpp
+    src/Platform/Windows/WindowsFileDialog.cpp
 
         # -- OpenGL source files
 

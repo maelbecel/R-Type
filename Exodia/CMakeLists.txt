@@ -22,6 +22,14 @@ set(SOURCES
         # R-Type Layer sources files
 
     src/Layer/EditorLayer.cpp
+
+        # ImGui Panels source files
+    
+    src/Panel/ContentBrowser/ContentBrowser.cpp
+
+        # Thumbnail sources files
+    
+    src/Thumbnail/ThumbnailCache.cpp
 )
 
 # Set include directories for the Exodia Game Engine Application

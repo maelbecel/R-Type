@@ -8,7 +8,11 @@
 #ifndef GAMEENGINE_HPP_
     #define GAMEENGINE_HPP_
 
+    // Exodia includes
     #include "Exodia.hpp"
+
+    // Panel includes
+    #include "Panel/ContentBrowser/ContentBrowser.hpp"
 
 namespace Exodia {
 
@@ -33,13 +37,33 @@ namespace Exodia {
             void OnImGUIRender()       override;
             void OnEvent(Event &event) override;
 
+        /////////////////////
+        // Project Methods //
+        /////////////////////
+        private:
+
+            void NewProject();
+            bool OpenProject();
+            void OpenProject(const std::filesystem::path &path);
+
+        ///////////////////
+        // Scene Methods //
+        ///////////////////
+        private:
+
+            void NewScene();
+            void OpenScene();
+            void OpenScene(AssetHandle handle);
+            void SaveScene();
+            void SaveSceneAs();
+
         ////////////////
         // Attributes //
         ////////////////
         private:
 
-            Exodia::OrthographicCameraController _CameraController;
-            glm::vec4 _SquareColor = { 0.2f, 0.3f, 0.8f, 1.0f };
+            Scope<ContentBrowser> _ContentBrowser;
+            Ref<Texture2D>         _Texture;
     };
 };
 

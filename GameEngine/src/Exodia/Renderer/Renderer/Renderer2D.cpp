@@ -89,9 +89,10 @@ namespace Exodia {
         _Data->LineVertexArray->AddVertexBuffer(_Data->LineVertexBuffer);
         _Data->LineVertexBufferBase = new LineVertex[_Data->MaxVertices];
 
+        _Data->WhiteTexture = Texture2D::Create(TextureSpecification());
+
         uint32_t whiteTextureData = 0xffffffff;
 
-        _Data->WhiteTexture = Texture2D::Create(TextureSpecification());
         _Data->WhiteTexture->SetData(Buffer(&whiteTextureData, sizeof(uint32_t)));
 
         _Data->QuadShader = Shader::Create("./Assets/Shaders/Renderer2D_Quad.glsl");

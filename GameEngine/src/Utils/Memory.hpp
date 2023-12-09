@@ -61,6 +61,11 @@ inline void *Malloc(size_t size)
     return malloc(size);
 }
 
+inline void Free(void *ptr)
+{
+    free(ptr);
+}
+
 inline void *Memset(void *data, int c, size_t size)
 {
     return memset(data, c, size);

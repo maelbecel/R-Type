@@ -16,7 +16,7 @@ namespace Exodia {
     // Constructor & Destructor //
     //////////////////////////////
 
-    EditorLayer::EditorLayer() : Layer("Exodia Editor"), _CameraController(1600.0f / 900.0f) {};
+    EditorLayer::EditorLayer() : Layer("Exodia Editor") {};
 
     /////////////
     // Methods //
@@ -29,9 +29,25 @@ namespace Exodia {
         auto commandLine = Application::Get().GetSpecification().CommandLineArgs;
 
         if (commandLine.Count > 1) {
-            Application::Get().Close();
-            return;
+            auto path = commandLine[1];
+
+            OpenProject(path);
+
+            if (Project::GetActive() == nullptr) {
+                EXODIA_ERROR("Failed to open project: {0}", path);
+
+                Application::Get().Close();
+                return;
+            }
+        } else {
+            if (!OpenProject()) {
+                Application::Get().Close();
+                return;
+            }
+            // TODO: If the user have no project create one and ask for a path and a name
         }
+        
+        _Texture = TextureImporter::LoadTexture2D("./Assets/Textures/Baldur.png");
     }
 
     void EditorLayer::OnDetach()
@@ -39,54 +55,67 @@ namespace Exodia {
         EXODIA_PROFILE_FUNCTION();
     }
 
-    void EditorLayer::OnUpdate(Exodia::Timestep ts)
+    void EditorLayer::OnUpdate(UNUSED Exodia::Timestep ts)
     {
         EXODIA_PROFILE_FUNCTION();
-
-        // Update
-        _CameraController.OnUpdate(ts);
-
-        // Renderer Prep
-        {
-            EXODIA_PROFILE_SCOPE("Renderer Prep");
-            Exodia::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
-            Exodia::RenderCommand::Clear();
-        }
-
-        // Renderer Draw
-        {
-            EXODIA_PROFILE_SCOPE("Renderer Draw");
-            Exodia::Renderer2D::BeginScene(_CameraController.GetCamera());
-
-            Exodia::Renderer2D::DrawRotatedQuad(
-                { -1.0f, 0.0f },            // Position
-                {  0.8f, 0.8f },            // Size
-                glm::radians(-45.0f),       // Rotation
-                { _SquareColor }           // Color
-            );
-            Exodia::Renderer2D::DrawQuad(
-                { 0.5f, -0.5f },           // Position
-                { 0.5f,  0.75f },          // Size
-                { 0.2f, 0.3f, 0.8f, 1.0f } // Color
-            );
-
-            Exodia::Renderer2D::EndScene();
-        }
     }
 
     void EditorLayer::OnImGUIRender()
     {
-        EXODIA_PROFILE_FUNCTION();
+        _ContentBrowser->OnImGuiRender();
 
         ImGui::Begin("Settings");
 
-        ImGui::ColorEdit4("Square Color", glm::value_ptr(_SquareColor));
+        ImGui::Image(reinterpret_cast<ImTextureID>(_Texture->GetRendererID()), ImVec2(_Texture->GetWidth(), _Texture->GetHeight()), { 0, 1 }, { 1, 0 });
 
         ImGui::End();
     }
 
-    void EditorLayer::OnEvent(Exodia::Event &event)
+    void EditorLayer::OnEvent(UNUSED Exodia::Event &event) {};
+
+    /////////////////////
+    // Project Methods //
+    /////////////////////
+
+    void EditorLayer::NewProject()
     {
-        _CameraController.OnEvent(event);
+        Project::New();
     }
+
+    bool EditorLayer::OpenProject()
+    {
+        std::string path = FileDialog::OpenFile("proj");
+
+        if (path.empty())
+            return false;
+        OpenProject(path);
+        return true;
+    }
+
+    void EditorLayer::OpenProject(const std::filesystem::path &path)
+    {
+        if (Project::Load(path)) {
+            AssetHandle startScene = Project::GetActive()->GetConfig().StartScene;
+
+            if (startScene)
+                OpenScene(startScene);
+            _ContentBrowser = CreateScope<ContentBrowser>(Project::GetActive());
+        }
+    }
+
+    //TODO: void SaveProject(const std::filesystem::path &path);
+
+    ///////////////////
+    // Scene Methods //
+    ///////////////////
+
+    void EditorLayer::NewScene() {};
+
+    void EditorLayer::OpenScene() {};
+
+    void EditorLayer::OpenScene(UNUSED AssetHandle handle) {};
+
+    void EditorLayer::SaveScene() {};
+
+    void EditorLayer::SaveSceneAs() {};
 };

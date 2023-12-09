@@ -1,0 +1,127 @@
+AssetRegistry:
+  - Handle: 12401337114591583034
+    Path: Textures/Baldur.png
+    Type: AssetType::Texture2D
+  - Handle: 987654321098765432
+    Path: Textures/Bellmite.png
+    Type: AssetType::Texture2D
+  - Handle: 871234567890123456
+    Path: Textures/Big_Explosion.png
+    Type: AssetType::Texture2D
+  - Handle: 123456789012345678
+    Path: Textures/Bink.png
+    Type: AssetType::Texture2D
+  - Handle: 234567890123456789
+    Path: Textures/Blaser.png
+    Type: AssetType::Texture2D
+  - Handle: 345678901234567890
+    Path: Textures/Boldo.png
+    Type: AssetType::Texture2D
+  - Handle: 456789012345678901
+    Path: Textures/Bronco.png
+    Type: AssetType::Texture2D
+  - Handle: 567890123456789012
+    Path: Textures/Bug.png
+    Type: AssetType::Texture2D
+  - Handle: 678901234567890123
+    Path: Textures/Bullet.png
+    Type: AssetType::Texture2D
+  - Handle: 789012345678901234
+    Path: Textures/Bydo.png
+    Type: AssetType::Texture2D
+  - Handle: 890123456789012345
+    Path: Textures/Cancer.png
+    Type: AssetType::Texture2D
+  - Handle: 901234567890123456
+    Path: Textures/Cheetah.png
+    Type: AssetType::Texture2D
+  - Handle: 1234567890123456789
+    Path: Textures/Compiler.png
+    Type: AssetType::Texture2D
+  - Handle: 2345678901234567890
+    Path: Textures/Cytron.png
+    Type: AssetType::Texture2D
+  - Handle: 3456789012345678901
+    Path: Textures/Dobkeratops.png
+    Type: AssetType::Texture2D
+  - Handle: 4567890123456789012
+    Path: Textures/Dop.png
+    Type: AssetType::Texture2D
+  - Handle: 5678901234567890123
+    Path: Textures/Explosion.png
+    Type: AssetType::Texture2D
+  - Handle: 6789012345678901234
+    Path: Textures/Geld.png
+    Type: AssetType::Texture2D
+  - Handle: 7890123456789012345
+    Path: Textures/Gomander#1.png
+    Type: AssetType::Texture2D
+  - Handle: 8901234567890123456
+    Path: Textures/Gomander#2.png
+    Type: AssetType::Texture2D
+  - Handle: 9012345678901234567
+    Path: Textures/Gomander#3.png
+    Type: AssetType::Texture2D
+  - Handle: 12345678901234567890
+    Path: Textures/Gomander#4.png
+    Type: AssetType::Texture2D
+  - Handle: 1345678901234567890
+    Path: Textures/Gomander#5.png
+    Type: AssetType::Texture2D
+  - Handle: 3456789012345678901
+    Path: Textures/HUD.png
+    Type: AssetType::Texture2D
+  - Handle: 4567890123456789012
+    Path: Textures/Mid.png
+    Type: AssetType::Texture2D
+  - Handle: 5678901234567890123
+    Path: Textures/Mikun.png
+    Type: AssetType::Texture2D
+  - Handle: 6789012345678901234
+    Path: Textures/Newt.png
+    Type: AssetType::Texture2D
+  - Handle: 7890123456789012346
+    Path: Textures/OutSlay.png
+    Type: AssetType::Texture2D
+  - Handle: 8901234567890123467
+    Path: Textures/P-Staff.png
+    Type: AssetType::Texture2D
+  - Handle: 9012345678901234678
+    Path: Textures/Pata-Pata.png
+    Type: AssetType::Texture2D
+  - Handle: 12345678901234578901
+    Path: Textures/Player.png
+    Type: AssetType::Texture2D
+  - Handle: 2345678901235789012
+    Path: Textures/Pursuer.png
+    Type: AssetType::Texture2D
+  - Handle: 3456789012357890123
+    Path: Textures/Round_Bit.png
+    Type: AssetType::Texture2D
+  - Handle: 4567890123578901234
+    Path: Textures/Scant.png
+    Type: AssetType::Texture2D
+  - Handle: 5678901235789012345
+    Path: Textures/Shell.png
+    Type: AssetType::Texture2D
+  - Handle: 6789012357890123456
+    Path: Textures/Slither.png
+    Type: AssetType::Texture2D
+  - Handle: 7890123578901234567
+    Path: Textures/T-Staff.png
+    Type: AssetType::Texture2D
+  - Handle: 8901235789012345678
+    Path: Textures/Tabrok.png
+    Type: AssetType::Texture2D
+  - Handle: 9012357890123456789
+    Path: Textures/Warship.png
+    Type: AssetType::Texture2D
+  - Handle: 12346890123456789012
+    Path: Textures/Wick.png
+    Type: AssetType::Texture2D
+  - Handle: 2346890123456789012
+    Path: Textures/Win.png
+    Type: AssetType::Texture2D
+  - Handle: 3468901234567890123
+    Path: Textures/Zoydo.png
+    Type: AssetType::Texture2D

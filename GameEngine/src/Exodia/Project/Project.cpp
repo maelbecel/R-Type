@@ -31,7 +31,8 @@ namespace Exodia {
 
         ProjectSerializer serializer(project);
 
-        EXODIA_CORE_ASSERT(serializer.Deserialize(path), "Project::Load() - Project deserialization failed !");
+        if (!serializer.Deserialize(path))
+            return nullptr;
 
         project->_ProjectDirectory = path.parent_path();
 

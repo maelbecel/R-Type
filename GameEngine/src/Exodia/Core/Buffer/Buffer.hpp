@@ -20,7 +20,9 @@ namespace Exodia {
         uint8_t  *Data = nullptr;
         uint64_t  Size = 0;
 
-        Buffer(uint64_t size = 0)
+        Buffer() = default;
+
+        Buffer(uint64_t size)
         {
             Allocate(size);
         }
@@ -47,8 +49,8 @@ namespace Exodia {
 
         void Release()
         {
-            if (Data) {
-                delete[] Data;
+            if (Data != nullptr) {
+                Free(Data);
                 Data = nullptr;
             }
 
