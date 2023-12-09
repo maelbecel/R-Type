@@ -9,6 +9,9 @@
 #include "Renderer2D.hpp"
 #include "Renderer/Renderer/RenderCommand.hpp"
 
+// Exodia Core include
+#include "Core/Buffer/Buffer.hpp"
+
 // Exodia Debug
 #include "Debug/Profiling.hpp"
 
@@ -86,11 +89,10 @@ namespace Exodia {
         _Data->LineVertexArray->AddVertexBuffer(_Data->LineVertexBuffer);
         _Data->LineVertexBufferBase = new LineVertex[_Data->MaxVertices];
 
-        _Data->WhiteTexture = Texture2D::Create(1, 1);
-
         uint32_t whiteTextureData = 0xffffffff;
 
-        _Data->WhiteTexture->SetData(&whiteTextureData, sizeof(uint32_t));
+        _Data->WhiteTexture = Texture2D::Create(TextureSpecification());
+        _Data->WhiteTexture->SetData(Buffer(&whiteTextureData, sizeof(uint32_t)));
 
         _Data->QuadShader = Shader::Create("./Assets/Shaders/Renderer2D_Quad.glsl");
         _Data->CircleShader = Shader::Create("./Assets/Shaders/Renderer2D_Circle.glsl");

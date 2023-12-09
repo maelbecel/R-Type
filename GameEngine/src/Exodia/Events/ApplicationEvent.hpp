@@ -16,6 +16,8 @@
 
     // External includes
     #include <sstream>
+    #include <filesystem>
+    #include <vector>
 
     ///////////////////////////////////////////////////////////////////////////////
     // In this file, we define all the event that are related to the application //
@@ -213,6 +215,37 @@ namespace Exodia {
         public:
             EVENT_CLASS_TYPE(AppRender);                        // Define the event type
             EVENT_CLASS_CATEGORY(EventCategory::EventCategoryApplication); // Define the event category
+    };
+
+    class EXODIA_API WindowDropEvent : public Event {
+
+        //////////////////////////////
+        // Constructor & Destructor //
+        //////////////////////////////
+        public:
+
+            WindowDropEvent(const std::vector<std::filesystem::path>  &paths) : _Paths(paths) {};
+            WindowDropEvent(const std::vector<std::filesystem::path> &&paths) : _Paths(std::move(paths)) {};
+
+        ///////////////////////
+        // Getters & Setters //
+        ///////////////////////
+        public:
+
+            const std::vector<std::filesystem::path> &GetPaths() const
+            {
+                return _Paths;
+            };
+
+            EVENT_CLASS_TYPE(WindowDrop);                                  // Define the event type
+            EVENT_CLASS_CATEGORY(EventCategory::EventCategoryApplication); // Define the event category
+        
+        ////////////////
+        // Attributes //
+        ////////////////
+        private:
+
+            std::vector<std::filesystem::path> _Paths; /*!< The paths of the files dropped */
     };
 };
 

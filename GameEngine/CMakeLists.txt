@@ -36,7 +36,7 @@ set(SOURCES_GAME_ENGINE
     src/Exodia/Renderer/Camera/Camera.cpp
     src/Exodia/Renderer/Buffer/UniformBuffer.cpp
     src/Exodia/Renderer/Buffer/Framebuffer.cpp
-    src/Exodia/Renderer/Buffer/Buffer.cpp
+    src/Exodia/Renderer/Buffer/Buffers.cpp
     src/Exodia/Renderer/Context/GraphicsContext.cpp
     src/Exodia/Renderer/Shader/Shader.cpp
     src/Exodia/Renderer/Vertex/VertexArray.cpp
@@ -62,9 +62,20 @@ set(SOURCES_GAME_ENGINE
 
     src/Exodia/Scene/Camera/SceneCamera.cpp
 
+        # -- Project source files
+
+    src/Exodia/Project/Project.cpp
+    src/Exodia/Project/ProjectSerializer.cpp
+
         # -- Exodia ImGui source files
 
     src/Exodia/ImGui/ImGuiLayer.cpp
+
+        # -- Exodia Asset source files
+    
+    src/Exodia/Asset/Importer/TextureImporter.cpp
+    src/Exodia/Asset/Importer/AssetImporter.cpp
+    src/Exodia/Asset/Manager/EditorAssetManager.cpp
 
     # Platform source files
 
