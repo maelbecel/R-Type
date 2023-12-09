@@ -251,6 +251,11 @@ namespace Exodia {
 
     void CollisionSystem::CompareCollisions(const std::vector<std::pair<Entity *, Entity *>> &collisions)
     {
+        if (collisions.empty()) {
+            _LastCollisions.clear();
+            return;
+        }
+
         if (_LastCollisions.empty()) {
             for (auto &collision : collisions)
                 EmitOnCollisionEnterEvent(collision.first, collision.second);
@@ -265,8 +270,10 @@ namespace Exodia {
                     }
                 }
 
-                if (found == false)
+                if (found == false) {
+                    EXODIA_CORE_INFO("Collision between {0} and {1}", collision.first->GetComponent<TagComponent>().Get().Tag, collision.second->GetComponent<TagComponent>().Get().Tag);
                     EmitOnCollisionEnterEvent(collision.first, collision.second);
+                }
             }
         }
 
