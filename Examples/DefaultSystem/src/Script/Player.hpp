@@ -45,11 +45,15 @@ namespace Exodia {
             {
                 EXODIA_INFO("Collision with {0}", entity->GetComponent<TagComponent>().Get().Tag);
 
-                auto &body = GetComponent<RigidBody2DComponent>().Get();
+                auto body = GetComponent<RigidBody2DComponent>();
 
-                if (body.Type == RigidBody2DComponent::BodyType::Dynamic)
-                    body.Velocity = glm::vec2{ 0.0f, 0.0f };
-                body.GravityScale = 0.0f;
+                if (body) {
+                    auto &bodyC = body.Get();
+
+                    if (bodyC.Type == RigidBody2DComponent::BodyType::Dynamic)
+                        bodyC.Velocity = glm::vec2{ 0.0f, 0.0f };
+                    bodyC.GravityScale = 0.0f;
+                }
             }
 
         ////////////////

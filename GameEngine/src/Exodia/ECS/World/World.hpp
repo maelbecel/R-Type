@@ -155,7 +155,6 @@ namespace Exodia {
 
         private:
             void MergeEntities();
-            void SortUUIDMap();
 
         ///////////////////////
         // Getters & Setters //
