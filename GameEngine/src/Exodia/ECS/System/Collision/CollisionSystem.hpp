@@ -2,18 +2,25 @@
 ** EPITECH PROJECT, 2023
 ** R-Type
 ** File description:
-** CollisionDetection2DSystem
+** CollisionSystem
 */
 
-#ifndef COLLISIONDETECTION2DSYSTEM_HPP_
-    #define COLLISIONDETECTION2DSYSTEM_HPP_
+#ifndef CollisionSystem_HPP_
+    #define CollisionSystem_HPP_
 
     // Exodia ECS Interface includes
     #include "Interface/EntitySystem.hpp"
+    #include "Interface/EventSubscriber.hpp"
+
+    // Exodia ECS Event includes
+    #include "Events/Events.hpp"
 
     // Exodia ECS Components includes
     #include "Component/Components.hpp"
     #include "Component/ComponentHandle.hpp"
+
+    // External includes
+    #include <vector>
 
 namespace Exodia {
 
@@ -25,8 +32,9 @@ namespace Exodia {
     struct BoxCollider2DComponent;
     struct CircleCollider2DComponent;
     struct TransformComponent;
+    struct ScriptComponent;
 
-    class EXODIA_API CollisionDetection2DSystem : public EntitySystem {
+    class EXODIA_API CollisionSystem : public EntitySystem, public EventSubscriber<Events::OnCollisionEntered> {
 
         ////////////
         // Struct //
@@ -42,8 +50,8 @@ namespace Exodia {
         ///////////////////////////////
         public:
 
-            CollisionDetection2DSystem() = default;
-            virtual ~CollisionDetection2DSystem() override = default;
+            CollisionSystem() = default;
+            virtual ~CollisionSystem() override = default;
 
         /////////////
         // Methods //
@@ -51,6 +59,8 @@ namespace Exodia {
         public:
 
             virtual void Update(World *world, Timestep ts) override;
+
+            virtual void Receive(World *world, const Events::OnCollisionEntered &event) override;
 
         private:
             bool CheckCollision(ComponentHandle<BoxCollider2DComponent> collider1, ComponentHandle<TransformComponent> transform1, ComponentHandle<BoxCollider2DComponent> collider2, ComponentHandle<TransformComponent> transform2);
@@ -60,8 +70,16 @@ namespace Exodia {
             BoundingBox CalculateTransformedBoundingBox(const BoxCollider2DComponent &collider, const TransformComponent &transform);
             bool IntersectBoundingBoxes(const BoundingBox &box1, const BoundingBox &box2);
 
-            void EmitCollisionEvent(Entity *entityA, Entity *entityB);
+            void EmitOnCollisionEnterEvent(Entity *entityA, Entity *entityB);
+
+            void CompareCollisions(const std::vector<std::pair<Entity *, Entity *>> &collisions);
+
+        ////////////////
+        // Attributes //
+        ////////////////
+        private:
+            std::vector<std::pair<Entity *, Entity *>> _LastCollisions;
     };
 };
 
-#endif /* !COLLISIONDETECTION2DSYSTEM_HPP_ */
+#endif /* !CollisionSystem_HPP_ */

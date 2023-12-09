@@ -49,6 +49,13 @@ namespace Exodia {
              */
             virtual void OnUpdate(UNUSED Timestep ts) {};
 
+            /**
+             * @brief Called when the handle entity is entered in collision with another entity.
+             * 
+             * @param other The other entity.
+             */
+            virtual void OnCollisionEnter(UNUSED Entity *other) {};
+
         ///////////////////////
         // Getters & Setters //
         ///////////////////////
