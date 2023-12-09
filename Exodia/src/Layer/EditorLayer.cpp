@@ -47,7 +47,7 @@ namespace Exodia {
             // TODO: If the user have no project create one and ask for a path and a name
         }
         
-        _Texture = TextureImporter::LoadTexture2D("./Assets/Textures/Baldur.png");
+        //_Texture = TextureImporter::LoadTexture2D("./Assets/Textures/Baldur.png");
     }
 
     void EditorLayer::OnDetach()
@@ -64,11 +64,9 @@ namespace Exodia {
     {
         _ContentBrowser->OnImGuiRender();
 
-        ImGui::Begin("Settings");
-
-        ImGui::Image(reinterpret_cast<ImTextureID>(_Texture->GetRendererID()), ImVec2(_Texture->GetWidth(), _Texture->GetHeight()), { 0, 1 }, { 1, 0 });
-
-        ImGui::End();
+        //ImGui::Begin("Settings");
+        //ImGui::Image(reinterpret_cast<ImTextureID>(_Texture->GetRendererID()), ImVec2(_Texture->GetWidth(), _Texture->GetHeight()), { 0, 1 }, { 1, 0 });
+        //ImGui::End();
     }
 
     void EditorLayer::OnEvent(UNUSED Exodia::Event &event) {};

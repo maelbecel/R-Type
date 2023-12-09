@@ -63,7 +63,7 @@ namespace Exodia {
         private:
 
             Scope<ContentBrowser> _ContentBrowser;
-            Ref<Texture2D>         _Texture;
+            //Ref<Texture2D>         _Texture;
     };
 };
 
