@@ -27,7 +27,7 @@ namespace Exodia {
     {
         EXODIA_PROFILE_FUNCTION();
 
-        return LoadScene(Project::GetAssetDirectory() / spec.Path);
+        return LoadScene(Project::GetActiveAssetDirectory() / spec.Path);
     }
 
     Ref<Scene> SceneImporter::LoadScene(const std::filesystem::path &path)
@@ -48,6 +48,6 @@ namespace Exodia {
 
         SceneSerializer serializer(scene);
 
-        serializer.Serialize(Project::GetAssetDirectory() / path);
+        serializer.Serialize(Project::GetActiveAssetDirectory() / path);
     }
 };

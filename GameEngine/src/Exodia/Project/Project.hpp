@@ -55,10 +55,17 @@ namespace Exodia {
         ///////////////////////
         public:
 
-            static const std::filesystem::path &GetProjectDirectory();
-            static std::filesystem::path        GetAssetDirectory();
-            static std::filesystem::path        GetAssetFilePath(const std::filesystem::path &path);
-            static std::filesystem::path        GetAssetRegistryPath();
+            const std::filesystem::path &GetProjectDirectory();
+            std::filesystem::path        GetAssetDirectory();
+            std::filesystem::path        GetAssetFilePath(const std::filesystem::path &path);
+            std::filesystem::path        GetAssetRegistryPath();
+            std::filesystem::path        GetAssetAbsolutePath(const std::filesystem::path &path);
+
+            static const std::filesystem::path &GetActiveProjectDirectory();
+            static std::filesystem::path        GetActiveAssetDirectory();
+            static std::filesystem::path        GetActiveAssetFilePath(const std::filesystem::path &path);
+            static std::filesystem::path        GetActiveAssetRegistryPath();
+
             static Ref<Project>                 GetActive();
 
             Ref<IAssetManager>       GetAssetManager()        const;

@@ -62,9 +62,7 @@ namespace Exodia {
 
     const std::filesystem::path &Project::GetProjectDirectory()
     {
-        EXODIA_CORE_ASSERT(_ActiveProject, "Project::GetProjectDirectory() - No active project !");
-
-        return _ActiveProject->_ProjectDirectory;
+        return _ProjectDirectory;
     }
 
     std::filesystem::path Project::GetAssetDirectory()
@@ -76,8 +74,6 @@ namespace Exodia {
 
     std::filesystem::path Project::GetAssetFilePath(const std::filesystem::path &path)
     {
-        EXODIA_CORE_ASSERT(_ActiveProject, "Project::GetAssetFilePath() - No active project !");
-
         return GetAssetDirectory() / path;
     }
 
@@ -86,6 +82,39 @@ namespace Exodia {
         EXODIA_CORE_ASSERT(_ActiveProject, "Project::GetAssetRegistryPath() - No active project !");
 
         return GetAssetDirectory() / _ActiveProject->_Config.AssetRegistryPath;
+    }
+
+    std::filesystem::path Project::GetAssetAbsolutePath(const std::filesystem::path &path)
+    {
+        return GetAssetDirectory() / path;
+    }
+
+    const std::filesystem::path &Project::GetActiveProjectDirectory()
+    {
+        EXODIA_CORE_ASSERT(_ActiveProject, "Project::GetActiveProjectDirectory() - No active project !");
+
+        return _ActiveProject->GetProjectDirectory();
+    }
+
+    std::filesystem::path Project::GetActiveAssetDirectory()
+    {
+        EXODIA_CORE_ASSERT(_ActiveProject, "Project::GetAssetDirectory() - No active project !");
+
+        return _ActiveProject->GetAssetDirectory();
+    }
+
+    std::filesystem::path Project::GetActiveAssetFilePath(const std::filesystem::path &path)
+    {
+        EXODIA_CORE_ASSERT(_ActiveProject, "Project::GetAssetFilePath() - No active project !");
+
+        return _ActiveProject->GetAssetFilePath(path);
+    }
+
+    std::filesystem::path Project::GetActiveAssetRegistryPath()
+    {
+        EXODIA_CORE_ASSERT(_ActiveProject, "Project::GetAssetRegistryPath() - No active project !");
+
+        return _ActiveProject->GetAssetRegistryPath();
     }
 
     Ref<Project> Project::GetActive()

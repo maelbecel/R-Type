@@ -89,7 +89,7 @@ namespace Exodia {
 
     void EditorAssetManager::SerializeAssetRegistry()
     {
-        auto path = Project::GetAssetRegistryPath();
+        auto path = Project::GetActiveAssetRegistryPath();
 
         YAML::Emitter out;
         {
@@ -118,7 +118,7 @@ namespace Exodia {
 
     bool EditorAssetManager::DeserializeAssetRegistry()
     {
-        auto path = Project::GetAssetRegistryPath();
+        auto path = Project::GetActiveAssetRegistryPath();
 
         YAML::Node data;
 

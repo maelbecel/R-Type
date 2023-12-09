@@ -34,7 +34,7 @@ namespace Exodia {
     {
         EXODIA_PROFILE_FUNCTION();
 
-        return LoadTexture2D(Project::GetAssetDirectory() / spec.Path);
+        return LoadTexture2D(Project::GetActiveAssetDirectory() / spec.Path);
     }
 
     Ref<Texture2D> TextureImporter::LoadTexture2D(const std::filesystem::path &path)
@@ -50,7 +50,9 @@ namespace Exodia {
         {
             EXODIA_PROFILE_SCOPE("stbi_load - TextureImporter::LoadTexture2D");
 
-            data.Data = stbi_load(path.string().c_str(), &width, &height, &channels, 0);
+            data.Data = stbi_load(path.string().c_str(), &width, &height, &channels, 4);
+
+            channels = 4;
         }
 
         EXODIA_CORE_ASSERT(data.Data, "Failed to load image !");
@@ -61,18 +63,7 @@ namespace Exodia {
 
         textureSpec.Width  = width;
         textureSpec.Height = height;
-
-        switch (channels) {
-            case 3:
-                textureSpec.Format = ImageFormat::RGB8;
-                break;
-            case 4:
-                textureSpec.Format = ImageFormat::RGBA8;
-                break;
-            default:
-                EXODIA_CORE_ASSERT(false, "Unsupported image format !");
-                break;
-        }
+        textureSpec.Format = ImageFormat::RGBA8;
 
         Ref<Texture2D> texture = Texture2D::Create(textureSpec, data);
 
