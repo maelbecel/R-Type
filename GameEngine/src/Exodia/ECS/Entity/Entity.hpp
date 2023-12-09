@@ -48,7 +48,7 @@ namespace Exodia {
         public:
 
             Entity();
-            Entity(World * world, uint64_t id = UUID());
+            Entity(World *world, uint64_t id = UUID());
 
             ~Entity();
 

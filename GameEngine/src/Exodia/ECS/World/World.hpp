@@ -71,7 +71,10 @@ namespace Exodia {
             void DestroyWorld();
 
             Entity *CreateEntity(const std::string &name = std::string());
+            Entity *CreateEntity(const UUID &uuid, const std::string &name = std::string());
+
             Entity *CreateNewEntity(const std::string &name = std::string());
+            Entity *CreateNewEntity(const UUID &uuid, const std::string &name = std::string());
 
             void DestroyEntity(Entity *entity, bool immediate = false);
 
