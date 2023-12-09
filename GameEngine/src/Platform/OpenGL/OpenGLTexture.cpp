@@ -33,8 +33,8 @@ namespace Exodia {
         glTextureStorage2D(_RendererID, 1, _InternalFormat, _Width, _Height);
 
         // Set the texture parameters
-        glTextureParameteri(_RendererID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTextureParameteri(_RendererID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTextureParameteri(_RendererID, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTextureParameteri(_RendererID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         glTextureParameteri(_RendererID, GL_TEXTURE_WRAP_S    , GL_REPEAT);
         glTextureParameteri(_RendererID, GL_TEXTURE_WRAP_T    , GL_REPEAT);
 

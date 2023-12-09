@@ -88,6 +88,7 @@ namespace Exodia {
 
         if (path.empty())
             return false;
+
         OpenProject(path);
         return true;
     }
