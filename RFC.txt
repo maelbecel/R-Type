@@ -50,7 +50,8 @@ Id - 64 bit (8 bytes) unsigned integer representing the id of the command
     use for implementing acknoledgement.
 GameEvents - - Null terminated string prefixed with a 32 bit (4 bytes) unsigned
     integer representing the length of the string.
-
+Size - 64 bit (8 bytes) unsigned integer representing the size of the content
+    of the packet.
 
 Commands
 
@@ -58,7 +59,7 @@ Each command is prefixed with a header define below representing the command. Th
 following commands command inferior to 0x80 are server commands and superior
 to 0x80 are client commands.
 Header
-    Content: [Command][Timestamp][Id]
+    Content: [Command][Timestamp][Id][Size]
 
 Special commands
     0x00 - Send number of packets received and send since last second

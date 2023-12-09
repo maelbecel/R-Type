@@ -10,6 +10,7 @@
 
     #include "IOContextManager/IOContextManager.hpp"
     #include "UDPSocket/UDPSocket.hpp"
+    #include "Header/Header.hpp"
     #include <vector>
 
 namespace Exodia {
@@ -23,7 +24,7 @@ namespace Exodia {
                  * @brief Construct a new Network object
                  *
                  */
-                Network(short port) : _socket(_ioContextManager, asio::ip::udp::endpoint(asio::ip::address::from_string("0.0.0.0"), port)) {};
+                Network(IOContextManager &context,short port) : _socket(context, asio::ip::udp::endpoint(asio::ip::address::from_string("0.0.0.0"), port)) {};
 
                 /**
                  * @brief Destroy the Network object
@@ -45,7 +46,18 @@ namespace Exodia {
                  */
                 void loop() {
                     _ioContextManager.run();
+                    _socket.receive(std::bind(&Network::splitter, this, std::placeholders::_1, std::placeholders::_2));
                 }
+
+                void splitter(const std::vector<char> message, size_t size) {
+                    std::cout << "Size: " << size << std::endl;
+                    for (size_t i = 0; i < size; i++)
+                        std::cout << int(message.data()[i]) << std::endl;
+                    Header header = Header::fillHeader(message.data());
+                    std::cout << "Command: " << int(header.getCommand()) << " Timestamp: " << header.getTimestamp() << " Id: " << header.getId() << " Size: " << header.getSize() << std::endl;
+                }
+
+            private:
 
             private:
                 UDPSocket _socket;

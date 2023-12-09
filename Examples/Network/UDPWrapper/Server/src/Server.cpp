@@ -30,12 +30,14 @@ int main(int ac, char **av)
         Exodia::Network::IOContextManager ioContextManager;
 
         // Define a local endpoint to listen on
-        asio::ip::udp::endpoint localEndpoint(asio::ip::address::from_string("127.0.0.1"), 8082);
+        // asio::ip::udp::endpoint localEndpoint(asio::ip::address::from_string("127.0.0.1"), 8082);
+        Exodia::Network::Network network(ioContextManager, 8082);
+        network.loop();
 
         // Create a UDPSocket object for the server
-        Exodia::Network::UDPSocket serverSocket(ioContextManager, localEndpoint);
+        // Exodia::Network::UDPSocket serverSocket(ioContextManager, localEndpoint);
 
-        serverSocket.receive(my_callback);
+        // serverSocket.receive(my_callback);
 
         // Run the IO context to initiate asynchronous operations
         ioContextManager.run();

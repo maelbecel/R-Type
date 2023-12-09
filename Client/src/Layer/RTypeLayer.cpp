@@ -26,30 +26,32 @@ namespace Exodia {
     {
         EXODIA_PROFILE_FUNCTION();
 
-        auto commandLine = Application::Get().GetSpecification().CommandLineArgs;
+        // auto commandLine = Application::Get().GetSpecification().CommandLineArgs;
 
-         // Server main
-        Exodia::Network::IOContextManager ioContextManager;
+        //  // Server main
+        // Exodia::Network::IOContextManager ioContextManager;
 
-        // Define a local endpoint to listen on
-        asio::ip::udp::endpoint localEndpoint(asio::ip::address::from_string("127.0.0.1"), 8081);
+        // // Define a local endpoint to listen on
+        // asio::ip::udp::endpoint localEndpoint(asio::ip::address::from_string("127.0.0.1"), 8081);
 
-        asio::ip::udp::endpoint serverEndpoint(asio::ip::address::from_string("127.0.0.1"), 8080);
+        // asio::ip::udp::endpoint serverEndpoint(asio::ip::address::from_string("127.0.0.1"), 8080);
 
-        // Create a UDPSocket object for the server
-        Exodia::Network::UDPSocket serverSocket(ioContextManager, localEndpoint);
+        // // Create a UDPSocket object for the server
+        // Exodia::Network::UDPSocket serverSocket(ioContextManager, localEndpoint);
 
-        // serverSocket.receive(my_callback);
-        serverSocket.send("Hello World", serverEndpoint);
+        // std::vector<char> buffer(1468, 1);
 
-        // Run the IO context to initiate asynchronous operations
-        ioContextManager.run();
+        // // serverSocket.receive(my_callback);
+        // serverSocket.send("Hello World", 12, serverEndpoint);
+
+        // // Run the IO context to initiate asynchronous operations
+        // ioContextManager.run();
 
 
-        if (commandLine.Count > 1) {
-            Application::Get().Close();
-            return;
-        }
+        // if (commandLine.Count > 1) {
+        //     Application::Get().Close();
+        //     return;
+        // }
     }
 
     void RTypeLayer::OnDetach()

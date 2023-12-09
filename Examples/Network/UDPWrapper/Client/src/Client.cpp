@@ -38,8 +38,16 @@ int main(int ac, char **av)
         Exodia::Network::UDPSocket serverSocket(ioContextManager, localEndpoint);
 
         // serverSocket.receive(my_callback);
-        serverSocket.send("Hello from client", serverEndpoint);
+        std::vector<char> buffer(1468, 1);
+        Exodia::Network::Header header(1, 1, 2, 2);
+        header.fillBuffer(buffer);
 
+        header = Exodia::Network::Header::fillHeader(buffer.data());
+        std::cout << "Header" << header << std::endl;
+        for (int i = 0; i < 22; i++)
+            std::cout << int(buffer.data()[i]) << std::endl;
+
+        serverSocket.send(buffer, 22, serverEndpoint);
         // Run the IO context to initiate asynchronous operations
         ioContextManager.run();
 

@@ -10,10 +10,11 @@
 #include "Exodia.hpp"
 
 
-void my_callback(const std::string &message)
+void my_callback(const std::vector<char> message, size_t size)
 {
     (void)message;
-    std::cout << "Message received: " << message << std::endl;
+    (void)size;
+    // std::cout << "Message received: " << message << std::endl;
 }
 
 int main(int ac, char **av)
