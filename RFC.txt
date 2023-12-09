@@ -69,15 +69,15 @@ Special commands
 ServerCommand
     0x02 - Accept client connection
     0x03 - Reject client connection
-    0x0b - Send list of system to load MUST get an acknowledge
+    0x0b - Send system to load MUST get an acknowledge
         Content: [System][System]...
-    0x0c - Send list of entities with their components MUST get an acknowledge
+    0x0c - Send entities with their components MUST get an acknowledge
         Content: [Entity][Component][Content_of_a_component]
-    0x0d - Send list of GameEvents MUST get an acknowledge
+    0x0d - Send GameEvents MUST get an acknowledge
         Content: [GameEvents][GameEvents]...
-    0x0e - Send list of deleted entities MUST get an acknowledge
+    0x0e - Send deleted entities MUST get an acknowledge
         Content: [Entity]
-    0x10 - Send list of deleted components on entities MUST get an acknowledge
+    0x10 - Send deleted components on entities MUST get an acknowledge
         Content: [Entity][Component][Content_of_a_component]
     0x11 - Send events
         Content: [Event]

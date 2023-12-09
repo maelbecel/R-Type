@@ -31,23 +31,27 @@ int main(int ac, char **av)
 
         // Define a local endpoint to listen on
         asio::ip::udp::endpoint localEndpoint(asio::ip::address::from_string("127.0.0.1"), 8083);
-
         asio::ip::udp::endpoint serverEndpoint(asio::ip::address::from_string("127.0.0.1"), 8082);
 
         // Create a UDPSocket object for the server
         Exodia::Network::UDPSocket serverSocket(ioContextManager, localEndpoint);
 
         // serverSocket.receive(my_callback);
-        std::vector<char> buffer(1468, 1);
         Exodia::Network::Header header(1, 1, 2, 2);
-        header.fillBuffer(buffer);
+        Exodia::Network::Packet packet;
 
-        header = Exodia::Network::Header::fillHeader(buffer.data());
         std::cout << "Header" << header << std::endl;
-        for (int i = 0; i < 22; i++)
-            std::cout << int(buffer.data()[i]) << std::endl;
+        packet.setHeader(header);
 
-        serverSocket.send(buffer, 22, serverEndpoint);
+        std::vector<char> buffer(1468, 1);
+        int packet_received = 8;
+        int packet_sent = 12;
+        std::memcpy(buffer.data(), &packet_received, sizeof(int));
+        std::memcpy(buffer.data() + sizeof(int), &packet_sent, sizeof(int));
+
+        packet.setContent(buffer);
+
+        serverSocket.send(packet.getBuffer(), 1468, serverEndpoint);
         // Run the IO context to initiate asynchronous operations
         ioContextManager.run();
 

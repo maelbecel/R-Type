@@ -73,6 +73,11 @@ namespace Exodia {
                     return Header(command, timestamp, id, size);
                 }
 
+                static size_t get_size()
+                {
+                    return 22;
+                }
+
                 char getCommand() const { return _command; };
                 float getTimestamp() const { return _timestamp; };
                 unsigned long getId() const { return _id; };
@@ -94,5 +99,6 @@ namespace Exodia {
         };
     };
 };
+
 
 #endif /* !HEADER_HPP_ */
