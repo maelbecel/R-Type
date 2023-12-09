@@ -23,14 +23,14 @@ int main(int ac, char **av)
 
     Exodia::Log::Init();
 
-    std::cout << "Asio World !" << std::endl;
+    std::cout << "Server is waiting for infos !" << std::endl;
 
     try {
         // Server main
         Exodia::Network::IOContextManager ioContextManager;
 
         // Define a local endpoint to listen on
-        asio::ip::udp::endpoint localEndpoint(asio::ip::address::from_string("127.0.0.1"), 8080);
+        asio::ip::udp::endpoint localEndpoint(asio::ip::address::from_string("127.0.0.1"), 8082);
 
         // Create a UDPSocket object for the server
         Exodia::Network::UDPSocket serverSocket(ioContextManager, localEndpoint);

@@ -57,4 +57,8 @@
     #include "Utils/Memory.hpp"
     #include "Utils/Assert.hpp"
 
+    // -- Exodia Network -------------------------------------------------------
+
+    #include "Network/Network.hpp"
+
 #endif /* !EXODIA_HPP_ */
