@@ -23,7 +23,8 @@ namespace Exodia {
     struct ProjectConfig {
         std::string Name = "Untitled";
 
-        std::filesystem::path StartScene;
+        AssetHandle StartScene;
+
         std::filesystem::path AssetsDirectory;
         std::filesystem::path AssetRegistryPath;
         std::filesystem::path ScriptsDirectory;

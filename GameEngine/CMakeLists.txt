@@ -61,6 +61,8 @@ set(SOURCES_GAME_ENGINE
         # -- Scene source files
 
     src/Exodia/Scene/Camera/SceneCamera.cpp
+    src/Exodia/Scene/Serializer/SceneSerializer.cpp
+    src/Exodia/Scene/Scene/Scene.cpp
 
         # -- Project source files
 
@@ -75,6 +77,7 @@ set(SOURCES_GAME_ENGINE
 
     src/Exodia/Asset/Importer/TextureImporter.cpp
     src/Exodia/Asset/Importer/AssetImporter.cpp
+    src/Exodia/Asset/Importer/SceneImporter.cpp
     src/Exodia/Asset/Manager/EditorAssetManager.cpp
 
     # Platform source files

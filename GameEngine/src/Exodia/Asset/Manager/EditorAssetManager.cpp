@@ -16,8 +16,14 @@
 // Exodia Utils includes
 #include "Utils/Assert.hpp"
 
+// Exodia Debug includes
+#include "Debug/Logs.hpp"
+
 // YAML-CPP includes
 #include <yaml-cpp/yaml.h>
+
+// External includes
+#include <map>
 
 namespace Exodia {
 
@@ -32,6 +38,29 @@ namespace Exodia {
         return out;
     }
 
+    //////////////////////////////////
+    // Static variables & Functions //
+    //////////////////////////////////
+
+    static std::map<std::filesystem::path, AssetType> AssetExtensionMap = {
+        { ".exodia", AssetType::Scene },
+        { ".png", AssetType::Texture2D },
+        { ".jpg", AssetType::Texture2D },
+        { ".jpeg", AssetType::Texture2D }
+    };
+
+    static AssetType GetAssetTypeFromFileExtension(const std::filesystem::path &extension)
+    {
+        auto it = AssetExtensionMap.find(extension);
+
+        if (it == AssetExtensionMap.end()) {
+            EXODIA_CORE_WARN("Asset type not found for extension `{}`", extension.string());
+
+            return AssetType::None;
+        }
+        return it->second;
+    }
+
     /////////////
     // Methods //
     /////////////
@@ -42,13 +71,15 @@ namespace Exodia {
         AssetSpecification spec;
 
         spec.Path = path;
-        spec.Type = AssetType::Texture2D;
+        spec.Type = GetAssetTypeFromFileExtension(path.extension());
+
+        EXODIA_CORE_ASSERT(spec.Type != AssetType::None, "EditorAssetManager::ImportAsset() - Asset type not found !");
 
         Ref<Asset> asset = AssetImporter::ImportAsset(handle, spec);
 
-        asset->Handle = handle;
-
         if (asset) {
+            asset->Handle = handle;
+
             _LoadedAssets[handle]  = asset;
             _AssetRegistry[handle] = spec;
 
@@ -120,7 +151,7 @@ namespace Exodia {
     // Getters & Setters //
     ///////////////////////
 
-    Ref<Asset> EditorAssetManager::GetAsset(AssetHandle handle) const
+    Ref<Asset> EditorAssetManager::GetAsset(AssetHandle handle)
     {
         if (!IsAssetHandleValid(handle))
             return nullptr;
@@ -134,9 +165,18 @@ namespace Exodia {
             asset = AssetImporter::ImportAsset(handle, spec);
 
             EXODIA_CORE_ASSERT(asset, "AssetImporter::ImportAsset() - Asset import failed !");
+
+            _LoadedAssets[handle] = asset;
         }
 
         return asset;
+    }
+
+    AssetType EditorAssetManager::GetAssetType(AssetHandle handle) const
+    {
+        if (!IsAssetHandleValid(handle))
+            return AssetType::None;
+        return _AssetRegistry.at(handle).Type;
     }
 
     bool EditorAssetManager::IsAssetHandleValid(AssetHandle handle) const
@@ -161,5 +201,10 @@ namespace Exodia {
     const AssetRegistry &EditorAssetManager::GetAssetRegistry() const
     {
         return _AssetRegistry;
+    }
+
+    const std::filesystem::path &EditorAssetManager::GetFilePath(AssetHandle handle) const
+    {
+        return GetAssetSpecification(handle).Path;
     }
 };

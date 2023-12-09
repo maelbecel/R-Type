@@ -43,7 +43,7 @@
 
     // -- Exodia Scene ---------------------------------------------------------
 
-    #include "Exodia/Scene/Scene.hpp"
+    #include "Exodia/Scene/SceneHeaders.hpp"
 
     // -- Exodia Project -------------------------------------------------------
 

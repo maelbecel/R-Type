@@ -38,7 +38,7 @@ namespace Exodia {
             {
                 out << YAML::BeginMap;
                 out << YAML::Key << "Name"              << YAML::Value << config.Name;
-                out << YAML::Key << "StartScene"        << YAML::Value << config.StartScene;
+                out << YAML::Key << "StartScene"        << YAML::Value << (uint64_t)config.StartScene;
                 out << YAML::Key << "AssetsDirectory"   << YAML::Value << config.AssetsDirectory;
                 out << YAML::Key << "AssetRegistryPath" << YAML::Value << config.AssetRegistryPath;
                 out << YAML::Key << "ScriptsDirectory"  << YAML::Value << config.ScriptsDirectory;
@@ -76,7 +76,7 @@ namespace Exodia {
             return false;
 
         config.Name              = project["Name"].as<std::string>();
-        config.StartScene        = project["StartScene"].as<std::string>();
+        config.StartScene        = project["StartScene"].as<std::uint64_t>();
         config.AssetsDirectory   = project["AssetsDirectory"].as<std::string>();
         config.AssetRegistryPath = project["AssetRegistryPath"].as<std::string>();
         config.ScriptsDirectory  = project["ScriptsDirectory"].as<std::string>();

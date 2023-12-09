@@ -9,6 +9,7 @@
 #include "AssetImporter.hpp"
 #include "Asset/Utils/AssetType.hpp"
 #include "Asset/Importer/TextureImporter.hpp"
+#include "Asset/Importer/SceneImporter.hpp"
 
 // Exodia Utils
 #include "Utils/Assert.hpp"
@@ -24,7 +25,8 @@ namespace Exodia {
     ///////////////////////
 
     static std::map<AssetType, AssetImportFunction> AssetImportFunctions = {
-        {AssetType::Texture2D, TextureImporter::ImportTexture2D}
+        { AssetType::Scene, SceneImporter::ImportScene },
+        { AssetType::Texture2D, TextureImporter::ImportTexture2D }
     };
 
     /////////////

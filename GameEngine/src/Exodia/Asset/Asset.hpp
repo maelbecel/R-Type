@@ -29,5 +29,6 @@
 
     #include "Exodia/Asset/Importer/AssetImporter.hpp"
     #include "Exodia/Asset/Importer/TextureImporter.hpp"
+    #include "Exodia/Asset/Importer/SceneImporter.hpp"
 
 #endif /* !ASSET_HPP_ */
