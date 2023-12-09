@@ -5,6 +5,12 @@ AssetRegistry:
   - Handle: 5690123456789012345
     Path: Icons/ContentBrowser/FileIcon.png
     Type: AssetType::Texture2D
+  - Handle: 6801234567890123456
+    Path: Icons/ContentBrowser/GoBack.png
+    Type: AssetType::Texture2D
+  - Handle: 7912345678901234567
+    Path: Icons/ContentBrowser/GoForward.png
+    Type: AssetType::Texture2D
   - Handle: 12401337114591583034
     Path: Textures/Baldur.png
     Type: AssetType::Texture2D

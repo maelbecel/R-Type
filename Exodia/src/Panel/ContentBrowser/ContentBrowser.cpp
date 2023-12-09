@@ -17,12 +17,14 @@ namespace Exodia {
     // Constructor & Destructor //
     //////////////////////////////
 
-    ContentBrowser::ContentBrowser(Ref<Project> project) : _Project(project), _ThumbnailCache(CreateRef<ThumbnailCache>(project)), _BaseDirectory(project->GetAssetDirectory()), _CurrentDirectory(_BaseDirectory)
+    ContentBrowser::ContentBrowser(Ref<Project> project) : _Project(project), _ThumbnailCache(CreateRef<ThumbnailCache>(project)), _BaseDirectory(project->GetAssetDirectory()), _CurrentDirectory(_BaseDirectory), _LastDirectory(_BaseDirectory)
     {
         _TreeNodes.push_back(TreeNode(".", 0));
 
         _DirectoryIcon = TextureImporter::LoadTexture2D("./Assets/Icons/ContentBrowser/DirectoryIcon.png");
         _FileIcon      = TextureImporter::LoadTexture2D("./Assets/Icons/ContentBrowser/FileIcon.png");
+        _GoBack        = TextureImporter::LoadTexture2D("./Assets/Icons/ContentBrowser/GoBack.png");
+        _GoForward     = TextureImporter::LoadTexture2D("./Assets/Icons/ContentBrowser/GoForward.png");
 
         RefreshTreeAsset();
     }
@@ -62,8 +64,17 @@ namespace Exodia {
         if (_CurrentDirectory != std::filesystem::path(_BaseDirectory)) {
             ImGui::SameLine();
 
-            if (ImGui::Button("<-"))
+            if (ImGui::ImageButton(reinterpret_cast<ImTextureID>(_GoBack->GetRendererID()), { 15, 15 }, { 0, 1 }, { 1, 0 })) {
+                _LastDirectory = _CurrentDirectory;
                 _CurrentDirectory = _CurrentDirectory.parent_path();
+            }
+        }
+
+        if (_LastDirectory != _CurrentDirectory) {
+            ImGui::SameLine();
+
+            if (ImGui::ImageButton(reinterpret_cast<ImTextureID>(_GoForward->GetRendererID()), { 15, 15 }, { 0, 1 }, { 1, 0 }))
+                _CurrentDirectory = _LastDirectory;
         }
     }
 
@@ -100,8 +111,10 @@ namespace Exodia {
             ImGui::PopStyleColor();
 
             if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left)) {
-                if (directoryEntry.is_directory())
+                if (directoryEntry.is_directory()) {
+                    _LastDirectory = _CurrentDirectory;
                     _CurrentDirectory /= filename;
+                }
             }
 
             ImGui::TextWrapped(filename.c_str());

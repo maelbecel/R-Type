@@ -66,9 +66,12 @@ namespace Exodia {
 
             std::filesystem::path _BaseDirectory;
             std::filesystem::path _CurrentDirectory;
+            std::filesystem::path _LastDirectory;
 
             Ref<Texture2D> _DirectoryIcon;
             Ref<Texture2D> _FileIcon;
+            Ref<Texture2D> _GoBack;
+            Ref<Texture2D> _GoForward;
 
             std::vector<TreeNode>                                               _TreeNodes;
             std::map<std::filesystem::path, std::vector<std::filesystem::path>> _AssetTree;
