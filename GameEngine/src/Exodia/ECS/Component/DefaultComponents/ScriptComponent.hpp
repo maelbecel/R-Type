@@ -11,13 +11,22 @@
     // Exodia Script includes
     #include "Script/ScriptableEntity.hpp"
 
-    // External includes
-    #include <yaml-cpp/yaml.h>
-    #include <string>
+    // Exodia ECS includes
+    #include "ECS/Interface/Component.hpp"
 
 namespace Exodia {
 
-    struct ScriptComponent {
+    struct ScriptComponent : public Component {
+        static std::string GetStaticName()
+        {
+            return "ScriptComponent";
+        }
+
+        std::string GetName() const override
+        {
+            return GetStaticName();
+        }
+
         ScriptableEntity *Instance = nullptr;
 
         ScriptableEntity *(*InstantiateScript)();
@@ -38,9 +47,14 @@ namespace Exodia {
             };
         }
 
-        void Serialize(UNUSED YAML::Emitter &out)
+        virtual void Serialize(YAML::Emitter &out)
         {
-            //TODO: Script Serialization implementation
+            out << YAML::Key << "ScriptComponent";
+            out << YAML::BeginMap;
+            {
+                // TODO: Serialize script
+            }
+            out << YAML::EndMap;
         }
     };
 };

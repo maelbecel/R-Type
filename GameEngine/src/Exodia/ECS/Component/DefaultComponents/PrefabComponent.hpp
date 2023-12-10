@@ -11,12 +11,22 @@
     // Exodia UUID includes
     #include "Core/ID/UUID.hpp"
 
-    // External includes
-    #include <yaml-cpp/yaml.h>
+    // Exodia ECS includes
+    #include "ECS/Interface/Component.hpp"
 
 namespace Exodia {
 
-    struct ChildrenComponent {
+    struct ChildrenComponent : public Component {
+        static std::string GetStaticName()
+        {
+            return "ChildrenComponent";
+        }
+
+        std::string GetName() const override
+        {
+            return GetStaticName();
+        }
+
         std::vector<UUID> Children;
 
         ChildrenComponent(const ChildrenComponent &) = default;
@@ -37,7 +47,7 @@ namespace Exodia {
             std::find(Children.begin(), Children.end(), child) != Children.end();
         }
 
-        void Serialize(YAML::Emitter &out)
+        virtual void Serialize(YAML::Emitter &out)
         {
             out << YAML::Key << "ChildrenComponent";
             out << YAML::BeginMap;
@@ -53,13 +63,23 @@ namespace Exodia {
         }
     };
 
-    struct ParentComponent {
+    struct ParentComponent : public Component {
+        static std::string GetStaticName()
+        {
+            return "ParentComponent";
+        }
+
+        std::string GetName() const override
+        {
+            return GetStaticName();
+        }
+
         UUID Parent;
 
         ParentComponent(const ParentComponent &) = default;
         ParentComponent(const UUID &parent = UUID(0)) : Parent(parent) {};
 
-        void Serialize(YAML::Emitter &out)
+        virtual void Serialize(YAML::Emitter &out)
         {
             out << YAML::Key << "ParentComponent";
             out << YAML::BeginMap;

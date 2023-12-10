@@ -11,12 +11,23 @@
     // Exodia Scene includes
     #include "Scene/Camera/SceneCamera.hpp"
 
-    // External includes
-    #include <yaml-cpp/yaml.h>
+    // Exodia ECS includes
+    #include "ECS/Interface/Component.hpp"
 
 namespace Exodia {
 
-    struct CameraComponent {
+    struct CameraComponent : public Component {
+
+        static std::string GetStaticName()
+        {
+            return "CameraComponent";
+        }
+
+        std::string GetName() const override
+        {
+            return GetStaticName();
+        }
+
         SceneCamera Camera;
         bool        Primary;
         bool        FixedAspectRatio;
@@ -24,7 +35,7 @@ namespace Exodia {
         CameraComponent(const CameraComponent &) = default;
         CameraComponent() : Primary(true), FixedAspectRatio(false) {};
 
-        void Serialize(YAML::Emitter &out)
+        virtual void Serialize(YAML::Emitter &out)
         {
             out << YAML::Key << "CameraComponent";
             out << YAML::BeginMap;

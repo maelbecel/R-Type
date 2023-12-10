@@ -11,13 +11,25 @@
     // Exodia Renderer includes
     #include "Renderer/Texture/SubTexture2D.hpp"
 
+    // Exodia ECS includes
+    #include "ECS/Interface/Component.hpp"
+
     // External include
-    #include <yaml-cpp/yaml.h>
     #include <glm/glm.hpp>
 
 namespace Exodia {
 
-    struct SpriteRendererComponent {
+    struct SpriteRendererComponent : public Component {
+        static std::string GetStaticName()
+        {
+            return "SpriteRendererComponent";
+        }
+
+        std::string GetName() const override
+        {
+            return GetStaticName();
+        }
+
         glm::vec4         Color;
         Ref<SubTexture2D> Texture;
         float             TilingFactor;
@@ -25,7 +37,7 @@ namespace Exodia {
         SpriteRendererComponent(const SpriteRendererComponent &) = default;
         SpriteRendererComponent(const glm::vec4 &color = glm::vec4(1.0f)) : Color(color), TilingFactor(1.0f) {};
 
-        void Serialize(YAML::Emitter &out)
+        virtual void Serialize(YAML::Emitter &out)
         {
             out << YAML::Key << "SpriteRendererComponent";
             out << YAML::BeginMap;
@@ -61,6 +73,16 @@ namespace Exodia {
     };
 
     struct CircleRendererComponent {
+        static std::string GetStaticName()
+        {
+            return "CircleRendererComponent";
+        }
+
+        std::string GetName() const
+        {
+            return GetStaticName();
+        }
+
         glm::vec4      Color;
         float          Thickness;
         float          Fade;
@@ -68,7 +90,7 @@ namespace Exodia {
         CircleRendererComponent(const CircleRendererComponent &) = default;
         CircleRendererComponent(const glm::vec4 &color = glm::vec4(1.0f)) : Color(color), Thickness(1.0f), Fade(0.005f) {};
 
-        void Serialize(YAML::Emitter &out)
+        virtual void Serialize(YAML::Emitter &out)
         {
             out << YAML::Key << "CircleRendererComponent";
             out << YAML::BeginMap;

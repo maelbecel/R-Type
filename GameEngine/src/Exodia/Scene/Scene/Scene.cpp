@@ -232,6 +232,11 @@ namespace Exodia {
         return _Name;
     }
 
+    void Scene::SetName(const std::string &name)
+    {
+        _Name = name;
+    }
+
     World &Scene::GetWorld() const
     {
         return *_World;

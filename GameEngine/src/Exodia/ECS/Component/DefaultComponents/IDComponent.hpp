@@ -11,18 +11,28 @@
     // Exodia UUID includes
     #include "Core/ID/UUID.hpp"
 
-    // External includes
-    #include <yaml-cpp/yaml.h>
+    // Exodia ECS includes
+    #include "ECS/Interface/Component.hpp"
 
 namespace Exodia {
 
-    struct IDComponent {
+    struct IDComponent : public Component {
+        static std::string GetStaticName()
+        {
+            return "IDComponent";
+        }
+
+        std::string GetName() const override
+        {
+            return GetStaticName();
+        }
+
         UUID ID;
 
         IDComponent(const IDComponent &) = default;
         IDComponent(const UUID &uuid = UUID()) : ID(uuid) {};
 
-        void Serialize(YAML::Emitter &out)
+        virtual void Serialize(YAML::Emitter &out)
         {
             out << YAML::Key << "IDComponent";
             out << YAML::BeginMap;

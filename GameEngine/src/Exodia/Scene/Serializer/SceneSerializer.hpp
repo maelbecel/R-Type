@@ -41,6 +41,7 @@ namespace Exodia {
         private:
 
             void SerializeEntity(YAML::Emitter &out, Entity *entity);
+            void DeserializeComponent(Entity *entity, std::string componentType, YAML::Node &componentData);
 
         ////////////////
         // Attributes //

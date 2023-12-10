@@ -83,6 +83,7 @@ namespace Exodia {
         public:
 
             const std::string &GetName() const;
+            void SetName(const std::string &name);
 
             World &GetWorld() const;
 

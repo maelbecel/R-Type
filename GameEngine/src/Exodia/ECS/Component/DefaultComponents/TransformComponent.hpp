@@ -8,18 +8,28 @@
 #ifndef TRANSFORMCOMPONENT_HPP_
     #define TRANSFORMCOMPONENT_HPP_
 
+    // Exodia ECS includes
+    #include "ECS/Interface/Component.hpp"
+
     // GLM includes
     #include <glm/glm.hpp>
     #include <glm/gtc/matrix_transform.hpp>
     #define GLM_ENABLE_EXPERIMENTAL
         #include <glm/gtx/quaternion.hpp>
 
-    // External includes
-    #include <yaml-cpp/yaml.h>
-
 namespace Exodia {
 
-    struct TransformComponent {
+    struct TransformComponent : public Component {
+        static std::string GetStaticName()
+        {
+            return "TransformComponent";
+        }
+
+        std::string GetName() const override
+        {
+            return GetStaticName();
+        }
+
         glm::vec3 Translation;
         glm::vec3 Rotation;
         glm::vec3 Scale;
@@ -36,7 +46,7 @@ namespace Exodia {
             return translation * rotation * scale;
         }
 
-        void Serialize(YAML::Emitter &out)
+        virtual void Serialize(YAML::Emitter &out)
         {
             out << YAML::Key << "TransformComponent";
             out << YAML::BeginMap;

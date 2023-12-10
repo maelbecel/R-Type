@@ -11,14 +11,25 @@
     // External includes
     #include "Utils/Assert.hpp"
 
+    // Exodia ECS includes
+    #include "ECS/Interface/Component.hpp"
+
     // External includes
-    #include <yaml-cpp/yaml.h>
     #include <glm/glm.hpp>
-    #include <string>
 
 namespace Exodia {
 
-    struct RigidBody2DComponent {
+    struct RigidBody2DComponent : public Component {
+        static std::string GetStaticName()
+        {
+            return "RigidBody2DComponent";
+        }
+
+        std::string GetName() const override
+        {
+            return GetStaticName();
+        }
+
         enum class BodyType {
             Static,
             Dynamic
@@ -53,7 +64,7 @@ namespace Exodia {
         float GravityScale;
         float Mass;
 
-        void Serialize(YAML::Emitter &out)
+        virtual void Serialize(YAML::Emitter &out)
         {
             out << YAML::Key << "RigidBody2DComponent";
             out << YAML::BeginMap;
