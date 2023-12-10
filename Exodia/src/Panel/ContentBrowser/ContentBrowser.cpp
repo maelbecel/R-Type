@@ -43,7 +43,7 @@ namespace Exodia {
         static float padding = 45.0f;
         static float thumbnailSize = 150.0f;
 
-        float cellSize = thumbnailSize + padding;
+        float cellSize   = thumbnailSize + padding;
         float panelWidth = ImGui::GetContentRegionAvail().x;
 
         int columnCount = (int)(panelWidth / cellSize);
@@ -56,7 +56,6 @@ namespace Exodia {
         DrawFile(thumbnailSize);
 
         ImGui::Columns(1);
-
         ImGui::End();
     }
 
@@ -119,6 +118,13 @@ namespace Exodia {
                 ImGui::EndPopup();
             }
 
+            if (ImGui::BeginDragDropSource()) {
+                AssetHandle handle = GetAssetFromPathInTree(relativePath);
+
+                ImGui::SetDragDropPayload("CONTENT_BROWSER_ITEM", &handle, sizeof(AssetHandle));
+                ImGui::EndDragDropSource();
+            }
+
             ImGui::PopStyleColor();
 
             if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left)) {
@@ -158,5 +164,22 @@ namespace Exodia {
                 }
             }
         }
+    }
+
+    ///////////////////////
+    // Getters & Setters //
+    ///////////////////////
+
+    AssetHandle ContentBrowser::GetAssetFromPathInTree(const std::filesystem::path &path)
+    {
+        const auto &assetRegistry = _Project->GetEditorAssetManager()->GetAssetRegistry();
+
+        for (const auto &[handle, spec] : assetRegistry) {
+            if (spec.Path == path)
+                return handle;
+        }
+
+        EXODIA_CORE_ASSERT(false, "Asset not found !");
+        return 0;
     }
 };

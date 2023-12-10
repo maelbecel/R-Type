@@ -29,7 +29,7 @@ namespace Exodia {
         // Methods //
         /////////////
         public:
-            virtual void Destroy(World * world) = 0;
+            virtual void Destroy(World *world) = 0;
             virtual void Removed(Entity *entity) = 0;
     };
 };

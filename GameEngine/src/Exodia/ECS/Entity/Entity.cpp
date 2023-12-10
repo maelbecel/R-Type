@@ -6,6 +6,7 @@
 */
 
 #include "Entity.hpp"
+#include "World/World.hpp"
 
 namespace Exodia {
 
@@ -13,9 +14,9 @@ namespace Exodia {
     // Constructor & Destructor //
     //////////////////////////////
 
-    Entity::Entity() {};
+    Entity::Entity() : _World(nullptr), _ID(0), _PendingDestroy(false) {};
 
-    Entity::Entity(World * world, uint64_t id) : _World(world), _ID(id), _PendingDestroy(false) {};
+    Entity::Entity(World *world, uint64_t id) : _World(world), _ID(id), _PendingDestroy(false) {};
 
     Entity::~Entity()
     {
@@ -30,22 +31,31 @@ namespace Exodia {
     {
         for (auto pair : _Components) {
             pair.second->Removed(this);
-            pair.second->Destroy(_World);
+            //pair.second->Destroy(_World);
         }
 
         _Components.clear();
+    }
+
+    Entity *Entity::Duplicate(World *world, UUID uuid, const std::string &name)
+    {
+        Entity *entity = world->CreateEntity(uuid, name);
+
+        for (auto pair : _Components)
+            entity->_Components[pair.first] = pair.second;
+        return entity;
     }
 
     ///////////////////////
     // Getters & Setters //
     ///////////////////////
 
-    World * Entity::GetWorld() const
+    World *Entity::GetWorld() const
     {
         return _World;
     }
 
-    void Entity::SetWorld(World * world)
+    void Entity::SetWorld(World *world)
     {
         _World = world;
     }

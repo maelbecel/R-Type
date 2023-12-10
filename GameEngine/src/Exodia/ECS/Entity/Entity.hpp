@@ -48,7 +48,7 @@ namespace Exodia {
         public:
 
             Entity();
-            Entity(World * world, uint64_t id = UUID());
+            Entity(World *world, uint64_t id = UUID());
 
             ~Entity();
 
@@ -87,6 +87,8 @@ namespace Exodia {
                 view(GetComponent<Components>()...);
                 return true;
             }
+
+            Entity *Duplicate(World *world, UUID uuid, const std::string &name);
 
         ///////////////////////
         // Getters & Setters //

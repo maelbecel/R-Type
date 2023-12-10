@@ -13,6 +13,7 @@
 
     // Panel includes
     #include "Panel/ContentBrowser/ContentBrowser.hpp"
+    #include "Panel/SceneHierarchy/SceneHierarchy.hpp"
 
 namespace Exodia {
 
@@ -62,7 +63,20 @@ namespace Exodia {
         ////////////////
         private:
 
+            // Framebuffer
+            Ref<Framebuffer> _Framebuffer;
+
+            // Panels
             Scope<ContentBrowser> _ContentBrowser;
+            SceneHierarchy        _SceneHierarchy;
+
+            // Viewport
+            glm::vec2 _ViewportBounds[2];
+            glm::vec2 _ViewportSize;
+            bool      _ViewportHovered;
+
+            // ImGuizmo
+            int _GuizmoType;
     };
 };
 

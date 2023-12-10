@@ -46,7 +46,8 @@ namespace Exodia {
     {
         EXODIA_PROFILE_FUNCTION(); // Performance instrumentation profiling for the function
 
-        glDeleteTextures(1, &_RendererID); // Delete the OpenGL texture
+        if (_IsLoaded)
+            glDeleteTextures(1, &_RendererID); // Delete the OpenGL texture
     }
 
     /////////////

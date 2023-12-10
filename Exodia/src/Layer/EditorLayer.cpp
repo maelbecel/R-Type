@@ -16,7 +16,7 @@ namespace Exodia {
     // Constructor & Destructor //
     //////////////////////////////
 
-    EditorLayer::EditorLayer() : Layer("Exodia Editor") {};
+    EditorLayer::EditorLayer() : Layer("Exodia Editor"), _ViewportSize{ 0.0f, 0.0f }, _ViewportHovered(false), _GuizmoType(-1) {};
 
     /////////////
     // Methods //
@@ -25,6 +25,18 @@ namespace Exodia {
     void EditorLayer::OnAttach()
     {
         EXODIA_PROFILE_FUNCTION();
+
+        Exodia::FramebufferSpecification fbSpec;
+
+        fbSpec.Width       = Application::Get().GetWindow().GetWidth();
+        fbSpec.Height      = Application::Get().GetWindow().GetHeight();
+        fbSpec.Attachments = {
+            FramebufferTextureFormat::RGBA8,
+            FramebufferTextureFormat::RED_INTEGER,
+            FramebufferTextureFormat::Depth
+        };
+
+        _Framebuffer = Exodia::Framebuffer::Create(fbSpec);
 
         auto commandLine = Application::Get().GetSpecification().CommandLineArgs;
 
@@ -62,6 +74,8 @@ namespace Exodia {
     {
         EXODIA_PROFILE_FUNCTION();
 
+            // -- DockSpace ----------------------------------------------------
+
         static bool dockspaceOpen                 = true;
         static bool opt_fullscreen_persistant     = true;
         static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
@@ -98,7 +112,7 @@ namespace Exodia {
 
         float minWinSizeX = style.WindowMinSize.x;
 
-        style.WindowMinSize.x = 450.0f;
+        style.WindowMinSize.x = 300.0f;
         if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable) {
             ImGuiID dockspace_id = ImGui::GetID("DockSpace");
             ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
@@ -106,8 +120,61 @@ namespace Exodia {
 
         style.WindowMinSize.x = minWinSizeX;
 
+            // -- Scene Hierarchy ----------------------------------------------
+
+        _SceneHierarchy.OnImGuiRender();
+
+            // -- Content Browser ----------------------------------------------
+
         if (_ContentBrowser)
             _ContentBrowser->OnImGuiRender();
+
+            // -- Viewport -----------------------------------------------------
+
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
+        ImGui::Begin("Viewport");
+
+        ImVec2 viewportMinRegion = ImGui::GetWindowContentRegionMin();
+        ImVec2 viewportMaxRegion = ImGui::GetWindowContentRegionMax();
+        ImVec2 viewportOffset = ImGui::GetWindowPos();
+
+        _ViewportBounds[0] = { viewportMinRegion.x + viewportOffset.x, viewportMinRegion.y + viewportOffset.y };
+        _ViewportBounds[1] = { viewportMaxRegion.x + viewportOffset.x, viewportMaxRegion.y + viewportOffset.y };
+
+        _ViewportHovered = ImGui::IsWindowHovered();
+
+        Application::Get().GetImGuiLayer()->SetBlockEvents(!_ViewportHovered);
+
+        ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
+
+        _ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
+
+        ImGui::Image(reinterpret_cast<ImTextureID>(_Framebuffer->GetColorAttachmentRendererID()), ImVec2{ _ViewportSize.x, _ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+
+            // 1. Drag and Drop
+        if (ImGui::BeginDragDropTarget()) {
+            const ImGuiPayload *payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM");
+
+            if (payload) {
+                AssetHandle handle = *(AssetHandle *)payload->Data;
+
+                OpenScene(handle);
+            }
+            ImGui::EndDragDropTarget();
+        }
+
+            // 2. ImGuizmo
+
+        Entity selectedEntity = _SceneHierarchy.GetSelectedEntity();
+
+        if (selectedEntity.GetEntityID() != Entity::InvalidEntityID && _GuizmoType != -1) {
+            // TODO: Setup ImGuizmo
+        }
+
+        ImGui::End();
+        ImGui::PopStyleVar();
+
+            // -- End DockSpace ------------------------------------------------
 
         ImGui::End();
     }
@@ -155,7 +222,10 @@ namespace Exodia {
 
     void EditorLayer::OpenScene() {};
 
-    void EditorLayer::OpenScene(UNUSED AssetHandle handle) {};
+    void EditorLayer::OpenScene(AssetHandle handle)
+    {
+        EXODIA_CORE_INFO("Open scene: {0}", (uint64_t)handle);
+    }
 
     void EditorLayer::SaveScene() {};
 

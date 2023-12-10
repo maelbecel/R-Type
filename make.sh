@@ -62,6 +62,7 @@ makefclean() {
     rm -rf bin_examples
     rm -rf r-type_client
     rm -rf r-type_server
+    rm -rf exodia
 }
 
 makere() {

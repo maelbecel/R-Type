@@ -56,6 +56,13 @@ namespace Exodia {
 
             void RefreshTreeAsset();
 
+        ///////////////////////
+        // Getters & Setters //
+        ///////////////////////
+        private:
+
+            AssetHandle GetAssetFromPathInTree(const std::filesystem::path &path);
+
         ////////////////
         // Attributes //
         ////////////////
