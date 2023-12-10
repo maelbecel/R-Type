@@ -50,7 +50,7 @@ namespace Exodia {
 
         private:
             
-            void GoToParentDirectory();
+            void DrawHeaders();
             void DrawAssets(float thumbnailSize);
             void DrawFile(float thumbnailSize);
 
@@ -67,6 +67,8 @@ namespace Exodia {
             std::filesystem::path _BaseDirectory;
             std::filesystem::path _CurrentDirectory;
             std::filesystem::path _LastDirectory;
+
+            std::string _SearchFilter;
 
             Ref<Texture2D> _DirectoryIcon;
             Ref<Texture2D> _FileIcon;

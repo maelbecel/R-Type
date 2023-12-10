@@ -10,6 +10,7 @@
 
 // ImGui includes
 #include <imgui.h>
+#include <misc/cpp/imgui_stdlib.h>
 
 namespace Exodia {
 
@@ -37,9 +38,9 @@ namespace Exodia {
     {
         ImGui::Begin("Content Browser");
 
-        GoToParentDirectory();
+        DrawHeaders();
 
-        static float padding = 30.0f;
+        static float padding = 45.0f;
         static float thumbnailSize = 150.0f;
 
         float cellSize = thumbnailSize + padding;
@@ -59,7 +60,7 @@ namespace Exodia {
         ImGui::End();
     }
 
-    void ContentBrowser::GoToParentDirectory()
+    void ContentBrowser::DrawHeaders()
     {
         if (_CurrentDirectory != std::filesystem::path(_BaseDirectory)) {
             ImGui::SameLine();
@@ -76,6 +77,13 @@ namespace Exodia {
             if (ImGui::ImageButton(reinterpret_cast<ImTextureID>(_GoForward->GetRendererID()), { 15, 15 }, { 0, 1 }, { 1, 0 }))
                 _CurrentDirectory = _LastDirectory;
         }
+
+        ImGui::SameLine();
+        ImGui::PushID("SearchBar");
+        ImGui::SetNextItemWidth(200);
+        ImGui::InputTextWithHint("##Search", "Search...", &_SearchFilter);
+        ImGui::PopID();
+        ImGui::Separator();
     }
 
     void ContentBrowser::DrawFile(float thumbnailSize)
@@ -84,6 +92,9 @@ namespace Exodia {
             const auto &path         = directoryEntry.path();
             std::string filename     = path.filename().string();
             Ref<Texture2D> thumbnail = _DirectoryIcon;
+
+            if (_SearchFilter.length() > 0 && filename.find(_SearchFilter) == std::string::npos)
+                continue;
 
             ImGui::PushID(filename.c_str());
 
