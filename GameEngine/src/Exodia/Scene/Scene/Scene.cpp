@@ -36,6 +36,9 @@ namespace Exodia {
 
     Ref<Scene> Scene::Copy(Ref<Scene> other)
     {
+        if (other == nullptr)
+            return nullptr;
+
         Ref<Scene> copyScene = CreateRef<Scene>(other->GetName());
 
         copyScene->_ViewportWidth  = other->_ViewportWidth;

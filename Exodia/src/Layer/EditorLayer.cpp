@@ -16,7 +16,7 @@ namespace Exodia {
     // Constructor & Destructor //
     //////////////////////////////
 
-    EditorLayer::EditorLayer() : Layer("Exodia Editor"), _ViewportSize{ 0.0f, 0.0f }, _ViewportHovered(false), _GuizmoType(-1) {};
+    EditorLayer::EditorLayer() : Layer("Exodia Editor"), _ActiveScene(nullptr), _SceneState(SceneState::Edit), _ViewportSize{ 0.0f, 0.0f }, _ViewportHovered(false), _GuizmoType(-1) {};
 
     /////////////
     // Methods //
@@ -37,6 +37,10 @@ namespace Exodia {
         };
 
         _Framebuffer = Exodia::Framebuffer::Create(fbSpec);
+
+        _EditorScene = CreateRef<Scene>();
+
+        _ActiveScene = _EditorScene;
 
         auto commandLine = Application::Get().GetSpecification().CommandLineArgs;
 
@@ -120,6 +124,29 @@ namespace Exodia {
 
         style.WindowMinSize.x = minWinSizeX;
 
+            // -- Menu Bar -----------------------------------------------------
+
+        if (ImGui::BeginMenuBar()) {
+            if (ImGui::BeginMenu("File")) {
+                if (ImGui::MenuItem("Open Project...", "Ctrl+O"))
+                    OpenProject();
+                ImGui::Separator();
+
+                if (ImGui::MenuItem("New Scene", "Ctrl+N"))
+                    NewScene();
+                if (ImGui::MenuItem("Save Scene", "Ctrl+S"))
+                    SaveScene();
+                if (ImGui::MenuItem("Save Scene As...", "Ctrl+Shift+S"))
+                    SaveSceneAs();
+                ImGui::Separator();
+
+                if (ImGui::MenuItem("Exit"))
+                    Application::Get().Close();                
+                ImGui::EndMenu();
+            }
+            ImGui::EndMenuBar();
+        }
+
             // -- Scene Hierarchy ----------------------------------------------
 
         _SceneHierarchy.OnImGuiRender();
@@ -165,9 +192,9 @@ namespace Exodia {
 
             // 2. ImGuizmo
 
-        Entity selectedEntity = _SceneHierarchy.GetSelectedEntity();
+        Entity *selectedEntity = _SceneHierarchy.GetSelectedEntity();
 
-        if (selectedEntity.GetEntityID() != Entity::InvalidEntityID && _GuizmoType != -1) {
+        if (selectedEntity && selectedEntity->GetEntityID() != Entity::InvalidEntityID && _GuizmoType != -1) {
             // TODO: Setup ImGuizmo
         }
 
@@ -218,16 +245,55 @@ namespace Exodia {
     // Scene Methods //
     ///////////////////
 
-    void EditorLayer::NewScene() {};
+    void EditorLayer::NewScene()
+    {
+        _ActiveScene     = CreateRef<Scene>();
+        _EditorScenePath = std::filesystem::path();
 
-    void EditorLayer::OpenScene() {};
+        _SceneHierarchy.SetContext(_ActiveScene);
+    }
 
     void EditorLayer::OpenScene(AssetHandle handle)
     {
-        EXODIA_CORE_INFO("Open scene: {0}", (uint64_t)handle);
+        if (_SceneState != SceneState::Edit)
+            OnSceneStop();
+        Ref<Scene> readOnly = AssetManager::GetAsset<Scene>(handle);
+        Ref<Scene> scene    = Scene::Copy(readOnly);
+
+        _EditorScene = scene;
+        _ActiveScene = _EditorScene;
+
+        _SceneHierarchy.SetContext(_ActiveScene);
+        _EditorScenePath = Project::GetActive()->GetEditorAssetManager()->GetFilePath(handle);
     }
 
-    void EditorLayer::SaveScene() {};
+    void EditorLayer::SaveScene()
+    {
+        if (!_EditorScenePath.empty())
+            SceneImporter::SaveScene(_ActiveScene, _EditorScenePath);
+        else
+            SaveSceneAs();
+    }
 
-    void EditorLayer::SaveSceneAs() {};
+    void EditorLayer::SaveSceneAs()
+    {
+        std::string path = FileDialog::SaveFile("exodia");
+
+        if (path.empty())
+            return;
+
+        SceneImporter::SaveScene(_ActiveScene, path);
+
+        _EditorScenePath = path;
+    }
+
+    void EditorLayer::OnSceneStop()
+    {
+        if (_SceneState == SceneState::Play)
+            _ActiveScene->OnRuntimeStop();
+        _SceneState = SceneState::Edit;
+        _ActiveScene = _EditorScene;
+
+        _SceneHierarchy.SetContext(_ActiveScene);
+    }
 };

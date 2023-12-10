@@ -19,6 +19,16 @@ namespace Exodia {
 
     class EditorLayer : public Exodia::Layer {
 
+        //////////
+        // Enum //
+        //////////
+        public:
+
+            enum class SceneState {
+                Edit = 0,
+                Play = 1
+            };
+
         //////////////////////////////
         // Constructor & Destructor //
         //////////////////////////////
@@ -53,10 +63,10 @@ namespace Exodia {
         private:
 
             void NewScene();
-            void OpenScene();
             void OpenScene(AssetHandle handle);
             void SaveScene();
             void SaveSceneAs();
+            void OnSceneStop();
 
         ////////////////
         // Attributes //
@@ -65,6 +75,12 @@ namespace Exodia {
 
             // Framebuffer
             Ref<Framebuffer> _Framebuffer;
+
+            // Scene
+            Ref<Scene>            _EditorScene;
+            Ref<Scene>            _ActiveScene;
+            std::filesystem::path _EditorScenePath;
+            SceneState            _SceneState;
 
             // Panels
             Scope<ContentBrowser> _ContentBrowser;

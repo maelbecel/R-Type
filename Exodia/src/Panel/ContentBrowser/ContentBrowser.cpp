@@ -91,6 +91,7 @@ namespace Exodia {
             const auto &path         = directoryEntry.path();
             std::string filename     = path.filename().string();
             Ref<Texture2D> thumbnail = _DirectoryIcon;
+            bool isDirectory         = directoryEntry.is_directory();
 
             if (_SearchFilter.length() > 0 && filename.find(_SearchFilter) == std::string::npos)
                 continue;
@@ -99,7 +100,7 @@ namespace Exodia {
 
             auto relativePath = std::filesystem::relative(path, Project::GetActiveAssetDirectory());
 
-            if (!directoryEntry.is_directory()) {
+            if (!isDirectory) {
                 thumbnail = _ThumbnailCache->GetOrCreateThumbnail(relativePath);
 
                 if (!thumbnail)
@@ -109,7 +110,7 @@ namespace Exodia {
             ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
             ImGui::ImageButton(reinterpret_cast<ImTextureID>(thumbnail->GetRendererID()), { thumbnailSize, thumbnailSize }, { 0, 1 }, { 1, 0 });
 
-            if (ImGui::BeginPopupContextItem()) {
+            if (!isDirectory && ImGui::BeginPopupContextItem()) {
                 if (ImGui::MenuItem("Import")) {
                     Project::GetActive()->GetEditorAssetManager()->ImportAsset(relativePath);
 

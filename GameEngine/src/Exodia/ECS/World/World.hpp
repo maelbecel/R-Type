@@ -136,6 +136,8 @@ namespace Exodia {
             template<typename ...Entities>
             void ForEach(typename std::common_type<std::function<void(Entity *, ComponentHandle<Entities>...)>>::type function, bool includePendingDestroy = false)
             {
+                if (GetCount() == 0)
+                    return;
                 for (auto *entity : View<Entities ...>(includePendingDestroy))
                     function(entity, entity->template GetComponent<Entities>()...);
                 MergeEntities();

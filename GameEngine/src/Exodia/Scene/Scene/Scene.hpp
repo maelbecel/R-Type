@@ -62,7 +62,8 @@ namespace Exodia {
             template<typename ...Components>
             void ForEach(typename std::common_type<std::function<void(Entity *, ComponentHandle<Components>...)>>::type function, bool includePendingDestroy = false)
             {
-                _World->ForEach<Components...>(function, includePendingDestroy);
+                if (_World)
+                    _World->ForEach<Components...>(function, includePendingDestroy);
             }
 
             void RegisterSystem(EntitySystem *system);

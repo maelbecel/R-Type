@@ -32,14 +32,9 @@ namespace Exodia {
         IDComponent(const IDComponent &) = default;
         IDComponent(const UUID &uuid = UUID()) : ID(uuid) {};
 
-        virtual void Serialize(YAML::Emitter &out)
+        virtual void Serialize(UNUSED YAML::Emitter &out)
         {
-            out << YAML::Key << "IDComponent";
-            out << YAML::BeginMap;
-            {
-                out << YAML::Key << "ID" << YAML::Value << (uint64_t)ID;
-            }
-            out << YAML::EndMap;
+            return;
         }
     };
 };

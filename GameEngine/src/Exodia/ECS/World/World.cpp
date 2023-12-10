@@ -154,6 +154,13 @@ namespace Exodia {
         if (entity == nullptr)
             return;
 
+        if (entity->HasComponent<ChildrenComponent>()) {
+            auto &children = entity->GetComponent<ChildrenComponent>().Get();
+
+            for (auto child : children.Children)
+                DestroyEntity(GetEntityByID(child), immediate);
+        }
+
         if (entity->IsPendingDestroy() == false) {
             if (immediate) {
                 if (_IndexToUUIDMap.find(entity->GetEntityID()) != _IndexToUUIDMap.end())
@@ -266,6 +273,8 @@ namespace Exodia {
 
     void World::ForAll(std::function<void(Entity *)> function, bool includePendingDestroy)
     {
+        if (GetCount() == 0)
+            return;
         for (auto *entity : AllEntities(includePendingDestroy))
             function(entity);
     }

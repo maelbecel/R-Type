@@ -20,7 +20,7 @@ namespace Exodia {
         //////////////////////////////
         public:
 
-            SceneHierarchy()  = default;
+            SceneHierarchy(const Ref<Scene> &context = nullptr);
             ~SceneHierarchy() = default;
 
         /////////////
@@ -29,23 +29,30 @@ namespace Exodia {
         public:
 
             void OnImGuiRender();
-        
+
+        private:
+
+            void DrawSceneHierarchy();
+            void DrawProperties();
+            void DrawEntityNode(Entity *entity);
+            void DrawComponents(Entity *entity);
+
         ///////////////////////
         // Getters & Setters //
         ///////////////////////
         public:
             
             void SetContext(Ref<Scene> context);            
-            void SetSelectedEntity(Entity entity);
+            void SetSelectedEntity(Entity *entity);
 
-            Entity GetSelectedEntity() const;
+            Entity *GetSelectedEntity() const;
 
         ////////////////
         // Attributes //
         ////////////////
         private:
             Ref<Scene> _Context;
-            Entity     _SelectedEntity;
+            Entity    *_SelectedEntity;
     };
 };
 

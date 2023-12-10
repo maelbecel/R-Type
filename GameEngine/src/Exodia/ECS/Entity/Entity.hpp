@@ -130,6 +130,7 @@ namespace Exodia {
 
             bool operator==(const Entity &other) const;
             bool operator!=(const Entity &other) const;
+            operator bool() const;
 
         ////////////////
         // Attributes //

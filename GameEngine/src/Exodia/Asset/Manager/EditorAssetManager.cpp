@@ -71,7 +71,8 @@ namespace Exodia {
         spec.Path = path;
         spec.Type = GetAssetTypeFromFileExtension(path.extension());
 
-        EXODIA_CORE_ASSERT(spec, "EditorAssetManager::ImportAsset() - Asset type not found !");
+        if (spec.Type == AssetType::None)
+            return;
 
         for (const auto &[handle, spec] : _AssetRegistry) {
             if (spec.Path.filename() == path.filename()) {

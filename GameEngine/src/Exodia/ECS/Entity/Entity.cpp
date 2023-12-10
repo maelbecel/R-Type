@@ -97,5 +97,9 @@ namespace Exodia {
     {
         return !(other == *this);
     }
-    
+
+    Entity::operator bool() const
+    {
+        return _ID != 0;
+    }
 };
