@@ -78,7 +78,13 @@ namespace Exodia {
 
     void Scene::OnRuntimeStart()
     {
+        if (_IsRunning)
+            return;
+
         _IsRunning = true;
+
+        for (auto &system : _Systems)
+            _World->RegisterSystem(system);
 
         _World->ForEach<CameraComponent>([&](Entity *entity, auto camera) {
             auto &cc = camera.Get();
@@ -100,7 +106,13 @@ namespace Exodia {
 
     void Scene::OnRuntimeStop()
     {
+        if (!_IsRunning)
+            return;
+
         _IsRunning = false;
+
+        for (auto &system : _Systems)
+            _World->UnregisterSystem(system);
 
         _World->ForEach<ScriptComponent>([&](Entity *entity, auto script) {
             auto &sc = script.Get();
@@ -180,6 +192,14 @@ namespace Exodia {
                 cc.Camera.SetViewportSize(width, height);
             }
         });
+    }
+
+    void Scene::RegisterSystem(EntitySystem *system)
+    {
+        if (_IsRunning)
+            _World->RegisterSystem(system);
+        else
+            _Systems.push_back(system);
     }
 
     void Scene::RenderScene()

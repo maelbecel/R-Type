@@ -65,6 +65,14 @@ namespace Exodia {
                 _World->ForEach<Components...>(function, includePendingDestroy);
             }
 
+            void RegisterSystem(EntitySystem *system);
+
+            template<typename Event>
+            void Subscribe(EventSubscriber<Event> *subscriber)
+            {
+                _World->Subscribe<Event>(subscriber);
+            }
+
         private:
             
             void RenderScene();
@@ -101,6 +109,8 @@ namespace Exodia {
 
             bool _IsRunning;
             bool _IsPaused;
+
+            std::vector<EntitySystem *> _Systems;
     };
 };
 
