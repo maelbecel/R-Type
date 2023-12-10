@@ -19,17 +19,15 @@
 // Exodia Debug includes
 #include "Debug/Logs.hpp"
 
-// YAML-CPP includes
-#include <yaml-cpp/yaml.h>
-
 // External includes
 #include <map>
+#include <yaml-cpp/yaml.h>
 
 namespace Exodia {
 
-    ////////////////////////////////
-    // YAML-CPP Operator Overload //
-    ////////////////////////////////
+    /////////////////////////////////
+    // Yaml-cpp operator overloads //
+    /////////////////////////////////
 
     YAML::Emitter &operator<<(YAML::Emitter &out, const std::string_view &str)
     {

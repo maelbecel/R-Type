@@ -50,6 +50,11 @@ namespace Exodia {
 
                 entity->GetWorld()->Emit<Events::OnComponentRemoved<Component>>({ entity, handle });
             }
+
+            virtual void Serialize(YAML::Emitter &out)
+            {
+                Data.Serialize(out);
+            }
     };
 };
 

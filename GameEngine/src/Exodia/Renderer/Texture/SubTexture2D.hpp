@@ -48,6 +48,7 @@ namespace Exodia {
 
             SubTexture2D(const Ref<Texture2D> &texture);
             SubTexture2D(const Ref<Texture2D> &texture, const glm::vec2 &coords, const glm::vec2 &cellSize, const glm::vec2 &spriteSize);
+            SubTexture2D(const AssetHandle &assetHandle, const glm::vec2 &coords, const glm::vec2 &cellSize, const glm::vec2 &spriteSize);
 
             ~SubTexture2D() = default;
 
@@ -84,6 +85,8 @@ namespace Exodia {
             const glm::vec2 &GetTextureCellSize();
             const glm::vec2 &GetTextureSpriteSize();
 
+            AssetHandle GetAssetHandle() const;
+
             void SetCoords(const glm::vec2 &coords);
             void SetTextureCellSize(const glm::vec2 &cellSize);
             void SetTextureSpriteSize(const glm::vec2 &spriteSize);
@@ -94,6 +97,7 @@ namespace Exodia {
         // Attributes //
         ////////////////
         private:
+            AssetHandle    _AssetHandle;        /*!< The handle of the parent texture. */
             Ref<Texture2D> _Texture;            /*!< The parent texture of the subtexture. */
             glm::vec2      _TextureCoords[4];   /*!< The texture coordinates defining the subtexture's corners. */
             glm::vec2      _Coords;             /*!< The starting coordinates of the subtexture within the texture. */

@@ -16,6 +16,7 @@
 
     // External includes
     #include <filesystem>
+    #include <yaml-cpp/yaml.h>
 
 namespace Exodia {
 
@@ -36,6 +37,10 @@ namespace Exodia {
 
             void Serialize(const std::filesystem::path &path);
             void Deserialize(const std::filesystem::path &path);
+
+        private:
+
+            void SerializeEntity(YAML::Emitter &out, Entity *entity);
 
         ////////////////
         // Attributes //

@@ -75,6 +75,15 @@ namespace Exodia {
         _PendingDestroy = pendingDestroy;
     }
 
+    std::vector<IComponentContainer *> Entity::GetAllComponents()
+    {
+        std::vector<IComponentContainer *> components;
+
+        for (auto pair : _Components)
+            components.push_back(pair.second);
+        return components;
+    }
+
     /////////////////
     // Comparators //
     /////////////////
