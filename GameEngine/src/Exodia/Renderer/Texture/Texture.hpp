@@ -8,6 +8,12 @@
 #ifndef TEXTURE_HPP_
     #define TEXTURE_HPP_
 
+    // Exodia Asset includes
+    #include "Asset/Asset.hpp"
+
+    // Exodia Core includes
+    #include "Core/Buffer/Buffer.hpp"
+
     // Exodia Utils
     #include "Utils/Memory.hpp"
 
@@ -17,11 +23,28 @@
 
 namespace Exodia {
 
+    enum class ImageFormat {
+        None    = 0,
+        R8      = 1,
+        RGB8    = 2,
+        RGBA8   = 3,
+        RGBA32F = 4
+    };
+
+    struct TextureSpecification {
+        uint32_t Width  = 1;
+        uint32_t Height = 1;
+
+        ImageFormat Format = ImageFormat::RGBA8;
+
+        bool GenerateMips = true;
+    };
+
     /**
      * @brief The Texture class defines an abstract interface for working with textures in the rendering pipeline.
      * It provides methods for binding textures, setting data, and retrieving texture properties.
      */
-    class Texture {
+    class Texture : public Asset {
 
         //////////////////////////////
         // Constructor & Destructor //
@@ -81,17 +104,16 @@ namespace Exodia {
              */
             virtual uint32_t GetRendererID() const = 0;
 
-            virtual std::string GetFilepath() const = 0;
-
             /**
              * @brief Set data for the texture.
              *
-             * @param data (Type: void *)   Pointer to the data to set.
-             * @param size (Type: uint32_t) Size of the data.
+             * @param data (Type: Buffer) The data to set.
              */
-            virtual void SetData(void *data, uint32_t size) = 0;
+            virtual void SetData(Buffer data) = 0;
 
             virtual bool IsLoaded() const = 0;
+
+            virtual const TextureSpecification &GetSpecification() const = 0;
     };
 
     /**
@@ -106,21 +128,21 @@ namespace Exodia {
         public:
             
             /**
-             * @brief Create a 2D texture with a specified width and height.
+             * @brief Create a 2D texture with a specified texture specification.
              *
-             * @param width  (Type: uint32_t)       The width of the texture.
-             * @param height (Type: uint32_t)       The height of the texture.
-             * @return       (Type: Ref<Texture2D>) A reference to the created texture.
+             * @param spec   (Type: const TextureSpecification &) The texture specification (default is TextureSpecification())
+             * @param data   (Type: Buffer)                       The data to set (default is Buffer())
+             * @return       (Type: Ref<Texture2D>)               A reference to the created texture.
              */
-            static Ref<Texture2D> Create(uint32_t width, uint32_t height);
+            static Ref<Texture2D> Create(const TextureSpecification &spec, Buffer data = Buffer());
 
-            /**
-             * @brief Create a 2D texture from an image file.
-             *
-             * @param path (Type: const std::string &) The path to the image file.
-             * @return     (Type: Ref<Texture2D>)      A reference to the created texture.
-             */
-            static Ref<Texture2D> Create(const std::string &path);
+        ///////////////////////
+        // Getters & Setters //
+        ///////////////////////
+        public:
+
+            static AssetType GetStaticType();
+            virtual AssetType GetType() const;
     };
 };
 

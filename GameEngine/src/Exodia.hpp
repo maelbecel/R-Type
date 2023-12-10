@@ -29,6 +29,10 @@
     #include "Exodia/Events/KeyEvent.hpp"
     #include "Exodia/Events/Event.hpp"
 
+    // -- Exodia Asset Manager -------------------------------------------------
+
+    #include "Exodia/Asset/Asset.hpp"
+
     // -- Exodia ImGui ---------------------------------------------------------
 
     #include "Exodia/ImGui/ImGuiLayer.hpp"
@@ -39,7 +43,12 @@
 
     // -- Exodia Scene ---------------------------------------------------------
 
-    #include "Exodia/Scene/Scene.hpp"
+    #include "Exodia/Scene/SceneHeaders.hpp"
+
+    // -- Exodia Project -------------------------------------------------------
+
+    #include "Exodia/Project/Project.hpp"
+    #include "Exodia/Project/ProjectSerializer.hpp"
 
     // -- Exodia Script --------------------------------------------------------
 

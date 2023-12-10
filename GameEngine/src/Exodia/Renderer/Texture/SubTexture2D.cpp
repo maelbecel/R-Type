@@ -8,6 +8,9 @@
 // Exodia Renderer
 #include "SubTexture2D.hpp"
 
+// Exodia Asset includes
+#include "Asset/Manager/AssetManager.hpp"
+
 namespace Exodia {
 
     /////////////
@@ -25,9 +28,7 @@ namespace Exodia {
 
     SubTexture2D::SubTexture2D(const Ref<Texture2D> &texture) : _Texture(texture), _Coords({ 0, 0 }), _SpriteSize({ 1, 1 })
     {
-        _CellSize = glm::vec2(texture->GetWidth(), texture->GetHeight());
-
-        calculateTextureCoords();
+        _CellSize = glm::vec2(_Texture->GetWidth(), _Texture->GetHeight());
     }
 
     SubTexture2D::SubTexture2D(const Ref<Texture2D> &texture, const glm::vec2 &coords, const glm::vec2 &cellSize, const glm::vec2 &spriteSize) : _Texture(texture), _Coords(coords), _CellSize(cellSize), _SpriteSize(spriteSize)
@@ -54,7 +55,7 @@ namespace Exodia {
     // Getters //
     /////////////
 
-    const Ref<Texture2D> &SubTexture2D::GetTexture() const
+    Ref<Texture2D> SubTexture2D::GetTexture()
     {
         return (_Texture);
     }
@@ -100,13 +101,28 @@ namespace Exodia {
         calculateTextureCoords();
     }
 
+    void SubTexture2D::SetTexture(const AssetHandle &handle)
+    {
+        Ref<Texture2D> texture = AssetManager::GetAsset<Texture2D>(handle);
+
+        // Reset the texture coordinates
+        _Coords = { 0, 0 };
+        if (texture != nullptr)
+            _CellSize = { (float)_Texture->GetWidth(), (float)_Texture->GetHeight() };
+        else
+            _CellSize = { 1, 1 };
+        _SpriteSize = { 1, 1 };
+
+        calculateTextureCoords();
+    }
+
     void SubTexture2D::SetTexture(const Ref<Texture2D> &texture)
     {
         _Texture = texture;
 
         // Reset the texture coordinates
         _Coords = { 0, 0 };
-        _CellSize = { (float)texture->GetWidth(), (float)texture->GetHeight() };
+        _CellSize = { (float)_Texture->GetWidth(), (float)_Texture->GetHeight() };
         _SpriteSize = { 1, 1 };
 
         calculateTextureCoords();
