@@ -82,7 +82,7 @@ namespace Exodia {
                             if (anim.CurrentFrame >= anim.MaxFrame)
                                 anim.CurrentFrame = 0;
 
-                            sprite.Get().Texture->SetCoords({ anim.CurrentFrame, 0.0f });
+                            sprite.Get().Texture->SetCoords({ anim.CurrentFrame, 4.0f });
 
                             // Réinitialiser le compteur
                             anim.ElapsedTime = 0.0f;

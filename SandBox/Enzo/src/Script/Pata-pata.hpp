@@ -71,14 +71,17 @@ namespace Exodia {
 
                     animation.Get().CurrentFrame = 0;
                     animation.Get().MaxFrame = 6;
-                    animation.Get().FrameTime = 1.0f;
+                    animation.Get().FrameTime = 1.5f;
 
                     // Set entity sprite
-                    Ref<Texture2D> texture = Texture2D::Create("Assets/Textures/Big_Explosion.png");
-                    sprite.Get().Texture = SubTexture2D::CreateFromCoords(texture, { 4.0f, 4.0f }, { 32.6f, 32.8f }, { 1.0f, 1.0f });
+                    Ref<Texture2D> texture = Texture2D::Create("Assets/Textures/Simple_Explosion.png");
+                    sprite.Get().Texture = SubTexture2D::CreateFromCoords(texture, { 0.0f, 0.0f }, { 32.0f, 34.0f }, { 1.0f, 1.0f });
                     _State = State::DEAD;
                 }
 
+                if (_State == State::DEAD && GetComponent<Animation>().Get().CurrentFrame == 5) {
+                    HandleEntity->GetWorld()->DestroyEntity(HandleEntity);
+                }
             }
 
             void OnCollisionEnter(Entity *entity) override
