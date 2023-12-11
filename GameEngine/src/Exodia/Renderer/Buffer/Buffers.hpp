@@ -2,11 +2,11 @@
 ** EPITECH PROJECT, 2023
 ** ExodiaGameEngine
 ** File description:
-** Buffer
+** Buffers
 */
 
-#ifndef BUFFER_HPP_
-    #define BUFFER_HPP_
+#ifndef BUFFERS_HPP_
+    #define BUFFERS_HPP_
 
     // Exodia Utils
     #include "Utils/Assert.hpp"
@@ -360,4 +360,4 @@ namespace Exodia {
     };
 };
 
-#endif /* !BUFFER_HPP_ */
+#endif /* !BUFFERS_HPP_ */

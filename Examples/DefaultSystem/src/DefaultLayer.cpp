@@ -7,7 +7,6 @@
 
 #include "DefaultLayer.hpp"
 #include "Script/Player.hpp"
-#include "EventSubscriber/CollisionStop.hpp"
 
 namespace Exodia {
 
@@ -53,12 +52,14 @@ namespace Exodia {
         transform.Translation = glm::vec3{ 2.0f, -2.0f, 0.0f };
         transform.Scale = glm::vec3{ 15.0f, 2.0f, 1.0f };
 
+        CollisionSystem *collisionSystem = new CollisionSystem();
+
         _World->RegisterSystem(new ScriptSystem());
         _World->RegisterSystem(new GravitySystem(1.5f));
         _World->RegisterSystem(new MovingSystem(1.5f));
-        _World->RegisterSystem(new CollisionDetection2DSystem());
+        _World->RegisterSystem(collisionSystem);
 
-        _World->Subscribe<Events::OnCollisionEntered>(new CollisionStop());
+        _World->Subscribe<Events::OnCollisionEntered>(collisionSystem);
 
         _CameraController.SetZoomLevel(5.0f);
     }

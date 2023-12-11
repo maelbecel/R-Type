@@ -31,6 +31,7 @@ namespace Exodia {
         public:
 
             operator uint64_t() const;
+            UUID &operator=(const UUID &uuid);
 
         ////////////////
         // Attributes //
