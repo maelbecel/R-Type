@@ -163,6 +163,7 @@ entity->AddComponent<Health>();
 ```
 
 Note `CreateEntity()` returns a pointer to the entity, know that this entity have default component (TagComponent, IDComponent, TransformComponent).
+Note `CreateEntity()` you can provides a name for the entity or a uuid.
 Note `AddComponent()` can take any arguments that the component's constructor takes, so you can do this instead:
 
 ```cpp

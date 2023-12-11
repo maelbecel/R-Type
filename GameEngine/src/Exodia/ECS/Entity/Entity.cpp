@@ -7,6 +7,7 @@
 
 #include "Entity.hpp"
 #include "World/World.hpp"
+#include "ECS/Events/Events.hpp"
 
 namespace Exodia {
 
@@ -44,6 +45,31 @@ namespace Exodia {
         for (auto pair : _Components)
             entity->_Components[pair.first] = pair.second;
         return entity;
+    }
+
+    void Entity::AddComponent(IComponentContainer *component)
+    {
+        TypeIndex typeIndex = component->GetTypeIndexOfComponent();
+
+        auto found = _Components.find(typeIndex);
+
+        _Components[typeIndex] = component;
+
+        _World->Emit<Events::OnComponentAddedNoTemplate>({ this, typeIndex });
+    }
+
+    bool Entity::RemoveComponent(IComponentContainer *component)
+    {
+        TypeIndex typeIndex = component->GetTypeIndexOfComponent();
+
+        auto found = _Components.find(typeIndex);
+
+        if (found == _Components.end())
+            return false;
+        found->second->Removed(this);
+        found->second->Destroy(_World);
+        _Components.erase(found);
+        return true;
     }
 
     ///////////////////////

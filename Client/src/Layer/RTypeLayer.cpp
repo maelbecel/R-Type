@@ -28,6 +28,24 @@ namespace Exodia {
 
         auto commandLine = Application::Get().GetSpecification().CommandLineArgs;
 
+         // Server main
+        Exodia::Network::IOContextManager ioContextManager;
+
+        // Define a local endpoint to listen on
+        asio::ip::udp::endpoint localEndpoint(asio::ip::address::from_string("127.0.0.1"), 8081);
+
+        asio::ip::udp::endpoint serverEndpoint(asio::ip::address::from_string("127.0.0.1"), 8080);
+
+        // Create a UDPSocket object for the server
+        Exodia::Network::UDPSocket serverSocket(ioContextManager, localEndpoint);
+
+        // serverSocket.receive(my_callback);
+        serverSocket.send("Hello World", serverEndpoint);
+
+        // Run the IO context to initiate asynchronous operations
+        ioContextManager.run();
+
+
         if (commandLine.Count > 1) {
             Application::Get().Close();
             return;

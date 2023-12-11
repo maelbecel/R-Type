@@ -70,9 +70,25 @@ namespace Exodia {
             }
             out << YAML::EndMap;
         }
+
+        virtual void DeserializeData(Buffer data) override
+        {
+            if (data.Size != sizeof(SpriteRendererComponent))
+                return;
+            SpriteRendererComponent component;
+
+            Memcpy(&component, data.Data, data.Size);
+
+            Color        = component.Color;
+            Texture      = nullptr;
+            TilingFactor = component.TilingFactor;
+
+            if (component.Texture)
+                Texture = CreateRef<SubTexture2D>(*component.Texture);
+        }
     };
 
-    struct CircleRendererComponent {
+    struct CircleRendererComponent : public Component {
         static std::string GetStaticName()
         {
             return "CircleRendererComponent";

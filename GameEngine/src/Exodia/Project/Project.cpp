@@ -9,10 +9,70 @@
 #include "Project.hpp"
 #include "Project/ProjectSerializer.hpp"
 
+// Exodia ECS includes
+#include "ECS/Component/Components.hpp"
+#include "ECS/Component/ComponentContainer.hpp"
+
 // Exodia Utils includes
 #include "Utils/Assert.hpp"
 
 namespace Exodia {
+
+    //////////////////////////////
+    // Constructor & Destructor //
+    //////////////////////////////
+
+    Project::Project()
+    {
+        RegisterComponent("IDComponent", [](Buffer data) -> IComponentContainer * {
+            return new ComponentContainer<IDComponent>(data);
+        });
+
+        RegisterComponent("TagComponent", [](Buffer data) -> IComponentContainer * {
+            return new ComponentContainer<TagComponent>(data);
+        });
+
+        RegisterComponent("TransformComponent", [](Buffer data) -> IComponentContainer * {
+            return new ComponentContainer<TransformComponent>(data);
+        });
+
+        RegisterComponent("CameraComponent", [](Buffer data) -> IComponentContainer * {
+            return new ComponentContainer<CameraComponent>(data);
+        });
+
+        RegisterComponent("BoxCollider2DComponent", [](Buffer data) -> IComponentContainer * {
+            return new ComponentContainer<BoxCollider2DComponent>(data);
+        });
+
+        RegisterComponent("CircleCollider2DComponent", [](Buffer data) -> IComponentContainer * {
+            return new ComponentContainer<CircleCollider2DComponent>(data);
+        });
+
+        RegisterComponent("ChildrenComponent", [](Buffer data) -> IComponentContainer * {
+            return new ComponentContainer<ChildrenComponent>(data);
+        });
+
+        RegisterComponent("ParentComponent", [](Buffer data) -> IComponentContainer * {
+            return new ComponentContainer<ParentComponent>(data);
+        });
+
+        RegisterComponent("SpriteRendererComponent", [](Buffer data) -> IComponentContainer * {
+            return new ComponentContainer<SpriteRendererComponent>(data);
+        });
+
+        RegisterComponent("CircleRendererComponent", [](Buffer data) -> IComponentContainer * {
+            return new ComponentContainer<CircleRendererComponent>(data);
+        });
+
+        // TODO: Add the text renderer component when the text rendering is available.
+        /*RegisterComponent("TextRendererComponent", [](Buffer data) -> IComponentContainer * {
+            return new ComponentContainer<TextRendererComponent>(data);
+        });*/
+
+        RegisterComponent("ScriptComponent", [](Buffer data) -> IComponentContainer * {
+            return new ComponentContainer<ScriptComponent>(data);
+        });
+    }
 
     /////////////
     // Methods //
@@ -141,5 +201,27 @@ namespace Exodia {
     ProjectConfig &Project::GetConfig()
     {
         return _Config;
+    }
+
+    void Project::RegisterComponent(std::string component, std::function<IComponentContainer *(Buffer)> factory)
+    {
+        if (_ComponentFactory.find(component) != _ComponentFactory.end()) {
+            EXODIA_CORE_WARN("Project::RegisterComponent() - Component factory already exists !");
+
+            return;
+        }
+
+        _ComponentFactory[component] = factory;
+    }
+
+    std::function<IComponentContainer *(Buffer)> Project::GetComponentFactory(std::string component)
+    {
+        if (_ComponentFactory.find(component) == _ComponentFactory.end()) {
+            EXODIA_CORE_WARN("Project::GetComponentFactory() - Component factory doesn't exist !");
+
+            return nullptr;
+        }
+
+        return _ComponentFactory[component];
     }
 };

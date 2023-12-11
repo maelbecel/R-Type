@@ -60,6 +60,8 @@ namespace Exodia {
             template<typename Component, typename ...Args>
             ComponentHandle<Component> AddComponent(Args && ...args);
 
+            void AddComponent(IComponentContainer *component);
+
             template<typename Component>
             bool RemoveComponent()
             {
@@ -75,6 +77,8 @@ namespace Exodia {
                 }
                 return false;
             }
+
+            bool RemoveComponent(IComponentContainer *component);
 
             void RemoveAllComponents();
 
