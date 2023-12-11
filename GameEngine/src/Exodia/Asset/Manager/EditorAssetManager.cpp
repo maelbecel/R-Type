@@ -19,17 +19,15 @@
 // Exodia Debug includes
 #include "Debug/Logs.hpp"
 
-// YAML-CPP includes
-#include <yaml-cpp/yaml.h>
-
 // External includes
 #include <map>
+#include <yaml-cpp/yaml.h>
 
 namespace Exodia {
 
-    ////////////////////////////////
-    // YAML-CPP Operator Overload //
-    ////////////////////////////////
+    /////////////////////////////////
+    // Yaml-cpp operator overloads //
+    /////////////////////////////////
 
     YAML::Emitter &operator<<(YAML::Emitter &out, const std::string_view &str)
     {
@@ -73,7 +71,16 @@ namespace Exodia {
         spec.Path = path;
         spec.Type = GetAssetTypeFromFileExtension(path.extension());
 
-        EXODIA_CORE_ASSERT(spec.Type != AssetType::None, "EditorAssetManager::ImportAsset() - Asset type not found !");
+        if (spec.Type == AssetType::None)
+            return;
+
+        for (const auto &[handle, spec] : _AssetRegistry) {
+            if (spec.Path.filename() == path.filename()) {
+                EXODIA_CORE_INFO("The asset `{}` is already imported !", path.string());
+
+                return;
+            }
+        }
 
         Ref<Asset> asset = AssetImporter::ImportAsset(handle, spec);
 

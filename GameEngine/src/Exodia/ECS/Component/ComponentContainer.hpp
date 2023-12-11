@@ -8,6 +8,9 @@
 #ifndef COMPONENTCONTAINER_HPP_
     #define COMPONENTCONTAINER_HPP_
 
+    // Exodia Core includes
+    #include "Core/Buffer/Buffer.hpp"
+
     // Exodia ECS Interface includes
     #include "Interface/IComponentContainer.hpp"
 
@@ -33,8 +36,18 @@ namespace Exodia {
             ComponentContainer() {};
             ComponentContainer(const Component &data) : Data(data) {};
 
+            ComponentContainer(const Buffer &data)
+            {
+                Data.DeserializeData(data);
+            }
+
         protected:
-            virtual void Destroy(World * world)
+            virtual TypeIndex GetTypeIndexOfComponent()
+            {
+                return GetTypeIndex<Component>();
+            }
+
+            virtual void Destroy(World *world)
             {
                 using ComponentAllocator = std::allocator_traits<World::EntityAllocator>::template rebind_alloc<ComponentContainer<Component>>;
 
@@ -49,6 +62,11 @@ namespace Exodia {
                 auto handle = ComponentHandle<Component>(&Data);
 
                 entity->GetWorld()->Emit<Events::OnComponentRemoved<Component>>({ entity, handle });
+            }
+
+            virtual void Serialize(YAML::Emitter &out)
+            {
+                Data.Serialize(out);
             }
     };
 };

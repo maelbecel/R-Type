@@ -36,6 +36,7 @@
     // -- Exodia ImGui ---------------------------------------------------------
 
     #include "Exodia/ImGui/ImGuiLayer.hpp"
+    #include "Exodia/ImGui/ImGuiToolsUI.hpp"
 
     // -- Exodia Renderer ------------------------------------------------------
 
@@ -65,5 +66,9 @@
     #include "Utils/PlatformUtils.hpp"
     #include "Utils/Memory.hpp"
     #include "Utils/Assert.hpp"
+
+    // -- Exodia Network -------------------------------------------------------
+
+    #include "Network/Network.hpp"
 
 #endif /* !EXODIA_HPP_ */

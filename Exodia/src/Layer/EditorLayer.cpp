@@ -16,7 +16,7 @@ namespace Exodia {
     // Constructor & Destructor //
     //////////////////////////////
 
-    EditorLayer::EditorLayer() : Layer("Exodia Editor") {};
+    EditorLayer::EditorLayer() : Layer("Exodia Editor"), _EditorCamera(30.0f, 1.778f, 0.1f, 1000.0f), _ActiveScene(nullptr), _SceneState(SceneState::Edit), _ViewportSize{ 0.0f, 0.0f }, _ViewportHovered(false), _GuizmoType(-1) {};
 
     /////////////
     // Methods //
@@ -25,6 +25,22 @@ namespace Exodia {
     void EditorLayer::OnAttach()
     {
         EXODIA_PROFILE_FUNCTION();
+
+        Exodia::FramebufferSpecification fbSpec;
+
+        fbSpec.Width       = Application::Get().GetWindow().GetWidth();
+        fbSpec.Height      = Application::Get().GetWindow().GetHeight();
+        fbSpec.Attachments = {
+            FramebufferTextureFormat::RGBA8,
+            FramebufferTextureFormat::RED_INTEGER,
+            FramebufferTextureFormat::Depth
+        };
+
+        _Framebuffer = Exodia::Framebuffer::Create(fbSpec);
+
+        _EditorScene = CreateRef<Scene>();
+
+        _ActiveScene = _EditorScene;
 
         auto commandLine = Application::Get().GetSpecification().CommandLineArgs;
 
@@ -56,11 +72,52 @@ namespace Exodia {
     void EditorLayer::OnUpdate(UNUSED Exodia::Timestep ts)
     {
         EXODIA_PROFILE_FUNCTION();
+
+        Renderer2D::ResetStats();
+
+        FramebufferSpecification spec = _Framebuffer->GetSpecification();
+
+        // Resize the viewport
+        if (_ViewportSize.x > 0.0f && _ViewportSize.y > 0.0f && (spec.Width != _ViewportSize.x || spec.Height != _ViewportSize.y)) {
+            _Framebuffer->Resize((uint32_t)_ViewportSize.x, (uint32_t)_ViewportSize.y);
+            _EditorCamera.SetViewportSize(_ViewportSize.x, _ViewportSize.y);
+            
+            if (_ActiveScene)
+                _ActiveScene->OnViewportResize((uint32_t)_ViewportSize.x, (uint32_t)_ViewportSize.y);
+        }
+
+        // Bind the Framebuffer
+        _Framebuffer->Bind();
+
+        // Clear the screen
+        RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
+        RenderCommand::Clear();
+        _Framebuffer->ClearAttachment(1, -1);
+
+        switch(_SceneState) {
+            case SceneState::Edit:
+                _EditorCamera.OnUpdate(ts);
+
+                if (_ActiveScene)
+                    _ActiveScene->OnUpdateEditor(ts, _EditorCamera);
+                break;
+            case SceneState::Play:
+                if (_ActiveScene)
+                    _ActiveScene->OnUpdateRuntime(ts);
+                break;
+            default:
+                break;
+        }
+
+        // Unbind the Framebuffer
+        _Framebuffer->Unbind();
     }
 
     void EditorLayer::OnImGUIRender()
     {
         EXODIA_PROFILE_FUNCTION();
+
+            // -- DockSpace ----------------------------------------------------
 
         static bool dockspaceOpen                 = true;
         static bool opt_fullscreen_persistant     = true;
@@ -98,7 +155,7 @@ namespace Exodia {
 
         float minWinSizeX = style.WindowMinSize.x;
 
-        style.WindowMinSize.x = 450.0f;
+        style.WindowMinSize.x = 300.0f;
         if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable) {
             ImGuiID dockspace_id = ImGui::GetID("DockSpace");
             ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
@@ -106,8 +163,84 @@ namespace Exodia {
 
         style.WindowMinSize.x = minWinSizeX;
 
+            // -- Menu Bar -----------------------------------------------------
+
+        if (ImGui::BeginMenuBar()) {
+            if (ImGui::BeginMenu("File")) {
+                if (ImGui::MenuItem("Open Project...", "Ctrl+O"))
+                    OpenProject();
+                ImGui::Separator();
+
+                if (ImGui::MenuItem("New Scene", "Ctrl+N"))
+                    NewScene();
+                if (ImGui::MenuItem("Save Scene", "Ctrl+S"))
+                    SaveScene();
+                if (ImGui::MenuItem("Save Scene As...", "Ctrl+Shift+S"))
+                    SaveSceneAs();
+                ImGui::Separator();
+
+                if (ImGui::MenuItem("Exit"))
+                    Application::Get().Close();                
+                ImGui::EndMenu();
+            }
+            ImGui::EndMenuBar();
+        }
+
+            // -- Scene Hierarchy ----------------------------------------------
+
+        _SceneHierarchy.OnImGuiRender();
+
+            // -- Content Browser ----------------------------------------------
+
         if (_ContentBrowser)
             _ContentBrowser->OnImGuiRender();
+
+            // -- Viewport -----------------------------------------------------
+
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
+        ImGui::Begin("Viewport");
+
+        ImVec2 viewportMinRegion = ImGui::GetWindowContentRegionMin();
+        ImVec2 viewportMaxRegion = ImGui::GetWindowContentRegionMax();
+        ImVec2 viewportOffset = ImGui::GetWindowPos();
+
+        _ViewportBounds[0] = { viewportMinRegion.x + viewportOffset.x, viewportMinRegion.y + viewportOffset.y };
+        _ViewportBounds[1] = { viewportMaxRegion.x + viewportOffset.x, viewportMaxRegion.y + viewportOffset.y };
+
+        _ViewportHovered = ImGui::IsWindowHovered();
+
+        Application::Get().GetImGuiLayer()->SetBlockEvents(!_ViewportHovered);
+
+        ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
+
+        _ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
+
+        ImGui::Image(reinterpret_cast<ImTextureID>(_Framebuffer->GetColorAttachmentRendererID()), ImVec2{ _ViewportSize.x, _ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+
+            // 1. Drag and Drop
+        if (ImGui::BeginDragDropTarget()) {
+            const ImGuiPayload *payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM");
+
+            if (payload) {
+                AssetHandle handle = *(AssetHandle *)payload->Data;
+
+                OpenScene(handle);
+            }
+            ImGui::EndDragDropTarget();
+        }
+
+            // 2. ImGuizmo
+
+        Entity *selectedEntity = _SceneHierarchy.GetSelectedEntity();
+
+        if (selectedEntity && selectedEntity->GetEntityID() != Entity::InvalidEntityID && _GuizmoType != -1) {
+            // TODO: Setup ImGuizmo
+        }
+
+        ImGui::End();
+        ImGui::PopStyleVar();
+
+            // -- End DockSpace ------------------------------------------------
 
         ImGui::End();
     }
@@ -151,13 +284,55 @@ namespace Exodia {
     // Scene Methods //
     ///////////////////
 
-    void EditorLayer::NewScene() {};
+    void EditorLayer::NewScene()
+    {
+        _ActiveScene     = CreateRef<Scene>();
+        _EditorScenePath = std::filesystem::path();
 
-    void EditorLayer::OpenScene() {};
+        _SceneHierarchy.SetContext(_ActiveScene);
+    }
 
-    void EditorLayer::OpenScene(UNUSED AssetHandle handle) {};
+    void EditorLayer::OpenScene(AssetHandle handle)
+    {
+        if (_SceneState != SceneState::Edit)
+            OnSceneStop();
+        Ref<Scene> readOnly = AssetManager::GetAsset<Scene>(handle);
+        Ref<Scene> scene    = Scene::Copy(readOnly);
 
-    void EditorLayer::SaveScene() {};
+        _EditorScene = scene;
+        _ActiveScene = _EditorScene;
 
-    void EditorLayer::SaveSceneAs() {};
+        _SceneHierarchy.SetContext(_ActiveScene);
+        _EditorScenePath = Project::GetActive()->GetEditorAssetManager()->GetFilePath(handle);
+    }
+
+    void EditorLayer::SaveScene()
+    {
+        if (!_EditorScenePath.empty())
+            SceneImporter::SaveScene(_ActiveScene, _EditorScenePath);
+        else
+            SaveSceneAs();
+    }
+
+    void EditorLayer::SaveSceneAs()
+    {
+        std::string path = FileDialog::SaveFile("exodia");
+
+        if (path.empty())
+            return;
+
+        SceneImporter::SaveScene(_ActiveScene, path);
+
+        _EditorScenePath = path;
+    }
+
+    void EditorLayer::OnSceneStop()
+    {
+        if (_SceneState == SceneState::Play)
+            _ActiveScene->OnRuntimeStop();
+        _SceneState = SceneState::Edit;
+        _ActiveScene = _EditorScene;
+
+        _SceneHierarchy.SetContext(_ActiveScene);
+    }
 };

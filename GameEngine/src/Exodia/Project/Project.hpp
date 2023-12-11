@@ -12,11 +12,19 @@
     #include "Asset/Manager/RuntimeAssetManager.hpp"
     #include "Asset/Manager/EditorAssetManager.hpp"
 
+    // Exodia ECS includes
+    #include "ECS/Interface/IComponentContainer.hpp"
+    
+    // Exodia Core includes
+    #include "Core/Buffer/Buffer.hpp"
+
     // Exodia Utils includes
     #include "Utils/Memory.hpp"
 
     // External includes
+    #include <unordered_map>
     #include <filesystem>
+    #include <functional>
 
 namespace Exodia {
 
@@ -37,7 +45,7 @@ namespace Exodia {
         //////////////////////////////
         public:
 
-            Project() = default;
+            Project();
             ~Project() = default;
 
         /////////////
@@ -72,6 +80,9 @@ namespace Exodia {
             Ref<RuntimeAssetManager> GetRuntimeAssetManager() const;
             Ref<EditorAssetManager>  GetEditorAssetManager()  const;
 
+            void RegisterComponent(std::string component, std::function<IComponentContainer *(Buffer)> factory);
+            std::function<IComponentContainer *(Buffer)> GetComponentFactory(std::string component);
+
             ProjectConfig &GetConfig();
         
         ////////////////
@@ -82,6 +93,8 @@ namespace Exodia {
             ProjectConfig         _Config;
             std::filesystem::path _ProjectDirectory;
             Ref<IAssetManager>    _AssetManager;
+            
+            std::unordered_map<std::string, std::function<IComponentContainer *(Buffer)>> _ComponentFactory;
 
         ///////////////////
         // Singletons... //

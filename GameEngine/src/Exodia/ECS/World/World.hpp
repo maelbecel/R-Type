@@ -71,7 +71,10 @@ namespace Exodia {
             void DestroyWorld();
 
             Entity *CreateEntity(const std::string &name = std::string());
+            Entity *CreateEntity(const UUID &uuid, const std::string &name = std::string());
+
             Entity *CreateNewEntity(const std::string &name = std::string());
+            Entity *CreateNewEntity(const UUID &uuid, const std::string &name = std::string());
 
             void DestroyEntity(Entity *entity, bool immediate = false);
 
@@ -133,6 +136,8 @@ namespace Exodia {
             template<typename ...Entities>
             void ForEach(typename std::common_type<std::function<void(Entity *, ComponentHandle<Entities>...)>>::type function, bool includePendingDestroy = false)
             {
+                if (GetCount() == 0)
+                    return;
                 for (auto *entity : View<Entities ...>(includePendingDestroy))
                     function(entity, entity->template GetComponent<Entities>()...);
                 MergeEntities();

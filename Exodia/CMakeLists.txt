@@ -26,6 +26,7 @@ set(SOURCES
         # ImGui Panels source files
     
     src/Panel/ContentBrowser/ContentBrowser.cpp
+    src/Panel/SceneHierarchy/SceneHierarchy.cpp
 
         # Thumbnail sources files
     

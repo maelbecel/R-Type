@@ -13,10 +13,21 @@
 
     // Panel includes
     #include "Panel/ContentBrowser/ContentBrowser.hpp"
+    #include "Panel/SceneHierarchy/SceneHierarchy.hpp"
 
 namespace Exodia {
 
     class EditorLayer : public Exodia::Layer {
+
+        //////////
+        // Enum //
+        //////////
+        public:
+
+            enum class SceneState {
+                Edit = 0,
+                Play = 1
+            };
 
         //////////////////////////////
         // Constructor & Destructor //
@@ -52,17 +63,37 @@ namespace Exodia {
         private:
 
             void NewScene();
-            void OpenScene();
             void OpenScene(AssetHandle handle);
             void SaveScene();
             void SaveSceneAs();
+            void OnSceneStop();
 
         ////////////////
         // Attributes //
         ////////////////
         private:
 
+            // Framebuffer
+            Ref<Framebuffer> _Framebuffer;
+
+            // Scene
+            EditorCamera          _EditorCamera;
+            Ref<Scene>            _EditorScene;
+            Ref<Scene>            _ActiveScene;
+            std::filesystem::path _EditorScenePath;
+            SceneState            _SceneState;
+
+            // Panels
             Scope<ContentBrowser> _ContentBrowser;
+            SceneHierarchy        _SceneHierarchy;
+
+            // Viewport
+            glm::vec2 _ViewportBounds[2];
+            glm::vec2 _ViewportSize;
+            bool      _ViewportHovered;
+
+            // ImGuizmo
+            int _GuizmoType;
     };
 };
 

@@ -10,6 +10,7 @@
 
     // Exodia Utils includes
     #include "Utils/CrossPlatform.hpp"
+    #include "Utils/TypeIndex.hpp"
 
 namespace Exodia {
 
@@ -33,10 +34,20 @@ namespace Exodia {
             Exodia::ComponentHandle<Component> AddedComponent;
         };
 
+        struct EXODIA_API OnComponentAddedNoTemplate {
+            Exodia::Entity *Entity;
+            TypeIndex       ComponentType;
+        };
+
         template<typename Component>
         struct EXODIA_API OnComponentRemoved {
             Exodia::Entity                    *Entity;
             Exodia::ComponentHandle<Component> RemovedComponent;
+        };
+
+        struct EXODIA_API OnComponentRemovedNoTemplate {
+            Exodia::Entity *Entity;
+            TypeIndex       ComponentType;
         };
 
         struct EXODIA_API OnCollisionEntered {
