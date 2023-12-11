@@ -37,9 +37,9 @@ namespace Exodia {
         _World->RegisterSystem(new AnimationSystem());
         _World->RegisterSystem(new ScriptSystem());
 
-        // CollisionSystem *collisionSystem = new CollisionSystem();
-        // _World->RegisterSystem(collisionSystem);
-        // _World->Subscribe<Events::OnCollisionEntered>(collisionSystem);
+        CollisionSystem *collisionSystem = new CollisionSystem();
+        _World->RegisterSystem(collisionSystem);
+        _World->Subscribe<Events::OnCollisionEntered>(collisionSystem);
 
         // Create player
         CreatePlayer();

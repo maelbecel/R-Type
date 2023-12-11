@@ -52,8 +52,10 @@ namespace Exodia {
                 }
 
                 // Remove bullet if out of screen
-                // if (transform.Get().Translation.x > 10.0f)
-                    // HandleEntity->GetWorld()->DestroyEntity(HandleEntity);
+                if (transform.Get().Translation.x > 10.0f) {
+                    EXODIA_INFO("Bullet {0} destroyed", HandleEntity->GetComponent<TagComponent>().Get().Tag);
+                    HandleEntity->GetWorld()->DestroyEntity(HandleEntity);
+                }
             }
 
         ////////////////
