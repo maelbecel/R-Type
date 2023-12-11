@@ -36,7 +36,6 @@ namespace Exodia {
 
             void OnCreate() override
             {
-                _Speed = 2.0f;
                 _State = State::ALIVE;
 
                 std::cout << "PataPata created" << std::endl;
@@ -46,17 +45,17 @@ namespace Exodia {
             {
                 auto transform = GetComponent<TransformComponent>();
                 auto &mytime = GetComponent<Clock>().Get().ElapsedTime;
-
+                auto body = GetComponent<RigidBody2DComponent>();
                 // Paramètres de la fonction sinus
-                double amplitude = 1.0f;  // Amplitude de la sinusoïde
+                double amplitude = 3.0f;  // Amplitude de la sinusoïde
                 double frequency = 1.0f;  // Fréquence de la sinusoïde en Hz
 
                 if (transform && _State == State::ALIVE) {
-                    auto &tc = transform.Get();
+                    // auto &tc = transform.Get();
                     // Mise à jour de la position en fonction du temps et du mouvement sinusoidal
                     mytime += ts.GetSeconds();
-                    tc.Translation.y = amplitude * sin(frequency * mytime * PI);
-                    tc.Translation.x -= _Speed * ts;
+                    body.Get().Velocity.y = amplitude * sin(frequency * mytime * PI);
+                    // tc.Translation.y = amplitude * sin(frequency * mytime * PI);
 
                     // Affichage des coordonnées
 
@@ -98,7 +97,6 @@ namespace Exodia {
         // Attributes //
         ////////////////
         private:
-            float _Speed;
             State _State;
     };
 };

@@ -85,6 +85,27 @@ namespace Exodia {
         return entity;
     }
 
+    Entity *World::CreateNewEntity(const UUID &uuid, const std::string &name)
+    {
+        Entity *entity = std::allocator_traits<EntityAllocator>::allocate(_EntityAllocator, 1);
+
+        std::allocator_traits<EntityAllocator>::construct(_EntityAllocator, entity, this, uuid);
+
+        _IndexToUUIDMap[GetCount() + _MergedEntities.size()] = uuid;
+
+        entity->AddComponent<IDComponent>(uuid);
+        entity->AddComponent<TransformComponent>();
+        auto tag = entity->AddComponent<TagComponent>();
+
+        tag.Get().Tag = name.empty() ? "Entity" : name;
+
+        _MergedEntities.push_back(entity);
+
+        Emit<Events::OnEntityCreated>({ entity });
+
+        return entity;
+    }
+
     Entity *World::CreateEntity(const std::string &name)
     {
         Entity *entity = std::allocator_traits<EntityAllocator>::allocate(_EntityAllocator, 1);
@@ -107,10 +128,38 @@ namespace Exodia {
         return entity;
     }
 
+    Entity *World::CreateEntity(const UUID &uuid, const std::string &name)
+    {
+        Entity *entity = std::allocator_traits<EntityAllocator>::allocate(_EntityAllocator, 1);
+
+        std::allocator_traits<EntityAllocator>::construct(_EntityAllocator, entity, this, uuid);
+
+        _IndexToUUIDMap[GetCount()] = uuid;
+
+        entity->AddComponent<IDComponent>(uuid);
+        entity->AddComponent<TransformComponent>();
+        auto tag = entity->AddComponent<TagComponent>();
+
+        tag.Get().Tag = name.empty() ? "Entity" : name;
+
+        _Entities.push_back(entity);
+
+        Emit<Events::OnEntityCreated>({ entity });
+
+        return entity;
+    }
+
     void World::DestroyEntity(Entity *entity, bool immediate)
     {
         if (entity == nullptr)
             return;
+
+        if (entity->HasComponent<ChildrenComponent>()) {
+            auto &children = entity->GetComponent<ChildrenComponent>().Get();
+
+            for (auto child : children.Children)
+                DestroyEntity(GetEntityByID(child), immediate);
+        }
 
         if (entity->IsPendingDestroy() == false) {
             if (immediate) {
@@ -224,6 +273,8 @@ namespace Exodia {
 
     void World::ForAll(std::function<void(Entity *)> function, bool includePendingDestroy)
     {
+        if (GetCount() == 0)
+            return;
         for (auto *entity : AllEntities(includePendingDestroy))
             function(entity);
     }

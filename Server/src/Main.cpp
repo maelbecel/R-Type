@@ -7,38 +7,41 @@
 
 #include <iostream>
 #include <asio.hpp>
+#include "Exodia.hpp"
+
+
+void my_callback(const std::string &message)
+{
+    (void)message;
+    std::cout << "Message received: " << message << std::endl;
+}
 
 int main(int ac, char **av)
 {
     (void)ac;
     (void)av;
 
+    Exodia::Log::Init();
+
     std::cout << "Asio World !" << std::endl;
 
     try {
-        asio::io_context io_context;
+        // Server main
+        Exodia::Network::IOContextManager ioContextManager;
 
-        // Création du socket accepteur
-        asio::ip::tcp::acceptor acceptor(io_context, asio::ip::tcp::endpoint(asio::ip::tcp::v4(), 8080));
+        // Define a local endpoint to listen on
+        asio::ip::udp::endpoint localEndpoint(asio::ip::address::from_string("127.0.0.1"), 8080);
 
-        std::cout << "Server started. Listening on port 8080...\n";
+        // Create a UDPSocket object for the server
+        Exodia::Network::UDPSocket serverSocket(ioContextManager, localEndpoint);
 
-        while (true) {
-            asio::ip::tcp::socket socket(io_context);
+        serverSocket.receive(my_callback);
 
-            // En attente et acceptation d'une nouvelle connexion
-            acceptor.accept(socket);
+        // Run the IO context to initiate asynchronous operations
+        ioContextManager.run();
 
-            std::cout << "New connection established: " << socket.remote_endpoint() << std::endl;
+        return 0;
 
-            // Lecture et renvoi des données reçues
-            char data[1024];
-            size_t len = socket.read_some(asio::buffer(data, sizeof(data)));
-
-            asio::write(socket, asio::buffer(data, len), asio::transfer_all());
-
-            socket.shutdown(asio::ip::tcp::socket::shutdown_both);
-        }
     } catch (std::exception &e) {
         std::cerr << "Exception: " << e.what() << std::endl;
     }

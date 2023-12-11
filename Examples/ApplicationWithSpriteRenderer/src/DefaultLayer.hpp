@@ -32,6 +32,10 @@ namespace Exodia {
             void OnUpdate(Timestep ts) override;
             void OnEvent(Event &event) override;
 
+        private:
+            bool OpenProject();
+            void OpenProject(const std::filesystem::path &path);
+
         ////////////////
         // Attributes //
         ////////////////

@@ -1,6 +1,6 @@
 # Check all the compilation flags
 
-    # -- Debug mode ------------------------------------------------------------    
+    # -- Debug mode ------------------------------------------------------------
 # Option for compiling in debug mode
 option(COMPILE_DEBUG "Compile debug" OFF)
 
@@ -33,4 +33,14 @@ if(COMPILE_SANDBOX)
     message(STATUS "Sandbox enabled")
 
     add_subdirectory(SandBox)
+endif()
+
+    # -- Editor ----------------------------------------------------------------
+# Option for compiling editor
+option(COMPILE_EDITOR "Compile editor" OFF)
+
+if(COMPILE_EDITOR)
+    message(STATUS "Editor enabled")
+
+    add_subdirectory(Exodia)
 endif()
