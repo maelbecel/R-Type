@@ -18,14 +18,14 @@ namespace Exodia {
     // Factory //
     /////////////
 
-    Ref<Texture2D> Texture2D::Create(uint32_t width, uint32_t height)
+    Ref<Texture2D> Texture2D::Create(const TextureSpecification &spec, Buffer data)
     {
         switch (Renderer::GetAPI()) {
             case RendererAPI::API::None:
                 EXODIA_CORE_ASSERT(false, "RendererAPI::None is not supported !");
                 return nullptr;
             case RendererAPI::API::OpenGL:
-                return CreateRef<OpenGLTexture>(width, height);
+                return CreateRef<OpenGLTexture>(spec, data);
             default:
                 break;
         }
@@ -34,19 +34,17 @@ namespace Exodia {
         return nullptr;
     }
 
-    Ref<Texture2D> Texture2D::Create(const std::string &path)
+    ///////////////////////
+    // Getters & Setters //
+    ///////////////////////
+    
+    AssetType Texture2D::GetStaticType()
     {
-        switch (Renderer::GetAPI()) {
-            case RendererAPI::API::None:
-                EXODIA_CORE_ASSERT(false, "RendererAPI::None is not supported !");
-                return nullptr;
-            case RendererAPI::API::OpenGL:
-                return CreateRef<OpenGLTexture>(path);
-            default:
-                break;
-        }
+        return AssetType::Texture2D;
+    }
 
-        EXODIA_CORE_ASSERT(false, "Unknown RendererAPI !");
-        return nullptr;
+    AssetType Texture2D::GetType() const
+    {
+        return GetStaticType();
     }
 };

@@ -30,20 +30,10 @@ namespace Exodia {
             /**
              * @brief Construct a new OpenGLTexture object with specified dimensions.
              *
-             * @param width  (Type: uint32_t) The width of the texture.
-             * @param height (Type: uint32_t) The height of the texture.
+             * @param spec (Type: const TextureSpecification&) The specification of the texture.
+             * @param data (Type: Buffer)                       The data of the texture.
              */
-            OpenGLTexture(uint32_t width, uint32_t height);
-
-            /**
-             * @brief Construct a new OpenGLTexture object from an image file.
-             *
-             * @param path (Type: const std::string&) The path to the image file.
-             * 
-             * @note This constructor uses stb_image to load the image file.
-             * @note If the image file cannot be loaded, an assertion error will be raised.
-             */
-            OpenGLTexture(const std::string &path);
+            OpenGLTexture(const TextureSpecification &spec, Buffer data);
 
             /**
              * @brief Destroy the OpenGLTexture object.
@@ -102,30 +92,23 @@ namespace Exodia {
              */
             virtual uint32_t GetRendererID() const override;
 
-            virtual std::string GetFilepath() const override;
-
-            /**
-             * @brief Set the data of the texture.
-             * This method allows setting the raw pixel data of the texture.
-             *
-             * @param data (Type: void*)    The data to set.
-             * @param size (Type: uint32_t) The size of the data in bytes.
-             */
-            virtual void SetData(void *data, uint32_t size) override;
+            virtual void SetData(Buffer data) override;
 
             virtual bool IsLoaded() const override;
+
+            virtual const TextureSpecification &GetSpecification() const override;
 
         ////////////////
         // Attributes //
         ////////////////
         private:
-            std::string _Path;           /*!< Path to the texture file */
-            uint32_t    _Width;          /*!< Width of the texture */
-            uint32_t    _Height;         /*!< Height of the texture */
-            uint32_t    _RendererID;     /*!< OpenGL texture ID */
-            GLenum      _InternalFormat; /*!< Internal format of the texture */
-            GLenum      _DataFormat;     /*!< Data format of the texture */
-            bool        _IsLoaded;       /*!< Whether the texture is loaded or not */
+            TextureSpecification _Specification; /*!< The specification of the texture */
+            uint32_t    _Width;                  /*!< Width of the texture */
+            uint32_t    _Height;                 /*!< Height of the texture */
+            uint32_t    _RendererID;             /*!< OpenGL texture ID */
+            GLenum      _InternalFormat;         /*!< Internal format of the texture */
+            GLenum      _DataFormat;             /*!< Data format of the texture */
+            bool        _IsLoaded;               /*!< Whether the texture is loaded or not */
     };
 };
 

@@ -2,11 +2,11 @@
 ** EPITECH PROJECT, 2023
 ** R-Type
 ** File description:
-** Scene
+** SceneHeaders
 */
 
-#ifndef SCENE_HPP_
-    #define SCENE_HPP_
+#ifndef SCENEHEADERS_HPP_
+    #define SCENEHEADERS_HPP_
 
     ///////////////////////////////////////////////////////////////////////
     // Main include file for Exodia Scene                                //
@@ -18,4 +18,12 @@
 
     #include "Exodia/Scene/Camera/SceneCamera.hpp"
 
-#endif /* !SCENE_HPP_ */
+    // -- Scene ----------------------------------------------------------------
+
+    #include "Exodia/Scene/Scene/Scene.hpp"
+
+    // -- Serializer -----------------------------------------------------------
+
+    #include "Exodia/Scene/Serializer/SceneSerializer.hpp"
+
+#endif /* !SCENEHEADERS_HPP_ */

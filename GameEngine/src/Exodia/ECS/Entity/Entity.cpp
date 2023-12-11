@@ -6,6 +6,8 @@
 */
 
 #include "Entity.hpp"
+#include "World/World.hpp"
+#include "ECS/Events/Events.hpp"
 
 namespace Exodia {
 
@@ -13,7 +15,7 @@ namespace Exodia {
     // Constructor & Destructor //
     //////////////////////////////
 
-    Entity::Entity() {};
+    Entity::Entity() : _World(nullptr), _ID(0), _PendingDestroy(false) {};
 
     Entity::Entity(World *world, uint64_t id) : _World(world), _ID(id), _PendingDestroy(false) {};
 
@@ -30,10 +32,44 @@ namespace Exodia {
     {
         for (auto pair : _Components) {
             pair.second->Removed(this);
-            pair.second->Destroy(_World);
+            //pair.second->Destroy(_World);
         }
 
         _Components.clear();
+    }
+
+    Entity *Entity::Duplicate(World *world, UUID uuid, const std::string &name)
+    {
+        Entity *entity = world->CreateEntity(uuid, name);
+
+        for (auto pair : _Components)
+            entity->_Components[pair.first] = pair.second;
+        return entity;
+    }
+
+    void Entity::AddComponent(IComponentContainer *component)
+    {
+        TypeIndex typeIndex = component->GetTypeIndexOfComponent();
+
+        auto found = _Components.find(typeIndex);
+
+        _Components[typeIndex] = component;
+
+        _World->Emit<Events::OnComponentAddedNoTemplate>({ this, typeIndex });
+    }
+
+    bool Entity::RemoveComponent(IComponentContainer *component)
+    {
+        TypeIndex typeIndex = component->GetTypeIndexOfComponent();
+
+        auto found = _Components.find(typeIndex);
+
+        if (found == _Components.end())
+            return false;
+        found->second->Removed(this);
+        found->second->Destroy(_World);
+        _Components.erase(found);
+        return true;
     }
 
     ///////////////////////
@@ -65,6 +101,15 @@ namespace Exodia {
         _PendingDestroy = pendingDestroy;
     }
 
+    std::vector<IComponentContainer *> Entity::GetAllComponents()
+    {
+        std::vector<IComponentContainer *> components;
+
+        for (auto pair : _Components)
+            components.push_back(pair.second);
+        return components;
+    }
+
     /////////////////
     // Comparators //
     /////////////////
@@ -78,5 +123,9 @@ namespace Exodia {
     {
         return !(other == *this);
     }
-    
+
+    Entity::operator bool() const
+    {
+        return _ID != 0;
+    }
 };
