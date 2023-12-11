@@ -34,7 +34,7 @@ namespace Exodia {
             ComponentContainer(const Component &data) : Data(data) {};
 
         protected:
-            virtual void Destroy(World * world)
+            virtual void Destroy(World *world)
             {
                 using ComponentAllocator = std::allocator_traits<World::EntityAllocator>::template rebind_alloc<ComponentContainer<Component>>;
 
@@ -49,6 +49,11 @@ namespace Exodia {
                 auto handle = ComponentHandle<Component>(&Data);
 
                 entity->GetWorld()->Emit<Events::OnComponentRemoved<Component>>({ entity, handle });
+            }
+
+            virtual void Serialize(YAML::Emitter &out)
+            {
+                Data.Serialize(out);
             }
     };
 };

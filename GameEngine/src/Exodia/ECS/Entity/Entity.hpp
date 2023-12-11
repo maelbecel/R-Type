@@ -88,6 +88,8 @@ namespace Exodia {
                 return true;
             }
 
+            Entity *Duplicate(World *world, UUID uuid, const std::string &name);
+
         ///////////////////////
         // Getters & Setters //
         ///////////////////////
@@ -113,6 +115,8 @@ namespace Exodia {
             template<typename Component>
             ComponentHandle<Component> GetComponent();
 
+            std::vector<IComponentContainer *> GetAllComponents();
+
             uint64_t GetEntityID() const;
 
             bool IsPendingDestroy() const;
@@ -126,6 +130,7 @@ namespace Exodia {
 
             bool operator==(const Entity &other) const;
             bool operator!=(const Entity &other) const;
+            operator bool() const;
 
         ////////////////
         // Attributes //

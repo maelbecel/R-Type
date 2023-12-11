@@ -30,6 +30,7 @@ namespace Exodia {
         WindowFocus,
         WindowLostFocus,
         WindowMoved,
+        WindowDrop,
         // App
         AppTick,
         AppUpdate,

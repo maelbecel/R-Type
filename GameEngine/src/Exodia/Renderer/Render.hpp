@@ -37,7 +37,7 @@
 
     #include "Exodia/Renderer/Buffer/Framebuffer.hpp"
     #include "Exodia/Renderer/Buffer/UniformBuffer.hpp"
-    #include "Exodia/Renderer/Buffer/Buffer.hpp"
+    #include "Exodia/Renderer/Buffer/Buffers.hpp"
 
     // -- Context --------------------------------------------------------------
 
