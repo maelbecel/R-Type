@@ -16,7 +16,7 @@ namespace Exodia {
     // Constructor & Destructor //
     //////////////////////////////
 
-    EditorLayer::EditorLayer() : Layer("Exodia Editor"), _ActiveScene(nullptr), _SceneState(SceneState::Edit), _ViewportSize{ 0.0f, 0.0f }, _ViewportHovered(false), _GuizmoType(-1) {};
+    EditorLayer::EditorLayer() : Layer("Exodia Editor"), _EditorCamera(30.0f, 1.778f, 0.1f, 1000.0f), _ActiveScene(nullptr), _SceneState(SceneState::Edit), _ViewportSize{ 0.0f, 0.0f }, _ViewportHovered(false), _GuizmoType(-1) {};
 
     /////////////
     // Methods //
@@ -72,6 +72,45 @@ namespace Exodia {
     void EditorLayer::OnUpdate(UNUSED Exodia::Timestep ts)
     {
         EXODIA_PROFILE_FUNCTION();
+
+        Renderer2D::ResetStats();
+
+        FramebufferSpecification spec = _Framebuffer->GetSpecification();
+
+        // Resize the viewport
+        if (_ViewportSize.x > 0.0f && _ViewportSize.y > 0.0f && (spec.Width != _ViewportSize.x || spec.Height != _ViewportSize.y)) {
+            _Framebuffer->Resize((uint32_t)_ViewportSize.x, (uint32_t)_ViewportSize.y);
+            _EditorCamera.SetViewportSize(_ViewportSize.x, _ViewportSize.y);
+            
+            if (_ActiveScene)
+                _ActiveScene->OnViewportResize((uint32_t)_ViewportSize.x, (uint32_t)_ViewportSize.y);
+        }
+
+        // Bind the Framebuffer
+        _Framebuffer->Bind();
+
+        // Clear the screen
+        RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
+        RenderCommand::Clear();
+        _Framebuffer->ClearAttachment(1, -1);
+
+        switch(_SceneState) {
+            case SceneState::Edit:
+                _EditorCamera.OnUpdate(ts);
+
+                if (_ActiveScene)
+                    _ActiveScene->OnUpdateEditor(ts, _EditorCamera);
+                break;
+            case SceneState::Play:
+                if (_ActiveScene)
+                    _ActiveScene->OnUpdateRuntime(ts);
+                break;
+            default:
+                break;
+        }
+
+        // Unbind the Framebuffer
+        _Framebuffer->Unbind();
     }
 
     void EditorLayer::OnImGUIRender()

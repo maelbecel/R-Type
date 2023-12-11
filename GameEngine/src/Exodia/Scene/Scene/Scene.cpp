@@ -127,7 +127,7 @@ namespace Exodia {
         });
     }
 
-    void Scene::OnUpdataRuntime(Timestep ts)
+    void Scene::OnUpdateRuntime(Timestep ts)
     {
         if (!_IsPaused) {
 

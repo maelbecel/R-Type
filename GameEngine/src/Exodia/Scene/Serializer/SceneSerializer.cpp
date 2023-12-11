@@ -9,14 +9,95 @@
 #include "SceneSerializer.hpp"
 
 // Exodia ECS includes
-#include "ECS/Component/DefaultComponents/IDComponent.hpp"
+#include "ECS/Component/Components.hpp"
 
 // External includes
 #include <yaml-cpp/yaml.h>
 #include <fstream>
 #include <string>
 
+namespace YAML {
+
+    ///////////////
+    // Structure //
+    ///////////////
+
+    template<>
+    struct convert<glm::vec2> {
+        static Node encode(const glm::vec2 &rhs)
+        {
+            Node node;
+
+            node.push_back(rhs.x);
+            node.push_back(rhs.y);
+            node.SetStyle(EmitterStyle::Flow);
+            return node;
+        }
+
+        static bool decode(const Node &node, glm::vec2 &rhs)
+        {
+            if (!node.IsSequence() || node.size() != 2)
+                return false;
+
+            rhs.x = node[0].as<float>();
+            rhs.y = node[1].as<float>();
+            return true;
+        }
+    };
+
+    template<>
+    struct convert<glm::vec3> {
+        static Node encode(const glm::vec3 &rhs)
+        {
+            Node node;
+
+            node.push_back(rhs.x);
+            node.push_back(rhs.y);
+            node.push_back(rhs.z);
+            return node;
+        }
+
+        static bool decode(const Node &node, glm::vec3 &rhs)
+        {
+            if (!node.IsSequence() || node.size() != 3)
+                return false;
+
+            rhs.x = node[0].as<float>();
+            rhs.y = node[1].as<float>();
+            rhs.z = node[2].as<float>();
+            return true;
+        }
+    };
+
+    template<>
+    struct convert<glm::vec4> {
+        static Node encode(const glm::vec4 &rhs)
+        {
+            Node node;
+
+            node.push_back(rhs.x);
+            node.push_back(rhs.y);
+            node.push_back(rhs.z);
+            node.push_back(rhs.w);
+            return node;
+        }
+
+        static bool decode(const Node &node, glm::vec4 &rhs)
+        {
+            if (!node.IsSequence() || node.size() != 4)
+                return false;
+
+            rhs.x = node[0].as<float>();
+            rhs.y = node[1].as<float>();
+            rhs.z = node[2].as<float>();
+            rhs.w = node[3].as<float>();
+            return true;
+        }
+    };
+};
+
 namespace Exodia {
+
 
     //////////////////////////////
     // Constructor & Destructor //
@@ -103,9 +184,32 @@ namespace Exodia {
 
             if (!newEntity)
                 return;
-            
+
             for (auto component : entity) {
-                std::string componentType;
+                if (component["IDComponent"])
+                    continue;
+                else if (component["TransformComponent"]) {
+                    try {
+                        auto transform = component["TransformComponent"];
+                        auto &tc       = newEntity->GetComponent<TransformComponent>().Get();
+
+                        tc.Translation = transform["Translation"].as<glm::vec3>();
+                        tc.Rotation    = transform["Rotation"].as<glm::vec3>();
+                        tc.Scale       = transform["Scale"].as<glm::vec3>();
+                    } catch (YAML::BadConversion &e) {
+                        EXODIA_CORE_ERROR("Transform component has invalid data !");
+
+                        continue;
+                    }
+                }
+
+
+
+
+
+
+                // -- TODO: Implement the user Factory for deserialization -- //
+                /*std::string componentType;
 
                 try {
                     componentType = component.first.as<std::string>();
@@ -117,7 +221,7 @@ namespace Exodia {
                 if (componentType == "Entity")
                     continue;
 
-                DeserializeComponent(newEntity, componentType, component.second);
+                DeserializeComponent(newEntity, componentType, component.second);*/
             }
         }
     }

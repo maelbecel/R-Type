@@ -47,7 +47,7 @@ namespace Exodia {
 
             void OnRuntimeStart();
             void OnRuntimeStop();
-            void OnUpdataRuntime(Timestep ts);
+            void OnUpdateRuntime(Timestep ts);
 
             // -- Editor -------------------------------------------------------
 

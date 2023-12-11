@@ -77,6 +77,7 @@ namespace Exodia {
             Ref<Framebuffer> _Framebuffer;
 
             // Scene
+            EditorCamera          _EditorCamera;
             Ref<Scene>            _EditorScene;
             Ref<Scene>            _ActiveScene;
             std::filesystem::path _EditorScenePath;

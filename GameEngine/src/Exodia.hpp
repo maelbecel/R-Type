@@ -36,6 +36,7 @@
     // -- Exodia ImGui ---------------------------------------------------------
 
     #include "Exodia/ImGui/ImGuiLayer.hpp"
+    #include "Exodia/ImGui/ImGuiToolsUI.hpp"
 
     // -- Exodia Renderer ------------------------------------------------------
 

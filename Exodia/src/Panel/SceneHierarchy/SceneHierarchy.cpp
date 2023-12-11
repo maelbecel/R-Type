@@ -117,11 +117,28 @@ namespace Exodia {
         }
     }
 
-    void SceneHierarchy::DrawComponents(Entity *entity)
+    void SceneHierarchy::DrawComponents(UNUSED Entity *entity)
     {
-        for (auto &component : entity->GetAllComponents()) {
-            (void)component;
-        }
+        // 1. Get all components that currently exist.
+        // 2. Iterate over all components.
+        // 3. If the entity has the component, draw it.
+
+        //for (auto &component : entity->GetAllComponents()) {
+        //    (void)component;
+
+            /*DrawComponent<TransformComponent>("Transform", entity, [](auto &component)
+            {
+                DrawVec3Control("Translation", component.Translation);
+
+                glm::vec3 rotation = glm::degrees(component.Rotation);
+
+                DrawVec3Control("Rotation", rotation);
+
+                component.Rotation = glm::radians(rotation);
+
+                DrawVec3Control("Scale", component.Scale, 1.0f);
+            });*/
+        //}
     }
 
     ///////////////////////
