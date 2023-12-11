@@ -30,31 +30,26 @@ namespace Exodia {
             {
                 // set random seed to 4
 
-                _Speed = random() % 8 + 1;
                 _size = 0.01f + static_cast<float>(random() % 8) / 100.0f;
                 _intensity = random() % 255 + 1;
                 _State = random() % 2 ? State::GROWING : State::SHRINKING;
 
-                GetComponent<TransformComponent>().Get().Scale.x = _size;
-                GetComponent<TransformComponent>().Get().Scale.y = _size;
                 auto transform = GetComponent<TransformComponent>();
                 auto &tc = transform.Get();
 				tc.Translation.x = 10 + random() % 20;
 				tc.Translation.y = 5 - random() % 10;
+                tc.Scale.x = _size;
+                tc.Scale.y = _size;
             }
 
             void OnUpdate(Timestep ts) override
             {
                 auto &mytime = GetComponent<Clock>().Get().ElapsedTime;
+                auto transform = GetComponent<TransformComponent>();
+                auto circle = GetComponent<CircleRendererComponent>();
+
                 mytime += ts.GetMilliseconds();
 
-                auto transform = GetComponent<TransformComponent>();
-                if (transform) {
-                    auto &tc = transform.Get();
-                    tc.Translation.x -= _Speed * ts;
-                }
-
-                auto circle = GetComponent<CircleRendererComponent>();
                 if (circle) {
                     auto &cc = circle.Get();
                     _intensity += (_State == State::GROWING) ? ts.GetSeconds() * 0.1 : ts.GetSeconds() * 0.1 * -1;
@@ -66,18 +61,16 @@ namespace Exodia {
                     cc.Color.a = getIntensity();
                 }
 
-				if (GetComponent<TransformComponent>().Get().Translation.x < -10) {
-				    GetComponent<TransformComponent>().Get().Translation.x = 10 + random() % 10;
-					GetComponent<TransformComponent>().Get().Translation.y = 5 - random() % 10;
+				if (transform.Get().Translation.x < -10) {
+				    transform.Get().Translation.x = 10 + random() % 10;
+					transform.Get().Translation.y = 5 - random() % 10;
 				}
-
             }
 
         ////////////////
         // Attributes //
         ////////////////
         private:
-            float _Speed;
             float _intensity;
             State _State;
             float _size;

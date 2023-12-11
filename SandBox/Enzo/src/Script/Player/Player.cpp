@@ -34,26 +34,31 @@ namespace Exodia {
 
     void Player::OnUpdate(Timestep ts) {
         auto transform = GetComponent<TransformComponent>();
+        auto velocity = GetComponent<RigidBody2DComponent>();
 
-        if (transform) {
+        if (transform && velocity) {
             TransformComponent &tc = transform.Get();
 
             // Move player with keyboard
             if (Input::IsKeyPressed(Key::A)) {          // Left
-                tc.Translation.x -= _Speed * ts;
                 _State = State::IDLE;
+                velocity.Get().Velocity.x = -5.0f;
             } else if (Input::IsKeyPressed(Key::D)) {   // Right
-                tc.Translation.x += _Speed * ts;
                 _State = State::IDLE;
+                velocity.Get().Velocity.x = 5.0f;
+            } else if (Input::IsKeyReleased(Key::A) && Input::IsKeyReleased(Key::D)) { // Idle
+                _State = State::IDLE;
+                velocity.Get().Velocity.x = 0.0f;
             }
             if (Input::IsKeyPressed(Key::W)) {          // Up
-                tc.Translation.y += _Speed * ts;
                 _State = State::MOVE_UP;
+                velocity.Get().Velocity.y = 5.0f;
             } else if (Input::IsKeyPressed(Key::S)) {   // Down
-                tc.Translation.y -= _Speed * ts;
                 _State = State::MOVE_DOWN;
+                velocity.Get().Velocity.y = -5.0f;
             } else if (Input::IsKeyReleased(Key::W) && Input::IsKeyReleased(Key::S)) { // Idle
                 _State = State::IDLE;
+                velocity.Get().Velocity.y = 0.0f;
             }
 
             // Simple attack

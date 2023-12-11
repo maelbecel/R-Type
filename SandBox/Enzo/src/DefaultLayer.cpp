@@ -36,6 +36,7 @@ namespace Exodia {
         _World = World::CreateWorld();
         _World->RegisterSystem(new AnimationSystem());
         _World->RegisterSystem(new ScriptSystem());
+        _World->RegisterSystem(new MovingSystem(1.5f));
 
         CollisionSystem *collisionSystem = new CollisionSystem();
         _World->RegisterSystem(collisionSystem);
@@ -80,6 +81,13 @@ namespace Exodia {
             star->GetComponent<TransformComponent>().Get().Scale.x = 0.1f;
             star->AddComponent<Clock>();
 			star->AddComponent<CircleRendererComponent>(glm::vec4{ 0.9f, 0.9f, 0.9f + static_cast<float>(random() % 100) / 10000.0f, 0.9f });
+
+            auto body = star->AddComponent<RigidBody2DComponent>();
+
+            body.Get().Type = RigidBody2DComponent::BodyType::Dynamic;
+            body.Get().Mass = 0.0f;
+            body.Get().GravityScale = 0.0f;
+            body.Get().Velocity.x = (random() % 8 + 1) * -1;
         }
 
 
@@ -157,5 +165,13 @@ namespace Exodia {
         // Set entity sprite
         Ref<Texture2D> texture = Texture2D::Create("Assets/Textures/Player.png");
         sprite.Get().Texture = SubTexture2D::CreateFromCoords(texture, { 2.0f, 4.0f }, { 33.2f, 17.2f }, { 1.0f, 1.0f });
+
+        // Set entity rigidbody
+        auto body = entity->AddComponent<RigidBody2DComponent>();
+
+        body.Get().Type = RigidBody2DComponent::BodyType::Dynamic;
+        body.Get().Mass = 0.0f;
+        body.Get().GravityScale = 0.0f;
+        body.Get().Velocity = glm::vec2{ 0.0f, 0.0f };
     }
 };

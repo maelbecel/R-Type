@@ -34,7 +34,6 @@ namespace Exodia {
 
             void OnCreate() override
             {
-                _Speed = 5.0f;
                 _State = State::IDLE;
                 _AttackTimer = 0.0f;
                 _IsAttacking = false;
@@ -66,7 +65,6 @@ namespace Exodia {
         // Attributes //
         ////////////////
         private:
-            float _Speed;
             State _State;
             float _AttackTimer;
             bool _IsAttacking;
