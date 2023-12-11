@@ -8,6 +8,9 @@
 #ifndef COMPONENT_HPP_
     #define COMPONENT_HPP_
 
+    // Exodia Core includes
+    #include "Core/Buffer/Buffer.hpp"
+
     // Exodia Utils includes
     #include "Utils/Memory.hpp"
 
@@ -30,6 +33,11 @@ namespace Exodia {
         }
 
         virtual void Serialize(YAML::Emitter &out) = 0;
+
+        virtual void DeserializeData(Buffer data)
+        {
+            Memcpy(this, data.Data, data.Size);
+        }
     };
 };
 
