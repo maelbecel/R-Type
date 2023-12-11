@@ -4,25 +4,78 @@
 
 Components in ECS can be any data type, but generally they'll be a struct containing some plain old data. For now, let's define two components:
 ```cpp
-struct Transform {
+struct Transform : public Component {
+    static std::string GetStaticName()
+    {
+        return "Transform";
+    }
+
+    std::string GetName() const override
+    {
+        return GetStaticName();
+    }
+
     glm::vec3 Translation;
     glm::vec3 Rotation;
     glm::vec3 Scale;
 
     Transform(const Transform &) = default;
     Transform(const glm::vec3 &translation = glm::vec3(0.0f)) : Translation(translation), Rotation(glm::vec3(0.0f)), Scale(glm::vec3(1.0f)) {};
+
+    virtual void Serialize(YAML::Emitter &out)
+    {
+        out << YAML::Key << "Transform";
+        out << YAML::BeginMap;
+        {
+            out << YAML::Key << "Translation" << YAML::Value << YAML::Flow;
+            {
+                out << YAML::BeginSeq << Translation.x << Translation.y << Translation.z << YAML::EndSeq;
+            }
+            out << YAML::Key << "Rotation"    << YAML::Value << YAML::Flow;
+            {
+                out << YAML::BeginSeq << Rotation.x << Rotation.y << Rotation.z << YAML::EndSeq;
+            }
+            out << YAML::Key << "Scale"       << YAML::Value << YAML::Flow;
+            {
+                out << YAML::BeginSeq << Scale.x << Scale.y << Scale.z << YAML::EndSeq;
+            }
+        }
+        out << YAML::EndMap;
+    }
 };
 
-struct Health {
+struct Health : public Component {
+    static std::string GetStaticName()
+    {
+        return "Health";
+    }
+
+    std::string GetName() const override
+    {
+        return GetStaticName();
+    }
+
     int CurrentHealth;
     int MaxHealth;
 
     Health(const Health &) = default;
     Health(int maxHealth = 100) : CurrentHealth(maxHealth), MaxHealth(maxHealth) {};
+
+    virtual void Serialize(YAML::Emitter &out)
+    {
+        out << YAML::Key << "Health";
+        out << YAML::BeginMap;
+        {
+            out << YAML::Key << "CurrentHealth" << YAML::Value << CurrentHealth;
+            out << YAML::Key << "MaxHealth"     << YAML::Value << MaxHealth;
+        }
+        out << YAML::EndMap;
+    }
 };
 ```
 
 Note that we don't have to do anything special for these structs to act as components, though there is the requirement for at least a default constructor.
+Note we can see `Serialize()` function, this function is used to serialize the component in a YAML file. When you create a component you need to define this function.
 
 ## Create a system
 
@@ -110,6 +163,7 @@ entity->AddComponent<Health>();
 ```
 
 Note `CreateEntity()` returns a pointer to the entity, know that this entity have default component (TagComponent, IDComponent, TransformComponent).
+Note `CreateEntity()` you can provides a name for the entity or a uuid.
 Note `AddComponent()` can take any arguments that the component's constructor takes, so you can do this instead:
 
 ```cpp

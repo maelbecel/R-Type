@@ -10,6 +10,7 @@
 
     #include <memory>
     #include <string.h>
+    #include <stdlib.h>
 
     //////////////////////////////////////////////////////////////////
     // A bitshift operator that will shift the bit to the left by x //
@@ -53,6 +54,16 @@ inline size_t Strlen(const char *str)
 inline size_t Wcslen(const wchar_t *s)
 {
     return wcslen(s);
+}
+
+inline void *Malloc(size_t size)
+{
+    return malloc(size);
+}
+
+inline void Free(void *ptr)
+{
+    free(ptr);
 }
 
 inline void *Memset(void *data, int c, size_t size)
