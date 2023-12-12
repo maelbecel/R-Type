@@ -82,7 +82,9 @@ namespace Exodia {
                     std::memcpy(&swappedSize, buffer + index, sizeof(unsigned long));
                     unsigned long size = swapEndianness(swappedSize);
 
-                    return Header(command, timestamp, id, size);
+                    Header header(command, id, size);
+                    header._timestamp = timestamp;
+                    return header;
                 }
 
                 static size_t get_size()

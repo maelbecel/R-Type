@@ -34,9 +34,15 @@ namespace Exodia {
         Exodia::World *world = Exodia::World::CreateWorld();
         Exodia::Network::Network network(world, ioContextManager, 8083);
         network.connect("0.0.0.0", 8082);
-        Exodia::Entity *entity = world->createEntity();
-        entity->addComponent<Exodia::Component::TransformComponent>();
-        entity->GetComponent<Exodia::Component::TransformComponent>().setPosition(glm::vec3(0, 0, 0));
+        Exodia::Entity *entity = world->CreateEntity();
+        entity->AddComponent<Exodia::TransformComponent>();
+        entity->GetComponent<Exodia::TransformComponent>()->Translation = glm::vec3(1, 2, 3);
+        entity->GetComponent<Exodia::TransformComponent>()->Rotation = glm::vec3(4, 5, 6);
+
+        //print type index of the component
+        // type_names[std::type_index(typeid(Exodia::TransformComponent))]
+        std::cout << "here" << std::type_index(typeid(Exodia::TransformComponent)).name() << std::endl;
+        // entity->GetComponent<Exodia::Component::TransformComponent>()->setPosition(glm::vec3(0, 0, 0));
 
         network.sendEntity(entity, "TransformComponent");
 

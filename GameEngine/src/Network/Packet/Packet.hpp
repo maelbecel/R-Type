@@ -14,7 +14,7 @@ namespace Exodia {
     namespace Network {
         class Packet {
             public:
-                Packet() : _header(0, 0, 0, 0), _content(std::vector<char>()) {};
+                Packet() : _header(0, 0, 0), _content(std::vector<char>()) {};
 
 
                 ~Packet() = default;

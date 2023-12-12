@@ -61,7 +61,6 @@ namespace Exodia {
                     std::vector<char> buffer(2 * sizeof(int));
                     int packet_received = 0;
                     int packet_sent = 0;
-                    size_t index = 0;
 
                     size_t offset = 0;
                     offset = fill_data(buffer, offset, &packet_received, sizeof(int));
@@ -91,10 +90,11 @@ namespace Exodia {
                     std::vector<char> buffer(1468, 0);
 
                     IComponentContainer *container = entity->GetComponent(component_name);
+                    std::cout << "Container: " << container << std::endl;
 
                     std::string component = component_name;
                     unsigned int size_of_string = component.size();
-                    unsigned long id = entity->getId();
+                    unsigned long id = entity->GetEntityID();
 
                     uint32_t size_of_data = sizeof(container);
                     std::vector<char> data(size_of_data, 0);
@@ -103,7 +103,7 @@ namespace Exodia {
                     size_t offset = 0;
                     offset = fill_data(buffer, offset, &id, sizeof(unsigned long)); //Set if of entity
                     offset = fill_data(buffer, offset, &size_of_string, sizeof(unsigned int)); //Set size of name
-                    offset = fill_data(buffer, offset, component.c_str(), component.size()); // Set name
+                    offset = fill_data(buffer, offset, component.data(), component.size()); // Set name
                     offset = fill_data(buffer, offset, &size_of_data, sizeof(uint32_t)); // Set size of data
                     offset = fill_data(buffer, offset, data.data(), size_of_data); // Set data
 
