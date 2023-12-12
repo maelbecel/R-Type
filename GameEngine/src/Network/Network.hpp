@@ -56,17 +56,17 @@ namespace Exodia {
                 }
 
                 void sendPacketInfo() {
-                    float time = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-                    Exodia::Network::Header header(0x00, time, 1, 2);
+                    Exodia::Network::Header header(0x00, 1, 2);
                     Exodia::Network::Packet packet;
                     std::vector<char> buffer(2 * sizeof(int));
                     int packet_received = 0;
                     int packet_sent = 0;
+                    size_t index = 0;
 
-                    std::memcpy(buffer.data(), &packet_received, sizeof(int));
-                    std::memcpy(buffer.data() + sizeof(int), &packet_sent, sizeof(int));
-                    packet.setHeader(header);
-                    packet.setContent(buffer);
+                    size_t offset = 0;
+                    offset = fill_data(buffer, offset, &packet_received, sizeof(int));
+                    offset = fill_data(buffer, offset, &packet_sent, sizeof(int));
+                    packet.set(header, buffer);
                     _socket.send(packet.getBuffer(), packet.get_size(), _remote_endpoint[0]);
                 }
 
@@ -84,9 +84,9 @@ namespace Exodia {
                     std::memcpy(buffer.data() + offset, data, size);
                     return offset + size;
                 }
+
                 void sendEntity(Entity *entity, std::string component_name) {
-                    float time = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-                    Exodia::Network::Header header(0x0c, time, 1, 2);
+                    Exodia::Network::Header header(0x0c, 1, 2);
                     Exodia::Network::Packet packet;
                     std::vector<char> buffer(1468, 0);
 

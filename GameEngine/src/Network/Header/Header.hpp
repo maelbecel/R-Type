@@ -25,7 +25,19 @@ namespace Exodia {
     namespace Network {
         class Header {
             public:
-                Header(char command, float timestamp, unsigned long id, unsigned long size) : _command(command), _timestamp(timestamp), _id(id), _size(size) {};
+
+                /**
+                 * @brief Construct a new Header object
+                 * Construct a new Header object with the given command, id and size
+                 *
+                 * @param command (Type: char ) The command of the header
+                 * @param id (Type: unsigned long) The id of the header
+                 * @param size (Type: unsigned long) The size of the packet
+                 */
+                Header(char command, unsigned long id, unsigned long size) : _command(command), _id(id), _size(size)
+                {
+                    _timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+                };
                 ~Header() = default;
 
                 void fillBuffer(std::vector<char>& buffer) const {
@@ -76,6 +88,10 @@ namespace Exodia {
                 static size_t get_size()
                 {
                     return 22;
+                }
+
+                void setSize(unsigned long size) {
+                    _size = size;
                 }
 
                 char getCommand() const { return _command; };

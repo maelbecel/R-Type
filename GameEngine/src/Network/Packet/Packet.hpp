@@ -30,6 +30,7 @@ namespace Exodia {
                 void set(Header header, std::vector<char> content) {
                     _header = header;
                     _content = content;
+                    _header.setSize(_content.size());
                 }
 
                 std::vector<char> getBuffer() const {
