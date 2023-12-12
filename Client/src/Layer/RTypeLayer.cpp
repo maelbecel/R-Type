@@ -34,7 +34,11 @@ namespace Exodia {
         Exodia::World *world = Exodia::World::CreateWorld();
         Exodia::Network::Network network(world, ioContextManager, 8083);
         network.connect("0.0.0.0", 8082);
-        network.sendEntity();
+        Exodia::Entity *entity = world->createEntity();
+        entity->addComponent<Exodia::Component::TransformComponent>();
+        entity->GetComponent<Exodia::Component::TransformComponent>().setPosition(glm::vec3(0, 0, 0));
+
+        network.sendEntity(entity, "TransformComponent");
 
         // Exodia::Network::IOContextManager ioContextManager;
 

@@ -73,7 +73,7 @@ namespace Exodia {
         ImGui::PushID(label.c_str());
         ImGui::Columns(2);
         ImGui::SetColumnWidth(0, columnWidth);
-        ImGui::Text(label.c_str());
+        // ImGui::Text(label.c_str()); ETHAN EDIT
         ImGui::NextColumn();
         ImGui::PushMultiItemsWidths(3, ImGui::CalcItemWidth());
         ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 0, 0 });

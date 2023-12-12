@@ -16,6 +16,8 @@ int main(int ac, char **av)
 
     Exodia::Log::Init();
 
+    Exodia::Project::Load("./Client/R-Type.proj");
+
     std::cout << "Server is waiting for infos !" << std::endl;
 
     try {

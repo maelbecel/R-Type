@@ -49,9 +49,7 @@ namespace Exodia {
                  *
                  */
                 void loop() {
-                    _ioContextManager.run();
                     _socket.receive(std::bind(&Network::splitter, this, std::placeholders::_1, std::placeholders::_2));
-
                 }
 
                 void sendPacketInfo() {
@@ -80,39 +78,67 @@ namespace Exodia {
                     std::cout << "Packet received: " << packet_received << " Packet sent: " << packet_sent << std::endl;
                 }
 
-                void sendEntity() {
+                size_t fill_data(std::vector<char> &buffer, size_t offset, void *data, size_t size) {
+                    std::memcpy(buffer.data() + offset, data, size);
+                    return offset + size;
+                }
+                void sendEntity(Entity *entity, std::string component_name) {
                     float time = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
                     Exodia::Network::Header header(0x0c, time, 1, 2);
                     Exodia::Network::Packet packet;
                     std::vector<char> buffer(1468, 0);
 
-                    std::string component = "Test";
+                    IComponentContainer *container = entity->GetComponent(component_name);
+
+                    std::string component = component_name;
                     unsigned int size_of_string = component.size();
-                    unsigned long id = 1;
+                    unsigned long id = entity->getId();
 
-                    std::memcpy(buffer.data(), &id, sizeof(unsigned long));
-                    std::memcpy(buffer.data() + sizeof(unsigned long), &size_of_string, sizeof(unsigned int));
-                    std::memcpy(buffer.data() + sizeof(unsigned int) + sizeof(unsigned long), component.c_str(), component.size());
+                    uint32_t size_of_data = sizeof(container);
+                    std::vector<char> data(size_of_data, 0);
+                    std::memcpy(data.data(), &container, size_of_data);
 
-                    packet.setHeader(header);
-                    packet.setContent(buffer);
-                    std::vector<char> test = packet.getBuffer();
-                    for (int i = 0; i < 30; i++)
-                        std::cout << test[i] << std::endl;
+                    size_t offset = 0;
+                    offset = fill_data(buffer, offset, &id, sizeof(unsigned long)); //Set if of entity
+                    offset = fill_data(buffer, offset, &size_of_string, sizeof(unsigned int)); //Set size of name
+                    offset = fill_data(buffer, offset, component.c_str(), component.size()); // Set name
+                    offset = fill_data(buffer, offset, &size_of_data, sizeof(uint32_t)); // Set size of data
+                    offset = fill_data(buffer, offset, data.data(), size_of_data); // Set data
+
+                    packet.set(header, buffer);
                     _socket.send(packet.getBuffer(), packet.get_size(), _remote_endpoint[0]);
                 }
+
                 void createEntity(const std::vector<char> message, size_t size) {
                     (void) size;
                     unsigned long id = 0;
                     unsigned int size_of_string = 0;
+                    std::string component_name;
+                    uint32_t size_of_data = 0;
 
                     std::memcpy(&id, message.data(), sizeof(unsigned long));
                     std::memcpy(&size_of_string, message.data() + sizeof(unsigned long), sizeof(unsigned int));
-                    std::string component(size_of_string, 0);
-                    std::memcpy(component.data(), message.data() + sizeof(unsigned long) + sizeof(unsigned int), size_of_string);
+                    component_name.resize(size_of_string, 0);
+                    std::memcpy(component_name.data(), message.data() + sizeof(unsigned long) + sizeof(unsigned int), size_of_string);
+                    std::memcpy(&size_of_data, message.data() + sizeof(unsigned long) + sizeof(unsigned int) + size_of_string, sizeof(uint32_t));
+                    std::vector<char> data(size_of_data, 0);
+                    std::memcpy(data.data(), message.data() + sizeof(unsigned long) + sizeof(unsigned int) + size_of_string + sizeof(uint32_t), size_of_data);
 
-                    std::cout << "Id: " << id << " Size of string: " << size_of_string << " Component: " << component << std::endl;
-                    // _world->CreateNewEntity
+                    std::cout << "Id: " << id << " Size of string: " << size_of_string << " component_name: " << component_name << " Size of data: " << size_of_data << std::endl;
+                    Entity *entity = _world->CreateEntity(id);
+
+                    std::function<Exodia::IComponentContainer *(Exodia::Buffer)> func = Project::GetActive()->GetComponentFactory(component_name);
+                    // auto func = Project::GetActive()->GetComponentFactory(component_name);
+                    if (!func) {
+                        std::string error = "Network::createEntity() - component " + component_name + " not found !";
+                        EXODIA_CORE_ERROR(error);
+                        return;
+                    }
+                    Exodia::Buffer buffer(data.data(), size_of_data);
+                    IComponentContainer *container = func(buffer);
+                    entity->AddComponent(container);
+                    std::cout << entity->GetComponent<TransformComponent>()->Translation.x << std::endl;
+                    std::cout << "Entity created" << std::endl;
                 }
 
                 void splitter(const std::vector<char> message, size_t size) {
