@@ -11,7 +11,7 @@
 
 int main(int ac, char **av)
 {
-   (void)ac;
+    (void)ac;
     (void)av;
 
     Exodia::Log::Init();
@@ -26,16 +26,14 @@ int main(int ac, char **av)
         // asio::ip::udp::endpoint localEndpoint(asio::ip::address::from_string("127.0.0.1"), 8082);
         Exodia::World *world = Exodia::World::CreateWorld();
         Exodia::Network::Network network(world, ioContextManager, 8082);
-        network.loop();
-
-        // Create a UDPSocket object for the server
-        // Exodia::Network::UDPSocket serverSocket(ioContextManager, localEndpoint);
-
-        // serverSocket.receive(my_callback);
-
+        network.startReceiveThread();
+        //network.loop();
         // Run the IO context to initiate asynchronous operations
-        ioContextManager.run();
-
+        while (true)
+        {
+            std::cout << "Server is Running" << std::endl;
+            sleep(30);
+        }
         return 0;
 
     } catch (std::exception &e) {

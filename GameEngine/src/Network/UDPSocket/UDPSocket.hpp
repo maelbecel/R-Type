@@ -93,6 +93,9 @@ class UDPSocket {
 
                         // Call the callback with the received data
                         callback(receivedMessage, bytes_received);
+
+                        // Call receive again to listen for more messages
+                        receive(callback);
                     } else {
                         EXODIA_CORE_ERROR("Error receiving message: ", error.message());
                     }

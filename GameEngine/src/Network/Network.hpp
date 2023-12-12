@@ -26,15 +26,17 @@ namespace Exodia {
                  * @brief Construct a new Network object
                  *
                  */
-                Network(World *world, IOContextManager &context,short port) : _world(world), _socket(context, asio::ip::udp::endpoint(asio::ip::address::from_string("0.0.0.0"), port))
-                 {
+                Network(World *world, IOContextManager &context,short port) : _world(world), _socket(context, asio::ip::udp::endpoint(asio::ip::address::from_string("0.0.0.0"), port)), _ioContextManager(context)
+                {
                 };
 
                 /**
                  * @brief Destroy the Network object
                  *
                  */
-                ~Network() = default;
+                ~Network()
+                {
+                };
 
                 /**
                  * @brief Connect to a remote endpoint
@@ -49,9 +51,8 @@ namespace Exodia {
                  *
                  */
                 void loop() {
-                    _ioContextManager.run();
                     _socket.receive(std::bind(&Network::splitter, this, std::placeholders::_1, std::placeholders::_2));
-
+                    _ioContextManager.run();
                 }
 
                 void sendPacketInfo() {
@@ -64,7 +65,6 @@ namespace Exodia {
 
                     std::memcpy(buffer.data(), &packet_received, sizeof(int));
                     std::memcpy(buffer.data() + sizeof(int), &packet_sent, sizeof(int));
-
                     packet.setHeader(header);
                     packet.setContent(buffer);
                     _socket.send(packet.getBuffer(), packet.get_size(), _remote_endpoint[0]);
@@ -132,13 +132,19 @@ namespace Exodia {
                     commands[header.getCommand()](content, header.getSize());
                 }
 
-            private:
+                void startReceiveThread() {
+                    _receiveThread = std::thread(&Network::loop, this);
+                }
 
             private:
                 World *_world;
                 UDPSocket _socket;
-                IOContextManager _ioContextManager;
                 std::vector<asio::ip::udp::endpoint> _remote_endpoint;
+
+                std::thread _receiveThread;
+
+                // IOContext
+                IOContextManager &_ioContextManager;
 
         }; // class Network
 
