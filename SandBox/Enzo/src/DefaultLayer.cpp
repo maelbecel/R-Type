@@ -13,6 +13,7 @@
 #include "ComponentExample.hpp"
 #include "AnimationSystem.hpp"
 
+
 namespace Exodia {
 
     // -- Layer ----------------------------------------------------------------
@@ -27,9 +28,26 @@ namespace Exodia {
     // Methods //
     /////////////
 
+
+    void DefaultLayer::RegisterComponent(std::string name, std::function<IComponentContainer *(Buffer)> factory) {
+        _ComponentFactory.emplace(name, factory);
+    }
+
     void DefaultLayer::OnAttach()
     {
         EXODIA_PROFILE_FUNCTION();
+
+        // Register components
+        RegisterComponent("IDComponent", [](Buffer data) -> IComponentContainer * { return new ComponentContainer<IDComponent>(); });
+        RegisterComponent("TransformComponent", [](Buffer data) -> IComponentContainer * { return new ComponentContainer<TransformComponent>(); });
+        RegisterComponent("SpriteRendererComponent", [](Buffer data) -> IComponentContainer * { return new ComponentContainer<SpriteRendererComponent>(); });
+        RegisterComponent("BoxCollider2DComponent", [](Buffer data) -> IComponentContainer * { return new ComponentContainer<BoxCollider2DComponent>(); });
+        RegisterComponent("CircleRendererComponent", [](Buffer data) -> IComponentContainer * { return new ComponentContainer<CircleRendererComponent>(); });
+        RegisterComponent("RigidBody2DComponent", [](Buffer data) -> IComponentContainer * { return new ComponentContainer<RigidBody2DComponent>(); });
+        RegisterComponent("ScriptComponent", [](Buffer data) -> IComponentContainer * { return new ComponentContainer<ScriptComponent>(); });
+        RegisterComponent("Health", [](Buffer data) -> IComponentContainer * { return new ComponentContainer<Health>(); });
+        RegisterComponent("Animation", [](Buffer data) -> IComponentContainer * { return new ComponentContainer<Animation>(); });
+        RegisterComponent("Clock", [](Buffer data) -> IComponentContainer * { return new ComponentContainer<Clock>(); });
 
 
         // Create world

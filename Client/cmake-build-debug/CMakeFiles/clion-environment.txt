@@ -1,0 +1,3 @@
+ToolSet: 1.0 (local)Options: 
+
+Options:-DCMAKE_MAKE_PROGRAM=/home/maelbecel/.local/share/JetBrains/Toolbox/apps/CLion-Nova/ch-0/233.12287/bin/ninja/linux/x64/ninja

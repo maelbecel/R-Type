@@ -39,7 +39,7 @@ namespace Exodia {
         Exodia::Renderer2D::DrawRotatedQuad(
             { -1.0f, 0.0f },      // Position
             {  0.8f, 0.8f },      // Size
-            glm::radians(-45.0f), // Rotation
+            glm::radians(-25.0f), // Rotation
             _SquareColor          // Color
         );
 

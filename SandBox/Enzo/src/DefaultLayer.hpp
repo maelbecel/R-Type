@@ -9,6 +9,7 @@
     #define __DEFAULT_LAYER_HPP__
 
     #include "Exodia.hpp"
+    #include <unordered_map>
 
 namespace Exodia {
 
@@ -34,6 +35,7 @@ namespace Exodia {
 
         public:
             void CreatePlayer();
+            void RegisterComponent(std::string name, std::function<IComponentContainer *(Buffer)> factory);
 
         ////////////////
         // Attributes //
@@ -41,6 +43,7 @@ namespace Exodia {
         private:
             OrthographicCameraController _CameraController;
             World                       *_World;
+            std::unordered_map<std::string, IComponentContainer *()> _ComponentFactory;
     };
 };
 
