@@ -25,7 +25,7 @@ namespace Exodia {
         bullet->AddComponent<BoxCollider2DComponent>();
         bullet->AddComponent<ParentComponent>().Get().Parent = GetComponent<IDComponent>().Get().ID;
 
-        Ref<Texture2D> texture = Texture2D::Create("Assets/Textures/Missile.png");
+        Ref<Texture2D> texture = TextureImporter::LoadTexture2D("Assets/Textures/Missile.png");
         sprite.Get().Texture = SubTexture2D::CreateFromCoords(texture, { 0.0f, 0.0f }, { 17.33f, 14.0f }, { 1.0f, 1.0f });
 
         _AttackTimer += ts.GetSeconds();

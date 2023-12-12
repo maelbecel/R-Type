@@ -29,25 +29,25 @@ namespace Exodia {
     /////////////
 
 
-    void DefaultLayer::RegisterComponent(std::string name, std::function<IComponentContainer *(Buffer)> factory) {
-        _ComponentFactory.emplace(name, factory);
-    }
+    // void DefaultLayer::RegisterComponent(std::string name, std::function<IComponentContainer *(Buffer)> factory) {
+    //     _ComponentFactory.emplace(name, factory);
+    // }
 
     void DefaultLayer::OnAttach()
     {
         EXODIA_PROFILE_FUNCTION();
 
         // Register components
-        RegisterComponent("IDComponent", [](Buffer data) -> IComponentContainer * { return new ComponentContainer<IDComponent>(); });
-        RegisterComponent("TransformComponent", [](Buffer data) -> IComponentContainer * { return new ComponentContainer<TransformComponent>(); });
-        RegisterComponent("SpriteRendererComponent", [](Buffer data) -> IComponentContainer * { return new ComponentContainer<SpriteRendererComponent>(); });
-        RegisterComponent("BoxCollider2DComponent", [](Buffer data) -> IComponentContainer * { return new ComponentContainer<BoxCollider2DComponent>(); });
-        RegisterComponent("CircleRendererComponent", [](Buffer data) -> IComponentContainer * { return new ComponentContainer<CircleRendererComponent>(); });
-        RegisterComponent("RigidBody2DComponent", [](Buffer data) -> IComponentContainer * { return new ComponentContainer<RigidBody2DComponent>(); });
-        RegisterComponent("ScriptComponent", [](Buffer data) -> IComponentContainer * { return new ComponentContainer<ScriptComponent>(); });
-        RegisterComponent("Health", [](Buffer data) -> IComponentContainer * { return new ComponentContainer<Health>(); });
-        RegisterComponent("Animation", [](Buffer data) -> IComponentContainer * { return new ComponentContainer<Animation>(); });
-        RegisterComponent("Clock", [](Buffer data) -> IComponentContainer * { return new ComponentContainer<Clock>(); });
+        // RegisterComponent("IDComponent", [](UNUSED Buffer data) -> IComponentContainer * { return new ComponentContainer<IDComponent>(); });
+        // RegisterComponent("TransformComponent", [](UNUSED Buffer data) -> IComponentContainer * { return new ComponentContainer<TransformComponent>(); });
+        // RegisterComponent("SpriteRendererComponent", [](UNUSED Buffer data) -> IComponentContainer * { return new ComponentContainer<SpriteRendererComponent>(); });
+        // RegisterComponent("BoxCollider2DComponent", [](UNUSED Buffer data) -> IComponentContainer * { return new ComponentContainer<BoxCollider2DComponent>(); });
+        // RegisterComponent("CircleRendererComponent", [](UNUSED Buffer data) -> IComponentContainer * { return new ComponentContainer<CircleRendererComponent>(); });
+        // RegisterComponent("RigidBody2DComponent", [](UNUSED Buffer data) -> IComponentContainer * { return new ComponentContainer<RigidBody2DComponent>(); });
+        // RegisterComponent("ScriptComponent", [](UNUSED Buffer data) -> IComponentContainer * { return new ComponentContainer<ScriptComponent>(); });
+        // RegisterComponent("Health", [](UNUSED Buffer data) -> IComponentContainer * { return new ComponentContainer<Health>(); });
+        // RegisterComponent("Animation", [](UNUSED Buffer data) -> IComponentContainer * { return new ComponentContainer<Animation>(); });
+        // RegisterComponent("Clock", [](UNUSED Buffer data) -> IComponentContainer * { return new ComponentContainer<Clock>(); });
 
 
         // Create world
@@ -80,7 +80,7 @@ namespace Exodia {
         body_patata.Get().GravityScale = 0.0f;
         body_patata.Get().Velocity.x = -2.0f;
         // Set entity sprite
-        Ref<Texture2D> texture = Texture2D::Create("Assets/Textures/Pata-Pata.png");
+        Ref<Texture2D> texture = TextureImporter::LoadTexture2D("Assets/Textures/Pata-Pata.png");
         sprite.Get().Texture = SubTexture2D::CreateFromCoords(texture, { 0.0f, 0.0f }, { 33.3125f, 36.0f }, { 1.0f, 1.0f });
 
 
@@ -124,7 +124,7 @@ namespace Exodia {
         EXODIA_PROFILE_FUNCTION();
     }
 
-    void DefaultLayer::OnUpdate(Exodia::Timestep ts)
+    void DefaultLayer::OnUpdate(Timestep ts)
     {
         // Update
         _CameraController.OnUpdate(ts);
@@ -132,8 +132,8 @@ namespace Exodia {
         _World->Update(ts);
 
         // Renderer Prep
-        Exodia::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
-        Exodia::RenderCommand::Clear();
+        RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
+        RenderCommand::Clear();
 
         Renderer2D::BeginScene(_CameraController.GetCamera());
 
@@ -168,7 +168,7 @@ namespace Exodia {
         Renderer2D::EndScene();
     }
 
-    void DefaultLayer::OnEvent(Exodia::Event &event)
+    void DefaultLayer::OnEvent(Event &event)
     {
         _CameraController.OnEvent(event);
     }
@@ -187,7 +187,7 @@ namespace Exodia {
         auto sprite = entity->AddComponent<SpriteRendererComponent>();
 
         // Set entity sprite
-        Ref<Texture2D> texture = Texture2D::Create("Assets/Textures/Player.png");
+        Ref<Texture2D> texture = TextureImporter::LoadTexture2D("Assets/Textures/Player.png");
         sprite.Get().Texture = SubTexture2D::CreateFromCoords(texture, { 2.0f, 4.0f }, { 33.2f, 17.2f }, { 1.0f, 1.0f });
 
         // Set entity rigidbody

@@ -137,3 +137,6 @@ AssetRegistry:
   - Handle: 3468901234567890123
     Path: Textures/Zoydo.png
     Type: AssetType::Texture2D
+  - Handle: 4589012345678901234
+    Path: Textures/Textures/Simple_Explosion.png
+    Type: AssetType::Texture2D
