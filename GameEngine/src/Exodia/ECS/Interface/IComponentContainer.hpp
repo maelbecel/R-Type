@@ -10,6 +10,11 @@
 
     // Exodia Utils includes
     #include "Utils/CrossPlatform.hpp"
+    #include "Utils/Memory.hpp"
+    #include "Utils/TypeIndex.hpp"
+
+    // External includes
+    #include <yaml-cpp/yaml.h>
 
 namespace Exodia {
 
@@ -28,7 +33,9 @@ namespace Exodia {
         // Methods //
         /////////////
         public:
-            virtual void Destroy(World  *world)  = 0;
+            virtual TypeIndex GetTypeIndexOfComponent() = 0;
+            virtual void Serialize(YAML::Emitter &out) = 0;
+            virtual void Destroy(World *world) = 0;
             virtual void Removed(Entity *entity) = 0;
     };
 };

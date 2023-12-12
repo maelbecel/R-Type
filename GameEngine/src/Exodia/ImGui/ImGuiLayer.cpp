@@ -13,6 +13,7 @@
     #include <backends/imgui_impl_glfw.h>
     #include <backends/imgui_impl_opengl3.h>
     #include <imgui_internal.h>
+    #include <ImGuizmo.h>
 
 // Exodia Core
 #include "Core/Application/Application.hpp"
@@ -95,7 +96,7 @@ namespace Exodia {
         if (_BlockEvents) {
             ImGuiIO &io = ImGui::GetIO();
 
-            event.Handled |= event.IsInCategory(EventCategory::EventCategoryMouse) & io.WantCaptureMouse;
+            event.Handled |= event.IsInCategory(EventCategory::EventCategoryMouse)    & io.WantCaptureMouse;
             event.Handled |= event.IsInCategory(EventCategory::EventCategoryKeyboard) & io.WantCaptureKeyboard;
         }
     }
@@ -109,6 +110,7 @@ namespace Exodia {
         ImGui_ImplGlfw_NewFrame();
 
         ImGui::NewFrame();
+        //ImGuizmo::BeginFrame();
     }
 
     void ImGuiLayer::End()

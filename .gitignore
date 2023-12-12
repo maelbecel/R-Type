@@ -34,12 +34,23 @@
 # Build
 build/
 lib/
-bin_examples/
+bin*
 
 # Ignore all logfiles and tempfiles.
 *.log
-*.json
+ExodiaProfile-*.json
 
 # Binaries for programs and plugins
 r-type_client
 r-type_server
+exodia
+
+# ImGui
+imgui.ini
+
+# Segfault error files
+vgcore.*
+
+# Editor directories and files
+.idea/
+.vscode/

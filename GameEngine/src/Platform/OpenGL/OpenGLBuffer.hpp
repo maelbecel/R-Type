@@ -9,7 +9,7 @@
     #define OPENGLBUFFER_HPP_
 
     // Exodia Renderer
-    #include "Renderer/Buffer/Buffer.hpp"
+    #include "Renderer/Buffer/Buffers.hpp"
 
 namespace Exodia {
 

@@ -17,6 +17,10 @@
 // Exodia Debug
 #include "Debug/Profiling.hpp"
 
+// External includes
+#include <vector>
+#include <filesystem>
+
 namespace Exodia {
 
     ///////////////////////
@@ -38,7 +42,7 @@ namespace Exodia {
      */
     static void GLFWErrorCallback(int error, char const *description)
     {
-        EXODIA_CORE_ERROR("GLFW Error (", error, "): ", description);
+        EXODIA_CORE_ERROR("GLFW Error ({0}): {1}", error, description);
     }
 
     /////////////
@@ -82,7 +86,7 @@ namespace Exodia {
         _Data.Height = props.Height;
 
         // Log the window creation
-        EXODIA_CORE_INFO("Creating window ", props.Title, " (", props.Width, ", ", props.Height, ")");
+        EXODIA_CORE_INFO("Creating window {0} ({1}, {2})", props.Title, props.Width, props.Height);
 
         // Check if GLFW is initialized and initialize it if not
         if (GLFWWindowCount == 0) {
@@ -199,6 +203,18 @@ namespace Exodia {
         glfwSetCursorPosCallback(_Window, [](GLFWwindow *window, double xPos, double yPos) {
             WindowData &data = *(WindowData *)glfwGetWindowUserPointer(window);
             MouseMovedEvent event((float)xPos, (float)yPos);
+
+            data.EventCallback(event);
+        });
+
+        glfwSetDropCallback(_Window, [](GLFWwindow *window, int count, const char **paths) {
+            WindowData &data = *(WindowData *)glfwGetWindowUserPointer(window);
+
+            std::vector<std::filesystem::path> filepaths(count);
+
+            for (int i = 0; i < count; i++)
+                filepaths[i] = paths[i];
+            WindowDropEvent event(std::move(filepaths));
 
             data.EventCallback(event);
         });

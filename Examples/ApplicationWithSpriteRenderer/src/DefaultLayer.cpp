@@ -22,7 +22,7 @@ namespace Exodia {
 
         auto sprite = entity->GetComponent<SpriteRendererComponent>();
 
-        Ref<Texture2D> texture = Texture2D::Create("Assets/Textures/Shell.png");
+        Ref<Texture2D> texture = TextureImporter::LoadTexture2D("Assets/Textures/Shell.png");
 
         sprite->Texture = SubTexture2D::CreateFromCoords(texture, { 0.0f, 2.0f }, { 33.0f, 33.0f }, { 1.0f, 1.0f });
     }
@@ -42,6 +42,23 @@ namespace Exodia {
     void DefaultLayer::OnAttach()
     {
         EXODIA_PROFILE_FUNCTION();
+
+        auto commandLine = Application::Get().GetSpecification().CommandLineArgs;
+
+        if (commandLine.Count > 1) {
+            auto path = commandLine[1];
+
+            OpenProject(path);
+
+            if (Project::GetActive() == nullptr) {
+                EXODIA_ERROR("Failed to open project: {0}", path);
+
+                Application::Get().Close();
+                return;
+            }
+        } else {
+            OpenProject("./Client/R-Type.proj");
+        }
 
         _World = World::CreateWorld();
 
@@ -90,5 +107,21 @@ namespace Exodia {
     void DefaultLayer::OnEvent(Exodia::Event &event)
     {
         _CameraController.OnEvent(event);
+    }
+
+    bool DefaultLayer::OpenProject()
+    {
+        std::string path = FileDialog::OpenFile("proj");
+
+        if (path.empty())
+            return false;
+
+        OpenProject(path);
+        return true;
+    }
+
+    void DefaultLayer::OpenProject(const std::filesystem::path &path)
+    {
+        Project::Load(path);
     }
 };

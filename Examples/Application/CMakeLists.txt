@@ -35,13 +35,23 @@ include_directories(${INCLUDE_DIRS})
 # Add an executable for the application
 add_executable(application ${SOURCES})
 
-target_link_libraries(application GameEngine glad glfw glm imgui)
+target_link_libraries(application PRIVATE
+    GameEngine
+    glad::glad
+    glfw
+    imgui
+    glm::glm
+    asio::asio
+    OpenAL::OpenAL
+    spdlog::spdlog
+    Catch2::Catch2 Catch2::Catch2WithMain
+    sol2
+    unofficial::nativefiledialog::nfd
+    yaml-cpp::yaml-cpp
+    imguizmo::imguizmo
+)
 
-target_include_directories(application PRIVATE ${glad_INCLUDE_DIRS})
-target_include_directories(application PRIVATE ${CMAKE_BINARY_DIR}/_deps/opengl-src/GLAD/include)
-target_include_directories(application PRIVATE ${CMAKE_BINARY_DIR}/_deps/opengl-src/stb_image)
-target_include_directories(application PRIVATE ${CMAKE_BINARY_DIR}/_deps/glfw-src/include)
-target_include_directories(application PRIVATE ${CMAKE_BINARY_DIR}/_deps/glm-src)
+target_include_directories(application PRIVATE ${Stb_INCLUDE_DIR})
 target_include_directories(application PRIVATE ${CMAKE_BINARY_DIR}/_deps/imgui-src)
 
 set_target_properties(application PROPERTIES

@@ -18,7 +18,7 @@ namespace Exodia {
     class Entity;
 
     typedef std::allocator<Exodia::Entity> Allocator;
-    typedef std::type_index                     TypeIndex;
+    typedef std::type_index                TypeIndex;
 
     template<typename T>
     TypeIndex GetTypeIndex()

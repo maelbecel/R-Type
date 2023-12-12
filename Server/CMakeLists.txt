@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.12)
 
-project(r-type_server)
+project(r-type_server LANGUAGES CXX VERSION 1.0.1)
 
 set(CMAKE_BUILD_TYPE Debug)
 
@@ -41,15 +41,24 @@ include_directories(${INCLUDE_DIRS})
 # Add an executable for the r-type_server
 add_executable(r-type_server ${SOURCES})
 
-target_link_libraries(r-type_server GameEngine glad glfw glm imgui)
+target_link_libraries(r-type_server PRIVATE
+    GameEngine
+    glad::glad
+    glfw
+    imgui
+    glm::glm
+    asio::asio
+    OpenAL::OpenAL
+    spdlog::spdlog
+    Catch2::Catch2 Catch2::Catch2WithMain
+    sol2
+    unofficial::nativefiledialog::nfd
+    yaml-cpp::yaml-cpp
+    imguizmo::imguizmo
+)
 
-target_include_directories(r-type_server PRIVATE ${glad_INCLUDE_DIRS})
-target_include_directories(r-type_server PRIVATE ${CMAKE_BINARY_DIR}/_deps/opengl-src/GLAD/include)
-target_include_directories(r-type_server PRIVATE ${CMAKE_BINARY_DIR}/_deps/opengl-src/stb_image)
-target_include_directories(r-type_server PRIVATE ${CMAKE_BINARY_DIR}/_deps/glfw-src/include)
-target_include_directories(r-type_server PRIVATE ${CMAKE_BINARY_DIR}/_deps/glm-src)
+target_include_directories(r-type_server PRIVATE ${Stb_INCLUDE_DIR})
 target_include_directories(r-type_server PRIVATE ${CMAKE_BINARY_DIR}/_deps/imgui-src)
-target_include_directories(r-type_server PRIVATE ${CMAKE_BINARY_DIR}/_deps/boost-src/include)
 
 set_target_properties(r-type_server PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../

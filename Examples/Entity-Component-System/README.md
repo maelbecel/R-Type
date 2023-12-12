@@ -4,25 +4,78 @@
 
 Components in ECS can be any data type, but generally they'll be a struct containing some plain old data. For now, let's define two components:
 ```cpp
-struct Transform {
+struct Transform : public Component {
+    static std::string GetStaticName()
+    {
+        return "Transform";
+    }
+
+    std::string GetName() const override
+    {
+        return GetStaticName();
+    }
+
     glm::vec3 Translation;
     glm::vec3 Rotation;
     glm::vec3 Scale;
 
     Transform(const Transform &) = default;
     Transform(const glm::vec3 &translation = glm::vec3(0.0f)) : Translation(translation), Rotation(glm::vec3(0.0f)), Scale(glm::vec3(1.0f)) {};
+
+    virtual void Serialize(YAML::Emitter &out)
+    {
+        out << YAML::Key << "Transform";
+        out << YAML::BeginMap;
+        {
+            out << YAML::Key << "Translation" << YAML::Value << YAML::Flow;
+            {
+                out << YAML::BeginSeq << Translation.x << Translation.y << Translation.z << YAML::EndSeq;
+            }
+            out << YAML::Key << "Rotation"    << YAML::Value << YAML::Flow;
+            {
+                out << YAML::BeginSeq << Rotation.x << Rotation.y << Rotation.z << YAML::EndSeq;
+            }
+            out << YAML::Key << "Scale"       << YAML::Value << YAML::Flow;
+            {
+                out << YAML::BeginSeq << Scale.x << Scale.y << Scale.z << YAML::EndSeq;
+            }
+        }
+        out << YAML::EndMap;
+    }
 };
 
-struct Health {
+struct Health : public Component {
+    static std::string GetStaticName()
+    {
+        return "Health";
+    }
+
+    std::string GetName() const override
+    {
+        return GetStaticName();
+    }
+
     int CurrentHealth;
     int MaxHealth;
 
     Health(const Health &) = default;
     Health(int maxHealth = 100) : CurrentHealth(maxHealth), MaxHealth(maxHealth) {};
+
+    virtual void Serialize(YAML::Emitter &out)
+    {
+        out << YAML::Key << "Health";
+        out << YAML::BeginMap;
+        {
+            out << YAML::Key << "CurrentHealth" << YAML::Value << CurrentHealth;
+            out << YAML::Key << "MaxHealth"     << YAML::Value << MaxHealth;
+        }
+        out << YAML::EndMap;
+    }
 };
 ```
 
 Note that we don't have to do anything special for these structs to act as components, though there is the requirement for at least a default constructor.
+Note we can see `Serialize()` function, this function is used to serialize the component in a YAML file. When you create a component you need to define this function.
 
 ## Create a system
 
@@ -103,12 +156,14 @@ World *world = World::CreateWorld();
 
 world->RegisterSystem(new GravitySystem(-6.9f));
 
-Entity *entity = world->CreateEntity();
+Entity *entity = world->CreateEntity("Player");
 
 entity->AddComponent<Transform>();
 entity->AddComponent<Health>();
 ```
 
+Note `CreateEntity()` returns a pointer to the entity, know that this entity have default component (TagComponent, IDComponent, TransformComponent).
+Note `CreateEntity()` you can provides a name for the entity or a uuid.
 Note `AddComponent()` can take any arguments that the component's constructor takes, so you can do this instead:
 
 ```cpp
@@ -126,6 +181,16 @@ Once you are done with the world, make sure to destroy it (this will also deallo
 
 ```cpp
 world->DestroyWorld();
+```
+
+## Create Entities
+
+You saw in the last examples that you can create entities with `World::CreateEntity()`.
+But if you want to create like a script for spawning entities, you can use `World::CreateEntity()` but that will segfault because you will edit the world during is iteration.
+So for that you can use `World::CreateNewEntity()` that will store the entity create in a merge list and will merge it at the end of the iteration.
+
+```cpp
+Entity *entity = world->CreateNewEntity("Player");
 ```
 
 ## Working with components
@@ -243,6 +308,7 @@ There are a handful of built-in events. Here is the list:
 - OnEntityDestroyed  - called when an entity is being destroyed (including when a world is beind deleted).
 - OnComponentAdded   - called when a component is added to an entity. This might mean the component is new to the entity, or there's just a new assignment of the component to that entity overwriting an old one.
 - OnComponentRemoved - called when a component is removed from an entity. This happens upon manual removal `Entity::RemoveComponent()` and `Entity::RemoveAllComponents()` or upon entity destruction (which can also happen as a result of the world being destroyed).
+- OnCollisionEnter  - called when an entity collides with another entity. This event is emitted by the CollisionSystem.
 
 # Running the example
 

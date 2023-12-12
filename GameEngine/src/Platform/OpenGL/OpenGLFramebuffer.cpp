@@ -64,7 +64,7 @@ namespace Exodia {
     void OpenGLFramebuffer::Resize(uint32_t width, uint32_t height)
     {
         if (width == 0 || height == 0 || height > _MaxFramebufferSize || width > _MaxFramebufferSize) {
-            EXODIA_CORE_WARN("Attempted to resize framebuffer to ", width, ", ", height);
+            EXODIA_CORE_WARN("Attempted to resize framebuffer to ({0}, {1})", width, height);
             return;
         }
 
@@ -149,7 +149,7 @@ namespace Exodia {
             }
         }
         if (_ColorAttachments.size() > 1) {
-            EXODIA_CORE_ASSERT(_ColorAttachments.size() <= 4);
+            EXODIA_CORE_ASSERT(_ColorAttachments.size() <= 4, "Only 4 color attachments are supported !");
 
             GLenum buffers[4] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3 };
 
