@@ -38,6 +38,11 @@ namespace Exodia {
         {
             Memcpy(this, data.Data, data.Size);
         }
+
+        virtual Buffer SerializeData()
+        {
+            return Buffer(this, sizeof(*this));
+        }
     };
 };
 
