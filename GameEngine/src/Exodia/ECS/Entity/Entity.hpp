@@ -65,7 +65,7 @@ namespace Exodia {
             template<typename Component>
             bool RemoveComponent()
             {
-                auto found = _Components.find(GetTypeIndex<Component>().name());
+                auto found = _Components.find(GetTypeName<Component>());
 
                 if (found != _Components.end()) {
                     found->second->Removed(this);
@@ -105,7 +105,7 @@ namespace Exodia {
             template<typename Component>
             bool HasComponent() const
             {
-                std::string index = GetTypeIndex<Component>().name();
+                std::string index = GetTypeName<Component>();
 
                 return _Components.find(index) != _Components.end();
             }

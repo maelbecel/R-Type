@@ -49,7 +49,8 @@ namespace Exodia {
 
     void Entity::AddComponent(IComponentContainer *component)
     {
-        std::string typeIndex = component->GetTypeIndexOfComponent().name();
+        std::string name = component->GetTypeIndexOfComponent().name();
+        std::string typeIndex = extractTypeName(name.c_str());
 
         auto found = _Components.find(typeIndex);
 
@@ -60,7 +61,8 @@ namespace Exodia {
 
     bool Entity::RemoveComponent(IComponentContainer *component)
     {
-        std::string typeIndex = component->GetTypeIndexOfComponent().name();
+        std::string name = component->GetTypeIndexOfComponent().name();
+        std::string typeIndex = extractTypeName(name.c_str());
 
         auto found = _Components.find(typeIndex);
 
