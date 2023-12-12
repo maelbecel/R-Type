@@ -1,3 +1,0 @@
-/home/maelbecel/delivery/Semester5/R-Type/Client/cmake-build-debug/CMakeFiles/r-type_client.dir
-/home/maelbecel/delivery/Semester5/R-Type/Client/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/maelbecel/delivery/Semester5/R-Type/Client/cmake-build-debug/CMakeFiles/rebuild_cache.dir
