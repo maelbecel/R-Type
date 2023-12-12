@@ -12,6 +12,9 @@
     #include "Utils/CrossPlatform.hpp"
     #include "Utils/TypeIndex.hpp"
 
+    // External includes
+    #include <string>
+
 namespace Exodia {
 
     class Entity;
@@ -36,7 +39,7 @@ namespace Exodia {
 
         struct EXODIA_API OnComponentAddedNoTemplate {
             Exodia::Entity *Entity;
-            TypeIndex       ComponentType;
+            std::string     ComponentType;
         };
 
         template<typename Component>
@@ -47,7 +50,7 @@ namespace Exodia {
 
         struct EXODIA_API OnComponentRemovedNoTemplate {
             Exodia::Entity *Entity;
-            TypeIndex       ComponentType;
+            std::string     ComponentType;
         };
 
         struct EXODIA_API OnCollisionEntered {
