@@ -48,8 +48,4 @@ namespace Exodia {
     };
 };
 
-<<<<<<< HEAD
 #endif /* !ANIMATIONCOMPONENT_HPP_ */
-=======
-#endif /* !COMPONENTEXAMPLE_HPP_ */
->>>>>>> origin/feat/game-logic
