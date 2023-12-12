@@ -10,7 +10,7 @@
 
     // Exodia includes
     #include "Exodia.hpp"
-    #include "BulletPlayer.hpp"
+    #include "Scripts/BulletPlayer.hpp"
 
 namespace Exodia {
 

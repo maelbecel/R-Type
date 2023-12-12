@@ -10,7 +10,9 @@
 
     // Exodia includes
     #include "Exodia.hpp"
-    #include "ComponentExample.hpp"
+    #include "Component/Animation.hpp"
+    #include "Component/Clock.hpp"
+    #include "Component/Health.hpp"
 
     #include <cmath>
 
@@ -46,6 +48,7 @@ namespace Exodia {
                 auto transform = GetComponent<TransformComponent>();
                 auto &mytime = GetComponent<Clock>().Get().ElapsedTime;
                 auto body = GetComponent<RigidBody2DComponent>();
+
                 // Paramètres de la fonction sinus
                 double amplitude = 3.0f;  // Amplitude de la sinusoïde
                 double frequency = 1.0f;  // Fréquence de la sinusoïde en Hz

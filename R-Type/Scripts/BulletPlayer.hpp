@@ -10,7 +10,7 @@
 
     // Exodia includes
     #include "Exodia.hpp"
-    #include "ComponentExample.hpp"
+    #include "Component/Animation.hpp"
 
     #include <cmath>
 
@@ -35,6 +35,7 @@ namespace Exodia {
                 auto transform = GetComponent<TransformComponent>();
                 auto animation = GetComponent<Animation>();
                 auto parent = GetComponent<ParentComponent>();
+
                 Entity *entity = HandleEntity->GetWorld()->GetEntityByID(parent.Get().Parent);
 
                 if (!entity) {

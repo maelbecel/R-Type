@@ -9,8 +9,9 @@
     #define CREATEPLAYER_HPP_
 
     #include "Exodia.hpp"
-    #include "ComponentExample.hpp"
-    #include "Script/Player/Player.hpp"
+    #include "Component/Animation.hpp"
+    #include "Component/Health.hpp"
+    #include "Scripts/Player/Player.hpp"
 
 namespace Exodia {
 

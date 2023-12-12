@@ -9,8 +9,8 @@
     #define CREATESTARS_HPP_
 
     #include "Exodia.hpp"
-    #include "ComponentExample.hpp"
-    #include "Script/Star.hpp"
+    #include "Component/Clock.hpp"
+    #include "Scripts/Star.hpp"
 
 namespace Exodia {
 

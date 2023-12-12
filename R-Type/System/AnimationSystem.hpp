@@ -9,9 +9,9 @@
     #define ANIMATIONSYSTEM_HPP_
 
     #include "Exodia.hpp"
-    #include "ComponentExample.hpp"
-    #include "Script/Player/Player.hpp"
-    #include "Script/Pata-pata.hpp"
+    #include "Component/Animation.hpp"
+    #include "Scripts/Player/Player.hpp"
+    #include "Scripts/Pata-pata.hpp"
 
 namespace Exodia {
 

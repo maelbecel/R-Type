@@ -9,8 +9,10 @@
     #define CREATEPATAPATA_HPP_
 
     #include "Exodia.hpp"
-    #include "ComponentExample.hpp"
-    #include "Script/Pata-pata.hpp"
+    #include "Component/Animation.hpp"
+    #include "Component/Clock.hpp"
+    #include "Component/Health.hpp"
+    #include "Scripts/Pata-pata.hpp"
 
 namespace Exodia {
 
@@ -20,7 +22,6 @@ namespace Exodia {
      * @param _World
      */
     void CreatePataPata(World *_World) {
-        // Create pata-pata
         Entity *patata = _World->CreateEntity("Pata-pata");
 
         auto sprite = patata->AddComponent<SpriteRendererComponent>();

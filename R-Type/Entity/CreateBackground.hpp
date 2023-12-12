@@ -9,7 +9,6 @@
     #define CREATEBACKGROUND_HPP_
 
     #include "Exodia.hpp"
-    #include "ComponentExample.hpp"
 
 namespace Exodia {
 
