@@ -19,7 +19,7 @@ Nothing hard you just need to register them to the world :
 _World->RegisterSystem(new ScriptSystem());
 _World->RegisterSystem(new GravitySystem(1.5f));
 _World->RegisterSystem(new MovingSystem(1.5f));
-_World->RegisterSystem(new CollisionDetection2DSystem());
+_World->RegisterSystem(new CollisionSystem());
 ```
 
 And after you just need to call the `Update` method of the world :
@@ -64,7 +64,7 @@ transform.Scale = glm::vec3{ 15.0f, 2.0f, 1.0f };
 _World->RegisterSystem(new ScriptSystem());
 _World->RegisterSystem(new GravitySystem(1.5f));
 _World->RegisterSystem(new MovingSystem(1.5f));
-_World->RegisterSystem(new CollisionDetection2DSystem());
+_World->RegisterSystem(new CollisionSystem());
 
 _World->Subscribe<Events::OnCollisionEntered>(new CollisionStop());
 ```

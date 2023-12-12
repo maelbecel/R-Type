@@ -2,11 +2,11 @@
 ** EPITECH PROJECT, 2023
 ** ExodiaGameEngine
 ** File description:
-** Buffer
+** Buffers
 */
 
 // Exodia Renderer
-#include "Buffer.hpp"
+#include "Buffers.hpp"
 #include "Renderer/Renderer/Renderer.hpp"
 
 // Entry point

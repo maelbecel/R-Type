@@ -48,7 +48,7 @@ namespace Exodia {
         public:
 
             Entity();
-            Entity(World * world, uint64_t id = UUID());
+            Entity(World *world, uint64_t id = UUID());
 
             ~Entity();
 
@@ -60,10 +60,12 @@ namespace Exodia {
             template<typename Component, typename ...Args>
             ComponentHandle<Component> AddComponent(Args && ...args);
 
+            void AddComponent(IComponentContainer *component);
+
             template<typename Component>
             bool RemoveComponent()
             {
-                auto found = _Components.find(GetTypeIndex<Component>());
+                auto found = _Components.find(GetTypeIndex<Component>().name());
 
                 if (found != _Components.end()) {
                     found->second->Removed(this);
@@ -75,6 +77,8 @@ namespace Exodia {
                 }
                 return false;
             }
+
+            bool RemoveComponent(IComponentContainer *component);
 
             void RemoveAllComponents();
 
@@ -88,6 +92,8 @@ namespace Exodia {
                 return true;
             }
 
+            Entity *Duplicate(World *world, UUID uuid, const std::string &name);
+
         ///////////////////////
         // Getters & Setters //
         ///////////////////////
@@ -99,7 +105,7 @@ namespace Exodia {
             template<typename Component>
             bool HasComponent() const
             {
-                TypeIndex index = GetTypeIndex<Component>();
+                std::string index = GetTypeIndex<Component>().name();
 
                 return _Components.find(index) != _Components.end();
             }
@@ -112,6 +118,10 @@ namespace Exodia {
 
             template<typename Component>
             ComponentHandle<Component> GetComponent();
+
+            IComponentContainer *GetComponent(const std::string &index);
+
+            std::vector<IComponentContainer *> GetAllComponents();
 
             uint64_t GetEntityID() const;
 
@@ -126,6 +136,7 @@ namespace Exodia {
 
             bool operator==(const Entity &other) const;
             bool operator!=(const Entity &other) const;
+            operator bool() const;
 
         ////////////////
         // Attributes //
@@ -136,7 +147,7 @@ namespace Exodia {
             uint64_t   _ID;
             bool       _PendingDestroy;
 
-            std::unordered_map<TypeIndex, IComponentContainer *> _Components;
+            std::unordered_map<std::string, IComponentContainer *> _Components;
 
         /////////////
         // Friends //

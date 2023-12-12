@@ -36,7 +36,7 @@ set(SOURCES_GAME_ENGINE
     src/Exodia/Renderer/Camera/Camera.cpp
     src/Exodia/Renderer/Buffer/UniformBuffer.cpp
     src/Exodia/Renderer/Buffer/Framebuffer.cpp
-    src/Exodia/Renderer/Buffer/Buffer.cpp
+    src/Exodia/Renderer/Buffer/Buffers.cpp
     src/Exodia/Renderer/Context/GraphicsContext.cpp
     src/Exodia/Renderer/Shader/Shader.cpp
     src/Exodia/Renderer/Vertex/VertexArray.cpp
@@ -53,7 +53,7 @@ set(SOURCES_GAME_ENGINE
     src/Exodia/ECS/Entity/EntityView.cpp
     src/Exodia/ECS/Entity/Entity.cpp
     src/Exodia/ECS/World/World.cpp
-    src/Exodia/ECS/System/Collision/CollisionDetection2DSystem.cpp
+    src/Exodia/ECS/System/Collision/CollisionSystem.cpp
     src/Exodia/ECS/System/Script/ScriptSystem.cpp
     src/Exodia/ECS/System/Physics/GravitySystem.cpp
     src/Exodia/ECS/System/Physics/MovingSystem.cpp
@@ -61,10 +61,24 @@ set(SOURCES_GAME_ENGINE
         # -- Scene source files
 
     src/Exodia/Scene/Camera/SceneCamera.cpp
+    src/Exodia/Scene/Serializer/SceneSerializer.cpp
+    src/Exodia/Scene/Scene/Scene.cpp
+
+        # -- Project source files
+
+    src/Exodia/Project/Project.cpp
+    src/Exodia/Project/ProjectSerializer.cpp
 
         # -- Exodia ImGui source files
 
     src/Exodia/ImGui/ImGuiLayer.cpp
+
+        # -- Exodia Asset source files
+
+    src/Exodia/Asset/Importer/TextureImporter.cpp
+    src/Exodia/Asset/Importer/AssetImporter.cpp
+    src/Exodia/Asset/Importer/SceneImporter.cpp
+    src/Exodia/Asset/Manager/EditorAssetManager.cpp
 
     # Platform source files
 
@@ -73,6 +87,7 @@ set(SOURCES_GAME_ENGINE
     src/Platform/Windows/WindowsPlatformUtils.cpp
     src/Platform/Windows/WindowsWindow.cpp
     src/Platform/Windows/WindowsInput.cpp
+    src/Platform/Windows/WindowsFileDialog.cpp
 
         # -- OpenGL source files
 
