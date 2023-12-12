@@ -69,8 +69,8 @@ namespace Exodia {
                     auto sprite = GetComponent<SpriteRendererComponent>();
 
                     animation.Get().CurrentFrame = 0;
-                    animation.Get().MaxFrame = 6;
-                    animation.Get().FrameTime = 1.5f;
+                    animation.Get().MaxFrame = 7;
+                    animation.Get().FrameTime = 0.095f;
 
                     // Set entity sprite
                     Ref<Texture2D> texture = TextureImporter::LoadTexture2D("Assets/Textures/Simple_Explosion.png");
@@ -78,7 +78,7 @@ namespace Exodia {
                     _State = State::DEAD;
                     GetComponent<RigidBody2DComponent>().Get().Velocity = { 0.0f, 0.0f };
                 }
-                if (_State == State::DEAD && GetComponent<Animation>().Get().CurrentFrame == 5) {
+                if (_State == State::DEAD && GetComponent<Animation>().Get().CurrentFrame == 6) {
                     HandleEntity->GetWorld()->DestroyEntity(HandleEntity);
                 }
             }

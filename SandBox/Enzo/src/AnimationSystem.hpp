@@ -76,7 +76,7 @@ namespace Exodia {
                         anim.ElapsedTime += ts.GetSeconds();
 
                         // Vérifier si 0.5 seconde s'est écoulée
-                        if (anim.ElapsedTime >= 0.075f) {
+                        if (anim.ElapsedTime >= anim.FrameTime) {
                             anim.CurrentFrame += 1;
 
                             if (anim.CurrentFrame >= anim.MaxFrame)

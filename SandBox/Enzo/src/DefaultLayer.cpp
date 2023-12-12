@@ -69,7 +69,7 @@ namespace Exodia {
         auto sprite = patata->AddComponent<SpriteRendererComponent>();
         patata->AddComponent<Health>(1);
         patata->AddComponent<ScriptComponent>().Get().Bind<PataPata>();
-        patata->AddComponent<Animation>(1.0f, 8.0f, 1.0f);
+        patata->AddComponent<Animation>(1.0f, 8.0f, 0.075f);
         patata->AddComponent<Clock>();
         patata->AddComponent<BoxCollider2DComponent>();
 
