@@ -28,8 +28,7 @@ int main(int ac, char **av)
         // asio::ip::udp::endpoint localEndpoint(asio::ip::address::from_string("127.0.0.1"), 8082);
         Exodia::World *world = Exodia::World::CreateWorld();
         Exodia::Network::Network network(world, ioContextManager, 8082);
-        network.startReceiveThread();
-        //network.loop();
+        network.loop();
         // Run the IO context to initiate asynchronous operations
         while (true)
         {
