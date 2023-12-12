@@ -5,10 +5,11 @@
 ** RTypeLayer
 */
 
-#ifndef GAMEENGINE_HPP_
-    #define GAMEENGINE_HPP_
+#ifndef RTYPELAYER_HPP_
+    #define RTYPELAYER_HPP_
 
     #include "Exodia.hpp"
+    #include "R-Type.hpp"
 
 namespace Exodia {
 
@@ -38,9 +39,9 @@ namespace Exodia {
         ////////////////
         private:
 
+            World                       *_World;
             Exodia::OrthographicCameraController _CameraController;
-            glm::vec4 _SquareColor = { 0.2f, 0.3f, 0.8f, 1.0f };
     };
 };
 
-#endif /* !GAMEENGINE_HPP_ */
+#endif /* !RTYPELAYER_HPP_ */
