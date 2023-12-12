@@ -153,7 +153,6 @@ namespace Exodia {
 
             _World->ForEach<TransformComponent, CameraComponent>([&](Entity *entity, auto transform, auto camera) {
                 auto &cc = camera.Get();
-
                 if (cc.Primary) {
                     mainCamera = &cc.Camera;
                     cameraTransform = transform.Get().GetTransform();
@@ -168,6 +167,8 @@ namespace Exodia {
                 RenderScene();
 
                 Renderer2D::EndScene();
+            } else {
+                EXODIA_WARN("No primary camera found!");
             }
         }
     }
@@ -213,6 +214,7 @@ namespace Exodia {
             auto &ic = id.Get();
 
             Renderer2D::DrawSprite(tc.GetTransform(), sc, (int)ic.ID);
+            EXODIA_INFO("SPRITE RENDER");
         });
 
         _World->ForEach<TransformComponent, CircleRendererComponent, IDComponent>([&](Entity *entity, auto transform, auto circle, auto id) {
@@ -221,9 +223,8 @@ namespace Exodia {
             auto &ic = id.Get();
 
             Renderer2D::DrawCircle(tc.GetTransform(), cc.Color, cc.Thickness, cc.Fade, (int)ic.ID);
+            EXODIA_INFO("CIRCLE RENDER");
         });
-
-        // TODO: When text rendering will be implemented (in Renderer2D);
     }
 
     ///////////////////////
@@ -251,7 +252,6 @@ namespace Exodia {
 
         _World->ForEach<CameraComponent>([&](Entity *entity, auto camera) {
             auto &cc = camera.Get();
-
             if (cc.Primary) {
                 primaryCamera = entity;
                 return;

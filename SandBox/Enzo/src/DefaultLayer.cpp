@@ -10,6 +10,7 @@
 #include "Script/Pata-pata.hpp"
 #include "Script/Star.hpp"
 #include "Script/ExampleScript.hpp"
+#include "Script/Camera.hpp"
 #include "ComponentExample.hpp"
 #include "AnimationSystem.hpp"
 
@@ -51,10 +52,25 @@ namespace Exodia {
 
 
         // Create world
-        _World = World::CreateWorld();
+        _World = new Scene();
+        _World->OnRuntimeStart();
         _World->RegisterSystem(new AnimationSystem());
         _World->RegisterSystem(new ScriptSystem());
         _World->RegisterSystem(new MovingSystem(1.5f));
+
+        Entity *camera = _World->CreateEntity("Camera");
+        camera->AddComponent<CameraComponent>();
+        camera->AddComponent<ScriptComponent>().Get().Bind<CameraScript>();
+        camera->AddComponent<TransformComponent>();
+
+        auto body_camera = camera->AddComponent<RigidBody2DComponent>();
+
+        body_camera.Get().Type = RigidBody2DComponent::BodyType::Dynamic;
+        body_camera.Get().Mass = 0.0f;
+        body_camera.Get().GravityScale = 0.0f;
+        body_camera.Get().Velocity = glm::vec2{ 2.0f, 0.0f };
+
+        _World->GetPrimaryCamera();
 
         CollisionSystem *collisionSystem = new CollisionSystem();
         _World->RegisterSystem(collisionSystem);
@@ -129,43 +145,46 @@ namespace Exodia {
         // Update
         _CameraController.OnUpdate(ts);
 
-        _World->Update(ts);
+        _World->OnUpdateRuntime(ts);
 
         // Renderer Prep
-        RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
-        RenderCommand::Clear();
+        // RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
+        // RenderCommand::Clear();
 
-        Renderer2D::BeginScene(_CameraController.GetCamera());
 
-		_World->ForEach<CircleRendererComponent>([&](Entity *entity, ComponentHandle<CircleRendererComponent> circle) {
-            auto transform = entity->GetComponent<TransformComponent>();
-            auto id = entity->GetComponent<IDComponent>();
+        // Renderer2D::BeginScene(_CameraController.GetCamera());
+        // Renderer2D::BeginScene(_World->GetPrimaryCamera().);
 
-            if (transform && id) {
-                Renderer2D::DrawCircle(
-                    transform.Get().GetTransform(), // Transform
-					circle.Get().Color, // CircleRendererComponent
-                    circle.Get().Thickness, // CircleRendererComponent
-                    circle.Get().Fade, // CircleRendererComponent
-                    (int)id.Get().ID                // Entity ID
-                );
-            }
-        });
 
-         _World->ForEach<SpriteRendererComponent>([&](Entity *entity, ComponentHandle<SpriteRendererComponent> sprite) {
-            auto transform = entity->GetComponent<TransformComponent>();
-            auto id = entity->GetComponent<IDComponent>();
+		// _World->ForEach<CircleRendererComponent>([&](Entity *entity, ComponentHandle<CircleRendererComponent> circle) {
+        //     auto transform = entity->GetComponent<TransformComponent>();
+        //     auto id = entity->GetComponent<IDComponent>();
 
-            if (transform && id) {
-                Renderer2D::DrawSprite(
-                    transform.Get().GetTransform(), // Transform
-                    sprite.Get(),                   // SpriteRendererComponent
-                    (int)id.Get().ID                // Entity ID
-                );
-            }
-        });
+        //     if (transform && id) {
+        //         Renderer2D::DrawCircle(
+        //             transform.Get().GetTransform(), // Transform
+		// 			circle.Get().Color, // CircleRendererComponent
+        //             circle.Get().Thickness, // CircleRendererComponent
+        //             circle.Get().Fade, // CircleRendererComponent
+        //             (int)id.Get().ID                // Entity ID
+        //         );
+        //     }
+        // });
 
-        Renderer2D::EndScene();
+        //  _World->ForEach<SpriteRendererComponent>([&](Entity *entity, ComponentHandle<SpriteRendererComponent> sprite) {
+        //     auto transform = entity->GetComponent<TransformComponent>();
+        //     auto id = entity->GetComponent<IDComponent>();
+
+        //     if (transform && id) {
+        //         Renderer2D::DrawSprite(
+        //             transform.Get().GetTransform(), // Transform
+        //             sprite.Get(),                   // SpriteRendererComponent
+        //             (int)id.Get().ID                // Entity ID
+        //         );
+        //     }
+        // });
+
+        // Renderer2D::EndScene();
     }
 
     void DefaultLayer::OnEvent(Event &event)

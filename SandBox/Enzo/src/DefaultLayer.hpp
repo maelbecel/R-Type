@@ -42,7 +42,7 @@ namespace Exodia {
         ////////////////
         private:
             OrthographicCameraController _CameraController;
-            World                       *_World;
+            Scene                       *_World;
             std::unordered_map<std::string, std::function<IComponentContainer *(Buffer)>> _ComponentFactory;
     };
 };
