@@ -11,6 +11,9 @@
     // Exodia UUID includes
     #include "Core/ID/UUID.hpp"
 
+    // Exodia Debug includes
+    #include "Debug/Logs.hpp"
+
     // Exodia ECS includes
     #include "ECS/Interface/Component.hpp"
 
@@ -61,6 +64,18 @@ namespace Exodia {
             }
             out << YAML::EndMap;
         }
+
+        virtual void Deserialize(const YAML::Node &node)
+        {
+            try {
+                auto children = node["ChildrenComponent"];
+
+                for (auto child : children["Children"])
+                    Children.push_back(child.as<uint64_t>());
+            } catch (YAML::BadConversion &e) {
+                EXODIA_CORE_WARN("ChildrenComponent deserialization failed: {0}", e.what());
+            }
+        }
     };
 
     struct ParentComponent : public Component {
@@ -87,6 +102,17 @@ namespace Exodia {
                 out << YAML::Key << "Parent" << YAML::Value << (uint64_t)Parent;
             }
             out << YAML::EndMap;
+        }
+
+        virtual void Deserialize(const YAML::Node &node)
+        {
+            try {
+                auto parent = node["ParentComponent"];
+
+                Parent = parent["Parent"].as<uint64_t>();
+            } catch (YAML::BadConversion &e) {
+                EXODIA_CORE_WARN("ParentComponent deserialization failed: {0}", e.what());
+            }
         }
     };
 };

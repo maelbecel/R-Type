@@ -11,12 +11,10 @@
     // Exodia Core includes
     #include "Core/Buffer/Buffer.hpp"
 
-    // Exodia Utils includes
-    #include "Utils/Memory.hpp"
-
     // External includes
     #include <yaml-cpp/yaml.h>
     #include <string>
+    #include <cstring>
 
 namespace Exodia {
 
@@ -33,10 +31,11 @@ namespace Exodia {
         }
 
         virtual void Serialize(YAML::Emitter &out) = 0;
+        virtual void Deserialize(UNUSED const YAML::Node &node) = 0;
 
         virtual void DeserializeData(Buffer data)
         {
-            Memcpy(this, data.Data, data.Size);
+            Memcopy(this, data.Data, data.Size);
         }
     };
 };

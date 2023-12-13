@@ -16,86 +16,6 @@
 #include <fstream>
 #include <string>
 
-namespace YAML {
-
-    ///////////////
-    // Structure //
-    ///////////////
-
-    template<>
-    struct convert<glm::vec2> {
-        static Node encode(const glm::vec2 &rhs)
-        {
-            Node node;
-
-            node.push_back(rhs.x);
-            node.push_back(rhs.y);
-            node.SetStyle(EmitterStyle::Flow);
-            return node;
-        }
-
-        static bool decode(const Node &node, glm::vec2 &rhs)
-        {
-            if (!node.IsSequence() || node.size() != 2)
-                return false;
-
-            rhs.x = node[0].as<float>();
-            rhs.y = node[1].as<float>();
-            return true;
-        }
-    };
-
-    template<>
-    struct convert<glm::vec3> {
-        static Node encode(const glm::vec3 &rhs)
-        {
-            Node node;
-
-            node.push_back(rhs.x);
-            node.push_back(rhs.y);
-            node.push_back(rhs.z);
-            return node;
-        }
-
-        static bool decode(const Node &node, glm::vec3 &rhs)
-        {
-            if (!node.IsSequence() || node.size() != 3)
-                return false;
-
-            rhs.x = node[0].as<float>();
-            rhs.y = node[1].as<float>();
-            rhs.z = node[2].as<float>();
-            return true;
-        }
-    };
-
-    template<>
-    struct convert<glm::vec4> {
-        static Node encode(const glm::vec4 &rhs)
-        {
-            Node node;
-
-            node.push_back(rhs.x);
-            node.push_back(rhs.y);
-            node.push_back(rhs.z);
-            node.push_back(rhs.w);
-            return node;
-        }
-
-        static bool decode(const Node &node, glm::vec4 &rhs)
-        {
-            if (!node.IsSequence() || node.size() != 4)
-                return false;
-
-            rhs.x = node[0].as<float>();
-            rhs.y = node[1].as<float>();
-            rhs.z = node[2].as<float>();
-            rhs.w = node[3].as<float>();
-            return true;
-        }
-    };
-};
-
 namespace Exodia {
 
 
@@ -134,95 +54,46 @@ namespace Exodia {
 
     void SceneSerializer::Deserialize(const std::filesystem::path &path)
     {
-        YAML::Node data;
-
         try {
-            data = YAML::LoadFile(path);
-        } catch (YAML::ParserException &e) {
-            EXODIA_CORE_ERROR("Failed to load scene file '{0}' !", path.string());
+            YAML::Node data = YAML::LoadFile(path);
 
-            return;
-        }
+            if (!data["Scene"]) {
+                EXODIA_CORE_ERROR("Scene file '{0}' is invalid !", path.string());
+                return;
+            }
 
-        if (!data["Scene"]) {
-            EXODIA_CORE_ERROR("Scene file '{0}' is invalid !", path.string());
-
-            return;
-        }
-    
-        try {
             std::string sceneName = data["Scene"].as<std::string>();
 
             EXODIA_CORE_INFO("Deserializing scene '{0}'...", sceneName);
 
             _Scene->SetName(sceneName);
-        } catch (YAML::BadConversion &e) {
-            EXODIA_CORE_ERROR("Scene file '{0}' is invalid !", path.string());
 
-            return;
-        }
-
-        if (!data["Entities"])
-            return;
-
-        auto entities = data["Entities"];
-
-        for (auto entity : entities) {
-            if (!entity["Entity"])
-                continue;
-            uint64_t uuid = 0;
-
-            try {
-                uuid = entity["Entity"].as<uint64_t>();
-            } catch (YAML::BadConversion &e) {
-                EXODIA_CORE_ERROR("Entity has no ID !");
-
-                continue;
-            }
-
-            Entity *newEntity = _Scene->CreateEntityWithUUID(uuid);
-
-            if (!newEntity)
+            if (!data["Entities"])
                 return;
 
-            for (auto component : entity) {
-                if (component["IDComponent"])
-                    continue;
-                else if (component["TransformComponent"]) {
-                    try {
-                        auto transform = component["TransformComponent"];
-                        auto &tc       = newEntity->GetComponent<TransformComponent>().Get();
+            auto entities = data["Entities"];
 
-                        tc.Translation = transform["Translation"].as<glm::vec3>();
-                        tc.Rotation    = transform["Rotation"].as<glm::vec3>();
-                        tc.Scale       = transform["Scale"].as<glm::vec3>();
-                    } catch (YAML::BadConversion &e) {
-                        EXODIA_CORE_ERROR("Transform component has invalid data !");
+            if (entities) {
+                for (YAML::detail::iterator_value entity : entities) {
+                    Entity *newEntity = _Scene->CreateEntityWithUUID(entity["Entity"].as<uint64_t>());
 
-                        continue;
+                    if (!newEntity)
+                        return;
+
+                    for (YAML::detail::iterator_value component : entity) {
+                        std::string componentType = component.first.as<std::string>();
+
+                        if (componentType == "Entity" || componentType == "IDComponent")
+                            continue;
+
+                        DeserializeComponent(componentType, entity, newEntity);
                     }
                 }
-
-
-
-
-
-
-                // -- TODO: Implement the user Factory for deserialization -- //
-                /*std::string componentType;
-
-                try {
-                    componentType = component.first.as<std::string>();
-                } catch (YAML::BadConversion &e) {
-                    EXODIA_CORE_ERROR("Component has no type !");
-
-                    continue;
-                }
-                if (componentType == "Entity")
-                    continue;
-
-                DeserializeComponent(newEntity, componentType, component.second);*/
             }
+        } catch (const YAML::BadConversion& e) {
+            EXODIA_CORE_ERROR("Failed to deserialize scene file '{0}':\n\t{1}", path.string(), e.what());
+        } catch (const YAML::Exception& e) {
+            EXODIA_CORE_ERROR("Failed to deserialize scene file '{0}':\n\t{1}", path.string(), e.what());
         }
     }
 
@@ -239,11 +110,23 @@ namespace Exodia {
         out << YAML::EndMap;
     }
 
-    void SceneSerializer::DeserializeComponent(Entity *entity, std::string componentType, YAML::Node &componentData)
+    void SceneSerializer::DeserializeComponent(const std::string &componentType, const YAML::Node &componentNode, Entity *entity)
     {
-        (void)entity;
-        (void)componentType;
-        (void)componentData;
-        // TODO: Implement DeserializeComponent
+        try {
+            std::function<IComponentContainer *(Buffer)> func = Project::GetActive()->GetComponentFactory(componentType);
+
+            if (!func) {
+                EXODIA_CORE_WARN("Component '{0}' is not registered !", componentType);
+
+                return;
+            }
+
+            IComponentContainer *container = func(Buffer());
+
+            container->Deserialize(componentNode);
+            entity->AddComponent(container);
+        } catch (const YAML::BadConversion &e) {
+            EXODIA_CORE_ERROR("Error deserializing component '{0}': {1}", componentType, e.what());
+        }
     }
 };

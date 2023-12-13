@@ -11,6 +11,9 @@
     // Exodia Scene includes
     #include "Scene/Camera/SceneCamera.hpp"
 
+    // Exodia Debug includes
+    #include "Debug/Logs.hpp"
+
     // Exodia ECS includes
     #include "ECS/Interface/Component.hpp"
 
@@ -56,6 +59,34 @@ namespace Exodia {
                 out << YAML::Key << "FixedAspectRatio"  << YAML::Value << FixedAspectRatio;
             }
             out << YAML::EndMap;
+        }
+
+        virtual void Deserialize(const YAML::Node &node)
+        {
+            try {
+                auto camera = node["CameraComponent"];
+
+                Primary          = camera["Primary"].as<bool>();
+                FixedAspectRatio = camera["FixedAspectRatio"].as<bool>();
+
+                auto cameraProps = camera["Camera"];
+
+                if (!cameraProps) {
+                    EXODIA_CORE_WARN("CameraComponent has invalid data !");
+
+                    return;
+                }
+
+                Camera.SetProjectionType((SceneCamera::ProjectionType)cameraProps["ProjectionType"].as<int>());
+                Camera.SetPerspectiveVerticalFOV(cameraProps["PerspectiveFOV"].as<float>());
+                Camera.SetPerspectiveNearClip(cameraProps["PerspectiveNear"].as<float>());
+                Camera.SetPerspectiveFarClip(cameraProps["PerspectiveFar"].as<float>());
+                Camera.SetOrthographicSize(cameraProps["OrthographicSize"].as<float>());
+                Camera.SetOrthographicNearClip(cameraProps["OrthographicNear"].as<float>());
+                Camera.SetOrthographicFarClip(cameraProps["OrthographicFar"].as<float>());
+            } catch (YAML::BadConversion &e) {
+                EXODIA_CORE_WARN("CameraComponent deserialization failed: {0}", e.what());
+            }
         }
     };
 };

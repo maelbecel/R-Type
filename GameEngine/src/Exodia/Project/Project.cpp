@@ -40,6 +40,10 @@ namespace Exodia {
             return new ComponentContainer<CameraComponent>(data);
         });
 
+        RegisterComponent("RigidBody2DComponent", [](Buffer data) -> IComponentContainer * {
+            return new ComponentContainer<RigidBody2DComponent>(data);
+        });
+
         RegisterComponent("BoxCollider2DComponent", [](Buffer data) -> IComponentContainer * {
             return new ComponentContainer<BoxCollider2DComponent>(data);
         });

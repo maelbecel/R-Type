@@ -11,6 +11,9 @@
     // Exodia Script includes
     #include "Script/ScriptableEntity.hpp"
 
+    // Exodia Debug includes
+    #include "Debug/Logs.hpp"
+
     // Exodia ECS includes
     #include "ECS/Interface/Component.hpp"
 
@@ -55,6 +58,15 @@ namespace Exodia {
                 // TODO: Serialize script
             }
             out << YAML::EndMap;
+        }
+
+        virtual void Deserialize(UNUSED const YAML::Node &node)
+        {
+            try {
+                // TODO: Deserialize script
+            } catch (YAML::BadConversion &e) {
+                EXODIA_CORE_WARN("ScriptComponent deserialization failed: {0}", e.what());
+            }
         }
     };
 };

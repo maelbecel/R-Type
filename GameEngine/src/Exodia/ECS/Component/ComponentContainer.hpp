@@ -68,6 +68,11 @@ namespace Exodia {
             {
                 Data.Serialize(out);
             }
+
+            virtual void Deserialize(const YAML::Node &node)
+            {
+                Data.Deserialize(node);
+            }
     };
 };
 

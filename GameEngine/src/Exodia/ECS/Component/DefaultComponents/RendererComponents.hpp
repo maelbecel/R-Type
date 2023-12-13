@@ -14,6 +14,9 @@
     // Exodia ECS includes
     #include "ECS/Interface/Component.hpp"
 
+    // Exodia Debug includes
+    #include "Debug/Logs.hpp"
+
     // External include
     #include <glm/glm.hpp>
 
@@ -71,20 +74,27 @@ namespace Exodia {
             out << YAML::EndMap;
         }
 
-        virtual void DeserializeData(Buffer data) override
+        virtual void Deserialize(const YAML::Node &node)
         {
-            if (data.Size != sizeof(SpriteRendererComponent))
-                return;
-            SpriteRendererComponent component;
+            try {
+                auto sprite = node["SpriteRendererComponent"];
 
-            Memcpy(&component, data.Data, data.Size);
+                Color = glm::vec4(sprite["Color"][0].as<float>(), sprite["Color"][1].as<float>(), sprite["Color"][2].as<float>(), sprite["Color"][3].as<float>());
 
-            Color        = component.Color;
-            Texture      = nullptr;
-            TilingFactor = component.TilingFactor;
+                TilingFactor = sprite["TilingFactor"].as<float>();
 
-            if (component.Texture)
-                Texture = CreateRef<SubTexture2D>(*component.Texture);
+                if (sprite["AssetHandle"] && sprite["Coords"] && sprite["CellSize"] && sprite["SpriteSize"]) {
+                    glm::vec2 coords        = glm::vec2(sprite["Coords"][0].as<float>(), sprite["Coords"][1].as<float>());
+                    glm::vec2 cellSize      = glm::vec2(sprite["CellSize"][0].as<float>(), sprite["CellSize"][1].as<float>());
+                    glm::vec2 spriteSize    = glm::vec2(sprite["SpriteSize"][0].as<float>(), sprite["SpriteSize"][1].as<float>());
+
+                    AssetHandle assetHandle = sprite["AssetHandle"].as<uint64_t>();
+
+                    Texture = CreateRef<SubTexture2D>(assetHandle, coords, cellSize, spriteSize);
+                }
+            } catch (YAML::BadConversion &e) {
+                EXODIA_CORE_WARN("SpriteRendererComponent has invalid data !");
+            }
         }
     };
 
@@ -119,6 +129,20 @@ namespace Exodia {
                 out << YAML::Key << "Fade"      << YAML::Value << Fade;
             }
             out << YAML::EndMap;
+        }
+
+        virtual void Deserialize(const YAML::Node &node)
+        {
+            try {
+                auto circle = node["CircleRendererComponent"];
+
+                Color = glm::vec4(circle["Color"][0].as<float>(), circle["Color"][1].as<float>(), circle["Color"][2].as<float>(), circle["Color"][3].as<float>());
+
+                Thickness = circle["Thickness"].as<float>();
+                Fade      = circle["Fade"].as<float>();
+            } catch (YAML::BadConversion &e) {
+                EXODIA_CORE_WARN("CircleRendererComponent deserialization failed: {0}", e.what());
+            }
         }
     };
 

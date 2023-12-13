@@ -14,6 +14,9 @@
     // Exodia ECS includes
     #include "ECS/Interface/Component.hpp"
 
+    // Exodia Debug includes
+    #include "Debug/Logs.hpp"
+
     // External includes
     #include <glm/glm.hpp>
 
@@ -69,7 +72,7 @@ namespace Exodia {
             out << YAML::Key << "RigidBody2DComponent";
             out << YAML::BeginMap;
             {
-                out << YAML::Key << "Type"         << YAML::Value << BodyTypeToString(Type);
+                out << YAML::Key << "BodyType"     << YAML::Value << BodyTypeToString(Type);
                 out << YAML::Key << "Velocity"     << YAML::Value << YAML::Flow;
                 {
                     out << YAML::BeginSeq << Velocity.x << Velocity.y << YAML::EndSeq;
@@ -78,6 +81,22 @@ namespace Exodia {
                 out << YAML::Key << "Mass"         << YAML::Value << Mass;
             }
             out << YAML::EndMap;
+        }
+
+        virtual void Deserialize(const YAML::Node &node)
+        {
+            try {
+                auto rigidBody = node["RigidBody2DComponent"];
+
+                Type         = StringToBodyType(rigidBody["BodyType"].as<std::string>());
+
+                Velocity     = glm::vec2(rigidBody["Velocity"][0].as<float>(), rigidBody["Velocity"][1].as<float>());
+
+                GravityScale = rigidBody["GravityScale"].as<float>();
+                Mass         = rigidBody["Mass"].as<float>();
+            } catch (YAML::BadConversion &e) {
+                EXODIA_CORE_WARN("RigidBody2DComponent deserialization failed: {0}", e.what());
+            }
         }
     };
 };

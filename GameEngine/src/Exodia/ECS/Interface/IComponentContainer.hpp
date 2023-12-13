@@ -34,7 +34,10 @@ namespace Exodia {
         /////////////
         public:
             virtual TypeIndex GetTypeIndexOfComponent() = 0;
+
             virtual void Serialize(YAML::Emitter &out) = 0;
+            virtual void Deserialize(const YAML::Node &node) = 0;
+
             virtual void Destroy(World *world) = 0;
             virtual void Removed(Entity *entity) = 0;
     };

@@ -11,6 +11,9 @@
     // Exodia ECS includes
     #include "ECS/Interface/Component.hpp"
 
+    // Exodia Debug includes
+    #include "Debug/Logs.hpp"
+
 namespace Exodia {
 
     struct TagComponent : public Component {
@@ -37,6 +40,17 @@ namespace Exodia {
                 out << YAML::Key << "Tag" << YAML::Value << Tag;
             }
             out << YAML::EndMap;
+        }
+
+        virtual void Deserialize(const YAML::Node &node)
+        {
+            try {
+                auto tag = node["TagComponent"];
+
+                Tag = tag["Tag"].as<std::string>();
+            } catch (const YAML::Exception &e) {
+                EXODIA_CORE_WARN("TagComponent deserialization failed: {0}", e.what());
+            }
         }
     };
 };

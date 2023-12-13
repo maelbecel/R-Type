@@ -11,6 +11,9 @@
     // Exodia ECS includes
     #include "ECS/Interface/Component.hpp"
 
+    // Exodia Debug includes
+    #include "Debug/Logs.hpp"
+
     // GLM includes
     #include <glm/glm.hpp>
     #include <glm/gtc/matrix_transform.hpp>
@@ -65,6 +68,19 @@ namespace Exodia {
                 }
             }
             out << YAML::EndMap;
+        }
+
+        virtual void Deserialize(const YAML::Node &node)
+        {
+            try {
+                auto transform = node["TransformComponent"];
+
+                Translation = glm::vec3(transform["Translation"][0].as<float>(), transform["Translation"][1].as<float>(), transform["Translation"][2].as<float>());
+                Rotation    = glm::vec3(transform["Rotation"][0].as<float>()   , transform["Rotation"][1].as<float>()   , transform["Rotation"][2].as<float>());
+                Scale       = glm::vec3(transform["Scale"][0].as<float>()      , transform["Scale"][1].as<float>()      , transform["Scale"][2].as<float>());
+            } catch (YAML::BadConversion &e) {
+                EXODIA_CORE_WARN("TransformComponent deserialization failed: {0}", e.what());
+            }
         }
     };
 };

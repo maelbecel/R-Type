@@ -11,6 +11,9 @@
     // Exodia ECS includes
     #include "ECS/Interface/Component.hpp"
 
+    // Exodia Debug includes
+    #include "Debug/Logs.hpp"
+
     // External includes
     #include <glm/glm.hpp>
 
@@ -51,6 +54,20 @@ namespace Exodia {
             }
             out << YAML::EndMap;
         }
+
+        virtual void Deserialize(const YAML::Node &node)
+        {
+            try {
+                auto box = node["BoxCollider2DComponent"];
+
+                Offset = glm::vec2(box["Offset"][0].as<float>(), box["Offset"][1].as<float>());
+                Size   = glm::vec2(box["Size"][0].as<float>()  , box["Size"][1].as<float>());
+
+                ColliderMask = box["Mask"].as<uint32_t>();
+            } catch (YAML::BadConversion &e) {
+                EXODIA_CORE_WARN("BoxCollider2DComponent deserialization failed: {0}", e.what());
+            }
+        }
     };
 
     struct CircleCollider2DComponent : public Component {
@@ -84,6 +101,21 @@ namespace Exodia {
                 out << YAML::Key << "Mask"   << YAML::Value << ColliderMask;
             }
             out << YAML::EndMap;
+        }
+
+        virtual void Deserialize(const YAML::Node &node)
+        {
+            try {
+                auto circle = node["CircleCollider2DComponent"];
+
+                Offset = glm::vec2(circle["Offset"][0].as<float>(), circle["Offset"][1].as<float>());
+
+                Radius = circle["Radius"].as<float>();
+
+                ColliderMask = circle["Mask"].as<uint32_t>();
+            } catch (YAML::BadConversion &e) {
+                EXODIA_CORE_WARN("CircleCollider2DComponent deserialization failed: {0}", e.what());
+            }
         }
     };
 };
