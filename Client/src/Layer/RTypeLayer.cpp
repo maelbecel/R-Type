@@ -39,11 +39,6 @@ namespace Exodia {
         entity->GetComponent<Exodia::TransformComponent>()->Translation = glm::vec3(1, 2, 3);
         entity->GetComponent<Exodia::TransformComponent>()->Rotation = glm::vec3(4, 5, 6);
 
-        //print type index of the component
-        // type_names[std::type_index(typeid(Exodia::TransformComponent))]
-        std::cout << "here" << std::type_index(typeid(Exodia::TransformComponent)).name() << std::endl;
-        // entity->GetComponent<Exodia::Component::TransformComponent>()->setPosition(glm::vec3(0, 0, 0));
-
         network.sendEntity(entity, "TransformComponent");
 
         // Exodia::Network::IOContextManager ioContextManager;
@@ -71,7 +66,6 @@ namespace Exodia {
         // packet.setContent(buffer);
 
         // serverSocket.send(packet.getBuffer(), 1468, serverEndpoint);
-        // Run the IO context to initiate asynchronous operations
         ioContextManager.run();
     }
 
