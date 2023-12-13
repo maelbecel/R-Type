@@ -13,8 +13,12 @@
 
 namespace Exodia {
 
-    class DefaultLayer : public Layer {
+    enum SceneType {
+        GAME,
+        MENU
+    };
 
+    class DefaultLayer : public Layer {
         //////////////////////////////
         // Constructor & Destructor //
         //////////////////////////////
@@ -40,9 +44,11 @@ namespace Exodia {
         ////////////////
         // Attributes //
         ////////////////
+        public:
+            inline static SceneType _currentScene;
+            inline static std::map<SceneType, std::shared_ptr<Exodia::Scene>> _World;
         private:
-            OrthographicCameraController                    _CameraController;
-            std::shared_ptr<Exodia::Scene>                  _World;
+            OrthographicCameraController                        _CameraController;
             std::unordered_map<std::string, std::function<IComponentContainer *(Buffer)>> _ComponentFactory;
     };
 };
