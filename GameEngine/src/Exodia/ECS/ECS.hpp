@@ -70,7 +70,7 @@ namespace Exodia {
     {
         using ComponentAllocator = std::allocator_traits<World::EntityAllocator>::template rebind_alloc<ComponentContainer<Component>>;
 
-        auto found = _Components.find(GetTypeIndex<Component>());
+        auto found = _Components.find(GetTypeIndex<Component>().name());
 
         if (found != _Components.end()) {
             ComponentContainer<Component> *container = reinterpret_cast<ComponentContainer<Component> *>(found->second);
@@ -89,7 +89,7 @@ namespace Exodia {
 
             std::allocator_traits<ComponentAllocator>::construct(allocator, container, Component(args ...));
 
-            _Components.insert({ GetTypeIndex<Component>(), container });
+            _Components.insert({ GetTypeIndex<Component>().name(), container });
 
             auto handle = ComponentHandle<Component>(&container->Data);
             
@@ -102,7 +102,7 @@ namespace Exodia {
     template<typename Component>
     ComponentHandle<Component> Entity::GetComponent()
     {
-        auto found = _Components.find(GetTypeIndex<Component>());
+        auto found = _Components.find(GetTypeIndex<Component>().name());
 
         EXODIA_ASSERT(found != _Components.end(), "Component not found in _Components map");
         EXODIA_ASSERT(found->second != nullptr  , "ComponentContainer is nullptr");
