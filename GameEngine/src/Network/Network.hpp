@@ -15,6 +15,12 @@
     #include <vector>
     #include <chrono>
 
+    // GLM includes
+    #include <glm/glm.hpp>
+    #include <glm/gtc/matrix_transform.hpp>
+    #define GLM_ENABLE_EXPERIMENTAL
+        #include <glm/gtx/quaternion.hpp>
+
 namespace Exodia {
 
     namespace Network {
@@ -57,17 +63,16 @@ namespace Exodia {
                 }
 
                 void sendPacketInfo() {
-                    float time = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-                    Exodia::Network::Header header(0x00, time, 1, 2);
+                    Exodia::Network::Header header(0x00, 1, 2);
                     Exodia::Network::Packet packet;
                     std::vector<char> buffer(2 * sizeof(int));
                     int packet_received = 0;
                     int packet_sent = 0;
 
-                    std::memcpy(buffer.data(), &packet_received, sizeof(int));
-                    std::memcpy(buffer.data() + sizeof(int), &packet_sent, sizeof(int));
-                    packet.setHeader(header);
-                    packet.setContent(buffer);
+                    size_t offset = 0;
+                    offset = fill_data(buffer, offset, &packet_received, sizeof(int));
+                    offset = fill_data(buffer, offset, &packet_sent, sizeof(int));
+                    packet.set(header, buffer);
                     _socket.send(packet.getBuffer(), packet.get_size(), _remote_endpoint[0]);
                 }
 
@@ -81,39 +86,79 @@ namespace Exodia {
                     std::cout << "Packet received: " << packet_received << " Packet sent: " << packet_sent << std::endl;
                 }
 
-                void sendEntity() {
-                    float time = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-                    Exodia::Network::Header header(0x0c, time, 1, 2);
+                size_t fill_data(std::vector<char> &buffer, size_t offset, void *data, size_t size) {
+                    std::memcpy(buffer.data() + offset, data, size);
+                    return offset + size;
+                }
+
+                void sendEntity(Entity *entity, std::string component_name) {
+                    Exodia::Network::Header header(0x0c, 1, 2);
                     Exodia::Network::Packet packet;
                     std::vector<char> buffer(1468, 0);
 
-                    std::string component = "Test";
-                    unsigned int size_of_string = component.size();
-                    unsigned long id = 1;
+                    IComponentContainer *container = entity->GetComponent(component_name);
+                    Buffer data = container->SerializeData();
+                    unsigned int size_of_string = component_name.size();
+                    unsigned long entity_id = entity->GetEntityID();
 
-                    std::memcpy(buffer.data(), &id, sizeof(unsigned long));
-                    std::memcpy(buffer.data() + sizeof(unsigned long), &size_of_string, sizeof(unsigned int));
-                    std::memcpy(buffer.data() + sizeof(unsigned int) + sizeof(unsigned long), component.c_str(), component.size());
+                    size_t size_of_data = data.Size;
+                    size_t offset = 0;
+                    offset = fill_data(buffer, offset, &entity_id, sizeof(unsigned long));      // Set if of entity
+                    offset = fill_data(buffer, offset, &size_of_string, sizeof(unsigned int));  // Set size of name
+                    offset = fill_data(buffer, offset, component_name.data(), component_name.size());// Set name
+                    offset = fill_data(buffer, offset, &size_of_data, sizeof(uint32_t));        // Set size of data
+                    offset = fill_data(buffer, offset, data.Data, size_of_data);                // Set data
 
-                    packet.setHeader(header);
-                    packet.setContent(buffer);
-                    std::vector<char> test = packet.getBuffer();
-                    for (int i = 0; i < 30; i++)
-                        std::cout << test[i] << std::endl;
+                    packet.set(header, buffer);
                     _socket.send(packet.getBuffer(), packet.get_size(), _remote_endpoint[0]);
                 }
-                void createEntity(const std::vector<char> message, size_t size) {
+
+                void sendAck() {
+                    Exodia::Network::Header header(0x01, 1, 2);
+                    Exodia::Network::Packet packet;
+                    std::vector<char> buffer(sizeof(uint64_t));
+                    uint64_t command_id;
+
+                    size_t offset = 0;
+                    offset = fill_data(buffer, offset, &command_id, sizeof(uint64_t));
+                    packet.set(header, buffer);
+                    _socket.send(packet.getBuffer(), packet.get_size(), _remote_endpoint[0]);
+                }
+
+                void receiveAck(const std::vector<char> message, size_t size) {
+                    (void) size;
+                    uint64_t command_id = 0;
+                    std::vector<char> buffer(sizeof(uint64_t));
+                    std::memcpy(&command_id, message.data(), sizeof(uint64_t));
+                    std::cout << "Command id: " << command_id << std::endl;
+                }
+
+                void receiveEntity(const std::vector<char> message, size_t size) {
                     (void) size;
                     unsigned long id = 0;
                     unsigned int size_of_string = 0;
+                    std::string component_name;
+                    uint32_t size_of_data = 0;
 
                     std::memcpy(&id, message.data(), sizeof(unsigned long));
                     std::memcpy(&size_of_string, message.data() + sizeof(unsigned long), sizeof(unsigned int));
-                    std::string component(size_of_string, 0);
-                    std::memcpy(component.data(), message.data() + sizeof(unsigned long) + sizeof(unsigned int), size_of_string);
+                    component_name.resize(size_of_string, 0);
+                    std::memcpy(component_name.data(), message.data() + sizeof(unsigned long) + sizeof(unsigned int), size_of_string);
+                    std::memcpy(&size_of_data, message.data() + sizeof(unsigned long) + sizeof(unsigned int) + size_of_string, sizeof(uint32_t));
+                    std::vector<char> data(size_of_data, 0);
+                    std::memcpy(data.data(), message.data() + sizeof(unsigned long) + sizeof(unsigned int) + size_of_string + sizeof(uint32_t), size_of_data);
 
-                    std::cout << "Id: " << id << " Size of string: " << size_of_string << " Component: " << component << std::endl;
-                    // _world->CreateNewEntity
+                    Entity *entity = _world->CreateEntity(id);
+
+                    std::function<Exodia::IComponentContainer *(Exodia::Buffer)> func = Project::GetActive()->GetComponentFactory(component_name);
+                    if (!func) {
+                        std::string error = "Network::createEntity() - component " + component_name + " not found !";
+                        EXODIA_CORE_ERROR(error);
+                        return;
+                    }
+                    Exodia::Buffer buffer(data.data(), size_of_data);
+                    IComponentContainer *container = func(buffer);
+                    entity->AddComponent(container);
                 }
 
                 void splitter(const std::vector<char> message, size_t size) {
@@ -124,12 +169,9 @@ namespace Exodia {
                     std::vector<char> content(message.begin() + int(Header::get_size()), message.end());
 
                     std::unordered_map<char, std::function<void(const std::vector<char>, size_t)>> commands;
-                    commands[0x00] = std::bind(&Network::receivePacketInfo, this, std::placeholders::_1, std::placeholders::_2);
-                    commands[0x01] = std::bind(&Network::receivePacketInfo, this, std::placeholders::_1, std::placeholders::_2);
-                    commands[0x0c] = std::bind(&Network::createEntity, this, std::placeholders::_1, std::placeholders::_2);
-
-
-
+                    commands[0x00] = std::bind(&Network::receivePacketInfo, this, std::placeholders::_1, std::placeholders::_2); // Packet info for loss calculation
+                    commands[0x01] = std::bind(&Network::receiveAck, this, std::placeholders::_1, std::placeholders::_2); //
+                    commands[0x0c] = std::bind(&Network::receiveEntity, this, std::placeholders::_1, std::placeholders::_2);
                     commands[header.getCommand()](content, header.getSize());
                 }
 

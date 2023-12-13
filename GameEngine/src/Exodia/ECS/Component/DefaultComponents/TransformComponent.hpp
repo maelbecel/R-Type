@@ -66,6 +66,11 @@ namespace Exodia {
             }
             out << YAML::EndMap;
         }
+
+        virtual Buffer SerializeData()
+        {
+            return Buffer(this, sizeof(*this));
+        }
     };
 };
 

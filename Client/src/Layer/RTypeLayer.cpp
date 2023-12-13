@@ -34,7 +34,12 @@ namespace Exodia {
         Exodia::World *world = Exodia::World::CreateWorld();
         Exodia::Network::Network network(world, ioContextManager, 8083);
         network.connect("0.0.0.0", 8082);
-        network.sendEntity();
+        Exodia::Entity *entity = world->CreateEntity();
+        entity->AddComponent<Exodia::TransformComponent>();
+        entity->GetComponent<Exodia::TransformComponent>()->Translation = glm::vec3(1, 2, 3);
+        entity->GetComponent<Exodia::TransformComponent>()->Rotation = glm::vec3(4, 5, 6);
+
+        network.sendEntity(entity, "TransformComponent");
 
         // Exodia::Network::IOContextManager ioContextManager;
 
@@ -61,7 +66,6 @@ namespace Exodia {
         // packet.setContent(buffer);
 
         // serverSocket.send(packet.getBuffer(), 1468, serverEndpoint);
-        // Run the IO context to initiate asynchronous operations
         ioContextManager.run();
     }
 

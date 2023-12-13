@@ -14,7 +14,7 @@ namespace Exodia {
     namespace Network {
         class Packet {
             public:
-                Packet() : _header(0, 0, 0, 0), _content(std::vector<char>()) {};
+                Packet() : _header(0, 0, 0), _content(std::vector<char>()) {};
 
 
                 ~Packet() = default;
@@ -25,6 +25,12 @@ namespace Exodia {
 
                 void setContent(std::vector<char> content) {
                     _content = content;
+                }
+
+                void set(Header header, std::vector<char> content) {
+                    _header = header;
+                    _content = content;
+                    _header.setSize(_content.size());
                 }
 
                 std::vector<char> getBuffer() const {
