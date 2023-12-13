@@ -88,11 +88,12 @@ class UDPSocket {
                         // Ensure correct sizing of receivedMessage
                         std::vector<char> receivedMessage(bytes_received);
 
+                        asio::ip::udp::endpoint senderEndpoint = getSenderEndpoint();
                         // Use std::memcpy to copy the received data
                         std::memcpy(receivedMessage.data(), _receiveBuffer.data(), bytes_received);
 
                         // Call the callback with the received data
-                        callback(receivedMessage, bytes_received);
+                        callback(receivedMessage, bytes_received, senderEndpoint);
 
                         // Call receive again to listen for more messages
                         receive(callback);
