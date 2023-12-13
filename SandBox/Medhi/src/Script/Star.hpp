@@ -66,7 +66,7 @@ namespace Exodia {
                     cc.Color.a = getIntensity();
                 }
 
-				if (transform.Get().Translation.x <  camera.Get().Translation.x - 10) {
+				if (transform.Get().Translation.x <  camera.Get().Translation.x - 12) {
 				    transform.Get().Translation.x = (10 + random() % 10) + camera.Get().Translation.x;
 					transform.Get().Translation.y = 5 - random() % 10;
 				}
