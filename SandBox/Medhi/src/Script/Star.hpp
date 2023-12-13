@@ -30,8 +30,8 @@ namespace Exodia {
             {
                 auto camera = HandleEntity->GetWorld()->GetEntityByTag("Camera")->GetComponent<TransformComponent>();
 
-                float max_height = 10.0f;
-                int height = 20;
+                float max_height = 20.0f;
+                int height = 40;
 
                 _size = 0.01f + static_cast<float>(random() % 8) / 100.0f;
                 _intensity = random() % 255 + 1;
@@ -66,7 +66,7 @@ namespace Exodia {
                     cc.Color.a = getIntensity();
                 }
 
-				if (transform.Get().Translation.x < -10) {
+				if (transform.Get().Translation.x <  camera.Get().Translation.x - 10) {
 				    transform.Get().Translation.x = (10 + random() % 10) + camera.Get().Translation.x;
 					transform.Get().Translation.y = 5 - random() % 10;
 				}

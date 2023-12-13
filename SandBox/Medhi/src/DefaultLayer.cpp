@@ -72,7 +72,7 @@ namespace Exodia {
         body_camera.Get().Type = RigidBody2DComponent::BodyType::Dynamic;
         body_camera.Get().Mass = 0.0f;
         body_camera.Get().GravityScale = 0.0f;
-        body_camera.Get().Velocity = glm::vec2{ 2.0f, 0.0f };
+        body_camera.Get().Velocity = glm::vec2{ 1.5f, 0.0f };
 
 
 
@@ -113,11 +113,15 @@ namespace Exodia {
         background->GetComponent<TransformComponent>().Get().Scale.x = 100.0f;
         background->GetComponent<TransformComponent>().Get().Translation.z = -0.5f;
 
-        std::cout << background->GetComponent<TransformComponent>().Get().Translation.z << std::endl;
+        auto body_bg = background->AddComponent<RigidBody2DComponent>();
+        body_bg.Get().Type = RigidBody2DComponent::BodyType::Dynamic;
+        body_bg.Get().Mass = 0.0f;
+        body_bg.Get().GravityScale = 0.0f;
+        body_bg.Get().Velocity = glm::vec2{ 1.5f, 0.0f };
 
 
         // Create stars
-		for(int i = 0; i < 100; i++) {
+		for(int i = 0; i < 60; i++) {
             Entity *star = _World->CreateEntity("Star" + std::to_string(i));
 
             star->AddComponent<ScriptComponent>().Get().Bind<Star>();
@@ -131,7 +135,7 @@ namespace Exodia {
             body.Get().Type = RigidBody2DComponent::BodyType::Dynamic;
             body.Get().Mass = 0.0f;
             body.Get().GravityScale = 0.0f;
-            body.Get().Velocity.x = (random() % 8 + 1) * -1;
+            body.Get().Velocity.x = (random() % 10 + 1) * -1;
         }
 
 
@@ -154,6 +158,29 @@ namespace Exodia {
         // Renderer Prep
         RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
         RenderCommand::Clear();
+
+        auto pata = _World->GetEntityByName("Pata-pata");
+        if (pata == nullptr) {
+            Entity *patata = _World->CreateEntity("Pata-pata");
+
+            auto sprite = patata->AddComponent<SpriteRendererComponent>();
+            patata->AddComponent<Health>(1);
+            patata->AddComponent<ScriptComponent>().Get().Bind<PataPata>();
+            patata->AddComponent<Animation>(1.0f, 8.0f, 0.075f);
+            patata->AddComponent<Clock>();
+            patata->AddComponent<BoxCollider2DComponent>();
+
+            auto body_patata = patata->AddComponent<RigidBody2DComponent>();
+
+            body_patata.Get().Type = RigidBody2DComponent::BodyType::Dynamic;
+            body_patata.Get().Mass = 0.0f;
+            body_patata.Get().GravityScale = 0.0f;
+            body_patata.Get().Velocity.x = -2.0f;
+            // Set entity sprite
+            Ref<Texture2D> texture = TextureImporter::LoadTexture2D("Assets/Textures/Pata-Pata.png");
+            sprite.Get().Texture = SubTexture2D::CreateFromCoords(texture, { 0.0f, 0.0f }, { 33.3125f, 36.0f }, { 1.0f, 1.0f });
+
+        }
 
         _World->OnUpdateRuntime(ts);
 
