@@ -54,12 +54,21 @@ namespace Exodia {
                     _remote_endpoint.push_back(asio::ip::udp::endpoint(asio::ip::address::from_string(ip), port));
                 }
 
+                void askConnect() {
+                    Exodia::Network::Header header(0x81, 1, 2);
+                    Exodia::Network::Packet packet;
+                    std::vector<char> buffer(0);
+
+                    packet.set(header, buffer);
+                    _socket.send(packet.getBuffer(), packet.get_size(), _remote_endpoint[0]);
+                }
+
                 /**
                  * @brief Run the network
                  *
                  */
                 void loop() {
-                    _socket.receive(std::bind(&Network::splitter, this, std::placeholders::_1, std::placeholders::_2));
+                    _socket.receive(std::bind(&Network::splitter, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
                 }
 
                 void sendPacketInfo() {
@@ -76,8 +85,10 @@ namespace Exodia {
                     _socket.send(packet.getBuffer(), packet.get_size(), _remote_endpoint[0]);
                 }
 
-                void receivePacketInfo(const std::vector<char> message, size_t size) {
+                void receivePacketInfo(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint) {
                     (void) size;
+                    (void) senderEndpoint;
+
                     int packet_received = 0;
                     int packet_sent = 0;
 
@@ -103,11 +114,11 @@ namespace Exodia {
 
                     size_t size_of_data = data.Size;
                     size_t offset = 0;
-                    offset = fill_data(buffer, offset, &entity_id, sizeof(unsigned long));      // Set if of entity
-                    offset = fill_data(buffer, offset, &size_of_string, sizeof(unsigned int));  // Set size of name
+                    offset = fill_data(buffer, offset, &entity_id, sizeof(unsigned long));           // Set if of entity
+                    offset = fill_data(buffer, offset, &size_of_string, sizeof(unsigned int));       // Set size of name
                     offset = fill_data(buffer, offset, component_name.data(), component_name.size());// Set name
-                    offset = fill_data(buffer, offset, &size_of_data, sizeof(uint32_t));        // Set size of data
-                    offset = fill_data(buffer, offset, data.Data, size_of_data);                // Set data
+                    offset = fill_data(buffer, offset, &size_of_data, sizeof(uint32_t));             // Set size of data
+                    offset = fill_data(buffer, offset, data.Data, size_of_data);                     // Set data
 
                     packet.set(header, buffer);
                     _socket.send(packet.getBuffer(), packet.get_size(), _remote_endpoint[0]);
@@ -125,16 +136,20 @@ namespace Exodia {
                     _socket.send(packet.getBuffer(), packet.get_size(), _remote_endpoint[0]);
                 }
 
-                void receiveAck(const std::vector<char> message, size_t size) {
+                void receiveAck(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint) {
                     (void) size;
+                    (void) senderEndpoint;
+
                     uint64_t command_id = 0;
                     std::vector<char> buffer(sizeof(uint64_t));
                     std::memcpy(&command_id, message.data(), sizeof(uint64_t));
                     std::cout << "Command id: " << command_id << std::endl;
                 }
 
-                void receiveEntity(const std::vector<char> message, size_t size) {
+                void receiveEntity(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint) {
                     (void) size;
+                    (void) senderEndpoint;
+
                     unsigned long id = 0;
                     unsigned int size_of_string = 0;
                     std::string component_name;
@@ -161,18 +176,33 @@ namespace Exodia {
                     entity->AddComponent(container);
                 }
 
-                void splitter(const std::vector<char> message, size_t size) {
+                void receiveConnect(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint) {
+                    (void) size;
+                    (void) message;
+                    auto find = std::find(_remote_endpoint.begin(), _remote_endpoint.end(), senderEndpoint);
+                    if (find == _remote_endpoint.end())
+                        _remote_endpoint.push_back(senderEndpoint);
+                    std::cout << "Receive connect" << std::endl;
+
+                    for (auto &endpoint : _remote_endpoint) {
+                        std::cout << endpoint.address().to_string() << ":" << endpoint.port() << std::endl;
+                    }
+                }
+
+                void splitter(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint) {
                     (void) size;
                     Header header = Header::fillHeader(message.data());
                     std::cout << "Command: " << int(header.getCommand()) << " Timestamp: " << header.getTimestamp() << " Id: " << header.getId() << " Size: " << header.getSize() << std::endl;
 
                     std::vector<char> content(message.begin() + int(Header::get_size()), message.end());
 
-                    std::unordered_map<char, std::function<void(const std::vector<char>, size_t)>> commands;
-                    commands[0x00] = std::bind(&Network::receivePacketInfo, this, std::placeholders::_1, std::placeholders::_2); // Packet info for loss calculation
-                    commands[0x01] = std::bind(&Network::receiveAck, this, std::placeholders::_1, std::placeholders::_2); //
-                    commands[0x0c] = std::bind(&Network::receiveEntity, this, std::placeholders::_1, std::placeholders::_2);
-                    commands[header.getCommand()](content, header.getSize());
+                    std::unordered_map<char, std::function<void(const std::vector<char>, size_t, asio::ip::udp::endpoint senderEndpoint)>> commands;
+                    commands[0x00] = std::bind(&Network::receivePacketInfo, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3); // Packet info for loss calculation
+                    commands[0x01] = std::bind(&Network::receiveAck, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);        // Packet Acknowledgement
+                    commands[0x02] = std::bind(&Network::receiveEntity, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);     // Accept client connection
+                    commands[0x81] = std::bind(&Network::receiveConnect, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);        // Ask for connection
+                    commands[0x0c] = std::bind(&Network::receiveEntity, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);     // Send one component of an entity
+                    commands[header.getCommand()](content, header.getSize(), senderEndpoint);
                 }
 
                 void startIOContextThread() {

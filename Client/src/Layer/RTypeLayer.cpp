@@ -34,38 +34,14 @@ namespace Exodia {
         Exodia::World *world = Exodia::World::CreateWorld();
         Exodia::Network::Network network(world, ioContextManager, 8083);
         network.connect("0.0.0.0", 8082);
-        Exodia::Entity *entity = world->CreateEntity();
-        entity->AddComponent<Exodia::TransformComponent>();
-        entity->GetComponent<Exodia::TransformComponent>()->Translation = glm::vec3(1, 2, 3);
-        entity->GetComponent<Exodia::TransformComponent>()->Rotation = glm::vec3(4, 5, 6);
+        network.askConnect();
 
-        network.sendEntity(entity, "TransformComponent");
+        // Exodia::Entity *entity = world->CreateEntity();
+        // entity->AddComponent<Exodia::TransformComponent>();
+        // entity->GetComponent<Exodia::TransformComponent>()->Translation = glm::vec3(1, 2, 3);
+        // entity->GetComponent<Exodia::TransformComponent>()->Rotation = glm::vec3(4, 5, 6);
 
-        // Exodia::Network::IOContextManager ioContextManager;
-
-        // // Define a local endpoint to listen on
-        // asio::ip::udp::endpoint localEndpoint(asio::ip::address::from_string("127.0.0.1"), 8083);
-        // asio::ip::udp::endpoint serverEndpoint(asio::ip::address::from_string("127.0.0.1"), 8082);
-
-        // // Create a UDPSocket object for the server
-        // Exodia::Network::UDPSocket serverSocket(ioContextManager, localEndpoint);
-
-        // // serverSocket.receive(my_callback);
-        // Exodia::Network::Header header(0x0c, 1, 2, 2);
-        // Exodia::Network::Packet packet;
-
-        // std::cout << "Header" << header << std::endl;
-        // packet.setHeader(header);
-
-        // std::vector<char> buffer(1468, 1);
-        // int packet_received = 8;
-        // int packet_sent = 12;
-        // std::memcpy(buffer.data(), &packet_received, sizeof(int));
-        // std::memcpy(buffer.data() + sizeof(int), &packet_sent, sizeof(int));
-
-        // packet.setContent(buffer);
-
-        // serverSocket.send(packet.getBuffer(), 1468, serverEndpoint);
+        // network.sendEntity(entity, "TransformComponent");
         ioContextManager.run();
     }
 
