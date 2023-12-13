@@ -62,6 +62,10 @@ namespace Exodia {
             }
             // TODO: If the user have no project create one and ask for a path and a name
         }
+
+        _PlayButton  = TextureImporter::LoadTexture2D("./Assets/Icons/ToolBar/PlayButton.png");
+        _StopButton  = TextureImporter::LoadTexture2D("./Assets/Icons/ToolBar/StopButton.png");
+        _PauseButton = TextureImporter::LoadTexture2D("./Assets/Icons/ToolBar/PauseButton.png");
     }
 
     void EditorLayer::OnDetach()
@@ -186,6 +190,10 @@ namespace Exodia {
             ImGui::EndMenuBar();
         }
 
+            // -- Tool Bar -----------------------------------------------------
+
+        ToolBarRendering();
+
             // -- Scene Hierarchy ----------------------------------------------
 
         _SceneHierarchy.OnImGuiRender();
@@ -287,6 +295,9 @@ namespace Exodia {
     void EditorLayer::NewScene()
     {
         _ActiveScene     = CreateRef<Scene>();
+
+        _EditorScene     = _ActiveScene;
+
         _EditorScenePath = std::filesystem::path();
 
         _SceneHierarchy.SetContext(_ActiveScene);
@@ -326,6 +337,16 @@ namespace Exodia {
         _EditorScenePath = path;
     }
 
+    void EditorLayer::OnSceneStart()
+    {
+        _SceneState = SceneState::Play;
+
+        _ActiveScene = Scene::Copy(_EditorScene);
+
+        _ActiveScene->OnRuntimeStart();
+        _SceneHierarchy.SetContext(_ActiveScene);
+    }
+
     void EditorLayer::OnSceneStop()
     {
         if (_SceneState == SceneState::Play)
@@ -334,5 +355,67 @@ namespace Exodia {
         _ActiveScene = _EditorScene;
 
         _SceneHierarchy.SetContext(_ActiveScene);
+    }
+
+    ///////////////////
+    // ImGui Methods //
+    ///////////////////
+
+    void EditorLayer::ToolBarRendering()
+    {
+        ImGui::PushStyleVar  (ImGuiStyleVar_WindowPadding   , ImVec2(0, 2));
+        ImGui::PushStyleVar  (ImGuiStyleVar_ItemInnerSpacing, ImVec2(0, 0));
+        ImGui::PushStyleColor(ImGuiCol_Button               , ImVec4(0, 0, 0, 0));
+
+        auto &colors = ImGui::GetStyle().Colors;
+        const auto &buttonHovered = colors[ImGuiCol_ButtonHovered];
+
+        ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(buttonHovered.x, buttonHovered.y, buttonHovered.z, 0.5f));
+
+        const auto &buttonActive = colors[ImGuiCol_ButtonActive];
+
+        ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(buttonActive.x, buttonActive.y, buttonActive.z, 0.5f));
+        ImGui::Begin("##toolbar", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+
+        bool toolbarEnabled = (bool)_ActiveScene;
+
+        ImVec4 tintColor = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
+
+        if (!toolbarEnabled)
+            tintColor.w = 0.5f;
+
+        float size = ImGui::GetWindowHeight() - 4.0f;
+
+        ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - (size * 0.5f));
+
+        bool hasPlayButton = _SceneState == SceneState::Edit || _SceneState == SceneState::Play;
+        bool hasPauseButton = _SceneState != SceneState::Edit;
+
+        if (hasPlayButton) {
+            Ref<Texture2D> icon = (_SceneState == SceneState::Edit) ? _PlayButton : _StopButton;
+
+            if (ImGui::ImageButton(reinterpret_cast<ImTextureID>(icon->GetRendererID()), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0, ImVec4(0, 0, 0, 0), tintColor) && toolbarEnabled) {
+                if (_SceneState == SceneState::Edit)
+                    OnSceneStart();
+                else if (_SceneState == SceneState::Play)
+                    OnSceneStop();
+            }
+        }
+
+        if (hasPauseButton) {
+            bool isPaused = _ActiveScene->IsPaused();
+
+            ImGui::SameLine();
+            {
+                Ref<Texture2D> icon = _PauseButton;
+
+                if (ImGui::ImageButton(reinterpret_cast<ImTextureID>(icon->GetRendererID()), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0, ImVec4(0, 0, 0, 0), tintColor) && toolbarEnabled)
+                    _ActiveScene->SetPaused(!isPaused);
+            }
+        }
+
+        ImGui::PopStyleVar(2);
+        ImGui::PopStyleColor(3);
+        ImGui::End();
     }
 };

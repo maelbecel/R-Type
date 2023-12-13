@@ -82,7 +82,7 @@ namespace Exodia {
     void Scene::OnRuntimeStart()
     {
         if (_IsRunning)
-            return;
+            OnRuntimeStop();
 
         _IsRunning = true;
 

@@ -125,6 +125,12 @@ AssetRegistry:
   - Handle: 12401337114591583034
     Path: Textures/Baldur.png
     Type: AssetType::Texture2D
-  - Handle: 14964834110432825836
-    Path: test.exodia
-    Type: AssetType::Scene
+  - Handle: 15815285158415
+    Path: Icons/ToolBar/PauseButton.png
+    Type: AssetType::Texture2D
+  - Handle: 65125412326541
+    Path: Icons/ToolBar/PlayButton.png
+    Type: AssetType::Texture2D
+  - Handle: 564512541524152211
+    Path: Icons/ToolBar/StopButton.png
+    Type: AssetType::Texture2D

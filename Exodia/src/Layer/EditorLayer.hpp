@@ -66,7 +66,14 @@ namespace Exodia {
             void OpenScene(AssetHandle handle);
             void SaveScene();
             void SaveSceneAs();
+            void OnSceneStart();
             void OnSceneStop();
+
+        ///////////
+        // ImGui //
+        ///////////
+        private:
+            void ToolBarRendering();
 
         ////////////////
         // Attributes //
@@ -94,6 +101,11 @@ namespace Exodia {
 
             // ImGuizmo
             int _GuizmoType;
+
+            // Icon
+            Ref<Texture2D> _PlayButton;
+            Ref<Texture2D> _PauseButton;
+            Ref<Texture2D> _StopButton;
     };
 };
 
