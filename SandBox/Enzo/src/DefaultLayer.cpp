@@ -52,25 +52,31 @@ namespace Exodia {
 
 
         // Create world
-        _World = new Scene();
-        _World->OnRuntimeStart();
+        _World = CreateRef<Scene>();
+        _World->OnViewportResize(1600, 900);
+
         _World->RegisterSystem(new AnimationSystem());
         _World->RegisterSystem(new ScriptSystem());
         _World->RegisterSystem(new MovingSystem(1.5f));
 
-        Entity *camera = _World->CreateEntity("Camera");
-        camera->AddComponent<CameraComponent>();
-        camera->AddComponent<ScriptComponent>().Get().Bind<CameraScript>();
-        camera->AddComponent<TransformComponent>();
 
-        auto body_camera = camera->AddComponent<RigidBody2DComponent>();
+        // camera->AddComponent<ScriptComponent>().Get().Bind<CameraScript>();
 
+
+
+        Entity *cameraEntity = _World->CreateEntity("Camera");
+        auto &camera = cameraEntity->AddComponent<CameraComponent>().Get();
+        cameraEntity->GetComponent<TransformComponent>().Get().Translation = { 0.0f, 0.0f, 20.0f };
+        camera.Camera.SetProjectionType(SceneCamera::ProjectionType::Perspective);
+        camera.Camera.SetViewportSize(1600, 900);
+
+        auto body_camera = cameraEntity->AddComponent<RigidBody2DComponent>();
         body_camera.Get().Type = RigidBody2DComponent::BodyType::Dynamic;
         body_camera.Get().Mass = 0.0f;
         body_camera.Get().GravityScale = 0.0f;
         body_camera.Get().Velocity = glm::vec2{ 2.0f, 0.0f };
 
-        _World->GetPrimaryCamera();
+
 
         CollisionSystem *collisionSystem = new CollisionSystem();
         _World->RegisterSystem(collisionSystem);
@@ -133,6 +139,7 @@ namespace Exodia {
 
         // Create camera
         _CameraController.SetZoomLevel(5.0f);
+        _World->OnRuntimeStart();
     }
 
     void DefaultLayer::OnDetach()
@@ -145,12 +152,12 @@ namespace Exodia {
         // Update
         _CameraController.OnUpdate(ts);
 
-        _World->OnUpdateRuntime(ts);
 
         // Renderer Prep
-        // RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
-        // RenderCommand::Clear();
+        RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
+        RenderCommand::Clear();
 
+        _World->OnUpdateRuntime(ts);
 
         // Renderer2D::BeginScene(_CameraController.GetCamera());
         // Renderer2D::BeginScene(_World->GetPrimaryCamera().);

@@ -209,21 +209,21 @@ namespace Exodia {
     void Scene::RenderScene()
     {
         _World->ForEach<TransformComponent, SpriteRendererComponent, IDComponent>([&](Entity *entity, auto transform, auto sprite, auto id) {
-            auto &tc = transform.Get();
-            auto &sc = sprite.Get();
-            auto &ic = id.Get();
-
-            Renderer2D::DrawSprite(tc.GetTransform(), sc, (int)ic.ID);
-            EXODIA_INFO("SPRITE RENDER");
+            Renderer2D::DrawSprite(
+                transform.Get().GetTransform(),
+                sprite.Get(),
+                (int)id.Get().ID
+            );
         });
 
         _World->ForEach<TransformComponent, CircleRendererComponent, IDComponent>([&](Entity *entity, auto transform, auto circle, auto id) {
-            auto &tc = transform.Get();
-            auto &cc = circle.Get();
-            auto &ic = id.Get();
-
-            Renderer2D::DrawCircle(tc.GetTransform(), cc.Color, cc.Thickness, cc.Fade, (int)ic.ID);
-            EXODIA_INFO("CIRCLE RENDER");
+            Renderer2D::DrawCircle(
+                transform.Get().GetTransform(),
+                circle.Get().Color,
+                circle.Get().Thickness,
+                circle.Get().Fade,
+                (int)id.Get().ID
+            );
         });
     }
 

@@ -41,8 +41,8 @@ namespace Exodia {
         // Attributes //
         ////////////////
         private:
-            OrthographicCameraController _CameraController;
-            Scene                       *_World;
+            OrthographicCameraController                    _CameraController;
+            std::shared_ptr<Exodia::Scene>                  _World;
             std::unordered_map<std::string, std::function<IComponentContainer *(Buffer)>> _ComponentFactory;
     };
 };

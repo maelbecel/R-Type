@@ -25,15 +25,18 @@ namespace Exodia {
                 auto cam = GetComponent<CameraComponent>();
                 cam.Get().Primary = true;
                 cam.Get().FixedAspectRatio = true;
+                cam.Get().Camera.SetProjectionType(SceneCamera::ProjectionType::Perspective);
             }
 
             void OnUpdate(UNUSED Timestep ts) override
             {
-                // auto velocity = GetComponent<RigidBody2DComponent>();
-                // auto transform = GetComponent<TransformComponent>();
+                auto velocity = GetComponent<RigidBody2DComponent>();
+                auto transform = GetComponent<TransformComponent>();
 
-                // EXODIA_INFO("velocity: {0}", velocity.Get().Velocity.x);
-                // EXODIA_INFO("transform: {0}", transform.Get().Translation.x);
+                if (Input::IsKeyPressed(Key::J)) {
+                    EXODIA_INFO("velocity: {0}", velocity.Get().Velocity.x);
+                    EXODIA_INFO("transform: {0}", transform.Get().Translation.x);
+                }
             }
 
         ////////////////
