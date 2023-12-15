@@ -140,6 +140,7 @@ namespace Exodia {
             ImGui::OpenPopup("AddComponent");
 
         if (ImGui::BeginPopup("AddComponent")) {
+
             /*DisplayAddComponentEntry<CameraComponent>("Camera");
             DisplayAddComponentEntry<SpriteRendererComponent>("Sprite Renderer");
             DisplayAddComponentEntry<CircleRendererComponent>("Circle Renderer");
@@ -151,26 +152,9 @@ namespace Exodia {
             ImGui::EndPopup();
         }
         ImGui::PopItemWidth();
-        // 1. Get all components that currently exist.
-        // 2. Iterate over all components.
-        // 3. If the entity has the component, draw it.
 
-        //for (auto &component : entity->GetAllComponents()) {
-        //    (void)component;
-
-            /*DrawComponent<TransformComponent>("Transform", entity, [](auto &component)
-            {
-                DrawVec3Control("Translation", component.Translation);
-
-                glm::vec3 rotation = glm::degrees(component.Rotation);
-
-                DrawVec3Control("Rotation", rotation);
-
-                component.Rotation = glm::radians(rotation);
-
-                DrawVec3Control("Scale", component.Scale, 1.0f);
-            });*/
-        //}
+        for (auto &component : entity->GetAllComponents())
+            component->OnImGuiRender();
     }
 
     ///////////////////////

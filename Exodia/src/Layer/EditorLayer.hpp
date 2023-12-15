@@ -74,6 +74,7 @@ namespace Exodia {
         ///////////
         private:
             void ToolBarRendering();
+            void OnOverlayRender();
 
         ////////////////
         // Attributes //
@@ -93,6 +94,9 @@ namespace Exodia {
             // Panels
             Scope<ContentBrowser> _ContentBrowser;
             SceneHierarchy        _SceneHierarchy;
+
+            // Entity
+            Entity _HoveredEntity;
 
             // Viewport
             glm::vec2 _ViewportBounds[2];

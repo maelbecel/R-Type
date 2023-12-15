@@ -73,6 +73,11 @@ namespace Exodia {
             {
                 Data.Deserialize(node);
             }
+
+            virtual void OnImGuiRender()
+            {
+                Data.DrawComponent();
+            }
     };
 };
 

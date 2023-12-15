@@ -7,6 +7,7 @@
 
 #include "EditorLayer.hpp"
 #include <imgui.h>
+#include <ImGuizmo.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
@@ -66,6 +67,8 @@ namespace Exodia {
         _PlayButton  = TextureImporter::LoadTexture2D("./Assets/Icons/ToolBar/PlayButton.png");
         _StopButton  = TextureImporter::LoadTexture2D("./Assets/Icons/ToolBar/StopButton.png");
         _PauseButton = TextureImporter::LoadTexture2D("./Assets/Icons/ToolBar/PauseButton.png");
+
+        Renderer2D::SetLineWidth(4.0f);
     }
 
     void EditorLayer::OnDetach()
@@ -112,6 +115,28 @@ namespace Exodia {
             default:
                 break;
         }
+
+         // Get Mouse Position in the Viewport window
+        auto[mx, my] = ImGui::GetMousePos();
+
+        mx -= _ViewportBounds[0].x;
+        my -= _ViewportBounds[0].y;
+
+        glm::vec2 viewportSize = _ViewportBounds[1] - _ViewportBounds[0];
+
+        my = viewportSize.y - my;
+
+        int mouseX = (int)mx;
+        int mouseY = (int)my;
+
+        // If the mouse is in the viewport window
+        if (mouseX >= 0 && mouseY >= 0 && mouseX < (int)viewportSize.x && mouseY < (int)viewportSize.y) {
+            int pixelData = _Framebuffer->ReadPixel(1, mouseX, mouseY);
+
+            _HoveredEntity = (pixelData == -1) ? Entity() : Entity(&_ActiveScene->GetWorld(), (uint64_t)pixelData);
+        }
+
+        OnOverlayRender();
 
         // Unbind the Framebuffer
         _Framebuffer->Unbind();
@@ -242,7 +267,47 @@ namespace Exodia {
         Entity *selectedEntity = _SceneHierarchy.GetSelectedEntity();
 
         if (selectedEntity && selectedEntity->GetEntityID() != Entity::InvalidEntityID && _GuizmoType != -1) {
-            // TODO: Setup ImGuizmo
+            ImGuizmo::SetOrthographic(false);
+            ImGuizmo::SetDrawlist();
+            ImGuizmo::SetRect(_ViewportBounds[0].x, _ViewportBounds[0].y, _ViewportBounds[1].x - _ViewportBounds[0].x, _ViewportBounds[1].y - _ViewportBounds[0].y);
+
+            // -- Editor Camera
+            const glm::mat4 &cameraProjection = _EditorCamera.GetProjection();
+            glm::mat4 cameraView = _EditorCamera.GetViewMatrix();
+
+            // Entity Transform
+            auto transformComponent = selectedEntity->GetComponent<TransformComponent>();
+
+            if (transformComponent) {
+                auto &tc = transformComponent.Get();
+                glm::mat4 transform = tc.GetTransform();
+
+                // Snapping
+                bool snap = Input::IsKeyPressed(Exodia::Key::LEFTCONTROL);
+                float snapValue = 0.5f; // Snap to 0.5m for translation/scale
+
+                // Snap to 45 degrees for rotation
+                if (_GuizmoType == ImGuizmo::OPERATION::ROTATE)
+                    snapValue = 45.0f;
+
+                float snapValues[3] = { snapValue, snapValue, snapValue };
+
+                ImGuizmo::Manipulate(glm::value_ptr(cameraView), glm::value_ptr(cameraProjection), (ImGuizmo::OPERATION)_GuizmoType, ImGuizmo::MODE::LOCAL, glm::value_ptr(transform), nullptr, snap ? snapValues : nullptr);
+
+                if (ImGuizmo::IsUsing()) {
+                    glm::vec3 translation;
+                    glm::vec3 rotation;
+                    glm::vec3 scale;
+
+                    Math::DecomposeTransform(transform, translation, rotation, scale);
+
+                    glm::vec3 deltaRotation = rotation - tc.Rotation;
+
+                    tc.Translation = translation;
+                    tc.Rotation   += deltaRotation;
+                    tc.Scale       = scale;
+                }
+            }
         }
 
         ImGui::End();
@@ -417,5 +482,33 @@ namespace Exodia {
         ImGui::PopStyleVar(2);
         ImGui::PopStyleColor(3);
         ImGui::End();
+    }
+
+    void EditorLayer::OnOverlayRender()
+    {
+        if (_SceneState == SceneState::Play) {
+            Entity *camera = _ActiveScene->GetPrimaryCamera();
+
+            if (!camera)
+                return;
+
+            Renderer2D::BeginScene(camera->GetComponent<CameraComponent>().Get().Camera, camera->GetComponent<TransformComponent>().Get().GetTransform());
+        } else
+            Renderer2D::BeginScene(_EditorCamera);
+
+        // Draw Selected Entity Outline
+        Entity *selectedEntity = _SceneHierarchy.GetSelectedEntity();
+
+        if (selectedEntity) {
+            auto transform = selectedEntity->GetComponent<TransformComponent>();
+
+            if (transform) {
+                auto &transformComponent = transform.Get();
+
+                Renderer2D::DrawRect(transformComponent.GetTransform(), glm::vec4(1.0f, 0.5f, 0.0f, 1.0f));
+            }
+        }
+
+        Renderer2D::EndScene();
     }
 };

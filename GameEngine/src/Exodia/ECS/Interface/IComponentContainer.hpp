@@ -40,6 +40,8 @@ namespace Exodia {
 
             virtual void Destroy(World *world) = 0;
             virtual void Removed(Entity *entity) = 0;
+
+            virtual void OnImGuiRender() = 0;
     };
 };
 

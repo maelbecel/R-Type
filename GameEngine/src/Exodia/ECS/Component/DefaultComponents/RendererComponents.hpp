@@ -78,12 +78,17 @@ namespace Exodia {
 
                 TilingFactor = sprite["TilingFactor"].as<float>();
 
-                if (sprite["AssetHandle"] && sprite["Coords"] && sprite["CellSize"] && sprite["SpriteSize"]) {
-                    glm::vec2 coords        = glm::vec2(sprite["Coords"][0].as<float>(), sprite["Coords"][1].as<float>());
-                    glm::vec2 cellSize      = glm::vec2(sprite["CellSize"][0].as<float>(), sprite["CellSize"][1].as<float>());
-                    glm::vec2 spriteSize    = glm::vec2(sprite["SpriteSize"][0].as<float>(), sprite["SpriteSize"][1].as<float>());
+                auto texture = sprite["Texture"];
 
-                    AssetHandle assetHandle = sprite["AssetHandle"].as<uint64_t>();
+                if (!texture)
+                    return;
+
+                if (texture["AssetHandle"] && texture["Coords"] && texture["CellSize"] && texture["SpriteSize"]) {
+                    glm::vec2 coords        = glm::vec2(texture["Coords"][0].as<float>(), texture["Coords"][1].as<float>());
+                    glm::vec2 cellSize      = glm::vec2(texture["CellSize"][0].as<float>(), texture["CellSize"][1].as<float>());
+                    glm::vec2 spriteSize    = glm::vec2(texture["SpriteSize"][0].as<float>(), texture["SpriteSize"][1].as<float>());
+
+                    AssetHandle assetHandle = texture["AssetHandle"].as<uint64_t>();
 
                     Texture = CreateRef<SubTexture2D>(assetHandle, coords, cellSize, spriteSize);
                 }

@@ -67,6 +67,10 @@
     #include "Utils/Memory.hpp"
     #include "Utils/Assert.hpp"
 
+    // -- Exodia Math ----------------------------------------------------------
+
+    #include "Exodia/Math/Math.hpp"
+
     // -- Exodia Network -------------------------------------------------------
 
     #include "Network/Network.hpp"
