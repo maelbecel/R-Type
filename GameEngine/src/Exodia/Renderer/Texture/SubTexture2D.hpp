@@ -97,7 +97,6 @@ namespace Exodia {
         // Attributes //
         ////////////////
         private:
-            AssetHandle    _AssetHandle;        /*!< The handle of the parent texture. */
             Ref<Texture2D> _Texture;            /*!< The parent texture of the subtexture. */
             glm::vec2      _TextureCoords[4];   /*!< The texture coordinates defining the subtexture's corners. */
             glm::vec2      _Coords;             /*!< The starting coordinates of the subtexture within the texture. */

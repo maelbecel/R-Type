@@ -20,16 +20,6 @@
 namespace Exodia {
 
     struct ScriptComponent : public Component {
-        static std::string GetStaticName()
-        {
-            return "ScriptComponent";
-        }
-
-        std::string GetName() const override
-        {
-            return GetStaticName();
-        }
-
         ScriptableEntity *Instance = nullptr;
 
         ScriptableEntity *(*InstantiateScript)();
@@ -50,7 +40,7 @@ namespace Exodia {
             };
         }
 
-        virtual void Serialize(YAML::Emitter &out)
+        virtual void Serialize(YAML::Emitter &out) override
         {
             out << YAML::Key << "ScriptComponent";
             out << YAML::BeginMap;
@@ -60,7 +50,7 @@ namespace Exodia {
             out << YAML::EndMap;
         }
 
-        virtual void Deserialize(UNUSED const YAML::Node &node)
+        virtual void Deserialize(UNUSED const YAML::Node &node) override
         {
             try {
                 // TODO: Deserialize script
@@ -68,6 +58,8 @@ namespace Exodia {
                 EXODIA_CORE_WARN("ScriptComponent deserialization failed: {0}", e.what());
             }
         }
+
+        //TODO: Draw script in ImGui
     };
 };
 

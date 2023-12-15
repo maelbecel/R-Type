@@ -12,6 +12,9 @@
 #include <imgui.h>
 #include <misc/cpp/imgui_stdlib.h>
 
+// External includes
+#include <cstring>
+
 namespace Exodia {
 
     //////////////////////////////
@@ -117,8 +120,37 @@ namespace Exodia {
         }
     }
 
-    void SceneHierarchy::DrawComponents(UNUSED Entity *entity)
+    void SceneHierarchy::DrawComponents(Entity *entity)
     {
+        if (entity->HasComponent<TagComponent>()) {
+            auto &tag = entity->GetComponent<TagComponent>().Get().Tag;
+            char buffer[256];
+
+            std::memset(buffer, 0, sizeof(buffer));
+            std::strncpy(buffer, tag.c_str(), sizeof(buffer));
+
+            if (ImGui::InputText("Tag", buffer, sizeof(buffer)))
+                tag = std::string(buffer);
+        }
+
+        ImGui::SameLine();
+        ImGui::PushItemWidth(-1);
+
+        if (ImGui::Button("Add Component"))
+            ImGui::OpenPopup("AddComponent");
+
+        if (ImGui::BeginPopup("AddComponent")) {
+            /*DisplayAddComponentEntry<CameraComponent>("Camera");
+            DisplayAddComponentEntry<SpriteRendererComponent>("Sprite Renderer");
+            DisplayAddComponentEntry<CircleRendererComponent>("Circle Renderer");
+            DisplayAddComponentEntry<NativeScriptComponent>("Native Script");
+            DisplayAddComponentEntry<Rigidbody2DComponent>("Rigidbody 2D");
+            DisplayAddComponentEntry<BoxCollider2DComponent>("Box Collider 2D");
+            DisplayAddComponentEntry<CircleCollider2DComponent>("Circle Collider 2D");*/
+
+            ImGui::EndPopup();
+        }
+        ImGui::PopItemWidth();
         // 1. Get all components that currently exist.
         // 2. Iterate over all components.
         // 3. If the entity has the component, draw it.

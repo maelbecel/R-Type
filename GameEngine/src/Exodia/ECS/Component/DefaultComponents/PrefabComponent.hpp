@@ -20,16 +20,6 @@
 namespace Exodia {
 
     struct ChildrenComponent : public Component {
-        static std::string GetStaticName()
-        {
-            return "ChildrenComponent";
-        }
-
-        std::string GetName() const override
-        {
-            return GetStaticName();
-        }
-
         std::vector<UUID> Children;
 
         ChildrenComponent(const ChildrenComponent &) = default;
@@ -50,7 +40,7 @@ namespace Exodia {
             std::find(Children.begin(), Children.end(), child) != Children.end();
         }
 
-        virtual void Serialize(YAML::Emitter &out)
+        virtual void Serialize(YAML::Emitter &out) override
         {
             out << YAML::Key << "ChildrenComponent";
             out << YAML::BeginMap;
@@ -65,7 +55,7 @@ namespace Exodia {
             out << YAML::EndMap;
         }
 
-        virtual void Deserialize(const YAML::Node &node)
+        virtual void Deserialize(const YAML::Node &node) override
         {
             try {
                 auto children = node["ChildrenComponent"];
@@ -76,25 +66,17 @@ namespace Exodia {
                 EXODIA_CORE_WARN("ChildrenComponent deserialization failed: {0}", e.what());
             }
         }
+
+        // TODO: Add a display to the component
     };
 
     struct ParentComponent : public Component {
-        static std::string GetStaticName()
-        {
-            return "ParentComponent";
-        }
-
-        std::string GetName() const override
-        {
-            return GetStaticName();
-        }
-
         UUID Parent;
 
         ParentComponent(const ParentComponent &) = default;
         ParentComponent(const UUID &parent = UUID(0)) : Parent(parent) {};
 
-        virtual void Serialize(YAML::Emitter &out)
+        virtual void Serialize(YAML::Emitter &out) override
         {
             out << YAML::Key << "ParentComponent";
             out << YAML::BeginMap;
@@ -104,7 +86,7 @@ namespace Exodia {
             out << YAML::EndMap;
         }
 
-        virtual void Deserialize(const YAML::Node &node)
+        virtual void Deserialize(const YAML::Node &node) override
         {
             try {
                 auto parent = node["ParentComponent"];
@@ -114,6 +96,8 @@ namespace Exodia {
                 EXODIA_CORE_WARN("ParentComponent deserialization failed: {0}", e.what());
             }
         }
+
+        // TODO: Add a display to the component
     };
 };
 

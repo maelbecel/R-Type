@@ -16,20 +16,14 @@
 
     // External includes
     #include <glm/glm.hpp>
+    #include <glm/gtc/type_ptr.hpp>
+
+    // ImGui includes
+    #include <imgui.h>
 
 namespace Exodia {
 
     struct BoxCollider2DComponent : public Component {
-        static std::string GetStaticName()
-        {
-            return "BoxCollider2DComponent";
-        }
-
-        std::string GetName() const override
-        {
-            return GetStaticName();
-        }
-
         glm::vec2 Offset;
         glm::vec2 Size;
         uint32_t  ColliderMask;
@@ -37,7 +31,7 @@ namespace Exodia {
         BoxCollider2DComponent(const BoxCollider2DComponent &) = default;
         BoxCollider2DComponent() : Offset(glm::vec2(0.0f)), Size(glm::vec2(0.5f)), ColliderMask(0xFFFFFFFF) {};
 
-        virtual void Serialize(YAML::Emitter &out)
+        virtual void Serialize(YAML::Emitter &out) override
         {
             out << YAML::Key << "BoxCollider2DComponent";
             out << YAML::BeginMap;
@@ -55,7 +49,7 @@ namespace Exodia {
             out << YAML::EndMap;
         }
 
-        virtual void Deserialize(const YAML::Node &node)
+        virtual void Deserialize(const YAML::Node &node) override
         {
             try {
                 auto box = node["BoxCollider2DComponent"];
@@ -68,19 +62,17 @@ namespace Exodia {
                 EXODIA_CORE_WARN("BoxCollider2DComponent deserialization failed: {0}", e.what());
             }
         }
+
+        virtual void DrawComponent() override
+        {
+            ImGui::DragFloat2("Offset", glm::value_ptr(Offset));
+            ImGui::DragFloat2("Size"  , glm::value_ptr(Size));
+
+            //TODO: Add display for mask (binary)
+        }
     };
 
     struct CircleCollider2DComponent : public Component {
-        static std::string GetStaticName()
-        {
-            return "CircleCollider2DComponent";
-        }
-
-        std::string GetName() const override
-        {
-            return GetStaticName();
-        }
-
         glm::vec2 Offset;
         float     Radius;
         uint32_t  ColliderMask;
@@ -103,7 +95,7 @@ namespace Exodia {
             out << YAML::EndMap;
         }
 
-        virtual void Deserialize(const YAML::Node &node)
+        virtual void Deserialize(const YAML::Node &node) override
         {
             try {
                 auto circle = node["CircleCollider2DComponent"];
@@ -116,6 +108,14 @@ namespace Exodia {
             } catch (YAML::BadConversion &e) {
                 EXODIA_CORE_WARN("CircleCollider2DComponent deserialization failed: {0}", e.what());
             }
+        }
+
+        virtual void DrawComponent() override
+        {
+            ImGui::DragFloat2("Offset", glm::value_ptr(Offset));
+            ImGui::DragFloat("Radius" , &Radius);
+
+            //TODO: Add display for mask (binary)
         }
     };
 };

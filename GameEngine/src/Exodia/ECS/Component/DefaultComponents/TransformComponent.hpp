@@ -20,19 +20,12 @@
     #define GLM_ENABLE_EXPERIMENTAL
         #include <glm/gtx/quaternion.hpp>
 
+    // Exodia ImGui includes
+    #include "ImGui/ImGuiToolsUI.hpp"
+
 namespace Exodia {
 
     struct TransformComponent : public Component {
-        static std::string GetStaticName()
-        {
-            return "TransformComponent";
-        }
-
-        std::string GetName() const override
-        {
-            return GetStaticName();
-        }
-
         glm::vec3 Translation;
         glm::vec3 Rotation;
         glm::vec3 Scale;
@@ -49,7 +42,7 @@ namespace Exodia {
             return translation * rotation * scale;
         }
 
-        virtual void Serialize(YAML::Emitter &out)
+        virtual void Serialize(YAML::Emitter &out) override
         {
             out << YAML::Key << "TransformComponent";
             out << YAML::BeginMap;
@@ -70,7 +63,7 @@ namespace Exodia {
             out << YAML::EndMap;
         }
 
-        virtual void Deserialize(const YAML::Node &node)
+        virtual void Deserialize(const YAML::Node &node) override
         {
             try {
                 auto transform = node["TransformComponent"];
@@ -81,6 +74,17 @@ namespace Exodia {
             } catch (YAML::BadConversion &e) {
                 EXODIA_CORE_WARN("TransformComponent deserialization failed: {0}", e.what());
             }
+        }
+
+        virtual void DrawComponent() override
+        {
+            glm::vec3 rotation = glm::degrees(Rotation);
+
+            DrawVec3Control("Translation", Translation);
+            DrawVec3Control("Rotation"   , rotation);
+            DrawVec3Control("Scale"      , Scale, 1.0f);
+
+            Rotation = glm::radians(rotation);
         }
     };
 };

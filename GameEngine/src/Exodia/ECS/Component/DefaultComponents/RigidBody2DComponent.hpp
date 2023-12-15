@@ -19,20 +19,14 @@
 
     // External includes
     #include <glm/glm.hpp>
+    #include <glm/gtc/type_ptr.hpp>
+
+    // ImGui includes
+    #include <imgui.h>
 
 namespace Exodia {
 
     struct RigidBody2DComponent : public Component {
-        static std::string GetStaticName()
-        {
-            return "RigidBody2DComponent";
-        }
-
-        std::string GetName() const override
-        {
-            return GetStaticName();
-        }
-
         enum class BodyType {
             Static,
             Dynamic
@@ -67,7 +61,7 @@ namespace Exodia {
         float GravityScale;
         float Mass;
 
-        virtual void Serialize(YAML::Emitter &out)
+        virtual void Serialize(YAML::Emitter &out) override
         {
             out << YAML::Key << "RigidBody2DComponent";
             out << YAML::BeginMap;
@@ -83,7 +77,7 @@ namespace Exodia {
             out << YAML::EndMap;
         }
 
-        virtual void Deserialize(const YAML::Node &node)
+        virtual void Deserialize(const YAML::Node &node) override
         {
             try {
                 auto rigidBody = node["RigidBody2DComponent"];
@@ -97,6 +91,31 @@ namespace Exodia {
             } catch (YAML::BadConversion &e) {
                 EXODIA_CORE_WARN("RigidBody2DComponent deserialization failed: {0}", e.what());
             }
+        }
+
+        virtual void DrawComponent() override
+        {
+            const char *bodyTypeStrings[]     = { "Static", "Dynamic" };
+            const char *currentBodyTypeString = bodyTypeStrings[(int)Type];
+
+            if (ImGui::BeginCombo("Body Type", currentBodyTypeString)) {
+                for (int i = 0; i < 2; i++) {
+                    bool isSelected = currentBodyTypeString == bodyTypeStrings[i];
+
+                    if (ImGui::Selectable(bodyTypeStrings[i], isSelected)) {
+                        currentBodyTypeString = bodyTypeStrings[i];
+
+                        Type = (BodyType)i;
+                    }
+
+                    if (isSelected)
+                        ImGui::SetItemDefaultFocus();
+                }
+                ImGui::EndCombo();
+            }
+            ImGui::DragFloat2("Velocity"    , glm::value_ptr(Velocity));
+            ImGui::DragFloat("Gravity Scale", &GravityScale);
+            ImGui::DragFloat("Mass"         , &Mass);
         }
     };
 };

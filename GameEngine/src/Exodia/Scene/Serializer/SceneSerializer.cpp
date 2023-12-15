@@ -18,7 +18,6 @@
 
 namespace Exodia {
 
-
     //////////////////////////////
     // Constructor & Destructor //
     //////////////////////////////
@@ -37,11 +36,13 @@ namespace Exodia {
         out << YAML::Key << "Scene" << YAML::Value << _Scene->GetName();
         out << YAML::Key << "Entities" << YAML::Value << YAML::BeginSeq;
         {
-            _Scene->GetWorld().ForAll([&](Entity *entity) {
-                if (entity == nullptr || !entity->GetComponent<IDComponent>())
-                    return;
-
-                SerializeEntity(out, entity);
+            _Scene->GetWorld().ForEach<IDComponent>([&](Entity *entity, UNUSED auto id) {
+                out << YAML::BeginMap;
+                out << YAML::Key << "Entity" << YAML::Value << id.Get().ID;
+                {
+                    SerializeEntity(out, entity);
+                }
+                out << YAML::EndMap;
             });
         }
         out << YAML::EndSeq;
@@ -99,15 +100,10 @@ namespace Exodia {
 
     void SceneSerializer::SerializeEntity(YAML::Emitter &out, Entity *entity)
     {
-        out << YAML::BeginMap;
-        out << YAML::Key << "Entity" << YAML::Value << entity->GetComponent<IDComponent>().Get().ID;
-        {
-            for (auto &component : entity->GetAllComponents()) {
-                if (component)
-                    component->Serialize(out);
-            }
+        for (auto &component : entity->GetAllComponents()) {
+            if (component)
+                component->Serialize(out);
         }
-        out << YAML::EndMap;
     }
 
     void SceneSerializer::DeserializeComponent(const std::string &componentType, const YAML::Node &componentNode, Entity *entity)
