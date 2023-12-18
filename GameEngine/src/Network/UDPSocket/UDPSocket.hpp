@@ -64,8 +64,8 @@ class UDPSocket {
          * @param message (Type: std::string &) The message to send
          * @param endpoint (Type: const asio::ip::udp::endpoint &) The endpoint to send the message to
          */
-        void send(const std::string& message, const asio::ip::udp::endpoint& endpoint) {
-            _socket.async_send_to(asio::buffer(message), endpoint,
+        void send(const std::vector<char> message, size_t size, const asio::ip::udp::endpoint& endpoint) {
+            _socket.async_send_to(asio::buffer(message.data(), size), endpoint,
                 [](const asio::error_code& error, std::size_t /*bytes_sent*/) {
                     if (error) {
                         EXODIA_CORE_ERROR("Error sending message: ", error.message());
@@ -78,12 +78,26 @@ class UDPSocket {
          *
          * @param callback (Type: void (*)(const std::string&)) The callback to call when a message is received
          */
-        void receive(void (*callback)(const std::string&)) {
+        template <typename Callback>
+        void receive(Callback callback) {
+            std::cout << "Waiting for message..." << std::endl;
             _socket.async_receive_from(asio::buffer(_receiveBuffer), _senderEndpoint,
                 [this, callback](const asio::error_code& error, std::size_t bytes_received) {
                     if (!error) {
-                        std::string receivedMessage(_receiveBuffer.begin(), _receiveBuffer.begin() + bytes_received);
-                        callback(receivedMessage);
+                        std::cout << "Received " << bytes_received << " bytes" << std::endl;
+
+                        // Ensure correct sizing of receivedMessage
+                        std::vector<char> receivedMessage(bytes_received);
+
+                        asio::ip::udp::endpoint senderEndpoint = getSenderEndpoint();
+                        // Use std::memcpy to copy the received data
+                        std::memcpy(receivedMessage.data(), _receiveBuffer.data(), bytes_received);
+
+                        // Call the callback with the received data
+                        callback(receivedMessage, bytes_received, senderEndpoint);
+
+                        // Call receive again to listen for more messages
+                        receive(callback);
                     } else {
                         EXODIA_CORE_ERROR("Error receiving message: ", error.message());
                     }
