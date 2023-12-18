@@ -25,7 +25,7 @@ namespace Exodia {
         //////////////////////////////
         public:
 
-            virtual ~ScriptableEntity() = default; 
+            virtual ~ScriptableEntity() = default;
 
         /////////////
         // Methods //

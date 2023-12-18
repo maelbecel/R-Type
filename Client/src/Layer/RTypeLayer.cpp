@@ -197,8 +197,7 @@ namespace Exodia {
 
         EXODIA_INFO("pressed {0}", key);
         _World->ForEach<ScriptComponent, TagComponent>([&](UNUSED Entity *entity, ComponentHandle<ScriptComponent> script, auto tag) {
-
-            if (tag.Get().Tag.rfind("Player", 0) && script.Get().Instance != nullptr) {
+            if (tag.Get().Tag.rfind("Player", 0) != std::string::npos && script.Get().Instance != nullptr) {
                 script.Get().Instance->OnKeyPressed(key);
             }
         });
@@ -213,7 +212,7 @@ namespace Exodia {
         EXODIA_INFO("released {0}", key);
        _World->ForEach<ScriptComponent, TagComponent>([&](UNUSED Entity *entity, ComponentHandle<ScriptComponent> script, auto tag) {
 
-            if (tag.Get().Tag.rfind("Player", 0) && script.Get().Instance != nullptr) {
+            if (tag.Get().Tag.rfind("Player", 0) != std::string::npos && script.Get().Instance != nullptr) {
                 script.Get().Instance->OnKeyReleased(key);
             }
         });
