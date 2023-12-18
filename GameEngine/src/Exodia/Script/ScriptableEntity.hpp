@@ -56,6 +56,12 @@ namespace Exodia {
              */
             virtual void OnCollisionEnter(UNUSED Entity *other) {};
 
+            virtual void OnHoveredEnter() {};
+
+            virtual void OnHoveredExit() {};
+
+            virtual void OnClick() {};
+
         ///////////////////////
         // Getters & Setters //
         ///////////////////////

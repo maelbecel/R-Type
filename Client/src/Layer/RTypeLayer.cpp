@@ -71,8 +71,13 @@ namespace Exodia {
         _World->RegisterSystem(new MovingSystem(1.5f));     // Moving system
 
         CollisionSystem *collisionSystem = new CollisionSystem();
+        EventHover      *eventHover      = new EventHover();
+
         _World->RegisterSystem(collisionSystem);
         _World->Subscribe<Events::OnCollisionEntered>(collisionSystem);
+        _World->Subscribe<Events::OnHoveredEnter>(eventHover);
+        _World->Subscribe<Events::OnHoveredExit>(eventHover);
+        _World->Subscribe<Events::OnClick>(eventHover);
 
         // Create the entities
         CreatePlayer(_World);
@@ -92,8 +97,6 @@ namespace Exodia {
     void RTypeLayer::OnUpdate(Exodia::Timestep ts)
     {
         EXODIA_PROFILE_FUNCTION();
-
-        EXODIA_CORE_INFO("FPS: {0}", (float)ts);
 
         // Renderer Prep
         {
@@ -159,8 +162,13 @@ namespace Exodia {
         Entity entity = (pixelData == -1) ? Entity() : Entity(_World, pixelData);
 
         if (entity.GetWorld() != nullptr) {
-            // Current entity hovered
-            // If the entity is hovered send entity hovered
+            if (_LastEntityHovered.GetWorld() == nullptr)
+                _World->Emit<Events::OnHoveredEnter>({ &entity });
+            if (Input::IsMouseButtonPressed(Mouse::BUTTONLEFT))
+                _World->Emit<Events::OnClick>({ &entity });
+        } else {
+            if (_LastEntityHovered.GetWorld() != nullptr)
+                _World->Emit<Events::OnHoveredExit>({ &_LastEntityHovered });
         }
 
         _LastEntityHovered = entity;
