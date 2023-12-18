@@ -13,7 +13,6 @@ namespace Exodia {
     Server::Server(short port): _network(_world, _ioContextManager, port)
     {
         std::cout << "Server is launching !" << std::endl;
-
         _inputThread = std::thread([&] {
             while (this->_running) {
                 if (std::cin.peek() != EOF) {
@@ -101,13 +100,17 @@ namespace Exodia {
 
     void Server::Update()
     {
-        float time = _Timer.Elapsed();
+        try {
+            float time = _Timer.Elapsed();
 
-        Timestep timestep(time - _lastTime);
+            Timestep timestep(time - _lastTime);
 
-        _lastTime = time;
+            _lastTime = time;
 
-        this->_world->Update(timestep);
+            this->_world->Update(timestep);
+        } catch (std::exception &e) {
+            std::cerr << "Unable to update the world: " << e.what() << std::endl;
+        }
     }
 
 

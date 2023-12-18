@@ -28,7 +28,8 @@ namespace Exodia {
                  */
                 Network(World *world, IOContextManager &context,short port) : _world(world), _socket(context, asio::ip::udp::endpoint(asio::ip::address::from_string("0.0.0.0"), port)), _ioContextManager(context)
                 {
-                    startIOContextThread();
+                    loop();
+                    _ioContextManager.run();
                 };
 
                 /**
@@ -37,7 +38,6 @@ namespace Exodia {
                  */
                 ~Network()
                 {
-                    stopIOContextThread();
                 };
 
                 /**
@@ -133,16 +133,6 @@ namespace Exodia {
                     commands[header.getCommand()](content, header.getSize());
                 }
 
-                void startIOContextThread() {
-                    _ioContextThread = std::thread([this]() {
-                        _ioContextManager.run();
-                    });
-                }
-
-                void stopIOContextThread() {
-                    _ioContextThread.join();
-                }
-
                 std::vector<asio::ip::udp::endpoint> getRemoteEndpoint() const {
                     return _remote_endpoint;
                 }
@@ -154,7 +144,6 @@ namespace Exodia {
 
                 // IOContext
                 IOContextManager &_ioContextManager;
-                std::thread _ioContextThread;
 
         }; // class Network
 

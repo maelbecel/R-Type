@@ -41,6 +41,20 @@ namespace Exodia {
     {
         EXODIA_PROFILE_FUNCTION();
 
+        Exodia::Network::IOContextManager ioContextManager;
+
+        // Define a local endpoint to listen on
+        // asio::ip::udp::endpoint localEndpoint(asio::ip::address::from_string("127.0.0.1"), 8082);
+        Exodia::World *world = Exodia::World::CreateWorld();
+        Exodia::Network::Network network(world, ioContextManager, 8083);
+        network.connect("0.0.0.0", 8082);
+
+        while(true) {
+            std::cout << "Send packet info" << std::endl;
+            network.sendPacketInfo();
+            sleep(1);
+        }
+
         ApplicationSpecification spec;
 
         spec.Name = "Application Example";

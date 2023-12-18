@@ -31,6 +31,7 @@
 
     // -- Time -----------------------------------------------------------------
     #include "Exodia/Core/Time/Timestep.hpp"
+    #include "Exodia/Core/Time/Timer.hpp"
 
     // -- ID -------------------------------------------------------------------
     #include "Exodia/Core/ID/UUID.hpp"
