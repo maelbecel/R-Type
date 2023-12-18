@@ -138,7 +138,7 @@ namespace Exodia {
                 _State = State::IDLE;
                 animation.Get().CurrentFrame = 2;
                 animation.Get().MaxFrame = 2;
-                animation.Get().FrameTime = 1.0f;
+                animation.Get().FrameTime = 0.1f;
                 GetComponent<TransformComponent>().Get().Scale.y = 0.5f;
 
                 // Set entity sprite
