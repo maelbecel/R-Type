@@ -49,7 +49,7 @@ namespace Exodia {
 
                             anim.ElapsedTime += ts.GetSeconds();
 
-                            if (anim.ElapsedTime >= 0.1f) {
+                            if (anim.ElapsedTime >= anim.FrameTime) {
 
                                 if (anim.MaxFrame > anim.CurrentFrame) {
                                     anim.CurrentFrame += 1;
@@ -64,7 +64,7 @@ namespace Exodia {
                                 }
 
 
-                                sprite.Get().Texture->SetCoords({ anim.CurrentFrame, 4.0f });
+                                sprite.Get().Texture->SetCoords({ anim.CurrentFrame, sprite.Get().Texture->GetCoords().y });
 
                                 anim.ElapsedTime = 0.0f;
                             }
@@ -101,6 +101,24 @@ namespace Exodia {
                                 anim.CurrentFrame = anim.MaxFrame;
 
                             sprite.Get().Texture->SetCoords({ anim.CurrentFrame, 0.0f });
+
+                            // Réinitialiser le compteur
+                            anim.ElapsedTime = 0.0f;
+                        }
+                    } else if (entity->GetComponent<TagComponent>().Get().Tag.rfind("BE", 0) == 0) {
+                        auto &anim = animation.Get();
+
+                        // Incrémenter le compteur avec le temps écoulé depuis la dernière mise à jour
+                        anim.ElapsedTime += ts.GetSeconds();
+
+                        // Vérifier si 0.5 seconde s'est écoulée
+                        if (anim.ElapsedTime >= anim.FrameTime) {
+                            anim.CurrentFrame += 1;
+
+                            if (anim.CurrentFrame >= anim.MaxFrame)
+                                anim.CurrentFrame = 8;
+
+                            sprite.Get().Texture->SetCoords({ anim.CurrentFrame, 4.0f });
 
                             // Réinitialiser le compteur
                             anim.ElapsedTime = 0.0f;

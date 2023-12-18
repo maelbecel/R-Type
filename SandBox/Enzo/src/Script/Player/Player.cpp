@@ -120,12 +120,12 @@ namespace Exodia {
             GetComponent<TransformComponent>().Get().Scale.y = 1.0f;
 
             animation.Get().CurrentFrame = 0;
-            animation.Get().MaxFrame = 7;
-            animation.Get().FrameTime = 0.095f;
+            animation.Get().MaxFrame = 8;
+            animation.Get().FrameTime = 0.075f;
 
             // Set entity sprite
-            Ref<Texture2D> texture = TextureImporter::LoadTexture2D("Assets/Textures/Simple_Explosion.png");
-            sprite.Get().Texture = SubTexture2D::CreateFromCoords(texture, { 0.0f, 0.0f }, { 32.0f, 34.0f }, { 1.0f, 1.0f });
+            Ref<Texture2D> texture = TextureImporter::LoadTexture2D("Assets/Textures/HUD.png");
+            sprite.Get().Texture = SubTexture2D::CreateFromCoords(texture, { 0.0f, 0.0f }, { 33.2f, 32.0f }, { 1.0f, 1.0f });
             _State = State::DEAD;
         }
         else if (_State == State::DEAD) {

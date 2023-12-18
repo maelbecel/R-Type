@@ -42,12 +42,13 @@ namespace Exodia {
 
                 TransformComponent &bullet_tc = bullet->GetComponent<TransformComponent>().Get();
                 bullet_tc.Translation.x = tc.Translation.x;
-                bullet_tc.Translation.y = tc.Translation.y - 1.0f;
+                bullet_tc.Translation.y = tc.Translation.y;
                 auto sprite = bullet->AddComponent<SpriteRendererComponent>();
                 bullet->AddComponent<ScriptComponent>().Get().Bind<BulletEnnemy>();
-                bullet->AddComponent<Animation>(0.0f, 2.0f, 1.0f);
+                bullet->AddComponent<Animation>(8.0f, 12.0f, 0.0795f);
                 bullet->AddComponent<BoxCollider2DComponent>();
                 bullet->AddComponent<ParentComponent>().Get().Parent = GetComponent<IDComponent>().Get().ID;
+                bullet->GetComponent<TransformComponent>().Get().Scale = { 0.5f, 0.5f, 0.0f };
 
                 auto player = HandleEntity->GetWorld()->GetEntityByTag("Player")->GetComponent<TransformComponent>();
                 auto body_bullet = bullet->AddComponent<RigidBody2DComponent>();
@@ -58,11 +59,8 @@ namespace Exodia {
                 body_bullet.Get().Velocity.x = player.Get().Translation.x - tc.Translation.x;
                 body_bullet.Get().Velocity.y = player.Get().Translation.y - tc.Translation.y;
 
-                Ref<Texture2D> texture = TextureImporter::LoadTexture2D("Assets/Textures/Missile.png");
-                sprite.Get().Texture = SubTexture2D::CreateFromCoords(texture, { 0.0f, 0.0f }, { 17.33f, 14.0f }, { 1.0f, 1.0f });
-
-                // Ref<Texture2D> texture = TextureImporter::LoadTexture2D("Assets/Textures/Explosion.png");
-                // sprite.Get().Texture = SubTexture2D::CreateFromCoords(texture, { 4.0f, 9.0f }, { 16.6666666667f, 17.0f }, { 1.0f, 1.0f });
+                Ref<Texture2D> texture = TextureImporter::LoadTexture2D("Assets/Textures/Explosion.png");
+                sprite.Get().Texture = SubTexture2D::CreateFromCoords(texture, { 8.0f, 4.0f }, { 16.6666666667f, 17.0f }, { 1.0f, 1.0f });
             }
 
             void OnCreate() override
