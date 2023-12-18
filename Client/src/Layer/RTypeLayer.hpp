@@ -40,7 +40,10 @@ namespace Exodia {
         private:
 
             World                       *_World;
-            Exodia::OrthographicCameraController _CameraController;
+            OrthographicCameraController _CameraController;
+            Ref<Framebuffer>             _Framebuffer;
+
+            Entity _LastEntityHovered;
     };
 };
 

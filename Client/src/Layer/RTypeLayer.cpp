@@ -28,7 +28,24 @@ namespace Exodia {
 
         auto commandLine = Application::Get().GetSpecification().CommandLineArgs;
 
-         // Server main
+        if (commandLine.Count > 1) {
+            Application::Get().Close();
+            return;
+        }
+
+        FramebufferSpecification fbSpec;
+
+        fbSpec.Width  = Application::Get().GetWindow().GetWidth();
+        fbSpec.Height = Application::Get().GetWindow().GetHeight();
+        fbSpec.Attachments = {
+            FramebufferTextureFormat::RGBA8,
+            FramebufferTextureFormat::RED_INTEGER,
+            FramebufferTextureFormat::Depth
+        };
+
+        _Framebuffer = Framebuffer::Create(fbSpec);
+
+        // Server main
         Exodia::Network::IOContextManager ioContextManager;
 
         // Define a local endpoint to listen on
@@ -44,12 +61,6 @@ namespace Exodia {
 
         // Run the IO context to initiate asynchronous operations
         ioContextManager.run();
-
-
-        if (commandLine.Count > 1) {
-            Application::Get().Close();
-            return;
-        }
 
         // Create the world
         _World = World::CreateWorld();
@@ -71,7 +82,6 @@ namespace Exodia {
 
         // Create the camera
         _CameraController.SetZoomLevel(5.0f);
-
     }
 
     void RTypeLayer::OnDetach()
@@ -83,18 +93,27 @@ namespace Exodia {
     {
         EXODIA_PROFILE_FUNCTION();
 
+        EXODIA_CORE_INFO("FPS: {0}", (float)ts);
+
+        // Renderer Prep
+        {
+            EXODIA_PROFILE_SCOPE("Renderer Prep");
+
+            // Bind the framebuffer
+            _Framebuffer->Bind();
+
+            Exodia::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
+            Exodia::RenderCommand::Clear();
+
+            // Clear Entity ID attachment to -1
+            _Framebuffer->ClearAttachment(1, -1);
+        }
+
         // Update
         _CameraController.OnUpdate(ts);
 
         // Update the world
         _World->Update(ts);
-
-        // Renderer Prep
-        {
-            EXODIA_PROFILE_SCOPE("Renderer Prep");
-            Exodia::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
-            Exodia::RenderCommand::Clear();
-        }
 
         // Renderer Draw
         {
@@ -129,20 +148,30 @@ namespace Exodia {
                 }
             });
 
-
             Exodia::Renderer2D::EndScene();
         }
+
+        // Get Mouse Position in the Viewport window
+        auto[mouseX, mouseY] = ImGui::GetMousePos();
+
+        int pixelData = _Framebuffer->ReadPixel(1, (int)mouseX, (int)mouseY);
+
+        Entity entity = (pixelData == -1) ? Entity() : Entity(_World, pixelData);
+
+        if (entity.GetWorld() != nullptr) {
+            // Current entity hovered
+            // If the entity is hovered send entity hovered
+        }
+
+        _LastEntityHovered = entity;
+
+        // Unbind the framebuffer
+        _Framebuffer->Unbind();
     }
 
     void RTypeLayer::OnImGUIRender()
     {
         EXODIA_PROFILE_FUNCTION();
-
-        // ImGui::Begin("Settings");
-
-        // ImGui::ColorEdit4("Square Color", glm::value_ptr(_SquareColor));
-
-        // ImGui::End();
     }
 
     void RTypeLayer::OnEvent(Exodia::Event &event)

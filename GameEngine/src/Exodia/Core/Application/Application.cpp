@@ -71,7 +71,7 @@ namespace Exodia {
         while (_Running) {
             EXODIA_PROFILE_SCOPE("RunLoop");
 
-            float time = Time::GetTime();
+            float time = _Timer.Elapsed();
 
             Timestep timestep(time - _LastTime);
 
