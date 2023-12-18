@@ -190,7 +190,6 @@ namespace Exodia::Network {
         Packet packet;
         Header header(0x02, 1, 2);
         packet.setHeader(header);
-        sleep(2);
         std::cout << "Send accept connect" << std::endl;
         connection.sendPacket(_socket, packet);
 
@@ -224,16 +223,5 @@ namespace Exodia::Network {
         commands[0x0c] = std::bind(&Network::receiveEntity, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);     // Send one component of an entity
         commands[header.getCommand()](content, header.getSize(), senderEndpoint);
     }
-
-    void Network::startIOContextThread() {
-        _ioContextThread = std::thread([this]() {
-            std::cout << "Start IOContext thread" << std::endl;
-            _ioContextManager.run();
-            std::cout << "Stop IOContext thread" << std::endl;
-        });
-    }
-
-    void Network::stopIOContextThread() {
-        _ioContextThread.join();
-    }
+ 
 };

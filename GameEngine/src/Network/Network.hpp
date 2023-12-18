@@ -30,7 +30,8 @@ namespace Exodia {
                  */
                 Network(World *world, IOContextManager &context,short port) : _world(world), _socket(context, asio::ip::udp::endpoint(asio::ip::address::from_string("0.0.0.0"), port)), _ioContextManager(context)
                 {
-                    startIOContextThread();
+                    loop();
+                    _ioContextManager.run();
                 };
 
                 /**
@@ -39,8 +40,6 @@ namespace Exodia {
                  */
                 ~Network()
                 {
-                    EXODIA_CORE_WARN("Network destroyed");
-                    stopIOContextThread();
                 };
 
                 /**
@@ -61,8 +60,9 @@ namespace Exodia {
                 void sendAskConnect(const std::string &ip, short port);      // 0x81
                 size_t fill_data(std::vector<char> &buffer, size_t offset, void *data, size_t size);
                 void splitter(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint);
-                void startIOContextThread();
-                void stopIOContextThread();
+                std::unordered_map<std::string, Connection> &getConnections() {
+                    return _connections;
+                }
 
             private:
                 void connect(const std::string &ip, short port) {
@@ -77,7 +77,6 @@ namespace Exodia {
 
                 // IOContext
                 IOContextManager &_ioContextManager;
-                std::thread _ioContextThread;
 
         }; // class Network
 

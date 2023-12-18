@@ -16,7 +16,7 @@ namespace Exodia {
     // Constructor & Destructor //
     //////////////////////////////
 
-    RTypeLayer::RTypeLayer() : Layer("R-Type"), network(world, ioContextManager, 8083), _CameraController(1600.0f / 900.0f)
+    RTypeLayer::RTypeLayer() : Layer("R-Type"), network(_World, ioContextManager, 8083), _CameraController(1600.0f / 900.0f)
     {
 
     };
@@ -34,7 +34,6 @@ namespace Exodia {
         // Define a local endpoint to listen on
         // asio::ip::udp::endpoint localEndpoint(asio::ip::address::from_string("127.0.0.1"), 8082);
         network.loop();
-        sleep(5);
         network.sendAskConnect("0.0.0.0", 8082);
 
 
@@ -62,6 +61,9 @@ namespace Exodia {
         // Update
         _CameraController.OnUpdate(ts);
 
+        // Update the world
+        _World->Update(ts);
+
         // Renderer Prep
         {
             EXODIA_PROFILE_SCOPE("Renderer Prep");
@@ -74,17 +76,34 @@ namespace Exodia {
             EXODIA_PROFILE_SCOPE("Renderer Draw");
             Exodia::Renderer2D::BeginScene(_CameraController.GetCamera());
 
-            Exodia::Renderer2D::DrawRotatedQuad(
-                { -1.0f, 0.0f },            // Position
-                {  0.8f, 0.8f },            // Size
-                glm::radians(-45.0f),       // Rotation
-                { _SquareColor }           // Color
-            );
-            Exodia::Renderer2D::DrawQuad(
-                { 0.5f, -0.5f },           // Position
-                { 0.5f,  0.75f },          // Size
-                { 0.2f, 0.3f, 0.8f, 1.0f } // Color
-            );
+            _World->ForEach<CircleRendererComponent>([&](Entity *entity, ComponentHandle<CircleRendererComponent> circle) {
+                auto transform = entity->GetComponent<TransformComponent>();
+                auto id = entity->GetComponent<IDComponent>();
+
+                if (transform && id) {
+                    Renderer2D::DrawCircle(
+                        transform.Get().GetTransform(), // Transform
+                        circle.Get().Color, // CircleRendererComponent
+                        circle.Get().Thickness, // CircleRendererComponent
+                        circle.Get().Fade, // CircleRendererComponent
+                        (int)id.Get().ID                // Entity ID
+                    );
+                }
+            });
+
+            _World->ForEach<SpriteRendererComponent>([&](Entity *entity, ComponentHandle<SpriteRendererComponent> sprite) {
+                auto transform = entity->GetComponent<TransformComponent>();
+                auto id = entity->GetComponent<IDComponent>();
+
+                if (transform && id) {
+                    Renderer2D::DrawSprite(
+                        transform.Get().GetTransform(), // Transform
+                        sprite.Get(),                   // SpriteRendererComponent
+                        (int)id.Get().ID                // Entity ID
+                    );
+                }
+            });
+
 
             Exodia::Renderer2D::EndScene();
         }
@@ -94,11 +113,11 @@ namespace Exodia {
     {
         EXODIA_PROFILE_FUNCTION();
 
-        ImGui::Begin("Settings");
+        // ImGui::Begin("Settings");
 
-        ImGui::ColorEdit4("Square Color", glm::value_ptr(_SquareColor));
+        // ImGui::ColorEdit4("Square Color", glm::value_ptr(_SquareColor));
 
-        ImGui::End();
+        // ImGui::End();
     }
 
     void RTypeLayer::OnEvent(Exodia::Event &event)
