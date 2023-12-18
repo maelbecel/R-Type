@@ -16,6 +16,7 @@ namespace Exodia {
         public:
             Server(short port);
             ~Server();
+            void handleCommand(const std::string &command);
             void Init();
             void Run();
             void Update();
@@ -35,6 +36,8 @@ namespace Exodia {
             float _lastTime;
 
             bool _running = true;
+
+            std::thread _inputThread;
     };
 }
 

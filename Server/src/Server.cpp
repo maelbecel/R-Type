@@ -13,10 +13,40 @@ namespace Exodia {
     Server::Server(short port): _network(_world, _ioContextManager, port)
     {
         std::cout << "Server is launching !" << std::endl;
+
+        _inputThread = std::thread([&] {
+            while (this->_running) {
+                if (std::cin.peek() != EOF) {
+                    std::string inputCommand;
+                    std::getline(std::cin, inputCommand);
+                    handleCommand(inputCommand);
+                }
+            }
+        });
     }
 
     Server::~Server()
     {
+        std::cout << "Server is closing !" << std::endl;
+        _inputThread.join();
+    }
+
+    void Server::handleCommand(const std::string &command)
+    {
+        std::cout << "Command received: " << command << std::endl;
+        if (command == "stop") {
+            this->_running = false;
+            this->Stop();
+        }
+        if (command == "update") {
+            this->Update();
+        }
+        if (command == "dump") {
+            auto entities = _world->AllEntities();
+            for (auto entity : entities) {
+                std::cout << entity->GetEntityID() << std::endl;
+            }
+        }
     }
 
     void Server::Init()
@@ -50,12 +80,8 @@ namespace Exodia {
         try {
             while(_running) {
                 std::cout << "In server loop" << std::endl;
-                auto entities = _world->AllEntities();
-                for (auto entity : entities) {
-                    std::cout << entity->GetEntityID() << std::endl;
-                }
-                this->Update();
-                sleep(10);
+                //this->Update();
+                sleep(1);
             }
         } catch (std::exception &e) {
             std::cerr << "Exception: " << e.what() << std::endl;
@@ -71,7 +97,7 @@ namespace Exodia {
 
         _lastTime = time;
 
-        this->_world->(timestep);
+        this->_world->Update(timestep);
     }
 
 
