@@ -19,7 +19,7 @@ namespace Exodia {
                 if (std::cin.peek() != EOF) {
                     std::string inputCommand;
                     std::getline(std::cin, inputCommand);
-                    handleCommand(inputCommand);
+                    HandleCommand(inputCommand);
                 }
             }
         });
@@ -31,7 +31,7 @@ namespace Exodia {
         _inputThread.join();
     }
 
-    void Server::handleCommand(const std::string &command)
+    void Server::HandleCommand(const std::string &command)
     {
         std::cout << "Command received: " << command << std::endl;
         if (command == "stop") {
@@ -42,10 +42,21 @@ namespace Exodia {
             this->Update();
         }
         if (command == "dump") {
+            std::cout << "Clients: " << std::endl;
+            if (_network.getRemoteEndpoint().empty())
+                std::cout << "No client connected" << std::endl;
+            else
+                for (auto &client : _network.getRemoteEndpoint()) {
+                    std::cout << client.address().to_string() << ":" << client.port() << std::endl;
+                }
+            std::cout << "Entities: " << std::endl;
             auto entities = _world->AllEntities();
+            std::size_t i = 0;
             for (auto entity : entities) {
-                std::cout << entity->GetEntityID() << std::endl;
+                (void)entity;
+                i++;
             }
+            std::cout << "Total: " << i << std::endl;
         }
     }
 
@@ -79,7 +90,6 @@ namespace Exodia {
         std::cout << "Server is running !" << std::endl;
         try {
             while(_running) {
-                std::cout << "In server loop" << std::endl;
                 //this->Update();
                 sleep(1);
             }

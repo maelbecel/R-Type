@@ -16,7 +16,7 @@ namespace Exodia {
         public:
             Server(short port);
             ~Server();
-            void handleCommand(const std::string &command);
+            void HandleCommand(const std::string &command);
             void Init();
             void Run();
             void Update();
