@@ -44,18 +44,30 @@ namespace Exodia::Network {
         Exodia::Network::Header header(0x00, 1, 2);
         Exodia::Network::Packet packet;
         std::vector<char> buffer(2 * sizeof(int));
-        int packet_received = 0;
-        int packet_sent = 0;
 
-        size_t offset = 0;
-        offset = fill_data(buffer, offset, &packet_received, sizeof(int));
-        offset = fill_data(buffer, offset, &packet_sent, sizeof(int));
         packet.set(header, buffer);
-        if (_connections.size() > 0)
-           for (auto &connection : _connections)
+
+        if (_connections.size() > 0) {
+           for (auto &connection : _connections) {
+                int32_t received = connection.second.getReceivedPacket();
+                int32_t sent = connection.second.getSendPacket();
+
+                size_t offset = 0;
+                offset = fill_data(buffer, offset, &received, sizeof(int));
+                offset = fill_data(buffer, offset, &sent, sizeof(int));
+                packet.set(header, buffer);
                 connection.second.sendPacket(_socket, packet);
-        else
+           }
+        } else {
+            int32_t received = _server_connection.getReceivedPacket();
+            int32_t sent = _server_connection.getSendPacket();
+
+            size_t offset = 0;
+            offset = fill_data(buffer, offset, &received, sizeof(int));
+            offset = fill_data(buffer, offset, &sent, sizeof(int));
+            packet.set(header, buffer);
             _server_connection.sendPacket(_socket, packet);
+        }
     }
 
     /**
@@ -208,6 +220,47 @@ namespace Exodia::Network {
             _server_connection.sendPacket(_socket, packet);
     }
 
+    /**
+     * @brief Send an event
+     *
+     * @param event (Type: u_int32_t) The event to send
+    */
+    void Network::sendEvent(u_int32_t event) {
+        Exodia::Network::Header header(0x82, 1, 2);
+        Exodia::Network::Packet packet;
+        std::vector<char> buffer(sizeof(u_int32_t));
+        size_t offset = 0;
+
+        offset = fill_data(buffer, offset, &event, sizeof(u_int32_t));
+        packet.set(header, buffer);
+        if (_connections.size() > 0)
+           for (auto &connection : _connections)
+                connection.second.sendPacket(_socket, packet);
+        else
+            _server_connection.sendPacket(_socket, packet);
+    }
+
+    /**
+    * @brief Receive an event
+    *
+    * @param message (Type: const std::vector<char>) The message received
+    * @param size (Type: size_t) The size of the message
+    * @param senderEndpoint (Type: asio::ip::udp::endpoint) The endpoint of the sender
+    */
+    void Network::receiveEvent(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint) {
+        (void) size;
+        (void) message;
+        u_int32_t event = 0;
+
+        if (size != sizeof(u_int32_t)) {
+            EXODIA_CORE_ERROR("Network::receiveEvent() - Packet size is not correct !");
+            return;
+        }
+        std::memcpy(&event, message.data(), sizeof(u_int32_t));
+        std::cout << "Event: " << event << std::endl;
+
+    }
+
     void Network::splitter(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint) {
         (void) size;
         Header header = Header::fillHeader(message.data());
@@ -220,8 +273,8 @@ namespace Exodia::Network {
         commands[0x01] = std::bind(&Network::receiveAck, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);        // Packet Acknowledgement
         commands[0x02] = std::bind(&Network::receiveConnectAccept, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);     // Accept client connection
         commands[0x81] = std::bind(&Network::receiveConnect, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);        // Ask for connection
+        commands[0x82] = std::bind(&Network::receiveEvent, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);          // Send an event
         commands[0x0c] = std::bind(&Network::receiveEntity, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);     // Send one component of an entity
         commands[header.getCommand()](content, header.getSize(), senderEndpoint);
     }
- 
 };

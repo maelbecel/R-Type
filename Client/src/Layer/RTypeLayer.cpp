@@ -56,7 +56,7 @@ namespace Exodia {
 
 
         // Ping server
-        //network.sendPacketInfo();
+        network.sendEvent(52);
 
         // Update
         _CameraController.OnUpdate(ts);

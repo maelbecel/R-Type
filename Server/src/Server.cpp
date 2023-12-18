@@ -56,6 +56,9 @@ namespace Exodia {
             }
             std::cout << "Total: " << i << std::endl;
         }
+        if (command == "packet") {
+            _network.sendPacketInfo();
+        }
     }
 
     void Server::Init()
