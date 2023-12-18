@@ -87,13 +87,17 @@ namespace Exodia {
                     return header;
                 }
 
-                static size_t get_size()
+                static size_t GetSize()
                 {
                     return 22;
                 }
 
                 void setSize(unsigned long size) {
                     _size = size;
+                }
+
+                void SetId(unsigned long id) {
+                    _id = id;
                 }
 
                 char getCommand() const { return _command; };

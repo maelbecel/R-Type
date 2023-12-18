@@ -33,16 +33,20 @@ namespace Exodia {
                     _header.setSize(_content.size());
                 }
 
-                std::vector<char> getBuffer() const {
-                    std::vector<char> buffer(Header::get_size() + _content.size());
+                std::vector<char> GetBuffer() const {
+                    std::vector<char> buffer(Header::GetSize() + _content.size());
 
                     _header.fillBuffer(buffer);
-                    std::memcpy(buffer.data() + Header::get_size(), _content.data(), _content.size());
+                    std::memcpy(buffer.data() + Header::GetSize(), _content.data(), _content.size());
                     return buffer;
                 }
 
-                size_t get_size() {
-                    return Header::get_size() + _content.size();
+                Header GetHeader() {
+                    return _header;
+                }
+
+                size_t GetSize() {
+                    return Header::GetSize() + _content.size();
                 }
 
             protected:

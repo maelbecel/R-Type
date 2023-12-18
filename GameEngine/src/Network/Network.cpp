@@ -8,6 +8,14 @@
 #include "Network.hpp"
 
 namespace Exodia::Network {
+
+    /**
+     * @brief send a packet to request connection to the server
+     *
+     * @param ip (Type: const std::string &) The ip of the server
+     * @param port (Type: short) The port of the server
+     * @return void
+    */
     void Network::sendAskConnect(const std::string &ip, short port) {
         connect(ip, port);
         Exodia::Network::Header header(0x81, 1, 2);
@@ -16,7 +24,7 @@ namespace Exodia::Network {
 
         packet.set(header, buffer);
         std::cout << "Send ask connect" << std::endl;
-        _socket.send(packet.getBuffer(), packet.get_size(), _server_connection.getEndpoint());
+        _server_connection.sendPacket(_socket, packet);
     }
 
     /**
@@ -27,6 +35,11 @@ namespace Exodia::Network {
         _socket.receive(std::bind(&Network::splitter, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
     }
 
+    /**
+     * @brief Send number of packet received and sent
+     *
+     * @return void
+    */
     void Network::sendPacketInfo() {
         Exodia::Network::Header header(0x00, 1, 2);
         Exodia::Network::Packet packet;
@@ -45,10 +58,21 @@ namespace Exodia::Network {
             _server_connection.sendPacket(_socket, packet);
     }
 
+    /**
+     * @brief Receive number of packet received and sent
+     *
+     * @param message (Type: const std::vector<char>) The message received
+     * @param size (Type: size_t) The size of the message
+     * @param senderEndpoint (Type: asio::ip::udp::endpoint) The endpoint of the sender
+    */
     void Network::receivePacketInfo(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint) {
-        (void) size;
         (void) senderEndpoint;
 
+
+        if (size != 2 * sizeof(int)) {
+            EXODIA_CORE_ERROR("Network::receivePacketInfo() - Packet size is not correct !");
+            return;
+        }
         int packet_received = 0;
         int packet_sent = 0;
 
@@ -104,6 +128,13 @@ namespace Exodia::Network {
             _server_connection.sendPacket(_socket, packet);
     }
 
+    void Network::receiveConnectAccept(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint) {
+        (void) size;
+        (void) message;
+        (void) senderEndpoint;
+        std::cout << "Receive accept connect" << std::endl;
+    }
+
     void Network::receiveAck(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint) {
         (void) size;
         (void) senderEndpoint;
@@ -153,6 +184,16 @@ namespace Exodia::Network {
             _connections[senderEndpoint.address().to_string() + ":" + std::to_string(senderEndpoint.port())] = Connection(senderEndpoint);
         std::string connect = "Connected to " + senderEndpoint.address().to_string() + ":" + std::to_string(senderEndpoint.port());
         EXODIA_CORE_INFO(connect);
+
+        Connection connection = _connections[senderEndpoint.address().to_string() + ":" + std::to_string(senderEndpoint.port())];
+        connection.AddReceivedPacket();
+        Packet packet;
+        Header header(0x02, 1, 2);
+        packet.setHeader(header);
+        sleep(2);
+        std::cout << "Send accept connect" << std::endl;
+        connection.sendPacket(_socket, packet);
+
     }
 
     void Network::sendAcceptConnect() {
@@ -173,12 +214,12 @@ namespace Exodia::Network {
         Header header = Header::fillHeader(message.data());
         std::cout << "Command: " << int(header.getCommand()) << " Timestamp: " << header.getTimestamp() << " Id: " << header.getId() << " Size: " << header.getSize() << std::endl;
 
-        std::vector<char> content(message.begin() + int(Header::get_size()), message.end());
+        std::vector<char> content(message.begin() + int(Header::GetSize()), message.end());
 
         std::unordered_map<char, std::function<void(const std::vector<char>, size_t, asio::ip::udp::endpoint senderEndpoint)>> commands;
         commands[0x00] = std::bind(&Network::receivePacketInfo, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3); // Packet info for loss calculation
         commands[0x01] = std::bind(&Network::receiveAck, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);        // Packet Acknowledgement
-        commands[0x02] = std::bind(&Network::receiveEntity, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);     // Accept client connection
+        commands[0x02] = std::bind(&Network::receiveConnectAccept, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);     // Accept client connection
         commands[0x81] = std::bind(&Network::receiveConnect, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);        // Ask for connection
         commands[0x0c] = std::bind(&Network::receiveEntity, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);     // Send one component of an entity
         commands[header.getCommand()](content, header.getSize(), senderEndpoint);
@@ -186,7 +227,9 @@ namespace Exodia::Network {
 
     void Network::startIOContextThread() {
         _ioContextThread = std::thread([this]() {
+            std::cout << "Start IOContext thread" << std::endl;
             _ioContextManager.run();
+            std::cout << "Stop IOContext thread" << std::endl;
         });
     }
 

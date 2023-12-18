@@ -16,7 +16,10 @@ namespace Exodia {
     // Constructor & Destructor //
     //////////////////////////////
 
-    RTypeLayer::RTypeLayer() : Layer("R-Type"), _CameraController(1600.0f / 900.0f) {};
+    RTypeLayer::RTypeLayer() : Layer("R-Type"), network(world, ioContextManager, 8083), _CameraController(1600.0f / 900.0f)
+    {
+
+    };
 
     /////////////
     // Methods //
@@ -27,13 +30,13 @@ namespace Exodia {
         EXODIA_PROFILE_FUNCTION();
 
 
-        Exodia::Network::IOContextManager ioContextManager;
 
         // Define a local endpoint to listen on
         // asio::ip::udp::endpoint localEndpoint(asio::ip::address::from_string("127.0.0.1"), 8082);
-        Exodia::World *world = Exodia::World::CreateWorld();
-        Exodia::Network::Network network(world, ioContextManager, 8083);
+        network.loop();
+        sleep(5);
         network.sendAskConnect("0.0.0.0", 8082);
+
 
         // Exodia::Entity *entity = world->CreateEntity();
         // entity->AddComponent<Exodia::TransformComponent>();
@@ -41,7 +44,6 @@ namespace Exodia {
         // entity->GetComponent<Exodia::TransformComponent>()->Rotation = glm::vec3(4, 5, 6);
 
         // network.sendEntity(entity, "TransformComponent");
-        ioContextManager.run();
     }
 
     void RTypeLayer::OnDetach()
@@ -52,6 +54,10 @@ namespace Exodia {
     void RTypeLayer::OnUpdate(Exodia::Timestep ts)
     {
         EXODIA_PROFILE_FUNCTION();
+
+
+        // Ping server
+        //network.sendPacketInfo();
 
         // Update
         _CameraController.OnUpdate(ts);

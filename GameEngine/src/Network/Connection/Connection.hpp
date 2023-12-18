@@ -27,12 +27,20 @@ class Connection {
 
 
         void sendPacket(Exodia::Network::UDPSocket &socket, Exodia::Network::Packet &packet) {
-            socket.send(packet.getBuffer(), packet.get_size(), _endpoint);
+            std::cout << "Send packet to " << _endpoint.address().to_string() << ":" << _endpoint.port() << std::endl;
+            std::cout << "Header: command: " << int(packet.GetHeader().getCommand()) << " id: " << packet.GetHeader().getId() << " size: " << packet.GetHeader().getSize() << std::endl;
+            Exodia::Network::Header header = packet.GetHeader();
+            header.SetId(_send_packet);
+            socket.send(packet.GetBuffer(), packet.GetSize(), _endpoint);
             _send_packet++;
         }
 
         void setSendPacket(int packet) {
             _send_packet = packet;
+        }
+
+        void AddReceivedPacket() {
+            _received_packet++;
         }
 
         void setReceivedPacket(int packet) {

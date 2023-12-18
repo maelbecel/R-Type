@@ -39,6 +39,7 @@ namespace Exodia {
                  */
                 ~Network()
                 {
+                    EXODIA_CORE_WARN("Network destroyed");
                     stopIOContextThread();
                 };
 
@@ -50,6 +51,7 @@ namespace Exodia {
                 void loop();
                 void receivePacketInfo(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint);   // 0x00
                 void receiveAck(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint);          // 0x01
+                void receiveConnectAccept(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint);// 0x02
                 void receiveEntity(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint);       // 0x0c
                 void receiveConnect(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint);      // 0x81
                 void sendPacketInfo();      // 0x00

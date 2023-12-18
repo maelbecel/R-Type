@@ -33,7 +33,7 @@ int main(int ac, char **av)
         while (true)
         {
             std::cout << "Server is Running" << std::endl;
-            sleep(30);
+            sleep(2);
         }
         return 0;
 

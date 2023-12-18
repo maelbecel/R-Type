@@ -80,6 +80,7 @@ class UDPSocket {
          */
         template <typename Callback>
         void receive(Callback callback) {
+            std::cout << "Waiting for message..." << std::endl;
             _socket.async_receive_from(asio::buffer(_receiveBuffer), _senderEndpoint,
                 [this, callback](const asio::error_code& error, std::size_t bytes_received) {
                     if (!error) {
