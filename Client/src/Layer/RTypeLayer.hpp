@@ -33,6 +33,9 @@ namespace Exodia {
             void OnUpdate(Timestep ts) override;
             void OnImGUIRender()       override;
             void OnEvent(Event &event) override;
+            bool OnKeyReleasedEvent(KeyReleasedEvent &event);
+            bool OnKeyPressedEvent(KeyPressedEvent &event);
+
 
         ////////////////
         // Attributes //

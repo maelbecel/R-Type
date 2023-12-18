@@ -51,12 +51,16 @@ namespace Exodia {
 
             /**
              * @brief Called when the handle entity is entered in collision with another entity.
-             * 
+             *
              * @param other The other entity.
              */
             virtual void OnCollisionEnter(UNUSED Entity *other) {};
 
             virtual void OnHoveredEnter() {};
+
+            virtual void OnKeyPressed(UNUSED int keycode) {EXODIA_WARN("OnKeyPressed not implemented");};
+
+            virtual void OnKeyReleased(UNUSED int keycode) {};
 
             virtual void OnHoveredExit() {};
 

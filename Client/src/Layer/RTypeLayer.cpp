@@ -185,5 +185,38 @@ namespace Exodia {
     void RTypeLayer::OnEvent(Exodia::Event &event)
     {
         _CameraController.OnEvent(event);
+        EventDispatcher dispatcher(event);
+        dispatcher.Dispatch<KeyPressedEvent>(BIND_EVENT_FN(RTypeLayer::OnKeyPressedEvent));
+        dispatcher.Dispatch<KeyReleasedEvent>(BIND_EVENT_FN(RTypeLayer::OnKeyReleasedEvent));
+
     }
+
+    bool RTypeLayer::OnKeyPressedEvent(KeyPressedEvent &event) {
+
+        int key = event.GetKeyCode();
+
+        EXODIA_INFO("pressed {0}", key);
+        _World->ForEach<ScriptComponent, TagComponent>([&](UNUSED Entity *entity, ComponentHandle<ScriptComponent> script, auto tag) {
+
+            if (tag.Get().Tag.rfind("Player", 0) && script.Get().Instance != nullptr) {
+                script.Get().Instance->OnKeyPressed(key);
+            }
+        });
+        return true;
+
+    };
+
+    bool RTypeLayer::OnKeyReleasedEvent(KeyReleasedEvent &event) {
+
+        int key = event.GetKeyCode();
+
+        EXODIA_INFO("released {0}", key);
+       _World->ForEach<ScriptComponent, TagComponent>([&](UNUSED Entity *entity, ComponentHandle<ScriptComponent> script, auto tag) {
+
+            if (tag.Get().Tag.rfind("Player", 0) && script.Get().Instance != nullptr) {
+                script.Get().Instance->OnKeyReleased(key);
+            }
+        });
+        return false;
+    };
 };

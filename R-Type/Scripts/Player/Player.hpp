@@ -44,6 +44,10 @@ namespace Exodia {
 
             void OnUpdate(Timestep ts) override;
 
+            void OnKeyPressed(int keycode) override;
+
+            void OnKeyReleased(int keycode) override;
+
             void CreateBullet(Timestep ts, TransformComponent &tc);
 
             void OnCollisionEnter(Entity *entity) override;
@@ -69,6 +73,7 @@ namespace Exodia {
             float _AttackTimer;
             bool _IsAttacking;
             bool _IsCharging;
+            bool _IsShooting = false;
     };
 };
 
