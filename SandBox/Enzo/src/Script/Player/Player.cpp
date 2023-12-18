@@ -35,30 +35,31 @@ namespace Exodia {
     void Player::OnUpdate(Timestep ts) {
         auto transform = GetComponent<TransformComponent>();
         auto velocity = GetComponent<RigidBody2DComponent>();
-        auto camera = HandleEntity->GetWorld()->GetEntityByTag("Camera")->GetComponent<TransformComponent>();
+        auto camera_entity = HandleEntity->GetWorld()->GetEntityByTag("Camera");
         bool block = false;
 
-        if (transform && velocity) {
+        if (transform && velocity && camera_entity && _State != State::DEAD) {
             TransformComponent &tc = transform.Get();
+            TransformComponent &camera = camera_entity->GetComponent<TransformComponent>().Get();
 
-            if (transform.Get().Translation.x < camera.Get().Translation.x - 9.5f) {
+            if (transform.Get().Translation.x < camera.Translation.x - 9.5f) {
                 _State = State::IDLE;
-                transform.Get().Translation.x = camera.Get().Translation.x - 9.5f;
+                transform.Get().Translation.x = camera.Translation.x - 9.5f;
                 block = true;
             }
-            if (transform.Get().Translation.x > camera.Get().Translation.x + 9.5f) {
+            if (transform.Get().Translation.x > camera.Translation.x + 9.5f) {
                 _State = State::IDLE;
-                transform.Get().Translation.x = camera.Get().Translation.x + 9.5f;
+                transform.Get().Translation.x = camera.Translation.x + 9.5f;
                 block = true;
             }
-            if (transform.Get().Translation.y < camera.Get().Translation.y - 5.5f) {
+            if (transform.Get().Translation.y < camera.Translation.y - 5.5f) {
                 _State = State::IDLE;
-                transform.Get().Translation.y = camera.Get().Translation.y - 5.5f;
+                transform.Get().Translation.y = camera.Translation.y - 5.5f;
                 block = true;
             }
-            if (transform.Get().Translation.y > camera.Get().Translation.y + 5.5f) {
+            if (transform.Get().Translation.y > camera.Translation.y + 5.5f) {
                 _State = State::IDLE;
-                transform.Get().Translation.y = camera.Get().Translation.y + 5.5f;
+                transform.Get().Translation.y = camera.Translation.y + 5.5f;
                 block = true;
             }
 
@@ -107,10 +108,52 @@ namespace Exodia {
             if (_IsCharging) {
                 _AttackTimer += ts.GetSeconds();
             }
+
+        }
+        if (_State != State::DEAD && GetComponent<Health>().Get().CurrentHealth == 0) {
+            EXODIA_INFO("Player is dead");
+            velocity.Get().Velocity.x = camera_entity->GetComponent<RigidBody2DComponent>().Get().Velocity.x;
+            velocity.Get().Velocity.y = camera_entity->GetComponent<RigidBody2DComponent>().Get().Velocity.y;
+
+            auto animation = GetComponent<Animation>();
+            auto sprite = GetComponent<SpriteRendererComponent>();
+            GetComponent<TransformComponent>().Get().Scale.y = 1.0f;
+
+            animation.Get().CurrentFrame = 0;
+            animation.Get().MaxFrame = 7;
+            animation.Get().FrameTime = 0.095f;
+
+            // Set entity sprite
+            Ref<Texture2D> texture = TextureImporter::LoadTexture2D("Assets/Textures/Simple_Explosion.png");
+            sprite.Get().Texture = SubTexture2D::CreateFromCoords(texture, { 0.0f, 0.0f }, { 32.0f, 34.0f }, { 1.0f, 1.0f });
+            _State = State::DEAD;
+        }
+        else if (_State == State::DEAD) {
+            auto animation = GetComponent<Animation>();
+            auto sprite = GetComponent<SpriteRendererComponent>();
+
+            if (animation.Get().CurrentFrame == animation.Get().MaxFrame - 1) {
+                EXODIA_INFO("Player is respawn");
+                GetComponent<Health>().Get().CurrentHealth = 1;
+                _State = State::IDLE;
+                animation.Get().CurrentFrame = 2;
+                animation.Get().MaxFrame = 2;
+                animation.Get().FrameTime = 1.0f;
+                GetComponent<TransformComponent>().Get().Scale.y = 0.5f;
+
+                // Set entity sprite
+                Ref<Texture2D> texture = TextureImporter::LoadTexture2D("Assets/Textures/Player.png");
+                sprite.Get().Texture = SubTexture2D::CreateFromCoords(texture, { 2.0f, 4.0f }, { 33.2f, 17.2f }, { 1.0f, 1.0f });
+            }
         }
     };
 
     void Player::OnCollisionEnter(Entity *entity) {
-        EXODIA_INFO("Collision with {0}", entity->GetComponent<TagComponent>().Get().Tag);
+        if (entity->GetComponent<TagComponent>().Get().Tag.rfind("BE", 0) == 0) {
+            EXODIA_INFO("BE {0} hit", entity->GetComponent<TagComponent>().Get().Tag);
+            entity->GetWorld()->DestroyEntity(entity);
+            GetComponent<Health>().Get().CurrentHealth -= 1;
+            EXODIA_INFO("Player health: {0}", GetComponent<Health>().Get().CurrentHealth);
+        }
     };
 }
