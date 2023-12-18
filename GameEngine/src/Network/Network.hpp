@@ -143,6 +143,10 @@ namespace Exodia {
                     _ioContextThread.join();
                 }
 
+                std::vector<asio::ip::udp::endpoint> getRemoteEndpoint() const {
+                    return _remote_endpoint;
+                }
+
             private:
                 World *_world;
                 UDPSocket _socket;
