@@ -35,30 +35,55 @@ namespace Exodia {
     void Player::OnUpdate(Timestep ts) {
         auto transform = GetComponent<TransformComponent>();
         auto velocity = GetComponent<RigidBody2DComponent>();
+        auto camera = HandleEntity->GetWorld()->GetEntityByTag("Camera")->GetComponent<TransformComponent>();
+        bool block = false;
 
         if (transform && velocity) {
             TransformComponent &tc = transform.Get();
 
-            // Move player with keyboard
-            if (Input::IsKeyPressed(Key::A)) {          // Left
+            if (transform.Get().Translation.x < camera.Get().Translation.x - 9.5f) {
                 _State = State::IDLE;
-                velocity.Get().Velocity.x = -5.0f;
-            } else if (Input::IsKeyPressed(Key::D)) {   // Right
-                _State = State::IDLE;
-                velocity.Get().Velocity.x = 5.0f;
-            } else if (Input::IsKeyReleased(Key::A) && Input::IsKeyReleased(Key::D)) { // Idle
-                _State = State::IDLE;
-                velocity.Get().Velocity.x = 0.0f;
+                transform.Get().Translation.x = camera.Get().Translation.x - 9.5f;
+                block = true;
             }
-            if (Input::IsKeyPressed(Key::W)) {          // Up
-                _State = State::MOVE_UP;
-                velocity.Get().Velocity.y = 5.0f;
-            } else if (Input::IsKeyPressed(Key::S)) {   // Down
-                _State = State::MOVE_DOWN;
-                velocity.Get().Velocity.y = -5.0f;
-            } else if (Input::IsKeyReleased(Key::W) && Input::IsKeyReleased(Key::S)) { // Idle
+            if (transform.Get().Translation.x > camera.Get().Translation.x + 9.5f) {
                 _State = State::IDLE;
-                velocity.Get().Velocity.y = 0.0f;
+                transform.Get().Translation.x = camera.Get().Translation.x + 9.5f;
+                block = true;
+            }
+            if (transform.Get().Translation.y < camera.Get().Translation.y - 5.5f) {
+                _State = State::IDLE;
+                transform.Get().Translation.y = camera.Get().Translation.y - 5.5f;
+                block = true;
+            }
+            if (transform.Get().Translation.y > camera.Get().Translation.y + 5.5f) {
+                _State = State::IDLE;
+                transform.Get().Translation.y = camera.Get().Translation.y + 5.5f;
+                block = true;
+            }
+
+            if (!block)
+            {
+                if (Input::IsKeyPressed(Key::A)) {          // Left
+                    _State = State::IDLE;
+                    velocity.Get().Velocity.x = -5.0f;
+                } else if (Input::IsKeyPressed(Key::D)) {   // Right
+                    _State = State::IDLE;
+                    velocity.Get().Velocity.x = 5.0f;
+                } else if (Input::IsKeyReleased(Key::A) && Input::IsKeyReleased(Key::D)) { // Idle
+                    _State = State::IDLE;
+                    velocity.Get().Velocity.x = 0.0f;
+                }
+                if (Input::IsKeyPressed(Key::W)) {          // Up
+                    _State = State::MOVE_UP;
+                    velocity.Get().Velocity.y = 5.0f;
+                } else if (Input::IsKeyPressed(Key::S)) {   // Down
+                    _State = State::MOVE_DOWN;
+                    velocity.Get().Velocity.y = -5.0f;
+                } else if (Input::IsKeyReleased(Key::W) && Input::IsKeyReleased(Key::S)) { // Idle
+                    _State = State::IDLE;
+                    velocity.Get().Velocity.y = 0.0f;
+                }
             }
 
             // Simple attack

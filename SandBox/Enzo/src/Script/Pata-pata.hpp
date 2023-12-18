@@ -36,9 +36,14 @@ namespace Exodia {
 
             void OnCreate() override
             {
-                _State = State::ALIVE;
+                auto transform = GetComponent<TransformComponent>();
+                auto camera = HandleEntity->GetWorld()->GetEntityByTag("Camera")->GetComponent<TransformComponent>();
 
+                _State = State::ALIVE;
                 std::cout << "PataPata created" << std::endl;
+                transform.Get().Translation.x = camera.Get().Translation.x + 20.0f;
+                transform.Get().Translation.y = 0.0f - random() % 5;
+                EXODIA_INFO("PataPata created at pos {0}, {1}", transform.Get().Translation.x, transform.Get().Translation.y);
             }
 
             void OnUpdate(Timestep ts) override
@@ -46,8 +51,10 @@ namespace Exodia {
                 auto transform = GetComponent<TransformComponent>();
                 auto &mytime = GetComponent<Clock>().Get().ElapsedTime;
                 auto body = GetComponent<RigidBody2DComponent>();
+                auto camera = HandleEntity->GetWorld()->GetEntityByTag("Camera")->GetComponent<TransformComponent>();
+
                 // Paramètres de la fonction sinus
-                double amplitude = 3.0f;  // Amplitude de la sinusoïde
+                double amplitude = 5.0f;  // Amplitude de la sinusoïde
                 double frequency = 1.0f;  // Fréquence de la sinusoïde en Hz
 
                 if (transform && _State == State::ALIVE) {
@@ -55,14 +62,12 @@ namespace Exodia {
                     // Mise à jour de la position en fonction du temps et du mouvement sinusoidal
                     mytime += ts.GetSeconds();
                     body.Get().Velocity.y = amplitude * sin(frequency * mytime * PI);
-                    // tc.Translation.y = amplitude * sin(frequency * mytime * PI);
 
                     // Affichage des coordonnées
 
-                    if (transform.Get().Translation.x < -10.0f)
-                        transform.Get().Translation.x = 10.0f;
+                    if (transform.Get().Translation.x < camera.Get().Translation.x - 20.0f)
+                        transform.Get().Translation.x = camera.Get().Translation.x + 20.0f;
                 }
-
 
                 if (GetComponent<Health>().Get().CurrentHealth == 0 && _State == State::ALIVE) {
                     auto animation = GetComponent<Animation>();

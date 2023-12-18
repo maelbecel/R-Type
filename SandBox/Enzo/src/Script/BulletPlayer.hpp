@@ -25,7 +25,7 @@ namespace Exodia {
 
             void OnCreate() override
             {
-                _Speed = 50.0f;
+                _Speed = 25.0f;
 
                 std::cout << "Bullet created" << std::endl;
             }
@@ -35,6 +35,8 @@ namespace Exodia {
                 auto transform = GetComponent<TransformComponent>();
                 auto animation = GetComponent<Animation>();
                 auto parent = GetComponent<ParentComponent>();
+                auto camera = HandleEntity->GetWorld()->GetEntityByTag("Camera")->GetComponent<TransformComponent>();
+
                 Entity *entity = HandleEntity->GetWorld()->GetEntityByID(parent.Get().Parent);
 
                 if (!entity) {
@@ -52,7 +54,7 @@ namespace Exodia {
                 }
 
                 // Remove bullet if out of screen
-                if (transform.Get().Translation.x > 10.0f) {
+                if (transform.Get().Translation.x > camera.Get().Translation.x + 10.0f) {
                     EXODIA_INFO("Bullet {0} destroyed", HandleEntity->GetComponent<TagComponent>().Get().Tag);
                     HandleEntity->GetWorld()->DestroyEntity(HandleEntity);
                 }
