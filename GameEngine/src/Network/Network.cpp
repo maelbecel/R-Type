@@ -169,24 +169,24 @@ namespace Exodia::Network {
         uint32_t size_of_data = 0;
 
         std::memcpy(&id, message.data(), sizeof(unsigned long));
-        // std::memcpy(&size_of_string, message.data() + sizeof(unsigned long), sizeof(unsigned int));
-        // component_name.resize(size_of_string, 0);
-        // std::memcpy(component_name.data(), message.data() + sizeof(unsigned long) + sizeof(unsigned int), size_of_string);
-        // std::memcpy(&size_of_data, message.data() + sizeof(unsigned long) + sizeof(unsigned int) + size_of_string, sizeof(uint32_t));
-        // std::vector<char> data(size_of_data, 0);
-        // std::memcpy(data.data(), message.data() + sizeof(unsigned long) + sizeof(unsigned int) + size_of_string + sizeof(uint32_t), size_of_data);
+        std::memcpy(&size_of_string, message.data() + sizeof(unsigned long), sizeof(unsigned int));
+        component_name.resize(size_of_string, 0);
+        std::memcpy(component_name.data(), message.data() + sizeof(unsigned long) + sizeof(unsigned int), size_of_string);
+        std::memcpy(&size_of_data, message.data() + sizeof(unsigned long) + sizeof(unsigned int) + size_of_string, sizeof(uint32_t));
+        std::vector<char> data(size_of_data, 0);
+        std::memcpy(data.data(), message.data() + sizeof(unsigned long) + sizeof(unsigned int) + size_of_string + sizeof(uint32_t), size_of_data);
 
-        // Entity *entity = _world->CreateEntity(id);
+        Entity *entity = _world->CreateEntity(id);
 
-        // std::function<Exodia::IComponentContainer *(Exodia::Buffer)> func = Project::GetActive()->GetComponentFactory(component_name);
-        // if (!func) {
-        //     std::string error = "Network::createEntity() - component " + component_name + " not found !";
-        //     EXODIA_CORE_ERROR(error);
-        //     return;
-        // }
-        // Exodia::Buffer buffer(data.data(), size_of_data);
-        // IComponentContainer *container = func(buffer);
-        // entity->AddComponent(container);
+        std::function<Exodia::IComponentContainer *(Exodia::Buffer)> func = Project::GetActive()->GetComponentFactory(component_name);
+        if (!func) {
+            std::string error = "Network::createEntity() - component " + component_name + " not found !";
+            EXODIA_CORE_ERROR(error);
+            return;
+        }
+        Exodia::Buffer buffer(data.data(), size_of_data);
+        IComponentContainer *container = func(buffer);
+        entity->AddComponent(container);
     }
 
     void Network::ReceiveConnect(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint) {
@@ -270,7 +270,10 @@ namespace Exodia::Network {
 
         std::vector<char> content(message.begin() + int(Header::GetSize()), message.end());
 
-        std::cout << "Real size: " << content.size() << std::endl;
+        if (header.getSize() != content.size()) {
+            EXODIA_CORE_ERROR("Network::Splitter() - Packet size is not the one indicated !");
+            return;
+        }
 
         std::unordered_map<char, std::function<void(const std::vector<char>, size_t, asio::ip::udp::endpoint senderEndpoint)>> commands;
         commands[0x00] = std::bind(&Network::ReceivePacketInfo, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3); // Packet info for loss calculation

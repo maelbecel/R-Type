@@ -41,10 +41,6 @@ namespace Exodia {
     {
         EXODIA_PROFILE_FUNCTION();
 
-
-        // Ping server
-        network.SendEvent(52);
-
         // Update
         _CameraController.OnUpdate(ts);
 

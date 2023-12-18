@@ -32,6 +32,9 @@ class Connection {
             Exodia::Network::Header header = packet.GetHeader();
             header.SetId(_sendPacket);
             header.setSize(packet.GetSize());
+            for (size_t i = 0; i < packet.GetSize(); i++) {
+                std::cout << int(packet.GetBuffer()[i]) << " ";
+            }
             socket.send(packet.GetBuffer(), packet.GetSize(), _endpoint);
             _sendPacket++;
         }

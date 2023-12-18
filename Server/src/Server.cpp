@@ -113,6 +113,7 @@ namespace Exodia {
             this->_world->ForEach<TransformComponent>([&](Entity *entity, ComponentHandle<TransformComponent> transform) {
                 if (transform) {
                     _network.SendEntity(entity, "TransformComponent");
+                    sleep(3);
                 }
             });
         } catch (std::exception &e) {
