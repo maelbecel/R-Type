@@ -8,13 +8,15 @@
 #include "Network.hpp"
 
 namespace Exodia::Network {
-    void Network::sendAskConnect() {
+    void Network::sendAskConnect(const std::string &ip, short port) {
+        connect(ip, port);
         Exodia::Network::Header header(0x81, 1, 2);
         Exodia::Network::Packet packet;
         std::vector<char> buffer(0);
 
         packet.set(header, buffer);
-        _socket.send(packet.getBuffer(), packet.get_size(), _remote_endpoint[0]);
+        std::cout << "Send ask connect" << std::endl;
+        _socket.send(packet.getBuffer(), packet.get_size(), _server_connection.getEndpoint());
     }
 
     /**
@@ -36,7 +38,11 @@ namespace Exodia::Network {
         offset = fill_data(buffer, offset, &packet_received, sizeof(int));
         offset = fill_data(buffer, offset, &packet_sent, sizeof(int));
         packet.set(header, buffer);
-        _socket.send(packet.getBuffer(), packet.get_size(), _remote_endpoint[0]);
+        if (_connections.size() > 0)
+           for (auto &connection : _connections)
+                connection.second.sendPacket(_socket, packet);
+        else
+            _server_connection.sendPacket(_socket, packet);
     }
 
     void Network::receivePacketInfo(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint) {
@@ -75,7 +81,11 @@ namespace Exodia::Network {
         offset = fill_data(buffer, offset, data.Data, size_of_data);                     // Set data
 
         packet.set(header, buffer);
-        _socket.send(packet.getBuffer(), packet.get_size(), _remote_endpoint[0]);
+        if (_connections.size() > 0)
+           for (auto &connection : _connections)
+                connection.second.sendPacket(_socket, packet);
+        else
+            _server_connection.sendPacket(_socket, packet);
     }
 
     void Network::sendAck() {
@@ -87,7 +97,11 @@ namespace Exodia::Network {
         size_t offset = 0;
         offset = fill_data(buffer, offset, &command_id, sizeof(uint64_t));
         packet.set(header, buffer);
-        _socket.send(packet.getBuffer(), packet.get_size(), _remote_endpoint[0]);
+        if (_connections.size() > 0)
+           for (auto &connection : _connections)
+                connection.second.sendPacket(_socket, packet);
+        else
+            _server_connection.sendPacket(_socket, packet);
     }
 
     void Network::receiveAck(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint) {
@@ -133,9 +147,10 @@ namespace Exodia::Network {
     void Network::receiveConnect(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint) {
         (void) size;
         (void) message;
-        auto find = std::find(_remote_endpoint.begin(), _remote_endpoint.end(), senderEndpoint);
-        if (find == _remote_endpoint.end())
-            _remote_endpoint.push_back(senderEndpoint);
+        const std::string name = senderEndpoint.address().to_string() + ":" + std::to_string(senderEndpoint.port());
+        auto find = _connections.find(name);
+        if (find == _connections.end())
+            _connections[senderEndpoint.address().to_string() + ":" + std::to_string(senderEndpoint.port())] = Connection(senderEndpoint);
         std::string connect = "Connected to " + senderEndpoint.address().to_string() + ":" + std::to_string(senderEndpoint.port());
         EXODIA_CORE_INFO(connect);
     }
@@ -146,7 +161,11 @@ namespace Exodia::Network {
         std::vector<char> buffer(0);
 
         packet.set(header, buffer);
-        _socket.send(packet.getBuffer(), packet.get_size(), _remote_endpoint[0]);
+        if (_connections.size() > 0)
+           for (auto &connection : _connections)
+                connection.second.sendPacket(_socket, packet);
+        else
+            _server_connection.sendPacket(_socket, packet);
     }
 
     void Network::splitter(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint) {

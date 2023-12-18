@@ -11,6 +11,7 @@
     #include "IOContextManager/IOContextManager.hpp"
     #include "UDPSocket/UDPSocket.hpp"
     #include "Header/Header.hpp"
+    #include "Connection/Connection.hpp"
     #include "Packet/Packet.hpp"
     #include "ECS/ECS.hpp"
     #include <vector>
@@ -45,9 +46,6 @@ namespace Exodia {
                  * @brief Connect to a remote endpoint
                  *
                  */
-                void connect(const std::string &ip, short port) {
-                    _remote_endpoint.push_back(asio::ip::udp::endpoint(asio::ip::address::from_string(ip), port));
-                }
 
                 void loop();
                 void receivePacketInfo(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint);   // 0x00
@@ -58,16 +56,22 @@ namespace Exodia {
                 void sendAck();             // 0x01
                 void sendAcceptConnect();   // 0x02
                 void sendEntity(Entity *entity, std::string component_name); // 0x0c
-                void sendAskConnect();      // 0x81
+                void sendAskConnect(const std::string &ip, short port);      // 0x81
                 size_t fill_data(std::vector<char> &buffer, size_t offset, void *data, size_t size);
                 void splitter(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint);
                 void startIOContextThread();
                 void stopIOContextThread();
 
             private:
+                void connect(const std::string &ip, short port) {
+                    _server_connection = Connection(asio::ip::udp::endpoint(asio::ip::address::from_string(ip), port));
+                }
+
+            private:
                 World *_world;
                 UDPSocket _socket;
-                std::vector<asio::ip::udp::endpoint> _remote_endpoint;
+                std::unordered_map<std::string, Connection> _connections;
+                Connection _server_connection;
 
                 // IOContext
                 IOContextManager &_ioContextManager;

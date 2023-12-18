@@ -33,8 +33,7 @@ namespace Exodia {
         // asio::ip::udp::endpoint localEndpoint(asio::ip::address::from_string("127.0.0.1"), 8082);
         Exodia::World *world = Exodia::World::CreateWorld();
         Exodia::Network::Network network(world, ioContextManager, 8083);
-        network.connect("0.0.0.0", 8082);
-        network.sendAskConnect();
+        network.sendAskConnect("0.0.0.0", 8082);
 
         // Exodia::Entity *entity = world->CreateEntity();
         // entity->AddComponent<Exodia::TransformComponent>();
