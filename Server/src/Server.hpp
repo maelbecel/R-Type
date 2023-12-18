@@ -1,35 +1,41 @@
 /*
 ** EPITECH PROJECT, 2023
-** R-Type
+** R-Type [WSL: Ubuntu-22.04]
 ** File description:
 ** Server
 */
 
-#ifndef SERVER_HPP
-    #define SERVER_HPP
+#ifndef SERVER_HPP_
+    #define SERVER_HPP_
 
-    #include <iostream>
-    #include <boost/asio.hpp>
-    #include <set>
-    #include <memory>
+    #include "Exodia.hpp"
 
-using boost::asio::ip::tcp;
+namespace Exodia {
 
-class Server {
-    public:
-        Server(boost::asio::io_context &io_context, short port);
+    class Server {
+        public:
+            Server(short port);
+            ~Server();
+            void Init();
+            void Run();
+            void Update();
+            void Stop() { _running = false; };
 
-        void start();
+        protected:
+        private:
+            // World is used to manage the entities
+            World *_world = World::CreateWorld();
 
-    private:
-        void doAccept();
+            // Network is used to manage the network with the clients
+            Network::IOContextManager _ioContextManager;
+            Network::Network _network;
 
-        void doRead(std::shared_ptr<tcp::socket> socket);
+            // Timestep is used to manage the time
+            Timer _Timer; 
+            float _lastTime;
 
-        void broadcast(const std::string& message, std::shared_ptr<tcp::socket> sender);
+            bool _running = true;
+    };
+}
 
-        tcp::acceptor acceptor_;
-        std::set<std::shared_ptr<tcp::socket>> sockets_;
-};
-
-#endif /* SERVER_HPP */
+#endif /* !SERVER_HPP_ */

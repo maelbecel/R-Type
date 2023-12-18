@@ -17,11 +17,11 @@ namespace Exodia {
         entity->AddComponent<Animation>(1.0f, 2.0f, 1.0f);
         entity->GetComponent<TransformComponent>().Get().Scale.y = 0.5f;
         entity->AddComponent<BoxCollider2DComponent>();
-        auto sprite = entity->AddComponent<SpriteRendererComponent>();
+        //auto sprite = entity->AddComponent<SpriteRendererComponent>();
 
         // Set entity sprite
-        Ref<Texture2D> texture = TextureImporter::LoadTexture2D("Assets/Textures/Player.png");
-        sprite.Get().Texture = SubTexture2D::CreateFromCoords(texture, { 2.0f, 4.0f }, { 33.2f, 17.2f }, { 1.0f, 1.0f });
+        //Ref<Texture2D> texture = TextureImporter::LoadTexture2D("Assets/Textures/Player.png");
+        //sprite.Get().Texture = SubTexture2D::CreateFromCoords(texture, { 2.0f, 4.0f }, { 33.2f, 17.2f }, { 1.0f, 1.0f });
 
         // Set entity rigidbody
         auto body = entity->AddComponent<RigidBody2DComponent>();

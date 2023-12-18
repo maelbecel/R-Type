@@ -19,6 +19,13 @@ set(SOURCES
 
     src/Main.cpp
     src/Server.cpp
+    # R-Type ECS sources files
+
+    ${R_TYPE_DIR}/Entity/CreateBackground.cpp
+    ${R_TYPE_DIR}/Entity/CreatePlayer.cpp
+    ${R_TYPE_DIR}/Entity/CreatePataPata.cpp
+    ${R_TYPE_DIR}/Entity/CreateStars.cpp
+    ${R_TYPE_DIR}/Scripts/Player/Player.cpp
 )
 
 # Set include directories for the Exodia Game Engine Application

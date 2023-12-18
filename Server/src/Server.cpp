@@ -1,64 +1,78 @@
 /*
 ** EPITECH PROJECT, 2023
-** R-Type
+** R-Type [WSL: Ubuntu-22.04]
 ** File description:
 ** Server
 */
 
 #include "Server.hpp"
-#include <cstddef>
-#include <iostream>
-#include <memory>
+#include "R-Type.hpp"
 
-Server::Server(boost::asio::io_context& io_context, short port)
-    : acceptor_(io_context, tcp::endpoint(tcp::v4(), port)) {}
+namespace Exodia {
 
-void Server::start() {
-    doAccept();
-}
-
-void Server::doAccept() {
-    acceptor_.async_accept([this](boost::system::error_code ec, tcp::socket socket) {
-        if (!ec) {
-            std::string message = "Welcome to the server !\n";
-            boost::asio::write(socket, boost::asio::buffer(message));
-            auto newSocket = std::make_shared<tcp::socket>(std::move(socket));
-            sockets_.insert(newSocket);
-            std::cout << "New client connected" << std::endl;
-            //write to client that he is connected
-            boost::asio::write(*newSocket, boost::asio::buffer("Welcome to the server !\n"));
-            doRead(newSocket);
-        }
-        doAccept();
-    });
-}
-
-void Server::doRead(std::shared_ptr<tcp::socket> socket) {
-    auto buffer = std::make_shared<boost::asio::streambuf>();
-
-    boost::asio::async_read_until(*socket, *buffer, '\n',
-        [this, socket, buffer](boost::system::error_code ec, std::size_t length) {
-            std::cout << "Read " << length << " bytes" << std::endl;
-            if (!ec) {
-                std::cout << "Read: " << &buffer << std::endl;
-                std::istream is(buffer.get());
-                std::string message;
-                std::getline(is, message);
-
-                broadcast(message, socket);
-                doRead(socket);
-            } else {
-                sockets_.erase(socket);
-            }
-        });
-}
-
-void Server::broadcast(const std::string& message, std::shared_ptr<tcp::socket> sender) {
-    std::cout << "Broadcasting: " << message << std::endl;
-    for (auto& socket : sockets_) {
-        if (socket != sender) {
-            std::cout << "Send to client: " << message << std::endl;
-            boost::asio::write(*socket, boost::asio::buffer(message));
-        }
+    Server::Server(short port): _network(_world, _ioContextManager, port)
+    {
+        std::cout << "Server is launching !" << std::endl;
     }
-}
+
+    Server::~Server()
+    {
+    }
+
+    void Server::Init()
+    {
+        std::cout << "Server is initializing !" << std::endl;
+        try {
+            // Register the systems
+            _world->RegisterSystem(new AnimationSystem());      // Animation system
+            _world->RegisterSystem(new ScriptSystem());         // Script system
+            _world->RegisterSystem(new MovingSystem(1.5f));     // Moving system
+
+            CollisionSystem *collisionSystem = new CollisionSystem();
+            _world->RegisterSystem(collisionSystem);
+            _world->Subscribe<Events::OnCollisionEntered>(collisionSystem);
+
+            // Create the entities
+            CreatePlayer(_world);
+            CreatePataPata(_world);
+            CreateBackground(_world);
+            CreateStars(_world);
+
+        } catch (std::exception &e) {
+            std::cerr << "Exception: " << e.what() << std::endl;
+        }
+        std::cout << "Server is initialized !" << std::endl;
+    }
+
+    void Server::Run()
+    {
+        std::cout << "Server is running !" << std::endl;
+        try {
+            while(_running) {
+                std::cout << "In server loop" << std::endl;
+                auto entities = _world->AllEntities();
+                for (auto entity : entities) {
+                    std::cout << entity->GetEntityID() << std::endl;
+                }
+                this->Update();
+                sleep(10);
+            }
+        } catch (std::exception &e) {
+            std::cerr << "Exception: " << e.what() << std::endl;
+        }
+        std::cout << "Server is stopped !" << std::endl;
+    }
+
+    void Server::Update()
+    {
+        float time = _Timer.Elapsed();
+
+        Timestep timestep(time - _lastTime);
+
+        _lastTime = time;
+
+        this->_world->(timestep);
+    }
+
+
+}; // namespace Exodia

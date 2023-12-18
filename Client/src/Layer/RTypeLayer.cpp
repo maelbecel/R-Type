@@ -35,7 +35,7 @@ namespace Exodia {
         network.connect("0.0.0.0", 8082);
 
         auto commandLine = Application::Get().GetSpecification().CommandLineArgs;
-
+    
         if (commandLine.Count > 1) {
             Application::Get().Close();
             return;
