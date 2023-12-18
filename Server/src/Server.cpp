@@ -42,10 +42,10 @@ namespace Exodia {
         }
         if (command == "dump") {
             std::cout << "Clients: " << std::endl;
-            if (_network.getConnections().empty())
+            if (_network.GetConnections().empty())
                 std::cout << "No clients connected" << std::endl;
-            for (auto connection : _network.getConnections()) {
-                std::cout << "IP: " << connection.second.getEndpoint().address().to_string() << " Port: " << connection.second.getEndpoint().port() << std::endl;
+            for (auto connection : _network.GetConnections()) {
+                std::cout << "IP: " << connection.second.GetEndpoint().address().to_string() << " Port: " << connection.second.GetEndpoint().port() << std::endl;
             }
             std::cout << "Entities: " << std::endl;
             auto entities = _world->AllEntities();
@@ -57,7 +57,7 @@ namespace Exodia {
             std::cout << "Total: " << i << std::endl;
         }
         if (command == "packet") {
-            _network.sendPacketInfo();
+            _network.SendPacketInfo();
         }
     }
 
@@ -75,10 +75,9 @@ namespace Exodia {
             _world->Subscribe<Events::OnCollisionEntered>(collisionSystem);
 
             // Create the entities
-            CreatePlayer(_world);
+            // CreatePlayer(_world);
             CreatePataPata(_world);
             CreateBackground(_world);
-            CreateStars(_world);
 
         } catch (std::exception &e) {
             std::cerr << "Exception: " << e.what() << std::endl;
@@ -91,8 +90,7 @@ namespace Exodia {
         std::cout << "Server is running !" << std::endl;
         try {
             while(_running) {
-                //this->Update();
-                sleep(1);
+                this->Update();
             }
         } catch (std::exception &e) {
             std::cerr << "Exception: " << e.what() << std::endl;
@@ -110,6 +108,13 @@ namespace Exodia {
             _lastTime = time;
 
             this->_world->Update(timestep);
+
+            //send entities
+            this->_world->ForEach<TransformComponent>([&](Entity *entity, ComponentHandle<TransformComponent> transform) {
+                if (transform) {
+                    _network.SendEntity(entity, "TransformComponent");
+                }
+            });
         } catch (std::exception &e) {
             std::cerr << "Unable to update the world: " << e.what() << std::endl;
         }

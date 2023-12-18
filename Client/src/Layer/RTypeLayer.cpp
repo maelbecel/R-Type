@@ -28,21 +28,8 @@ namespace Exodia {
     void RTypeLayer::OnAttach()
     {
         EXODIA_PROFILE_FUNCTION();
-
-
-
-        // Define a local endpoint to listen on
-        // asio::ip::udp::endpoint localEndpoint(asio::ip::address::from_string("127.0.0.1"), 8082);
-        network.loop();
-        network.sendAskConnect("0.0.0.0", 8082);
-
-
-        // Exodia::Entity *entity = world->CreateEntity();
-        // entity->AddComponent<Exodia::TransformComponent>();
-        // entity->GetComponent<Exodia::TransformComponent>()->Translation = glm::vec3(1, 2, 3);
-        // entity->GetComponent<Exodia::TransformComponent>()->Rotation = glm::vec3(4, 5, 6);
-
-        // network.sendEntity(entity, "TransformComponent");
+        network.Loop();
+        network.SendAskConnect("0.0.0.0", 8082);
     }
 
     void RTypeLayer::OnDetach()
@@ -56,7 +43,7 @@ namespace Exodia {
 
 
         // Ping server
-        network.sendEvent(52);
+        network.SendEvent(52);
 
         // Update
         _CameraController.OnUpdate(ts);

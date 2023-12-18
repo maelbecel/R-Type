@@ -30,7 +30,7 @@ namespace Exodia {
                  */
                 Network(World *world, IOContextManager &context,short port) : _world(world), _socket(context, asio::ip::udp::endpoint(asio::ip::address::from_string("0.0.0.0"), port)), _ioContextManager(context)
                 {
-                    loop();
+                    Loop();
                     _ioContextManager.run();
                 };
 
@@ -47,22 +47,21 @@ namespace Exodia {
                  *
                  */
 
-                void loop();
-                void receivePacketInfo(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint);   // 0x00
-                void receiveAck(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint);          // 0x01
-                void receiveConnectAccept(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint);// 0x02
-                void receiveEntity(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint);       // 0x0c
-                void receiveConnect(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint);      // 0x81
-                void receiveEvent(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint);        // 0x82
-                void sendPacketInfo();      // 0x00
-                void sendAck();             // 0x01
-                void sendAcceptConnect();   // 0x02
-                void sendEntity(Entity *entity, std::string component_name); // 0x0c
-                void sendAskConnect(const std::string &ip, short port);      // 0x81
-                void sendEvent(u_int32_t event);                                   // 0x82
-                size_t fill_data(std::vector<char> &buffer, size_t offset, void *data, size_t size);
-                void splitter(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint);
-                std::unordered_map<std::string, Connection> &getConnections() {
+                void Loop();
+                void ReceivePacketInfo(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint);   // 0x00
+                void ReceiveAck(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint);          // 0x01
+                void ReceiveConnectAccept(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint);// 0x02
+                void ReceiveEntity(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint);       // 0x0c
+                void ReceiveConnect(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint);      // 0x81
+                void ReceiveEvent(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint);        // 0x82
+                void SendPacketInfo();      // 0x00
+                void SendAck();             // 0x01
+                void SendAcceptConnect();   // 0x02
+                void SendEntity(Entity *entity, std::string component_name); // 0x0c
+                void SendAskConnect(const std::string &ip, short port);      // 0x81
+                void SendEvent(u_int32_t event);                                   // 0x82
+                void Splitter(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint);
+                std::unordered_map<std::string, Connection> &GetConnections() {
                     return _connections;
                 }
 
@@ -70,6 +69,7 @@ namespace Exodia {
                 void connect(const std::string &ip, short port) {
                     _server_connection = Connection(asio::ip::udp::endpoint(asio::ip::address::from_string(ip), port));
                 }
+                size_t FillData(std::vector<char> &buffer, size_t offset, void *data, size_t size);
 
             private:
                 World *_world;

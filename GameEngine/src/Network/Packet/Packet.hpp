@@ -19,15 +19,15 @@ namespace Exodia {
 
                 ~Packet() = default;
 
-                void setHeader(Header header) {
+                void SetHeader(Header header) {
                     _header = header;
                 }
 
-                void setContent(std::vector<char> content) {
+                void SetContent(std::vector<char> content) {
                     _content = content;
                 }
 
-                void set(Header header, std::vector<char> content) {
+                void Set(Header header, std::vector<char> content) {
                     _header = header;
                     _content = content;
                     _header.setSize(_content.size());
