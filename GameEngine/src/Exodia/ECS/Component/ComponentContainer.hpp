@@ -29,7 +29,7 @@
 namespace Exodia {
 
     template<typename Component>
-    struct EXODIA_API ComponentContainer : public IComponentContainer {
+    struct ComponentContainer : public IComponentContainer {
         public:
             Component Data;
 

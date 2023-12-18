@@ -53,7 +53,7 @@
 
     // -- Exodia Script --------------------------------------------------------
 
-    #include "Exodia/Script/ScriptableEntity.hpp"
+    #include "Exodia/Script/Script.hpp"
 
     // -- Exodia Debug ---------------------------------------------------------
 
@@ -64,6 +64,7 @@
 
     #include "Utils/CrossPlatform.hpp"
     #include "Utils/PlatformUtils.hpp"
+    #include "Utils/LibrairyLoader.hpp"
     #include "Utils/Memory.hpp"
     #include "Utils/Assert.hpp"
 

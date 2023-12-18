@@ -21,7 +21,7 @@ namespace Exodia {
     /**
      * @brief Class that will be used for log
      */
-    class EXODIA_API Log {
+    class Log {
 
         /////////////
         // Methods //

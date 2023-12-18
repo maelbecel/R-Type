@@ -21,7 +21,7 @@ namespace Exodia {
     class World;
     class Entity;
 
-    struct EXODIA_API IComponentContainer {
+    struct IComponentContainer {
 
         ////////////////
         // Destructor //

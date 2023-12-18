@@ -24,7 +24,7 @@ namespace Exodia {
      * @brief Input class, that can't be instanciated
      * This class is used to get input from the user
      */
-    class EXODIA_API Input {
+    class Input {
 
         ///////////////////////
         // Getters & Setters //

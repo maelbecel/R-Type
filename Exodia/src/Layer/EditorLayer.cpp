@@ -343,10 +343,13 @@ namespace Exodia {
     void EditorLayer::OpenProject(const std::filesystem::path &path)
     {
         if (Project::Load(path)) {
+            ScriptEngine::Init();
+
             AssetHandle startScene = Project::GetActive()->GetConfig().StartScene;
 
             if (startScene)
                 OpenScene(startScene);
+
             _ContentBrowser = CreateScope<ContentBrowser>(Project::GetActive());
         }
     }

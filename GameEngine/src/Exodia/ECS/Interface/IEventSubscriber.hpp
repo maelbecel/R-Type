@@ -13,7 +13,7 @@
 
 namespace Exodia {
 
-    class EXODIA_API IEventSubscriber {
+    class IEventSubscriber {
 
         ////////////////
         // Destructor //

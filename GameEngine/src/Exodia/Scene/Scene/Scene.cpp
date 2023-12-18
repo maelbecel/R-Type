@@ -99,10 +99,13 @@ namespace Exodia {
         _World->ForEach<ScriptComponent>([&](Entity *entity, auto script) {
             auto &sc = script.Get();
 
-            if (sc.Instance) {
+            if (sc.Instance == nullptr) {
                 sc.Instance = sc.InstantiateScript();
-                sc.Instance->HandleEntity = entity;
-                sc.Instance->OnCreate();
+
+                if (sc.Instance != nullptr) {
+                    sc.Instance->HandleEntity = entity;
+                    sc.Instance->OnCreate();
+                }
             }
         });
     }
@@ -137,11 +140,15 @@ namespace Exodia {
 
                 if (!sc.Instance) {
                     sc.Instance = sc.InstantiateScript();
-                    sc.Instance->HandleEntity = entity;
-                    sc.Instance->OnCreate();
+
+                    if (sc.Instance != nullptr) {
+                        sc.Instance->HandleEntity = entity;
+                        sc.Instance->OnCreate();
+                    }
                 }
 
-                sc.Instance->OnUpdate(ts);
+                if (sc.Instance)
+                    sc.Instance->OnUpdate(ts);
             });
 
             // -- Update the world -- //

@@ -17,7 +17,7 @@ namespace Exodia {
      * @brief The Timestep class represents a duration of time, typically used for frame timing.
      * It provides methods to retrieve the duration in seconds or milliseconds and supports conversion to float.
      */
-    class EXODIA_API Timestep {
+    class Timestep {
 
         //////////////////////////////
         // Constructor & Destructor //

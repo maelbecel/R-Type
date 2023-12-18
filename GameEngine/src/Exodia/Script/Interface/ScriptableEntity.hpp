@@ -18,7 +18,7 @@ namespace Exodia {
 
     class Entity;
 
-    class EXODIA_API ScriptableEntity {
+    class ScriptableEntity {
 
         //////////////////////////////
         // Constructor & Destructor //

@@ -9,7 +9,10 @@
     #define SCRIPTCOMPONENT_HPP_
 
     // Exodia Script includes
-    #include "Script/ScriptableEntity.hpp"
+    #include "Script/Interface/ScriptableEntity.hpp"
+    #include "Script/Engine/ScriptEngine.hpp"
+
+    #include "Utils/LibrairyLoader.hpp"
 
     // Exodia Debug includes
     #include "Debug/Logs.hpp"
@@ -17,23 +20,30 @@
     // Exodia ECS includes
     #include "ECS/Interface/Component.hpp"
 
+    // External includes
+    #include <string>
+    #include <functional>
+
 namespace Exodia {
 
     struct ScriptComponent : public Component {
+        std::string Name;
+
         ScriptableEntity *Instance = nullptr;
 
-        ScriptableEntity *(*InstantiateScript)();
-        void              (*DestroyScript)(ScriptComponent *);
+        std::function<ScriptableEntity *()>    InstantiateScript;
+        std::function<void(ScriptComponent *)> DestroyScript;
 
-        template<typename ScriptClass>
-        void Bind()
+        void Bind(const std::string &name)
         {
-            InstantiateScript = []() {
-                return static_cast<ScriptableEntity *>(new ScriptClass());
+            Name = name;
+
+            InstantiateScript = [this]() -> ScriptableEntity * {
+                return ScriptEngine::InstantiateScript(Name);
             };
 
             DestroyScript = [](ScriptComponent *script) {
-                if (script->Instance != nullptr) {
+                if (script != nullptr && script->Instance != nullptr) {
                     delete script->Instance;
                     script->Instance = nullptr;
                 }
@@ -45,7 +55,7 @@ namespace Exodia {
             out << YAML::Key << "ScriptComponent";
             out << YAML::BeginMap;
             {
-                // TODO: Serialize script
+                out << YAML::Key << "Name" << YAML::Value << Name;
             }
             out << YAML::EndMap;
         }
@@ -53,13 +63,44 @@ namespace Exodia {
         virtual void Deserialize(UNUSED const YAML::Node &node) override
         {
             try {
-                // TODO: Deserialize script
+                auto script = node["ScriptComponent"];
+
+                Bind(script["Name"].as<std::string>());
             } catch (YAML::BadConversion &e) {
                 EXODIA_CORE_WARN("ScriptComponent deserialization failed: {0}", e.what());
             }
         }
 
-        //TODO: Draw script in ImGui
+        virtual void DrawComponent() override
+        {
+            if (Name.empty()) {
+                if (ImGui::Button("Add Script"))
+                    ImGui::OpenPopup("AddScript");
+
+                if (ImGui::BeginPopup("AddScript")) {
+                    const auto &scripts = ScriptEngine::GetScriptableEntities();
+
+                    for (auto script : scripts) {
+                        if (ImGui::MenuItem(script.c_str())) {
+                            Bind(script);
+
+                            ImGui::CloseCurrentPopup();
+                        }
+                    }
+
+                    ImGui::EndPopup();
+                }
+            } else {
+                ImGui::Text("Script: %s", Name.c_str());
+
+                ImGui::SameLine();
+
+                if (ImGui::Button("Remove Script")) {
+                    Name = "";
+                    Instance = nullptr;
+                }
+            }
+        }
     };
 };
 
