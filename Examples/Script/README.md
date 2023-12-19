@@ -10,7 +10,7 @@ Know that this abstraction can evolved in the future, it's currently a simple sc
 If you want to upgrade it, ask to `PharaEthan` the owner of the game engine.
 
 ```cpp
-class EXODIA_API ScriptableEntity {
+class ScriptableEntity {
     public:
         virtual ~ScriptableEntity() = default; 
 

@@ -5,7 +5,7 @@ project(GameEngine LANGUAGES CXX VERSION 1.0.1)
 set(CMAKE_BUILD_TYPE Debug)
 
 # Set compiler flags
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 
 set(GLAD_INCLUDE_DIRS ${CMAKE_BINARY_DIR}/GLAD/include CACHE STRING "GLAD Include directories")
 
@@ -65,6 +65,10 @@ set(SOURCES_GAME_ENGINE
     src/Exodia/Scene/Serializer/SceneSerializer.cpp
     src/Exodia/Scene/Scene/Scene.cpp
 
+        # -- Script source files
+    
+    src/Exodia/Script/Engine/ScriptEngine.cpp
+
         # -- Project source files
 
     src/Exodia/Project/Project.cpp
@@ -80,6 +84,10 @@ set(SOURCES_GAME_ENGINE
     src/Exodia/Asset/Importer/AssetImporter.cpp
     src/Exodia/Asset/Importer/SceneImporter.cpp
     src/Exodia/Asset/Manager/EditorAssetManager.cpp
+        
+        # -- Exodia Math source files
+    
+    src/Exodia/Math/Math.cpp
 
     # Platform source files
 
