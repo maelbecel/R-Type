@@ -40,6 +40,10 @@ namespace Exodia {
             return new ComponentContainer<CameraComponent>(data);
         });
 
+        RegisterComponent("RigidBody2DComponent", [](Buffer data) -> IComponentContainer * {
+            return new ComponentContainer<RigidBody2DComponent>(data);
+        });
+
         RegisterComponent("BoxCollider2DComponent", [](Buffer data) -> IComponentContainer * {
             return new ComponentContainer<BoxCollider2DComponent>(data);
         });
@@ -150,6 +154,11 @@ namespace Exodia {
         return GetAssetDirectory() / path;
     }
 
+    std::filesystem::path Project::GetScriptPath()
+    {
+        return GetAssetDirectory() / _ActiveProject->_Config.ScriptsDirectory;
+    }
+
     const std::filesystem::path &Project::GetActiveProjectDirectory()
     {
         EXODIA_CORE_ASSERT(_ActiveProject, "Project::GetActiveProjectDirectory() - No active project !");
@@ -176,6 +185,13 @@ namespace Exodia {
         EXODIA_CORE_ASSERT(_ActiveProject, "Project::GetAssetRegistryPath() - No active project !");
 
         return _ActiveProject->GetAssetRegistryPath();
+    }
+
+    std::filesystem::path Project::GetActiveScriptPath()
+    {
+        EXODIA_CORE_ASSERT(_ActiveProject, "Project::GetScriptPath() - No active project !");
+
+        return _ActiveProject->GetScriptPath();
     }
 
     Ref<Project> Project::GetActive()

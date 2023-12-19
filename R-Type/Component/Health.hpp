@@ -25,16 +25,6 @@ namespace Exodia {
      * @param MaxHealth Max health of the entity.
      */
     struct Health: public Component {
-        static std::string GetStaticName()
-        {
-            return "Health";
-        }
-
-        virtual std::string GetName() const
-        {
-            return GetStaticName();
-        }
-
         int CurrentHealth;
         int MaxHealth;
 

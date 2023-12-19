@@ -17,7 +17,7 @@ namespace Exodia {
     class EntityComponentIterator;
 
     template<typename ...Components>
-    class EXODIA_API EntityComponentView {
+    class EntityComponentView {
 
         /////////////////
         // Constructor //

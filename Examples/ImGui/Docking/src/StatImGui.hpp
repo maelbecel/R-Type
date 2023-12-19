@@ -34,7 +34,7 @@ namespace Exodia {
 
                 ImGui::Begin("Stats");
 
-                ImGui::Text("Renderer2D Stats:");
+                ImGui::TextUnformatted("Renderer2D Stats:");
                 ImGui::Text("Draw Calls: %d", stats.DrawCalls);
                 ImGui::Text("Quads: %d", stats.QuadCount);
                 ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());

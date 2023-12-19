@@ -24,7 +24,7 @@ namespace Exodia {
 
         Ref<Texture2D> texture = TextureImporter::LoadTexture2D("Assets/Textures/Shell.png");
 
-        sprite->Texture = SubTexture2D::CreateFromCoords(texture, { 0.0f, 2.0f }, { 33.0f, 33.0f }, { 1.0f, 1.0f });
+        sprite->Texture = SubTexture2D::CreateFromCoords(texture->Handle, { 0.0f, 2.0f }, { 33.0f, 33.0f }, { 1.0f, 1.0f });
     }
 
     // -- Layer ----------------------------------------------------------------

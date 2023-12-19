@@ -33,7 +33,7 @@ namespace Exodia {
 
     class World;
 
-    class EXODIA_API Entity {
+    class Entity {
 
         /////////////
         // Defines //

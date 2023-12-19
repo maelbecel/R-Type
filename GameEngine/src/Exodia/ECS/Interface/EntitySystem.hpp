@@ -18,7 +18,7 @@ namespace Exodia {
 
     class World;
 
-    class EXODIA_API EntitySystem {
+    class EntitySystem {
         ////////////////
         // Destructor //
         ////////////////

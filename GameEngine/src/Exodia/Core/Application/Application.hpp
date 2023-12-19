@@ -58,7 +58,7 @@ namespace Exodia {
     /**
      * @brief Class that will be used for the application
      */
-    class EXODIA_API Application {
+    class Application {
 
         //////////////////////////////
         // Constructor & Destructor //

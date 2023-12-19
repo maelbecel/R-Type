@@ -19,7 +19,7 @@ namespace Exodia {
     class World;
     class Entity;
 
-    class EXODIA_API EntityIterator {
+    class EntityIterator {
 
         /////////////////
         // Constructor //

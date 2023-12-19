@@ -17,6 +17,7 @@
 
 // External include
 #include <glm/gtc/matrix_transform.hpp>
+#include <cstring>
 
 namespace Exodia {
 
@@ -218,7 +219,7 @@ namespace Exodia {
 
     void Renderer2D::ResetStats()
     {
-        Memset(&_Data->Stats, 0, sizeof(Statistics));
+        std::memset(&_Data->Stats, 0, sizeof(Statistics));
     }
 
     void Renderer2D::FlushAndReset()

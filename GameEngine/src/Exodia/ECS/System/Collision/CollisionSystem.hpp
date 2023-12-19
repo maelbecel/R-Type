@@ -34,7 +34,7 @@ namespace Exodia {
     struct TransformComponent;
     struct ScriptComponent;
 
-    class EXODIA_API CollisionSystem : public EntitySystem, public EventSubscriber<Events::OnCollisionEntered> {
+    class CollisionSystem : public EntitySystem, public EventSubscriber<Events::OnCollisionEntered> {
 
         ////////////
         // Struct //

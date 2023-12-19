@@ -11,25 +11,21 @@
     // Exodia ECS includes
     #include "ECS/Interface/Component.hpp"
 
+    // Exodia Debug includes
+    #include "Debug/Logs.hpp"
+
     // GLM includes
     #include <glm/glm.hpp>
     #include <glm/gtc/matrix_transform.hpp>
     #define GLM_ENABLE_EXPERIMENTAL
         #include <glm/gtx/quaternion.hpp>
 
+    // Exodia ImGui includes
+    #include "ImGui/ImGuiToolsUI.hpp"
+
 namespace Exodia {
 
     struct TransformComponent : public Component {
-        static std::string GetStaticName()
-        {
-            return "TransformComponent";
-        }
-
-        std::string GetName() const override
-        {
-            return GetStaticName();
-        }
-
         glm::vec3 Translation;
         glm::vec3 Rotation;
         glm::vec3 Scale;
@@ -46,7 +42,7 @@ namespace Exodia {
             return translation * rotation * scale;
         }
 
-        virtual void Serialize(YAML::Emitter &out)
+        virtual void Serialize(YAML::Emitter &out) override
         {
             out << YAML::Key << "TransformComponent";
             out << YAML::BeginMap;
@@ -65,6 +61,30 @@ namespace Exodia {
                 }
             }
             out << YAML::EndMap;
+        }
+
+        virtual void Deserialize(const YAML::Node &node) override
+        {
+            try {
+                auto transform = node["TransformComponent"];
+
+                Translation = glm::vec3(transform["Translation"][0].as<float>(), transform["Translation"][1].as<float>(), transform["Translation"][2].as<float>());
+                Rotation    = glm::vec3(transform["Rotation"][0].as<float>()   , transform["Rotation"][1].as<float>()   , transform["Rotation"][2].as<float>());
+                Scale       = glm::vec3(transform["Scale"][0].as<float>()      , transform["Scale"][1].as<float>()      , transform["Scale"][2].as<float>());
+            } catch (YAML::BadConversion &e) {
+                EXODIA_CORE_WARN("TransformComponent deserialization failed: {0}", e.what());
+            }
+        }
+
+        virtual void DrawComponent() override
+        {
+            glm::vec3 rotation = glm::degrees(Rotation);
+
+            DrawVec3Control("Translation", Translation);
+            DrawVec3Control("Rotation"   , rotation);
+            DrawVec3Control("Scale"      , Scale, 1.0f);
+
+            Rotation = glm::radians(rotation);
         }
 
         virtual Buffer SerializeData()

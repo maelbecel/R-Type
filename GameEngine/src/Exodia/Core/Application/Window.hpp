@@ -41,7 +41,7 @@ namespace Exodia {
     /**
      * @brief Interface representing a desktop system based window
      */
-    class EXODIA_API Window {
+    class Window {
 
         /////////////
         // Factory //
