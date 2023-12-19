@@ -26,16 +26,6 @@ namespace Exodia {
      * @param FrameTime Time between each frame.
      */
     struct Animation : public Component {
-        static std::string GetStaticName()
-        {
-            return "Animation";
-        }
-
-        virtual std::string GetName() const
-        {
-            return GetStaticName();
-        }
-
         float CurrentFrame;
         float MaxFrame;
         float FrameTime;

@@ -16,7 +16,10 @@ namespace Exodia {
     // Constructor & Destructor //
     //////////////////////////////
 
-    RTypeLayer::RTypeLayer() : Layer("R-Type"), _CameraController(1600.0f / 900.0f) {};
+    RTypeLayer::RTypeLayer() : Layer("R-Type"), network(_World, ioContextManager, 8083), _CameraController(1600.0f / 900.0f)
+    {
+
+    };
 
     /////////////
     // Methods //
@@ -26,12 +29,11 @@ namespace Exodia {
     {
         EXODIA_PROFILE_FUNCTION();
 
-        auto commandLine = Application::Get().GetSpecification().CommandLineArgs;
 
-        if (commandLine.Count > 1) {
-            Application::Get().Close();
-            return;
-        }
+        // if (commandLine.Count > 1) {
+        //     Application::Get().Close();
+        //     return;
+        // }
 
         FramebufferSpecification fbSpec;
 
@@ -49,18 +51,9 @@ namespace Exodia {
         Exodia::Network::IOContextManager ioContextManager;
 
         // Define a local endpoint to listen on
-        asio::ip::udp::endpoint localEndpoint(asio::ip::address::from_string("127.0.0.1"), 8081);
-
-        asio::ip::udp::endpoint serverEndpoint(asio::ip::address::from_string("127.0.0.1"), 8080);
-
-        // Create a UDPSocket object for the server
-        Exodia::Network::UDPSocket serverSocket(ioContextManager, localEndpoint);
-
-        // serverSocket.receive(my_callback);
-        serverSocket.send("Hello World", serverEndpoint);
-
-        // Run the IO context to initiate asynchronous operations
-        ioContextManager.run();
+        // asio::ip::udp::endpoint localEndpoint(asio::ip::address::from_string("127.0.0.1"), 8082);
+        network.loop();
+        network.sendAskConnect("0.0.0.0", 8082);
 
         // Create the world
         _World = World::CreateWorld();

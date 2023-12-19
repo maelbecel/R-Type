@@ -23,16 +23,6 @@ namespace Exodia {
      * @param ElapsedTime Elapsed time of the entity.
      */
     struct Clock : public Component {
-        static std::string GetStaticName()
-        {
-            return "Clock";
-        }
-
-        virtual std::string GetName() const
-        {
-            return GetStaticName();
-        }
-
         float ElapsedTime;
 
         Clock(const Clock &) = default;

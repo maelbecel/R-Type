@@ -77,7 +77,7 @@ namespace Exodia {
 
                     // Set entity sprite
                     Ref<Texture2D> texture = TextureImporter::LoadTexture2D("Assets/Textures/Simple_Explosion.png");
-                    sprite.Get().Texture = SubTexture2D::CreateFromCoords(texture, { 0.0f, 0.0f }, { 32.0f, 34.0f }, { 1.0f, 1.0f });
+                    sprite.Get().Texture = SubTexture2D::CreateFromCoords(texture->Handle, { 0.0f, 0.0f }, { 32.0f, 34.0f }, { 1.0f, 1.0f });
                     _State = State::DEAD;
                     GetComponent<RigidBody2DComponent>().Get().Velocity = { 0.0f, 0.0f };
                 }
