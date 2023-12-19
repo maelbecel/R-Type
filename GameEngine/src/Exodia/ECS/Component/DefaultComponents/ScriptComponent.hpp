@@ -26,6 +26,22 @@
 
 namespace Exodia {
 
+    struct Script : public Component {
+        std::string Name;
+
+        virtual void Serialize(YAML::Emitter &out) override
+        {
+            out << YAML::Key << "ScriptComponent";
+            out << YAML::BeginMap;
+            {
+                out << YAML::Key << "Name" << YAML::Value << Name;
+
+                // Get the script class -- Get the fields of the lua script -- Serialize the fields
+            }
+            out << YAML::EndMap;
+        }
+    }
+
     struct ScriptComponent : public Component {
         std::string Name;
 
@@ -39,7 +55,8 @@ namespace Exodia {
             Name = name;
 
             InstantiateScript = [this]() -> ScriptableEntity * {
-                return ScriptEngine::InstantiateScript(Name);
+                //return ScriptEngine::InstantiateScript(Name);
+                return nullptr;
             };
 
             DestroyScript = [](ScriptComponent *script) {

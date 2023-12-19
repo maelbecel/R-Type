@@ -8,6 +8,12 @@
 #ifndef SCRIPTENGINE_HPP_
     #define SCRIPTENGINE_HPP_
 
+    // Exodia Debug
+    #include "Debug/Logs.hpp"
+
+    // Lua include
+    #include <sol/sol.hpp>
+
     // External includes
     #include <unordered_map>
     #include <functional>
@@ -19,7 +25,28 @@ namespace Exodia {
     class ScriptableEntity;
 
     struct ScriptEngineData {
-        std::vector<std::string> ScriptableEntities;
+        std::unordered_map<std::string, sol::protected_function> Scripts;
+
+        void LoadScript(const std::string &path)
+        {
+            sol::state lua;
+            
+            try {
+                sol::protected_function_result loadResult = lua.safe_script_file(path);
+
+                if (!loadResult.valid()) {
+                    sol::error err = loadResult;
+
+                    EXODIA_CORE_ERROR("Error while loading script '{0}':\n\t{1}", path, err.what());
+                } else {
+                    sol::protected_function script = loadResult;
+
+                    Scripts[path] = script;
+                }
+            } catch (const sol::error &e) {
+                EXODIA_CORE_ERROR("Error while loading script '{0}':\n\t{1}", path, e.what());
+            }
+        }
     };
 
     class ScriptEngine {
@@ -37,7 +64,9 @@ namespace Exodia {
         ///////////////////////
         public:
 
-            static ScriptableEntity *InstantiateScript(const std::string &name);
+            static sol::optional<sol::table> GetScriptPublicVariables(const std::string &scriptName);
+
+            static sol::protected_function GetScript(const std::string &name);
             static std::vector<std::string> GetScriptableEntities();
 
         ////////////////

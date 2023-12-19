@@ -9,6 +9,7 @@
         "openal-soft",
         "spdlog",
         "catch2",
+        "lua",
         "sol2",
         "nativefiledialog",
         "yaml-cpp",

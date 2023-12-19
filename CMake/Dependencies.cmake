@@ -24,6 +24,7 @@ find_package(spdlog   CONFIG REQUIRED) # spdlog::spdlog
 find_package(Catch2   CONFIG REQUIRED) # Catch2::Catch2 Catch2::Catch2WithMain
 
     # -- Scripting Library -----------------------------------------------------
+find_package(Lua             REQUIRED)
 find_package(sol2     CONFIG REQUIRED) # sol2
 
     # -- Game Editor Library ---------------------------------------------------

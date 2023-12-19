@@ -147,6 +147,8 @@ target_link_libraries(GameEngine PRIVATE
 target_include_directories(GameEngine PRIVATE ${INCLUDE_DIRS_GAME_ENGINE})
 target_include_directories(GameEngine PRIVATE ${Stb_INCLUDE_DIR})
 target_include_directories(GameEngine PRIVATE ${CMAKE_BINARY_DIR}/_deps/imgui-src)
+target_include_directories(GameEngine PRIVATE ${LUA_INCLUDE_DIR})
+target_link_libraries(GameEngine      PRIVATE ${LUA_LIBRARIES})
 
 set_target_properties(GameEngine PROPERTIES
     ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../lib

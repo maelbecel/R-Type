@@ -72,6 +72,8 @@ target_link_libraries(exodia PRIVATE
 
 target_include_directories(exodia PRIVATE ${Stb_INCLUDE_DIR})
 target_include_directories(exodia PRIVATE ${CMAKE_BINARY_DIR}/_deps/imgui-src)
+target_include_directories(exodia PRIVATE ${LUA_INCLUDE_DIR})
+target_link_libraries(exodia      PRIVATE ${LUA_LIBRARIES})
 
 set_target_properties(exodia PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../

@@ -33,35 +33,19 @@ namespace Exodia {
         Data = new ScriptEngineData();
 
         if (std::filesystem::exists(scriptModulePath)) {
-            for (auto &file : std::filesystem::directory_iterator(scriptModulePath)) {    
-                auto path = file.path();
-
-            #ifdef _WIN32
-                if (path.extension() != ".dll")
-                    continue;
-            #else
-                if (path.extension() != ".so")
-                    continue;
-            #endif
-                void *handle = LibraryLoader::Load(path.string());
-
-                if (handle != nullptr)
-                    continue;
-                auto getScriptableEntity = (ScriptableEntity *(*)(void))LibraryLoader::GetFunction(handle, "CreateScript");
-
-                if (!getScriptableEntity) {
-                    LibraryLoader::Close(handle);
-
-                    continue;
-                }
-
-                Data->ScriptableEntities.push_back(path.stem().string());
+            for (const auto &file : std::filesystem::directory_iterator(scriptModulePath)) {
+                if (file.is_regular_file() && file.path().extension() == ".lua")
+                    Data->LoadScript(file.path().string());
             }
         }
     }
 
     void ScriptEngine::Shutdown()
     {
+        for (auto &script : Data->Scripts)
+            script.second.abandon();
+        Data->Scripts.clear();
+
         if (Data) {
             delete Data;
             Data = nullptr;
@@ -72,28 +56,32 @@ namespace Exodia {
     // Getters & Setters //
     ///////////////////////
 
-    ScriptableEntity *ScriptEngine::InstantiateScript(const std::string &name)
+    sol::optional<sol::table> ScriptEngine::GetScriptPublicVariables(const std::string &scriptName)
     {
-    #ifdef _WIN32
-        void *handle = LibraryLoader::Load(Project::GetActiveScriptPath() / (name + ".dll"));
-    #else
-        void *handle = LibraryLoader::Load(Project::GetActiveScriptPath() / (name + ".so"));
-    #endif
+        if (Data->Scripts.find(scriptName) != Data->Scripts.end()) {
+            sol::table global = Data->Scripts[scriptName].lua_state();
+            sol::optional<sol::table> publicTable = global["public"];
 
-        auto getScriptableEntity = (ScriptableEntity *(*)(void))LibraryLoader::GetFunction(handle, "CreateScript");
-
-        if (!getScriptableEntity) {
-            EXODIA_CORE_WARN("ScriptEngine::InstantiateScript: Failed to load script {0}", name);
-
-            LibraryLoader::Close(handle);
-            return nullptr;
+            if (!publicTable)
+                return sol::nullopt;
+            return *publicTable;
         }
+        return sol::nullopt;
+    }
 
-        return getScriptableEntity();
+    sol::protected_function ScriptEngine::GetScript(const std::string &name)
+    {
+        if (Data->Scripts.find(name) != Data->Scripts.end())
+            return Data->Scripts[name];
+        return nullptr;
     }
 
     std::vector<std::string> ScriptEngine::GetScriptableEntities()
     {
-        return Data->ScriptableEntities;
+        std::vector<std::string> scriptableEntities;
+
+        for (const auto &script : Data->Scripts)
+            scriptableEntities.push_back(script.first);
+        return scriptableEntities;
     }
 };

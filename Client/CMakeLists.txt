@@ -63,6 +63,8 @@ target_link_libraries(r-type_client PRIVATE
 
 target_include_directories(r-type_client PRIVATE ${Stb_INCLUDE_DIR})
 target_include_directories(r-type_client PRIVATE ${CMAKE_BINARY_DIR}/_deps/imgui-src)
+target_include_directories(r-type_client PRIVATE ${LUA_INCLUDE_DIR})
+target_link_libraries(r-type_client      PRIVATE ${LUA_LIBRARIES})
 
 set_target_properties(r-type_client PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../
