@@ -102,14 +102,8 @@ namespace Exodia {
         {
             EXODIA_PROFILE_SCOPE("Renderer Prep");
 
-            // Bind the framebuffer
-            _Framebuffer->Bind();
-
             Exodia::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
             Exodia::RenderCommand::Clear();
-
-            // Clear Entity ID attachment to -1
-            _Framebuffer->ClearAttachment(1, -1);
         }
 
         // Update
@@ -153,28 +147,6 @@ namespace Exodia {
 
             Exodia::Renderer2D::EndScene();
         }
-
-        // Get Mouse Position in the Viewport window
-        auto[mouseX, mouseY] = ImGui::GetMousePos();
-
-        int pixelData = _Framebuffer->ReadPixel(1, (int)mouseX, (int)mouseY);
-
-        Entity entity = (pixelData == -1) ? Entity() : Entity(_World, pixelData);
-
-        if (entity.GetWorld() != nullptr) {
-            if (_LastEntityHovered.GetWorld() == nullptr)
-                _World->Emit<Events::OnHoveredEnter>({ &entity });
-            if (Input::IsMouseButtonPressed(Mouse::BUTTONLEFT))
-                _World->Emit<Events::OnClick>({ &entity });
-        } else {
-            if (_LastEntityHovered.GetWorld() != nullptr)
-                _World->Emit<Events::OnHoveredExit>({ &_LastEntityHovered });
-        }
-
-        _LastEntityHovered = entity;
-
-        // Unbind the framebuffer
-        _Framebuffer->Unbind();
     }
 
     void RTypeLayer::OnImGUIRender()
