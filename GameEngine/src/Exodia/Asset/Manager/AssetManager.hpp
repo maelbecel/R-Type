@@ -34,6 +34,11 @@ namespace Exodia {
                 return std::static_pointer_cast<T>(asset);
             }
 
+            static AssetHandle GetAssetHandle(const std::filesystem::path &path)
+            {
+                return Project::GetActive()->GetAssetManager()->GetAssetHandle(path);
+            }
+
             static bool IsAssetHandleValid(AssetHandle handle)
             {
                 return Project::GetActive()->GetAssetManager()->IsAssetHandleValid(handle);

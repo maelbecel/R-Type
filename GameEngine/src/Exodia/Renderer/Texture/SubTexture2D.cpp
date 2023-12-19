@@ -122,8 +122,6 @@ namespace Exodia {
     {
         Ref<Texture2D> texture = AssetManager::GetAsset<Texture2D>(handle);
 
-        _AssetHandle = handle;
-
         // Reset the texture coordinates
         _Coords = { 0, 0 };
         if (texture != nullptr)
@@ -131,6 +129,8 @@ namespace Exodia {
         else
             _CellSize = { 1, 1 };
         _SpriteSize = { 1, 1 };
+
+        _AssetHandle = handle;
 
         calculateTextureCoords();
     }

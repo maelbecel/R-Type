@@ -190,6 +190,16 @@ namespace Exodia {
         return asset;
     }
 
+    AssetHandle EditorAssetManager::GetAssetHandle(std::filesystem::path path)
+    {
+        for (const auto &[handle, spec] : _AssetRegistry) {
+            if (spec.Path == path)
+                return handle;
+        }
+
+        return 0;
+    }
+
     AssetType EditorAssetManager::GetAssetType(AssetHandle handle) const
     {
         if (!IsAssetHandleValid(handle))

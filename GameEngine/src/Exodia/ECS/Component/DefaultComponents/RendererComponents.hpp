@@ -129,8 +129,12 @@ namespace Exodia {
                 if (const ImGuiPayload *payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM")) {
                     AssetHandle handle = *(AssetHandle *)payload->Data;
 
-                    if (AssetManager::GetAssetType(handle) == AssetType::Texture2D)
-                        Texture->SetTexture(handle);
+                    if (AssetManager::GetAssetType(handle) == AssetType::Texture2D) {
+                        if (Texture == nullptr)
+                            Texture = CreateRef<SubTexture2D>(handle);
+                        else
+                            Texture->SetTexture(handle);
+                    }
                     else
                         EXODIA_CORE_WARN("Invalid asset type for SpriteRendererComponent !");
                 }
@@ -149,6 +153,20 @@ namespace Exodia {
             }
             ImGui::SameLine();
             ImGui::TextUnformatted("Texture");
+
+            if (Texture) {
+                const glm::vec2 &textureCoords = Texture->GetCoords();
+                const glm::vec2 &textureCellSize = Texture->GetTextureCellSize();
+                const glm::vec2 &textureSpriteSize = Texture->GetTextureSpriteSize();
+
+                DrawVec2Control("Coordinates", (glm::vec2 &)textureCoords);
+                DrawVec2Control("Cell Size", (glm::vec2 &)textureCellSize, (float)Texture->GetTexture()->GetWidth(), (float)Texture->GetTexture()->GetHeight());
+                DrawVec2Control("Sprite Size", (glm::vec2 &)textureSpriteSize, 1.0f, 1.0f);
+
+                Texture->SetCoords(textureCoords);
+                Texture->SetTextureCellSize(textureCellSize);
+                Texture->SetTextureSpriteSize(textureSpriteSize);
+            }
 
             ImGui::DragFloat("Tiling Factor", &TilingFactor, 0.1f, 0.0f, 100.0f);
         }
