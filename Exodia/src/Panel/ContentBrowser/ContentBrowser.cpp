@@ -135,7 +135,7 @@ namespace Exodia {
                 }
             }
 
-            ImGui::TextWrapped(filename.c_str());
+            ImGui::TextWrapped("%s", filename.c_str());
             ImGui::NextColumn();
             ImGui::PopID();
         }
