@@ -29,7 +29,7 @@
 namespace Exodia {
 
     template<typename Component>
-    struct EXODIA_API ComponentContainer : public IComponentContainer {
+    struct ComponentContainer : public IComponentContainer {
         public:
             Component Data;
 
@@ -67,6 +67,16 @@ namespace Exodia {
             virtual void Serialize(YAML::Emitter &out)
             {
                 Data.Serialize(out);
+            }
+
+            virtual void Deserialize(const YAML::Node &node)
+            {
+                Data.Deserialize(node);
+            }
+
+            virtual void OnImGuiRender()
+            {
+                Data.DrawComponent();
             }
 
             virtual Buffer SerializeData()

@@ -178,7 +178,11 @@ namespace Exodia {
 
             asset = AssetImporter::ImportAsset(handle, spec);
 
-            EXODIA_CORE_ASSERT(asset, "AssetImporter::ImportAsset() - Asset import failed !");
+            if (asset == nullptr) {
+                EXODIA_CORE_WARN("Import asset '{0}' failed !", (uint64_t)handle);
+
+                return nullptr;
+            }
 
             _LoadedAssets[handle] = asset;
         }

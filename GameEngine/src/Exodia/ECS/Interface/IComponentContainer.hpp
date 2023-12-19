@@ -24,7 +24,7 @@ namespace Exodia {
     class World;
     class Entity;
 
-    struct EXODIA_API IComponentContainer {
+    struct IComponentContainer {
 
         ////////////////
         // Destructor //
@@ -37,9 +37,14 @@ namespace Exodia {
         /////////////
         public:
             virtual TypeIndex GetTypeIndexOfComponent() = 0;
+
             virtual void Serialize(YAML::Emitter &out) = 0;
+            virtual void Deserialize(const YAML::Node &node) = 0;
+
             virtual void Destroy(World *world) = 0;
             virtual void Removed(Entity *entity) = 0;
+
+            virtual void OnImGuiRender() = 0;
             virtual Buffer SerializeData() = 0;
     };
 };

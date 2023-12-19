@@ -33,21 +33,20 @@ namespace Exodia {
             /**
              * @brief Create a SubTexture2D instance from texture coordinates.
              *
-             * @param texture    (Type: const Ref<Texture2D> &) The parent texture.
-             * @param coords     (Type: const glm::vec2      &) The starting coordinates of the subtexture within the texture.
-             * @param cellSize   (Type: const glm::vec2      &) The size of each cell within the texture (for grid-based textures).
-             * @param spriteSize (Type: const glm::vec2      &) The size of the sprite within the cell (default is {1, 1}).
-             * @return           (Type: Ref<SubTexture2D>)      A reference to the created SubTexture2D.
+             * @param assetHandle (Type: const AssetHandle &) The asset handle of the parent texture.
+             * @param coords      (Type: const glm::vec2   &) The starting coordinates of the subtexture within the texture.
+             * @param cellSize    (Type: const glm::vec2   &) The size of each cell within the texture (for grid-based textures).
+             * @param spriteSize  (Type: const glm::vec2   &) The size of the sprite within the cell (default is {1, 1}).
+             * @return            (Type: Ref<SubTexture2D>)   A reference to the created SubTexture2D.
              */
-            static Ref<SubTexture2D> CreateFromCoords(const Ref<Texture2D> &texture, const glm::vec2 &coords, const glm::vec2 &cellSize, const glm::vec2 &spriteSize);
+            static Ref<SubTexture2D> CreateFromCoords(const AssetHandle &AssetHandle, const glm::vec2 &coords, const glm::vec2 &cellSize, const glm::vec2 &spriteSize);
 
         //////////////////////////////
         // Constructor & Destructor //
         //////////////////////////////
         public:
 
-            SubTexture2D(const Ref<Texture2D> &texture);
-            SubTexture2D(const Ref<Texture2D> &texture, const glm::vec2 &coords, const glm::vec2 &cellSize, const glm::vec2 &spriteSize);
+            SubTexture2D(const AssetHandle &assetHandle);
             SubTexture2D(const AssetHandle &assetHandle, const glm::vec2 &coords, const glm::vec2 &cellSize, const glm::vec2 &spriteSize);
 
             ~SubTexture2D() = default;
@@ -91,14 +90,12 @@ namespace Exodia {
             void SetTextureCellSize(const glm::vec2 &cellSize);
             void SetTextureSpriteSize(const glm::vec2 &spriteSize);
             void SetTexture(const AssetHandle &handle);
-            void SetTexture(const Ref<Texture2D> &texture);
 
         ////////////////
         // Attributes //
         ////////////////
         private:
-            AssetHandle    _AssetHandle;        /*!< The handle of the parent texture. */
-            Ref<Texture2D> _Texture;            /*!< The parent texture of the subtexture. */
+            AssetHandle    _AssetHandle;        /*!< The asset handle of the parent texture. */
             glm::vec2      _TextureCoords[4];   /*!< The texture coordinates defining the subtexture's corners. */
             glm::vec2      _Coords;             /*!< The starting coordinates of the subtexture within the texture. */
             glm::vec2      _CellSize;           /*!< The size of each cell within the texture (for grid-based textures). */

@@ -9,52 +9,42 @@
     #define SCRIPTCOMPONENT_HPP_
 
     // Exodia Script includes
-    #include "Script/ScriptableEntity.hpp"
+    #include "Script/Interface/ScriptableEntity.hpp"
+    #include "Script/Engine/ScriptEngine.hpp"
+
+    #include "Utils/LibrairyLoader.hpp"
+
+    // Exodia Debug includes
+    #include "Debug/Logs.hpp"
 
     // Exodia ECS includes
     #include "ECS/Interface/Component.hpp"
 
+    // External includes
+    #include <string>
+    #include <functional>
+
 namespace Exodia {
 
     struct ScriptComponent : public Component {
-        static std::string GetStaticName()
-        {
-            return "ScriptComponent";
-        }
-
-        std::string GetName() const override
-        {
-            return GetStaticName();
-        }
-
         ScriptableEntity *Instance = nullptr;
 
-        ScriptableEntity *(*InstantiateScript)();
-        void              (*DestroyScript)(ScriptComponent *);
+        std::function<ScriptableEntity *()>    InstantiateScript;
+        std::function<void(ScriptComponent *)> DestroyScript;
 
-        template<typename ScriptClass>
+        template<typename T>
         void Bind()
         {
-            InstantiateScript = []() {
-                return static_cast<ScriptableEntity *>(new ScriptClass());
+            InstantiateScript = []() -> ScriptableEntity * {
+                return static_cast<ScriptableEntity *>(new T());
             };
 
             DestroyScript = [](ScriptComponent *script) {
-                if (script->Instance != nullptr) {
-                    delete script->Instance;
+                if (script != nullptr && script->Instance != nullptr) {
+                    delete static_cast<T *>(script->Instance);
                     script->Instance = nullptr;
                 }
             };
-        }
-
-        virtual void Serialize(YAML::Emitter &out)
-        {
-            out << YAML::Key << "ScriptComponent";
-            out << YAML::BeginMap;
-            {
-                // TODO: Serialize script
-            }
-            out << YAML::EndMap;
         }
     };
 };

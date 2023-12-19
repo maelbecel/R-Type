@@ -96,9 +96,7 @@ namespace Exodia {
 
             EXODIA_CORE_ASSERT(success, "Could not initialize GLFW !");
 
-            // TODO: glfwSetErrorCallback to be handled by the client
-            // Currently we got GLFW Error (65539): Invalid window attribute 0x0002000D
-            //glfwSetErrorCallback(GLFWErrorCallback);
+            glfwSetErrorCallback(GLFWErrorCallback);
 
             // -- To remove the warning of unused variable -- //
             (void)success;
