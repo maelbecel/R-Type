@@ -113,11 +113,11 @@ class StatImGui {
 
             ImGui::Begin("Stats");
 
-            ImGui::Text("Renderer2D Stats:");
-            ImGui::Text("Draw Calls: %d", stats.DrawCalls);
-            ImGui::Text("Quads: %d", stats.QuadCount);
-            ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
-            ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
+            ImGui::TextUnformatted("Renderer2D Stats:");
+            ImGui::TextUnformatted("Draw Calls: %d", stats.DrawCalls);
+            ImGui::TextUnformatted("Quads: %d", stats.QuadCount);
+            ImGui::TextUnformatted("Vertices: %d", stats.GetTotalVertexCount());
+            ImGui::TextUnformatted("Indices: %d", stats.GetTotalIndexCount());
 
             ImGui::End();
         }

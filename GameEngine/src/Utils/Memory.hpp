@@ -46,39 +46,9 @@
         return std::make_unique<T>(std::forward<Args>(args)...);
     }
 
-inline size_t Strlen(const char *str)
-{
-    return strlen(str);
-}
-
-inline size_t Wcslen(const wchar_t *s)
-{
-    return wcslen(s);
-}
-
-inline void *Malloc(size_t size)
-{
-    return malloc(size);
-}
-
-inline void Free(void *ptr)
-{
-    free(ptr);
-}
-
-inline void *Memset(void *data, int c, size_t size)
-{
-    return memset(data, c, size);
-}
-
-inline void *Memcpy(void *dest, const void *src, size_t size)
-{
-    return memcpy(dest, src, size);
-}
-
-inline void *Strncpy(char *dest, size_t size, const char *src)
-{
-    return strncpy(dest, src, size);
-}
+    inline static void *Memcopy(void *dest, const void *src, size_t n)
+    {
+        return memcpy(dest, src, n);
+    }
 
 #endif /* !MEMORY_HPP_ */

@@ -13,6 +13,8 @@
 
     // External include
     #include <cstdint>
+    #include <cstdlib>
+    #include <cstring>
 
 namespace Exodia {
 
@@ -35,7 +37,7 @@ namespace Exodia {
         {
             Buffer buffer(other.Size);
 
-            Memcpy(buffer.Data, other.Data, other.Size);
+            std::memcpy(buffer.Data, other.Data, other.Size);
             return buffer;
         }
 
@@ -43,14 +45,14 @@ namespace Exodia {
         {
             Release();
 
-            Data = (uint8_t *)Malloc(size);
+            Data = (uint8_t *)std::malloc(size);
             Size = size;
         }
 
         void Release()
         {
             if (Data != nullptr) {
-                Free(Data);
+                std::free(Data);
                 Data = nullptr;
             }
 

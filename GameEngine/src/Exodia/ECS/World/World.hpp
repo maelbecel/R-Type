@@ -35,7 +35,7 @@
 
 namespace Exodia {
 
-    class EXODIA_API World {
+    class World {
 
         /////////////
         // Defines //

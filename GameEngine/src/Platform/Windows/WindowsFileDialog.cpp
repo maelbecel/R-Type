@@ -27,6 +27,7 @@
 
 // External includes
 #include <glm/glm.hpp>
+#include <cstdlib>
 
 namespace Exodia {
 
@@ -43,7 +44,7 @@ namespace Exodia {
         if (result == NFD_OKAY) {
             path = outPath;
 
-            free(outPath);
+            std::free(outPath);
         }
 
         if (path.empty())
@@ -72,7 +73,7 @@ namespace Exodia {
         if (result == NFD_OKAY) {
             path = outPath;
 
-            free(outPath);
+            std::free(outPath);
             return path;
         }
         return "";

@@ -17,25 +17,10 @@
 namespace Exodia {
 
     struct IDComponent : public Component {
-        static std::string GetStaticName()
-        {
-            return "IDComponent";
-        }
-
-        std::string GetName() const override
-        {
-            return GetStaticName();
-        }
-
         UUID ID;
 
         IDComponent(const IDComponent &) = default;
         IDComponent(const UUID &uuid = UUID()) : ID(uuid) {};
-
-        virtual void Serialize(UNUSED YAML::Emitter &out)
-        {
-            return;
-        }
     };
 };
 

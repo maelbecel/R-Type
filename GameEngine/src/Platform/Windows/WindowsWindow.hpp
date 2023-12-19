@@ -45,7 +45,7 @@ namespace Exodia {
      * @brief Implementation of the `Window` interface.
      * This class represents a graphical window that can be used to render graphics in it.
      */
-    class EXODIA_API WindowsWindow : public Window {
+    class WindowsWindow : public Window {
 
         //////////////////////////////
         // Constructor & Destructor //

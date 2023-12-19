@@ -66,7 +66,15 @@ namespace Exodia {
             void OpenScene(AssetHandle handle);
             void SaveScene();
             void SaveSceneAs();
+            void OnSceneStart();
             void OnSceneStop();
+
+        ///////////
+        // ImGui //
+        ///////////
+        private:
+            void ToolBarRendering();
+            void OnOverlayRender();
 
         ////////////////
         // Attributes //
@@ -87,6 +95,9 @@ namespace Exodia {
             Scope<ContentBrowser> _ContentBrowser;
             SceneHierarchy        _SceneHierarchy;
 
+            // Entity
+            Entity _HoveredEntity;
+
             // Viewport
             glm::vec2 _ViewportBounds[2];
             glm::vec2 _ViewportSize;
@@ -94,6 +105,11 @@ namespace Exodia {
 
             // ImGuizmo
             int _GuizmoType;
+
+            // Icon
+            Ref<Texture2D> _PlayButton;
+            Ref<Texture2D> _PauseButton;
+            Ref<Texture2D> _StopButton;
     };
 };
 

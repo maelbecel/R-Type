@@ -14,7 +14,7 @@
     // External includes
     #include <chrono>
 
-namespace EXODIA_API Exodia {
+namespace Exodia {
 
     /**
      * @brief The InstrumentationTimer class provides a mechanism to measure the duration of code execution for profiling.

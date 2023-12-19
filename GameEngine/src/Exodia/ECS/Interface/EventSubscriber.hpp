@@ -19,7 +19,7 @@ namespace Exodia {
     class World;
 
     template<typename Event>
-    class EXODIA_API EventSubscriber : public IEventSubscriber {
+    class EventSubscriber : public IEventSubscriber {
 
         ////////////////
         // Destructor //

@@ -28,7 +28,7 @@ namespace Exodia {
     /**
      * @brief Class that will be call when the window is resized
      */
-    class EXODIA_API WindowResizeEvent : public Event {
+    class WindowResizeEvent : public Event {
 
         ////////////////////////////////////////
         // Constructor & Destructor (default) //
@@ -105,7 +105,7 @@ namespace Exodia {
     /**
      * @brief Class that will be call when the window is closed
      */
-    class EXODIA_API WindowCloseEvent : public Event {
+    class WindowCloseEvent : public Event {
 
         //////////////////////////////////////////////////
         // Constructor (default) & Destructor (default) //
@@ -135,7 +135,7 @@ namespace Exodia {
      * This event is called every frame
      * The difference between AppTickEvent and AppUpdateEvent is that AppTickEvent is called before AppUpdateEvent
      */
-    class EXODIA_API AppTickEvent : public Event {
+    class AppTickEvent : public Event {
 
         //////////////////////////////////////////////////
         // Constructor (default) & Destructor (default) //
@@ -165,7 +165,7 @@ namespace Exodia {
      * This event is called every frame
      * The difference between AppTickEvent and AppUpdateEvent is that AppTickEvent is called before AppUpdateEvent
      */
-    class EXODIA_API AppUpdateEvent : public Event {
+    class AppUpdateEvent : public Event {
 
         //////////////////////////////////////////////////
         // Constructor (default) & Destructor (default) //
@@ -194,7 +194,7 @@ namespace Exodia {
      * @brief Class that will be call when the Application is rendered
      * This event is called every frame
      */
-    class EXODIA_API AppRenderEvent : public Event {
+    class AppRenderEvent : public Event {
 
         //////////////////////////////////////////////////
         // Constructor (default) & Destructor (default) //
@@ -217,7 +217,7 @@ namespace Exodia {
             EVENT_CLASS_CATEGORY(EventCategory::EventCategoryApplication); // Define the event category
     };
 
-    class EXODIA_API WindowDropEvent : public Event {
+    class WindowDropEvent : public Event {
 
         //////////////////////////////
         // Constructor & Destructor //

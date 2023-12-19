@@ -14,7 +14,7 @@
 namespace Exodia {
 
     template<typename Component>
-    class EXODIA_API ComponentHandle {
+    class ComponentHandle {
 
         /////////////////
         // Constructor //
