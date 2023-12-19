@@ -91,7 +91,7 @@ set(SOURCES_GAME_ENGINE
     # Platform source files
 
         # -- Windows source files
-    
+
     src/Platform/Windows/WindowsPlatformUtils.cpp
     src/Platform/Windows/WindowsWindow.cpp
     src/Platform/Windows/WindowsInput.cpp
@@ -107,6 +107,10 @@ set(SOURCES_GAME_ENGINE
     src/Platform/OpenGL/OpenGLTexture.cpp
     src/Platform/OpenGL/OpenGLUniformBuffer.cpp
     src/Platform/OpenGL/OpenGLVertexArray.cpp
+
+    # Network source files
+
+    src/Network/Network.cpp
 )
 
 # Set the include directories for the Game Engine Library

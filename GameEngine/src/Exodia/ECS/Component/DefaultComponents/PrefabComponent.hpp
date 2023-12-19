@@ -35,9 +35,9 @@ namespace Exodia {
             Children.erase(std::remove(Children.begin(), Children.end(), child), Children.end());
         }
 
-        void HasChild(const UUID &child)
+        bool HasChild(const UUID &child)
         {
-            std::find(Children.begin(), Children.end(), child) != Children.end();
+            return std::find(Children.begin(), Children.end(), child) != Children.end();
         }
 
         virtual void Serialize(YAML::Emitter &out) override
