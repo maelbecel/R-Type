@@ -8,6 +8,9 @@
 #ifndef ICOMPONENTCONTAINER_HPP_
     #define ICOMPONENTCONTAINER_HPP_
 
+    // Exodia Core includes
+    #include "Core/Buffer/Buffer.hpp"
+
     // Exodia Utils includes
     #include "Utils/CrossPlatform.hpp"
     #include "Utils/Memory.hpp"
@@ -42,6 +45,7 @@ namespace Exodia {
             virtual void Removed(Entity *entity) = 0;
 
             virtual void OnImGuiRender() = 0;
+            virtual Buffer SerializeData() = 0;
     };
 };
 

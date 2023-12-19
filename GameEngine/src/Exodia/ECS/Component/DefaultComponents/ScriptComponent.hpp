@@ -27,79 +27,24 @@
 namespace Exodia {
 
     struct ScriptComponent : public Component {
-        std::string Name;
-
         ScriptableEntity *Instance = nullptr;
 
         std::function<ScriptableEntity *()>    InstantiateScript;
         std::function<void(ScriptComponent *)> DestroyScript;
 
-        void Bind(const std::string &name)
+        template<typename T>
+        void Bind()
         {
-            Name = name;
-
-            InstantiateScript = [this]() -> ScriptableEntity * {
-                return ScriptEngine::InstantiateScript(Name);
+            InstantiateScript = []() -> ScriptableEntity * {
+                return static_cast<ScriptableEntity *>(new T());
             };
 
             DestroyScript = [](ScriptComponent *script) {
                 if (script != nullptr && script->Instance != nullptr) {
-                    delete script->Instance;
+                    delete static_cast<T *>(script->Instance);
                     script->Instance = nullptr;
                 }
             };
-        }
-
-        virtual void Serialize(YAML::Emitter &out) override
-        {
-            out << YAML::Key << "ScriptComponent";
-            out << YAML::BeginMap;
-            {
-                out << YAML::Key << "Name" << YAML::Value << Name;
-            }
-            out << YAML::EndMap;
-        }
-
-        virtual void Deserialize(UNUSED const YAML::Node &node) override
-        {
-            try {
-                auto script = node["ScriptComponent"];
-
-                Bind(script["Name"].as<std::string>());
-            } catch (YAML::BadConversion &e) {
-                EXODIA_CORE_WARN("ScriptComponent deserialization failed: {0}", e.what());
-            }
-        }
-
-        virtual void DrawComponent() override
-        {
-            if (Name.empty()) {
-                if (ImGui::Button("Add Script"))
-                    ImGui::OpenPopup("AddScript");
-
-                if (ImGui::BeginPopup("AddScript")) {
-                    const auto &scripts = ScriptEngine::GetScriptableEntities();
-
-                    for (auto script : scripts) {
-                        if (ImGui::MenuItem(script.c_str())) {
-                            Bind(script);
-
-                            ImGui::CloseCurrentPopup();
-                        }
-                    }
-
-                    ImGui::EndPopup();
-                }
-            } else {
-                ImGui::TextUnformatted("Script: %s", Name.c_str());
-
-                ImGui::SameLine();
-
-                if (ImGui::Button("Remove Script")) {
-                    Name = "";
-                    Instance = nullptr;
-                }
-            }
         }
     };
 };

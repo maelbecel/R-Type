@@ -86,6 +86,11 @@ namespace Exodia {
 
             Rotation = glm::radians(rotation);
         }
+
+        virtual Buffer SerializeData()
+        {
+            return Buffer(this, sizeof(*this));
+        }
     };
 };
 

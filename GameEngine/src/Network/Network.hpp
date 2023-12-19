@@ -10,7 +10,12 @@
 
     #include "IOContextManager/IOContextManager.hpp"
     #include "UDPSocket/UDPSocket.hpp"
+    #include "Header/Header.hpp"
+    #include "Connection/Connection.hpp"
+    #include "Packet/Packet.hpp"
+    #include "ECS/ECS.hpp"
     #include <vector>
+    #include <chrono>
 
 namespace Exodia {
 
@@ -23,34 +28,57 @@ namespace Exodia {
                  * @brief Construct a new Network object
                  *
                  */
-                Network(short port) : _socket(_ioContextManager, asio::ip::udp::endpoint(asio::ip::address::from_string("0.0.0.0"), port)) {};
+                Network(World *world, IOContextManager &context,short port) : _world(world), _socket(context, asio::ip::udp::endpoint(asio::ip::address::from_string("0.0.0.0"), port)), _ioContextManager(context)
+                {
+                    loop();
+                    _ioContextManager.run();
+                };
 
                 /**
                  * @brief Destroy the Network object
                  *
                  */
-                ~Network() = default;
+                ~Network()
+                {
+                };
 
                 /**
                  * @brief Connect to a remote endpoint
                  *
                  */
-                void connect(const std::string &ip, short port) {
-                    _remote_endpoint.push_back(asio::ip::udp::endpoint(asio::ip::address::from_string(ip), port));
-                }
 
-                /**
-                 * @brief Run the network
-                 *
-                 */
-                void loop() {
-                    _ioContextManager.run();
+                void loop();
+                void receivePacketInfo(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint);   // 0x00
+                void receiveAck(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint);          // 0x01
+                void receiveConnectAccept(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint);// 0x02
+                void receiveEntity(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint);       // 0x0c
+                void receiveConnect(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint);      // 0x81
+                void receiveEvent(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint);        // 0x82
+                void sendPacketInfo();      // 0x00
+                void sendAck();             // 0x01
+                void sendAcceptConnect();   // 0x02
+                void sendEntity(Entity *entity, std::string component_name); // 0x0c
+                void sendAskConnect(const std::string &ip, short port);      // 0x81
+                void sendEvent(u_int32_t event);                                   // 0x82
+                size_t fill_data(std::vector<char> &buffer, size_t offset, void *data, size_t size);
+                void splitter(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint);
+                std::unordered_map<std::string, Connection> &getConnections() {
+                    return _connections;
                 }
 
             private:
+                void connect(const std::string &ip, short port) {
+                    _server_connection = Connection(asio::ip::udp::endpoint(asio::ip::address::from_string(ip), port));
+                }
+
+            private:
+                World *_world;
                 UDPSocket _socket;
-                IOContextManager _ioContextManager;
-                std::vector<asio::ip::udp::endpoint> _remote_endpoint;
+                std::unordered_map<std::string, Connection> _connections;
+                Connection _server_connection;
+
+                // IOContext
+                IOContextManager &_ioContextManager;
 
         }; // class Network
 

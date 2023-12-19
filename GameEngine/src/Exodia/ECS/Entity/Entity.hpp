@@ -65,7 +65,7 @@ namespace Exodia {
             template<typename Component>
             bool RemoveComponent()
             {
-                auto found = _Components.find(GetTypeIndex<Component>());
+                auto found = _Components.find(GetTypeName<Component>());
 
                 if (found != _Components.end()) {
                     found->second->Removed(this);
@@ -105,7 +105,7 @@ namespace Exodia {
             template<typename Component>
             bool HasComponent() const
             {
-                TypeIndex index = GetTypeIndex<Component>();
+                std::string index = GetTypeName<Component>();
 
                 return _Components.find(index) != _Components.end();
             }
@@ -118,6 +118,8 @@ namespace Exodia {
 
             template<typename Component>
             ComponentHandle<Component> GetComponent();
+
+            IComponentContainer *GetComponent(const std::string &index);
 
             std::vector<IComponentContainer *> GetAllComponents();
 
@@ -145,7 +147,7 @@ namespace Exodia {
             uint64_t   _ID;
             bool       _PendingDestroy;
 
-            std::unordered_map<TypeIndex, IComponentContainer *> _Components;
+            std::unordered_map<std::string, IComponentContainer *> _Components;
 
         /////////////
         // Friends //

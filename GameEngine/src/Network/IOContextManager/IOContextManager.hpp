@@ -26,6 +26,8 @@ namespace Exodia {
 
             ~IOContextManager()
             {
+                if (_ioContextThread.joinable())
+                    _ioContextThread.join();
                 if (isRunning_)
                     io_context_.stop();
             };
@@ -44,8 +46,10 @@ namespace Exodia {
              *
              */
             void run() {
-                isRunning_ = true;
-                io_context_.run();
+                _ioContextThread = std::thread([this]() {
+                    isRunning_ = true;
+                    io_context_.run();
+                });
             }
 
             /**
@@ -59,6 +63,7 @@ namespace Exodia {
 
         private:
             asio::io_context io_context_;
+            std::thread _ioContextThread;
             bool isRunning_;
         };
     } // namespace Network

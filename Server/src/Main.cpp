@@ -8,13 +8,7 @@
 #include <iostream>
 #include <asio.hpp>
 #include "Exodia.hpp"
-
-
-void my_callback(const std::string &message)
-{
-    (void)message;
-    std::cout << "Message received: " << message << std::endl;
-}
+#include "Server.hpp"
 
 int main(int ac, char **av)
 {
@@ -23,23 +17,14 @@ int main(int ac, char **av)
 
     Exodia::Log::Init();
 
-    std::cout << "Asio World !" << std::endl;
+    Exodia::Project::Load("./Client/R-Type.proj");
+
+    std::cout << "Server is waiting for infos !" << std::endl;
 
     try {
-        // Server main
-        Exodia::Network::IOContextManager ioContextManager;
-
-        // Define a local endpoint to listen on
-        asio::ip::udp::endpoint localEndpoint(asio::ip::address::from_string("127.0.0.1"), 8080);
-
-        // Create a UDPSocket object for the server
-        Exodia::Network::UDPSocket serverSocket(ioContextManager, localEndpoint);
-
-        serverSocket.receive(my_callback);
-
-        // Run the IO context to initiate asynchronous operations
-        ioContextManager.run();
-
+        Exodia::Server server(8082);
+        server.Init();
+        server.Run();
         return 0;
 
     } catch (std::exception &e) {
