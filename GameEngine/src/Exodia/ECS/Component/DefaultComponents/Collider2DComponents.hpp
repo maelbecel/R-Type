@@ -65,6 +65,8 @@ namespace Exodia {
 
         virtual void DrawComponent() override
         {
+            ImGui::Separator();
+
             ImGui::DragFloat2("Offset", glm::value_ptr(Offset));
             ImGui::DragFloat2("Size"  , glm::value_ptr(Size));
 
@@ -112,6 +114,8 @@ namespace Exodia {
 
         virtual void DrawComponent() override
         {
+            ImGui::Separator();
+
             ImGui::DragFloat2("Offset", glm::value_ptr(Offset));
             ImGui::DragFloat("Radius" , &Radius);
 

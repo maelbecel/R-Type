@@ -38,6 +38,8 @@ namespace Exodia {
 
             // -- Entity -------------------------------------------------------
 
+            Entity *CreateNewEntity(const std::string &name = std::string());
+            Entity *CreateNewEntityWithUUID(UUID uuid, const std::string &name = std::string());
             Entity *CreateEntity(const std::string &name = std::string());
             Entity *CreateEntityWithUUID(UUID uuid, const std::string &name = std::string());
             Entity *DuplicateEntity(Entity *entity);

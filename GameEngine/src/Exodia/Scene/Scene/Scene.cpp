@@ -57,6 +57,16 @@ namespace Exodia {
         return copyScene;
     }
 
+    Entity *Scene::CreateNewEntity(const std::string &name)
+    {
+        return _World->CreateNewEntity(name);
+    }
+
+    Entity *Scene::CreateNewEntityWithUUID(UUID uuid, const std::string &name)
+    {
+        return _World->CreateNewEntity(uuid, name);
+    }
+
     Entity *Scene::CreateEntity(const std::string &name)
     {
         return _World->CreateEntity(name);

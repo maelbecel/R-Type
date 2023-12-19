@@ -78,6 +78,8 @@ namespace Exodia {
 
         virtual void DrawComponent() override
         {
+            ImGui::Separator();
+
             glm::vec3 rotation = glm::degrees(Rotation);
 
             DrawVec3Control("Translation", Translation);

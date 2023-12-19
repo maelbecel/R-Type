@@ -95,6 +95,8 @@ namespace Exodia {
 
         virtual void DrawComponent() override
         {
+            ImGui::Separator();
+
             const char *bodyTypeStrings[]     = { "Static", "Dynamic" };
             const char *currentBodyTypeString = bodyTypeStrings[(int)Type];
 

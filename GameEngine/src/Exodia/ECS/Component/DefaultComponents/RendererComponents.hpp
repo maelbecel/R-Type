@@ -99,6 +99,8 @@ namespace Exodia {
 
         virtual void DrawComponent() override
         {
+            ImGui::Separator();
+
             std::string label = "None";
             bool isTextureValid = false;
 
@@ -191,6 +193,8 @@ namespace Exodia {
 
         virtual void DrawComponent() override
         {
+            ImGui::Separator();
+
             ImGui::ColorEdit4("Color"   , glm::value_ptr(Color));
             ImGui::DragFloat("Thickness", &Thickness);
             ImGui::DragFloat("Fade"     , &Fade);

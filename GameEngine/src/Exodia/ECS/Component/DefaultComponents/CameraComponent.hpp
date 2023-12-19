@@ -83,6 +83,8 @@ namespace Exodia {
 
         virtual void DrawComponent() override
         {
+            ImGui::Separator();
+
             ImGui::Checkbox("Primary", &Primary);
 
             const char *projectionTypeString[]      = { "Perspective", "Orthographic" };

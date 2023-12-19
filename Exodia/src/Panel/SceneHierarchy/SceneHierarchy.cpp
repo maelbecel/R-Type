@@ -48,6 +48,9 @@ namespace Exodia {
             }
 
             _Context->GetWorld().ForAll([&](Entity *entity) {
+                if (entity->HasComponent<ParentComponent>())
+                    return;
+
                 DrawEntityNode(entity);
             });
 
@@ -70,11 +73,16 @@ namespace Exodia {
 
     void SceneHierarchy::DrawEntityNode(Entity *entity)
     {
-        auto &tag = entity->GetComponent<TagComponent>().Get();
+        if (entity == nullptr)
+            return;
+
+        auto tc = entity->GetComponent<TagComponent>();
+
+        if (!tc)
+            return;
+        auto &tag = tc.Get();
 
         if (entity->HasComponent<ChildrenComponent>()) {
-            if (entity->HasComponent<ParentComponent>())
-                return;
             auto &children = entity->GetComponent<ChildrenComponent>().Get();
 
             ImGuiTreeNodeFlags flags = ((_SelectedEntity == entity) ? ImGuiTreeNodeFlags_Selected : 0) | ImGuiTreeNodeFlags_OpenOnArrow;
@@ -106,9 +114,17 @@ namespace Exodia {
         bool showPopupForThisEntity = (_SelectedEntity == entity);
 
         if (showPopupForThisEntity && ImGui::BeginPopupContextItem()) {
-            if (ImGui::MenuItem("Delete Entity")) {
-                entityDeleted = true;
+            if (entity->HasComponent<ChildrenComponent>()) {
+                if (ImGui::MenuItem("Create Empty Entity")) {
+                    Entity *child = _Context->CreateNewEntity("Empty Entity");
+
+                    child->AddComponent<ParentComponent>(entity->GetEntityID());
+
+                    entity->GetComponent<ChildrenComponent>().Get().AddChild(child->GetEntityID());
+                }
             }
+            if (ImGui::MenuItem("Delete Entity"))
+                entityDeleted = true;
             ImGui::EndPopup();
         }
 
@@ -127,6 +143,7 @@ namespace Exodia {
                 IComponentContainer *component = factory(Buffer());
 
                 _SelectedEntity->AddComponent(component);
+
                 ImGui::CloseCurrentPopup();
             }
         }
@@ -161,8 +178,6 @@ namespace Exodia {
         ImGui::PopItemWidth();
 
         for (auto &component : entity->GetAllComponents()) {
-            ImGui::Separator();
-
             component->OnImGuiRender();
         }
     }
