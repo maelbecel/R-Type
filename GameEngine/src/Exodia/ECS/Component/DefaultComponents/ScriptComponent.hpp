@@ -91,7 +91,7 @@ namespace Exodia {
                     ImGui::EndPopup();
                 }
             } else {
-                ImGui::Text("Script: %s", Name.c_str());
+                ImGui::TextUnformatted("Script: %s", Name.c_str());
 
                 ImGui::SameLine();
 

@@ -81,7 +81,7 @@ namespace Exodia {
 
             flags |= ImGuiTreeNodeFlags_SpanAvailWidth;
 
-            bool opened = ImGui::TreeNodeEx((void *)(uint64_t)(uint32_t)(*entity), flags, tag.Tag.c_str());
+            bool opened = ImGui::TreeNodeEx((void *)(uint64_t)(uint32_t)(*entity), flags, "%s", tag.Tag.c_str());
 
             if (ImGui::IsItemClicked())
                 _SelectedEntity = entity;
@@ -96,7 +96,7 @@ namespace Exodia {
 
             flags |= ImGuiTreeNodeFlags_SpanAvailWidth;
 
-            ImGui::TreeNodeEx((void *)(uint64_t)(uint32_t)(*entity), flags, tag.Tag.c_str());
+            ImGui::TreeNodeEx((void *)(uint64_t)(uint32_t)(*entity), flags, "%s", tag.Tag.c_str());
 
             if (ImGui::IsItemClicked())
                 _SelectedEntity = entity;
