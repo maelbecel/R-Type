@@ -232,12 +232,16 @@ namespace Exodia {
 
     std::function<IComponentContainer *(Buffer)> Project::GetComponentFactory(std::string component)
     {
-        if (_ComponentFactory.find(component) == _ComponentFactory.end()) {
-            EXODIA_CORE_WARN("Project::GetComponentFactory() - Component factory doesn't exist !");
-
+        if (!this) {
             return nullptr;
         }
 
-        return _ComponentFactory[component];
+        auto it = _ComponentFactory.find(component);
+        if (it == _ComponentFactory.end())
+        {
+            return nullptr;
+        }
+
+        return it->second;
     }
 };

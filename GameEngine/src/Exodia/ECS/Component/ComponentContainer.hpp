@@ -78,6 +78,11 @@ namespace Exodia {
             {
                 Data.DrawComponent();
             }
+
+            virtual Buffer SerializeData()
+            {
+                return Data.SerializeData();
+            }
     };
 };
 
