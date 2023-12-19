@@ -36,6 +36,7 @@ namespace Exodia {
             void DrawProperties();
             void DrawEntityNode(Entity *entity);
             void DrawComponents(Entity *entity);
+            void DisplayAddComponentEntry(const std::string &name, const std::function<IComponentContainer *(Buffer)> &factory);
 
         ///////////////////////
         // Getters & Setters //

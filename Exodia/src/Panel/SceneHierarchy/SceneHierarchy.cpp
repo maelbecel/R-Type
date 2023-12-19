@@ -120,6 +120,18 @@ namespace Exodia {
         }
     }
 
+    void SceneHierarchy::DisplayAddComponentEntry(const std::string &name, const std::function<IComponentContainer *(Buffer)> &factory)
+    {
+        if (!_SelectedEntity->Has(name)) {
+            if (ImGui::MenuItem(name.c_str())) {
+                IComponentContainer *component = factory(Buffer());
+
+                _SelectedEntity->AddComponent(component);
+                ImGui::CloseCurrentPopup();
+            }
+        }
+    }
+
     void SceneHierarchy::DrawComponents(Entity *entity)
     {
         if (entity->HasComponent<TagComponent>()) {
@@ -140,21 +152,19 @@ namespace Exodia {
             ImGui::OpenPopup("AddComponent");
 
         if (ImGui::BeginPopup("AddComponent")) {
+            auto &components = Project::GetActive()->GetComponentsFactory();
 
-            /*DisplayAddComponentEntry<CameraComponent>("Camera");
-            DisplayAddComponentEntry<SpriteRendererComponent>("Sprite Renderer");
-            DisplayAddComponentEntry<CircleRendererComponent>("Circle Renderer");
-            DisplayAddComponentEntry<NativeScriptComponent>("Native Script");
-            DisplayAddComponentEntry<Rigidbody2DComponent>("Rigidbody 2D");
-            DisplayAddComponentEntry<BoxCollider2DComponent>("Box Collider 2D");
-            DisplayAddComponentEntry<CircleCollider2DComponent>("Circle Collider 2D");*/
-
+            for (auto &component : components)
+                DisplayAddComponentEntry(component.first, component.second);
             ImGui::EndPopup();
         }
         ImGui::PopItemWidth();
 
-        for (auto &component : entity->GetAllComponents())
+        for (auto &component : entity->GetAllComponents()) {
+            ImGui::Separator();
+
             component->OnImGuiRender();
+        }
     }
 
     ///////////////////////

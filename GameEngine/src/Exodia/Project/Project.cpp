@@ -230,6 +230,11 @@ namespace Exodia {
         _ComponentFactory[component] = factory;
     }
 
+    std::unordered_map<std::string, std::function<IComponentContainer *(Buffer)>> &Project::GetComponentsFactory()
+    {
+        return _ComponentFactory;
+    }
+
     std::function<IComponentContainer *(Buffer)> Project::GetComponentFactory(std::string component)
     {
         if (!this) {

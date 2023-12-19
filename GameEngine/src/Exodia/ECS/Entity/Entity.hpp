@@ -110,6 +110,8 @@ namespace Exodia {
                 return _Components.find(index) != _Components.end();
             }
 
+            bool Has(const std::string &index);
+
             template<typename Required, typename Additional, typename... Remaining>
             bool HasComponent() const
             {

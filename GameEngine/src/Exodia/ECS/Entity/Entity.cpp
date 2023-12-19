@@ -74,6 +74,11 @@ namespace Exodia {
         return true;
     }
 
+    bool Entity::Has(const std::string &index)
+    {
+        return _Components.find(index) != _Components.end();
+    }
+
     ///////////////////////
     // Getters & Setters //
     ///////////////////////

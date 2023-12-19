@@ -83,6 +83,8 @@ namespace Exodia {
             Ref<EditorAssetManager>  GetEditorAssetManager()  const;
 
             void RegisterComponent(std::string component, std::function<IComponentContainer *(Buffer)> factory);
+
+            std::unordered_map<std::string, std::function<IComponentContainer *(Buffer)>> &GetComponentsFactory();
             std::function<IComponentContainer *(Buffer)> GetComponentFactory(std::string component);
 
             ProjectConfig &GetConfig();
