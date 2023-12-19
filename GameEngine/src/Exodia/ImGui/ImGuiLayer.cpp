@@ -110,7 +110,6 @@ namespace Exodia {
         ImGui_ImplGlfw_NewFrame();
 
         ImGui::NewFrame();
-        //ImGuizmo::BeginFrame();
     }
 
     void ImGuiLayer::End()

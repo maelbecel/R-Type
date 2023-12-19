@@ -22,7 +22,7 @@ namespace Exodia {
     /**
      * @brief Class that will be call when a key is pressed
      */
-    class EXODIA_API KeyEvent : public Event {
+    class KeyEvent : public Event {
 
         /////////////////
         // Constructor //
@@ -63,7 +63,7 @@ namespace Exodia {
     /**
      * @brief Class that will be call when a key is pressed
      */
-    class EXODIA_API KeyPressedEvent : public KeyEvent {
+    class KeyPressedEvent : public KeyEvent {
 
         ////////////////////////////////////////
         // Constructor & Destructor (default) //
@@ -129,7 +129,7 @@ namespace Exodia {
      * @brief Class that will be call when a key is released
      * Release it's when the key is not pressed anymore
      */
-    class EXODIA_API KeyReleasedEvent : public KeyEvent {
+    class KeyReleasedEvent : public KeyEvent {
 
         ////////////////////////////////////////
         // Constructor & Destructor (default) //
@@ -177,7 +177,7 @@ namespace Exodia {
      * @brief Class that will be call when a key is typed
      * Type it's when the key is pressed and released
      */
-    class EXODIA_API KeyTypedEvent : public KeyEvent {
+    class KeyTypedEvent : public KeyEvent {
 
         ////////////////////////////////////////
         // Constructor & Destructor (default) //

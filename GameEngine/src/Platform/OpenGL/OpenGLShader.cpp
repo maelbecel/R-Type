@@ -172,7 +172,7 @@ namespace Exodia {
         std::unordered_map<GLenum, std::string> shaderSources;
 
         const char *typeToken = "#type";
-        size_t typeTokenLength = strlen(typeToken);
+        size_t typeTokenLength = std::strlen(typeToken);
         size_t pos = source.find(typeToken, 0);
 
         while (pos != std::string::npos) {

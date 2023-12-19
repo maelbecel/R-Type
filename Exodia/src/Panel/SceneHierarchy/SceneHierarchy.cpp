@@ -12,6 +12,9 @@
 #include <imgui.h>
 #include <misc/cpp/imgui_stdlib.h>
 
+// External includes
+#include <cstring>
+
 namespace Exodia {
 
     //////////////////////////////
@@ -117,28 +120,41 @@ namespace Exodia {
         }
     }
 
-    void SceneHierarchy::DrawComponents(UNUSED Entity *entity)
+    void SceneHierarchy::DrawComponents(Entity *entity)
     {
-        // 1. Get all components that currently exist.
-        // 2. Iterate over all components.
-        // 3. If the entity has the component, draw it.
+        if (entity->HasComponent<TagComponent>()) {
+            auto &tag = entity->GetComponent<TagComponent>().Get().Tag;
+            char buffer[256];
 
-        //for (auto &component : entity->GetAllComponents()) {
-        //    (void)component;
+            std::memset(buffer, 0, sizeof(buffer));
+            std::strncpy(buffer, tag.c_str(), sizeof(buffer));
 
-            /*DrawComponent<TransformComponent>("Transform", entity, [](auto &component)
-            {
-                DrawVec3Control("Translation", component.Translation);
+            if (ImGui::InputText("Tag", buffer, sizeof(buffer)))
+                tag = std::string(buffer);
+        }
 
-                glm::vec3 rotation = glm::degrees(component.Rotation);
+        ImGui::SameLine();
+        ImGui::PushItemWidth(-1);
 
-                DrawVec3Control("Rotation", rotation);
+        if (ImGui::Button("Add Component"))
+            ImGui::OpenPopup("AddComponent");
 
-                component.Rotation = glm::radians(rotation);
+        if (ImGui::BeginPopup("AddComponent")) {
 
-                DrawVec3Control("Scale", component.Scale, 1.0f);
-            });*/
-        //}
+            /*DisplayAddComponentEntry<CameraComponent>("Camera");
+            DisplayAddComponentEntry<SpriteRendererComponent>("Sprite Renderer");
+            DisplayAddComponentEntry<CircleRendererComponent>("Circle Renderer");
+            DisplayAddComponentEntry<NativeScriptComponent>("Native Script");
+            DisplayAddComponentEntry<Rigidbody2DComponent>("Rigidbody 2D");
+            DisplayAddComponentEntry<BoxCollider2DComponent>("Box Collider 2D");
+            DisplayAddComponentEntry<CircleCollider2DComponent>("Circle Collider 2D");*/
+
+            ImGui::EndPopup();
+        }
+        ImGui::PopItemWidth();
+
+        for (auto &component : entity->GetAllComponents())
+            component->OnImGuiRender();
     }
 
     ///////////////////////

@@ -16,7 +16,7 @@
 
 namespace Exodia {
 
-    class EXODIA_API EntityView {
+    class EntityView {
 
         /////////////////
         // Constructor //
