@@ -48,12 +48,12 @@ namespace Exodia {
                  */
 
                 void Loop();
-                void ReceivePacketInfo(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint);   // 0x00
-                void ReceiveAck(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint);          // 0x01
-                void ReceiveConnectAccept(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint);// 0x02
-                void ReceiveEntity(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint);       // 0x0c
-                void ReceiveConnect(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint);      // 0x81
-                void ReceiveEvent(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint);        // 0x82
+                void ReceivePacketInfo(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint, Exodia::Network::Header header);   // 0x00
+                void ReceiveAck(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint, Exodia::Network::Header header);          // 0x01
+                void ReceiveConnectAccept(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint, Exodia::Network::Header header);// 0x02
+                void ReceiveEntity(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint, Exodia::Network::Header header);       // 0x0c
+                void ReceiveConnect(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint, Exodia::Network::Header header);      // 0x81
+                void ReceiveEvent(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint, Exodia::Network::Header header);        // 0x82
                 void SendPacketInfo();      // 0x00
                 void SendAck();             // 0x01
                 void SendAcceptConnect();   // 0x02
@@ -79,6 +79,8 @@ namespace Exodia {
 
                 // IOContext
                 IOContextManager &_ioContextManager;
+
+                std::map<float, uint32_t> _events;
 
         }; // class Network
 

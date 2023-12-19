@@ -71,6 +71,8 @@ namespace Exodia {
                         circle.Get().Fade, // CircleRendererComponent
                         (int)id.Get().ID                // Entity ID
                     );
+                    // entity->GetComponent<TransformComponent>().Get().Translation.x += 0.01 * ts;
+                    // network.SendEntity(entity, "TransformComponent");
                 }
             });
 

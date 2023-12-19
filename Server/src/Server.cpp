@@ -63,6 +63,8 @@ namespace Exodia {
 
     void Server::Init()
     {
+        RendererAPI::SetAPI(RendererAPI::API::None);
+
         std::cout << "Server is initializing !" << std::endl;
         try {
             // Register the systems
@@ -79,6 +81,11 @@ namespace Exodia {
             CreatePataPata(_world);
             CreateBackground(_world);
 
+            Exodia::Entity *entity = _world->CreateEntity();
+            entity->AddComponent<IDComponent>();
+            // entity->AddComponent<TransformComponent>(glm::vec3{ 0.0f, 0.0f, 0.0f });
+            entity->AddComponent<CircleRendererComponent>(glm::vec4{ 0.9f, 0.9f, 0.9f + static_cast<float>(random() % 100) / 10000.0f, 0.9f });
+            // entity->AddComponent<SpriteRendererComponent>(glm::vec4{ 1.0f, 1.0f, 1.0f, 1.0f });
         } catch (std::exception &e) {
             std::cerr << "Exception: " << e.what() << std::endl;
         }
@@ -110,8 +117,11 @@ namespace Exodia {
             this->_world->Update(timestep);
 
             //send entities
-            this->_world->ForEach<TransformComponent>([&](Entity *entity, ComponentHandle<TransformComponent> transform) {
+            this->_world->ForEach<CircleRendererComponent>([&](Entity *entity, ComponentHandle<CircleRendererComponent> transform) {
                 if (transform) {
+                    _network.SendEntity(entity, "CircleRendererComponent");
+                    entity->GetComponent<TransformComponent>().Get().Translation.y += 100;
+                    std::cout << "Y translation: " << entity->GetComponent<TransformComponent>().Get().Translation.y << std::endl;
                     _network.SendEntity(entity, "TransformComponent");
                     sleep(3);
                 }
