@@ -64,7 +64,7 @@ namespace Exodia {
                 EXODIA_INFO("Player is moving up");
                 _State = State::MOVE_UP;
                 velocity.Get().Velocity.y = 5.0f;
-            } else if (keycode) {   // Down
+            } else if (keycode == Key::S) {   // Down
                 EXODIA_INFO("Player is moving down");
                 _State = State::MOVE_DOWN;
                 velocity.Get().Velocity.y = -5.0f;
