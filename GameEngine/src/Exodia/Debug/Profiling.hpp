@@ -21,7 +21,7 @@
 
     // -- Macros ---------------------------------------------------------------
 
-    #if DEBUG
+    #if EXODIA_DEBUG
         #define EXODIA_PROFILE_BEGIN_SESSION(name, filepath) ::Exodia::Instrumentor::Get().BeginSession(name, filepath)
         #define EXODIA_PROFILE_END_SESSION()                 ::Exodia::Instrumentor::Get().EndSession()
         #define EXODIA_PROFILE_SCOPE(name)                   ::Exodia::InstrumentationTimer timer##__LINE__(name)

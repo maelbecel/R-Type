@@ -8,6 +8,9 @@
 #ifndef EVENTSUBSCRIBER_HPP_
     #define EVENTSUBSCRIBER_HPP_
 
+    // Exodia ECS Interface includes
+    #include "Interface/IEventSubscriber.hpp"
+
     // Exodia Utils includes
     #include "Utils/CrossPlatform.hpp"
 
@@ -16,7 +19,7 @@ namespace Exodia {
     class World;
 
     template<typename Event>
-    class EXODIA_API EventSubscriber : public IEventSubscriber {
+    class EventSubscriber : public IEventSubscriber {
 
         ////////////////
         // Destructor //

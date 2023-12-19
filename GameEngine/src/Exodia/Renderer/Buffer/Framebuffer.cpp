@@ -25,7 +25,7 @@ namespace Exodia {
     {
         switch (Renderer::GetAPI()) {
             case RendererAPI::API::None:
-                EXODIA_CORE_ASSERT("RendererAPI::None is not supported !");
+                EXODIA_CORE_ASSERT(false, "RendererAPI::None is not supported !");
                 return nullptr;
             case RendererAPI::API::OpenGL:
                 return CreateRef<OpenGLFramebuffer>(spec);
@@ -33,7 +33,7 @@ namespace Exodia {
                 break;
         }
 
-        EXODIA_CORE_ASSERT("Unknown RendererAPI !");
+        EXODIA_CORE_ASSERT(false, "Unknown RendererAPI !");
         return nullptr;
     };
 };

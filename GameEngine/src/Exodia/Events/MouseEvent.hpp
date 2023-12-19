@@ -22,7 +22,7 @@ namespace Exodia {
     /**
      * @brief Class that will be call when the mouse is moved
      */
-    class EXODIA_API MouseMovedEvent : public Event {
+    class MouseMovedEvent : public Event {
 
         ////////////////////////////////////////
         // Constructor & Destructor (default) //
@@ -103,7 +103,7 @@ namespace Exodia {
     /**
      * @brief Class that will be call when the scroll is moved
      */
-    class EXODIA_API MouseScrolledEvent : public Event {
+    class MouseScrolledEvent : public Event {
 
         ////////////////////////////////////////
         // Constructor & Destructor (default) //
@@ -184,7 +184,7 @@ namespace Exodia {
     /**
      * @brief Class that will be call when a mouse button is pressed
      */
-    class EXODIA_API MouseButtonEvent : public Event {
+    class MouseButtonEvent : public Event {
 
         ///////////////////////
         // Getters & Setters //
@@ -225,7 +225,7 @@ namespace Exodia {
     /**
      * @brief Class that will be call when a mouse button is pressed
      */
-    class EXODIA_API MouseButtonPressedEvent : public MouseButtonEvent {
+    class MouseButtonPressedEvent : public MouseButtonEvent {
 
         ////////////////////////////////////////
         // Constructor & Destructor (default) //
@@ -273,7 +273,7 @@ namespace Exodia {
      * @brief Class that will be call when a mouse button is released
      * Release it's when the button is not pressed anymore
      */
-    class EXODIA_API MouseButtonReleasedEvent : public MouseButtonEvent {
+    class MouseButtonReleasedEvent : public MouseButtonEvent {
 
         ////////////////////////////////////////
         // Constructor & Destructor (default) //

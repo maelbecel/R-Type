@@ -9,11 +9,15 @@
 #include "Renderer2D.hpp"
 #include "Renderer/Renderer/RenderCommand.hpp"
 
+// Exodia Core include
+#include "Core/Buffer/Buffer.hpp"
+
 // Exodia Debug
 #include "Debug/Profiling.hpp"
 
 // External include
 #include <glm/gtc/matrix_transform.hpp>
+#include <cstring>
 
 namespace Exodia {
 
@@ -86,11 +90,11 @@ namespace Exodia {
         _Data->LineVertexArray->AddVertexBuffer(_Data->LineVertexBuffer);
         _Data->LineVertexBufferBase = new LineVertex[_Data->MaxVertices];
 
-        _Data->WhiteTexture = Texture2D::Create(1, 1);
+        _Data->WhiteTexture = Texture2D::Create(TextureSpecification());
 
         uint32_t whiteTextureData = 0xffffffff;
 
-        _Data->WhiteTexture->SetData(&whiteTextureData, sizeof(uint32_t));
+        _Data->WhiteTexture->SetData(Buffer(&whiteTextureData, sizeof(uint32_t)));
 
         _Data->QuadShader = Shader::Create("./Assets/Shaders/Renderer2D_Quad.glsl");
         _Data->CircleShader = Shader::Create("./Assets/Shaders/Renderer2D_Circle.glsl");
@@ -215,7 +219,7 @@ namespace Exodia {
 
     void Renderer2D::ResetStats()
     {
-        Memset(&_Data->Stats, 0, sizeof(Statistics));
+        std::memset(&_Data->Stats, 0, sizeof(Statistics));
     }
 
     void Renderer2D::FlushAndReset()
@@ -306,6 +310,9 @@ namespace Exodia {
     void Renderer2D::DrawQuad(const glm::mat4 &transform, const Ref<Texture2D> &texture, float tilingFactor, const glm::vec4 &tintColor, int entityID)
     {
         EXODIA_PROFILE_FUNCTION(); // Performance instrumentation profiling for the function
+
+        if (texture == nullptr)
+            return DrawQuad(transform, tintColor, entityID);
 
         constexpr uint32_t quadVertexCount = 4;
         constexpr glm::vec2 textureCoords[] = {

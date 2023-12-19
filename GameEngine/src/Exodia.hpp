@@ -29,13 +29,31 @@
     #include "Exodia/Events/KeyEvent.hpp"
     #include "Exodia/Events/Event.hpp"
 
+    // -- Exodia Asset Manager -------------------------------------------------
+
+    #include "Exodia/Asset/Asset.hpp"
+
     // -- Exodia ImGui ---------------------------------------------------------
 
     #include "Exodia/ImGui/ImGuiLayer.hpp"
+    #include "Exodia/ImGui/ImGuiToolsUI.hpp"
 
     // -- Exodia Renderer ------------------------------------------------------
 
     #include "Exodia/Renderer/Render.hpp"
+
+    // -- Exodia Scene ---------------------------------------------------------
+
+    #include "Exodia/Scene/SceneHeaders.hpp"
+
+    // -- Exodia Project -------------------------------------------------------
+
+    #include "Exodia/Project/Project.hpp"
+    #include "Exodia/Project/ProjectSerializer.hpp"
+
+    // -- Exodia Script --------------------------------------------------------
+
+    #include "Exodia/Script/Script.hpp"
 
     // -- Exodia Debug ---------------------------------------------------------
 
@@ -46,7 +64,16 @@
 
     #include "Utils/CrossPlatform.hpp"
     #include "Utils/PlatformUtils.hpp"
+    #include "Utils/LibrairyLoader.hpp"
     #include "Utils/Memory.hpp"
     #include "Utils/Assert.hpp"
+
+    // -- Exodia Math ----------------------------------------------------------
+
+    #include "Exodia/Math/Math.hpp"
+
+    // -- Exodia Network -------------------------------------------------------
+
+    #include "Network/Network.hpp"
 
 #endif /* !EXODIA_HPP_ */

@@ -24,7 +24,7 @@ namespace Exodia {
      * @brief The Instrumentor class provides functionality for instrumenting code for profiling.
      * It allows starting and ending profiling sessions, writing profile results to an output stream, and managing timers.
      */
-    class EXODIA_API Instrumentor {
+    class Instrumentor {
 
         //////////////////////////////
         // Constructor & Destructor //

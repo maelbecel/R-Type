@@ -160,7 +160,7 @@ namespace Exodia {
             in.read(&contents[0], contents.size());
             in.close();
         } else
-            EXODIA_CORE_ERROR("Could not open file '", filepath, "'");
+            EXODIA_CORE_ERROR("Could not open file '{0}'", filepath);
 
         return contents;
     }
@@ -172,7 +172,7 @@ namespace Exodia {
         std::unordered_map<GLenum, std::string> shaderSources;
 
         const char *typeToken = "#type";
-        size_t typeTokenLength = strlen(typeToken);
+        size_t typeTokenLength = std::strlen(typeToken);
         size_t pos = source.find(typeToken, 0);
 
         while (pos != std::string::npos) {
@@ -202,7 +202,7 @@ namespace Exodia {
 
         GLuint program = glCreateProgram();
 
-        EXODIA_CORE_ASSERT(shaderSources.size() <= MAX_SHADER_SUPPORTED, "We only support " + MAX_SHADER_SUPPORTED + " shaders for now");
+        EXODIA_CORE_ASSERT(shaderSources.size() <= MAX_SHADER_SUPPORTED, std::string("We only support " + std::to_string(MAX_SHADER_SUPPORTED) + " shaders for now !").c_str());
 
         std::array<GLenum, MAX_SHADER_SUPPORTED> glShaderIDs;
         int glShaderIDIndex = 0;

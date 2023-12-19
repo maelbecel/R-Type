@@ -7,10 +7,10 @@ The application creates a rendering window and uses a layer (DefaultLayer) to ma
 
 ## File contents
 
-    DefaultLayer.hpp: Contains the definition of the DefaultLayer class, the engine's base layer.
-    DefaultLayer.cpp: Implementation of DefaultLayer class methods for game logic and rendering.
-    ApplicationExample.hpp: An application example class using DefaultLayer and initializing the application with the Exodia engine.
-    Exodia/EntryPoint.hpp : Application entry point that creates and launches the Exodia application.
+- DefaultLayer.hpp: Contains the definition of the DefaultLayer class, the engine's base layer.
+- DefaultLayer.cpp: Implementation of DefaultLayer class methods for game logic and rendering.
+- ApplicationExample.hpp: An application example class using DefaultLayer and initializing the application with the Exodia engine.
+- Exodia/EntryPoint.hpp : Application entry point that creates and launches the Exodia application.
 
 ## Main features
     

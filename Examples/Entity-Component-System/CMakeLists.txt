@@ -34,12 +34,23 @@ include_directories(${INCLUDE_DIRS})
 # Add an executable for the ecs
 add_executable(ecs ${SOURCES})
 
-target_link_libraries(ecs GameEngine glad glfw glm imgui)
+target_link_libraries(ecs PRIVATE
+    GameEngine
+    glad::glad
+    glfw
+    imgui
+    glm::glm
+    asio::asio
+    OpenAL::OpenAL
+    spdlog::spdlog
+    Catch2::Catch2 Catch2::Catch2WithMain
+    sol2
+    unofficial::nativefiledialog::nfd
+    yaml-cpp::yaml-cpp
+    imguizmo::imguizmo
+)
 
-target_include_directories(ecs PRIVATE ${glad_INCLUDE_DIRS})
-target_include_directories(ecs PRIVATE ${CMAKE_BINARY_DIR}/_deps/opengl-src/GLAD/include)
-target_include_directories(ecs PRIVATE ${CMAKE_BINARY_DIR}/_deps/glfw-src/include)
-target_include_directories(ecs PRIVATE ${CMAKE_BINARY_DIR}/_deps/glm-src)
+target_include_directories(ecs PRIVATE ${Stb_INCLUDE_DIR})
 target_include_directories(ecs PRIVATE ${CMAKE_BINARY_DIR}/_deps/imgui-src)
 
 set_target_properties(ecs PROPERTIES

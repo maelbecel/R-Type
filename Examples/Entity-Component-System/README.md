@@ -4,7 +4,8 @@
 
 Components in ECS can be any data type, but generally they'll be a struct containing some plain old data. For now, let's define two components:
 ```cpp
-struct Transform {
+struct Transform : public Component {
+
     glm::vec3 Translation;
     glm::vec3 Rotation;
     glm::vec3 Scale;
@@ -13,7 +14,7 @@ struct Transform {
     Transform(const glm::vec3 &translation = glm::vec3(0.0f)) : Translation(translation), Rotation(glm::vec3(0.0f)), Scale(glm::vec3(1.0f)) {};
 };
 
-struct Health {
+struct Health : public Component {
     int CurrentHealth;
     int MaxHealth;
 
@@ -23,6 +24,8 @@ struct Health {
 ```
 
 Note that we don't have to do anything special for these structs to act as components, though there is the requirement for at least a default constructor.
+
+Note we can see ![Component.hpp](https://github.com/maelbecel/R-Type/blob/main/GameEngine/src/Exodia/ECS/Interface/Component.hpp) how to create a component, with his override methods.
 
 ## Create a system
 
@@ -41,7 +44,7 @@ class GravitySystem : public EntitySystem {
         virtual void Update(World *world, Timestep ts) override
         {
             world->ForEach<Transform>([&](Entity *entity, ComponentHandle<Transform> transform) {
-                transform->Translation.y += _GravityAmount * ts;
+                transform.Get().Translation.y += _GravityAmount * ts;
             });
         }
 
@@ -65,7 +68,7 @@ The downside is that it will not directly expose components as arguments, but yo
 ```cpp
 for (Entity *entity : world->ForEach<Transform>()) {
     entity->CallFunctionWithComponents<Transform>([&](ComponentHandle<Transform> transform) {
-	    transform->Translation.y += _GravityAmount * ts;
+	    transform.Get().Translation.y += _GravityAmount * ts;
 	});
 }
 ```
@@ -76,7 +79,7 @@ Alternatively, you may retrieve a single component at a time with `Entity::GetCo
 ```cpp
 ComponentHandle<Transform> transform = entity->GetComponent<Transform>();
 
-transform->Translation.y += _GravityAmount * ts; // this will crash if there is no position component on the entity
+transform.Get().Translation.y += _GravityAmount * ts; // this will crash if there is no position component on the entity
 ```
 
 `CallFunctionWithComponents<Components>()` only runs the given function if the entity has the listed components.
@@ -103,12 +106,14 @@ World *world = World::CreateWorld();
 
 world->RegisterSystem(new GravitySystem(-6.9f));
 
-Entity *entity = world->CreateEntity();
+Entity *entity = world->CreateEntity("Player");
 
 entity->AddComponent<Transform>();
 entity->AddComponent<Health>();
 ```
 
+Note `CreateEntity()` returns a pointer to the entity, know that this entity have default component (TagComponent, IDComponent, TransformComponent).
+Note `CreateEntity()` you can provides a name for the entity or a uuid.
 Note `AddComponent()` can take any arguments that the component's constructor takes, so you can do this instead:
 
 ```cpp
@@ -128,6 +133,16 @@ Once you are done with the world, make sure to destroy it (this will also deallo
 world->DestroyWorld();
 ```
 
+## Create Entities
+
+You saw in the last examples that you can create entities with `World::CreateEntity()`.
+But if you want to create like a script for spawning entities, you can use `World::CreateEntity()` but that will segfault because you will edit the world during is iteration.
+So for that you can use `World::CreateNewEntity()` that will store the entity create in a merge list and will merge it at the end of the iteration.
+
+```cpp
+Entity *entity = world->CreateNewEntity("Player");
+```
+
 ## Working with components
 
 You may retrieve a component handle (for example, to print out the position of your entity) with `GetComponents()`:
@@ -143,7 +158,7 @@ ComponentHandle<Transform> transform = entity->GetComponent<Transform>();
 
 // ComponentHandle::operator bool() will return false if the handle is invalid
 if (transform /* or transform.IsValid() */)
-    std::cout << "My position is " << transform->Translation.x << ", " << transform->Translation.y << std::endl;
+    std::cout << "My position is " << transform.Get().Translation.x << ", " << transform.Get().Translation.y << std::endl;
 else
     std::cout << "I don't have a Transform component !" << std::endl;
 ```
@@ -211,7 +226,7 @@ class FortniteZone : public EntitySystem, public EventSubscriber<TakeDamageEvent
         virtual void Update(World *world, Timestep ts) override
         {
             world->ForEach<Health>([&](Entity *entity, ComponentHandle<Health> health) {
-                health->CurrentHealth -= _DamagePerSecond * ts;
+                health.Get().CurrentHealth -= _DamagePerSecond * ts;
             });
         }
 
@@ -243,6 +258,7 @@ There are a handful of built-in events. Here is the list:
 - OnEntityDestroyed  - called when an entity is being destroyed (including when a world is beind deleted).
 - OnComponentAdded   - called when a component is added to an entity. This might mean the component is new to the entity, or there's just a new assignment of the component to that entity overwriting an old one.
 - OnComponentRemoved - called when a component is removed from an entity. This happens upon manual removal `Entity::RemoveComponent()` and `Entity::RemoveAllComponents()` or upon entity destruction (which can also happen as a result of the world being destroyed).
+- OnCollisionEnter  - called when an entity collides with another entity. This event is emitted by the CollisionSystem.
 
 # Running the example
 

@@ -38,7 +38,7 @@ namespace Exodia {
 
         const char *operator[](int index) const
         {
-            EXODIA_CORE_ASSERT(index < Count);
+            EXODIA_CORE_ASSERT(index < Count, "Index out of range !");
 
             return Args[index];
         }
@@ -58,7 +58,7 @@ namespace Exodia {
     /**
      * @brief Class that will be used for the application
      */
-    class EXODIA_API Application {
+    class Application {
 
         //////////////////////////////
         // Constructor & Destructor //

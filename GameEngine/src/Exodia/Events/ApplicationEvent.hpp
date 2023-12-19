@@ -16,6 +16,8 @@
 
     // External includes
     #include <sstream>
+    #include <filesystem>
+    #include <vector>
 
     ///////////////////////////////////////////////////////////////////////////////
     // In this file, we define all the event that are related to the application //
@@ -26,7 +28,7 @@ namespace Exodia {
     /**
      * @brief Class that will be call when the window is resized
      */
-    class EXODIA_API WindowResizeEvent : public Event {
+    class WindowResizeEvent : public Event {
 
         ////////////////////////////////////////
         // Constructor & Destructor (default) //
@@ -103,7 +105,7 @@ namespace Exodia {
     /**
      * @brief Class that will be call when the window is closed
      */
-    class EXODIA_API WindowCloseEvent : public Event {
+    class WindowCloseEvent : public Event {
 
         //////////////////////////////////////////////////
         // Constructor (default) & Destructor (default) //
@@ -133,7 +135,7 @@ namespace Exodia {
      * This event is called every frame
      * The difference between AppTickEvent and AppUpdateEvent is that AppTickEvent is called before AppUpdateEvent
      */
-    class EXODIA_API AppTickEvent : public Event {
+    class AppTickEvent : public Event {
 
         //////////////////////////////////////////////////
         // Constructor (default) & Destructor (default) //
@@ -163,7 +165,7 @@ namespace Exodia {
      * This event is called every frame
      * The difference between AppTickEvent and AppUpdateEvent is that AppTickEvent is called before AppUpdateEvent
      */
-    class EXODIA_API AppUpdateEvent : public Event {
+    class AppUpdateEvent : public Event {
 
         //////////////////////////////////////////////////
         // Constructor (default) & Destructor (default) //
@@ -192,7 +194,7 @@ namespace Exodia {
      * @brief Class that will be call when the Application is rendered
      * This event is called every frame
      */
-    class EXODIA_API AppRenderEvent : public Event {
+    class AppRenderEvent : public Event {
 
         //////////////////////////////////////////////////
         // Constructor (default) & Destructor (default) //
@@ -213,6 +215,37 @@ namespace Exodia {
         public:
             EVENT_CLASS_TYPE(AppRender);                        // Define the event type
             EVENT_CLASS_CATEGORY(EventCategory::EventCategoryApplication); // Define the event category
+    };
+
+    class WindowDropEvent : public Event {
+
+        //////////////////////////////
+        // Constructor & Destructor //
+        //////////////////////////////
+        public:
+
+            WindowDropEvent(const std::vector<std::filesystem::path>  &paths) : _Paths(paths) {};
+            WindowDropEvent(const std::vector<std::filesystem::path> &&paths) : _Paths(std::move(paths)) {};
+
+        ///////////////////////
+        // Getters & Setters //
+        ///////////////////////
+        public:
+
+            const std::vector<std::filesystem::path> &GetPaths() const
+            {
+                return _Paths;
+            };
+
+            EVENT_CLASS_TYPE(WindowDrop);                                  // Define the event type
+            EVENT_CLASS_CATEGORY(EventCategory::EventCategoryApplication); // Define the event category
+        
+        ////////////////
+        // Attributes //
+        ////////////////
+        private:
+
+            std::vector<std::filesystem::path> _Paths; /*!< The paths of the files dropped */
     };
 };
 
