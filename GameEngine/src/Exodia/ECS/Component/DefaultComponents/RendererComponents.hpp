@@ -146,7 +146,7 @@ namespace Exodia {
                     Texture->SetTexture(AssetHandle(0));
             }
             ImGui::SameLine();
-            ImGui::Text("Texture");
+            ImGui::TextUnformatted("Texture");
 
             ImGui::DragFloat("Tiling Factor", &TilingFactor, 0.1f, 0.0f, 100.0f);
         }
