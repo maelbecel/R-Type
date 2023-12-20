@@ -12,6 +12,7 @@
     #include "Component/Animation.hpp"
     #include "Component/Health.hpp"
     #include "Scripts/Player/Player.hpp"
+    #include "SceneType.hpp"
 
 namespace Exodia {
 
@@ -20,7 +21,7 @@ namespace Exodia {
      *
      * @param _World
      */
-    void CreatePlayer(World *_World);
+    void CreatePlayer(std::map<SceneType, std::shared_ptr<Exodia::Scene>> _World);
 };
 
 #endif /* !CREATEPLAYER_HPP_ */

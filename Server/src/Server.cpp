@@ -75,10 +75,10 @@ namespace Exodia {
             _world->Subscribe<Events::OnCollisionEntered>(collisionSystem);
 
             // Create the entities
-            CreatePlayer(_world);
-            CreatePataPata(_world);
-            CreateBackground(_world);
-            CreateStars(_world);
+            // CreatePlayer(_world);
+            // CreatePataPata(_world);
+            // CreateBackground(_world);
+            // CreateStars(_world);
 
         } catch (std::exception &e) {
             std::cerr << "Exception: " << e.what() << std::endl;

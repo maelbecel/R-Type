@@ -11,6 +11,7 @@
     // Exodia includes
     #include "Exodia.hpp"
     #include "Scripts/BulletPlayer.hpp"
+    #include "Component/Health.hpp"
 
 namespace Exodia {
 

@@ -36,12 +36,19 @@ namespace Exodia {
             bool OnKeyReleasedEvent(KeyReleasedEvent &event);
             bool OnKeyPressedEvent(KeyPressedEvent &event);
 
+        public:
+            void RegisterComponent(std::string name, std::function<IComponentContainer *(Buffer)> factory);
 
         ////////////////
         // Attributes //
         ////////////////
+        public:
+            inline static SceneType _currentScene;
+            inline static std::map<SceneType, std::shared_ptr<Exodia::Scene>> _World;
+
         private:
-            Exodia::World *_World = Exodia::World::CreateWorld();
+            std::unordered_map<std::string, std::function<IComponentContainer *(Buffer)>> _ComponentFactory;
+            Exodia::World *_worldNetwork = Exodia::World::CreateWorld();
             Exodia::Network::IOContextManager ioContextManager;
 
             Ref<Framebuffer>             _Framebuffer;
