@@ -61,7 +61,6 @@ namespace Exodia {
 
             _World->ForEach<CircleRendererComponent>([&](Entity *entity, ComponentHandle<CircleRendererComponent> circle) {
                 auto transform = entity->GetComponent<TransformComponent>();
-
                 if (transform) {
                     Renderer2D::DrawCircle(
                         transform.Get().GetTransform(), // Transform
@@ -87,6 +86,7 @@ namespace Exodia {
             });
 
 
+
             Exodia::Renderer2D::EndScene();
         }
     }
@@ -105,5 +105,9 @@ namespace Exodia {
     void RTypeLayer::OnEvent(Exodia::Event &event)
     {
         _CameraController.OnEvent(event);
+        if (Exodia::Input::IsKeyPressed(Exodia::Key::SPACE)) {
+            std::cout << "Space key is pressed" << std::endl;
+            network.SendEvent(0x00);
+        }
     }
 };

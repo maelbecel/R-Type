@@ -274,7 +274,6 @@ namespace Exodia {
                 std::memcpy(buffer.Data + offset, &Thickness, sizeof(Thickness));
                 offset += sizeof(Thickness);
                 std::memcpy(buffer.Data + offset, &Fade, sizeof(Fade));
-                EXODIA_CORE_INFO("CircleRendererComponent serialization success !");
                 return buffer;
 
             } catch (std::exception &e) {

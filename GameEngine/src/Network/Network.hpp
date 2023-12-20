@@ -16,6 +16,7 @@
     #include "ECS/ECS.hpp"
     #include <vector>
     #include <chrono>
+    #include <queue>
 
 namespace Exodia {
 
@@ -80,6 +81,11 @@ namespace Exodia {
                     return _connections;
                 }
 
+                std::queue<uint32_t> flushEvents() {
+                    std::queue<uint32_t> flushedEvents = std::move(_events);
+                    return flushedEvents;
+                }
+
             private:
                 void connect(const std::string &ip, short port) {
                     _server_connection = Connection(asio::ip::udp::endpoint(asio::ip::address::from_string(ip), port));
@@ -95,7 +101,7 @@ namespace Exodia {
                 // IOContext
                 IOContextManager &_ioContextManager;
 
-                std::map<float, uint32_t> _events;
+                std::queue<uint32_t> _events;
 
         }; // class Network
 

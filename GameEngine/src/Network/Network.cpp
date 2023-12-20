@@ -267,7 +267,7 @@ namespace Exodia::Network {
 
         std::cout << "Event: " << event << std::endl;
 
-        // _events[]
+        _events.push(event);
 
     }
 
