@@ -14,6 +14,49 @@
         <toc-element topic="Application-with-a-sprite-renderer.md"/>
         <toc-element topic="Server.md"/>
         <toc-element topic="Client.md"/>
-        <toc-element topic="Game-Engine.md"/>
+        <toc-element topic="Game-Engine.md">
+            <toc-element topic="Platform.md">
+                <toc-element topic="Windows.md">
+                    <toc-element topic="WindowsFileDialog.md"/>
+                    <toc-element topic="WindowsInput.md"/>
+                    <toc-element topic="WindowsPlatformUtils.md"/>
+                    <toc-element topic="WindowsWindow.md"/>
+                </toc-element>
+                <toc-element topic="OpenGL.md">
+                    <toc-element topic="OpenGLFramebufferUtils.md"/>
+                    <toc-element topic="OpenGLBuffer.md"/>
+                    <toc-element topic="OpenGLContext.md"/>
+                    <toc-element topic="OpenGLFramebuffer.md"/>
+                    <toc-element topic="OpenGLRendererAPI.md">
+                    </toc-element>
+                    <toc-element topic="OpenGLShader.md"/>
+                    <toc-element topic="OpenGLTexture.md"/>
+                    <toc-element topic="OpenGLTextureUtils.md"/>
+                    <toc-element topic="OpenGLUniformBuffer.md"/>
+                    <toc-element topic="OpenGLVertexArray.md"/>
+                </toc-element>
+            </toc-element>
+            <toc-element topic="Utils.md"/>
+            <toc-element topic="Systems.md">
+                <toc-element topic="ScriptSystem.md"/>
+                <toc-element topic="MovingSystem.md"/>
+                <toc-element topic="GravitySystem.md"/>
+                <toc-element topic="CollisionSystem.md"/>
+            </toc-element>
+            <toc-element topic="Components.md">
+                <toc-element topic="TagComponent.md"/>
+                <toc-element topic="CircleRenderer.md"/>
+                <toc-element topic="ScriptComponent.md"/>
+                <toc-element topic="TransformComponent.md"/>
+                <toc-element topic="RigidBody2D.md"/>
+                <toc-element topic="SpriteRendererComponent.md"/>
+                <toc-element topic="ParentComponent.md"/>
+                <toc-element topic="IDComponent.md"/>
+                <toc-element topic="CircleCollider2DComponent.md"/>
+                <toc-element topic="BoxCollider2DComponent.md"/>
+                <toc-element topic="CameraComponent.md"/>
+                <toc-element topic="ChildrenComponent.md"/>
+            </toc-element>
+        </toc-element>
     </toc-element>
 </instance-profile>

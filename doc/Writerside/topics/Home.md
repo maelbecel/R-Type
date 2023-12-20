@@ -36,11 +36,14 @@ To start using RType, follow these installation steps:
 
 ```bash
 git clone https://github.com/maelbecel/R-Type.git
-cd rtype-game-engine
-make install
+cd R-Type
+git submodule update --init --recursive
+./make.sh
 ```
 
 ## Architecture
+
+![Architechture.png](Architechture.png)
 
 ### Entity-Component-System (ECS)
 
@@ -49,6 +52,12 @@ RType follows the ECS pattern, where:
 - **Entity**: Represents an object in the game world.
 - **Component**: Defines data or attributes attached to entities.
 - **System**: Implements logic that operates on entities with specific components.
+
+ECS offers several advantages for game development:
+
+- **Code Reusability**: Components can be reused across multiple entities, reducing code duplication and improving maintainability.
+- **Modular Design**: Systems are independent of each other, allowing for flexible and extensible code.
+- **Performance Efficiency**: ECS can improve performance by reducing memory access and calculations.
 
 ### Modules
 
