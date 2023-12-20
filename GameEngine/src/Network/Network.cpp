@@ -18,7 +18,7 @@ namespace Exodia::Network {
     */
     void Network::SendAskConnect(const std::string &ip, short port) {
         connect(ip, port);
-        Exodia::Network::Header header(0x81, 1, 2);
+        Exodia::Network::Header header(0x81, 1, 0);
         Exodia::Network::Packet packet;
         std::vector<char> buffer(0);
 
@@ -118,7 +118,6 @@ namespace Exodia::Network {
         buffer.resize(offset);
 
         packet.Set(header, buffer);
-
         if (_connections.size() > 0)
            for (auto &connection : _connections)
                 connection.second.SendPacket(_socket, packet);
@@ -273,10 +272,12 @@ namespace Exodia::Network {
 
     void Network::Splitter(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint) {
         (void) size;
-        Header header = Header::fillHeader(message.data());
+        Header header = Header::fillHeader(message);
         std::cout << "Command: " << Network::VerbaliseCommand(header) << " Timestamp: " << header.getTimestamp() << " Id: " << header.getId() << " Size: " << header.getSize() << std::endl;
 
-        std::vector<char> content(message.begin() + int(Header::GetSize()), message.end());
+        std::vector<char> content;
+        if (header.getSize() > 0)
+            content = std::vector<char>(message.begin() + int(Header::GetSize()), message.end());
 
         if (header.getSize() != content.size()) {
             EXODIA_CORE_ERROR("Network::Splitter() - Packet size is not the one indicated got {0} instead of {1} !", content.size(), header.getSize());
