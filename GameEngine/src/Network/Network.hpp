@@ -61,6 +61,21 @@ namespace Exodia {
                 void SendAskConnect(const std::string &ip, short port);      // 0x81
                 void SendEvent(u_int32_t event);                                   // 0x82
                 void Splitter(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint);
+                static std::string VerbaliseCommand(Exodia::Network::Header header)
+                {
+                    std::string command;
+                    std::unordered_map<char, std::string> commands;
+                    commands[0x00] = "Packet info";
+                    commands[0x01] = "Acknowledgement";
+                    commands[0x02] = "Accept client connection";
+                    commands[0x81] = "Ask for connection";
+                    commands[0x82] = "New Event";
+                    commands[0x0c] = "Create component";
+                    command = commands[header.getCommand()];
+                    if (command.empty())
+                        command = "Unknown command";
+                    return command;
+                }
                 std::unordered_map<std::string, Connection> &GetConnections() {
                     return _connections;
                 }

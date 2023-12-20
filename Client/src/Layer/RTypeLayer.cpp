@@ -61,18 +61,15 @@ namespace Exodia {
 
             _World->ForEach<CircleRendererComponent>([&](Entity *entity, ComponentHandle<CircleRendererComponent> circle) {
                 auto transform = entity->GetComponent<TransformComponent>();
-                auto id = entity->GetComponent<IDComponent>();
 
-                if (transform && id) {
+                if (transform) {
                     Renderer2D::DrawCircle(
                         transform.Get().GetTransform(), // Transform
                         circle.Get().Color, // CircleRendererComponent
                         circle.Get().Thickness, // CircleRendererComponent
                         circle.Get().Fade, // CircleRendererComponent
-                        (int)id.Get().ID                // Entity ID
+                        entity->GetEntityID() // Entity ID
                     );
-                    // entity->GetComponent<TransformComponent>().Get().Translation.x += 0.01 * ts;
-                    // network.SendEntity(entity, "TransformComponent");
                 }
             });
 

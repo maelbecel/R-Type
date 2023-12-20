@@ -76,16 +76,14 @@ namespace Exodia {
             _world->RegisterSystem(collisionSystem);
             _world->Subscribe<Events::OnCollisionEntered>(collisionSystem);
 
-            // Create the entities
-            // CreatePlayer(_world);
-            CreatePataPata(_world);
-            CreateBackground(_world);
+            // // Create the entities
+            // // CreatePlayer(_world);
+            // CreatePataPata(_world);
+            // CreateBackground(_world);
 
             Exodia::Entity *entity = _world->CreateEntity();
             entity->AddComponent<IDComponent>();
-            // entity->AddComponent<TransformComponent>(glm::vec3{ 0.0f, 0.0f, 0.0f });
-            entity->AddComponent<CircleRendererComponent>(glm::vec4{ 0.9f, 0.9f, 0.9f + static_cast<float>(random() % 100) / 10000.0f, 0.9f });
-            // entity->AddComponent<SpriteRendererComponent>(glm::vec4{ 1.0f, 1.0f, 1.0f, 1.0f });
+            entity->AddComponent<CircleRendererComponent>(glm::vec4{ 0.9f, 0.0f, 0.0f + static_cast<float>(random() % 100) / 10000.0f, 0.9f });
         } catch (std::exception &e) {
             std::cerr << "Exception: " << e.what() << std::endl;
         }
@@ -119,13 +117,14 @@ namespace Exodia {
             //send entities
             this->_world->ForEach<CircleRendererComponent>([&](Entity *entity, ComponentHandle<CircleRendererComponent> transform) {
                 if (transform) {
+                    std::cout << "Entity: " << entity->GetEntityID() << std::endl;
                     _network.SendEntity(entity, "CircleRendererComponent");
-                    entity->GetComponent<TransformComponent>().Get().Translation.y += 100;
-                    std::cout << "Y translation: " << entity->GetComponent<TransformComponent>().Get().Translation.y << std::endl;
+                    entity->GetComponent<TransformComponent>().Get().Translation.y += 10;
                     _network.SendEntity(entity, "TransformComponent");
-                    sleep(3);
                 }
             });
+            sleep(3);
+
         } catch (std::exception &e) {
             std::cerr << "Unable to update the world: " << e.what() << std::endl;
         }

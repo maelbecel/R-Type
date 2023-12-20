@@ -262,6 +262,46 @@ namespace Exodia {
             ImGui::DragFloat("Thickness", &Thickness);
             ImGui::DragFloat("Fade"     , &Fade);
         }
+
+        virtual Buffer SerializeData() override
+        {
+            try {
+                Buffer buffer(sizeof(Color) + sizeof(Thickness) + sizeof(Fade));
+                size_t offset = 0;
+
+                std::memcpy(buffer.Data, &Color, sizeof(Color));
+                offset += sizeof(Color);
+                std::memcpy(buffer.Data + offset, &Thickness, sizeof(Thickness));
+                offset += sizeof(Thickness);
+                std::memcpy(buffer.Data + offset, &Fade, sizeof(Fade));
+                EXODIA_CORE_INFO("CircleRendererComponent serialization success !");
+                return buffer;
+
+            } catch (std::exception &e) {
+                EXODIA_CORE_WARN("CircleRendererComponent serialization failed: {0}", e.what());
+                return Buffer();
+            }
+        }
+
+        virtual void DeserializeData(Buffer data) override
+        {
+            try {
+                size_t offset = 0;
+
+                Memcopy(&Color, data.Data + offset, sizeof(Color));
+                offset += sizeof(Color);
+                Memcopy(&Thickness, data.Data + offset, sizeof(Thickness));
+                offset += sizeof(Thickness);
+                Memcopy(&Fade, data.Data + offset, sizeof(Fade));
+
+                EXODIA_CORE_TRACE("CircleRendererComponent deserialization success !");
+                EXODIA_CORE_TRACE("\tColor     : '{0}, {1}, {2}, {3}'", Color.x, Color.y, Color.z, Color.w);
+                EXODIA_CORE_TRACE("\tThickness : '{0}'", Thickness);
+                EXODIA_CORE_TRACE("\tFade      : '{0}'", Fade);
+            } catch (std::exception &e) {
+                EXODIA_CORE_WARN("CircleRendererComponent deserialization failed: {0}", e.what());
+            }
+        }
     };
 
     // TODO: Implement Text Renderer Component when available

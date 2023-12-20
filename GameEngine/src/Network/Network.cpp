@@ -188,8 +188,7 @@ namespace Exodia::Network {
         Exodia::Buffer buffer(data.data(), size_of_data);
         IComponentContainer *container = func(buffer);
         entity->AddComponent(container);
-        if (entity->GetComponent<TransformComponent>())
-            std::cout << "Translation: " << entity->GetComponent<TransformComponent>().Get().Translation.x << std::endl;
+        EXODIA_CORE_INFO("Network::createEntity() - Component " + component_name + " added to entity " + std::to_string(id));
     }
 
     void Network::ReceiveConnect(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint, Exodia::Network::Header header) {
@@ -275,12 +274,12 @@ namespace Exodia::Network {
     void Network::Splitter(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint) {
         (void) size;
         Header header = Header::fillHeader(message.data());
-        std::cout << "Command: " << int(header.getCommand()) << " Timestamp: " << header.getTimestamp() << " Id: " << header.getId() << " Size: " << header.getSize() << std::endl;
+        std::cout << "Command: " << Network::VerbaliseCommand(header) << " Timestamp: " << header.getTimestamp() << " Id: " << header.getId() << " Size: " << header.getSize() << std::endl;
 
         std::vector<char> content(message.begin() + int(Header::GetSize()), message.end());
 
         if (header.getSize() != content.size()) {
-            EXODIA_CORE_ERROR("Network::Splitter() - Packet size is not the one indicated !");
+            EXODIA_CORE_ERROR("Network::Splitter() - Packet size is not the one indicated got {0} instead of {1} !", content.size(), header.getSize());
             return;
         }
 

@@ -9,6 +9,7 @@
 #define CONNECTION_HPP_
 
 #include "Network/Packet/Packet.hpp"
+#include "Network/Network.hpp"
 
 class Connection {
     public:
@@ -27,11 +28,10 @@ class Connection {
 
 
         void SendPacket(Exodia::Network::UDPSocket &socket, Exodia::Network::Packet &packet) {
-            std::cout << "Send packet to " << _endpoint.address().to_string() << ":" << _endpoint.port() << std::endl;
-            std::cout << "Header: command: " << int(packet.GetHeader().getCommand()) << " id: " << packet.GetHeader().getId() << " size: " << packet.GetHeader().getSize() << std::endl;
             Exodia::Network::Header header = packet.GetHeader();
             header.SetId(_sendPacket);
             header.setSize(packet.GetSize());
+
             socket.send(packet.GetBuffer(), packet.GetSize(), _endpoint);
             _sendPacket++;
         }
