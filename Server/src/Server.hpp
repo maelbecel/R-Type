@@ -9,6 +9,7 @@
     #define SERVER_HPP_
 
     #include "Exodia.hpp"
+    #include "SceneType.hpp"
 
 namespace Exodia {
 
@@ -22,17 +23,26 @@ namespace Exodia {
             void Update();
             void Stop() { _running = false; };
 
+        public:
+            void RegisterComponent(std::string name, std::function<IComponentContainer *(Buffer)> factory);
+
         protected:
+
+        public:
+            inline static std::map<SceneType, std::shared_ptr<Exodia::Scene>> _World;
+            inline static SceneType _currentScene;
+
         private:
-            // World is used to manage the entities
-            World *_world = World::CreateWorld();
+            // WARNING: This is a temporary solution
+            Exodia::World *_worldNetwork = Exodia::World::CreateWorld();
+            std::unordered_map<std::string, std::function<IComponentContainer *(Buffer)>> _ComponentFactory;
 
             // Network is used to manage the network with the clients
             Network::IOContextManager _ioContextManager;
             Network::Network _network;
 
             // Timestep is used to manage the time
-            Timer _Timer; 
+            Timer _Timer;
             float _lastTime;
 
             bool _running = true;

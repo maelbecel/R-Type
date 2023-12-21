@@ -9,10 +9,10 @@
 
 namespace Exodia {
 
-    void CreateStars(World *_World) {
-
-		for(int i = 0; i < 60; i++) {
-            Entity *star = _World->CreateEntity("Star" + std::to_string(i));
+    void CreateStars(std::map<SceneType, std::shared_ptr<Exodia::Scene>> _World)
+    {
+        for(int i = 0; i < 60; i++) {
+            Entity *star = _World[GAME]->CreateEntity("Star" + std::to_string(i));
 
             star->AddComponent<ScriptComponent>().Get().Bind<Star>();
             star->GetComponent<TransformComponent>().Get().Scale.y = 0.1f;
@@ -25,7 +25,8 @@ namespace Exodia {
             body.Get().Type = RigidBody2DComponent::BodyType::Dynamic;
             body.Get().Mass = 0.0f;
             body.Get().GravityScale = 0.0f;
-            body.Get().Velocity.x = (random() % 8 + 1) * -1;
+            body.Get().Velocity.x = (random() % 10 + 1) * -1;
+            EXODIA_INFO("Star {0} created", i);
         }
     };
 };

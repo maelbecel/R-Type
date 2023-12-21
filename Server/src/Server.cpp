@@ -10,7 +10,7 @@
 
 namespace Exodia {
 
-    Server::Server(short port): _network(_world, _ioContextManager, port)
+    Server::Server(short port): _network(_worldNetwork, _ioContextManager, port), _lastTime(0.0f)
     {
         std::cout << "Server is launching !" << std::endl;
         _inputThread = std::thread([&] {
@@ -28,6 +28,10 @@ namespace Exodia {
     {
         std::cout << "Server is closing !" << std::endl;
         _inputThread.join();
+    }
+
+    void Server::RegisterComponent(std::string name, std::function<IComponentContainer *(Buffer)> factory) {
+        _ComponentFactory.emplace(name, factory);
     }
 
     void Server::HandleCommand(const std::string &command)
@@ -48,7 +52,7 @@ namespace Exodia {
                 std::cout << "IP: " << connection.second.GetEndpoint().address().to_string() << " Port: " << connection.second.GetEndpoint().port() << std::endl;
             }
             std::cout << "Entities: " << std::endl;
-            auto entities = _world->AllEntities();
+            auto entities = _worldNetwork->AllEntities();
             std::size_t i = 0;
             for (auto entity : entities) {
                 (void)entity;
@@ -71,30 +75,59 @@ namespace Exodia {
 
         std::cout << "Server is initializing !" << std::endl;
         try {
-            // Register the systems
-            _world->RegisterSystem(new AnimationSystem());      // Animation system
-            _world->RegisterSystem(new ScriptSystem());         // Script system
-            _world->RegisterSystem(new MovingSystem(1.5f));     // Moving system
+            // Register components
+            RegisterComponent("IDComponent", [](UNUSED Buffer data) -> IComponentContainer * { return new ComponentContainer<IDComponent>(); });
+            RegisterComponent("TransformComponent", [](UNUSED Buffer data) -> IComponentContainer * { return new ComponentContainer<TransformComponent>(); });
+            RegisterComponent("SpriteRendererComponent", [](UNUSED Buffer data) -> IComponentContainer * { return new ComponentContainer<SpriteRendererComponent>(); });
+            RegisterComponent("BoxCollider2DComponent", [](UNUSED Buffer data) -> IComponentContainer * { return new ComponentContainer<BoxCollider2DComponent>(); });
+            RegisterComponent("CircleRendererComponent", [](UNUSED Buffer data) -> IComponentContainer * { return new ComponentContainer<CircleRendererComponent>(); });
+            RegisterComponent("RigidBody2DComponent", [](UNUSED Buffer data) -> IComponentContainer * { return new ComponentContainer<RigidBody2DComponent>(); });
+            RegisterComponent("ScriptComponent", [](UNUSED Buffer data) -> IComponentContainer * { return new ComponentContainer<ScriptComponent>(); });
+            RegisterComponent("Health", [](UNUSED Buffer data) -> IComponentContainer * { return new ComponentContainer<Health>(); });
+            RegisterComponent("Animation", [](UNUSED Buffer data) -> IComponentContainer * { return new ComponentContainer<Animation>(); });
+            RegisterComponent("Clock", [](UNUSED Buffer data) -> IComponentContainer * { return new ComponentContainer<Clock>(); });
+
+            // Create world
+            _currentScene = GAME;
+            _World[GAME] = CreateRef<Scene>();
+            _World[MENU] = CreateRef<Scene>();
+            _World[GAME]->OnViewportResize(1600, 900);
+            _World[MENU]->OnViewportResize(1600, 900);
+
+            _World[GAME]->RegisterSystem(new AnimationSystem());
+            _World[GAME]->RegisterSystem(new ScriptSystem());
+            _World[GAME]->RegisterSystem(new MovingSystem(1.5f));
+
+            _World[MENU]->RegisterSystem(new AnimationSystem());
+            _World[MENU]->RegisterSystem(new ScriptSystem());
+            _World[MENU]->RegisterSystem(new MovingSystem(1.5f));
 
             CollisionSystem *collisionSystem = new CollisionSystem();
-            _world->RegisterSystem(collisionSystem);
-            _world->Subscribe<Events::OnCollisionEntered>(collisionSystem);
+            _World[GAME]->RegisterSystem(collisionSystem);
+            _World[GAME]->Subscribe<Events::OnCollisionEntered>(collisionSystem);
 
-            // // Create the entities
-            // // CreatePlayer(_world);
-            // CreatePataPata(_world);
-            // CreateBackground(_world);
+            // Create the entities
+            CreatePlayer(_World);
+            CreatePataPata(_World);
+            CreateBackground(_World);
+            CreateStars(_World);
 
-            Exodia::Entity *entity = _world->CreateEntity();
-            entity->AddComponent<IDComponent>();
-            entity->AddComponent<CircleRendererComponent>(glm::vec4{ 1.0f, 1.0f, 1.0f, 1.0f });
-            _network.SendEntity(entity, "CircleRendererComponent");
-            Exodia::Entity *entity2 = _world->CreateEntity();
-            entity2->AddComponent<IDComponent>();
-            entity2->AddComponent<CircleRendererComponent>(glm::vec4{ 1.0f, 1.0f, 1.0f, 1.0f });
-            entity2->AddComponent<TransformComponent>(glm::vec3{2.0f, 0.0f, 0.0f});
-            _network.SendEntity(entity2, "CircleRendererComponent");
-            _network.SendEntity(entity2, "TransformComponent");
+            // Create the camera entity
+            Entity *cameraEntity = _World[GAME]->CreateEntity("Camera");
+            auto &camera = cameraEntity->AddComponent<CameraComponent>().Get();
+
+            cameraEntity->GetComponent<TransformComponent>().Get().Translation = { 0.0f, 0.0f, 15.0f };
+            cameraEntity->GetComponent<TransformComponent>().Get().Rotation = { 0.0f, 0.0f, 45.0f };
+            camera.Camera.SetProjectionType(SceneCamera::ProjectionType::Perspective);
+            camera.Camera.SetViewportSize(1600, 900);
+
+            auto body_camera = cameraEntity->AddComponent<RigidBody2DComponent>();
+            body_camera.Get().Type = RigidBody2DComponent::BodyType::Dynamic;
+            body_camera.Get().Mass = 0.0f;
+            body_camera.Get().GravityScale = 0.0f;
+            body_camera.Get().Velocity = glm::vec2{ 1.5f, 0.0f };
+
+            _World[_currentScene]->OnRuntimeStart();
 
         } catch (std::exception &e) {
             std::cerr << "Exception: " << e.what() << std::endl;
@@ -124,30 +157,33 @@ namespace Exodia {
 
             _lastTime = time;
 
-            this->_world->Update(timestep);
+            if (_currentScene == GAME) {
+                auto pata = _World[GAME]->GetEntityByName("Pata-pata");
 
-            //send entities
-            this->_world->ForEach<CircleRendererComponent, TransformComponent>([&](Entity *entity, ComponentHandle<CircleRendererComponent> circle, ComponentHandle<TransformComponent> transform) {
-                if (circle && transform) {
-                    _network.SendEntity(entity, "CircleRendererComponent");
-                    entity->GetComponent<TransformComponent>().Get().Translation.y += 0.01f;
-                    entity->GetComponent<TransformComponent>().Get().Translation.z = 0;
-                    _network.SendEntity(entity, "TransformComponent");
+                if (pata == nullptr) {
+                    Entity *patata = _World[GAME]->CreateEntity("Pata-pata");
+
+                    patata->AddComponent<Health>(1);
+                    patata->AddComponent<ScriptComponent>().Get().Bind<PataPata>();
+                    patata->AddComponent<Animation>(1.0f, 8.0f, 0.075f);
+                    patata->AddComponent<Clock>();
+                    patata->AddComponent<BoxCollider2DComponent>();
+
+                    auto body_patata = patata->AddComponent<RigidBody2DComponent>();
+
+                    body_patata.Get().Type = RigidBody2DComponent::BodyType::Dynamic;
+                    body_patata.Get().Mass = 0.0f;
+                    body_patata.Get().GravityScale = 0.0f;
+                    body_patata.Get().Velocity.x = -2.0f;
+                    patata->AddComponent<CircleRendererComponent>(glm::vec4{ 1.0f, 1.0f, 0.0f, 1.0f});
+                    // Set entity sprite
+                    // auto sprite = patata->AddComponent<SpriteRendererComponent>();
+                    // Ref<Texture2D> texture = TextureImporter::LoadTexture2D("Assets/Textures/Pata-Pata.png");
+                    // sprite.Get().Texture = SubTexture2D::CreateFromCoords(texture->Handle, { 0.0f, 0.0f }, { 33.3125f, 36.0f }, { 1.0f, 1.0f });
                 }
-            });
-            usleep(1000000 / 24);
-
-            std::queue<uint32_t> events = _network.flushEvents();
-            for (std::size_t i = 0; i < events.size(); i++) {
-                this->_world->ForEach<CircleRendererComponent>([&](Entity *entity, ComponentHandle<CircleRendererComponent> circle) {
-                    (void)entity;
-                    if (circle) {
-                        circle.Get().Color = glm::vec4{ 1.0f, 0.0f, 0.0f, 1.0f };
-                    }
-                });
-                events.pop();
             }
 
+            _World[_currentScene]->OnUpdateRuntime(timestep);
         } catch (std::exception &e) {
             std::cerr << "Unable to update the world: " << e.what() << std::endl;
         }
