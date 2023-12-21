@@ -25,6 +25,7 @@ jobs:
           cd vcpkg
           ./bootstrap-vcpkg.sh
       - name: Add VCPKG_ROOT to env
+        run: |
           export VCPKG_ROOT=$(pwd)
           echo $VCPKG_ROOT
       - name: Setup Ninja
@@ -55,6 +56,7 @@ jobs:
           cd vcpkg
           .\bootstrap-vcpkg.bat
       - name: Add VCPKG_ROOT to env
+        run: |
           $env:VCPKG_ROOT = $PWD
           echo %VCPKG_ROOT%
       - name: Setup MSBuild
