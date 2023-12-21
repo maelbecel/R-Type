@@ -29,6 +29,7 @@ namespace Exodia::Network {
     /**
      * @brief Run the network
      *
+     * @return void
      */
     void Network::Loop() {
         _socket.receive(std::bind(&Network::Splitter, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
@@ -92,12 +93,30 @@ namespace Exodia::Network {
         std::cout << "Packet received: " << packet_received << " Packet sent: " << packet_sent << std::endl;
     }
 
+    /**
+     * @brief Fill a buffer with data and return the offset after filling
+     *
+     * @param buffer (Type: std::vector<char> &) The buffer to fill
+     * @param offset (Type: size_t) The offset to start filling the buffer
+     * @param data (Type: void *) The data to put in the buffer
+     * @param size (Type: size_t) The size of the data
+     *
+     * @return size_t The offset after filling the buffer
+    */
     size_t Network::FillData(std::vector<char> &buffer, size_t offset, void *data, size_t size) {
         std::memcpy(buffer.data() + offset, data, size);
         return offset + size;
     }
 
-    void Network::SendEntity(Entity *entity, std::string component_name) {
+    /**
+     * @brief Send an entity
+     *
+     * @param entity (Type: Entity *) The entity to send
+     * @param component_name (Type: std::string) The name of the component to send
+     *
+     * @return void
+    */
+    void Network::SendComponentOf(Entity *entity, std::string component_name) {
         Exodia::Network::Header header(0x0c, 1, 2);
         Exodia::Network::Packet packet;
         std::vector<char> buffer(1468, 0);
@@ -124,6 +143,11 @@ namespace Exodia::Network {
             _server_connection.SendPacket(_socket, packet);
     }
 
+    /**
+     * @brief Send Acknowledgement
+     *
+     * @return void
+    */
     void Network::SendAck() {
         Exodia::Network::Header header(0x01, 1, 2);
         Exodia::Network::Packet packet;
@@ -140,6 +164,15 @@ namespace Exodia::Network {
             _server_connection.SendPacket(_socket, packet);
     }
 
+    /**
+     * @brief This function is called when the intelocutor accept the connection
+     *
+     * @param message (Type: const std::vector<char>) The message received
+     * @param size (Type: size_t) The size of the message
+     * @param senderEndpoint (Type: asio::ip::udp::endpoint) The endpoint of the sender
+     *
+     * @return void
+    */
     void Network::ReceiveConnectAccept(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint, Exodia::Network::Header header) {
         (void) size;
         (void) message;
@@ -147,6 +180,15 @@ namespace Exodia::Network {
         std::cout << "Receive accept connect" << std::endl;
     }
 
+    /**
+     * @brief This function is called when an Acknowledgement is received
+     *
+     * @param message (Type: const std::vector<char>) The message received
+     * @param size (Type: size_t) The size of the message
+     * @param senderEndpoint (Type: asio::ip::udp::endpoint) The endpoint of the sender
+     *
+     * @return void
+    */
     void Network::ReceiveAck(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint, Exodia::Network::Header header) {
         (void) size;
         (void) senderEndpoint;
@@ -157,7 +199,16 @@ namespace Exodia::Network {
         std::cout << "Command id: " << command_id << std::endl;
     }
 
-    void Network::ReceiveEntity(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint, Exodia::Network::Header header) {
+    /**
+     * @brief This function is called when an entity is received
+     *
+     * @param message (Type: const std::vector<char>) The message received
+     * @param size (Type: size_t) The size of the message
+     * @param senderEndpoint (Type: asio::ip::udp::endpoint) The endpoint of the sender
+     *
+     * @return void
+    */
+    void Network::ReceiveComponentOf(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint, Exodia::Network::Header header) {
         (void) size;
         (void) senderEndpoint;
 
@@ -269,6 +320,17 @@ namespace Exodia::Network {
 
     }
 
+    /**
+     * @brief This function is called when a packet is received
+     *
+     * @details This function call the right function depending on the command
+     *
+     * @param message (Type: const std::vector<char>) The message received
+     * @param size (Type: size_t) The size of the message
+     * @param senderEndpoint (Type: asio::ip::udp::endpoint) The endpoint of the sender
+     *
+     * @return void
+    */
     void Network::Splitter(const std::vector<char> &message, size_t size, asio::ip::udp::endpoint senderEndpoint) {
         (void) size;
         std::vector<char> copiedBuffer(message.begin(), message.begin() + size);
@@ -290,7 +352,7 @@ namespace Exodia::Network {
         commands[0x02] = std::bind(&Network::ReceiveConnectAccept, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4);     // Accept client connection
         commands[0x81] = std::bind(&Network::ReceiveConnect, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4);        // Ask for connection
         commands[0x82] = std::bind(&Network::ReceiveEvent, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4);          // Send an event
-        commands[0x0c] = std::bind(&Network::ReceiveEntity, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4);     // Send one component of an entity
+        commands[0x0c] = std::bind(&Network::ReceiveComponentOf, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4);     // Send one component of an entity
         commands[header.getCommand()](content, header.getSize(), senderEndpoint, header);
     }
 };
