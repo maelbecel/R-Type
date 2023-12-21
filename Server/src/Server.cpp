@@ -88,13 +88,13 @@ namespace Exodia {
             Exodia::Entity *entity = _world->CreateEntity();
             entity->AddComponent<IDComponent>();
             entity->AddComponent<CircleRendererComponent>(glm::vec4{ 1.0f, 1.0f, 1.0f, 1.0f });
-            _network.SendEntity(entity, "CircleRendererComponent");
+            _network.SendComponentOf(entity, "CircleRendererComponent");
             Exodia::Entity *entity2 = _world->CreateEntity();
             entity2->AddComponent<IDComponent>();
             entity2->AddComponent<CircleRendererComponent>(glm::vec4{ 1.0f, 1.0f, 1.0f, 1.0f });
             entity2->AddComponent<TransformComponent>(glm::vec3{2.0f, 0.0f, 0.0f});
-            _network.SendEntity(entity2, "CircleRendererComponent");
-            _network.SendEntity(entity2, "TransformComponent");
+            _network.SendComponentOf(entity2, "CircleRendererComponent");
+            _network.SendComponentOf(entity2, "TransformComponent");
 
         } catch (std::exception &e) {
             std::cerr << "Exception: " << e.what() << std::endl;
@@ -129,10 +129,10 @@ namespace Exodia {
             //send entities
             this->_world->ForEach<CircleRendererComponent, TransformComponent>([&](Entity *entity, ComponentHandle<CircleRendererComponent> circle, ComponentHandle<TransformComponent> transform) {
                 if (circle && transform) {
-                    _network.SendEntity(entity, "CircleRendererComponent");
+                    _network.SendComponentOf(entity, "CircleRendererComponent");
                     entity->GetComponent<TransformComponent>().Get().Translation.y += 0.01f;
                     entity->GetComponent<TransformComponent>().Get().Translation.z = 0;
-                    _network.SendEntity(entity, "TransformComponent");
+                    _network.SendComponentOf(entity, "TransformComponent");
                 }
             });
             usleep(1000000 / 24);
