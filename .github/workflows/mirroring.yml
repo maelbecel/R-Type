@@ -25,7 +25,9 @@ jobs:
           cd vcpkg
           ./bootstrap-vcpkg.sh
           export VCPKG_ROOT=$(pwd)
-          source ~/.bashrc
+      - name: Add VCPKG_ROOT to env
+        run: |
+          echo "VCPKG_ROOT=$VCPKG_ROOT" >> $GITHUB_ENV
       - name: Print VCPKG_ROOT
         run: |
           echo $VCPKG_ROOT
@@ -56,8 +58,7 @@ jobs:
           git clone https://github.com/microsoft/vcpkg.git
           cd vcpkg
           .\bootstrap-vcpkg.bat
-          set VCPKG_ROOT=%cd%
-          set PATH=%PATH%;%VCPKG_ROOT%
+          $env:VCPKG_ROOT=%cd%
       - name: Print VCPKG_ROOT
         run: |
           echo %VCPKG_ROOT%
