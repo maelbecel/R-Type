@@ -10,7 +10,7 @@
 
 namespace Exodia {
 
-    Server::Server(short port): _network(_worldNetwork, _ioContextManager, port)
+    Server::Server(short port): _network(_worldNetwork, _ioContextManager, port), _lastTime(0.0f)
     {
         std::cout << "Server is launching !" << std::endl;
         _inputThread = std::thread([&] {
@@ -115,6 +115,7 @@ namespace Exodia {
             // Create the camera entity
             Entity *cameraEntity = _World[GAME]->CreateEntity("Camera");
             auto &camera = cameraEntity->AddComponent<CameraComponent>().Get();
+
             cameraEntity->GetComponent<TransformComponent>().Get().Translation = { 0.0f, 0.0f, 15.0f };
             camera.Camera.SetProjectionType(SceneCamera::ProjectionType::Perspective);
             camera.Camera.SetViewportSize(1600, 900);
