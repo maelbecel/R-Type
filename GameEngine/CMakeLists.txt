@@ -111,6 +111,7 @@ set(SOURCES_GAME_ENGINE
     # Network source files
 
     src/Network/Network.cpp
+    src/Network/UDPSocket/UDPSocket.cpp
 )
 
 # Set the include directories for the Game Engine Library

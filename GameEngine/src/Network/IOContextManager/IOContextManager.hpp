@@ -22,7 +22,7 @@ namespace Exodia {
              * @brief Construct a new IOContextManager object and initialize the io_context_
              *
              */
-            IOContextManager() : io_context_() {}
+            IOContextManager() : io_context_() { isRunning_ = false; }
 
             ~IOContextManager()
             {
