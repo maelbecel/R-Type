@@ -26,14 +26,16 @@ namespace Exodia {
     // Constructor //
     /////////////////
 
-    SubTexture2D::SubTexture2D(const AssetHandle &assetHandle) : _AssetHandle(assetHandle), _Coords({ 0, 0 }), _SpriteSize({ 1, 1 })
+    SubTexture2D::SubTexture2D(const AssetHandle &assetHandle) : _AssetHandle(assetHandle), _Coords({ 0.0f, 0 }), _SpriteSize({ 1.0f, 1.0f })
     {
         Ref<Texture2D> texture = AssetManager::GetAsset<Texture2D>(_AssetHandle);
 
         if (texture != nullptr)
             _CellSize = glm::vec2(texture->GetWidth(), texture->GetHeight());
         else
-            _CellSize = glm::vec2(1, 1);
+            _CellSize = { 1, 1 };
+
+        calculateTextureCoords();
     }
 
     SubTexture2D::SubTexture2D(const AssetHandle &assetHandle, const glm::vec2 &coords, const glm::vec2 &cellSize, const glm::vec2 &spriteSize) : _AssetHandle(assetHandle), _Coords(coords), _CellSize(cellSize), _SpriteSize(spriteSize)
