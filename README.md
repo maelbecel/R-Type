@@ -4,6 +4,30 @@ Replicate of the `rtype` game.
 
 ## Usage & Examples
 
+### VCPKG
+
+- Install VCPKG.
+
+After the installation done, on Linux :
+
+```bash
+./vcpkg/bootstrap-vcpkg.sh
+
+code ~/.bashrc
+```
+
+On the file opened, add this line at the end :
+
+```bash
+export VCPKG_ROOT=/path/vcpkg
+```
+
+Save and close the file.
+
+```bash
+source ~/.bashrc
+```
+
 You can use the bash script `make.sh` if you want to try.
 
 First at all, you will have this menu when you launch the script. Here you can choose which command execute.

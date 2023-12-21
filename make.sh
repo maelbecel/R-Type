@@ -3,8 +3,6 @@
 make() {
     local compile_type="$1"
 
-    git submodule update --init --recursive
-
     # Vérifier si le répertoire "build" n'existe pas
     if [ ! -d "build" ]; then
         # Créer le répertoire "build" s'il n'existe pas

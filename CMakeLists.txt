@@ -4,6 +4,9 @@ project(r-type)
 
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/CMake" ${CMAKE_MODULE_PATH})
 
+# Include VCPKG
+include($ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake)
+
 # Dependencies (find_package (vcpkg))
 include(Dependencies)
 
