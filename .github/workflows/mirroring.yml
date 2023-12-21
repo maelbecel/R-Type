@@ -2,41 +2,86 @@ name: Clone Repository
 on:
   push:
     branches:
-      #- main
-      #- dev
-      - test/workflows
+      - main
+      - dev
+      - fix/Compilation
 
 env:
   MIRROR_URL:
     git@github.com:EpitechPromo2026/B-CPP-500-REN-5-2-rtype-ethan1.hernou.git
 
 jobs:
-  compilation:
-    name: Compiling...
+  linux-compilation:
+  name: Compiling on Linux...
     runs-on: ubuntu-latest
     container: epitechcontent/epitest-docker
-    timeout-minutes: 4
+    timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 5
-      - uses: seanmiddleditch/gha-setup-ninja@v4
-      - run: |
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install Vcpkg
+        run: |
+          git clone https://github.com/microsoft/vcpkg.git
+          cd vcpkg
+          ./bootstrap-vcpkg.sh
+          export VCPKG_ROOT=$(pwd)
+      - name: Setup Ninja
+        uses: seanmiddleditch/gha-setup-ninja@v4
+      - name: Setup CMake
+        run: |
           cmake --version
-          echo "2" | ./make.sh && [ -f r-type_client ] && [ -f r-type_server ]
+      - name: Compiling...
+        run: |
+          mkdir build
+          cd build
+          cmake .. -G Ninja --preset=vcpkg
+          ninja
+      - name: Check if the executable exists
+        run: |
+          [ -f r-type_client ] && [ -f r-type_server ]
 
-  tests:
-    name: Testing...
-    needs: compilation
-    runs-on: ubuntu-latest
-    container: epitechcontent/epitest-docker
-    timeout-minutes: 10
+  windows-compilation:
+    name: Compiling on Windows...
+    runs-on: windows-latest
+    timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      - run: |
-          echo testing the project
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install Vcpkg
+        run: |
+          git clone https://github.com/microsoft/vcpkg.git
+          cd vcpkg
+          .\bootstrap-vcpkg.bat
+          set VCPKG_ROOT=%cd%
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v1
+      - name: Setup CMake
+        run: |
+          cmake --version
+      - name: Compiling...
+        run: |
+          mkdir build
+          cd build
+          cmake .. -G "Visual Studio 17 2022" --preset=vcpkg
+          cmake --build . --config Release
+      - name: Check if the executable exists
+        run: |
+          IF EXIST build\Release\r-type_client.exe IF EXIST build\Release\r-type_server.exe exit 0
+          exit 1
+        shell: pwsh
+
+#  tests:
+#    name: Testing...
+#    needs: linux-compilation
+#    runs-on: ubuntu-latest
+#    container: epitechcontent/epitest-docker
+#    timeout-minutes: 10
+#    steps:
+#      - uses: actions/checkout@v3
+#        with:
+#          fetch-depth: 0
+#      - run: |
+#          echo testing the project
 
   mirroring:
     runs-on: ubuntu-latest
