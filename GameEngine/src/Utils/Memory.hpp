@@ -25,7 +25,7 @@
 #ifdef _MSC_VER // MSVC (Microsoft Visual C++)
     #define UNUSED(x) __pragma(warning(suppress:4100)) x
 #else
-    #define UNUSED(x) __attribute__((unused))
+    #define UNUSED(x) __attribute__((unused)) x
 #endif
 
     // Replace the std::shared_ptr into Ref
