@@ -35,14 +35,12 @@ namespace Exodia {
             // Close the socket
             _socket.close();
         }
-        
+
         void UDPSocket::send(const std::vector<char> message, size_t size, const asio::ip::udp::endpoint& endpoint) {
             // Send data asynchronously
             _socket.async_send_to(asio::buffer(message, size), endpoint, [this](const asio::error_code& error, std::size_t bytes_transferred) {
                 if (error) {
                     EXODIA_CORE_ERROR("Error sending data: ", error.message());
-                } else {
-                    EXODIA_CORE_INFO("Data sent successfully");
                 }
             });
         }
@@ -55,8 +53,6 @@ namespace Exodia {
             _socket.async_send_to(asio::buffer(message, size), endpoint, [this](const asio::error_code& error, std::size_t bytes_transferred) {
                 if (error) {
                     EXODIA_CORE_ERROR("Error sending data: ", error.message());
-                } else {
-                    EXODIA_CORE_INFO("Data sent successfully");
                 }
             });
         }
@@ -67,6 +63,7 @@ namespace Exodia {
             [this, callback](const asio::error_code& error, std::size_t bytes_received) {
                 _receive_mutex.lock();
                 std::vector<char> receivedMessage(_receiveBuffer.begin(), _receiveBuffer.begin() + bytes_received);
+                std::cout << std::endl;
                 if (!error) {
 
                     // Call the callback with the received data

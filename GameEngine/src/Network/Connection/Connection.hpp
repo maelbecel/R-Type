@@ -27,6 +27,7 @@ class Connection {
         };
 
         void SendPacket(Exodia::Network::UDPSocket &socket, Exodia::Network::Packet &packet) {
+            packet.GetHeader()->setSize(packet.GetContent().size());
             packet.GetHeader()->SetId(_sendPacket);
             for (int i = 0; i < 2; i++)
                 socket.send(packet, _endpoint);

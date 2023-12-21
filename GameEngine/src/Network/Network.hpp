@@ -70,29 +70,6 @@ namespace Exodia {
                 void Splitter(const std::vector<char> &message, size_t size, asio::ip::udp::endpoint senderEndpoint);
 
                 /**
-                 * @brief Return string representation of a command
-                 *
-                 * @param header (Type: Exodia::Network::Header) The header of the command
-                 *
-                 * @return std::string String representation of the command
-                */
-                static std::string VerbaliseCommand(Exodia::Network::Header header)
-                {
-                    std::string command;
-                    std::unordered_map<char, std::string> commands;
-                    commands[0x00] = "Packet info";
-                    commands[0x01] = "Acknowledgement";
-                    commands[0x02] = "Accept client connection";
-                    commands[0x81] = "Ask for connection";
-                    commands[0x82] = "New Event";
-                    commands[0x0c] = "Create component";
-                    command = commands[header.getCommand()];
-                    if (command.empty())
-                        command = "Unknown command";
-                    return command;
-                }
-
-                /**
                  * @brief Return an unordered map of pair of string and Connection
                  *
                  * @details The string is the ip of the connection and the Connection is the connection object
