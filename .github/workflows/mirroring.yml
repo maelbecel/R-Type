@@ -31,7 +31,7 @@ jobs:
           cmake --version
       - name: Compiling...
         run: |
-          mkdir build && cd build && cmake .. -G Ninja -DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake && ninja && [ -f r-type_client ] && [ -f r-type_server ]
+          mkdir build && cd build && cmake .. -G Ninja -DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake && ninja && cd .. && [ -f r-type_client ] && [ -f r-type_server ]
 
 #  windows-compilation:
 #    name: Compiling on Windows...
