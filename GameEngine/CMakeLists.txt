@@ -61,6 +61,7 @@ set(SOURCES_GAME_ENGINE
     src/Exodia/ECS/System/Script/ScriptSystem.cpp
     src/Exodia/ECS/System/Physics/GravitySystem.cpp
     src/Exodia/ECS/System/Physics/MovingSystem.cpp
+    src/Exodia/ECS/EventSubscriber/EventHover.cpp
 
         # -- Scene source files
 
@@ -115,6 +116,7 @@ set(SOURCES_GAME_ENGINE
     # Network source files
 
     src/Network/Network.cpp
+    src/Network/UDPSocket/UDPSocket.cpp
 )
 
 # Set the include directories for the Game Engine Library

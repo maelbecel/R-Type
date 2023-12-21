@@ -30,6 +30,10 @@
 
     #include "Events/Events.hpp"
 
+    // -- Exodia ECS EventSubscriber -------------------------------------------
+
+    #include "EventSubscriber/EventHover.hpp"
+
     // -- Exodia ECS System ----------------------------------------------------
 
     #include "System/Collision/CollisionSystem.hpp"

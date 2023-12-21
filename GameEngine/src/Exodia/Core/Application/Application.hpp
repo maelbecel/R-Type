@@ -15,6 +15,7 @@
     #include "Core/Layer/LayerStack.hpp"
     #include "Core/Time/Timestep.hpp"
     #include "Core/Application/Window.hpp"
+    #include "Core/Time/Timer.hpp"
 
     // Exodia Debug
     #include "Debug/Logs.hpp"
@@ -187,6 +188,7 @@ namespace Exodia {
             bool                       _Minimized;     /*!< The minimized state of the application */
             LayerStack                 _LayerStack;    /*!< The layer stack of the application */
             float                      _LastTime;      /*!< The last time of the last frame of the application */
+            Timer                      _Timer;         /*!< The timer of the application */
 
         private:
             static Application *_Instance; /*!< The instance of the application */

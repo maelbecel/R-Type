@@ -48,6 +48,8 @@ namespace Exodia {
                     _timestamp = static_cast<float>(timestamp);
                 }
 
+                Header(const Header &header) : _command(header._command), _timestamp(header._timestamp), _id(header._id), _size(header._size) {};
+
                 ~Header() = default;
 
                 void fillBuffer(std::vector<char>& buffer) const {
@@ -70,30 +72,34 @@ namespace Exodia {
                 }
 
                 // Static function to fill a Header from a buffer
-                static Header fillHeader(const char* buffer) {
+                static Header fillHeader(const std::vector<char> buffer) {
                     size_t index = 0;
 
+                    if (buffer.size() < 22)
+                        return Header(0, 0, 0);
+
                     char swappedCommand;
-                    std::memcpy(&swappedCommand, buffer, sizeof(char));
+                    std::memcpy(&swappedCommand, buffer.data(), sizeof(char));
                     index += sizeof(char);
                     char command = swapEndianness(swappedCommand);
 
                     float swappedTimestamp;
-                    std::memcpy(&swappedTimestamp, buffer + index, sizeof(float));
+                    std::memcpy(&swappedTimestamp, buffer.data() + index, sizeof(float));
                     index += sizeof(float);
                     float timestamp = swapEndianness(swappedTimestamp);
 
                     unsigned long swappedId;
-                    std::memcpy(&swappedId, buffer + index, sizeof(unsigned long));
+                    std::memcpy(&swappedId, buffer.data() + index, sizeof(unsigned long));
                     index += sizeof(unsigned long);
                     unsigned long id = swapEndianness(swappedId);
 
                     unsigned long swappedSize;
-                    std::memcpy(&swappedSize, buffer + index, sizeof(unsigned long));
+                    std::memcpy(&swappedSize, buffer.data() + index, sizeof(unsigned long));
                     unsigned long size = swapEndianness(swappedSize);
 
                     Header header(command, id, size);
                     header._timestamp = timestamp;
+
                     return header;
                 }
 
@@ -121,6 +127,14 @@ namespace Exodia {
                     os << "ID: " << header._id << std::endl;
                     os << "Size: " << header._size << std::endl;
                     return os;
+                }
+
+                Header &operator=(const Header &header) {
+                    _command = header._command;
+                    _timestamp = header._timestamp;
+                    _id = header._id;
+                    _size = header._size;
+                    return *this;
                 }
 
             private:

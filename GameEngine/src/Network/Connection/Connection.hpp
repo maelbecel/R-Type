@@ -9,14 +9,15 @@
 #define CONNECTION_HPP_
 
 #include "Network/Packet/Packet.hpp"
+#include "Network/Network.hpp"
 
 class Connection {
     public:
         Connection(asio::ip::udp::endpoint endpoint)
         {
             _endpoint = endpoint;
-            _send_packet = 0;
-            _received_packet = 0;
+            _sendPacket = 0;
+            _receivedPacket = 0;
         };
 
         Connection() = default;
@@ -25,53 +26,49 @@ class Connection {
         {
         };
 
-
-        void sendPacket(Exodia::Network::UDPSocket &socket, Exodia::Network::Packet &packet) {
-            std::cout << "Send packet to " << _endpoint.address().to_string() << ":" << _endpoint.port() << std::endl;
-            std::cout << "Header: command: " << int(packet.GetHeader().getCommand()) << " id: " << packet.GetHeader().getId() << " size: " << packet.GetHeader().getSize() << std::endl;
-            Exodia::Network::Header header = packet.GetHeader();
-            header.SetId(_send_packet);
-            header.setSize((unsigned long)packet.GetSize());
-            socket.send(packet.GetBuffer(), packet.GetSize(), _endpoint);
-            _send_packet++;
+        void SendPacket(Exodia::Network::UDPSocket &socket, Exodia::Network::Packet &packet) {
+            packet.GetHeader()->SetId(_sendPacket);
+            for (int i = 0; i < 2; i++)
+                socket.send(packet, _endpoint);
+            _sendPacket++;
         }
 
-        void setSendPacket(int packet) {
-            _send_packet = packet;
+        void SetSendPacket(int packet) {
+            _sendPacket = packet;
         }
 
         void AddReceivedPacket() {
-            _received_packet++;
+            _receivedPacket++;
         }
 
-        void setReceivedPacket(int packet) {
-            _received_packet = packet;
+        void SetReceivedPacket(int packet) {
+            _receivedPacket = packet;
         }
 
-        int getSendPacket() {
-            return _send_packet;
+        int GetSendPacket() {
+            return _sendPacket;
         }
 
-        int getReceivedPacket() {
-            return _received_packet;
+        int GetReceivedPacket() {
+            return _receivedPacket;
         }
 
-        asio::ip::udp::endpoint getEndpoint() const {
+        asio::ip::udp::endpoint GetEndpoint() const {
             return _endpoint;
         }
 
         bool operator==(const Connection &connection) const {
-            return _endpoint == connection.getEndpoint();
+            return _endpoint == connection.GetEndpoint();
         }
 
         bool operator!=(const Connection &connection) const {
-            return _endpoint != connection.getEndpoint();
+            return _endpoint != connection.GetEndpoint();
         }
     protected:
     private:
         asio::ip::udp::endpoint _endpoint;
-        int _send_packet;
-        int _received_packet;
+        int _sendPacket;
+        int _receivedPacket;
 
 };
 

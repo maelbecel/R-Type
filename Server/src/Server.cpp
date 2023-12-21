@@ -43,10 +43,10 @@ namespace Exodia {
         }
         if (command == "dump") {
             std::cout << "Clients: " << std::endl;
-            if (_network.getConnections().empty())
+            if (_network.GetConnections().empty())
                 std::cout << "No clients connected" << std::endl;
-            for (auto connection : _network.getConnections()) {
-                std::cout << "IP: " << connection.second.getEndpoint().address().to_string() << " Port: " << connection.second.getEndpoint().port() << std::endl;
+            for (auto connection : _network.GetConnections()) {
+                std::cout << "IP: " << connection.second.GetEndpoint().address().to_string() << " Port: " << connection.second.GetEndpoint().port() << std::endl;
             }
             std::cout << "Entities: " << std::endl;
             auto entities = _world->AllEntities();
@@ -58,12 +58,18 @@ namespace Exodia {
             std::cout << "Total: " << i << std::endl;
         }
         if (command == "packet") {
-            _network.sendPacketInfo();
+            _network.SendPacketInfo();
         }
     }
 
     void Server::Init()
     {
+        while (_network.GetConnections().empty()) {
+            std::cout << "Waiting for clients to connect..." << std::endl;
+            sleep(1);
+        }
+        RendererAPI::SetAPI(RendererAPI::API::None);
+
         std::cout << "Server is initializing !" << std::endl;
         try {
             // Register the systems
@@ -75,11 +81,21 @@ namespace Exodia {
             _world->RegisterSystem(collisionSystem);
             _world->Subscribe<Events::OnCollisionEntered>(collisionSystem);
 
-            // Create the entities
-            CreatePlayer(_world);
-            CreatePataPata(_world);
-            CreateBackground(_world);
-            CreateStars(_world);
+            // // Create the entities
+            // // CreatePlayer(_world);
+            // CreatePataPata(_world);
+            // CreateBackground(_world);
+
+            Exodia::Entity *entity = _world->CreateEntity();
+            entity->AddComponent<IDComponent>();
+            entity->AddComponent<CircleRendererComponent>(glm::vec4{ 1.0f, 1.0f, 1.0f, 1.0f });
+            _network.SendEntity(entity, "CircleRendererComponent");
+            Exodia::Entity *entity2 = _world->CreateEntity();
+            entity2->AddComponent<IDComponent>();
+            entity2->AddComponent<CircleRendererComponent>(glm::vec4{ 1.0f, 1.0f, 1.0f, 1.0f });
+            entity2->AddComponent<TransformComponent>(glm::vec3{2.0f, 0.0f, 0.0f});
+            _network.SendEntity(entity2, "CircleRendererComponent");
+            _network.SendEntity(entity2, "TransformComponent");
 
         } catch (std::exception &e) {
             std::cerr << "Exception: " << e.what() << std::endl;
@@ -92,8 +108,7 @@ namespace Exodia {
         std::cout << "Server is running !" << std::endl;
         try {
             while(_running) {
-                //this->Update();
-                std::this_thread::sleep_for(std::chrono::seconds(1)); // Sleep for 1 second
+                this->Update();
             }
         } catch (std::exception &e) {
             std::cerr << "Exception: " << e.what() << std::endl;
@@ -111,6 +126,29 @@ namespace Exodia {
             _lastTime = time;
 
             this->_world->Update(timestep);
+
+            //send entities
+            this->_world->ForEach<CircleRendererComponent, TransformComponent>([&](Entity *entity, ComponentHandle<CircleRendererComponent> circle, ComponentHandle<TransformComponent> transform) {
+                if (circle && transform) {
+                    _network.SendEntity(entity, "CircleRendererComponent");
+                    entity->GetComponent<TransformComponent>().Get().Translation.y += 0.01f;
+                    entity->GetComponent<TransformComponent>().Get().Translation.z = 0;
+                    _network.SendEntity(entity, "TransformComponent");
+                }
+            });
+            usleep(1000000 / 24);
+
+            std::queue<uint32_t> events = _network.flushEvents();
+            for (std::size_t i = 0; i < events.size(); i++) {
+                this->_world->ForEach<CircleRendererComponent>([&](Entity *entity, ComponentHandle<CircleRendererComponent> circle) {
+                    (void)entity;
+                    if (circle) {
+                        circle.Get().Color = glm::vec4{ 1.0f, 0.0f, 0.0f, 1.0f };
+                    }
+                });
+                events.pop();
+            }
+
         } catch (std::exception &e) {
             std::cerr << "Unable to update the world: " << e.what() << std::endl;
         }
