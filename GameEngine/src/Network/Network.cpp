@@ -110,12 +110,16 @@ namespace Exodia::Network {
 
         size_t size_of_data = data.Size;
         size_t offset = 0;
-        offset = FillData(buffer, offset, &entity_id, sizeof(unsigned long));           // Set if of entity
+        offset = FillData(buffer, offset, &entity_id, sizeof(unsigned long));           // Set id of entity
         offset = FillData(buffer, offset, &size_of_string, sizeof(unsigned int));       // Set size of name
         offset = FillData(buffer, offset, component_name.data(), component_name.size());// Set name
         offset = FillData(buffer, offset, &size_of_data, sizeof(uint32_t));             // Set size of data
         offset = FillData(buffer, offset, data.Data, size_of_data);                     // Set data
         buffer.resize(offset);
+
+        for (size_t i = 0; i < data.Size; i++)
+            std::cout << "(" << (char)data.Data[i] << "," << (int)data.Data[i] << ")";
+        std::cout << std::endl;
 
         packet.Set(header, buffer);
         if (_connections.size() > 0)
