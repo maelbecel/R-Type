@@ -39,8 +39,6 @@ namespace Exodia {
                 _AttackTimer = 0.0f;
                 _IsAttacking = false;
                 _IsCharging = false;
-
-                std::cout << "Player created" << std::endl;
             }
 
             void OnUpdate(Timestep ts) override;

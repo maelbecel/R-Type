@@ -104,47 +104,13 @@ namespace Exodia {
 
         // Create the entities
         CreatePlayer(_World);
-        // CreatePataPata(_World);
-        // CreateBackground(_World);
-        // CreateStars(_World);
 
 
         // Create pata-pata
-        Entity *patata = _World[GAME]->CreateEntity("Pata-pata");
-
-        patata->AddComponent<Health>(1);
-        patata->AddComponent<ScriptComponent>().Get().Bind<PataPata>();
-        patata->AddComponent<Animation>(1.0f, 8.0f, 0.1f);
-        patata->AddComponent<Clock>();
-        patata->AddComponent<BoxCollider2DComponent>();
-
-        auto body_patata = patata->AddComponent<RigidBody2DComponent>();
-
-        body_patata.Get().Type = RigidBody2DComponent::BodyType::Dynamic;
-        body_patata.Get().Mass = 0.0f;
-        body_patata.Get().GravityScale = 0.0f;
-        body_patata.Get().Velocity.x = -2.0f;
-        // Set entity sprite
-        // auto sprite = patata->AddComponent<SpriteRendererComponent>();
-        // Ref<Texture2D> texture = TextureImporter::LoadTexture2D("Assets/Textures/Pata-Pata.png");
-        // sprite.Get().Texture = SubTexture2D::CreateFromCoords(texture->Handle, { 0.0f, 0.0f }, { 33.3125f, 36.0f }, { 1.0f, 1.0f });
-
+        CreatePataPata(_World);
 
         // Create background
-        Entity *background = _World[GAME]->CreateEntity("Background");
-
-        background->AddComponent<IDComponent>();
-        background->AddComponent<CircleRendererComponent>(glm::vec4{ 0.0f, 0.0f, 0.005f, 1.0f });
-        background->GetComponent<TransformComponent>().Get().Scale.y = 100.0f;
-        background->GetComponent<TransformComponent>().Get().Scale.x = 100.0f;
-        background->GetComponent<TransformComponent>().Get().Translation.z = -0.5f;
-
-        auto body_bg = background->AddComponent<RigidBody2DComponent>();
-        body_bg.Get().Type = RigidBody2DComponent::BodyType::Dynamic;
-        body_bg.Get().Mass = 0.0f;
-        body_bg.Get().GravityScale = 0.0f;
-        body_bg.Get().Velocity = glm::vec2{ 1.5f, 0.0f };
-
+        CreateBackground(_World);
 
         // Entity *button = _World[MENU]->CreateEntity("Button");
 
@@ -169,22 +135,7 @@ namespace Exodia {
         cameraMenu->AddComponent<RigidBody2DComponent>().Get().Type = RigidBody2DComponent::BodyType::Static;
 
         // Create stars
-		for(int i = 0; i < 60; i++) {
-            Entity *star = _World[GAME]->CreateEntity("Star" + std::to_string(i));
-
-            star->AddComponent<ScriptComponent>().Get().Bind<Star>();
-            star->GetComponent<TransformComponent>().Get().Scale.y = 0.1f;
-            star->GetComponent<TransformComponent>().Get().Scale.x = 0.1f;
-            star->AddComponent<Clock>();
-			star->AddComponent<CircleRendererComponent>(glm::vec4{ 0.9f, 0.9f, 0.9f + static_cast<float>(random() % 100) / 10000.0f, 0.9f });
-
-            auto body = star->AddComponent<RigidBody2DComponent>();
-
-            body.Get().Type = RigidBody2DComponent::BodyType::Dynamic;
-            body.Get().Mass = 0.0f;
-            body.Get().GravityScale = 0.0f;
-            body.Get().Velocity.x = (random() % 10 + 1) * -1;
-        }
+        CreateStars(_World);
 
         // Create the camera
         _CameraController.SetZoomLevel(5.0f);

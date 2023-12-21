@@ -10,7 +10,7 @@
 
 namespace Exodia {
 
-    Server::Server(short port): _network(_world, _ioContextManager, port)
+    Server::Server(short port): _network(_worldNetwork, _ioContextManager, port)
     {
         std::cout << "Server is launching !" << std::endl;
         _inputThread = std::thread([&] {
@@ -48,7 +48,7 @@ namespace Exodia {
                 std::cout << "IP: " << connection.second.getEndpoint().address().to_string() << " Port: " << connection.second.getEndpoint().port() << std::endl;
             }
             std::cout << "Entities: " << std::endl;
-            auto entities = _world->AllEntities();
+            auto entities = _worldNetwork->AllEntities();
             std::size_t i = 0;
             for (auto entity : entities) {
                 (void)entity;
@@ -65,20 +65,30 @@ namespace Exodia {
     {
         std::cout << "Server is initializing !" << std::endl;
         try {
-            // Register the systems
-            _world->RegisterSystem(new AnimationSystem());      // Animation system
-            _world->RegisterSystem(new ScriptSystem());         // Script system
-            _world->RegisterSystem(new MovingSystem(1.5f));     // Moving system
+            // Create world
+            _currentScene = GAME;
+            _World[GAME] = CreateRef<Scene>();
+            _World[MENU] = CreateRef<Scene>();
+            _World[GAME]->OnViewportResize(1600, 900);
+            _World[MENU]->OnViewportResize(1600, 900);
+
+            _World[GAME]->RegisterSystem(new AnimationSystem());
+            _World[GAME]->RegisterSystem(new ScriptSystem());
+            _World[GAME]->RegisterSystem(new MovingSystem(1.5f));
+
+            _World[MENU]->RegisterSystem(new AnimationSystem());
+            _World[MENU]->RegisterSystem(new ScriptSystem());
+            _World[MENU]->RegisterSystem(new MovingSystem(1.5f));
 
             CollisionSystem *collisionSystem = new CollisionSystem();
-            _world->RegisterSystem(collisionSystem);
-            _world->Subscribe<Events::OnCollisionEntered>(collisionSystem);
+            _World[GAME]->RegisterSystem(collisionSystem);
+            _World[GAME]->Subscribe<Events::OnCollisionEntered>(collisionSystem);
 
             // Create the entities
-            // CreatePlayer(_world);
-            // CreatePataPata(_world);
-            // CreateBackground(_world);
-            // CreateStars(_world);
+            CreatePlayer(_World);
+            CreatePataPata(_World);
+            CreateBackground(_World);
+            CreateStars(_World);
 
         } catch (std::exception &e) {
             std::cerr << "Exception: " << e.what() << std::endl;
@@ -109,7 +119,7 @@ namespace Exodia {
 
             _lastTime = time;
 
-            this->_world->Update(timestep);
+            _World[_currentScene]->OnUpdateRuntime(timestep);
         } catch (std::exception &e) {
             std::cerr << "Unable to update the world: " << e.what() << std::endl;
         }

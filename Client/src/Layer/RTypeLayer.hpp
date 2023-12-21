@@ -47,8 +47,10 @@ namespace Exodia {
             inline static std::map<SceneType, std::shared_ptr<Exodia::Scene>> _World;
 
         private:
-            std::unordered_map<std::string, std::function<IComponentContainer *(Buffer)>> _ComponentFactory;
+            // WARNING: This is a temporary solution
             Exodia::World *_worldNetwork = Exodia::World::CreateWorld();
+
+            std::unordered_map<std::string, std::function<IComponentContainer *(Buffer)>> _ComponentFactory;
             Exodia::Network::IOContextManager ioContextManager;
 
             Ref<Framebuffer>             _Framebuffer;

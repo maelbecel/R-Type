@@ -5,8 +5,8 @@
 ** Player
 */
 
-#ifndef BULLETPLAYER_HPP_
-    #define BULLETPLAYER_HPP_
+#ifndef BULLETENNEMY_HPP_
+    #define BULLETENNEMY_HPP_
 
     // Exodia includes
     #include "Exodia.hpp"
@@ -16,7 +16,7 @@
 
 namespace Exodia {
 
-    class BulletPlayer : public ScriptableEntity {
+    class BulletEnnemy : public ScriptableEntity {
 
         /////////////
         // Methods //
@@ -25,7 +25,7 @@ namespace Exodia {
 
             void OnCreate() override
             {
-                _Speed = 25.0f;
+                _Speed = 5.0f;
 
                 std::cout << "Bullet created" << std::endl;
             }
@@ -49,12 +49,12 @@ namespace Exodia {
                     auto &tc = transform.Get();
                     // Mise à jour de la position en fonction du temps et du mouvement sinusoidal
                     if (animation.Get().CurrentFrame == animation.Get().MaxFrame) {
-                        tc.Translation.x += _Speed * ts;
+                        tc.Translation.x -= _Speed * ts;
                     }
                 }
 
                 // Remove bullet if out of screen
-                if (transform.Get().Translation.x > camera.Get().Translation.x + 10.0f) {
+                if (transform.Get().Translation.x > camera.Get().Translation.x + 20.0f) {
                     EXODIA_INFO("Bullet {0} destroyed", HandleEntity->GetComponent<TagComponent>().Get().Tag);
                     HandleEntity->GetWorld()->DestroyEntity(HandleEntity);
                 }
@@ -68,5 +68,5 @@ namespace Exodia {
     };
 };
 
-#endif /* !BULLETPLAYER_HPP_ */
+#endif /* !BULLETENNEMY_HPP_ */
 
