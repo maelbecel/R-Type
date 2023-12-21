@@ -25,6 +25,7 @@ jobs:
           cd vcpkg
           ./bootstrap-vcpkg.sh
           export VCPKG_ROOT=$(pwd)
+          source ~/.bashrc
       - name: Print VCPKG_ROOT
         run: |
           echo $VCPKG_ROOT
@@ -56,6 +57,7 @@ jobs:
           cd vcpkg
           .\bootstrap-vcpkg.bat
           set VCPKG_ROOT=%cd%
+          set PATH=%PATH%;%VCPKG_ROOT%
       - name: Print VCPKG_ROOT
         run: |
           echo %VCPKG_ROOT%
