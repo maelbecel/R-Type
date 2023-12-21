@@ -86,24 +86,6 @@ class UDPSocket {
         std::array<char, MTU> _receiveBuffer; /*!< The receive buffer */
 
     private:
-
-        //thread safe
-        std::mutex _mutex;
-        std::queue<std::vector<char>> _messages;
-        std::thread _send_message_thread;
-
-        void send_thread()
-        {
-            while (true) {
-                if (!_messages.empty()) {
-                    _mutex.lock();
-                    std::vector<char> message = _messages.front();
-                    _messages.pop();
-                    _mutex.unlock();
-                    _socket.send_to(asio::buffer(message), _senderEndpoint);
-                }
-            }
-        }
     };
     }; // namespace Network
 }; // namespace Exodia

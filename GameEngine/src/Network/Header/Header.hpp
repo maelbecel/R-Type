@@ -71,7 +71,6 @@ namespace Exodia {
                     if (buffer.size() < 22)
                         return Header(0, 0, 0);
 
-                    std::cout << "Dump fillHeader: " << std::endl;
                     char swappedCommand;
                     std::memcpy(&swappedCommand, buffer.data(), sizeof(char));
                     index += sizeof(char);
@@ -81,18 +80,15 @@ namespace Exodia {
                     std::memcpy(&swappedTimestamp, buffer.data() + index, sizeof(float));
                     index += sizeof(float);
                     float timestamp = swapEndianness(swappedTimestamp);
-                    std::cout << "Timestamp: " << timestamp << std::endl;
 
                     unsigned long swappedId;
                     std::memcpy(&swappedId, buffer.data() + index, sizeof(unsigned long));
                     index += sizeof(unsigned long);
                     unsigned long id = swapEndianness(swappedId);
-                    std::cout << "ID: " << id << std::endl;
 
                     unsigned long swappedSize;
                     std::memcpy(&swappedSize, buffer.data() + index, sizeof(unsigned long));
                     unsigned long size = swapEndianness(swappedSize);
-                    std::cout << "Size: " << size << std::endl;
 
                     Header header(command, id, size);
                     header._timestamp = timestamp;

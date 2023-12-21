@@ -29,13 +29,11 @@ namespace Exodia {
                 EXODIA_CORE_ERROR("Error opening socket: ", error.message());
                 throw std::runtime_error("Error opening socket");
             }
-            _send_message_thread = std::thread(&UDPSocket::send_thread, this);
         }
 
         UDPSocket::~UDPSocket() {
             // Close the socket
             _socket.close();
-            _send_message_thread.join();
         }
         
         void UDPSocket::send(const std::vector<char> message, size_t size, const asio::ip::udp::endpoint& endpoint) {
@@ -52,11 +50,15 @@ namespace Exodia {
         void UDPSocket::send(Exodia::Network::Packet &packet ,const asio::ip::udp::endpoint& endpoint) {
             _senderEndpoint = endpoint;
             std::vector<char> message = packet.GetBuffer();
-            std::vector<char> dup_message = message;
+            size_t size = message.size();
 
-            _mutex.lock();
-            _messages.push(dup_message);
-            _mutex.unlock();
+            _socket.async_send_to(asio::buffer(message, size), endpoint, [this](const asio::error_code& error, std::size_t bytes_transferred) {
+                if (error) {
+                    EXODIA_CORE_ERROR("Error sending data: ", error.message());
+                } else {
+                    EXODIA_CORE_INFO("Data sent successfully");
+                }
+            });
         }
 
         void UDPSocket::receive(const std::function<void(const std::vector<char>&, size_t, asio::ip::udp::endpoint)>& callback) {
@@ -66,12 +68,6 @@ namespace Exodia {
                 _receive_mutex.lock();
                 std::vector<char> receivedMessage(_receiveBuffer.begin(), _receiveBuffer.begin() + bytes_received);
                 if (!error) {
-                    std::cout << "Received " << bytes_received << " bytes" << std::endl;
-
-                    for (auto& c : receivedMessage) {
-                        std::cout << std::hex << (int)c << " ";
-                    }
-                    std::cout << std::endl;
 
                     // Call the callback with the received data
                     callback(receivedMessage, receivedMessage.size(), _senderEndpoint);
