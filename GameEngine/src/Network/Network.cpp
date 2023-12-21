@@ -274,17 +274,18 @@ namespace Exodia::Network {
 
     }
 
-    void Network::Splitter(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint) {
+    void Network::Splitter(const std::vector<char> &message, size_t size, asio::ip::udp::endpoint senderEndpoint) {
         (void) size;
-        Header header = Header::fillHeader(message);
+        std::vector<char> copiedBuffer(message.begin(), message.begin() + size);
+        Header header = Header::fillHeader(copiedBuffer);
         std::cout << "Command: " << Network::VerbaliseCommand(header) << " Timestamp: " << header.getTimestamp() << " Id: " << header.getId() << " Size: " << header.getSize() << std::endl;
 
         std::vector<char> content;
         if (header.getSize() > 0)
-            content = std::vector<char>(message.begin() + int(Header::GetSize()), message.end());
+            content = std::vector<char>(copiedBuffer.begin() + int(Header::GetSize()), copiedBuffer.end());
 
         if (header.getSize() != content.size()) {
-            EXODIA_CORE_ERROR("Network::Splitter() - Packet size is not the one indicated got {0} instead of {1} !", content.size(), header.getSize());
+            EXODIA_CORE_ERROR("Network::Splitter() - Packet size is not the one indicated got {0} instead of {1} !", copiedBuffer.size(), header.getSize());
             return;
         }
 

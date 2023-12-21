@@ -61,7 +61,7 @@ namespace Exodia {
                 void SendEntity(Entity *entity, std::string component_name); // 0x0c
                 void SendAskConnect(const std::string &ip, short port);      // 0x81
                 void SendEvent(u_int32_t event);                                   // 0x82
-                void Splitter(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint);
+                void Splitter(const std::vector<char> &message, size_t size, asio::ip::udp::endpoint senderEndpoint);
                 static std::string VerbaliseCommand(Exodia::Network::Header header)
                 {
                     std::string command;
