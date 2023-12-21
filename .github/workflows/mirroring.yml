@@ -63,7 +63,7 @@ jobs:
           cd ..
       - name: Check if the executable exists
         run: |
-          IF EXIST Release\r-type_client.exe IF EXIST Release\r-type_server.exe exit 0
+          IF (Test-Path .\Release\r-type_client.exe) -and (Test-Path .\Release\r-type_server.exe) { exit 0 }
           exit 1
         shell: pwsh
 
