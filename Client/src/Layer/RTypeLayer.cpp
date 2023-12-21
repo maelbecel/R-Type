@@ -67,7 +67,7 @@ namespace Exodia {
                         circle.Get().Color, // CircleRendererComponent
                         circle.Get().Thickness, // CircleRendererComponent
                         circle.Get().Fade, // CircleRendererComponent
-                        entity->GetEntityID() // Entity ID
+                        (int)entity->GetEntityID() // Entity ID
                     );
                 }
             });

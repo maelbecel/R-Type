@@ -66,7 +66,7 @@ namespace Exodia {
     {
         while (_network.GetConnections().empty()) {
             std::cout << "Waiting for clients to connect..." << std::endl;
-            sleep(1);
+            std::this_thread::sleep_for(std::chrono::seconds(1)); // Sleep for 1 second
         }
         RendererAPI::SetAPI(RendererAPI::API::None);
 
@@ -136,7 +136,7 @@ namespace Exodia {
                     _network.SendEntity(entity, "TransformComponent");
                 }
             });
-            usleep(1000000 / 24);
+            std::this_thread::sleep_for(std::chrono::microseconds(1000000 / 24));
 
             std::queue<uint32_t> events = _network.flushEvents();
             for (std::size_t i = 0; i < events.size(); i++) {

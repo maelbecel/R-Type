@@ -35,7 +35,7 @@ Please install `Visual Studio 17 2022`
 ```bash
 mkdir build
 cd build
-cmake .. -G "Visual Studio 17 2022" -DCMAKE_TOOLCHAIN_FILE=C:\Users\Ethan\Epitech\vcpkg\scripts\buildsystems\vcpkg.cmake -D_WIN32_WINNT=0x0601
+cmake .. -G "Visual Studio 17 2022" -DCMAKE_TOOLCHAIN_FILE=\path\vcpkg\scripts\buildsystems\vcpkg.cmake -D_WIN32_WINNT=0x0601
 cmake --build . --config Release
 ```
 

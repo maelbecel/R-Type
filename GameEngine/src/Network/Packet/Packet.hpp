@@ -23,7 +23,7 @@ namespace Exodia {
                 Packet(Header header, std::vector<char> content) : _content(content)
                 {
                     _header = CreateScope<Header>(header);
-                    _header->setSize(_content.size());
+                    _header->setSize((unsigned long)_content.size());
                 };
 
                 Packet(const Packet &packet) : _content(packet._content)
@@ -36,7 +36,7 @@ namespace Exodia {
                 void SetHeader(Header header)
                 {
                     _header = CreateScope<Header>(header);
-                    _header->setSize(_content.size());
+                    _header->setSize((unsigned long)_content.size());
                 }
 
                 void SetContent(std::vector<char> content)

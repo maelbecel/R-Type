@@ -238,10 +238,10 @@ namespace Exodia::Network {
 
         offset = FillData(buffer, offset, &event, sizeof(uint32_t));
         packet.Set(header, buffer);
-        if (_connections.size() > 0)
+        if (_connections.size() > 0) {
            for (auto &connection : _connections)
                 connection.second.SendPacket(_socket, packet);
-        else
+        } else
             _server_connection.SendPacket(_socket, packet);
     }
 
