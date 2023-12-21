@@ -34,8 +34,8 @@ The entity component system provides a flexible and efficient way to represent a
 
 The Game Engine has 3 main parts :
 
-- **Exodia** : The core of the Game Engine. It contains the ECS and the main classes of the Game Engine.
-- **Network** : The network part of the Game Engine. It contains the classes that will be used to communicate with the server.
+- [**Exodia**](Exodia.md) : The core of the Game Engine. It contains the ECS and the main classes of the Game Engine.
+- [**Network**](Network.md) : The network part of the Game Engine. It contains the classes that will be used to communicate with the server.
 - [**Platform**](Platform.md) : The platform part of the Game Engine. It contains the classes that will be used to communicate with the client.
 
 There is also a [**Utils**](Utils.md) part that contains some useful classes.
@@ -47,7 +47,40 @@ There is also a [**Utils**](Utils.md) part that contains some useful classes.
 The Game Engine comes with a set of default components that can be used to create a game.
 YOu can check it [here](Components.md)
 
+### Adding a Component
+
+To add a component, you need to create a class that inherits from the Component class.
+Here is an example of a component that will be used to store the position of an entity :
+
+```c++
+class PositionComponent : public Exodia::Component {
+public:
+    PositionComponent(float x, float y) : x(x), y(y) {}
+
+    float x;
+    float y;
+};
+```
+
+
 ### Default Systems
 
 The Game Engine comes with a set of default systems that can be used to create a game.
 You can check it [here](Systems.md)
+
+### Adding a System
+
+To add a system, you need to create a class that inherits from the System class.
+Here is an example of a system that will be used to print the position of an entity :
+
+```c++
+class PositionSystem : public Exodia::System {
+public:
+    void OnUpdate() override {
+        for (auto entity : GetEntities()) {
+            auto position = entity->GetComponent<PositionComponent>();
+            std::cout << "Position: " << position->x << ", " << position->y << std::endl;
+        }
+    }
+};
+```
