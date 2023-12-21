@@ -19,73 +19,105 @@ namespace Exodia {
         bullet_tc.Translation.y = tc.Translation.y - 0.05f;
         bullet_tc.Scale.x = 0.5f;
         bullet_tc.Scale.y = 0.5f;
-        auto sprite = bullet->AddComponent<SpriteRendererComponent>();
         bullet->AddComponent<ScriptComponent>().Get().Bind<BulletPlayer>();
         bullet->AddComponent<Animation>(0.0f, 2.0f, 1.0f);
         bullet->AddComponent<BoxCollider2DComponent>();
         bullet->AddComponent<ParentComponent>().Get().Parent = GetComponent<IDComponent>().Get().ID;
 
-        Ref<Texture2D> texture = TextureImporter::LoadTexture2D("Assets/Textures/Missile.png");
-        sprite.Get().Texture = SubTexture2D::CreateFromCoords(texture->Handle, { 0.0f, 0.0f }, { 17.33f, 14.0f }, { 1.0f, 1.0f });
+        // auto sprite = bullet->AddComponent<SpriteRendererComponent>();
+        // Ref<Texture2D> texture = TextureImporter::LoadTexture2D("Assets/Textures/Missile.png");
+        // sprite.Get().Texture = SubTexture2D::CreateFromCoords(texture->Handle, { 0.0f, 0.0f }, { 17.33f, 14.0f }, { 1.0f, 1.0f });
 
         _AttackTimer += ts.GetSeconds();
         _IsAttacking = true;
     }
 
     void Player::OnUpdate(Timestep ts) {
+        if (_IsCharging) {
+            _AttackTimer += ts.GetSeconds();
+        }
+        if (_IsShooting) {
+            CreateBullet(ts, GetComponent<TransformComponent>().Get());
+            _IsShooting = false;
+        }
+    };
+
+    void Player::OnKeyPressed(int keycode)
+    {
+        EXODIA_INFO("Player is pressing {0}", keycode);
         auto transform = GetComponent<TransformComponent>();
         auto velocity = GetComponent<RigidBody2DComponent>();
 
         if (transform && velocity) {
-            TransformComponent &tc = transform.Get();
-
             // Move player with keyboard
-            if (Input::IsKeyPressed(Key::A)) {          // Left
+            if (keycode == Key::A) {          // Left
+                EXODIA_INFO("Player is moving left");
                 _State = State::IDLE;
                 velocity.Get().Velocity.x = -5.0f;
-            } else if (Input::IsKeyPressed(Key::D)) {   // Right
+            } else if (keycode == Key::D) {   // Right
+                EXODIA_INFO("Player is moving right");
                 _State = State::IDLE;
                 velocity.Get().Velocity.x = 5.0f;
-            } else if (Input::IsKeyReleased(Key::A) && Input::IsKeyReleased(Key::D)) { // Idle
-                _State = State::IDLE;
-                velocity.Get().Velocity.x = 0.0f;
             }
-            if (Input::IsKeyPressed(Key::W)) {          // Up
+
+            if (keycode == Key::W) {          // Up
+                EXODIA_INFO("Player is moving up");
                 _State = State::MOVE_UP;
                 velocity.Get().Velocity.y = 5.0f;
-            } else if (Input::IsKeyPressed(Key::S)) {   // Down
+            } else if (keycode == Key::S) {   // Down
+                EXODIA_INFO("Player is moving down");
                 _State = State::MOVE_DOWN;
                 velocity.Get().Velocity.y = -5.0f;
-            } else if (Input::IsKeyReleased(Key::W) && Input::IsKeyReleased(Key::S)) { // Idle
-                _State = State::IDLE;
-                velocity.Get().Velocity.y = 0.0f;
             }
 
             // Simple attack
-            if (Input::IsKeyPressed(Key::SPACE) && !_IsAttacking) {
-                CreateBullet(ts, tc);
-            } else if (Input::IsKeyReleased(Key::SPACE) && _IsAttacking) {
-                _AttackTimer = 0.0f;
-                _IsAttacking = false;
+            if (keycode == Key::SPACE && !_IsAttacking) {
+                EXODIA_INFO("Player is shooting");
+                _IsShooting = true;
             }
 
             // Charge attack
-            if (Input::IsKeyPressed(Key::Q) && !_IsCharging) {
+            if (keycode == Key::Q && !_IsCharging) {
                 EXODIA_INFO("Player is charging");
-                _AttackTimer += ts.GetSeconds();
                 _IsCharging = true;
-            } else if (Input::IsKeyReleased(Key::Q) && _IsCharging) {
-                EXODIA_INFO("Player realease charge after {0} seconds", _AttackTimer);
-                _AttackTimer = 0.0f;
-                _IsCharging = false;
-            }
-            if (_IsCharging) {
-                _AttackTimer += ts.GetSeconds();
             }
         }
     };
 
+    void Player::OnKeyReleased(int keycode)
+    {
+        auto velocity = GetComponent<RigidBody2DComponent>();
+
+        if (velocity) {
+            if (keycode == Key::A || keycode == Key::D) {
+                _State = State::IDLE;
+                velocity.Get().Velocity.x = 0.0f;
+            }
+            if (keycode == Key::W || keycode == Key::S) {
+                _State = State::IDLE;
+                velocity.Get().Velocity.y = 0.0f;
+            }
+
+            if (keycode == Key::SPACE && _IsAttacking) {
+                _AttackTimer = 0.0f;
+                _IsAttacking = false;
+            }
+
+            if (keycode == Key::Q && _IsCharging) {
+                EXODIA_INFO("Player realease charge after {0} seconds", _AttackTimer);
+                _AttackTimer = 0.0f;
+                _IsCharging = false;
+            }
+        }
+    }
+
+
     void Player::OnCollisionEnter(Entity *entity) {
-        EXODIA_INFO("Collision with {0}", entity->GetComponent<TagComponent>().Get().Tag);
+        if (entity->GetComponent<TagComponent>().Get().Tag.rfind("BE", 0) == 0) {
+            EXODIA_INFO("BE {0} hit", entity->GetComponent<TagComponent>().Get().Tag);
+            entity->GetWorld()->DestroyEntity(entity);
+            GetComponent<Health>().Get().CurrentHealth -= 1;
+            EXODIA_INFO("Player health: {0}", GetComponent<Health>().Get().CurrentHealth);
+        }
     };
 }

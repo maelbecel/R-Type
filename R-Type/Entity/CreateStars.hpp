@@ -11,6 +11,7 @@
     #include "Exodia.hpp"
     #include "Component/Clock.hpp"
     #include "Scripts/Star.hpp"
+    #include "SceneType.hpp"
 
 namespace Exodia {
 
@@ -19,7 +20,7 @@ namespace Exodia {
      *
      * @param _World
      */
-    void CreateStars(World *_World);
+    void CreateStars(std::map<SceneType, std::shared_ptr<Exodia::Scene>> _World);
 };
 
 #endif /* !CREATESTARS_HPP_ */

@@ -9,6 +9,7 @@
     #define CREATEBACKGROUND_HPP_
 
     #include "Exodia.hpp"
+    #include "SceneType.hpp"
 
 namespace Exodia {
 
@@ -17,7 +18,7 @@ namespace Exodia {
      *
      * @param _World
      */
-    void CreateBackground(World *_World);
+    void CreateBackground(std::map<SceneType, std::shared_ptr<Exodia::Scene>> _World);
 };
 
 #endif /* !CREATEBACKGROUND_HPP_ */

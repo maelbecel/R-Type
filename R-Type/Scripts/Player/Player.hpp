@@ -11,6 +11,7 @@
     // Exodia includes
     #include "Exodia.hpp"
     #include "Scripts/BulletPlayer.hpp"
+    #include "Component/Health.hpp"
 
 namespace Exodia {
 
@@ -38,11 +39,13 @@ namespace Exodia {
                 _AttackTimer = 0.0f;
                 _IsAttacking = false;
                 _IsCharging = false;
-
-                std::cout << "Player created" << std::endl;
             }
 
             void OnUpdate(Timestep ts) override;
+
+            void OnKeyPressed(int keycode) override;
+
+            void OnKeyReleased(int keycode) override;
 
             void CreateBullet(Timestep ts, TransformComponent &tc);
 
@@ -69,6 +72,7 @@ namespace Exodia {
             float _AttackTimer;
             bool _IsAttacking;
             bool _IsCharging;
+            bool _IsShooting = false;
     };
 };
 
