@@ -40,8 +40,6 @@ namespace Exodia {
     Application *CreateApplication(ApplicationCommandLineArgs args)
     {
         EXODIA_PROFILE_FUNCTION();
-        Exodia::Project::Load("./Client/R-Type.proj");
-
 
         ApplicationSpecification spec;
 

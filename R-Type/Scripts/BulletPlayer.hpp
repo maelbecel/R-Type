@@ -30,12 +30,13 @@ namespace Exodia {
                 std::cout << "Bullet created" << std::endl;
             }
 
-            void OnUpdate(Timestep ts) override
+            void OnUpdate(UNUSED Timestep ts) override
             {
                 auto transform = GetComponent<TransformComponent>();
                 auto animation = GetComponent<Animation>();
                 auto parent = GetComponent<ParentComponent>();
                 auto camera = HandleEntity->GetWorld()->GetEntityByTag("Camera")->GetComponent<TransformComponent>();
+                auto velocity = GetComponent<RigidBody2DComponent>();
 
                 Entity *entity = HandleEntity->GetWorld()->GetEntityByID(parent.Get().Parent);
 
@@ -43,13 +44,15 @@ namespace Exodia {
                     std::cout << "Entity not found " << parent.Get().Parent << std::endl;
                 }
 
+                EXODIA_INFO("Animation {0}", animation.Get().CurrentFrame);
+
+
                 // Paramètres de la fonction sinus
 
-                if (transform && animation) {
-                    auto &tc = transform.Get();
+                if (velocity && animation) {
                     // Mise à jour de la position en fonction du temps et du mouvement sinusoidal
                     if (animation.Get().CurrentFrame == animation.Get().MaxFrame) {
-                        tc.Translation.x += _Speed * ts;
+                        velocity.Get().Velocity.x = _Speed;
                     }
                 }
 

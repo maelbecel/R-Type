@@ -63,6 +63,7 @@ namespace Exodia {
                 // Ref<Texture2D> texture = TextureImporter::LoadTexture2D("Assets/Textures/Explosion.png");
                 // auto sprite = bullet->AddComponent<SpriteRendererComponent>();
                 // sprite.Get().Texture = SubTexture2D::CreateFromCoords(texture->Handle, { 8.0f, 4.0f }, { 16.6666666667f, 17.0f }, { 1.0f, 1.0f });
+                bullet->AddComponent<CircleRendererComponent>(glm::vec4{ 0.0f, 1.0f, 0.0f, 1.0f});
             }
 
             void OnCreate() override

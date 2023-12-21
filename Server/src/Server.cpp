@@ -154,7 +154,31 @@ namespace Exodia {
             Timestep timestep(time - _lastTime);
 
             _lastTime = time;
+            if (_currentScene == GAME) {
+                auto pata = _World[GAME]->GetEntityByName("Pata-pata");
+                if (pata == nullptr) {
+                    Entity *patata = _World[GAME]->CreateEntity("Pata-pata");
 
+                    patata->AddComponent<Health>(1);
+                    patata->AddComponent<ScriptComponent>().Get().Bind<PataPata>();
+                    patata->AddComponent<Animation>(1.0f, 8.0f, 0.075f);
+                    patata->AddComponent<Clock>();
+                    patata->AddComponent<BoxCollider2DComponent>();
+
+                    auto body_patata = patata->AddComponent<RigidBody2DComponent>();
+
+                    body_patata.Get().Type = RigidBody2DComponent::BodyType::Dynamic;
+                    body_patata.Get().Mass = 0.0f;
+                    body_patata.Get().GravityScale = 0.0f;
+                    body_patata.Get().Velocity.x = -2.0f;
+                    patata->AddComponent<CircleRendererComponent>(glm::vec4{ 1.0f, 1.0f, 0.0f, 1.0f});
+                    // Set entity sprite
+                    // auto sprite = patata->AddComponent<SpriteRendererComponent>();
+                    // Ref<Texture2D> texture = TextureImporter::LoadTexture2D("Assets/Textures/Pata-Pata.png");
+                    // sprite.Get().Texture = SubTexture2D::CreateFromCoords(texture->Handle, { 0.0f, 0.0f }, { 33.3125f, 36.0f }, { 1.0f, 1.0f });
+
+            }
+        }
             _World[_currentScene]->OnUpdateRuntime(timestep);
         } catch (std::exception &e) {
             std::cerr << "Unable to update the world: " << e.what() << std::endl;
