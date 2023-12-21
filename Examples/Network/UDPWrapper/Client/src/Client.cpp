@@ -36,7 +36,6 @@ int main(int ac, char **av)
         // Create a UDPSocket object for the server
         Exodia::Network::UDPSocket serverSocket(ioContextManager, localEndpoint);
 
-        // serverSocket.receive(my_callback);
         Exodia::Network::Header header(1, 1, 2, 2);
         Exodia::Network::Packet packet;
 
@@ -51,7 +50,7 @@ int main(int ac, char **av)
 
         packet.setContent(buffer);
 
-        serverSocket.send(packet.getBuffer(), 1468, serverEndpoint);
+        serverSocket.Send(packet.getBuffer(), 1468, serverEndpoint);
         // Run the IO context to initiate asynchronous operations
         ioContextManager.run();
 

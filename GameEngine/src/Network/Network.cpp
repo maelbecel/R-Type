@@ -31,7 +31,7 @@ namespace Exodia::Network {
      * @return void
      */
     void Network::Loop() {
-        _socket.receive(std::bind(&Network::Splitter, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
+        _socket.Receive(std::bind(&Network::Splitter, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
     }
 
     /**

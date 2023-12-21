@@ -30,7 +30,7 @@ class Connection {
             packet.GetHeader()->setSize(packet.GetContent().size());
             packet.GetHeader()->SetId(_sendPacket);
             for (int i = 0; i < 2; i++)
-                socket.send(packet, _endpoint);
+                socket.Send(packet, _endpoint);
             _sendPacket++;
         }
 

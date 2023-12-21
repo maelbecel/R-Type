@@ -36,7 +36,16 @@ namespace Exodia {
             _socket.close();
         }
 
-        void UDPSocket::send(const std::vector<char> message, size_t size, const asio::ip::udp::endpoint& endpoint) {
+        /**
+         * @brief Send data to the given endpoint
+         *
+         * @param message (Type: std::vector<char>) The message to send
+         * @param size (Type: size_t) The size of the message
+         * @param endpoint (Type: asio::ip::udp::endpoint) The endpoint to send the message to
+         *
+         * @return void
+        */
+        void UDPSocket::Send(const std::vector<char> message, size_t size, const asio::ip::udp::endpoint& endpoint) {
             // Send data asynchronously
             _socket.async_send_to(asio::buffer(message, size), endpoint, [this](const asio::error_code& error, std::size_t bytes_transferred) {
                 if (error) {
@@ -45,7 +54,15 @@ namespace Exodia {
             });
         }
 
-        void UDPSocket::send(Exodia::Network::Packet &packet ,const asio::ip::udp::endpoint& endpoint) {
+        /**
+         * @brief Send data to the given endpoint
+         *
+         * @param packet (Type: Exodia::Network::Packet) The packet to send
+         * @param endpoint (Type: asio::ip::udp::endpoint) The endpoint to send the packet to
+         *
+         * @return void
+        */
+        void UDPSocket::Send(Exodia::Network::Packet &packet ,const asio::ip::udp::endpoint& endpoint) {
             _senderEndpoint = endpoint;
             std::vector<char> message = packet.GetBuffer();
             size_t size = message.size();
@@ -57,26 +74,26 @@ namespace Exodia {
             });
         }
 
-        void UDPSocket::receive(const std::function<void(const std::vector<char>&, size_t, asio::ip::udp::endpoint)>& callback) {
+        void UDPSocket::Receive(const std::function<void(const std::vector<char>&, size_t, asio::ip::udp::endpoint)>& callback) {
+            _socket.async_receive_from(asio::buffer(_receiveBuffer), _senderEndpoint,
+                [this, callback](const asio::error_code& error, std::size_t bytes_received) {
+                    _receive_mutex.lock();
+                    std::vector<char> receivedMessage(_receiveBuffer.begin(), _receiveBuffer.begin() + bytes_received);
+                    std::cout << std::endl;
+                    if (!error) {
 
-        _socket.async_receive_from(asio::buffer(_receiveBuffer), _senderEndpoint,
-            [this, callback](const asio::error_code& error, std::size_t bytes_received) {
-                _receive_mutex.lock();
-                std::vector<char> receivedMessage(_receiveBuffer.begin(), _receiveBuffer.begin() + bytes_received);
-                std::cout << std::endl;
-                if (!error) {
+                        // Call the callback with the received data
+                        callback(receivedMessage, receivedMessage.size(), _senderEndpoint);
 
-                    // Call the callback with the received data
-                    callback(receivedMessage, receivedMessage.size(), _senderEndpoint);
-
-                    // Call receive again to listen for more messages
-                    _receive_mutex.unlock();
-                    receive(callback);
-                } else {
-                    _receive_mutex.unlock();
-                    EXODIA_CORE_ERROR("Error receiving message: ", error.message());
+                        // Call receive again to listen for more messages
+                        _receive_mutex.unlock();
+                        Receive(callback);
+                    } else {
+                        _receive_mutex.unlock();
+                        EXODIA_CORE_ERROR("Error receiving message: ", error.message());
+                    }
                 }
-            });
+            );
         }
     }
 }
