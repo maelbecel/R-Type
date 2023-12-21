@@ -70,18 +70,18 @@ jobs:
           exit 1
         shell: pwsh
 
-#  tests:
-#    name: Testing...
-#    needs: linux-compilation
-#    runs-on: ubuntu-latest
-#    container: epitechcontent/epitest-docker
-#    timeout-minutes: 10
-#    steps:
-#      - uses: actions/checkout@v3
-#        with:
-#          fetch-depth: 0
-#      - run: |
-#          echo testing the project
+  tests:
+    name: Testing...
+    needs: linux-compilation
+    runs-on: ubuntu-latest
+    container: epitechcontent/epitest-docker
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - run: |
+          echo testing the project
 
   mirroring:
     runs-on: ubuntu-latest
