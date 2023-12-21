@@ -28,6 +28,7 @@ set(SOURCES
 # Set include directories for the Exodia Game Engine Application
 set(INCLUDE_DIRS
     # Exodia-App include directories
+    src/
 
     # R-Type include directories
     ${R_TYPE_DIR}

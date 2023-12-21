@@ -34,14 +34,19 @@ namespace Exodia {
                 std::uniform_int_distribution<int>    intensityDist(1, 255);
                 std::uniform_int_distribution<int>    stateDist(0, 1);
 
+                auto camera = HandleEntity->GetWorld()->GetEntityByTag("Camera")->GetComponent<TransformComponent>();
+
+                float max_height = 20.0f;
+                int height = 40;
+
                 _size      = sizeDist(gen);
                 _intensity = intensityDist(gen) / 255.0f;
                 _State     = stateDist(gen) ? State::GROWING : State::SHRINKING;
 
                 auto transform = GetComponent<TransformComponent>();
                 auto &tc = transform.Get();
-                tc.Translation.x = (float)(10 + std::uniform_int_distribution<int>(0, 19)(gen));
-                tc.Translation.y = (float)(5 - std::uniform_int_distribution<int>(0, 9)(gen));
+				tc.Translation.x = (float)(10 + std::uniform_int_distribution<int>(0, 19)(gen)) + camera.Get().Translation.x;
+				tc.Translation.y = max_height - (float)(std::uniform_int_distribution<int>(0, height)(gen));
                 tc.Scale.x = _size;
                 tc.Scale.y = _size;
             }
@@ -51,6 +56,8 @@ namespace Exodia {
                 auto &mytime = GetComponent<Clock>().Get().ElapsedTime;
                 auto transform = GetComponent<TransformComponent>();
                 auto circle = GetComponent<CircleRendererComponent>();
+                auto camera = HandleEntity->GetWorld()->GetEntityByTag("Camera")->GetComponent<TransformComponent>();
+
 
                 mytime += ts.GetMilliseconds();
 
@@ -66,13 +73,13 @@ namespace Exodia {
                     cc.Color.a = _intensity;
                 }
 
-                if (transform.Get().Translation.x < -10) {
+                if (transform.Get().Translation.x < camera.Get().Translation.x - 12) {
                     std::mt19937 gen(std::random_device{}());
                     std::uniform_int_distribution<int> xDist(10, 19);
                     std::uniform_int_distribution<int> yDist(-5, 5);
 
-                    transform.Get().Translation.x = (float)xDist(gen);
-                    transform.Get().Translation.y = (float)yDist(gen);
+                    transform.Get().Translation.x = (float)(xDist(gen)) + camera.Get().Translation.x;
+                    transform.Get().Translation.y = (float)(yDist(gen));
                 }
             }
 

@@ -18,8 +18,7 @@ namespace Exodia {
     class AnimationSystem : public EntitySystem {
         public:
             // Constructor && Destructor
-            AnimationSystem() {
-            };
+            AnimationSystem() {};
 
             virtual ~AnimationSystem() {};
 
@@ -27,7 +26,9 @@ namespace Exodia {
             // Methods
             virtual void Update(World *world, Timestep ts) override
             {
-                world->ForEach<SpriteRendererComponent, Animation>([&](Entity *entity, auto sprite, ComponentHandle<Animation> animation) {
+                // WARNING: This is a temporary solution
+                // world->ForEach<SpriteRendererComponent, Animation>([&](Entity *entity, auto sprite, auto animation) {
+                world->ForEach<Animation>([&](Entity *entity, ComponentHandle<Animation> animation) {
                     // check if entity is player
                     if (entity->GetComponent<TagComponent>().Get().Tag.rfind("Player", 0) == 0) {
                         UpdateAnimation<Player>(entity, [&](Player *player) {
@@ -45,7 +46,6 @@ namespace Exodia {
                                     break;
                             }
                             auto &anim = animation.Get();
-                            // sprite.Get().Texture->SetCoords({ (float)anim.CurrentFrame, 4.0f });
 
                             anim.ElapsedTime += ts.GetSeconds();
 
@@ -63,8 +63,8 @@ namespace Exodia {
                                         anim.CurrentFrame = anim.MaxFrame;
                                 }
 
-
-                                sprite.Get().Texture->SetCoords({ anim.CurrentFrame, 4.0f });
+                                // WARNING: This is a temporary solution
+                                // sprite.Get().Texture->SetCoords({ anim.CurrentFrame, 4.0f });
 
                                 anim.ElapsedTime = 0.0f;
                             }
@@ -82,7 +82,8 @@ namespace Exodia {
                             if (anim.CurrentFrame >= anim.MaxFrame)
                                 anim.CurrentFrame = 0;
 
-                            sprite.Get().Texture->SetCoords({ anim.CurrentFrame, 4.0f });
+                            // WARNING: This is a temporary solution
+                            // sprite.Get().Texture->SetCoords({ anim.CurrentFrame, 4.0f });
 
                             // Réinitialiser le compteur
                             anim.ElapsedTime = 0.0f;
@@ -100,7 +101,8 @@ namespace Exodia {
                             if (anim.CurrentFrame >= anim.MaxFrame)
                                 anim.CurrentFrame = anim.MaxFrame;
 
-                            sprite.Get().Texture->SetCoords({ anim.CurrentFrame, 0.0f });
+                            // WARNING: This is a temporary solution
+                            // sprite.Get().Texture->SetCoords({ anim.CurrentFrame, 0.0f });
 
                             // Réinitialiser le compteur
                             anim.ElapsedTime = 0.0f;

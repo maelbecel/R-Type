@@ -25,7 +25,7 @@
 
 namespace Exodia {
 
-    static Scope<Renderer2D::Renderer2DData> _Data; /* !< Renderer2D data */
+    static Scope<Renderer2D::Renderer2DData> _Data = nullptr; /* !< Renderer2D data */
 
     /////////////
     // Methods //
@@ -130,6 +130,9 @@ namespace Exodia {
     {
         EXODIA_PROFILE_FUNCTION(); // Performance instrumentation profiling for the function
 
+        if (_Data == nullptr)
+            return;
+
         // Bind shader and set view projection matrix
         _Data->CameraBuffer.ViewProjection = camera.GetViewProjectionMatrix();
         _Data->CameraUniformBuffer->SetData(&_Data->CameraBuffer, sizeof(CameraData));
@@ -141,6 +144,9 @@ namespace Exodia {
     {
         EXODIA_PROFILE_FUNCTION(); // Performance instrumentation profiling for the function
 
+        if (_Data == nullptr)
+            return;
+
         _Data->CameraBuffer.ViewProjection = camera.GetProjection() * glm::inverse(transform);
         _Data->CameraUniformBuffer->SetData(&_Data->CameraBuffer, sizeof(CameraData));
 
@@ -151,6 +157,9 @@ namespace Exodia {
     {
         EXODIA_PROFILE_FUNCTION(); // Performance instrumentation profiling for the function
 
+        if (_Data == nullptr)
+            return;
+
         _Data->CameraBuffer.ViewProjection = camera.GetViewProjection();
         _Data->CameraUniformBuffer->SetData(&_Data->CameraBuffer, sizeof(CameraData));
 
@@ -160,6 +169,9 @@ namespace Exodia {
     void Renderer2D::EndScene()
     {
         EXODIA_PROFILE_FUNCTION(); // Performance instrumentation profiling for the function
+
+        if (_Data == nullptr)
+            return;
 
         Flush();
     }

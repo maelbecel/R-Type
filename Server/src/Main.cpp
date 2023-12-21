@@ -16,8 +16,8 @@ int main(int ac, char **av)
     (void)av;
 
     Exodia::Log::Init();
-
     Exodia::Project::Load("./Client/R-Type.proj");
+    Exodia::RendererAPI::SetGraphical(false);
 
     std::cout << "Server is waiting for infos !" << std::endl;
 
