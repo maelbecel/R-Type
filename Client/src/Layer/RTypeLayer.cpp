@@ -63,7 +63,7 @@ namespace Exodia {
         _Framebuffer = Framebuffer::Create(fbSpec);
 
         // Server main
-        Exodia::Network::IOContextManager ioContextManager;
+        //Exodia::Network::IOContextManager ioContextManager;
 
         // Define a local endpoint to listen on
         // asio::ip::udp::endpoint localEndpoint(asio::ip::address::from_string("127.0.0.1"), 8082);
@@ -245,7 +245,9 @@ namespace Exodia {
         int key = event.GetKeyCode();
 
         EXODIA_INFO("pressed {0}", key);
-        _World[_currentScene]->GetWorld().ForEach<ScriptComponent, TagComponent>([&](UNUSED(Entity *entity), ComponentHandle<ScriptComponent> script, auto tag) {
+        _World[_currentScene]->GetWorld().ForEach<ScriptComponent, TagComponent>([&](Entity *entity, auto script, auto tag) {
+            (void)entity;
+
             if (tag.Get().Tag.rfind("Player", 0) != std::string::npos && script.Get().Instance != nullptr) {
                 script.Get().Instance->OnKeyPressed(key);
             }
@@ -260,7 +262,9 @@ namespace Exodia {
 
         EXODIA_INFO("released {0}", key);
 
-        _World[_currentScene]->GetWorld().ForEach<ScriptComponent, TagComponent>([&](UNUSED(Entity *entity), ComponentHandle<ScriptComponent> script, auto tag) {
+        _World[_currentScene]->GetWorld().ForEach<ScriptComponent, TagComponent>([&](Entity *entity, auto script, auto tag) {
+            (void)entity;
+
             if (tag.Get().Tag.rfind("Player", 0) != std::string::npos && script.Get().Instance != nullptr) {
                 script.Get().Instance->OnKeyReleased(key);
             }

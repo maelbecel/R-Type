@@ -15,6 +15,7 @@
     #include "BulletEnnemy.hpp"
 
     #include <cmath>
+    #include <random>
 
 namespace Exodia {
 
@@ -72,7 +73,8 @@ namespace Exodia {
 
                 _State = State::ALIVE;
                 transform.Get().Translation.x = camera.Get().Translation.x + 20.0f;
-                transform.Get().Translation.y = 0.0f - random() % 5;
+                transform.Get().Translation.y = (float)(std::rand() % 10 - 5);
+
                 EXODIA_INFO("PataPata created at pos {0}, {1}", transform.Get().Translation.x, transform.Get().Translation.y);
             }
 
