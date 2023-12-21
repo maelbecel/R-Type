@@ -25,6 +25,9 @@ jobs:
           cd vcpkg
           ./bootstrap-vcpkg.sh
           export VCPKG_ROOT=$(pwd)
+      - name: Print VCPKG_ROOT
+        run: |
+          echo $VCPKG_ROOT
       - name: Setup Ninja
         uses: seanmiddleditch/gha-setup-ninja@v4
       - name: Setup CMake
@@ -53,6 +56,9 @@ jobs:
           cd vcpkg
           .\bootstrap-vcpkg.bat
           set VCPKG_ROOT=%cd%
+      - name: Print VCPKG_ROOT
+        run: |
+          echo %VCPKG_ROOT%
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v1
       - name: Setup CMake

@@ -16,15 +16,15 @@ make() {
 
     # Exécuter les commandes cmake et ninja
     if [ "$compile_type" == "debug" ]; then
-        cmake .. -G Ninja -DCOMPILE_DEBUG=ON --preset=vcpkg
+        cmake .. -G Ninja -DCOMPILE_DEBUG=ON
     elif [ "$compile_type" == "examples" ]; then
-        cmake .. -G Ninja -DCOMPILE_EXAMPLES=ON --preset=vcpkg
+        cmake .. -G Ninja -DCOMPILE_EXAMPLES=ON
     elif [ "$compile_type" == "sandbox" ]; then
-        cmake .. -G Ninja -DCOMPILE_SANDBOX=ON --preset=vcpkg
+        cmake .. -G Ninja -DCOMPILE_SANDBOX=ON
     elif [ "$compile_type" == "exodia" ]; then
-        cmake .. -G Ninja -DCOMPILE_EDITOR=ON --preset=vcpkg
+        cmake .. -G Ninja -DCOMPILE_EDITOR=ON
     else
-        cmake .. -G Ninja --preset=vcpkg
+        cmake .. -G Ninja
     fi
 
     ninja
