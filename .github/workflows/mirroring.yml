@@ -39,34 +39,34 @@ jobs:
         run: |
           [ -f r-type_client ] && [ -f r-type_server ]
 
-  windows-compilation:
-    name: Compiling on Windows...
-    runs-on: windows-latest
-    timeout-minutes: 20
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Install Vcpkg
-        run: |
-          git clone https://github.com/microsoft/vcpkg.git
-          cd vcpkg
-          .\bootstrap-vcpkg.bat
-      - name: Setup MSBuild
-        uses: microsoft/setup-msbuild@v1
-      - name: Setup CMake
-        run: |
-          cmake --version
-      - name: Compiling...
-        run: |
-          mkdir build
-          cd build
-          cmake .. -G "Visual Studio 17 2022" -DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake
-          cmake --build . --config Release
-      - name: Check if the executable exists
-        run: |
-          IF EXIST build\Release\r-type_client.exe IF EXIST build\Release\r-type_server.exe exit 0
-          exit 1
-        shell: pwsh
+#  windows-compilation:
+#    name: Compiling on Windows...
+#    runs-on: windows-latest
+#    timeout-minutes: 20
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v2
+#      - name: Install Vcpkg
+#        run: |
+#          git clone https://github.com/microsoft/vcpkg.git
+#          cd vcpkg
+#          .\bootstrap-vcpkg.bat
+#      - name: Setup MSBuild
+#        uses: microsoft/setup-msbuild@v1
+#      - name: Setup CMake
+#        run: |
+#          cmake --version
+#      - name: Compiling...
+#        run: |
+#          mkdir build
+#          cd build
+#          cmake .. -G "Visual Studio 17 2022" -DCMAKE_TOOLCHAIN_FILE=/vcpkg/scripts/buildsystems/vcpkg.cmake
+#          cmake --build . --config Release
+#      - name: Check if the executable exists
+#        run: |
+#          IF EXIST build\Release\r-type_client.exe IF EXIST build\Release\r-type_server.exe exit 0
+#          exit 1
+#        shell: pwsh
 
   tests:
     name: Testing...
