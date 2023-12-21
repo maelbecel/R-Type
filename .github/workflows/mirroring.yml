@@ -24,10 +24,6 @@ jobs:
           git clone https://github.com/microsoft/vcpkg.git
           cd vcpkg
           ./bootstrap-vcpkg.sh
-      - name: Add VCPKG_ROOT to env
-        run: |
-          export VCPKG_ROOT=$(pwd)
-          echo $VCPKG_ROOT
       - name: Setup Ninja
         uses: seanmiddleditch/gha-setup-ninja@v4
       - name: Setup CMake
@@ -37,7 +33,7 @@ jobs:
         run: |
           mkdir build
           cd build
-          cmake .. -G Ninja
+          cmake .. -G Ninja -DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake
           ninja
       - name: Check if the executable exists
         run: |
@@ -55,10 +51,6 @@ jobs:
           git clone https://github.com/microsoft/vcpkg.git
           cd vcpkg
           .\bootstrap-vcpkg.bat
-      - name: Add VCPKG_ROOT to env
-        run: |
-          $env:VCPKG_ROOT = $PWD
-          echo %VCPKG_ROOT%
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v1
       - name: Setup CMake
@@ -68,7 +60,7 @@ jobs:
         run: |
           mkdir build
           cd build
-          cmake .. -G "Visual Studio 17 2022"
+          cmake .. -G "Visual Studio 17 2022" -DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake
           cmake --build . --config Release
       - name: Check if the executable exists
         run: |

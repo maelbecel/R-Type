@@ -16,15 +16,15 @@ make() {
 
     # Exécuter les commandes cmake et ninja
     if [ "$compile_type" == "debug" ]; then
-        cmake .. -G Ninja -DCOMPILE_DEBUG=ON
+        cmake .. -G Ninja -DCOMPILE_DEBUG=ON -DCMAKE_TOOLCHAIN_FILE=${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake
     elif [ "$compile_type" == "examples" ]; then
-        cmake .. -G Ninja -DCOMPILE_EXAMPLES=ON
+        cmake .. -G Ninja -DCOMPILE_EXAMPLES=ON -DCMAKE_TOOLCHAIN_FILE=${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake
     elif [ "$compile_type" == "sandbox" ]; then
-        cmake .. -G Ninja -DCOMPILE_SANDBOX=ON
+        cmake .. -G Ninja -DCOMPILE_SANDBOX=ON -DCMAKE_TOOLCHAIN_FILE=${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake
     elif [ "$compile_type" == "exodia" ]; then
-        cmake .. -G Ninja -DCOMPILE_EDITOR=ON
+        cmake .. -G Ninja -DCOMPILE_EDITOR=ON -DCMAKE_TOOLCHAIN_FILE=${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake
     else
-        cmake .. -G Ninja
+        cmake .. -G Ninja -DCMAKE_TOOLCHAIN_FILE=${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake
     fi
 
     ninja
