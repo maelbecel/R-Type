@@ -10,6 +10,7 @@
 
     // Exodia includes
     #include "Exodia.hpp"
+    #include "Component/Clock.hpp"
     #include <random>
 
 namespace Exodia {
@@ -28,16 +29,19 @@ namespace Exodia {
 
             void OnCreate() override
             {
-                // set random seed to 4
+                std::mt19937 gen(std::random_device{}());
+                std::uniform_real_distribution<float> sizeDist(0.01f, 0.09f);
+                std::uniform_int_distribution<int>    intensityDist(1, 255);
+                std::uniform_int_distribution<int>    stateDist(0, 1);
 
-                _size = 0.01f + static_cast<float>(random() % 8) / 100.0f;
-                _intensity = random() % 255 + 1;
-                _State = random() % 2 ? State::GROWING : State::SHRINKING;
+                _size      = sizeDist(gen);
+                _intensity = intensityDist(gen) / 255.0f;
+                _State     = stateDist(gen) ? State::GROWING : State::SHRINKING;
 
                 auto transform = GetComponent<TransformComponent>();
                 auto &tc = transform.Get();
-				tc.Translation.x = 10 + random() % 20;
-				tc.Translation.y = 5 - random() % 10;
+                tc.Translation.x = (float)(10 + std::uniform_int_distribution<int>(0, 19)(gen));
+                tc.Translation.y = (float)(5 - std::uniform_int_distribution<int>(0, 9)(gen));
                 tc.Scale.x = _size;
                 tc.Scale.y = _size;
             }
@@ -52,19 +56,24 @@ namespace Exodia {
 
                 if (circle) {
                     auto &cc = circle.Get();
-                    _intensity += (_State == State::GROWING) ? ts.GetSeconds() * 0.1 : ts.GetSeconds() * 0.1 * -1;
-                    if (_intensity <= 0.01f) {
+
+                    _intensity += (_State == State::GROWING) ? (float)(ts.GetSeconds() * 0.1) : (float)(ts.GetSeconds() * 0.1 * -1);
+
+                    if (_intensity <= 0.01f)
                         _State = State::GROWING;
-                    } else if (_intensity >= 0.99f) {
+                    else if (_intensity >= 0.99f)
                         _State = State::SHRINKING;
-                    }
-                    cc.Color.a = getIntensity();
+                    cc.Color.a = _intensity;
                 }
 
-				if (transform.Get().Translation.x < -10) {
-				    transform.Get().Translation.x = 10 + random() % 10;
-					transform.Get().Translation.y = 5 - random() % 10;
-				}
+                if (transform.Get().Translation.x < -10) {
+                    std::mt19937 gen(std::random_device{}());
+                    std::uniform_int_distribution<int> xDist(10, 19);
+                    std::uniform_int_distribution<int> yDist(-5, 5);
+
+                    transform.Get().Translation.x = (float)xDist(gen);
+                    transform.Get().Translation.y = (float)yDist(gen);
+                }
             }
 
         ////////////////
@@ -74,7 +83,6 @@ namespace Exodia {
             float _intensity;
             State _State;
             float _size;
-            float getIntensity() const { return _intensity; }
     };
 };
 

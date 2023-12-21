@@ -122,10 +122,10 @@ namespace Exodia {
                 auto script = entity->GetComponent<ScriptComponent>();
 
                 if (script) {
-                    auto entity = reinterpret_cast<T *>(script.Get().Instance);
+                    auto instance = reinterpret_cast<T *>(script.Get().Instance);
 
                     if (entity)
-                        func(entity);
+                        func(instance);
                 }
             };
     };

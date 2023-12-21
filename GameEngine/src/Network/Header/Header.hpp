@@ -45,7 +45,7 @@ namespace Exodia {
 
                     MillisecondsType timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 
-                    _timestamp = timestamp;
+                    _timestamp = static_cast<float>(timestamp);
                 }
 
                 ~Header() = default;

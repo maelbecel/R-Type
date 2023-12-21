@@ -7,6 +7,7 @@
 
 #include "Server.hpp"
 #include "R-Type.hpp"
+#include <thread>
 
 namespace Exodia {
 
@@ -92,7 +93,7 @@ namespace Exodia {
         try {
             while(_running) {
                 //this->Update();
-                sleep(1);
+                std::this_thread::sleep_for(std::chrono::seconds(1)); // Sleep for 1 second
             }
         } catch (std::exception &e) {
             std::cerr << "Exception: " << e.what() << std::endl;

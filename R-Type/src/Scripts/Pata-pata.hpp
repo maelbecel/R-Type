@@ -9,7 +9,6 @@
     #define PATAPATA_HPP_
 
     // Exodia includes
-    #include "Exodia.hpp"
     #include "Component/Animation.hpp"
     #include "Component/Clock.hpp"
     #include "Component/Health.hpp"
@@ -57,7 +56,7 @@ namespace Exodia {
                     // auto &tc = transform.Get();
                     // Mise à jour de la position en fonction du temps et du mouvement sinusoidal
                     mytime += ts.GetSeconds();
-                    body.Get().Velocity.y = amplitude * sin(frequency * mytime * PI);
+                    body.Get().Velocity.y = (float)(amplitude * sin(frequency * mytime * PI));
                     // tc.Translation.y = amplitude * sin(frequency * mytime * PI);
 
                     // Affichage des coordonnées

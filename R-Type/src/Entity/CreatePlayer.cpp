@@ -5,7 +5,7 @@
 ** Create player
 */
 
-#include "Entity/CreatePlayer.hpp"
+#include "CreatePlayer.hpp"
 
 namespace Exodia {
 

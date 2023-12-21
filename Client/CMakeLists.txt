@@ -26,14 +26,6 @@ set(SOURCES
         # R-Type Layer sources files
 
     src/Layer/RTypeLayer.cpp
-
-        # R-Type ECS sources files
-
-    ${R_TYPE_DIR}/Entity/CreateBackground.cpp
-    ${R_TYPE_DIR}/Entity/CreatePlayer.cpp
-    ${R_TYPE_DIR}/Entity/CreatePataPata.cpp
-    ${R_TYPE_DIR}/Entity/CreateStars.cpp
-    ${R_TYPE_DIR}/Scripts/Player/Player.cpp
 )
 
 # Set include directories for the Exodia Game Engine Application
@@ -43,6 +35,7 @@ set(INCLUDE_DIRS
 
     # R-Type include directories
     ${R_TYPE_DIR}
+    ${R_TYPE_DIR}/src
 
     # GameEngine include directories
     ${GAME_ENGINE_DIR}/src
@@ -59,6 +52,7 @@ add_executable(r-type_client ${SOURCES})
 
 target_link_libraries(r-type_client PRIVATE
     GameEngine
+    R-Type
     glad::glad
     glfw
     imgui

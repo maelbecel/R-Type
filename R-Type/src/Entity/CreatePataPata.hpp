@@ -8,7 +8,6 @@
 #ifndef CREATEPATAPATA_HPP_
     #define CREATEPATAPATA_HPP_
 
-    #include "Exodia.hpp"
     #include "Component/Animation.hpp"
     #include "Component/Clock.hpp"
     #include "Component/Health.hpp"

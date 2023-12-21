@@ -8,7 +8,6 @@
 #ifndef CREATESTARS_HPP_
     #define CREATESTARS_HPP_
 
-    #include "Exodia.hpp"
     #include "Component/Clock.hpp"
     #include "Scripts/Star.hpp"
 
