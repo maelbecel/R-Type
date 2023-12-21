@@ -67,8 +67,8 @@ namespace Exodia {
 
         // Define a local endpoint to listen on
         // asio::ip::udp::endpoint localEndpoint(asio::ip::address::from_string("127.0.0.1"), 8082);
-        network.loop();
-        network.sendAskConnect("0.0.0.0", 8082);
+        network.Loop();
+        network.SendAskConnect("0.0.0.0", 8082);
 
         // Create world
         _currentScene = GAME;
@@ -151,14 +151,6 @@ namespace Exodia {
     {
         EXODIA_PROFILE_FUNCTION();
 
-        // Renderer Prep
-        {
-            EXODIA_PROFILE_SCOPE("Renderer Prep");
-
-            Exodia::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
-            Exodia::RenderCommand::Clear();
-        }
-
         // Update
         _CameraController.OnUpdate(ts);
 
@@ -198,6 +190,8 @@ namespace Exodia {
         //         }
         //     });
 
+
+
         //     Exodia::Renderer2D::EndScene();
         // }
     }
@@ -205,15 +199,21 @@ namespace Exodia {
     void RTypeLayer::OnImGUIRender()
     {
         EXODIA_PROFILE_FUNCTION();
+
+        // ImGui::Begin("Settings");
+
+        // ImGui::ColorEdit4("Square Color", glm::value_ptr(_SquareColor));
+
+        // ImGui::End();
     }
 
     void RTypeLayer::OnEvent(Exodia::Event &event)
     {
         _CameraController.OnEvent(event);
-        EventDispatcher dispatcher(event);
-        dispatcher.Dispatch<KeyPressedEvent>(BIND_EVENT_FN(RTypeLayer::OnKeyPressedEvent));
-        dispatcher.Dispatch<KeyReleasedEvent>(BIND_EVENT_FN(RTypeLayer::OnKeyReleasedEvent));
-
+        if (Exodia::Input::IsKeyPressed(Exodia::Key::SPACE)) {
+            std::cout << "Space key is pressed" << std::endl;
+            network.SendEvent(0x00);
+        }
     }
 
     bool RTypeLayer::OnKeyPressedEvent(KeyPressedEvent &event) {

@@ -22,6 +22,7 @@
 
     // Exodia ImGui includes
     #include "ImGui/ImGuiToolsUI.hpp"
+    #include <iostream>
 
 namespace Exodia {
 
@@ -89,7 +90,40 @@ namespace Exodia {
 
         virtual Buffer SerializeData()
         {
-            return Buffer(this, sizeof(*this));
+            try {
+            Buffer buffer(sizeof(glm::vec3) * 3);
+            size_t offset = 0;
+
+            memcpy(buffer.Data + offset, &Translation, sizeof(Translation));
+            offset += sizeof(Translation);
+            memcpy(buffer.Data + offset, &Rotation, sizeof(Rotation));
+            offset += sizeof(Rotation);
+            memcpy(buffer.Data + offset, &Scale, sizeof(Scale));
+
+            return buffer;
+            } catch (std::exception &e) {
+                EXODIA_CORE_WARN("TransformComponent serialization failed: {0}", e.what());
+                return Buffer();
+            }
+        }
+
+        virtual void DeserializeData(Buffer data)
+        {
+            try {
+                size_t offset = 0;
+
+                if (data.Size != (sizeof(glm::vec3) * 3)) {
+                    EXODIA_CORE_WARN("TransformComponent deserialization failed: buffer size is not equal to TransformComponent size");
+                    return;
+                }
+                memcpy(&Translation, data.Data + offset, sizeof(Translation));
+                offset += sizeof(Translation);
+                memcpy(&Rotation, data.Data + offset, sizeof(Rotation));
+                offset += sizeof(Rotation);
+                memcpy(&Scale, data.Data + offset, sizeof(Scale));
+            } catch (std::exception &e) {
+                EXODIA_CORE_WARN("TransformComponent deserialization failed: {0}", e.what());
+            }
         }
     };
 };

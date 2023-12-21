@@ -88,7 +88,7 @@ namespace Exodia {
                 double frequency = 1.0f;  // Fréquence de la sinusoïde en Hz
 
                 _AttackTimer += ts.GetSeconds();
-                if (transform && _State == State::ALIVE) {
+                if (transform && _State == State::ALIVE && body) {
                     // auto &tc = transform.Get();
                     // Mise à jour de la position en fonction du temps et du mouvement sinusoidal
                     mytime += ts.GetSeconds();
@@ -102,15 +102,15 @@ namespace Exodia {
 
                 if (GetComponent<Health>().Get().CurrentHealth == 0 && _State == State::ALIVE) {
                     auto animation = GetComponent<Animation>();
-                    auto sprite = GetComponent<SpriteRendererComponent>();
 
                     animation.Get().CurrentFrame = 0;
                     animation.Get().MaxFrame = 7;
                     animation.Get().FrameTime = 0.095f;
 
                     // Set entity sprite
-                    Ref<Texture2D> texture = TextureImporter::LoadTexture2D("Assets/Textures/Simple_Explosion.png");
-                    sprite.Get().Texture = SubTexture2D::CreateFromCoords(texture->Handle, { 0.0f, 0.0f }, { 32.0f, 34.0f }, { 1.0f, 1.0f });
+                    // auto sprite = GetComponent<SpriteRendererComponent>();
+                    // Ref<Texture2D> texture = TextureImporter::LoadTexture2D("Assets/Textures/Simple_Explosion.png");
+                    // sprite.Get().Texture = SubTexture2D::CreateFromCoords(texture->Handle, { 0.0f, 0.0f }, { 32.0f, 34.0f }, { 1.0f, 1.0f });
                     _State = State::DEAD;
                     GetComponent<RigidBody2DComponent>().Get().Velocity = { 0.0f, 0.0f };
                 }

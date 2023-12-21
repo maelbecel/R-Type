@@ -30,6 +30,10 @@ namespace Exodia {
         _inputThread.join();
     }
 
+    void Server::RegisterComponent(std::string name, std::function<IComponentContainer *(Buffer)> factory) {
+        _ComponentFactory.emplace(name, factory);
+    }
+
     void Server::HandleCommand(const std::string &command)
     {
         std::cout << "Command received: " << command << std::endl;
@@ -42,10 +46,10 @@ namespace Exodia {
         }
         if (command == "dump") {
             std::cout << "Clients: " << std::endl;
-            if (_network.getConnections().empty())
+            if (_network.GetConnections().empty())
                 std::cout << "No clients connected" << std::endl;
-            for (auto connection : _network.getConnections()) {
-                std::cout << "IP: " << connection.second.getEndpoint().address().to_string() << " Port: " << connection.second.getEndpoint().port() << std::endl;
+            for (auto connection : _network.GetConnections()) {
+                std::cout << "IP: " << connection.second.GetEndpoint().address().to_string() << " Port: " << connection.second.GetEndpoint().port() << std::endl;
             }
             std::cout << "Entities: " << std::endl;
             auto entities = _worldNetwork->AllEntities();
@@ -57,14 +61,32 @@ namespace Exodia {
             std::cout << "Total: " << i << std::endl;
         }
         if (command == "packet") {
-            _network.sendPacketInfo();
+            _network.SendPacketInfo();
         }
     }
 
     void Server::Init()
     {
+        while (_network.GetConnections().empty()) {
+            std::cout << "Waiting for clients to connect..." << std::endl;
+            sleep(1);
+        }
+        RendererAPI::SetAPI(RendererAPI::API::None);
+
         std::cout << "Server is initializing !" << std::endl;
         try {
+            // Register components
+            RegisterComponent("IDComponent", [](UNUSED Buffer data) -> IComponentContainer * { return new ComponentContainer<IDComponent>(); });
+            RegisterComponent("TransformComponent", [](UNUSED Buffer data) -> IComponentContainer * { return new ComponentContainer<TransformComponent>(); });
+            RegisterComponent("SpriteRendererComponent", [](UNUSED Buffer data) -> IComponentContainer * { return new ComponentContainer<SpriteRendererComponent>(); });
+            RegisterComponent("BoxCollider2DComponent", [](UNUSED Buffer data) -> IComponentContainer * { return new ComponentContainer<BoxCollider2DComponent>(); });
+            RegisterComponent("CircleRendererComponent", [](UNUSED Buffer data) -> IComponentContainer * { return new ComponentContainer<CircleRendererComponent>(); });
+            RegisterComponent("RigidBody2DComponent", [](UNUSED Buffer data) -> IComponentContainer * { return new ComponentContainer<RigidBody2DComponent>(); });
+            RegisterComponent("ScriptComponent", [](UNUSED Buffer data) -> IComponentContainer * { return new ComponentContainer<ScriptComponent>(); });
+            RegisterComponent("Health", [](UNUSED Buffer data) -> IComponentContainer * { return new ComponentContainer<Health>(); });
+            RegisterComponent("Animation", [](UNUSED Buffer data) -> IComponentContainer * { return new ComponentContainer<Animation>(); });
+            RegisterComponent("Clock", [](UNUSED Buffer data) -> IComponentContainer * { return new ComponentContainer<Clock>(); });
+
             // Create world
             _currentScene = GAME;
             _World[GAME] = CreateRef<Scene>();
@@ -90,6 +112,21 @@ namespace Exodia {
             CreateBackground(_World);
             CreateStars(_World);
 
+            // Create the camera entity
+            Entity *cameraEntity = _World[GAME]->CreateEntity("Camera");
+            auto &camera = cameraEntity->AddComponent<CameraComponent>().Get();
+            cameraEntity->GetComponent<TransformComponent>().Get().Translation = { 0.0f, 0.0f, 15.0f };
+            camera.Camera.SetProjectionType(SceneCamera::ProjectionType::Perspective);
+            camera.Camera.SetViewportSize(1600, 900);
+
+            auto body_camera = cameraEntity->AddComponent<RigidBody2DComponent>();
+            body_camera.Get().Type = RigidBody2DComponent::BodyType::Dynamic;
+            body_camera.Get().Mass = 0.0f;
+            body_camera.Get().GravityScale = 0.0f;
+            body_camera.Get().Velocity = glm::vec2{ 1.5f, 0.0f };
+
+            _World[_currentScene]->OnRuntimeStart();
+
         } catch (std::exception &e) {
             std::cerr << "Exception: " << e.what() << std::endl;
         }
@@ -101,8 +138,7 @@ namespace Exodia {
         std::cout << "Server is running !" << std::endl;
         try {
             while(_running) {
-                //this->Update();
-                sleep(1);
+                this->Update();
             }
         } catch (std::exception &e) {
             std::cerr << "Exception: " << e.what() << std::endl;
