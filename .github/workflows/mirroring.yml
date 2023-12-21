@@ -24,12 +24,8 @@ jobs:
           git clone https://github.com/microsoft/vcpkg.git
           cd vcpkg
           ./bootstrap-vcpkg.sh
-          export VCPKG_ROOT=$(pwd)
       - name: Add VCPKG_ROOT to env
-        run: |
-          echo "VCPKG_ROOT=$VCPKG_ROOT" >> $GITHUB_ENV
-      - name: Print VCPKG_ROOT
-        run: |
+          export VCPKG_ROOT=$(pwd)
           echo $VCPKG_ROOT
       - name: Setup Ninja
         uses: seanmiddleditch/gha-setup-ninja@v4
@@ -58,9 +54,8 @@ jobs:
           git clone https://github.com/microsoft/vcpkg.git
           cd vcpkg
           .\bootstrap-vcpkg.bat
-          $env:VCPKG_ROOT=%cd%
-      - name: Print VCPKG_ROOT
-        run: |
+      - name: Add VCPKG_ROOT to env
+          $env:VCPKG_ROOT = $PWD
           echo %VCPKG_ROOT%
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v1
