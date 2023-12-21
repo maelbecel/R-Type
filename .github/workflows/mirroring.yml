@@ -49,10 +49,6 @@ jobs:
           git clone https://github.com/microsoft/vcpkg.git
           cd vcpkg
           .\bootstrap-vcpkg.bat
-      - name: Print vcpkg path
-        run: |
-          $vcpkgDir = Get-Location
-          Write-Output "Current directory: $vcpkgDir"
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v1
       - name: Setup CMake
@@ -62,9 +58,7 @@ jobs:
         run: |
           mkdir build
           cd build
-          $buildDir = Get-Location
-          Write-Output "Current directory: $buildDir"
-          cmake .. -G "Visual Studio 17 2022" -DCMAKE_TOOLCHAIN_FILE=..\vcpkg\scripts\buildsystems\vcpkg.cmake -D_WIN32_WINNT=0x0601
+          cmake .. -G "Visual Studio 17 2022" -DCMAKE_TOOLCHAIN_FILE=D:\a\R-Type\R-Type\vcpkg\scripts\buildsystems\vcpkg.cmake -D_WIN32_WINNT=0x0601
           cmake --build . --config Release
           cd ..
       - name: Check if the executable exists
