@@ -57,6 +57,18 @@ namespace Exodia {
             Exodia::Entity *EntityA;
             Exodia::Entity *EntityB;
         };
+
+        struct OnHoveredEnter {
+            Exodia::Entity *Entity;
+        };
+
+        struct OnHoveredExit {
+            Exodia::Entity *Entity;
+        };
+
+        struct OnClick {
+            Exodia::Entity *Entity;
+        };
     };
 };
 
