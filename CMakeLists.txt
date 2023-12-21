@@ -14,3 +14,8 @@ include(BuildBinaries)
 
 # Compilation Flags
 include(CompileFlags)
+
+if (MSVC)
+    file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/Assets DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/../Debug)
+    file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/Assets DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/../Release)
+endif()
