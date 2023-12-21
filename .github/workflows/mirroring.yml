@@ -34,7 +34,7 @@ jobs:
         run: |
           mkdir build
           cd build
-          cmake .. -G Ninja --preset=vcpkg
+          cmake .. -G Ninja
           ninja
       - name: Check if the executable exists
         run: |
@@ -62,7 +62,7 @@ jobs:
         run: |
           mkdir build
           cd build
-          cmake .. -G "Visual Studio 17 2022" --preset=vcpkg
+          cmake .. -G "Visual Studio 17 2022"
           cmake --build . --config Release
       - name: Check if the executable exists
         run: |
