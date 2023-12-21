@@ -31,7 +31,11 @@ jobs:
           cmake --version
       - name: Compiling...
         run: |
-          mkdir build && cd build && cmake .. -G Ninja -DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake && ninja && [ -f r-type_client ] && [ -f r-type_server ]
+          mkdir build && cd build && cmake .. -G Ninja -DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake && ninja && cd ..
+      - name: Check if the executable exists
+        run: |
+          if [ -f r-type_client ] && [ -f r-type_server ]; then exit 0; else exit 1; fi
+        shell: bash
 
 #  windows-compilation:
 #    name: Compiling on Windows...
