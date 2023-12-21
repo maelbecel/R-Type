@@ -117,6 +117,7 @@ namespace Exodia {
             auto &camera = cameraEntity->AddComponent<CameraComponent>().Get();
 
             cameraEntity->GetComponent<TransformComponent>().Get().Translation = { 0.0f, 0.0f, 15.0f };
+            cameraEntity->GetComponent<TransformComponent>().Get().Rotation = { 0.0f, 0.0f, 45.0f };
             camera.Camera.SetProjectionType(SceneCamera::ProjectionType::Perspective);
             camera.Camera.SetViewportSize(1600, 900);
 
@@ -155,8 +156,10 @@ namespace Exodia {
             Timestep timestep(time - _lastTime);
 
             _lastTime = time;
+
             if (_currentScene == GAME) {
                 auto pata = _World[GAME]->GetEntityByName("Pata-pata");
+
                 if (pata == nullptr) {
                     Entity *patata = _World[GAME]->CreateEntity("Pata-pata");
 
@@ -177,9 +180,9 @@ namespace Exodia {
                     // auto sprite = patata->AddComponent<SpriteRendererComponent>();
                     // Ref<Texture2D> texture = TextureImporter::LoadTexture2D("Assets/Textures/Pata-Pata.png");
                     // sprite.Get().Texture = SubTexture2D::CreateFromCoords(texture->Handle, { 0.0f, 0.0f }, { 33.3125f, 36.0f }, { 1.0f, 1.0f });
-
+                }
             }
-        }
+
             _World[_currentScene]->OnUpdateRuntime(timestep);
         } catch (std::exception &e) {
             std::cerr << "Unable to update the world: " << e.what() << std::endl;
