@@ -12,7 +12,7 @@ env:
 
 jobs:
   linux-compilation:
-  name: Compiling on Linux...
+    name: Compiling on Linux...
     runs-on: ubuntu-latest
     container: epitechcontent/epitest-docker
     timeout-minutes: 20
