@@ -16,6 +16,7 @@
         <toc-element topic="Client.md"/>
         <toc-element topic="Game-Engine.md">
             <toc-element topic="Exodia.md">
+                <toc-element topic="ECS.md"/>
                 <toc-element topic="Debug.md">
                     <toc-element topic="Profiling.md"/>
                     <toc-element topic="Logger.md"/>
