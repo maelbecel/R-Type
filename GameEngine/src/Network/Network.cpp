@@ -23,7 +23,6 @@ namespace Exodia::Network {
         std::vector<char> buffer(0);
 
         packet.Set(header, buffer);
-        std::cout << "Send ask connect" << std::endl;
         _server_connection.SendPacket(_socket, packet);
     }
 
@@ -116,10 +115,6 @@ namespace Exodia::Network {
         offset = FillData(buffer, offset, &size_of_data, sizeof(uint32_t));             // Set size of data
         offset = FillData(buffer, offset, data.Data, size_of_data);                     // Set data
         buffer.resize(offset);
-
-        for (size_t i = 0; i < data.Size; i++)
-            std::cout << "(" << (char)data.Data[i] << "," << (int)data.Data[i] << ")";
-        std::cout << std::endl;
 
         packet.Set(header, buffer);
         if (_connections.size() > 0)

@@ -85,12 +85,10 @@ namespace Exodia {
             // CreatePataPata(_world);
             // CreateBackground(_world);
 
-            sleep(2);
             Exodia::Entity *entity = _world->CreateEntity();
             entity->AddComponent<IDComponent>();
             entity->AddComponent<CircleRendererComponent>(glm::vec4{ 1.0f, 1.0f, 1.0f, 1.0f });
             _network.SendEntity(entity, "CircleRendererComponent");
-            sleep(2);
             Exodia::Entity *entity2 = _world->CreateEntity();
             entity2->AddComponent<IDComponent>();
             entity2->AddComponent<CircleRendererComponent>(glm::vec4{ 1.0f, 1.0f, 1.0f, 1.0f });
@@ -136,8 +134,8 @@ namespace Exodia {
                     entity->GetComponent<TransformComponent>().Get().Translation.z = 0;
                     _network.SendEntity(entity, "TransformComponent");
                 }
-                usleep(1000000 / 2);
             });
+            usleep(1000000 / 24);
 
             std::queue<uint32_t> events = _network.flushEvents();
             for (std::size_t i = 0; i < events.size(); i++) {
