@@ -25,7 +25,7 @@ namespace Exodia {
 
         public:
             // Methods
-            virtual void Update(World *world, UNUSED Timestep ts) override
+            virtual void Update(World *world, Timestep ts) override
             {
                 world->ForEach<SpriteRendererComponent, Animation>([&](Entity *entity, auto sprite, ComponentHandle<Animation> animation) {
                     // check if entity is player

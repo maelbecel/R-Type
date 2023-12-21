@@ -75,9 +75,9 @@ namespace Exodia {
     ScriptableEntity *ScriptEngine::InstantiateScript(const std::string &name)
     {
     #ifdef _WIN32
-        void *handle = LibraryLoader::Load(Project::GetActiveScriptPath() / (name + ".dll"));
+        void *handle = LibraryLoader::Load((Project::GetActiveScriptPath() / (name + ".dll")).string());
     #else
-        void *handle = LibraryLoader::Load(Project::GetActiveScriptPath() / (name + ".so"));
+        void *handle = LibraryLoader::Load((Project::GetActiveScriptPath() / (name + ".so")).string());
     #endif
 
         auto getScriptableEntity = (ScriptableEntity *(*)(void))LibraryLoader::GetFunction(handle, "CreateScript");

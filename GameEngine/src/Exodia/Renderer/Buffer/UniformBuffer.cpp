@@ -7,6 +7,7 @@
 
 // Exodia Renderer includes
 #include "UniformBuffer.hpp"
+#include "Renderer/Renderer/RendererAPI.hpp"
 #include "Renderer/Renderer/Renderer.hpp"
 
 // Entry point
@@ -20,7 +21,9 @@ namespace Exodia {
 
     Ref<UniformBuffer> UniformBuffer::Create(uint32_t size, uint32_t binding)
     {
-        switch (Renderer::GetAPI()) {
+        RendererAPI::API api = Renderer::GetAPI();
+
+        switch (api) {
             case RendererAPI::API::None:
                 EXODIA_CORE_ASSERT(false, "RendererAPI::None is not supported !");
                 return nullptr;

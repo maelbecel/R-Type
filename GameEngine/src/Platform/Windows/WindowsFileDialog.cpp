@@ -15,14 +15,13 @@
 #include <nfd.h>
 
 #ifdef _WIN32
+    #include <GLFW/glfw3.h>
     #define GLFW_EXPOSE_NATIVE_WIN32
         #include <GLFW/glfw3native.h>
-#elif __linux__
+#else
     #define GLFW_EXPOSE_NATIVE_X11
         #include <GLFW/glfw3.h>
         #include <GLFW/glfw3native.h>
-#else
-    #error "Unsupported platform!"
 #endif
 
 // External includes
@@ -59,6 +58,8 @@ namespace Exodia {
                 return "";
             }
         } catch (std::exception &e) {
+            EXODIA_CORE_WARN("An error occured while checking the file extension: {0}", e.what());
+
             return "";
         }
         return path;

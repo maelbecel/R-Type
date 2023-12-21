@@ -34,7 +34,7 @@ namespace Exodia {
         Animation(const Animation &) = default;
         Animation(float CurrentFrame = 0.0f, float MaxFrame = 0.0f, float FrameTime = 0.0f) : CurrentFrame(CurrentFrame), MaxFrame(MaxFrame), FrameTime(FrameTime) {};
 
-        virtual void Serialize(UNUSED YAML::Emitter &out) override {};
+        virtual void Serialize(UNUSED(YAML::Emitter &out)) override {};
     };
 };
 

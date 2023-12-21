@@ -42,7 +42,7 @@ namespace Exodia {
             return translation * rotation * scale;
         }
 
-        virtual void Serialize(YAML::Emitter &out) override
+        virtual void Serialize(YAML::Emitter &out)
         {
             out << YAML::Key << "TransformComponent";
             out << YAML::BeginMap;
@@ -63,7 +63,7 @@ namespace Exodia {
             out << YAML::EndMap;
         }
 
-        virtual void Deserialize(const YAML::Node &node) override
+        virtual void Deserialize(const YAML::Node &node)
         {
             try {
                 auto transform = node["TransformComponent"];

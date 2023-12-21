@@ -59,7 +59,7 @@ namespace Exodia {
                 void sendAcceptConnect();   // 0x02
                 void sendEntity(Entity *entity, std::string component_name); // 0x0c
                 void sendAskConnect(const std::string &ip, short port);      // 0x81
-                void sendEvent(u_int32_t event);                                   // 0x82
+                void sendEvent(uint32_t event);                                   // 0x82
                 size_t fill_data(std::vector<char> &buffer, size_t offset, void *data, size_t size);
                 void splitter(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint);
                 std::unordered_map<std::string, Connection> &getConnections() {

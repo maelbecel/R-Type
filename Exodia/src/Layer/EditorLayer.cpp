@@ -76,7 +76,7 @@ namespace Exodia {
         EXODIA_PROFILE_FUNCTION();
     }
 
-    void EditorLayer::OnUpdate(UNUSED Exodia::Timestep ts)
+    void EditorLayer::OnUpdate(UNUSED(Exodia::Timestep ts))
     {
         EXODIA_PROFILE_FUNCTION();
 
@@ -318,7 +318,7 @@ namespace Exodia {
         ImGui::End();
     }
 
-    void EditorLayer::OnEvent(UNUSED Exodia::Event &event) {};
+    void EditorLayer::OnEvent(UNUSED(Exodia::Event &event)) {};
 
     /////////////////////
     // Project Methods //

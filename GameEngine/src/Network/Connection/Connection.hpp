@@ -31,7 +31,7 @@ class Connection {
             std::cout << "Header: command: " << int(packet.GetHeader().getCommand()) << " id: " << packet.GetHeader().getId() << " size: " << packet.GetHeader().getSize() << std::endl;
             Exodia::Network::Header header = packet.GetHeader();
             header.SetId(_send_packet);
-            header.setSize(packet.GetSize());
+            header.setSize((unsigned long)packet.GetSize());
             socket.send(packet.GetBuffer(), packet.GetSize(), _endpoint);
             _send_packet++;
         }

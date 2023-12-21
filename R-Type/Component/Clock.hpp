@@ -28,7 +28,7 @@ namespace Exodia {
         Clock(const Clock &) = default;
         Clock(float ElapsedTime = 0.0f) : ElapsedTime(ElapsedTime) {};
 
-        virtual void Serialize(UNUSED YAML::Emitter &out) override {};
+        virtual void Serialize(UNUSED(YAML::Emitter &out)) override {};
     };
 };
 
