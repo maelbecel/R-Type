@@ -311,7 +311,10 @@ namespace Exodia::Network {
 
         std::cout << "Event: " << event << std::endl;
 
-        _events.push(event);
+        std::pair<uint32_t, asio::ip::udp::endpoint> eventPair;
+        eventPair.first = event;
+        eventPair.second = senderEndpoint;
+        _events.push(eventPair);
 
     }
 

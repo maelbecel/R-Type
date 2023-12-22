@@ -43,6 +43,9 @@ namespace Exodia {
                     _ioContextManager.run();
                 };
 
+                void SetWorld(World *world) {
+                    _world = world;
+                }
                 /**
                  * @brief Destroy the Network object
                  *
@@ -85,8 +88,8 @@ namespace Exodia {
                  *
                  * @return a copy of the queue of uint32_t representing the events received
                 */
-                std::queue<uint32_t> flushEvents() {
-                    std::queue<uint32_t> flushedEvents = std::move(_events);
+                std::queue<std::pair<uint32_t, asio::ip::udp::endpoint>> GetEvents() {
+                    std::queue<std::pair<uint32_t, asio::ip::udp::endpoint>> flushedEvents = std::move(_events);
                     return flushedEvents;
                 }
 
@@ -110,7 +113,7 @@ namespace Exodia {
                 std::unordered_map<std::string, Connection> _connections;
                 Connection _server_connection;
                 IOContextManager &_ioContextManager;
-                std::queue<uint32_t> _events;
+                std::queue<std::pair<uint32_t, asio::ip::udp::endpoint>> _events;
 
         }; // class Network
 

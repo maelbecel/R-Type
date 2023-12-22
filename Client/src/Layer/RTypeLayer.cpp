@@ -124,6 +124,7 @@ namespace Exodia {
         // Create the camera
         _CameraController.SetZoomLevel(5.0f);
         _World[_currentScene]->OnRuntimeStart();
+        network.SetWorld(_World[_currentScene]->GetWorldPtr());
     }
 
     void RTypeLayer::OnDetach()
@@ -146,12 +147,6 @@ namespace Exodia {
         // Update
         _CameraController.OnUpdate(ts);
 
-        _worldNetwork->ForEach<CircleRendererComponent>([&](Entity *entity, ComponentHandle<CircleRendererComponent> circle) {
-            (void) entity;
-            (void) circle;
-            std::cout << "Rond" << std::endl;
-        });
-        std::cout << "Update" << std::endl;
         if (_currentScene == GAME) {
             auto pata = _World[GAME]->GetEntityByName("Pata-pata");
             if (pata == nullptr) {
@@ -173,7 +168,6 @@ namespace Exodia {
                 // auto sprite = patata->AddComponent<SpriteRendererComponent>();
                 // Ref<Texture2D> texture = TextureImporter::LoadTexture2D("Assets/Textures/Pata-Pata.png");
                 // sprite.Get().Texture = SubTexture2D::CreateFromCoords(texture->Handle, { 0.0f, 0.0f }, { 33.3125f, 36.0f }, { 1.0f, 1.0f });
-
             }
         }
         // Update the world

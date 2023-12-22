@@ -166,6 +166,16 @@ namespace Exodia {
 
             _lastTime = time;
 
+            for (int i = 0; i < 4; i++)
+            {
+                Entity *player = _World[GAME]->GetEntityByName("Player_" + std::to_string(i));
+
+                if (player != nullptr) {
+                    _network.SendComponentOf(player, "TransformComponent");
+                    _network.SendComponentOf(player, "CircleRendererComponent");
+                }
+            }
+
             if (_currentScene == GAME) {
                 auto pata = _World[GAME]->GetEntityByName("Pata-pata");
 
@@ -185,12 +195,11 @@ namespace Exodia {
                     body_patata.Get().GravityScale = 0.0f;
                     body_patata.Get().Velocity.x = -2.0f;
                     patata->AddComponent<CircleRendererComponent>(glm::vec4{ 1.0f, 1.0f, 0.0f, 1.0f});
-                    // Set entity sprite
-                    // auto sprite = patata->AddComponent<SpriteRendererComponent>();
-                    // Ref<Texture2D> texture = TextureImporter::LoadTexture2D("Assets/Textures/Pata-Pata.png");
-                    // sprite.Get().Texture = SubTexture2D::CreateFromCoords(texture->Handle, { 0.0f, 0.0f }, { 33.3125f, 36.0f }, { 1.0f, 1.0f });
                 }
             }
+
+            // std::queue<uint32_t, asio::asio::ip::udp::endpoint> events = _network.GetEvents();
+            // (void)events;
 
             _World[_currentScene]->OnUpdateRuntime(timestep);
         } catch (std::exception &e) {
