@@ -137,6 +137,7 @@ namespace Exodia {
             body_camera.Get().Velocity = glm::vec2{ 1.5f, 0.0f };
 
             _World[_currentScene]->OnRuntimeStart();
+            _network.SetWorld(_World[_currentScene]->GetWorldPtr());
 
         } catch (std::exception &e) {
             std::cerr << "Exception: " << e.what() << std::endl;
@@ -196,10 +197,26 @@ namespace Exodia {
                     body_patata.Get().Velocity.x = -2.0f;
                     patata->AddComponent<CircleRendererComponent>(glm::vec4{ 1.0f, 1.0f, 0.0f, 1.0f});
                 }
+
+                _network.SendComponentOf(pata, "TransformComponent");
+                _network.SendComponentOf(pata, "CircleRendererComponent");
             }
 
-            // std::queue<uint32_t, asio::asio::ip::udp::endpoint> events = _network.GetEvents();
-            // (void)events;
+            std::queue<std::pair<uint32_t, asio::ip::udp::endpoint>> events = _network.GetEvents();
+            while (!events.empty()) {
+                auto event = events.front();
+                events.pop();
+                int player_id = _network.ConnectionPlace(event.second);
+
+                _World[_currentScene]->GetWorld().ForEach<ScriptComponent, TagComponent>([&](Entity *entity, auto script, auto tag) {
+                    (void)entity;
+
+                    if (tag.Get().Tag.rfind("Player_" + player_id, 0) != std::string::npos && script.Get().Instance != nullptr) {
+                        std::cout << "Event received: " << event.first << std::endl;
+                        script.Get().Instance->OnKeyReleased(event.first);
+                    }
+                });
+            }
 
             _World[_currentScene]->OnUpdateRuntime(timestep);
         } catch (std::exception &e) {
