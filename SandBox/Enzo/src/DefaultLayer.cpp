@@ -41,7 +41,7 @@ namespace Exodia {
         entity->AddComponent<IDComponent>();
         entity->AddComponent<SpriteRendererComponent>(glm::vec4{ 0.8f, 0.2f, 0.3f, 1.0f });
         entity->AddComponent<Health>(185);
-        entity->AddComponent<ScriptComponent>().Get().Bind<Player>();
+        entity->AddComponent<ScriptComponent>().Get().Bind("Player");
         entity->AddComponent<SpriteRendererComponent>();
         entity->AddComponent<Animation>();
         entity->GetComponent<TransformComponent>().Get().Scale.y = 0.5f;
@@ -56,7 +56,7 @@ namespace Exodia {
         patata->AddComponent<IDComponent>();
         patata->AddComponent<SpriteRendererComponent>(glm::vec4{ 0.8f, 0.2f, 0.3f, 1.0f });
         patata->AddComponent<Health>(185);
-        patata->AddComponent<ScriptComponent>().Get().Bind<PataPata>();
+        patata->AddComponent<ScriptComponent>().Get().Bind("PataPata");
         patata->AddComponent<SpriteRendererComponent>();
         patata->AddComponent<Animation>(1.0f, 8.0f, 1.0f);
 

@@ -101,7 +101,7 @@ namespace Exodia {
             auto &sc = script.Get();
 
             if (sc.Instance == nullptr) {
-                sc.Instance = sc.InstantiateScript();
+                sc.Instance = sc.InstantiateScript(sc.Name);
 
                 if (sc.Instance != nullptr) {
                     sc.Instance->HandleEntity = entity;
@@ -140,7 +140,7 @@ namespace Exodia {
                 auto &sc = script.Get();
 
                 if (!sc.Instance) {
-                    sc.Instance = sc.InstantiateScript();
+                    sc.Instance = sc.InstantiateScript(sc.Name);
 
                     if (sc.Instance != nullptr) {
                         sc.Instance->HandleEntity = entity;

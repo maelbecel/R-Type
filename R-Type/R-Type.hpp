@@ -37,11 +37,15 @@ namespace RType {
 
     inline static void InitRType()
     {
+        // -- Init the R-Type project ------------------------------------------
 #ifdef _WIN32
         Ref<Exodia::Project> project = Exodia::Project::Load("../Client/R-Type.proj");
 #else
         Ref<Exodia::Project> project = Exodia::Project::Load("./Client/R-Type.proj");
 #endif
+
+        // -- Register R-Type components ---------------------------------------
+
         project->RegisterComponent("Health", [](Exodia::Buffer data) -> Exodia::IComponentContainer * {
             return new Exodia::ComponentContainer<Exodia::Health>(data);
         });
@@ -54,7 +58,27 @@ namespace RType {
             return new Exodia::ComponentContainer<Exodia::Clock>(data);
         });
 
-        // TODO: Register Scripts
+        // -- Register R-Type scripts ------------------------------------------
+
+        project->RegisterScript("Star", []() -> Exodia::ScriptableEntity * {
+            return new Exodia::Star();
+        });
+
+        project->RegisterScript("PataPata", []() -> Exodia::ScriptableEntity * {
+            return new Exodia::PataPata();
+        });
+
+        project->RegisterScript("BulletPlayer", []() -> Exodia::ScriptableEntity * {
+            return new Exodia::BulletPlayer();
+        });
+
+        project->RegisterScript("BulletEnnemy", []() -> Exodia::ScriptableEntity * {
+            return new Exodia::BulletEnnemy();
+        });
+
+        project->RegisterScript("Player", []() -> Exodia::ScriptableEntity * {
+            return new Exodia::Player();
+        });
     }
 };
 
