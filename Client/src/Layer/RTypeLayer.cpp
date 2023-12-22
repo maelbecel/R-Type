@@ -16,10 +16,7 @@ namespace Exodia {
     // Constructor & Destructor //
     //////////////////////////////
 
-    RTypeLayer::RTypeLayer() : Layer("R-Type"), network(_worldNetwork, ioContextManager, 8083), _CameraController(1600.0f / 900.0f)
-    {
-
-    };
+    RTypeLayer::RTypeLayer() : Layer("R-Type"), network(_worldNetwork, ioContextManager, 8083), _CameraController(1600.0f / 900.0f) {};
 
     /////////////
     // Methods //
