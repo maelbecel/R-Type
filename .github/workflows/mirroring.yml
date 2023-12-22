@@ -51,8 +51,9 @@ jobs:
           .\bootstrap-vcpkg.bat
       - name: Environement variables
         run: |
-          set VCPKG_ROOT="D:\a\R-Type\R-Type\vcpkg"
-          setx PATH=%VCPKG_ROOT%;%PATH%
+          $VCPKG_ROOT = "D:\a\R-Type\R-Type\vcpkg"
+          [Environment]::SetEnvironmentVariable("VCPKG_ROOT", $VCPKG_ROOT, "User")
+          $env:Path += ";$VCPKG_ROOT"
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v1
       - name: Setup CMake
