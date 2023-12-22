@@ -38,9 +38,6 @@ namespace Exodia {
             bool OnKeyReleasedEvent(KeyReleasedEvent &event);
             bool OnKeyPressedEvent(KeyPressedEvent &event);
 
-        public:
-            void RegisterComponent(std::string name, std::function<IComponentContainer *(Buffer)> factory);
-
         ////////////////
         // Attributes //
         ////////////////
@@ -52,7 +49,6 @@ namespace Exodia {
             // WARNING: This is a temporary solution
             Exodia::World *_worldNetwork = Exodia::World::CreateWorld();
 
-            std::unordered_map<std::string, std::function<IComponentContainer *(Buffer)>> _ComponentFactory;
             Exodia::Network::IOContextManager ioContextManager;
 
             Ref<Framebuffer>             _Framebuffer;

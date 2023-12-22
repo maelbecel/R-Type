@@ -25,25 +25,9 @@ namespace Exodia {
     // Methods //
     /////////////
 
-    void RTypeLayer::RegisterComponent(std::string name, std::function<IComponentContainer *(Buffer)> factory) {
-        _ComponentFactory.emplace(name, factory);
-    }
-
     void RTypeLayer::OnAttach()
     {
         EXODIA_PROFILE_FUNCTION();
-
-        // Register components
-        RegisterComponent("IDComponent", [](UNUSED(Buffer data)) -> IComponentContainer * { return new ComponentContainer<IDComponent>(); });
-        RegisterComponent("TransformComponent", [](UNUSED(Buffer data)) -> IComponentContainer * { return new ComponentContainer<TransformComponent>(); });
-        RegisterComponent("SpriteRendererComponent", [](UNUSED(Buffer data)) -> IComponentContainer * { return new ComponentContainer<SpriteRendererComponent>(); });
-        RegisterComponent("BoxCollider2DComponent", [](UNUSED(Buffer data)) -> IComponentContainer * { return new ComponentContainer<BoxCollider2DComponent>(); });
-        RegisterComponent("CircleRendererComponent", [](UNUSED(Buffer data)) -> IComponentContainer * { return new ComponentContainer<CircleRendererComponent>(); });
-        RegisterComponent("RigidBody2DComponent", [](UNUSED(Buffer data)) -> IComponentContainer * { return new ComponentContainer<RigidBody2DComponent>(); });
-        RegisterComponent("ScriptComponent", [](UNUSED(Buffer data)) -> IComponentContainer * { return new ComponentContainer<ScriptComponent>(); });
-        RegisterComponent("Health", [](UNUSED(Buffer data)) -> IComponentContainer * { return new ComponentContainer<Health>(); });
-        RegisterComponent("Animation", [](UNUSED(Buffer data)) -> IComponentContainer * { return new ComponentContainer<Animation>(); });
-        RegisterComponent("Clock", [](UNUSED(Buffer data)) -> IComponentContainer * { return new ComponentContainer<Clock>(); });
 
         auto commandLine = Application::Get().GetSpecification().CommandLineArgs;
         int port = 8083; // Default port
@@ -54,7 +38,6 @@ namespace Exodia {
                 return;
             }
         }
-
 
         FramebufferSpecification fbSpec;
 
