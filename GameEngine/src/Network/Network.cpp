@@ -119,6 +119,8 @@ namespace Exodia::Network {
         offset = FillData(buffer, offset, data.Data, size_of_data);                     // Set data
         buffer.resize(offset);
 
+        EXODIA_TRACE("Send Entity '{0}': {1} bytes", component_name, offset);
+
         packet.Set(header, buffer);
         if (_connections.size() > 0)
            for (auto &connection : _connections)
