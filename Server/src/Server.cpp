@@ -95,6 +95,8 @@ namespace Exodia {
             _World[GAME]->OnViewportResize(1600, 900);
             _World[MENU]->OnViewportResize(1600, 900);
 
+            RType::EntityEventSubscriber *subscribe = new RType::EntityEventSubscriber(_network);
+
             _World[GAME]->RegisterSystem(new AnimationSystem());
             _World[GAME]->RegisterSystem(new ScriptSystem());
             _World[GAME]->RegisterSystem(new MovingSystem(1.5f));
@@ -105,6 +107,9 @@ namespace Exodia {
 
             CollisionSystem *collisionSystem = new CollisionSystem();
             _World[GAME]->RegisterSystem(collisionSystem);
+
+            _World[GAME]->Subscribe<Events::OnEntityCreated>(subscribe);
+            _World[GAME]->Subscribe<Events::OnEntityDestroyed>(subscribe);
             _World[GAME]->Subscribe<Events::OnCollisionEntered>(collisionSystem);
 
             // Create the entities

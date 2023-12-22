@@ -74,16 +74,20 @@ namespace Exodia {
         _World[GAME]->OnViewportResize(1600, 900);
         _World[MENU]->OnViewportResize(1600, 900);
 
+        CollisionSystem *collisionSystem = new CollisionSystem();
+
         _World[GAME]->RegisterSystem(new AnimationSystem());
         _World[GAME]->RegisterSystem(new ScriptSystem());
         _World[GAME]->RegisterSystem(new MovingSystem(1.5f));
-
         _World[MENU]->RegisterSystem(new AnimationSystem());
         _World[MENU]->RegisterSystem(new ScriptSystem());
         _World[MENU]->RegisterSystem(new MovingSystem(1.5f));
-
-        CollisionSystem *collisionSystem = new CollisionSystem();
         _World[GAME]->RegisterSystem(collisionSystem);
+
+        RType::EntityEventSubscriber *subscribe = new RType::EntityEventSubscriber(network);
+
+        _World[GAME]->Subscribe<Events::OnEntityCreated>(subscribe);
+        _World[GAME]->Subscribe<Events::OnEntityDestroyed>(subscribe);
         _World[GAME]->Subscribe<Events::OnCollisionEntered>(collisionSystem);
 
         // Create the camera entity
@@ -158,7 +162,9 @@ namespace Exodia {
     void RTypeLayer::OnEvent(Exodia::Event &event)
     {
         _CameraController.OnEvent(event);
+
         EventDispatcher dispatcher(event);
+
         dispatcher.Dispatch<KeyPressedEvent>(BIND_EVENT_FN(RTypeLayer::OnKeyPressedEvent));
         dispatcher.Dispatch<KeyReleasedEvent>(BIND_EVENT_FN(RTypeLayer::OnKeyReleasedEvent));
 
@@ -178,7 +184,6 @@ namespace Exodia {
             }
         });
         return true;
-
     };
 
     bool RTypeLayer::OnKeyReleasedEvent(KeyReleasedEvent &event) {
