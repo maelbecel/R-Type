@@ -21,13 +21,10 @@ class Connection {
         };
 
         Connection() = default;
-
-        ~Connection()
-        {
-        };
+        ~Connection() = default;
 
         void SendPacket(Exodia::Network::UDPSocket &socket, Exodia::Network::Packet &packet) {
-            packet.GetHeader()->setSize(packet.GetContent().size());
+            packet.GetHeader()->setSize((unsigned long)packet.GetContent().size());
             packet.GetHeader()->SetId(_sendPacket);
             for (int i = 0; i < 2; i++)
                 socket.Send(packet, _endpoint);
