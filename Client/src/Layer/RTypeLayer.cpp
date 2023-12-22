@@ -16,7 +16,8 @@ namespace Exodia {
     // Constructor & Destructor //
     //////////////////////////////
 
-    RTypeLayer::RTypeLayer() : Layer("R-Type"), _CameraController(1600.0f / 900.0f) {
+    RTypeLayer::RTypeLayer() : Layer("R-Type"), _CameraController(1600.0f / 900.0f)
+    {
         std::cout << "RTypeLayer constructor" << std::endl;
     };
 

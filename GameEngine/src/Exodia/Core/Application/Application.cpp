@@ -99,6 +99,13 @@ namespace Exodia {
 
             _Window->OnUpdate();
         }
+
+        {
+            EXODIA_PROFILE_SCOPE("LayerStack OnDetach");
+
+            for (Layer *layer : _LayerStack)
+                layer->OnDetach();
+        }
     }
 
     void Application::Close()
@@ -139,6 +146,7 @@ namespace Exodia {
     bool Application::OnWindowClose(UNUSED(WindowCloseEvent &event))
     {
         _Running = false;
+
         return true;
     }
 

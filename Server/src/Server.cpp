@@ -72,7 +72,6 @@ namespace Exodia {
             std::cout << "Waiting for clients to connect..." << std::endl;
             std::this_thread::sleep_for(std::chrono::seconds(1)); // Sleep for 1 second
         }
-        RendererAPI::SetAPI(RendererAPI::API::None);
 
         std::cout << "Server is initializing !" << std::endl;
         try {
