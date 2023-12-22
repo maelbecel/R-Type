@@ -9,13 +9,6 @@
 #include "Layer/RTypeLayer.hpp"
 #include <iostream>
 
-
-void my_callback(const std::string &message)
-{
-    (void)message;
-    std::cout << "Message received: " << message << std::endl;
-}
-
 namespace Exodia {
 
     class RType : public Application {
@@ -41,7 +34,11 @@ namespace Exodia {
     {
         EXODIA_PROFILE_FUNCTION();
 
+#ifdef _WIN32
+        Exodia::Project::Load("../Client/R-Type.proj");
+#else
         Exodia::Project::Load("./Client/R-Type.proj");
+#endif
 
         ApplicationSpecification spec;
 
