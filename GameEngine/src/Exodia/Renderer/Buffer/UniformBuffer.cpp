@@ -25,7 +25,6 @@ namespace Exodia {
 
         switch (api) {
             case RendererAPI::API::None:
-                EXODIA_CORE_ASSERT(false, "RendererAPI::None is not supported !");
                 return nullptr;
             case RendererAPI::API::OpenGL:
                 return CreateRef<OpenGLUniformBuffer>(size, binding);

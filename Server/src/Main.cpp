@@ -20,7 +20,7 @@ int main(void)
     Exodia::Project::Load("./Client/R-Type.proj");
 #endif
 
-    Exodia::RendererAPI::SetGraphical(false);
+    Exodia::RendererAPI::SetAPI(Exodia::RendererAPI::API::None);
 
     std::cout << "Server is waiting for infos !" << std::endl;
 

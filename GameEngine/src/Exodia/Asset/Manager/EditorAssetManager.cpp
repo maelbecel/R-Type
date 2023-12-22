@@ -139,12 +139,15 @@ namespace Exodia {
 
         auto assetRegistry = data["AssetRegistry"];
 
-        if (!assetRegistry)
+        if (!assetRegistry) {
+            EXODIA_CORE_WARN("Asset registry not found in `{}`", path.string());
+
             return false;
+        }
+
         for (const auto &node : assetRegistry) {
             if (!node["Handle"] || !node["Path"] || !node["Type"])
                 continue;
-
             try {
                 AssetHandle handle = node["Handle"].as<uint64_t>();
 
@@ -184,7 +187,8 @@ namespace Exodia {
                 return nullptr;
             }
 
-            _LoadedAssets[handle] = asset;
+            // TODO: Check why this is not working when active
+            //_LoadedAssets[handle] = asset;
         }
 
         return asset;

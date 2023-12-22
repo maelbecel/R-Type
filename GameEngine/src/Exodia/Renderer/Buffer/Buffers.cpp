@@ -76,10 +76,11 @@ namespace Exodia {
 
         switch (api) {
             case RendererAPI::API::None:
-                EXODIA_CORE_ASSERT(false, "RendererAPI::API::None is currently not supported !");
                 return nullptr;
             case RendererAPI::API::OpenGL:
                 return CreateRef<OpenGLVertexBuffer>(size);
+            default:
+                break;
         }
 
         EXODIA_CORE_ASSERT(false, "Unknown RendererAPI !");
@@ -92,10 +93,11 @@ namespace Exodia {
 
         switch (api) {
             case RendererAPI::API::None:
-                EXODIA_CORE_ASSERT(false, "RendererAPI::API::None is currently not supported !");
                 return nullptr;
             case RendererAPI::API::OpenGL:
                 return CreateRef<OpenGLVertexBuffer>(vertices, size);
+            default:
+                break;
         }
 
         EXODIA_CORE_ASSERT(false, "Unknown RendererAPI !");
@@ -112,10 +114,11 @@ namespace Exodia {
 
         switch (api) {
             case RendererAPI::API::None:
-                EXODIA_CORE_ASSERT(false, "RendererAPI::API::None is currently not supported !");
                 return nullptr;
             case RendererAPI::API::OpenGL:
                 return CreateRef<OpenGLIndexBuffer>(indices, count);
+            default:
+                break;
         }
 
         EXODIA_CORE_ASSERT(false, "Unknown RendererAPI !");
