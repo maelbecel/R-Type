@@ -52,7 +52,7 @@ jobs:
       - name: Environement variables
         run: |
           set VCPKG_ROOT="D:\a\R-Type\R-Type\vcpkg"
-          set PATH=%VCPKG_ROOT%;%PATH%
+          setx PATH=%VCPKG_ROOT%;%PATH%
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v1
       - name: Setup CMake
