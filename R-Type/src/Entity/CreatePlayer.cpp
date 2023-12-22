@@ -14,7 +14,7 @@ namespace Exodia {
         Entity *entity = _World[GAME]->CreateEntity("Player_" + std::to_string(playerID));
 
         entity->AddComponent<Health>(1);
-        entity->AddComponent<ScriptComponent>().Get().Bind<Player>();
+        entity->AddComponent<ScriptComponent>().Get().Bind("Player");
         entity->AddComponent<Animation>(1.0f, 2.0f, 0.1f);
         entity->GetComponent<TransformComponent>().Get().Scale.y = 0.5f;
         entity->GetComponent<TransformComponent>().Get().Translation.y = 0.4f * playerID;

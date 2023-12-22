@@ -14,7 +14,7 @@ namespace Exodia {
         Entity *patata = _World[GAME]->CreateEntity("Pata-pata");
 
         patata->AddComponent<Health>(1);
-        patata->AddComponent<ScriptComponent>().Get().Bind<PataPata>();
+        patata->AddComponent<ScriptComponent>().Get().Bind("PataPata");
         patata->AddComponent<Animation>(1.0f, 8.0f, 0.1f);
         patata->AddComponent<Clock>();
         patata->AddComponent<BoxCollider2DComponent>();

@@ -33,34 +33,24 @@ namespace Exodia {
             void OnUpdate(Timestep ts) override;
             void OnImGUIRender()       override;
             void OnEvent(Event &event) override;
-        
+
         private:
             bool OnKeyReleasedEvent(KeyReleasedEvent &event);
             bool OnKeyPressedEvent(KeyPressedEvent &event);
-
-        public:
-            void RegisterComponent(std::string name, std::function<IComponentContainer *(Buffer)> factory);
 
         ////////////////
         // Attributes //
         ////////////////
         public:
-            inline static SceneType _currentScene;
-            inline static std::map<SceneType, std::shared_ptr<Exodia::Scene>> _World;
+            inline static std::map<SceneType, Ref<Scene>> Scenes;
+            inline static SceneType CurrentScene;
 
         private:
-            // WARNING: This is a temporary solution
-            Exodia::World *_worldNetwork = Exodia::World::CreateWorld();
+            // TODO: WARNING: This is a temporary solution
+            World *_WorldNetwork;
 
-            std::unordered_map<std::string, std::function<IComponentContainer *(Buffer)>> _ComponentFactory;
-            Exodia::Network::IOContextManager ioContextManager;
-
-            Ref<Framebuffer>             _Framebuffer;
-
-            Entity _LastEntityHovered;
-
-            std::unique_ptr<Exodia::Network::Network> network = nullptr;
-            Exodia::OrthographicCameraController _CameraController;
+            Network::IOContextManager _IOContextManager;
+            Scope<Network::Network>   _Network;
     };
 };
 

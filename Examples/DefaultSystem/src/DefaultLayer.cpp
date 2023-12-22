@@ -31,7 +31,7 @@ namespace Exodia {
         Entity *entity = _World->CreateEntity("Player");
 
         entity->AddComponent<SpriteRendererComponent>(glm::vec4{ 0.8f, 0.2f, 0.3f, 1.0f });
-        entity->AddComponent<ScriptComponent>().Get().Bind<Player>();
+        entity->AddComponent<ScriptComponent>().Get().Bind("Player");
         entity->AddComponent<BoxCollider2DComponent>();
         entity->GetComponent<TransformComponent>().Get().Translation = glm::vec3{ 0.0f, 5.0f, 0.0f };
 

@@ -14,7 +14,7 @@
 
     // Exodia ECS includes
     #include "ECS/Interface/IComponentContainer.hpp"
-    
+
     // Exodia Core includes
     #include "Core/Buffer/Buffer.hpp"
 
@@ -27,6 +27,8 @@
     #include <functional>
 
 namespace Exodia {
+
+    class ScriptableEntity;
 
     struct ProjectConfig {
         std::string Name = "Untitled";
@@ -85,6 +87,9 @@ namespace Exodia {
             void RegisterComponent(std::string component, std::function<IComponentContainer *(Buffer)> factory);
             std::function<IComponentContainer *(Buffer)> GetComponentFactory(std::string component);
 
+            void RegisterScript(std::string script, std::function<ScriptableEntity *()> factory);
+            std::function<ScriptableEntity *()> GetScriptFactory(std::string script);
+
             ProjectConfig &GetConfig();
         
         ////////////////
@@ -97,6 +102,7 @@ namespace Exodia {
             Ref<IAssetManager>    _AssetManager;
             
             std::unordered_map<std::string, std::function<IComponentContainer *(Buffer)>> _ComponentFactory;
+            std::unordered_map<std::string, std::function<ScriptableEntity    *()>>       _ScriptFactory;
 
         ///////////////////
         // Singletons... //

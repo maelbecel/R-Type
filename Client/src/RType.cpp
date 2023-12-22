@@ -7,23 +7,23 @@
 
 #include "Exodia/EntryPoint.hpp"
 #include "Layer/RTypeLayer.hpp"
-#include <iostream>
+#include "R-Type.hpp"
 
 namespace Exodia {
 
-    class RType : public Application {
+    class RTypeClient : public Application {
 
         //////////////////////////////
         // Constructor & Destructor //
         //////////////////////////////
         public:
 
-            RType(const ApplicationSpecification &spec) : Application(spec)
+            RTypeClient(const ApplicationSpecification &spec) : Application(spec)
             {
                 PushLayer(new RTypeLayer());
             }
 
-            ~RType() = default;
+            ~RTypeClient() = default;
     };
 
     /////////////////
@@ -34,17 +34,13 @@ namespace Exodia {
     {
         EXODIA_PROFILE_FUNCTION();
 
-#ifdef _WIN32
-        Exodia::Project::Load("../Client/R-Type.proj");
-#else
-        Exodia::Project::Load("./Client/R-Type.proj");
-#endif
+        RType::InitRType();
 
         ApplicationSpecification spec;
 
         spec.Name = "Application Example";
         spec.CommandLineArgs = args;
 
-        return new RType(spec);
+        return new RTypeClient(spec);
     }
 };
