@@ -221,15 +221,16 @@ namespace Exodia {
                 events.pop();
                 int player_id = _network.ConnectionPlace(event.second);
 
-                _World[_currentScene]->GetWorld().ForEach<ScriptComponent, TagComponent>([&](Entity *entity, auto script, auto tag) {
-                    (void)entity;
+                _World[_currentScene]->GetWorld().ForEach<ScriptComponent, TagComponent>([&](UNUSED(Entity *entity), auto script, auto tag) {
+                    auto &sc = script.Get();
+                    auto &tc = tag.Get();
 
-                    if (tag.Get().Tag.rfind("Player_" + player_id, 0) != std::string::npos && script.Get().Instance != nullptr) {
+                    if (tc.Tag == std::string("Player_" + std::to_string(player_id)) && sc.Instance != nullptr) {
                         std::cout << "Event received: " << event.first.first << std::endl;
                         if (event.first.second)
-                            script.Get().Instance->OnKeyPressed(event.first.first);
+                            sc.Instance->OnKeyPressed(event.first.first);
                         else
-                            script.Get().Instance->OnKeyReleased(event.first.first);
+                            sc.Instance->OnKeyReleased(event.first.first);
                     }
                 });
             }

@@ -186,7 +186,7 @@ namespace Exodia {
             if (tc.Tag.rfind("Player", 0) != std::string::npos && sc.Instance != nullptr) {
                 sc.Instance->OnKeyPressed(key);
 
-                network.SendEvent(key, true);
+                network->SendEvent(key, true);
             }
         });
         return true;
@@ -206,7 +206,7 @@ namespace Exodia {
             if (tc.Tag.rfind("Player", 0) != std::string::npos && sc.Instance != nullptr) {
                 sc.Instance->OnKeyReleased(key);
 
-                network.SendEvent(key, false);
+                network->SendEvent(key, false);
             }
         });
         return false;
