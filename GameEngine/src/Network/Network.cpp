@@ -119,6 +119,15 @@ namespace Exodia::Network {
         Exodia::Network::Packet packet(0x0c);
         std::vector<char> buffer(1468, 0);
 
+        if (entity == nullptr) {
+            EXODIA_CORE_ERROR("Network::SendComponentOf() - Entity is null !");
+            return;
+        }
+        if (entity->GetComponent(component_name) == nullptr) {
+            EXODIA_CORE_ERROR("Network::SendComponentOf() - Component " + component_name + " not found !");
+            return;
+        }
+
         IComponentContainer *container = entity->GetComponent(component_name);
         Buffer data = container->SerializeData();
 
@@ -141,6 +150,53 @@ namespace Exodia::Network {
                 connection.second.SendPacket(_socket, packet);
         else
             _server_connection.SendPacket(_socket, packet);
+    }
+
+    /**
+     * @brief Send delete entity
+     *
+     * @param entity (Type: Entity *) The entity to delete
+     *
+     * @return void
+    */
+    void Network::SendDeleteEntity(Entity *entity) {
+        if (entity == nullptr) {
+            EXODIA_CORE_ERROR("Network::SendDeleteEntity() - Entity is null !");
+            return;
+        }
+        Exodia::Network::Packet packet(0x0e);
+        std::vector<char> buffer(sizeof(unsigned long));
+        unsigned long entity_id = (unsigned long)entity->GetEntityID();
+
+        uint64_t offset = 0;
+        offset = FillData(buffer, offset, &entity_id, sizeof(unsigned long));
+        packet.SetContent(buffer);
+        if (_connections.size() > 0)
+           for (auto &connection : _connections)
+                connection.second.SendPacket(_socket, packet);
+        else
+            _server_connection.SendPacket(_socket, packet);
+    }
+
+    /**
+     * @brief Receive delete entity
+     *
+     * @param message (Type: const std::vector<char>) The message received
+     * @param size (Type: size_t) The size of the message
+     * @param senderEndpoint (Type: asio::ip::udp::endpoint) The endpoint of the sender
+     *
+     * @return void
+    */
+    void Network::ReceiveDeleteEntity(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint, Exodia::Network::Header header) {
+        (void) size;
+        (void) senderEndpoint;
+
+        unsigned long id = 0;
+        std::memcpy(&id, message.data(), sizeof(unsigned long));
+
+        Entity *entity = _world->GetEntityByID(id);
+        _world->DestroyEntity(entity);
+        EXODIA_CORE_INFO("Network::ReceiveDeleteEntity() - Entity " + std::to_string(id) + " deleted");
     }
 
     /**

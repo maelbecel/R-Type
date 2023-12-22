@@ -62,12 +62,15 @@ namespace Exodia {
                 void ReceiveAck(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint, Exodia::Network::Header header);          // 0x01
                 void ReceiveConnectAccept(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint, Exodia::Network::Header header);// 0x02
                 void ReceiveComponentOf(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint, Exodia::Network::Header header);  // 0x0c
+                void ReceiveDeleteEntity(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint, Exodia::Network::Header header);        // 0x0e
                 void ReceiveConnect(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint, Exodia::Network::Header header);      // 0x81
                 void ReceiveEvent(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint, Exodia::Network::Header header);        // 0x82
+
                 void SendPacketInfo();      // 0x00
                 void SendAck();             // 0x01
                 void SendAcceptConnect();   // 0x02
                 void SendComponentOf(Entity *entity, std::string component_name);  // 0x0c
+                void SendDeleteEntity(Entity *entity);                             // 0x0e
                 void SendAskConnect(const std::string &ip, short port);            // 0x81
                 void SendEvent(uint32_t event);                                   // 0x82
                 void Splitter(const std::vector<char> &message, size_t size, asio::ip::udp::endpoint senderEndpoint);

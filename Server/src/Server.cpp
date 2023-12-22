@@ -200,6 +200,12 @@ namespace Exodia {
 
                 _network.SendComponentOf(pata, "TransformComponent");
                 _network.SendComponentOf(pata, "CircleRendererComponent");
+
+                auto *bullet = _World[GAME]->GetEntityByName("BE68");
+                if (bullet != nullptr) {
+                    _network.SendComponentOf(bullet, "TransformComponent");
+                    _network.SendComponentOf(bullet, "CircleRendererComponent");
+                }
             }
 
             std::queue<std::pair<uint32_t, asio::ip::udp::endpoint>> events = _network.GetEvents();
