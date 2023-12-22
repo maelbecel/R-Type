@@ -20,7 +20,7 @@ namespace Exodia {
             if (!error) {
                 _socket.bind(endpoint, error);
                 if (!error) {
-                    EXODIA_CORE_INFO("Socket opened successfully");
+                    EXODIA_CORE_INFO("Socket opened successfully on port {0}", endpoint.port());
                 } else {
                     EXODIA_CORE_ERROR("Error binding socket: ", error.message());
                     throw std::runtime_error("Error binding socket");
@@ -69,11 +69,11 @@ namespace Exodia {
 
             _socket.async_send_to(asio::buffer(message, size), endpoint, [this](const asio::error_code& error, std::size_t bytes_transferred) {
                 if (error) {
-                    EXODIA_CORE_ERROR("Error sending data: ", error.message());
+                    EXODIA_CORE_ERROR("Error sending data on {0}:{1}: ", _senderEndpoint.address().to_string(), _senderEndpoint.port(), error.message());
                 }
             });
         }
-
+    
         void UDPSocket::Receive(const std::function<void(const std::vector<char>&, size_t, asio::ip::udp::endpoint)>& callback) {
             _socket.async_receive_from(asio::buffer(_receiveBuffer), _senderEndpoint,
                 [this, callback](const asio::error_code& error, std::size_t bytes_received) {

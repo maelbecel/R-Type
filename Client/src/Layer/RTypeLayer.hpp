@@ -56,9 +56,8 @@ namespace Exodia {
             Ref<Framebuffer>             _Framebuffer;
 
             Entity _LastEntityHovered;
-            // Define a local endpoint to listen on
-            // asio::ip::udp::endpoint localEndpoint(asio::ip::address::from_string("127.0.0.1"), 8082);
-            Exodia::Network::Network network;
+
+            std::unique_ptr<Exodia::Network::Network> network = nullptr;
             Exodia::OrthographicCameraController _CameraController;
     };
 };
