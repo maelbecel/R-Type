@@ -101,22 +101,11 @@ namespace Exodia {
                 _API = api;
             }
 
-            inline static bool IsGraphical()
-            {
-                return _IsGraphical;
-            }
-
-            inline static void SetGraphical(bool isGraphical)
-            {
-                _IsGraphical = isGraphical;
-            }
-
         ////////////////
         // Attributes //
         ////////////////
         private:
-            static API  _API;         /*!< The API of the Renderer */
-            static bool _IsGraphical; /*!< Is the Renderer in graphical mode */
+            static API  _API; /*!< The API of the Renderer */
     };
 };
 

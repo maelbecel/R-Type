@@ -107,18 +107,25 @@ namespace Exodia {
                 offset += sizeof(Color);
                 std::memcpy(buffer.Data + offset, &TilingFactor, sizeof(TilingFactor));
                 offset += sizeof(TilingFactor);
-                Exodia::AssetHandle assetHandle = Texture->GetAssetHandle();
 
-                std::memcpy(buffer.Data + offset, &assetHandle, sizeof(Texture->GetAssetHandle()));
-                offset += sizeof(Texture->GetAssetHandle());
-                std::memcpy(buffer.Data + offset, &(Texture->GetCoords()), sizeof(Texture->GetCoords()));
-                offset += sizeof(Texture->GetCoords());
-                std::memcpy(buffer.Data + offset, &Texture->GetTextureCellSize(), sizeof(Texture->GetTextureCellSize()));
-                offset += sizeof(Texture->GetTextureCellSize());
-                std::memcpy(buffer.Data + offset, &Texture->GetTextureSpriteSize(), sizeof(Texture->GetTextureSpriteSize()));
+                bool hasTexture = (Texture != nullptr);
+
+                std::memcpy(buffer.Data, &hasTexture, sizeof(bool));
+                offset += sizeof(bool);
+
+                if (Texture) {
+                    Exodia::AssetHandle assetHandle = Texture->GetAssetHandle();
+
+                    std::memcpy(buffer.Data + offset, &assetHandle, sizeof(Texture->GetAssetHandle()));
+                    offset += sizeof(Texture->GetAssetHandle());
+                    std::memcpy(buffer.Data + offset, &(Texture->GetCoords()), sizeof(Texture->GetCoords()));
+                    offset += sizeof(Texture->GetCoords());
+                    std::memcpy(buffer.Data + offset, &Texture->GetTextureCellSize(), sizeof(Texture->GetTextureCellSize()));
+                    offset += sizeof(Texture->GetTextureCellSize());
+                    std::memcpy(buffer.Data + offset, &Texture->GetTextureSpriteSize(), sizeof(Texture->GetTextureSpriteSize()));
+                }
 
                 return buffer;
-
             } catch (std::exception &e) {
                 EXODIA_CORE_WARN("SpriteRendererComponent serialization failed: {0}", e.what());
                 return Buffer();
@@ -129,31 +136,35 @@ namespace Exodia {
         {
             try {
                 size_t offset = 0;
-                Texture = CreateRef<SubTexture2D>(0);
+                bool hasTexture = false;
 
                 Memcopy(&Color, data.Data + offset, sizeof(Color));
                 offset += sizeof(Color);
                 Memcopy(&TilingFactor, data.Data + offset, sizeof(TilingFactor));
                 offset += sizeof(TilingFactor);
 
-                Exodia::AssetHandle assetHandle = Texture->GetAssetHandle();
+                std::memcpy(&hasTexture, data.Data, sizeof(bool));
+                offset += sizeof(bool);
+
+                if (!hasTexture)
+                    return;
+                Exodia::AssetHandle assetHandle;
+                glm::vec2 coords;
+                glm::vec2 cellSize;
+                glm::vec2 spriteSize;
 
                 Memcopy(&assetHandle, data.Data + offset, sizeof(assetHandle));
-
                 offset += sizeof(assetHandle);
 
-                glm::vec2 coords;
                 Memcopy(&coords, data.Data + offset, sizeof(coords));
                 offset += sizeof(coords);
 
-                glm::vec2 cellSize;
                 Memcopy(&cellSize, data.Data + offset, sizeof(cellSize));
                 offset += sizeof(cellSize);
 
-                glm::vec2 spriteSize;
                 Memcopy(&spriteSize, data.Data + offset, sizeof(spriteSize));
 
-                Texture = SubTexture2D::CreateFromCoords(assetHandle, coords, cellSize, spriteSize);
+                Texture = SubTexture2D::CreateFromCoords(assetHandle, coords, cellSize, glm::vec2{1.0f, 1.0f});
 
                 EXODIA_CORE_TRACE("SpriteRendererComponent deserialization success !");
                 EXODIA_CORE_TRACE("\tAssetHandle : '{0}'", (uint64_t)assetHandle);
@@ -164,6 +175,7 @@ namespace Exodia {
                 EXODIA_CORE_WARN("SpriteRendererComponent deserialization failed: {0}", e.what());
             }
         }
+
         virtual void DrawComponent() override
         {
             std::string label = "None";

@@ -8,6 +8,9 @@
 // Exodia Asset includes
 #include "TextureImporter.hpp"
 
+// Exodia Renderer includes
+#include "Renderer/Renderer/RendererAPI.hpp"
+
 // Exodia Buffer includes
 #include "Core/Buffer/Buffer.hpp"
 
@@ -41,6 +44,8 @@ namespace Exodia {
     {
         EXODIA_PROFILE_FUNCTION();
 
+        if (RendererAPI::GetAPI() == RendererAPI::API::None)
+            return nullptr;
         Buffer data;
         int width    = 0;
         int height   = 0;
