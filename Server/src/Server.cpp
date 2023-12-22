@@ -75,6 +75,8 @@ namespace Exodia {
         EXODIA_INFO("Server initialisation...");
 
         try {
+            CurrentScene = GAME;
+
             Scenes[MENU] = CreateRef<Scene>();
             Scenes[MENU]->RegisterSystem(new AnimationSystem());
             Scenes[MENU]->RegisterSystem(new ScriptSystem());
