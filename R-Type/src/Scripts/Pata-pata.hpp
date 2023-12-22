@@ -9,13 +9,13 @@
     #define PATAPATA_HPP_
 
     // Exodia includes
-    #include "Exodia.hpp"
     #include "Component/Animation.hpp"
     #include "Component/Clock.hpp"
     #include "Component/Health.hpp"
     #include "BulletEnnemy.hpp"
 
     #include <cmath>
+    #include <random>
 
 namespace Exodia {
 
@@ -73,7 +73,8 @@ namespace Exodia {
 
                 _State = State::ALIVE;
                 transform.Get().Translation.x = camera.Get().Translation.x + 20.0f;
-                transform.Get().Translation.y = 0.0f - random() % 5;
+                transform.Get().Translation.y = (float)(std::rand() % 10 - 5);
+
                 EXODIA_INFO("PataPata created at pos {0}, {1}", transform.Get().Translation.x, transform.Get().Translation.y);
             }
 
@@ -93,7 +94,7 @@ namespace Exodia {
                     // auto &tc = transform.Get();
                     // Mise à jour de la position en fonction du temps et du mouvement sinusoidal
                     mytime += ts.GetSeconds();
-                    body.Get().Velocity.y = amplitude * sin(frequency * mytime * PI);
+                    body.Get().Velocity.y = (float)(amplitude * sin(frequency * mytime * PI));
 
                     // Affichage des coordonnées
 

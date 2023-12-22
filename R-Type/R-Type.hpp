@@ -14,19 +14,19 @@
     // And create your own R-Type game           //
     ///////////////////////////////////////////////
 
-    #include "Component/Animation.hpp"
-    #include "Component/Clock.hpp"
-    #include "Component/Health.hpp"
+    #include "src/Component/Animation.hpp"
+    #include "src/Component/Clock.hpp"
+    #include "src/Component/Health.hpp"
 
-    #include "Scripts/BulletPlayer.hpp"
-    #include "Scripts/Player/Player.hpp"
-    #include "Scripts/Pata-pata.hpp"
+    #include "src/Scripts/BulletPlayer.hpp"
+    #include "src/Scripts/Player/Player.hpp"
+    #include "src/Scripts/Pata-pata.hpp"
 
-    #include "System/AnimationSystem.hpp"
+    #include "src/System/AnimationSystem.hpp"
 
-    #include "Entity/CreatePataPata.hpp"
-    #include "Entity/CreatePlayer.hpp"
-    #include "Entity/CreateBackground.hpp"
-    #include "Entity/CreateStars.hpp"
+    #include "src/Entity/CreatePataPata.hpp"
+    #include "src/Entity/CreatePlayer.hpp"
+    #include "src/Entity/CreateBackground.hpp"
+    #include "src/Entity/CreateStars.hpp"
 
 #endif /* !R_TYPE_HPP_ */

@@ -8,7 +8,6 @@
 #ifndef CREATEPLAYER_HPP_
     #define CREATEPLAYER_HPP_
 
-    #include "Exodia.hpp"
     #include "Component/Animation.hpp"
     #include "Component/Health.hpp"
     #include "Scripts/Player/Player.hpp"

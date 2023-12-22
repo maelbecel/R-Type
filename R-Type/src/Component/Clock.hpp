@@ -10,12 +10,6 @@
 
     #include "Exodia.hpp"
 
-    // GLM includes
-    #include <glm/glm.hpp>
-    #include <glm/gtc/matrix_transform.hpp>
-    #define GLM_ENABLE_EXPERIMENTAL
-        #include <glm/gtx/quaternion.hpp>
-
 namespace Exodia {
     /**
      * @brief Clock component.
@@ -28,7 +22,7 @@ namespace Exodia {
         Clock(const Clock &) = default;
         Clock(float ElapsedTime = 0.0f) : ElapsedTime(ElapsedTime) {};
 
-        virtual void Serialize(UNUSED YAML::Emitter &out) override {};
+        virtual void Serialize(UNUSED(YAML::Emitter &out)) override {};
     };
 };
 

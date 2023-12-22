@@ -13,6 +13,7 @@
 
     // Exodia Utils
     #include "Utils/CrossPlatform.hpp"
+    #include "Utils/Memory.hpp"
 
 namespace Exodia {
 
@@ -47,20 +48,20 @@ namespace Exodia {
              *
              * @param ts The timestep.
              */
-            virtual void OnUpdate(UNUSED Timestep ts) {};
+            virtual void OnUpdate(UNUSED(Timestep ts)) {};
 
             /**
              * @brief Called when the handle entity is entered in collision with another entity.
              *
              * @param other The other entity.
              */
-            virtual void OnCollisionEnter(UNUSED Entity *other) {};
+            virtual void OnCollisionEnter(UNUSED(Entity *other)) {};
 
             virtual void OnHoveredEnter() {};
 
-            virtual void OnKeyPressed(UNUSED int keycode) {EXODIA_WARN("OnKeyPressed not implemented");};
+            virtual void OnKeyPressed(UNUSED(int keycode)) {};
 
-            virtual void OnKeyReleased(UNUSED int keycode) {};
+            virtual void OnKeyReleased(UNUSED(int keycode)) {};
 
             virtual void OnHoveredExit() {};
 

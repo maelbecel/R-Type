@@ -26,7 +26,7 @@ namespace Exodia {
             // Methods
             virtual void Receive(World *world, const TakeDamageEvent &event) override
             {
-                world->ForEach<Health>([&](UNUSED Entity *entity, ComponentHandle<Health> health) {
+                world->ForEach<Health>([&](UNUSED(Entity *entity), ComponentHandle<Health> health) {
                     std::cout << "I took " << event.Damage << " damage !" << std::endl;
 
                     health->CurrentHealth -= event.Damage;
@@ -45,7 +45,7 @@ namespace Exodia {
             // Methods
             virtual void Update(World *world, Timestep ts) override
             {
-                world->ForEach<Health>([&](UNUSED Entity *entity, ComponentHandle<Health> health) {
+                world->ForEach<Health>([&](UNUSED(Entity *entity), ComponentHandle<Health> health) {
                     health.Get().CurrentHealth -= _DamagePerSecond * ts;
                 });
             }

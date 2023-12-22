@@ -181,7 +181,7 @@ namespace Exodia {
         }
     }
 
-    void Scene::OnUpdateEditor(UNUSED Timestep ts, EditorCamera &camera)
+    void Scene::OnUpdateEditor(UNUSED(Timestep ts), EditorCamera &camera)
     {
         Renderer2D::BeginScene(camera);
 

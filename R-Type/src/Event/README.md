@@ -19,7 +19,7 @@ class TakeDamageSubscriber : public EventSubscriber<TakeDamageEvent> {
         // Methods
         virtual void Receive(World *world, const TakeDamageEvent &event) override
         {
-            world->ForEach<Health>([&](UNUSED Entity *entity, ComponentHandle<Health> health) {
+            world->ForEach<Health>([&](UNUSED(Entity *entity), ComponentHandle<Health> health) {
                 std::cout << "I took " << event.Damage << " damage !" << std::endl;
 
                 health->CurrentHealth -= event.Damage;

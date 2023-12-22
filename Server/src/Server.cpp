@@ -7,6 +7,7 @@
 
 #include "Server.hpp"
 #include "R-Type.hpp"
+#include <thread>
 
 namespace Exodia {
 
@@ -69,23 +70,23 @@ namespace Exodia {
     {
         while (_network.GetConnections().empty()) {
             std::cout << "Waiting for clients to connect..." << std::endl;
-            sleep(1);
+            std::this_thread::sleep_for(std::chrono::seconds(1)); // Sleep for 1 second
         }
         RendererAPI::SetAPI(RendererAPI::API::None);
 
         std::cout << "Server is initializing !" << std::endl;
         try {
             // Register components
-            RegisterComponent("IDComponent", [](UNUSED Buffer data) -> IComponentContainer * { return new ComponentContainer<IDComponent>(); });
-            RegisterComponent("TransformComponent", [](UNUSED Buffer data) -> IComponentContainer * { return new ComponentContainer<TransformComponent>(); });
-            RegisterComponent("SpriteRendererComponent", [](UNUSED Buffer data) -> IComponentContainer * { return new ComponentContainer<SpriteRendererComponent>(); });
-            RegisterComponent("BoxCollider2DComponent", [](UNUSED Buffer data) -> IComponentContainer * { return new ComponentContainer<BoxCollider2DComponent>(); });
-            RegisterComponent("CircleRendererComponent", [](UNUSED Buffer data) -> IComponentContainer * { return new ComponentContainer<CircleRendererComponent>(); });
-            RegisterComponent("RigidBody2DComponent", [](UNUSED Buffer data) -> IComponentContainer * { return new ComponentContainer<RigidBody2DComponent>(); });
-            RegisterComponent("ScriptComponent", [](UNUSED Buffer data) -> IComponentContainer * { return new ComponentContainer<ScriptComponent>(); });
-            RegisterComponent("Health", [](UNUSED Buffer data) -> IComponentContainer * { return new ComponentContainer<Health>(); });
-            RegisterComponent("Animation", [](UNUSED Buffer data) -> IComponentContainer * { return new ComponentContainer<Animation>(); });
-            RegisterComponent("Clock", [](UNUSED Buffer data) -> IComponentContainer * { return new ComponentContainer<Clock>(); });
+            RegisterComponent("IDComponent", [](UNUSED(Buffer data)) -> IComponentContainer * { return new ComponentContainer<IDComponent>(); });
+            RegisterComponent("TransformComponent", [](UNUSED(Buffer data)) -> IComponentContainer * { return new ComponentContainer<TransformComponent>(); });
+            RegisterComponent("SpriteRendererComponent", [](UNUSED(Buffer data)) -> IComponentContainer * { return new ComponentContainer<SpriteRendererComponent>(); });
+            RegisterComponent("BoxCollider2DComponent", [](UNUSED(Buffer data)) -> IComponentContainer * { return new ComponentContainer<BoxCollider2DComponent>(); });
+            RegisterComponent("CircleRendererComponent", [](UNUSED(Buffer data)) -> IComponentContainer * { return new ComponentContainer<CircleRendererComponent>(); });
+            RegisterComponent("RigidBody2DComponent", [](UNUSED(Buffer data)) -> IComponentContainer * { return new ComponentContainer<RigidBody2DComponent>(); });
+            RegisterComponent("ScriptComponent", [](UNUSED(Buffer data)) -> IComponentContainer * { return new ComponentContainer<ScriptComponent>(); });
+            RegisterComponent("Health", [](UNUSED(Buffer data)) -> IComponentContainer * { return new ComponentContainer<Health>(); });
+            RegisterComponent("Animation", [](UNUSED(Buffer data)) -> IComponentContainer * { return new ComponentContainer<Animation>(); });
+            RegisterComponent("Clock", [](UNUSED(Buffer data)) -> IComponentContainer * { return new ComponentContainer<Clock>(); });
 
             // Create world
             _currentScene = GAME;

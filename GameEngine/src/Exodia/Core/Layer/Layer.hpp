@@ -11,16 +11,12 @@
     // Exodia Events
     #include "Events/Event.hpp"
 
-    // Exodia Utils
-    #include "Utils/CrossPlatform.hpp"
-
-    // Exodia Core
-    #include "Core/Time/Timestep.hpp"
-
     // External includes
     #include <string>
 
 namespace Exodia {
+
+    class Timestep;
 
     /**
      * @brief The Layer class represents a layer of the application
@@ -45,7 +41,7 @@ namespace Exodia {
             /**
              * @brief Destroy the Layer object
              */
-            virtual ~Layer();
+            virtual ~Layer() = default;
 
         /////////////
         // Methods //

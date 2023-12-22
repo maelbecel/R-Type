@@ -34,7 +34,7 @@ namespace Exodia {
         SpriteRendererComponent(const SpriteRendererComponent &) = default;
         SpriteRendererComponent(const glm::vec4 &color = glm::vec4(1.0f)) : Color(color), TilingFactor(1.0f) {};
 
-        virtual void Serialize(YAML::Emitter &out) override
+        virtual void Serialize(YAML::Emitter &out)
         {
             out << YAML::Key << "SpriteRendererComponent";
             out << YAML::BeginMap;
@@ -69,7 +69,7 @@ namespace Exodia {
             out << YAML::EndMap;
         }
 
-        virtual void Deserialize(const YAML::Node &node) override
+        virtual void Deserialize(const YAML::Node &node)
         {
             try {
                 auto sprite = node["SpriteRendererComponent"];
@@ -92,8 +92,8 @@ namespace Exodia {
 
                     Texture = CreateRef<SubTexture2D>(assetHandle, coords, cellSize, spriteSize);
                 }
-            } catch (YAML::BadConversion &e) {
-                EXODIA_CORE_WARN("SpriteRendererComponent has invalid data !");
+            } catch (YAML::BadConversion &error) {
+                EXODIA_CORE_WARN("SpriteRendererComponent has invalid data !\n\t{0}", error.what());
             }
         }
 
@@ -227,7 +227,7 @@ namespace Exodia {
         CircleRendererComponent(const CircleRendererComponent &) = default;
         CircleRendererComponent(const glm::vec4 &color = glm::vec4(1.0f)) : Color(color), Thickness(1.0f), Fade(0.005f) {};
 
-        virtual void Serialize(YAML::Emitter &out) override
+        virtual void Serialize(YAML::Emitter &out)
         {
             out << YAML::Key << "CircleRendererComponent";
             out << YAML::BeginMap;
@@ -242,7 +242,7 @@ namespace Exodia {
             out << YAML::EndMap;
         }
 
-        virtual void Deserialize(const YAML::Node &node) override
+        virtual void Deserialize(const YAML::Node &node)
         {
             try {
                 auto circle = node["CircleRendererComponent"];

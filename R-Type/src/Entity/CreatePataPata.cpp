@@ -5,7 +5,7 @@
 ** Create pata-pata
 */
 
-#include "Entity/CreatePataPata.hpp"
+#include "CreatePataPata.hpp"
 
 namespace Exodia {
 

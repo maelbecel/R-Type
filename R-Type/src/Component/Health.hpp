@@ -10,12 +10,6 @@
 
     #include "Exodia.hpp"
 
-    // GLM includes
-    #include <glm/glm.hpp>
-    #include <glm/gtc/matrix_transform.hpp>
-    #define GLM_ENABLE_EXPERIMENTAL
-        #include <glm/gtx/quaternion.hpp>
-
 namespace Exodia {
 
     /**
@@ -30,8 +24,6 @@ namespace Exodia {
 
         Health(const Health &) = default;
         Health(int maxHealth = 100) : CurrentHealth(maxHealth), MaxHealth(maxHealth) {};
-
-        virtual void Serialize(UNUSED YAML::Emitter &out) override {};
     };
 };
 

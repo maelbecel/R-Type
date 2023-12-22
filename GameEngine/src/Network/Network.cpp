@@ -6,6 +6,7 @@
 */
 
 #include "Network.hpp"
+#include "Utils/Memory.hpp"
 
 namespace Exodia::Network {
 
@@ -104,11 +105,13 @@ namespace Exodia::Network {
 
         IComponentContainer *container = entity->GetComponent(component_name);
         Buffer data = container->SerializeData();
-        unsigned int size_of_string = component_name.size();
-        unsigned long entity_id = entity->GetEntityID();
+
+        unsigned long size_of_string = (unsigned long)component_name.size();
+        unsigned long entity_id = (unsigned long)entity->GetEntityID();
 
         size_t size_of_data = data.Size;
         size_t offset = 0;
+
         offset = FillData(buffer, offset, &entity_id, sizeof(unsigned long));           // Set id of entity
         offset = FillData(buffer, offset, &size_of_string, sizeof(unsigned int));       // Set size of name
         offset = FillData(buffer, offset, component_name.data(), component_name.size());// Set name
@@ -225,20 +228,20 @@ namespace Exodia::Network {
     /**
      * @brief Send an event
      *
-     * @param event (Type: u_int32_t) The event to send
+     * @param event (Type: uint32_t) The event to send
     */
-    void Network::SendEvent(u_int32_t event) {
+    void Network::SendEvent(uint32_t event) {
         Exodia::Network::Header header(0x82, 1, 2);
         Exodia::Network::Packet packet;
-        std::vector<char> buffer(sizeof(u_int32_t));
+        std::vector<char> buffer(sizeof(uint32_t));
         size_t offset = 0;
 
-        offset = FillData(buffer, offset, &event, sizeof(u_int32_t));
+        offset = FillData(buffer, offset, &event, sizeof(uint32_t));
         packet.Set(header, buffer);
-        if (_connections.size() > 0)
+        if (_connections.size() > 0) {
            for (auto &connection : _connections)
                 connection.second.SendPacket(_socket, packet);
-        else
+        } else
             _server_connection.SendPacket(_socket, packet);
     }
 
@@ -255,13 +258,13 @@ namespace Exodia::Network {
         (void) size;
         (void) message;
         float Timestamp = 0;
-        u_int32_t event = 0;
+        uint32_t event = 0;
 
-        if (size != sizeof(u_int32_t)) {
+        if (size != sizeof(uint32_t)) {
             EXODIA_CORE_ERROR("Network::ReceiveEvent() - Packet size is not correct !");
             return;
         }
-        std::memcpy(&event, message.data(), sizeof(u_int32_t));
+        std::memcpy(&event, message.data(), sizeof(uint32_t));
 
         std::cout << "Event: " << event << std::endl;
 
@@ -284,7 +287,7 @@ namespace Exodia::Network {
             return;
         }
 
-        std::unordered_map<char, std::function<void(const std::vector<char>, size_t, asio::ip::udp::endpoint senderEndpoint, Exodia::Network::Header _header)>> commands;
+        std::unordered_map<unsigned char, std::function<void(const std::vector<char>, size_t, asio::ip::udp::endpoint senderEndpoint, Exodia::Network::Header _header)>> commands;
         commands[0x00] = std::bind(&Network::ReceivePacketInfo, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4); // Packet info for loss calculation
         commands[0x01] = std::bind(&Network::ReceiveAck, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4);        // Packet Acknowledgement
         commands[0x02] = std::bind(&Network::ReceiveConnectAccept, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4);     // Accept client connection

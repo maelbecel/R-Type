@@ -9,7 +9,6 @@
     #define BULLETPLAYER_HPP_
 
     // Exodia includes
-    #include "Exodia.hpp"
     #include "Component/Animation.hpp"
 
     #include <cmath>
@@ -30,7 +29,7 @@ namespace Exodia {
                 std::cout << "Bullet created" << std::endl;
             }
 
-            void OnUpdate(UNUSED Timestep ts) override
+            void OnUpdate(UNUSED(Timestep ts)) override
             {
                 auto transform = GetComponent<TransformComponent>();
                 auto animation = GetComponent<Animation>();

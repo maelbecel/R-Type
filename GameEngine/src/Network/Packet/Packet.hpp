@@ -9,6 +9,7 @@
 #define PACKET_HPP_
 
 #include "Network/Header/Header.hpp"
+#include "Utils/Memory.hpp"
 
 namespace Exodia {
     namespace Network {
@@ -16,26 +17,26 @@ namespace Exodia {
             public:
                 Packet() : _content(std::vector<char>())
                 {
-                    _header = std::make_unique<Header>(0, 0, 0);
+                    _header = CreateScope<Header>(0, 0, 0);
                 };
 
                 Packet(Header header, std::vector<char> content) : _content(content)
                 {
-                    _header = std::make_unique<Header>(header);
-                    _header->setSize(_content.size());
+                    _header = CreateScope<Header>(header);
+                    _header->setSize((unsigned long)_content.size());
                 };
 
                 Packet(const Packet &packet) : _content(packet._content)
                 {
-                    _header = std::make_unique<Header>(*packet._header);
+                    _header = CreateScope<Header>(*packet._header);
                 };
 
                 ~Packet() = default;
 
                 void SetHeader(Header header)
                 {
-                    _header = std::make_unique<Header>(header);
-                    _header->setSize(_content.size());
+                    _header = CreateScope<Header>(header);
+                    _header->setSize((unsigned long)_content.size());
                 }
 
                 void SetContent(std::vector<char> content)
@@ -45,9 +46,9 @@ namespace Exodia {
 
                 void Set(Header header, std::vector<char> content)
                 {
-                    _header = std::make_unique<Header>(header);
+                    _header = CreateScope<Header>(header);
                     _content = content;
-                    _header->setSize(_content.size());
+                    _header->setSize((unsigned long)_content.size());
                 }
 
                 std::vector<char> GetBuffer() const {
@@ -78,7 +79,7 @@ namespace Exodia {
             
             protected:
             private:
-                std::unique_ptr<Header> _header;
+                Scope<Header> _header;
                 std::vector<char> _content;
         };
     };

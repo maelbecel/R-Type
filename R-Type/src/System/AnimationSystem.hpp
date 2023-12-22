@@ -18,8 +18,7 @@ namespace Exodia {
     class AnimationSystem : public EntitySystem {
         public:
             // Constructor && Destructor
-            AnimationSystem() {
-            };
+            AnimationSystem() {};
 
             virtual ~AnimationSystem() {};
 
@@ -28,7 +27,8 @@ namespace Exodia {
             virtual void Update(World *world, Timestep ts) override
             {
                 // WARNING: This is a temporary solution
-                world->ForEach<CircleRendererComponent, Animation>([&](Entity *entity, UNUSED auto sprite, ComponentHandle<Animation> animation) {
+                // world->ForEach<SpriteRendererComponent, Animation>([&](Entity *entity, auto sprite, auto animation) {
+                world->ForEach<Animation>([&](Entity *entity, ComponentHandle<Animation> animation) {
                     // check if entity is player
                     if (entity->GetComponent<TagComponent>().Get().Tag.rfind("Player", 0) == 0) {
                         UpdateAnimation<Player>(entity, [&](Player *player) {
@@ -124,10 +124,10 @@ namespace Exodia {
                 auto script = entity->GetComponent<ScriptComponent>();
 
                 if (script) {
-                    auto entity = reinterpret_cast<T *>(script.Get().Instance);
+                    auto instance = reinterpret_cast<T *>(script.Get().Instance);
 
                     if (entity)
-                        func(entity);
+                        func(instance);
                 }
             };
     };

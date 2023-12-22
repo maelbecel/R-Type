@@ -7,6 +7,7 @@
 
 // Exodia Renderer
 #include "Renderer/Renderer/Renderer.hpp"
+#include "Renderer/Renderer/RendererAPI.hpp"
 #include "Texture.hpp"
 
 // Entry Point
@@ -20,9 +21,10 @@ namespace Exodia {
 
     Ref<Texture2D> Texture2D::Create(const TextureSpecification &spec, Buffer data)
     {
-        switch (Renderer::GetAPI()) {
+        RendererAPI::API api = Renderer::GetAPI();
+
+        switch (api) {
             case RendererAPI::API::None:
-                EXODIA_CORE_ASSERT(false, "RendererAPI::None is not supported !");
                 return nullptr;
             case RendererAPI::API::OpenGL:
                 return CreateRef<OpenGLTexture>(spec, data);
