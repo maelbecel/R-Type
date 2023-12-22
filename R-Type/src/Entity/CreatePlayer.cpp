@@ -9,9 +9,9 @@
 
 namespace Exodia {
 
-    void CreatePlayer(std::map<SceneType, std::shared_ptr<Exodia::Scene>> _World)
+    void CreatePlayer(std::map<SceneType, std::shared_ptr<Exodia::Scene>> _World, int playerID)
     {
-        Entity *entity = _World[GAME]->CreateEntity("Player");
+        Entity *entity = _World[GAME]->CreateEntity("Player_" + std::to_string(playerID));
 
         entity->AddComponent<Health>(1);
         entity->AddComponent<ScriptComponent>().Get().Bind<Player>();

@@ -20,7 +20,7 @@ namespace Exodia {
      *
      * @param _World
      */
-    void CreatePlayer(std::map<SceneType, std::shared_ptr<Exodia::Scene>> _World);
+    void CreatePlayer(std::map<SceneType, std::shared_ptr<Exodia::Scene>> _World, int playerID);
 };
 
 #endif /* !CREATEPLAYER_HPP_ */

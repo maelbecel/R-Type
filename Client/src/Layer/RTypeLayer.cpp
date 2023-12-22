@@ -103,29 +103,13 @@ namespace Exodia {
         body_camera.Get().Velocity = glm::vec2{ 1.5f, 0.0f };
 
         // Create the entities
-        CreatePlayer(_World);
-
+        CreatePlayer(_World, 0);
 
         // Create pata-pata
         CreatePataPata(_World);
 
         // Create background
         CreateBackground(_World);
-
-        // Entity *button = _World[MENU]->CreateEntity("Button");
-
-        // button->AddComponent<IDComponent>();
-        // button->AddComponent<CircleRendererComponent>(glm::vec4{ 0.8f, 0.0f, 0.005f, 1.0f });
-        // button->AddComponent<ScriptComponent>().Get().Bind<ButtonScript>();
-        // button->GetComponent<TransformComponent>().Get().Scale.y = 4.0f;
-        // button->GetComponent<TransformComponent>().Get().Scale.x = 4.0f;
-        // button->GetComponent<TransformComponent>().Get().Translation.z = -0.5f;
-
-        // auto buttonBody = button->AddComponent<RigidBody2DComponent>();
-        // buttonBody.Get().Type = RigidBody2DComponent::BodyType::Dynamic;
-        // buttonBody.Get().Mass = 0.0f;
-        // buttonBody.Get().GravityScale = 0.0f;
-        // buttonBody.Get().Velocity = glm::vec2{ 0.0f, 0.0f };
 
         Entity *cameraMenu = _World[MENU]->CreateEntity("Camera");
         auto &camera_ = cameraMenu->AddComponent<CameraComponent>().Get();
@@ -188,42 +172,6 @@ namespace Exodia {
         }
         // Update the world
         _World[_currentScene]->OnUpdateRuntime(ts);
-
-        // // Renderer Draw
-        // {
-        //     EXODIA_PROFILE_SCOPE("Renderer Draw");
-        //     Exodia::Renderer2D::BeginScene(_CameraController.GetCamera());
-
-        //     _World->ForEach<CircleRendererComponent>([&](Entity *entity, ComponentHandle<CircleRendererComponent> circle) {
-        //         auto transform = entity->GetComponent<TransformComponent>();
-        //         auto id = entity->GetComponent<IDComponent>();
-
-        //         if (transform && id) {
-        //             Renderer2D::DrawCircle(
-        //                 transform.Get().GetTransform(), // Transform
-        //                 circle.Get().Color, // CircleRendererComponent
-        //                 circle.Get().Thickness, // CircleRendererComponent
-        //                 circle.Get().Fade, // CircleRendererComponent
-        //                 (int)id.Get().ID                // Entity ID
-        //             );
-        //         }
-        //     });
-
-        //     _World->ForEach<SpriteRendererComponent>([&](Entity *entity, ComponentHandle<SpriteRendererComponent> sprite) {
-        //         auto transform = entity->GetComponent<TransformComponent>();
-        //         auto id = entity->GetComponent<IDComponent>();
-
-        //         if (transform && id) {
-        //             Renderer2D::DrawSprite(
-        //                 transform.Get().GetTransform(), // Transform
-        //                 sprite.Get(),                   // SpriteRendererComponent
-        //                 (int)id.Get().ID                // Entity ID
-        //             );
-        //         }
-        //     });
-
-        //     Exodia::Renderer2D::EndScene();
-        // }
     }
 
     void RTypeLayer::OnImGUIRender()
@@ -250,6 +198,7 @@ namespace Exodia {
 
             if (tag.Get().Tag.rfind("Player", 0) != std::string::npos && script.Get().Instance != nullptr) {
                 script.Get().Instance->OnKeyPressed(key);
+                network.SendEvent(key);
             }
         });
         return true;

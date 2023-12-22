@@ -108,7 +108,14 @@ namespace Exodia {
             _World[GAME]->Subscribe<Events::OnCollisionEntered>(collisionSystem);
 
             // Create the entities
-            CreatePlayer(_World);
+            for (int i = 0; i < 4; i++)
+            {
+                CreatePlayer(_World, i);
+                Entity *player = _World[GAME]->GetEntityByName("Player_" + std::to_string(i));
+
+                _network.SendComponentOf(player, "TransformComponent");
+            }
+
             CreatePataPata(_World);
             CreateBackground(_World);
             CreateStars(_World);
