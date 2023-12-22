@@ -393,7 +393,7 @@ namespace Exodia::Network {
         std::vector<char> copiedBuffer(message.begin(), message.begin() + size);
         Header header = Header::fillHeader(copiedBuffer);
         // std::cout << "Command: " << header.VerbaliseCommand() << " Timestamp: " << header.getTimestamp() << " Id: " << header.getId() << " Size: " << header.getSize() << std::endl;
-        EXODIA_CORE_INFO("{0}", Header::toStr(header));
+        EXODIA_CORE_INFO("{0}", header.toString());
 
         std::vector<char> content;
         if (header.getSize() > 0)

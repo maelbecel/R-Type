@@ -84,10 +84,10 @@ namespace Exodia {
         _World[MENU]->RegisterSystem(new MovingSystem(1.5f));
         _World[GAME]->RegisterSystem(collisionSystem);
 
-        RType::EntityEventSubscriber *subscribe = new RType::EntityEventSubscriber(network);
+        //RType::EntityEventSubscriber *subscribe = new RType::EntityEventSubscriber(network);
 
-        _World[GAME]->Subscribe<Events::OnEntityCreated>(subscribe);
-        _World[GAME]->Subscribe<Events::OnEntityDestroyed>(subscribe);
+        //_World[GAME]->Subscribe<Events::OnEntityCreated>(subscribe);
+        //_World[GAME]->Subscribe<Events::OnEntityDestroyed>(subscribe);
         _World[GAME]->Subscribe<Events::OnCollisionEntered>(collisionSystem);
 
         // Create the camera entity
@@ -167,7 +167,6 @@ namespace Exodia {
 
         dispatcher.Dispatch<KeyPressedEvent>(BIND_EVENT_FN(RTypeLayer::OnKeyPressedEvent));
         dispatcher.Dispatch<KeyReleasedEvent>(BIND_EVENT_FN(RTypeLayer::OnKeyReleasedEvent));
-
     }
 
     bool RTypeLayer::OnKeyPressedEvent(KeyPressedEvent &event) {
