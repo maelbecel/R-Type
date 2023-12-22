@@ -106,7 +106,7 @@ namespace Exodia {
         // CreatePataPata(_World);
 
         // Create background
-        // CreateBackground(_World);
+        CreateBackground(_World);
 
         Entity *cameraMenu = _World[MENU]->CreateEntity("Camera");
         auto &camera_ = cameraMenu->AddComponent<CameraComponent>().Get();
@@ -174,7 +174,7 @@ namespace Exodia {
 
             if (tag.Get().Tag.rfind("Player", 0) != std::string::npos && script.Get().Instance != nullptr) {
                 script.Get().Instance->OnKeyPressed(key);
-                network.SendEvent(key);
+                network.SendEvent(key, 1);
             }
         });
         return true;
@@ -192,6 +192,7 @@ namespace Exodia {
 
             if (tag.Get().Tag.rfind("Player", 0) != std::string::npos && script.Get().Instance != nullptr) {
                 script.Get().Instance->OnKeyReleased(key);
+                network.SendEvent(key, 0);
             }
         });
         return false;

@@ -72,7 +72,7 @@ namespace Exodia {
         }
         else if (_State == State::DEAD) {
             auto animation = GetComponent<Animation>();
-            // auto sprite = GetComponent<SpriteRendererComponent>();
+            auto sprite = GetComponent<SpriteRendererComponent>();
 
             if (animation.Get().CurrentFrame == animation.Get().MaxFrame - 1) {
                 EXODIA_INFO("Player is respawn");

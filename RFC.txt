@@ -86,8 +86,10 @@ ClientCommand
     0x82 - Disconnect
     0x8a - Send events
         Content: [Event]
-    0x8b - Send important events MUST get an acknowledge
-        Content: [Event]
+    0x8b - Send events release the bool is true if the event is a key press false if it is a key release
+        Content: [Event][Bool]
+    0x8c - Send important events the bool is true if the event is a key press false if it is a key release MUST get an acknowledge
+        Content: [Event][Bool]
 
 Usage
 

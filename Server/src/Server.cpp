@@ -208,7 +208,7 @@ namespace Exodia {
                 }
             }
 
-            std::queue<std::pair<uint32_t, asio::ip::udp::endpoint>> events = _network.GetEvents();
+            std::queue<std::pair<std::pair<uint32_t, bool>, asio::ip::udp::endpoint>> events = _network.GetEvents();
             while (!events.empty()) {
                 auto event = events.front();
                 events.pop();
@@ -218,8 +218,11 @@ namespace Exodia {
                     (void)entity;
 
                     if (tag.Get().Tag.rfind("Player_" + player_id, 0) != std::string::npos && script.Get().Instance != nullptr) {
-                        std::cout << "Event received: " << event.first << std::endl;
-                        script.Get().Instance->OnKeyReleased(event.first);
+                        std::cout << "Event received: " << event.first.first << std::endl;
+                        if (event.first.second)
+                            script.Get().Instance->OnKeyPressed(event.first.first);
+                        else
+                            script.Get().Instance->OnKeyReleased(event.first.first);
                     }
                 });
             }
