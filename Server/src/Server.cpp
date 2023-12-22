@@ -114,6 +114,7 @@ namespace Exodia {
                 Entity *player = _World[GAME]->GetEntityByName("Player_" + std::to_string(i));
 
                 _network.SendComponentOf(player, "TransformComponent");
+                _network.SendComponentOf(player, "CircleRendererComponent");
             }
 
             CreatePataPata(_World);

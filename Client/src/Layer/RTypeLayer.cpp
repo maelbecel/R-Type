@@ -109,7 +109,7 @@ namespace Exodia {
         CreatePataPata(_World);
 
         // Create background
-        CreateBackground(_World);
+        // CreateBackground(_World);
 
         Entity *cameraMenu = _World[MENU]->CreateEntity("Camera");
         auto &camera_ = cameraMenu->AddComponent<CameraComponent>().Get();
@@ -119,7 +119,7 @@ namespace Exodia {
         cameraMenu->AddComponent<RigidBody2DComponent>().Get().Type = RigidBody2DComponent::BodyType::Static;
 
         // Create stars
-        CreateStars(_World);
+        // CreateStars(_World);
 
         // Create the camera
         _CameraController.SetZoomLevel(5.0f);
@@ -146,6 +146,12 @@ namespace Exodia {
         // Update
         _CameraController.OnUpdate(ts);
 
+        _worldNetwork->ForEach<CircleRendererComponent>([&](Entity *entity, ComponentHandle<CircleRendererComponent> circle) {
+            (void) entity;
+            (void) circle;
+            std::cout << "Rond" << std::endl;
+        });
+        std::cout << "Update" << std::endl;
         if (_currentScene == GAME) {
             auto pata = _World[GAME]->GetEntityByName("Pata-pata");
             if (pata == nullptr) {

@@ -228,7 +228,7 @@ namespace Exodia::Network {
 
         std::function<Exodia::IComponentContainer *(Exodia::Buffer)> func = Project::GetActive()->GetComponentFactory(component_name);
         if (!func) {
-            std::string error = "Network::createEntity() - component " + component_name + " not found !";
+            std::string error = "Network::ReceiveComponentOF() - component " + component_name + " not found !";
             EXODIA_CORE_ERROR(error);
             return;
         }
