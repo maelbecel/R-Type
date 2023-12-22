@@ -330,12 +330,13 @@ namespace Exodia::Network {
      *
      * @param event (Type: uint32_t) The event to send
     */
-    void Network::SendEvent(uint32_t event) {
+    void Network::SendEvent(uint32_t event, bool isPressed) {
         Exodia::Network::Packet packet(0x82);
-        std::vector<char> buffer(sizeof(uint32_t));
+        std::vector<char> buffer(sizeof(uint32_t) + sizeof(bool));
         size_t offset = 0;
 
         offset = FillData(buffer, offset, &event, sizeof(uint32_t));
+        offset = FillData(buffer, offset, &isPressed, sizeof(bool));
         packet.SetContent(buffer);
         if (_connections.size() > 0) {
            for (auto &connection : _connections)
@@ -358,17 +359,19 @@ namespace Exodia::Network {
         (void) message;
         float Timestamp = 0;
         uint32_t event = 0;
+        bool isPressed = false;
 
-        if (size != sizeof(uint32_t)) {
+        if (size != sizeof(uint32_t) + sizeof(bool)) {
             EXODIA_CORE_ERROR("Network::ReceiveEvent() - Packet size is not correct !");
             return;
         }
         std::memcpy(&event, message.data(), sizeof(uint32_t));
+        std::memcpy(&isPressed, message.data() + sizeof(uint32_t), sizeof(bool));
 
         std::cout << "Event: " << event << std::endl;
 
-        std::pair<uint32_t, asio::ip::udp::endpoint> eventPair;
-        eventPair.first = event;
+        std::pair<std::pair<uint32_t, bool>, asio::ip::udp::endpoint> eventPair;
+        eventPair.first = std::make_pair(event, isPressed);
         eventPair.second = senderEndpoint;
         _events.push(eventPair);
 
@@ -390,7 +393,7 @@ namespace Exodia::Network {
         std::vector<char> copiedBuffer(message.begin(), message.begin() + size);
         Header header = Header::fillHeader(copiedBuffer);
         // std::cout << "Command: " << header.VerbaliseCommand() << " Timestamp: " << header.getTimestamp() << " Id: " << header.getId() << " Size: " << header.getSize() << std::endl;
-        EXODIA_CORE_INFO("{0}", Header::toStr(header));
+        EXODIA_CORE_INFO("{0}", header.toString());
 
         std::vector<char> content;
         if (header.getSize() > 0)
@@ -408,6 +411,7 @@ namespace Exodia::Network {
         commands[0x81] = std::bind(&Network::ReceiveConnect, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4);        // Ask for connection
         commands[0x82] = std::bind(&Network::ReceiveEvent, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4);          // Send an event
         commands[0x0c] = std::bind(&Network::ReceiveComponentOf, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4);     // Send one component of an entity
+        commands[0x0e] = std::bind(&Network::ReceiveDeleteEntity, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4);        // Send delete entity
         commands[header.getCommand()](content, header.getSize(), senderEndpoint, header);
     }
 };

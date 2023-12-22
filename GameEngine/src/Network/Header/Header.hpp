@@ -135,38 +135,46 @@ namespace Exodia {
                 /**
                  * @brief Return string representation of a command
                  *
-                 * @param header (Type: Exodia::Network::Header) The header of the command
-                 *
                  * @return std::string String representation of the command
                 */
-                static std::string VerbaliseCommand(const Header &header)
+                std::string VerbaliseCommand() const
                 {
-                    std::string command;
                     std::unordered_map<unsigned char, std::string> commands;
+                    std::string command;
+
                     commands[0x00] = "Packet info";
                     commands[0x01] = "Acknowledgement";
                     commands[0x02] = "Accept client connection";
                     commands[0x81] = "Ask for connection";
                     commands[0x82] = "New Event";
                     commands[0x0c] = "Create component";
-                    command = commands[header.getCommand()];
+                    command = commands[getCommand()];
+
                     if (command.empty())
                         command = "Unknown command";
+
                     return command;
                 }
 
-                static std::string toStr(const Header &header) {
+                std::string toString()
+                {
                     std::string str;
-                    str += "Command: '" + VerbaliseCommand(header) + "'";
-                    char buffer[80];
-                    str += " Timestamp: " + std::string(buffer);
-                    str += " ID: " + std::to_string(header._id);
-                    str += " Size: " + std::to_string(header._size);
+
+                    str += "Header: ";
+                    str += "Command: '" + VerbaliseCommand() + "'";
+                    str += " ID: "     + std::to_string(_id);
+                    str += " Size: "   + std::to_string(_size) + "\n";
+
                     return str;
                 }
 
-                friend std::ostream& operator<<(std::ostream& os, const Header& header) {
-                    os << toStr(header);
+                friend std::ostream& operator<<(std::ostream &os, const Header &header)
+                {
+                    os << "Header: ";
+                    os << "Command: '" << header.VerbaliseCommand() << "'";
+                    os << " ID: "      << header._id;
+                    os << " Size: "    << header._size << std::endl;
+
                     return os;
                 }
 

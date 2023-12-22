@@ -24,6 +24,8 @@
 
     #include "src/System/AnimationSystem.hpp"
 
+    #include "src/Event/EntityEventSubscriber.hpp"
+
     #include "src/Entity/CreatePataPata.hpp"
     #include "src/Entity/CreatePlayer.hpp"
     #include "src/Entity/CreateBackground.hpp"

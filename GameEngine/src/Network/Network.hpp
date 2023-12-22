@@ -72,7 +72,7 @@ namespace Exodia {
                 void SendComponentOf(Entity *entity, std::string component_name);  // 0x0c
                 void SendDeleteEntity(Entity *entity);                             // 0x0e
                 void SendAskConnect(const std::string &ip, short port);            // 0x81
-                void SendEvent(uint32_t event);                                   // 0x82
+                void SendEvent(uint32_t event, bool isPressed);                    // 0x82
                 void Splitter(const std::vector<char> &message, size_t size, asio::ip::udp::endpoint senderEndpoint);
 
                 /**
@@ -91,8 +91,8 @@ namespace Exodia {
                  *
                  * @return a copy of the queue of uint32_t representing the events received
                 */
-                std::queue<std::pair<uint32_t, asio::ip::udp::endpoint>> GetEvents() {
-                    std::queue<std::pair<uint32_t, asio::ip::udp::endpoint>> flushedEvents = std::move(_events);
+                std::queue<std::pair<std::pair<uint32_t, bool>, asio::ip::udp::endpoint>> GetEvents() {
+                    std::queue<std::pair<std::pair<uint32_t, bool>, asio::ip::udp::endpoint>> flushedEvents = std::move(_events);
                     return flushedEvents;
                 }
 
@@ -129,7 +129,7 @@ namespace Exodia {
                 std::unordered_map<std::string, Connection> _connections;
                 Connection _server_connection;
                 IOContextManager &_ioContextManager;
-                std::queue<std::pair<uint32_t, asio::ip::udp::endpoint>> _events;
+                std::queue<std::pair<std::pair<uint32_t, bool>, asio::ip::udp::endpoint>> _events;
 
         }; // class Network
 

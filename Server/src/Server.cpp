@@ -95,6 +95,8 @@ namespace Exodia {
             _World[GAME]->OnViewportResize(1600, 900);
             _World[MENU]->OnViewportResize(1600, 900);
 
+            RType::EntityEventSubscriber *subscribe = new RType::EntityEventSubscriber(_network);
+
             _World[GAME]->RegisterSystem(new AnimationSystem());
             _World[GAME]->RegisterSystem(new ScriptSystem());
             _World[GAME]->RegisterSystem(new MovingSystem(1.5f));
@@ -105,6 +107,9 @@ namespace Exodia {
 
             CollisionSystem *collisionSystem = new CollisionSystem();
             _World[GAME]->RegisterSystem(collisionSystem);
+
+            _World[GAME]->Subscribe<Events::OnEntityCreated>(subscribe);
+            _World[GAME]->Subscribe<Events::OnEntityDestroyed>(subscribe);
             _World[GAME]->Subscribe<Events::OnCollisionEntered>(collisionSystem);
 
             // Create the entities
@@ -208,7 +213,7 @@ namespace Exodia {
                 }
             }
 
-            std::queue<std::pair<uint32_t, asio::ip::udp::endpoint>> events = _network.GetEvents();
+            std::queue<std::pair<std::pair<uint32_t, bool>, asio::ip::udp::endpoint>> events = _network.GetEvents();
             while (!events.empty()) {
                 auto event = events.front();
                 events.pop();
@@ -218,8 +223,11 @@ namespace Exodia {
                     (void)entity;
 
                     if (tag.Get().Tag.rfind("Player_" + player_id, 0) != std::string::npos && script.Get().Instance != nullptr) {
-                        std::cout << "Event received: " << event.first << std::endl;
-                        script.Get().Instance->OnKeyReleased(event.first);
+                        std::cout << "Event received: " << event.first.first << std::endl;
+                        if (event.first.second)
+                            script.Get().Instance->OnKeyPressed(event.first.first);
+                        else
+                            script.Get().Instance->OnKeyReleased(event.first.first);
                     }
                 });
             }
