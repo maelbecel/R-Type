@@ -232,16 +232,10 @@ namespace Exodia {
 
     std::function<IComponentContainer *(Buffer)> Project::GetComponentFactory(std::string component)
     {
-        if (!this) {
-            return nullptr;
-        }
-
         auto it = _ComponentFactory.find(component);
-        if (it == _ComponentFactory.end())
-        {
-            return nullptr;
-        }
 
+        if (it == _ComponentFactory.end())
+            return nullptr;
         return it->second;
     }
 };

@@ -93,6 +93,18 @@ namespace Exodia {
                     return flushedEvents;
                 }
 
+                uint32_t ConnectionPlace(asio::ip::udp::endpoint endpoint)
+                {
+                    uint32_t i = 0;
+
+                    for (auto &connection : _connections) {
+                        if (connection.second.GetEndpoint() == endpoint)
+                            return i;
+                        i++;
+                    }
+                    return -1;
+                }
+
             private:
                 /**
                  * @brief Use to connect to a user with the ip and port given
