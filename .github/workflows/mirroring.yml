@@ -16,6 +16,8 @@ jobs:
     runs-on: ubuntu-latest
     container: epitechcontent/epitest-docker
     timeout-minutes: 20
+    env:
+      VCPKG_ROOT: ${{ github.workspace }}/vcpkg
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -31,7 +33,7 @@ jobs:
           cmake --version
       - name: Compiling...
         run: |
-          mkdir build && cd build && cmake .. -G Ninja -DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake && ninja && cd ..
+          mkdir build && cd build && cmake .. -G Ninja && ninja && cd ..
       - name: Check if the executable exists
         run: |
           if [ -f r-type_client ] && [ -f r-type_server ]; then exit 0; else exit 1; fi
@@ -41,6 +43,8 @@ jobs:
     name: Compiling on Windows...
     runs-on: windows-latest
     timeout-minutes: 20
+    env:
+      VCPKG_ROOT: ${{ github.workspace }}/vcpkg
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -56,10 +60,7 @@ jobs:
           cmake --version
       - name: Set VCPKG_ROOT and Run CMake
         run: |
-          $VCPKG_ROOT = "D:\a\R-Type\R-Type\vcpkg"
-          [Environment]::SetEnvironmentVariable("VCPKG_ROOT", $VCPKG_ROOT, "User")
-          cmake -S . -B build
-        working-directory: D:\a\R-Type\R-Type
+          mkdir build && cd build && cmake .. && cmake --build . && cd ..
 #      - name: Check if the executable exists
 #        run: |
 #          IF (Test-Path .\Release\r-type_client.exe) -and (Test-Path .\Release\r-type_server.exe) { exit 0 }
