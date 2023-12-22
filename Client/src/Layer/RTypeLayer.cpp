@@ -179,7 +179,8 @@ namespace Exodia {
         int key = event.GetKeyCode();
 
         EXODIA_INFO("pressed {0}", key);
-        _World[_currentScene]->GetWorld().ForEach<ScriptComponent, TagComponent>([&](UNUSED(Entity *entity), auto script, auto tag) {
+        _World[_currentScene]->GetWorld().ForEach<ScriptComponent, TagComponent>([&](Entity *entity, auto script, auto tag) {
+            (void)entity;
             auto &sc = script.Get();
             auto &tc = tag.Get();
 
@@ -199,7 +200,8 @@ namespace Exodia {
 
         EXODIA_INFO("released {0}", key);
 
-        _World[_currentScene]->GetWorld().ForEach<ScriptComponent, TagComponent>([&](UNUSED(Entity *entity), auto script, auto tag) {
+        _World[_currentScene]->GetWorld().ForEach<ScriptComponent, TagComponent>([&](Entity *entity, auto script, auto tag) {
+            (void)entity;
             auto &sc = script.Get();
             auto &tc = tag.Get();
 

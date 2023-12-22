@@ -220,7 +220,8 @@ namespace Exodia {
                 events.pop();
                 int player_id = _network.ConnectionPlace(event.second);
 
-                _World[_currentScene]->GetWorld().ForEach<ScriptComponent, TagComponent>([&](UNUSED(Entity *entity), auto script, auto tag) {
+                _World[_currentScene]->GetWorld().ForEach<ScriptComponent, TagComponent>([&](Entity *entity, auto script, auto tag) {
+                    (void)entity;
                     auto &sc = script.Get();
                     auto &tc = tag.Get();
 
