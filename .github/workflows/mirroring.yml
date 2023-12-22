@@ -4,7 +4,7 @@ on:
     branches:
       - main
       - dev
-      - fix/Compilation
+      - fix/Compilation-windows
 
 env:
   MIRROR_URL:
@@ -49,6 +49,10 @@ jobs:
           git clone https://github.com/microsoft/vcpkg.git
           cd vcpkg
           .\bootstrap-vcpkg.bat
+      - name: Environement variables
+        run: |
+          set VCPKG_ROOT="D:\a\R-Type\R-Type\vcpkg
+          set PATH=%VCPKG_ROOT%;%PATH%
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v1
       - name: Setup CMake
