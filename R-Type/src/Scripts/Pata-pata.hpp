@@ -51,7 +51,11 @@ namespace Exodia {
                 bullet->AddComponent<ParentComponent>().Get().Parent = GetComponent<IDComponent>().Get().ID;
                 bullet->GetComponent<TransformComponent>().Get().Scale = { 0.5f, 0.5f, 0.0f };
 
+                if (HandleEntity->GetWorld()->GetEntityByTag("Player_0") == nullptr)
+                    return;
+
                 auto player = HandleEntity->GetWorld()->GetEntityByTag("Player_0")->GetComponent<TransformComponent>();
+
                 auto body_bullet = bullet->AddComponent<RigidBody2DComponent>();
 
                 body_bullet.Get().Type = RigidBody2DComponent::BodyType::Dynamic;

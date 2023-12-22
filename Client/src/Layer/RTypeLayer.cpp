@@ -174,12 +174,15 @@ namespace Exodia {
         int key = event.GetKeyCode();
 
         EXODIA_INFO("pressed {0}", key);
-        _World[_currentScene]->GetWorld().ForEach<ScriptComponent, TagComponent>([&](Entity *entity, auto script, auto tag) {
-            (void)entity;
+        _World[_currentScene]->GetWorld().ForEach<ScriptComponent, TagComponent>([&](UNUSED(Entity *entity), auto script, auto tag) {
+            auto &sc = script.Get();
+            auto &tc = tag.Get();
 
-            if (tag.Get().Tag.rfind("Player", 0) != std::string::npos && script.Get().Instance != nullptr) {
-                script.Get().Instance->OnKeyPressed(key);
-                network.SendEvent(key, 1);
+            //TODO: Check if player{client_id}
+            if (tc.Tag.rfind("Player", 0) != std::string::npos && sc.Instance != nullptr) {
+                sc.Instance->OnKeyPressed(key);
+
+                network.SendEvent(key, true);
             }
         });
         return true;
@@ -191,12 +194,15 @@ namespace Exodia {
 
         EXODIA_INFO("released {0}", key);
 
-        _World[_currentScene]->GetWorld().ForEach<ScriptComponent, TagComponent>([&](Entity *entity, auto script, auto tag) {
-            (void)entity;
+        _World[_currentScene]->GetWorld().ForEach<ScriptComponent, TagComponent>([&](UNUSED(Entity *entity), auto script, auto tag) {
+            auto &sc = script.Get();
+            auto &tc = tag.Get();
 
-            if (tag.Get().Tag.rfind("Player", 0) != std::string::npos && script.Get().Instance != nullptr) {
-                script.Get().Instance->OnKeyReleased(key);
-                network.SendEvent(key, 0);
+            // TODO: Check if player{client_id}
+            if (tc.Tag.rfind("Player", 0) != std::string::npos && sc.Instance != nullptr) {
+                sc.Instance->OnKeyReleased(key);
+
+                network.SendEvent(key, false);
             }
         });
         return false;

@@ -118,6 +118,8 @@ namespace Exodia {
                 CreatePlayer(_World, i);
                 Entity *player = _World[GAME]->GetEntityByName("Player_" + std::to_string(i));
 
+                EXODIA_CORE_INFO("Player_{}", i);
+
                 _network.SendComponentOf(player, "TransformComponent");
                 _network.SendComponentOf(player, "CircleRendererComponent");
             }
