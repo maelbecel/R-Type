@@ -96,6 +96,7 @@ namespace Exodia {
                     return flushedEvents;
                 }
 
+                //Need to modify this function to have a good index
                 uint32_t ConnectionPlace(asio::ip::udp::endpoint endpoint)
                 {
                     uint32_t i = 0;
@@ -105,7 +106,7 @@ namespace Exodia {
                             return i;
                         i++;
                     }
-                    return -1;
+                    return 0;
                 }
 
             private:

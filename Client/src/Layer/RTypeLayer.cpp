@@ -16,7 +16,9 @@ namespace Exodia {
     // Constructor & Destructor //
     //////////////////////////////
 
-    RTypeLayer::RTypeLayer() : Layer("R-Type"), network(_worldNetwork, ioContextManager, 8083), _CameraController(1600.0f / 900.0f) {};
+    RTypeLayer::RTypeLayer() : Layer("R-Type"), _CameraController(1600.0f / 900.0f) {
+        std::cout << "RTypeLayer constructor" << std::endl;
+    };
 
     /////////////
     // Methods //
@@ -42,10 +44,16 @@ namespace Exodia {
         RegisterComponent("Animation", [](UNUSED(Buffer data)) -> IComponentContainer * { return new ComponentContainer<Animation>(); });
         RegisterComponent("Clock", [](UNUSED(Buffer data)) -> IComponentContainer * { return new ComponentContainer<Clock>(); });
 
-        // if (commandLine.Count > 1) {
-        //     Application::Get().Close();
-        //     return;
-        // }
+        auto commandLine = Application::Get().GetSpecification().CommandLineArgs;
+        int port = 8083; // Default port
+        if (commandLine.Count > 1) {
+            port = std::stoi(commandLine[1]);
+            if (port < 1024 || port > 65535) {
+                Application::Get().Close();
+                return;
+            }
+        }
+
 
         FramebufferSpecification fbSpec;
 
@@ -59,17 +67,14 @@ namespace Exodia {
 
         _Framebuffer = Framebuffer::Create(fbSpec);
 
-        // Server main
-        //Exodia::Network::IOContextManager ioContextManager;
-
-        // Define a local endpoint to listen on
-        // asio::ip::udp::endpoint localEndpoint(asio::ip::address::from_string("127.0.0.1"), 8082);
-        network.Loop();
-        network.SendAskConnect("0.0.0.0", 8082);
+        this->network = std::make_unique<Exodia::Network::Network>(_worldNetwork, ioContextManager, port);
+        network->Loop();
+        network->SendAskConnect("127.0.0.1", 8082);
 
         // Create world
         _currentScene = GAME;
         _World[GAME] = CreateRef<Scene>();
+        network->SetWorld(_World[_currentScene]->GetWorldPtr());
         _World[MENU] = CreateRef<Scene>();
         _World[GAME]->OnViewportResize(1600, 900);
         _World[MENU]->OnViewportResize(1600, 900);
@@ -121,7 +126,6 @@ namespace Exodia {
         // Create the camera
         _CameraController.SetZoomLevel(5.0f);
         _World[_currentScene]->OnRuntimeStart();
-        network.SetWorld(_World[_currentScene]->GetWorldPtr());
     }
 
     void RTypeLayer::OnDetach()
@@ -174,7 +178,7 @@ namespace Exodia {
 
             if (tag.Get().Tag.rfind("Player", 0) != std::string::npos && script.Get().Instance != nullptr) {
                 script.Get().Instance->OnKeyPressed(key);
-                network.SendEvent(key);
+                network->SendEvent(key);
             }
         });
         return true;
