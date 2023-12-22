@@ -216,7 +216,7 @@ namespace Exodia {
 
     void Scene::RenderScene()
     {
-        if (RendererAPI::IsGraphical() == false)
+        if (RendererAPI::GetAPI() == RendererAPI::API::None)
             return;
 
         _World->ForEach<TransformComponent, SpriteRendererComponent, IDComponent>([&](Entity *entity, auto transform, auto sprite, auto id) {
