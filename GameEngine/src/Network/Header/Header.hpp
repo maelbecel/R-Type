@@ -11,9 +11,9 @@
 #include <iostream>
 #include <vector>
 #include <cstring>
-#include <ctime>
-#include <arpa/inet.h>
 #include <iomanip>
+#define _CRT_SECURE_NO_WARNINGS
+    #include <ctime>
 
 #ifdef _WIN32
     #include <winsock2.h>
@@ -35,7 +35,11 @@ namespace Exodia {
 
                 Header(uint8_t command) : _command(command), _timestamp(0), _id(0), _size(0)
                 {
-                    _timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+                    using MillisecondsType = std::chrono::milliseconds::rep;
+
+                    MillisecondsType timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+
+                    _timestamp = static_cast<float>(timestamp);
                 };
                 /**
                  * @brief Construct a new Header object
@@ -138,7 +142,7 @@ namespace Exodia {
                 static std::string VerbaliseCommand(const Header &header)
                 {
                     std::string command;
-                    std::unordered_map<char, std::string> commands;
+                    std::unordered_map<unsigned char, std::string> commands;
                     commands[0x00] = "Packet info";
                     commands[0x01] = "Acknowledgement";
                     commands[0x02] = "Accept client connection";
@@ -154,10 +158,7 @@ namespace Exodia {
                 static std::string toStr(const Header &header) {
                     std::string str;
                     str += "Command: '" + VerbaliseCommand(header) + "'";
-                    std::time_t timestampAsTimeT = static_cast<std::time_t>(header._timestamp);
-                    std::tm* timeInfo = std::gmtime(&timestampAsTimeT);
                     char buffer[80];
-                    std::strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", timeInfo);
                     str += " Timestamp: " + std::string(buffer);
                     str += " ID: " + std::to_string(header._id);
                     str += " Size: " + std::to_string(header._size);

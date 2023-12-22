@@ -274,12 +274,12 @@ namespace Exodia::Network {
      *
      * @param event (Type: uint32_t) The event to send
     */
-    void Network::SendEvent(u_int32_t event) {
+    void Network::SendEvent(uint32_t event) {
         Exodia::Network::Packet packet(0x82);
-        std::vector<char> buffer(sizeof(u_int32_t));
+        std::vector<char> buffer(sizeof(uint32_t));
         size_t offset = 0;
 
-        offset = FillData(buffer, offset, &event, sizeof(u_int32_t));
+        offset = FillData(buffer, offset, &event, sizeof(uint32_t));
         packet.SetContent(buffer);
         if (_connections.size() > 0) {
            for (auto &connection : _connections)
