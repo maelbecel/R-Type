@@ -5,19 +5,27 @@
 ** Renderer2D
 */
 
+// GLM includes
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 // Exodia Renderer
 #include "Renderer2D.hpp"
 #include "Renderer/Renderer/RenderCommand.hpp"
+
+// Exodia Core include
+#include "Core/Buffer/Buffer.hpp"
 
 // Exodia Debug
 #include "Debug/Profiling.hpp"
 
 // External include
-#include <glm/gtc/matrix_transform.hpp>
+#include <cstring>
 
 namespace Exodia {
 
-    static Renderer2D::Renderer2DData *_Data; /* !< Renderer2D data */
+    static Scope<Renderer2D::Renderer2DData> _Data = nullptr; /* !< Renderer2D data */
 
     /////////////
     // Methods //
@@ -28,7 +36,7 @@ namespace Exodia {
         EXODIA_PROFILE_FUNCTION(); // Performance instrumentation profiling for the function
 
         // Initialize Renderer2D data and set default values
-        _Data = new Renderer2DData;
+        _Data = CreateScope<Renderer2D::Renderer2DData>();
         _Data->QuadVertexArray = VertexArray::Create();
         _Data->QuadVertexBuffer = VertexBuffer::Create(Renderer2DData::MaxVertices * sizeof(QuadVertex));
         _Data->QuadVertexBuffer->SetLayout({
@@ -86,11 +94,11 @@ namespace Exodia {
         _Data->LineVertexArray->AddVertexBuffer(_Data->LineVertexBuffer);
         _Data->LineVertexBufferBase = new LineVertex[_Data->MaxVertices];
 
-        _Data->WhiteTexture = Texture2D::Create(1, 1);
+        _Data->WhiteTexture = Texture2D::Create(TextureSpecification());
 
         uint32_t whiteTextureData = 0xffffffff;
 
-        _Data->WhiteTexture->SetData(&whiteTextureData, sizeof(uint32_t));
+        _Data->WhiteTexture->SetData(Buffer(&whiteTextureData, sizeof(uint32_t)));
 
         _Data->QuadShader = Shader::Create("./Assets/Shaders/Renderer2D_Quad.glsl");
         _Data->CircleShader = Shader::Create("./Assets/Shaders/Renderer2D_Circle.glsl");
@@ -110,20 +118,20 @@ namespace Exodia {
     {
         EXODIA_PROFILE_FUNCTION(); // Performance instrumentation profiling for the function
 
-        if (_Data->QuadVertexBufferBase != nullptr) {
+        if (_Data && _Data->QuadVertexBufferBase != nullptr) {
             delete[] _Data->QuadVertexBufferBase;
             _Data->QuadVertexBufferBase = nullptr;
         }
 
-        if (_Data != nullptr) {
-            delete _Data;
-            _Data = nullptr;
-        }
+        _Data = nullptr;
     }
 
     void Renderer2D::BeginScene(const OrthographicCamera &camera)
     {
         EXODIA_PROFILE_FUNCTION(); // Performance instrumentation profiling for the function
+
+        if (_Data == nullptr)
+            return;
 
         // Bind shader and set view projection matrix
         _Data->CameraBuffer.ViewProjection = camera.GetViewProjectionMatrix();
@@ -136,6 +144,9 @@ namespace Exodia {
     {
         EXODIA_PROFILE_FUNCTION(); // Performance instrumentation profiling for the function
 
+        if (_Data == nullptr)
+            return;
+
         _Data->CameraBuffer.ViewProjection = camera.GetProjection() * glm::inverse(transform);
         _Data->CameraUniformBuffer->SetData(&_Data->CameraBuffer, sizeof(CameraData));
 
@@ -145,6 +156,9 @@ namespace Exodia {
     void Renderer2D::BeginScene(const EditorCamera &camera)
     {
         EXODIA_PROFILE_FUNCTION(); // Performance instrumentation profiling for the function
+
+        if (_Data == nullptr)
+            return;
 
         _Data->CameraBuffer.ViewProjection = camera.GetViewProjection();
         _Data->CameraUniformBuffer->SetData(&_Data->CameraBuffer, sizeof(CameraData));
@@ -156,6 +170,9 @@ namespace Exodia {
     {
         EXODIA_PROFILE_FUNCTION(); // Performance instrumentation profiling for the function
 
+        if (_Data == nullptr)
+            return;
+
         Flush();
     }
 
@@ -163,7 +180,7 @@ namespace Exodia {
     {
         if (_Data->QuadIndexCount) {
             // Calculate data size
-            uint32_t dataSize = (uint8_t *)_Data->QuadVertexBufferPtr - (uint8_t *)_Data->QuadVertexBufferBase;
+            uint32_t dataSize = (uint32_t)((uint8_t *)_Data->QuadVertexBufferPtr - (uint8_t *)_Data->QuadVertexBufferBase);
 
             _Data->QuadVertexBuffer->SetData(_Data->QuadVertexBufferBase, dataSize);
 
@@ -181,7 +198,7 @@ namespace Exodia {
 
         if (_Data->CircleIndexCount) {
             // Calculate data size
-            uint32_t dataSize = (uint8_t *)_Data->CircleVertexBufferPtr - (uint8_t *)_Data->CircleVertexBufferBase;
+            uint32_t dataSize = (uint32_t)((uint8_t *)_Data->CircleVertexBufferPtr - (uint8_t *)_Data->CircleVertexBufferBase);
 
             _Data->CircleVertexBuffer->SetData(_Data->CircleVertexBufferBase, dataSize);
 
@@ -197,7 +214,7 @@ namespace Exodia {
 
         if (_Data->LineVertexCount) {
             // Calculate data size
-            uint32_t dataSize = (uint8_t *)_Data->LineVertexBufferPtr - (uint8_t *)_Data->LineVertexBufferBase;
+            uint32_t dataSize = (uint32_t)((uint8_t *)_Data->LineVertexBufferPtr - (uint8_t *)_Data->LineVertexBufferBase);
 
             _Data->LineVertexBuffer->SetData(_Data->LineVertexBufferBase, dataSize);
 
@@ -215,7 +232,7 @@ namespace Exodia {
 
     void Renderer2D::ResetStats()
     {
-        Memset(&_Data->Stats, 0, sizeof(Statistics));
+        std::memset(&_Data->Stats, 0, sizeof(Statistics));
     }
 
     void Renderer2D::FlushAndReset()
@@ -306,6 +323,9 @@ namespace Exodia {
     void Renderer2D::DrawQuad(const glm::mat4 &transform, const Ref<Texture2D> &texture, float tilingFactor, const glm::vec4 &tintColor, int entityID)
     {
         EXODIA_PROFILE_FUNCTION(); // Performance instrumentation profiling for the function
+
+        if (texture == nullptr)
+            return DrawQuad(transform, tintColor, entityID);
 
         constexpr uint32_t quadVertexCount = 4;
         constexpr glm::vec2 textureCoords[] = {

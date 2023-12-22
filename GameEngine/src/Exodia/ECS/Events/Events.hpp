@@ -10,6 +10,10 @@
 
     // Exodia Utils includes
     #include "Utils/CrossPlatform.hpp"
+    #include "Utils/TypeIndex.hpp"
+
+    // External includes
+    #include <string>
 
 namespace Exodia {
 
@@ -19,28 +23,51 @@ namespace Exodia {
     class ComponentHandle;
 
     namespace Events {
-        struct EXODIA_API OnEntityCreated
-        {
+        struct OnEntityCreated {
             Exodia::Entity *Entity;
         };
 
-        struct EXODIA_API OnEntityDestroyed
-        {
+        struct OnEntityDestroyed {
             Exodia::Entity *Entity;
         };
 
         template<typename Component>
-        struct EXODIA_API OnComponentAdded
-        {
-            Exodia::Entity                      *Entity;
+        struct OnComponentAdded {
+            Exodia::Entity                    *Entity;
             Exodia::ComponentHandle<Component> AddedComponent;
         };
 
+        struct OnComponentAddedNoTemplate {
+            Exodia::Entity *Entity;
+            std::string     ComponentType;
+        };
+
         template<typename Component>
-        struct EXODIA_API OnComponentRemoved
-        {
+        struct OnComponentRemoved {
             Exodia::Entity                    *Entity;
             Exodia::ComponentHandle<Component> RemovedComponent;
+        };
+
+        struct OnComponentRemovedNoTemplate {
+            Exodia::Entity *Entity;
+            std::string     ComponentType;
+        };
+
+        struct OnCollisionEntered {
+            Exodia::Entity *EntityA;
+            Exodia::Entity *EntityB;
+        };
+
+        struct OnHoveredEnter {
+            Exodia::Entity *Entity;
+        };
+
+        struct OnHoveredExit {
+            Exodia::Entity *Entity;
+        };
+
+        struct OnClick {
+            Exodia::Entity *Entity;
         };
     };
 };

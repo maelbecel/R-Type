@@ -16,6 +16,9 @@
 #include "Core/Key/KeyCodes.hpp"
 #include "Core/Key/Input.hpp"
 
+// External includes
+#include <algorithm>
+
 namespace Exodia {
 
     //////////////////////////////
@@ -30,24 +33,24 @@ namespace Exodia {
 
     void OrthographicCameraController::OnUpdate(Timestep ts)
     {
-        if (Input::IsKeyPressed(EXODIA_KEY_LEFT)) {
+        if (Input::IsKeyPressed(Exodia::Key::LEFT)) {
             _CameraPos.x -= cos(glm::radians(_CameraRotation)) * _CameraTranslationSpeed * ts;
             _CameraPos.y -= sin(glm::radians(_CameraRotation)) * _CameraTranslationSpeed * ts;
-        } else if (Input::IsKeyPressed(EXODIA_KEY_RIGHT)) {
+        } else if (Input::IsKeyPressed(Exodia::Key::RIGHT)) {
             _CameraPos.x += cos(glm::radians(_CameraRotation)) * _CameraTranslationSpeed * ts;
             _CameraPos.y += sin(glm::radians(_CameraRotation)) * _CameraTranslationSpeed * ts;
-        } else if (Input::IsKeyPressed(EXODIA_KEY_UP)) {
+        } else if (Input::IsKeyPressed(Exodia::Key::UP)) {
             _CameraPos.x += -sin(glm::radians(_CameraRotation)) * _CameraTranslationSpeed * ts;
             _CameraPos.y += cos(glm::radians(_CameraRotation)) * _CameraTranslationSpeed * ts;
-        } else if (Input::IsKeyPressed(EXODIA_KEY_DOWN)) {
+        } else if (Input::IsKeyPressed(Exodia::Key::DOWN)) {
             _CameraPos.x -= -sin(glm::radians(_CameraRotation)) * _CameraTranslationSpeed * ts;
             _CameraPos.y -= cos(glm::radians(_CameraRotation)) * _CameraTranslationSpeed * ts;
         }
 
         if (_Rotation) {
-            if (Input::IsKeyPressed(EXODIA_KEY_A))
+            if (Input::IsKeyPressed(Exodia::Key::A))
                 _CameraRotation += _CameraRotationSpeed * ts;
-            else if (Input::IsKeyPressed(EXODIA_KEY_E))
+            else if (Input::IsKeyPressed(Exodia::Key::E))
                 _CameraRotation -= _CameraRotationSpeed * ts;
 
             if (_CameraRotation > 180.0f)
@@ -91,7 +94,9 @@ namespace Exodia {
         EXODIA_PROFILE_FUNCTION(); // Performance instrumentation profiling for the function
 
         _ZoomLevel -= event.GetYOffset() * 0.25f;
-        _ZoomLevel = std::max(_ZoomLevel, 0.25f);
+
+        #undef max
+        _ZoomLevel  = std::max(_ZoomLevel, 0.25f);
 
         CalculateView();
         return false;

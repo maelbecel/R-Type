@@ -8,6 +8,9 @@
 #ifndef ENTITY_HPP_
     #define ENTITY_HPP_
 
+    // Exodia Core includes
+    #include "Core/ID/UUID.hpp"
+
     // Exodia ECS Component includes
     #include "Component/ComponentHandle.hpp"
 
@@ -19,6 +22,7 @@
 
     // Exodia Utils includes
     #include "Utils/CrossPlatform.hpp"
+    #include "Utils/Memory.hpp"
 
     // External includes
     #include <unordered_map>
@@ -29,7 +33,7 @@ namespace Exodia {
 
     class World;
 
-    class EXODIA_API Entity {
+    class Entity {
 
         /////////////
         // Defines //
@@ -43,7 +47,8 @@ namespace Exodia {
         //////////////////////////////
         public:
 
-            Entity(World *world, uint64_t id);
+            Entity();
+            Entity(World *world, uint64_t id = UUID());
 
             ~Entity();
 
@@ -55,10 +60,12 @@ namespace Exodia {
             template<typename Component, typename ...Args>
             ComponentHandle<Component> AddComponent(Args && ...args);
 
+            void AddComponent(IComponentContainer *component);
+
             template<typename Component>
             bool RemoveComponent()
             {
-                auto found = _Components.find(GetTypeIndex<Component>());
+                auto found = _Components.find(GetTypeName<Component>());
 
                 if (found != _Components.end()) {
                     found->second->Removed(this);
@@ -70,6 +77,8 @@ namespace Exodia {
                 }
                 return false;
             }
+
+            bool RemoveComponent(IComponentContainer *component);
 
             void RemoveAllComponents();
 
@@ -83,17 +92,20 @@ namespace Exodia {
                 return true;
             }
 
+            Entity *Duplicate(World *world, UUID uuid, const std::string &name);
+
         ///////////////////////
         // Getters & Setters //
         ///////////////////////
         public:
 
             World *GetWorld() const;
+            void SetWorld(World *world);
 
             template<typename Component>
             bool HasComponent() const
             {
-                TypeIndex index = GetTypeIndex<Component>();
+                std::string index = GetTypeName<Component>();
 
                 return _Components.find(index) != _Components.end();
             }
@@ -107,22 +119,35 @@ namespace Exodia {
             template<typename Component>
             ComponentHandle<Component> GetComponent();
 
+            IComponentContainer *GetComponent(const std::string &index);
+
+            std::vector<IComponentContainer *> GetAllComponents();
+
             uint64_t GetEntityID() const;
 
             bool IsPendingDestroy() const;
 
             void SetPendingDestroy(bool pendingDestroy);
 
+        /////////////////
+        // Comparators //
+        /////////////////
+        public:
+
+            bool operator==(const Entity &other) const;
+            bool operator!=(const Entity &other) const;
+            operator bool() const;
+
         ////////////////
         // Attributes //
         ////////////////
         private:
 
-            World   *_World;
-            uint64_t _ID;
-            bool     _PendingDestroy;
+            World *_World;
+            uint64_t   _ID;
+            bool       _PendingDestroy;
 
-            std::unordered_map<TypeIndex, IComponentContainer *> _Components;
+            std::unordered_map<std::string, IComponentContainer *> _Components;
 
         /////////////
         // Friends //

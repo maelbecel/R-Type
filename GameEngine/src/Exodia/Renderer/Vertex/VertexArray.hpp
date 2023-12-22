@@ -9,7 +9,7 @@
     #define VERTEXARRAY_HPP_
 
     // Exodia Renderer
-    #include "Renderer/Buffer/Buffer.hpp"
+    #include "Renderer/Buffer/Buffers.hpp"
 
     // Exodia Utils
     #include "Utils/Memory.hpp"

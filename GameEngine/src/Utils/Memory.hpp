@@ -10,6 +10,7 @@
 
     #include <memory>
     #include <string.h>
+    #include <stdlib.h>
 
     //////////////////////////////////////////////////////////////////
     // A bitshift operator that will shift the bit to the left by x //
@@ -21,7 +22,11 @@
     //////////////////////////////////////////////////////////////////
     #define BIT(x) (1 << x)
 
-    #define UNUSED __attribute__((unused)) // For unused variables
+#ifdef _MSC_VER // MSVC (Microsoft Visual C++)
+    #define UNUSED(x) __pragma(warning(suppress:4100)) x
+#else
+    #define UNUSED(x) __attribute__((unused)) x
+#endif
 
     // Replace the std::shared_ptr into Ref
     template <typename T>
@@ -45,29 +50,9 @@
         return std::make_unique<T>(std::forward<Args>(args)...);
     }
 
-inline size_t Strlen(const char *str)
-{
-    return strlen(str);
-}
-
-inline size_t Wcslen(const wchar_t *s)
-{
-    return wcslen(s);
-}
-
-inline void *Memset(void *data, int c, size_t size)
-{
-    return memset(data, c, size);
-}
-
-inline void *Memcpy(void *dest, const void *src, size_t size)
-{
-    return memcpy(dest, src, size);
-}
-
-inline void *Strncpy(char *dest, size_t size, const char *src)
-{
-    return strncpy(dest, src, size);
-}
+    inline static void *Memcopy(void *dest, const void *src, size_t n)
+    {
+        return memcpy(dest, src, n);
+    }
 
 #endif /* !MEMORY_HPP_ */

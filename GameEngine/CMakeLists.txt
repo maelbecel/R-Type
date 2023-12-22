@@ -1,11 +1,15 @@
 cmake_minimum_required(VERSION 3.12)
 
-project(GameEngine)
+project(GameEngine LANGUAGES CXX VERSION 1.0.1)
 
-set(CMAKE_BUILD_TYPE Debug)
+set(CMAKE_CXX_STANDARD 17)
 
 # Set compiler flags
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
+if (WIN32)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+else()
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
+endif()
 
 set(GLAD_INCLUDE_DIRS ${CMAKE_BINARY_DIR}/GLAD/include CACHE STRING "GLAD Include directories")
 
@@ -36,7 +40,7 @@ set(SOURCES_GAME_ENGINE
     src/Exodia/Renderer/Camera/Camera.cpp
     src/Exodia/Renderer/Buffer/UniformBuffer.cpp
     src/Exodia/Renderer/Buffer/Framebuffer.cpp
-    src/Exodia/Renderer/Buffer/Buffer.cpp
+    src/Exodia/Renderer/Buffer/Buffers.cpp
     src/Exodia/Renderer/Context/GraphicsContext.cpp
     src/Exodia/Renderer/Shader/Shader.cpp
     src/Exodia/Renderer/Vertex/VertexArray.cpp
@@ -45,7 +49,6 @@ set(SOURCES_GAME_ENGINE
 
     src/Exodia/Debug/Profiling/InstrumentorTimer.cpp
     src/Exodia/Debug/Profiling/Instrumentor.cpp
-    src/Exodia/Debug/Logger/Logger.cpp
     src/Exodia/Debug/Logger/Log.cpp
 
         # -- Entity Component System (ECS) source files
@@ -54,18 +57,50 @@ set(SOURCES_GAME_ENGINE
     src/Exodia/ECS/Entity/EntityView.cpp
     src/Exodia/ECS/Entity/Entity.cpp
     src/Exodia/ECS/World/World.cpp
+    src/Exodia/ECS/System/Collision/CollisionSystem.cpp
+    src/Exodia/ECS/System/Script/ScriptSystem.cpp
+    src/Exodia/ECS/System/Physics/GravitySystem.cpp
+    src/Exodia/ECS/System/Physics/MovingSystem.cpp
+    src/Exodia/ECS/EventSubscriber/EventHover.cpp
+
+        # -- Scene source files
+
+    src/Exodia/Scene/Camera/SceneCamera.cpp
+    src/Exodia/Scene/Serializer/SceneSerializer.cpp
+    src/Exodia/Scene/Scene/Scene.cpp
+
+        # -- Script source files
+    
+    src/Exodia/Script/Engine/ScriptEngine.cpp
+
+        # -- Project source files
+
+    src/Exodia/Project/Project.cpp
+    src/Exodia/Project/ProjectSerializer.cpp
 
         # -- Exodia ImGui source files
 
     src/Exodia/ImGui/ImGuiLayer.cpp
 
+        # -- Exodia Asset source files
+
+    src/Exodia/Asset/Importer/TextureImporter.cpp
+    src/Exodia/Asset/Importer/AssetImporter.cpp
+    src/Exodia/Asset/Importer/SceneImporter.cpp
+    src/Exodia/Asset/Manager/EditorAssetManager.cpp
+        
+        # -- Exodia Math source files
+    
+    src/Exodia/Math/Math.cpp
+
     # Platform source files
 
         # -- Windows source files
-    
+
     src/Platform/Windows/WindowsPlatformUtils.cpp
     src/Platform/Windows/WindowsWindow.cpp
     src/Platform/Windows/WindowsInput.cpp
+    src/Platform/Windows/WindowsFileDialog.cpp
 
         # -- OpenGL source files
 
@@ -77,6 +112,11 @@ set(SOURCES_GAME_ENGINE
     src/Platform/OpenGL/OpenGLTexture.cpp
     src/Platform/OpenGL/OpenGLUniformBuffer.cpp
     src/Platform/OpenGL/OpenGLVertexArray.cpp
+
+    # Network source files
+
+    src/Network/Network.cpp
+    src/Network/UDPSocket/UDPSocket.cpp
 )
 
 # Set the include directories for the Game Engine Library
@@ -91,16 +131,31 @@ set(INCLUDE_DIRS_GAME_ENGINE
 
     # Game Engine Platform include directories
     src/Platform
+
+    # Network include directories
+    src/Network
 )
 
 # Create the Game Engine Static Library
 add_library(GameEngine STATIC ${SOURCES_GAME_ENGINE})
 
+target_link_libraries(GameEngine PRIVATE
+    asio::asio
+    glm::glm
+    glfw
+    glad::glad
+    imgui
+    OpenAL::OpenAL
+    spdlog::spdlog
+    Catch2::Catch2 Catch2::Catch2WithMain
+    sol2
+    unofficial::nativefiledialog::nfd
+    yaml-cpp::yaml-cpp
+    imguizmo::imguizmo
+)
+
 target_include_directories(GameEngine PRIVATE ${INCLUDE_DIRS_GAME_ENGINE})
-target_include_directories(GameEngine PRIVATE ${CMAKE_BINARY_DIR}/_deps/opengl-src/GLAD/include)
-target_include_directories(GameEngine PRIVATE ${CMAKE_BINARY_DIR}/_deps/opengl-src/stb_image)
-target_include_directories(GameEngine PRIVATE ${CMAKE_BINARY_DIR}/_deps/glfw-src/include)
-target_include_directories(GameEngine PRIVATE ${CMAKE_BINARY_DIR}/_deps/glm-src)
+target_include_directories(GameEngine PRIVATE ${Stb_INCLUDE_DIR})
 target_include_directories(GameEngine PRIVATE ${CMAKE_BINARY_DIR}/_deps/imgui-src)
 
 set_target_properties(GameEngine PROPERTIES

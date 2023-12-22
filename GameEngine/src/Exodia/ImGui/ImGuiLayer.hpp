@@ -22,7 +22,7 @@ namespace Exodia {
      * @brief The ImGUILayer class represents a layer that integrates ImGui for GUI rendering.
      * It provides methods to manage ImGui's initialization, rendering, and cleanup within a layer.
      */
-    class EXODIA_API ImGuiLayer : public Layer {
+    class ImGuiLayer : public Layer {
 
         //////////////////////////////
         // Constructor & Destructor //

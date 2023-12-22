@@ -30,6 +30,17 @@
 
     #include "Events/Events.hpp"
 
+    // -- Exodia ECS EventSubscriber -------------------------------------------
+
+    #include "EventSubscriber/EventHover.hpp"
+
+    // -- Exodia ECS System ----------------------------------------------------
+
+    #include "System/Collision/CollisionSystem.hpp"
+    #include "System/Script/ScriptSystem.hpp"
+    #include "System/Physics/GravitySystem.hpp"
+    #include "System/Physics/MovingSystem.hpp"
+
     // -- Exodia ECS Interface -------------------------------------------------
 
     #include "Interface/IComponentContainer.hpp"
@@ -42,6 +53,10 @@
     #include "Utils/TypeIndex.hpp"
 
     // -------------------------------------------------------------------------
+
+    #include "Utils/Assert.hpp"
+
+    #include <iostream>
 
 namespace Exodia {
 
@@ -59,7 +74,7 @@ namespace Exodia {
     {
         using ComponentAllocator = std::allocator_traits<World::EntityAllocator>::template rebind_alloc<ComponentContainer<Component>>;
 
-        auto found = _Components.find(GetTypeIndex<Component>());
+        auto found = _Components.find(GetTypeName<Component>());
 
         if (found != _Components.end()) {
             ComponentContainer<Component> *container = reinterpret_cast<ComponentContainer<Component> *>(found->second);
@@ -78,7 +93,7 @@ namespace Exodia {
 
             std::allocator_traits<ComponentAllocator>::construct(allocator, container, Component(args ...));
 
-            _Components.insert({ GetTypeIndex<Component>(), container });
+            _Components.insert({ GetTypeName<Component>(), container });
 
             auto handle = ComponentHandle<Component>(&container->Data);
             
@@ -91,11 +106,14 @@ namespace Exodia {
     template<typename Component>
     ComponentHandle<Component> Entity::GetComponent()
     {
-        auto found = _Components.find(GetTypeIndex<Component>());
+        auto found = _Components.find(GetTypeName<Component>());
 
-        if (found != _Components.end())
-            return ComponentHandle<Component>(&reinterpret_cast<ComponentContainer<Component> *>(found->second)->Data);    
-        return ComponentHandle<Component>();
+        EXODIA_ASSERT(found != _Components.end(), "Component not found in _Components map");
+        EXODIA_ASSERT(found->second != nullptr  , "ComponentContainer is nullptr");
+
+        if (found == _Components.end() || found->second == nullptr)
+            return ComponentHandle<Component>();
+        return ComponentHandle<Component>(&reinterpret_cast<ComponentContainer<Component> *>(found->second)->Data);
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -129,7 +147,6 @@ namespace Exodia {
         _Index++;
 
         for (; _Index < _World->GetCount() && (Get() == nullptr || !Get()->template HasComponent<Components ...>() || (Get()->IsPendingDestroy() && !_IncludePendingDestroy)); _Index++);
-
 
         if (_Index >= _World->GetCount())
             _IsEnd = true;

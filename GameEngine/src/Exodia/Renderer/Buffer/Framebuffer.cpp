@@ -7,6 +7,7 @@
 
 // Exodia Renderer
 #include "Framebuffer.hpp"
+#include "Renderer/Renderer/RendererAPI.hpp"
 #include "Renderer/Renderer/Renderer.hpp"
 
 // Exodia Utils
@@ -23,9 +24,11 @@ namespace Exodia {
 
     Ref<Framebuffer> Framebuffer::Create(const FramebufferSpecification &spec)
     {
-        switch (Renderer::GetAPI()) {
+        RendererAPI::API api = Renderer::GetAPI();
+
+        switch (api) {
             case RendererAPI::API::None:
-                EXODIA_CORE_ASSERT("RendererAPI::None is not supported !");
+                EXODIA_CORE_ASSERT(false, "RendererAPI::None is not supported !");
                 return nullptr;
             case RendererAPI::API::OpenGL:
                 return CreateRef<OpenGLFramebuffer>(spec);
@@ -33,7 +36,7 @@ namespace Exodia {
                 break;
         }
 
-        EXODIA_CORE_ASSERT("Unknown RendererAPI !");
+        EXODIA_CORE_ASSERT(false, "Unknown RendererAPI !");
         return nullptr;
     };
 };

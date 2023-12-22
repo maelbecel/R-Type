@@ -11,23 +11,19 @@
     // Exodia Events
     #include "Events/Event.hpp"
 
-    // Exodia Utils
-    #include "Utils/CrossPlatform.hpp"
-
-    // Exodia Core
-    #include "Core/Time/Timestep.hpp"
-
     // External includes
     #include <string>
 
 namespace Exodia {
+
+    class Timestep;
 
     /**
      * @brief The Layer class represents a layer of the application
      * A layer is a part of the application
      * The difference between a layer and an overlay is that an overlay is always on top of the layer stack
      */
-    class EXODIA_API Layer {
+    class Layer {
 
         //////////////////////////////
         // Constructor & Destructor //
@@ -45,7 +41,7 @@ namespace Exodia {
             /**
              * @brief Destroy the Layer object
              */
-            virtual ~Layer();
+            virtual ~Layer() = default;
 
         /////////////
         // Methods //

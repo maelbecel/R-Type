@@ -5,6 +5,12 @@
 ** EditorCamera
 */
 
+// GLM includes
+#include <glm/glm.hpp>
+#define GLM_ENABLE_EXPERIMENTAL
+    #include <glm/gtx/quaternion.hpp>
+    #include <glm/gtx/transform.hpp>
+
 // Exodia Renderer includes
 #include "EditorCamera.hpp"
 
@@ -14,9 +20,8 @@
 #include "Core/Key/MouseButtonCodes.hpp"
 #include "Core/Application/Application.hpp"
 
-// External includes
-#define GLM_ENABLE_EXPERIMENTAL
-    #include <glm/gtx/quaternion.hpp>
+// Exodia Utils includes
+#include "Utils/Memory.hpp"
 
 namespace Exodia {
 
@@ -33,29 +38,25 @@ namespace Exodia {
     // Methods //
     /////////////
 
-    void EditorCamera::OnUpdate(Timestep ts)
+    void EditorCamera::OnUpdate(UNUSED(Timestep ts))
     {
-        (void)ts;
-
-        if (Input::IsKeyPressed(EXODIA_KEY_LEFT_ALT)) {
-            const glm::vec2 &mouse{
+        if (Input::IsKeyPressed(Exodia::Key::LEFTALT)) {
+            const glm::vec2 &mouse {
                 Input::GetMouseX(),
                 Input::GetMouseY()
             };
-
             glm::vec2 delta = (mouse - _InitialMousePosition) * 0.003f;
 
             _InitialMousePosition = mouse;
 
-            (void)delta;
-            //IsMouseButtonPressed
-            if (Input::IsMouseButtonPressed(EXODIA_MOUSE_BUTTON_MIDDLE) || Input::IsKeyPressed(EXODIA_KEY_V))
+            if (Input::IsMouseButtonPressed(Exodia::Mouse::BUTTONRIGHT))
                 MousePan(delta);
-            else if (Input::IsMouseButtonPressed(EXODIA_MOUSE_BUTTON_LEFT) || Input::IsKeyPressed(EXODIA_KEY_C))
+            else if (Input::IsMouseButtonPressed(Exodia::Mouse::BUTTONLEFT))
                 MouseRotate(delta);
-            else if (Input::IsMouseButtonPressed(EXODIA_MOUSE_BUTTON_RIGHT) || Input::IsKeyPressed(EXODIA_KEY_B))
+            else if (Input::IsMouseButtonPressed(Exodia::Mouse::BUTTONRIGHT))
                 MouseZoom(delta.y);
         }
+
         UpdateView();
     }
 
@@ -175,10 +176,20 @@ namespace Exodia {
 
     std::pair<float, float> EditorCamera::PanSpeed() const
     {
+    #ifdef _WIN32
+        float x = min(_ViewportWidth / 1000.0f, 2.4f); // max = 2.4f
+    #else
         float x = std::min(_ViewportWidth / 1000.0f, 2.4f); // max = 2.4f
+    #endif
+
         float xFactor = 0.0366f * (x * x) - 0.1778f * x + 0.3021f;
 
+    #ifdef _WIN32
+        float y = min(_ViewportHeight / 1000.0f, 2.4f); // max = 2.4f
+    #else
         float y = std::min(_ViewportHeight / 1000.0f, 2.4f); // max = 2.4f
+    #endif
+
         float yFactor = 0.0366f * (y * y) - 0.1778f * y + 0.3021f;
 
         return {
@@ -196,11 +207,20 @@ namespace Exodia {
     {
         float distance = _Distance * 0.2f;
 
+    #ifdef _WIN32
+        distance = max(distance, 0.0f);
+    #else
         distance = std::max(distance, 0.0f);
+    #endif
 
         float speed = distance * distance;
 
+    #ifdef _WIN32
+        speed = min(speed, 100.0f); // max speed = 100
+    #else
         speed = std::min(speed, 100.0f); // max speed = 100
+    #endif
+
         return speed;
     }
 }

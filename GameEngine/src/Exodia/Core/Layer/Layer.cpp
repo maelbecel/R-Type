@@ -6,10 +6,11 @@
 */
 
 // Exodia Core
-#include "Core/Layer/Layer.hpp"
+#include "Layer.hpp"
+#include "Core/Time/Timestep.hpp"
 
-// Exodia Utils
-#include "Utils/Memory.hpp"
+// External include
+#include <sstream>
 
 namespace Exodia {
 
@@ -19,34 +20,23 @@ namespace Exodia {
 
     Layer::Layer(const std::string &name) : _DebugName(name) {};
 
-    Layer::~Layer() {};
-
     /////////////
     // Methods //
     /////////////
 
-    void Layer::OnAttach()
+    void Layer::OnAttach() {};
+
+    void Layer::OnDetach() {};
+
+    void Layer::OnUpdate(Timestep ts)
     {
-        return;
+        (void)ts;
     }
 
-    void Layer::OnDetach()
-    {
-        return;
-    }
+    void Layer::OnImGUIRender() {};
 
-    void Layer::OnUpdate(UNUSED Timestep ts)
+    void Layer::OnEvent(Event &event)
     {
-        return;
-    }
-
-    void Layer::OnImGUIRender()
-    {
-        return;
-    }
-
-    void Layer::OnEvent(UNUSED Event &event)
-    {
-        return;
+        (void)event;
     }
 };

@@ -5,10 +5,11 @@
 ** RTypeLayer
 */
 
-#ifndef GAMEENGINE_HPP_
-    #define GAMEENGINE_HPP_
+#ifndef RTYPELAYER_HPP_
+    #define RTYPELAYER_HPP_
 
     #include "Exodia.hpp"
+    #include "R-Type.hpp"
 
 namespace Exodia {
 
@@ -32,15 +33,34 @@ namespace Exodia {
             void OnUpdate(Timestep ts) override;
             void OnImGUIRender()       override;
             void OnEvent(Event &event) override;
+            bool OnKeyReleasedEvent(KeyReleasedEvent &event);
+            bool OnKeyPressedEvent(KeyPressedEvent &event);
+
+        public:
+            void RegisterComponent(std::string name, std::function<IComponentContainer *(Buffer)> factory);
 
         ////////////////
         // Attributes //
         ////////////////
-        private:
+        public:
+            inline static SceneType _currentScene;
+            inline static std::map<SceneType, std::shared_ptr<Exodia::Scene>> _World;
 
+        private:
+            // WARNING: This is a temporary solution
+            Exodia::World *_worldNetwork = Exodia::World::CreateWorld();
+
+            std::unordered_map<std::string, std::function<IComponentContainer *(Buffer)>> _ComponentFactory;
+            Exodia::Network::IOContextManager ioContextManager;
+
+            Ref<Framebuffer>             _Framebuffer;
+
+            Entity _LastEntityHovered;
+            // Define a local endpoint to listen on
+            // asio::ip::udp::endpoint localEndpoint(asio::ip::address::from_string("127.0.0.1"), 8082);
+            Exodia::Network::Network network;
             Exodia::OrthographicCameraController _CameraController;
-            glm::vec4 _SquareColor = { 0.2f, 0.3f, 0.8f, 1.0f };
     };
 };
 
-#endif /* !GAMEENGINE_HPP_ */
+#endif /* !RTYPELAYER_HPP_ */

@@ -2,15 +2,20 @@ cmake_minimum_required(VERSION 3.12)
 
 project(r-type)
 
-# Option for compiling examples
-option(COMPILE_EXAMPLES "Compile examples" OFF)
+set(CMAKE_TOOLCHAIN_FILE $ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake CACHE STRING "Vcpkg toolchain file")
+set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/CMake" ${CMAKE_MODULE_PATH})
 
-add_subdirectory(3rd-party)
-add_subdirectory(GameEngine)
+# Dependencies (find_package (vcpkg))
+include(Dependencies)
 
-if(COMPILE_EXAMPLES)
-    add_subdirectory(Examples)
-else()
-    add_subdirectory(Client)
-    add_subdirectory(Server)
+# Project
+include(BuildEngine)
+include(BuildBinaries)
+
+# Compilation Flags
+include(CompileFlags)
+
+if (MSVC)
+    file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/Assets DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/../Debug)
+    file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/Assets DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/../Release)
 endif()

@@ -9,11 +9,19 @@
     #define RENDERER_HPP_
 
     // Exodia Renderer
-    #include "Renderer/Camera/OrthographicCamera.hpp"
-    #include "Renderer/Renderer/RenderCommand.hpp"
-    #include "Renderer/Shader/Shader.hpp"
+    #include "Renderer/Renderer/RendererAPI.hpp"
+
+    // Exodia Utils
+    #include "Utils/Memory.hpp"
+
+    // GLM include
+    #include <glm/glm.hpp>
 
 namespace Exodia {
+
+    class OrthographicCamera;
+    class VertexArray;
+    class Shader;
 
     /**
      * @brief This structure holds scene-related data, primarily the view-projection matrix.
@@ -97,7 +105,7 @@ namespace Exodia {
         // Attributes //
         ////////////////
         private:
-            static SceneData *_SceneData; /*!< Data of the scene */
+            static Scope<SceneData> _SceneData; /*!< Data of the scene */
     };
 };
 

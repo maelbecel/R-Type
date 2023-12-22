@@ -9,15 +9,12 @@
     #define CROSSPLATFORM_HPP_
 
 #if defined(_WIN32) || defined(_WIN64)
-    #ifndef ENGINE_EXPORT
-        #define EXODIA_API __declspec(dllexport)
-    #else
-        #define EXODIA_API __declspec(dllimport)
-    #endif
-#elif defined(__APPLE__)
-    #define EXODIA_API __attribute__((visibility("default")))
+    #define WIN32_LEAN_AND_MEAN
+        #include <windows.h>
+
+    #define EXODIA_EXPORT extern "C" __declspec(dllexport)
 #else
-    #define EXODIA_API
+    #define EXODIA_EXPORT extern "C"
 #endif
 
 #if defined(__GNUC__) || (defined(__MWERKS__) && (__MWERKS__ >= 0x3000)) || (defined(__ICC) && (__ICC >= 600)) || defined(__ghs__) // If the compiler is GCC, or a GCC-compatible compiler
