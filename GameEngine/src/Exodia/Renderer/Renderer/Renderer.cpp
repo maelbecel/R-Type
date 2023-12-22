@@ -8,16 +8,17 @@
 // Exodia Renderer
 #include "Renderer.hpp"
 #include "Renderer/Renderer/Renderer2D.hpp"
-
-// Entry Point
-#include "OpenGL/OpenGLShader.hpp"
+#include "Renderer/Renderer/RenderCommand.hpp"
+#include "Renderer/Camera/OrthographicCamera.hpp"
+#include "Renderer/Vertex/VertexArray.hpp"
+#include "Renderer/Shader/Shader.hpp"
 
 // Exodia Debug
 #include "Debug/Profiling.hpp"
 
 namespace Exodia {
 
-    SceneData *Renderer::_SceneData = new SceneData;
+    Scope<SceneData> Renderer::_SceneData = CreateScope<SceneData>();
 
     /////////////
     // Methods //
@@ -33,8 +34,6 @@ namespace Exodia {
 
     void Renderer::Shutdown()
     {
-        EXODIA_PROFILE_FUNCTION(); // Performance instrumentation profiling for the function
-
         Renderer2D::Shutdown();
     }
 
@@ -43,17 +42,14 @@ namespace Exodia {
         _SceneData->ViewProjectionMatrix = camera.GetViewProjectionMatrix();
     }
 
-    void Renderer::EndScene()
-    {
-        return;
-    }
+    void Renderer::EndScene() {};
 
     void Renderer::Submit(const Ref<Shader> &shader, const Ref<VertexArray> &vertexArray, const glm::mat4 &transform)
     {
         shader->Bind();
 
-        std::dynamic_pointer_cast<OpenGLShader>(shader)->UploadUniformMat4("u_ViewProjection", _SceneData->ViewProjectionMatrix);
-        std::dynamic_pointer_cast<OpenGLShader>(shader)->UploadUniformMat4("u_Transform", transform);
+        shader->SetMat4("u_ViewProjection", _SceneData->ViewProjectionMatrix);
+        shader->SetMat4("u_Transform", transform);
 
         vertexArray->Bind();
 

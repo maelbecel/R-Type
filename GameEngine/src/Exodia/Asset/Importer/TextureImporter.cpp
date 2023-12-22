@@ -30,7 +30,7 @@ namespace Exodia {
     // Methods //
     /////////////
 
-    Ref<Texture2D> TextureImporter::ImportTexture2D(UNUSED AssetHandle handle, const AssetSpecification &spec)
+    Ref<Texture2D> TextureImporter::ImportTexture2D(UNUSED(AssetHandle handle), const AssetSpecification &spec)
     {
         EXODIA_PROFILE_FUNCTION();
 

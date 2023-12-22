@@ -3,8 +3,6 @@
 make() {
     local compile_type="$1"
 
-    git submodule update --init --recursive
-
     # Vérifier si le répertoire "build" n'existe pas
     if [ ! -d "build" ]; then
         # Créer le répertoire "build" s'il n'existe pas
@@ -18,15 +16,15 @@ make() {
 
     # Exécuter les commandes cmake et ninja
     if [ "$compile_type" == "debug" ]; then
-        cmake .. -G Ninja -DCOMPILE_DEBUG=ON --preset=vcpkg
+        cmake .. -G Ninja -DCOMPILE_DEBUG=ON -DCMAKE_TOOLCHAIN_FILE=${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake
     elif [ "$compile_type" == "examples" ]; then
-        cmake .. -G Ninja -DCOMPILE_EXAMPLES=ON --preset=vcpkg
+        cmake .. -G Ninja -DCOMPILE_EXAMPLES=ON -DCMAKE_TOOLCHAIN_FILE=${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake
     elif [ "$compile_type" == "sandbox" ]; then
-        cmake .. -G Ninja -DCOMPILE_SANDBOX=ON --preset=vcpkg
+        cmake .. -G Ninja -DCOMPILE_SANDBOX=ON -DCMAKE_TOOLCHAIN_FILE=${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake
     elif [ "$compile_type" == "exodia" ]; then
-        cmake .. -G Ninja -DCOMPILE_EDITOR=ON --preset=vcpkg
+        cmake .. -G Ninja -DCOMPILE_EDITOR=ON -DCMAKE_TOOLCHAIN_FILE=${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake
     else
-        cmake .. -G Ninja --preset=vcpkg
+        cmake .. -G Ninja -DCMAKE_TOOLCHAIN_FILE=${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake
     fi
 
     ninja

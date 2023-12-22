@@ -6,10 +6,11 @@
 */
 
 // Exodia Core
-#include "Core/Layer/LayerStack.hpp"
+#include "LayerStack.hpp"
 
 // External includes
 #include <algorithm>
+#include <sstream>
 
 namespace Exodia {
 

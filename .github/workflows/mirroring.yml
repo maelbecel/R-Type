@@ -2,32 +2,74 @@ name: Clone Repository
 on:
   push:
     branches:
-      #- main
-      #- dev
-      - test/workflows
+      - main
+      - dev
+      - fix/Compilation
 
 env:
   MIRROR_URL:
     git@github.com:EpitechPromo2026/B-CPP-500-REN-5-2-rtype-ethan1.hernou.git
 
 jobs:
-  compilation:
-    name: Compiling...
+  linux-compilation:
+    name: Compiling on Linux...
     runs-on: ubuntu-latest
     container: epitechcontent/epitest-docker
-    timeout-minutes: 4
+    timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 5
-      - uses: seanmiddleditch/gha-setup-ninja@v4
-      - run: |
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install Vcpkg
+        run: |
+          git clone https://github.com/microsoft/vcpkg.git
+          cd vcpkg
+          ./bootstrap-vcpkg.sh
+      - name: Setup Ninja
+        uses: seanmiddleditch/gha-setup-ninja@v4
+      - name: Setup CMake
+        run: |
           cmake --version
-          echo "2" | ./make.sh && [ -f r-type_client ] && [ -f r-type_server ]
+      - name: Compiling...
+        run: |
+          mkdir build && cd build && cmake .. -G Ninja -DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake && ninja && cd ..
+      - name: Check if the executable exists
+        run: |
+          if [ -f r-type_client ] && [ -f r-type_server ]; then exit 0; else exit 1; fi
+        shell: bash
+
+  windows-compilation:
+    name: Compiling on Windows...
+    runs-on: windows-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install Vcpkg
+        run: |
+          git clone https://github.com/microsoft/vcpkg.git
+          cd vcpkg
+          .\bootstrap-vcpkg.bat
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v1
+      - name: Setup CMake
+        run: |
+          cmake --version
+      - name: Compiling...
+        run: |
+          mkdir build
+          cd build
+          cmake .. -G "Visual Studio 17 2022" -DCMAKE_TOOLCHAIN_FILE=D:\a\R-Type\R-Type\vcpkg\scripts\buildsystems\vcpkg.cmake -D_WIN32_WINNT=0x0601
+          cmake --build . --config Release
+          cd ..
+#      - name: Check if the executable exists
+#        run: |
+#          IF (Test-Path .\Release\r-type_client.exe) -and (Test-Path .\Release\r-type_server.exe) { exit 0 }
+#          exit 1
+#        shell: pwsh
 
   tests:
     name: Testing...
-    needs: compilation
+    needs: linux-compilation
     runs-on: ubuntu-latest
     container: epitechcontent/epitest-docker
     timeout-minutes: 10

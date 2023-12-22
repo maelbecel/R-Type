@@ -130,7 +130,7 @@ namespace Exodia {
         YAML::Node data;
 
         try {
-            data = YAML::LoadFile(path);
+            data = YAML::LoadFile(path.string());
         } catch (const YAML::ParserException &e) {
             EXODIA_CORE_ERROR("Failed to deserialize asset registry `{}`:\n\t{}", path.string(), e.what());
 

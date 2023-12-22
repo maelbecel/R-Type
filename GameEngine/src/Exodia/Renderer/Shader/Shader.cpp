@@ -8,6 +8,7 @@
 // Exodia Renderer
 #include "Shader.hpp"
 #include "Renderer/Renderer/Renderer.hpp"
+#include "Renderer/Renderer/RendererAPI.hpp"
 
 // Exodia Utils
 #include "Utils/Assert.hpp"
@@ -27,7 +28,9 @@ namespace Exodia {
 
     Ref<Shader> Shader::Create(const std::string &filepath)
     {
-        switch (Renderer::GetAPI()) {
+        RendererAPI::API api = Renderer::GetAPI();
+
+        switch (api) {
             case RendererAPI::API::None:
                 EXODIA_CORE_ASSERT(false, "RendererAPI::None is not supported !");
                 return nullptr;
@@ -43,7 +46,9 @@ namespace Exodia {
 
     Ref<Shader> Shader::Create(const std::string &name, const std::string &vertexSrc, const std::string &fragmentSrc)
     {
-        switch (Renderer::GetAPI()) {
+        RendererAPI::API api = Renderer::GetAPI();
+
+        switch (api) {
             case RendererAPI::API::None:
                 EXODIA_CORE_ASSERT(false, "RendererAPI::None is not supported !");
                 return nullptr;

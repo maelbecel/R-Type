@@ -60,14 +60,6 @@
     #include "Exodia/Debug/Profiling.hpp"
     #include "Exodia/Debug/Logs.hpp"
 
-    // -- Exodia Utils ---------------------------------------------------------
-
-    #include "Utils/CrossPlatform.hpp"
-    #include "Utils/PlatformUtils.hpp"
-    #include "Utils/LibrairyLoader.hpp"
-    #include "Utils/Memory.hpp"
-    #include "Utils/Assert.hpp"
-
     // -- Exodia Math ----------------------------------------------------------
 
     #include "Exodia/Math/Math.hpp"
@@ -75,5 +67,13 @@
     // -- Exodia Network -------------------------------------------------------
 
     #include "Network/Network.hpp"
+
+    // -- Exodia Utils ---------------------------------------------------------
+
+    #include "Utils/CrossPlatform.hpp"
+    #include "Utils/PlatformUtils.hpp"
+    #include "Utils/LibrairyLoader.hpp"
+    #include "Utils/Memory.hpp"
+    #include "Utils/Assert.hpp"
 
 #endif /* !EXODIA_HPP_ */

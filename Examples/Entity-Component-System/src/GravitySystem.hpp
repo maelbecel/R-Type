@@ -24,7 +24,7 @@ namespace Exodia {
             // Methods
             virtual void Update(World *world, Timestep ts) override
             {
-                world->ForEach<Transform>([&](UNUSED Entity *entity, ComponentHandle<Transform> transform) {
+                world->ForEach<Transform>([&](UNUSED(Entity *entity), ComponentHandle<Transform> transform) {
                     transform.Get().Translation.y += _GravityAmount * ts;
                 });
             }

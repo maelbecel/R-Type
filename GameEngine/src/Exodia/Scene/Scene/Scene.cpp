@@ -13,6 +13,7 @@
 
 // Exodia Renderer includes
 #include "Renderer/Renderer/Renderer2D.hpp"
+#include "Renderer/Renderer/RendererAPI.hpp"
 
 namespace Exodia {
 
@@ -160,10 +161,11 @@ namespace Exodia {
 
             _World->ForEach<TransformComponent, CameraComponent>([&](Entity *entity, auto transform, auto camera) {
                 auto &cc = camera.Get();
+                auto &tc = transform.Get();
 
                 if (cc.Primary) {
                     mainCamera = &cc.Camera;
-                    cameraTransform = transform.Get().GetTransform();
+                    cameraTransform = tc.GetTransform();
                     return;
                 }
             });
@@ -179,7 +181,7 @@ namespace Exodia {
         }
     }
 
-    void Scene::OnUpdateEditor(UNUSED Timestep ts, EditorCamera &camera)
+    void Scene::OnUpdateEditor(UNUSED(Timestep ts), EditorCamera &camera)
     {
         Renderer2D::BeginScene(camera);
 
@@ -214,6 +216,9 @@ namespace Exodia {
 
     void Scene::RenderScene()
     {
+        if (RendererAPI::IsGraphical() == false)
+            return;
+
         _World->ForEach<TransformComponent, SpriteRendererComponent, IDComponent>([&](Entity *entity, auto transform, auto sprite, auto id) {
             auto &tc = transform.Get();
             auto &sc = sprite.Get();

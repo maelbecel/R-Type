@@ -6,7 +6,7 @@
 */
 
 #ifndef HEADER_HPP_
-#define HEADER_HPP_
+    #define HEADER_HPP_
 
 #include <iostream>
 #include <vector>
@@ -15,6 +15,12 @@
 #include <arpa/inet.h>
 #include <iomanip>
 
+#ifdef _WIN32
+    #include <winsock2.h>
+    #include <ws2tcpip.h>
+#else
+    #include <arpa/inet.h>
+#endif
 
 template <typename T>
 T swapEndianness(T value) {
@@ -39,14 +45,16 @@ namespace Exodia {
                  * @param id (Type: unsigned long) The id of the header
                  * @param size (Type: unsigned long) The size of the packet
                  */
-                Header(char command, unsigned long id, unsigned long size) : _command(command), _id(id), _size(size)
+                Header(unsigned char command, unsigned long id, unsigned long size) : _command(command), _id(id), _size(size)
                 {
-                    _timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-                };
+                    using MillisecondsType = std::chrono::milliseconds::rep;
 
-                Header(const Header &header) : _command(header._command), _timestamp(header._timestamp), _id(header._id), _size(header._size)
-                {
-                };
+                    MillisecondsType timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+
+                    _timestamp = static_cast<float>(timestamp);
+                }
+
+                Header(const Header &header) : _command(header._command), _timestamp(header._timestamp), _id(header._id), _size(header._size) {};
 
                 ~Header() = default;
 
@@ -114,7 +122,7 @@ namespace Exodia {
                     _id = id;
                 }
 
-                char getCommand() const { return _command; };
+                unsigned char getCommand() const { return _command; };
                 float getTimestamp() const { return _timestamp; };
                 unsigned long getId() const { return _id; };
                 unsigned long getSize() const { return _size; };
@@ -170,7 +178,7 @@ namespace Exodia {
                 }
 
             private:
-                char _command;
+                unsigned char _command;
                 float _timestamp;
                 unsigned long _id;
                 unsigned long _size;
