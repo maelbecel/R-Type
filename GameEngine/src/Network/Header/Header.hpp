@@ -8,10 +8,12 @@
 #ifndef HEADER_HPP_
     #define HEADER_HPP_
 
-    #include <iostream>
-    #include <vector>
-    #include <cstring>
-    #include <ctime>
+#include <iostream>
+#include <vector>
+#include <cstring>
+#include <ctime>
+#include <arpa/inet.h>
+#include <iomanip>
 
 #ifdef _WIN32
     #include <winsock2.h>
@@ -31,6 +33,10 @@ namespace Exodia {
         class Header {
             public:
 
+                Header(uint8_t command) : _command(command), _timestamp(0), _id(0), _size(0)
+                {
+                    _timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+                };
                 /**
                  * @brief Construct a new Header object
                  * Construct a new Header object with the given command, id and size
@@ -121,11 +127,45 @@ namespace Exodia {
                 unsigned long getId() const { return _id; };
                 unsigned long getSize() const { return _size; };
 
+
+                /**
+                 * @brief Return string representation of a command
+                 *
+                 * @param header (Type: Exodia::Network::Header) The header of the command
+                 *
+                 * @return std::string String representation of the command
+                */
+                static std::string VerbaliseCommand(const Header &header)
+                {
+                    std::string command;
+                    std::unordered_map<char, std::string> commands;
+                    commands[0x00] = "Packet info";
+                    commands[0x01] = "Acknowledgement";
+                    commands[0x02] = "Accept client connection";
+                    commands[0x81] = "Ask for connection";
+                    commands[0x82] = "New Event";
+                    commands[0x0c] = "Create component";
+                    command = commands[header.getCommand()];
+                    if (command.empty())
+                        command = "Unknown command";
+                    return command;
+                }
+
+                static std::string toStr(const Header &header) {
+                    std::string str;
+                    str += "Command: '" + VerbaliseCommand(header) + "'";
+                    std::time_t timestampAsTimeT = static_cast<std::time_t>(header._timestamp);
+                    std::tm* timeInfo = std::gmtime(&timestampAsTimeT);
+                    char buffer[80];
+                    std::strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", timeInfo);
+                    str += " Timestamp: " + std::string(buffer);
+                    str += " ID: " + std::to_string(header._id);
+                    str += " Size: " + std::to_string(header._size);
+                    return str;
+                }
+
                 friend std::ostream& operator<<(std::ostream& os, const Header& header) {
-                    os << "Command: " << header._command << std::endl;
-                    os << "Timestamp: " << header._timestamp << std::endl;
-                    os << "ID: " << header._id << std::endl;
-                    os << "Size: " << header._size << std::endl;
+                    os << toStr(header);
                     return os;
                 }
 

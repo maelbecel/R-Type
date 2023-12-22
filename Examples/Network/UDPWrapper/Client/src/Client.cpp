@@ -15,11 +15,8 @@ void my_callback(const std::string &message)
     std::cout << "Message received: " << message << std::endl;
 }
 
-int main(int ac, char **av)
+int main(void)
 {
-    (void)ac;
-    (void)av;
-
     Exodia::Log::Init();
 
     std::cout << "Client have been launched!" << std::endl;
@@ -51,7 +48,7 @@ int main(int ac, char **av)
 
         packet.SetContent(buffer);
 
-        serverSocket.send(packet.GetBuffer(), 1468, serverEndpoint);
+        serverSocket.Send(packet.GetBuffer(), 1468, serverEndpoint);
         // Run the IO context to initiate asynchronous operations
         ioContextManager.run();
 

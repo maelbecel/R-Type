@@ -141,7 +141,7 @@ namespace Exodia {
 
                 sprite.Get().Texture = SubTexture2D::CreateFromCoords(90123456789012678, { 0.0f, 0.0f }, { 33.3125f, 36.0f }, { 1.0f, 1.0f });
 
-                _network.SendEntity(patata, "SpriteRendererComponent");
+                _network.SendComponentOf(patata, "SpriteRendererComponent");
             }
             _World->OnUpdateRuntime(timestep);
         } catch (std::exception &e) {
