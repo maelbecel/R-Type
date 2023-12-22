@@ -49,23 +49,17 @@ jobs:
           git clone https://github.com/microsoft/vcpkg.git
           cd vcpkg
           .\bootstrap-vcpkg.bat
-      - name: Environement variables
-        run: |
-          $VCPKG_ROOT = "D:\a\R-Type\R-Type\vcpkg"
-          [Environment]::SetEnvironmentVariable("VCPKG_ROOT", $VCPKG_ROOT, "User")
-          $env:Path += ";$VCPKG_ROOT"
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v1
       - name: Setup CMake
         run: |
           cmake --version
-      - name: Compiling...
+      - name: Set VCPKG_ROOT and Run CMake
         run: |
-          mkdir build
-          cd build
-          cmake ..
-          cmake --build .
-          cd ..
+          $VCPKG_ROOT = "D:\a\R-Type\R-Type\vcpkg"
+          [Environment]::SetEnvironmentVariable("VCPKG_ROOT", $VCPKG_ROOT, "User")
+          cmake -S . -B build
+        working-directory: D:\a\R-Type\R-Type
 #      - name: Check if the executable exists
 #        run: |
 #          IF (Test-Path .\Release\r-type_client.exe) -and (Test-Path .\Release\r-type_server.exe) { exit 0 }
