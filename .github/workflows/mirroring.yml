@@ -58,8 +58,8 @@ jobs:
         run: |
           mkdir build
           cd build
-          cmake .. -G "Visual Studio 17 2022" -DCMAKE_TOOLCHAIN_FILE=D:\a\R-Type\R-Type\vcpkg\scripts\buildsystems\vcpkg.cmake -D_WIN32_WINNT=0x0601
-          cmake --build . --config Release
+          cmake ..
+          cmake --build .
           cd ..
 #      - name: Check if the executable exists
 #        run: |
