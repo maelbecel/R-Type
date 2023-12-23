@@ -158,11 +158,10 @@ namespace Exodia {
             _LastTime = time;
 
             for (uint32_t i = 0; i < (uint32_t)_Users.size(); i++) {
-                Entity *player = Scenes[GAME]->GetEntityByName("Player_" + std::to_string(i));
+                // Entity *player = Scenes[GAME]->GetEntityByName("Player_" + std::to_string(i));
 
-                if (player != nullptr) {
-                    // _Network.SendComponentOf(player, "ScriptComponent");
-                }
+                // if (player != nullptr) {
+                // }
             }
 
             /*
@@ -258,6 +257,9 @@ namespace Exodia {
                         _Network.SendComponentOf(entity, "SpriteRendererComponent");
                         body.Get().Velocity.x = 0.5f;
                         _Network.SendComponentOf(entity, "RigidBody2DComponent");
+                        _Network.SendComponentOf(entity, "Animation");
+                        _Network.SendComponentOf(entity, "Health");
+                        _Network.SendComponentOf(entity, "ScriptComponent");
                     }
                 });
 

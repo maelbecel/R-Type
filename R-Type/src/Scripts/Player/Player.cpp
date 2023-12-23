@@ -49,46 +49,59 @@ namespace Exodia {
             _IsShooting = false;
         }
 
+        if (!GetComponent<Health>())
+            return;
+
         if (_State != State::DEAD && GetComponent<Health>().Get().CurrentHealth == 0) {
             EXODIA_INFO("Player is dead");
             auto velocity = GetComponent<RigidBody2DComponent>();
             auto camera_entity = HandleEntity->GetWorld()->GetEntityByTag("Camera");
-            velocity.Get().Velocity.x = camera_entity->GetComponent<RigidBody2DComponent>().Get().Velocity.x;
-            velocity.Get().Velocity.y = camera_entity->GetComponent<RigidBody2DComponent>().Get().Velocity.y;
+            // if (!velocity || !camera_entity)
+            //     return;
+            // velocity.Get().Velocity.x = camera_entity->GetComponent<RigidBody2DComponent>().Get().Velocity.x;
+            // velocity.Get().Velocity.y = camera_entity->GetComponent<RigidBody2DComponent>().Get().Velocity.y;
 
-            auto animation = GetComponent<Animation>();
+            // auto animation = GetComponent<Animation>();
             // auto sprite = GetComponent<SpriteRendererComponent>();
-            GetComponent<TransformComponent>().Get().Scale.y = 1.0f;
+            // if (!animation || !sprite)
+            //     return;
 
-            animation.Get().CurrentFrame = 0;
-            animation.Get().MaxFrame = 8;
-            animation.Get().FrameTime = 0.075f;
+            // if (GetComponent<TransformComponent>())
+            //     GetComponent<TransformComponent>().Get().Scale.y = 1.0f;
 
-            // Set entity sprite
-            // Ref<Texture2D> texture = TextureImporter::LoadTexture2D("Assets/Textures/HUD.png");
-            // sprite.Get().Texture = SubTexture2D::CreateFromCoords(texture->Handle, { 0.0f, 0.0f }, { 33.2f, 32.0f }, { 1.0f, 1.0f });
-            GetComponent<CircleRendererComponent>().Get().Color = glm::vec4{ 0.0f, 0.0f, 1.0f, 1.0f};
-            _State = State::DEAD;
+            // animation.Get().CurrentFrame = 0;
+            // animation.Get().MaxFrame = 8;
+            // animation.Get().FrameTime = 0.075f;
+
+            // // Set entity sprite
+            // // Ref<Texture2D> texture = TextureImporter::LoadTexture2D("Assets/Textures/HUD.png");
+            // // sprite.Get().Texture = SubTexture2D::CreateFromCoords(texture->Handle, { 0.0f, 0.0f }, { 33.2f, 32.0f }, { 1.0f, 1.0f });
+            // // GetComponent<CircleRendererComponent>().Get().Color = glm::vec4{ 0.0f, 0.0f, 1.0f, 1.0f};
+            // _State = State::DEAD;
         }
-        else if (_State == State::DEAD) {
-            auto animation = GetComponent<Animation>();
-            auto sprite = GetComponent<SpriteRendererComponent>();
+        // else if (_State == State::DEAD) {
+        //     auto animation = GetComponent<Animation>();
+        //     auto sprite = GetComponent<SpriteRendererComponent>();
+        //     if (!animation || !sprite)
+        //         return;
 
-            if (animation.Get().CurrentFrame == animation.Get().MaxFrame - 1) {
-                EXODIA_INFO("Player is respawn");
-                GetComponent<Health>().Get().CurrentHealth = 1;
-                _State = State::IDLE;
-                animation.Get().CurrentFrame = 2;
-                animation.Get().MaxFrame = 2;
-                animation.Get().FrameTime = 0.1f;
-                GetComponent<TransformComponent>().Get().Scale.y = 0.5f;
+        //     if (animation.Get().CurrentFrame == animation.Get().MaxFrame - 1) {
+        //         EXODIA_INFO("Player is respawn");
+        //         GetComponent<Health>().Get().CurrentHealth = 1;
+        //         _State = State::IDLE;
+        //         animation.Get().CurrentFrame = 2;
+        //         animation.Get().MaxFrame = 2;
+        //         animation.Get().FrameTime = 0.1f;
 
-                // Set entity sprite
-                // Ref<Texture2D> texture = TextureImporter::LoadTexture2D("Assets/Textures/Player.png");
-                // sprite.Get().Texture = SubTexture2D::CreateFromCoords(texture->Handle, { 2.0f, 4.0f }, { 33.2f, 17.2f }, { 1.0f, 1.0f });
-                GetComponent<CircleRendererComponent>().Get().Color = glm::vec4{ 1.0f, 1.0f, 1.0f, 1.0f};
-            }
-        }
+        //         if (GetComponent<TransformComponent>())
+        //             GetComponent<TransformComponent>().Get().Scale.y = 0.5f;
+
+        //         // Set entity sprite
+        //         // Ref<Texture2D> texture = TextureImporter::LoadTexture2D("Assets/Textures/Player.png");
+        //         // sprite.Get().Texture = SubTexture2D::CreateFromCoords(texture->Handle, { 2.0f, 4.0f }, { 33.2f, 17.2f }, { 1.0f, 1.0f });
+        //         // GetComponent<CircleRendererComponent>().Get().Color = glm::vec4{ 1.0f, 1.0f, 1.0f, 1.0f};
+        //     }
+        // }
     };
 
     void Player::OnKeyPressed(int keycode)
