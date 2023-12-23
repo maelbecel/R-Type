@@ -117,6 +117,36 @@ namespace Exodia {
             ImGui::DragFloat("Gravity Scale", &GravityScale);
             ImGui::DragFloat("Mass"         , &Mass);
         }
+
+        virtual Buffer SerializeData() override
+        {
+            try {
+                uint32_t size = sizeof(BodyType) + sizeof(float) * 2 + sizeof(glm::vec2);
+                Buffer buffer(size);
+
+                std::memcpy(buffer.Data, &Type, sizeof(BodyType));
+                std::memcpy(buffer.Data + sizeof(BodyType), &Velocity, sizeof(glm::vec2));
+                std::memcpy(buffer.Data + sizeof(BodyType) + sizeof(glm::vec2), &GravityScale, sizeof(float));
+                std::memcpy(buffer.Data + sizeof(BodyType) + sizeof(glm::vec2) + sizeof(float), &Mass, sizeof(float));
+
+                return buffer;
+            } catch (const std::exception &e) {
+                EXODIA_CORE_WARN("RigidBody2DComponent serialization failed: {0}", e.what());
+                return Buffer();
+            }
+        }
+
+        virtual void DeserializeData(Buffer buffer) override
+        {
+            try {
+                std::memcpy(&Type, buffer.Data, sizeof(BodyType));
+                std::memcpy(&Velocity, buffer.Data + sizeof(BodyType), sizeof(glm::vec2));
+                std::memcpy(&GravityScale, buffer.Data + sizeof(BodyType) + sizeof(glm::vec2), sizeof(float));
+                std::memcpy(&Mass, buffer.Data + sizeof(BodyType) + sizeof(glm::vec2) + sizeof(float), sizeof(float));
+            } catch (const std::exception &e) {
+                EXODIA_CORE_WARN("RigidBody2DComponent deserialization failed: {0}", e.what());
+            }
+        }
     };
 };
 

@@ -20,11 +20,8 @@ namespace Exodia {
         entity->GetComponent<TransformComponent>().Get().Translation.y = 0.4f * playerID;
         entity->AddComponent<BoxCollider2DComponent>();
 
-        // Set entity sprite
-        // auto sprite = entity->AddComponent<SpriteRendererComponent>();
-        // Ref<Texture2D> texture = TextureImporter::LoadTexture2D("Assets/Textures/Player.png");
-        // sprite.Get().Texture = SubTexture2D::CreateFromCoords(texture->Handle, { 2.0f, 4.0f }, { 33.2f, 17.2f }, { 1.0f, 1.0f });
-        entity->AddComponent<CircleRendererComponent>(glm::vec4{ 1.0f, 1.0f, 1.0f, 1.0f});
+        auto sprite = entity->AddComponent<SpriteRendererComponent>();
+        sprite.Get().Texture = SubTexture2D::CreateFromCoords(12345678901234578, { 2.0f, 4.0f }, { 33.2f, 17.2f }, { 1.0f, 1.0f });
 
         // Set entity rigidbody
         auto body = entity->AddComponent<RigidBody2DComponent>();

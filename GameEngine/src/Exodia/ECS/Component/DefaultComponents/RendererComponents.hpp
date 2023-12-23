@@ -304,11 +304,6 @@ namespace Exodia {
                 Memcopy(&Thickness, data.Data + offset, sizeof(Thickness));
                 offset += sizeof(Thickness);
                 Memcopy(&Fade, data.Data + offset, sizeof(Fade));
-
-                EXODIA_CORE_TRACE("CircleRendererComponent deserialization success !");
-                EXODIA_CORE_TRACE("\tColor     : '{0}, {1}, {2}, {3}'", Color.x, Color.y, Color.z, Color.w);
-                EXODIA_CORE_TRACE("\tThickness : '{0}'", Thickness);
-                EXODIA_CORE_TRACE("\tFade      : '{0}'", Fade);
             } catch (std::exception &e) {
                 EXODIA_CORE_WARN("CircleRendererComponent deserialization failed: {0}", e.what());
             }

@@ -54,6 +54,8 @@ namespace Exodia {
                  */
                 ~Network()
                 {
+                    _socket.~UDPSocket();
+                    _ioContextManager.stop();
                 };
 
                 /////////////
