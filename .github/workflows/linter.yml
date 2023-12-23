@@ -1,23 +1,27 @@
-name: Run clang-format Linter
+name: ClangFormat Auto-Formatter
 
-on: [push]
+on:
+  push:
+    paths:
+      - '**/*.c'
+      - '**/*.cpp'
+      - '**/*.h'
+      - '**/*.hpp'
 
 jobs:
-  build:
+  clang-format:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - uses: DoozyX/clang-format-lint-action@v0.16.2
-      with:
-        source: '.'
-        extensions: 'hpp,h,cpp,c'
-        clangFormatVersion: 16
-        inplace: True
-    - uses: EndBug/add-and-commit@v9
-      with:
-        author_name: Clang Formater
-        author_email: robot@example.com
-        message: 'Committing clang-format changes'
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Install ClangFormat
+      run: |
+        sudo apt-get update
+        sudo apt-get install clang-format
+
+    - name: Auto-format Code
+      run: |
+        git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -E '\.(c|cpp|h)$' | xargs clang-format -i -style=file
+        git diff --exit-code --quiet || git commit -am "Auto-format code using ClangFormat" && git push origin ${{ github.head_ref }}
