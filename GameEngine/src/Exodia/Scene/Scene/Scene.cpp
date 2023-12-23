@@ -109,6 +109,24 @@ namespace Exodia {
                 }
             }
         });
+
+        if (RendererAPI::IsGraphical() == false)
+            return;
+
+        _World->ForEach<MusicComponent>([&](Entity *entity, auto music) {
+            auto &sc = music.Get();
+
+            Ref<Sound2D> sound = AssetManager::GetAsset<Sound2D>(sc.Handle);
+
+            if (sound == nullptr)
+                return;
+            if (sc.Play) {
+                sound->SetVolume(sc.Volume);
+                sound->SetLoop(true);
+
+                Renderer2D::PlaySound(sc.Handle);
+            }
+        });
     }
 
     void Scene::OnRuntimeStop()
@@ -236,6 +254,21 @@ namespace Exodia {
         });
 
         // TODO: When text rendering will be implemented (in Renderer2D);
+
+        _World->ForEach<SoundComponent>([&](Entity *entity, auto sound) {
+            auto &sc = sound.Get();
+
+            Ref<Sound2D> soundRef = AssetManager::GetAsset<Sound2D>(sc.Handle);
+
+            if (soundRef == nullptr)
+                return;
+            if (sc.Play && !soundRef->IsPlaying()) {
+                soundRef->SetVolume(sc.Volume);
+                soundRef->SetLoop(false);
+
+                Renderer2D::PlaySound(sc.Handle);
+            }
+        });
     }
 
     ///////////////////////
