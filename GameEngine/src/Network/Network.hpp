@@ -150,6 +150,7 @@ namespace Exodia {
                 IOContextManager &_ioContextManager;
                 std::queue<std::pair<std::pair<uint32_t, bool>, asio::ip::udp::endpoint>> _events;
                 std::vector<std::pair<Connection, std::unordered_map<uint64_t, Packet>>> _packetNeedAck;
+                uint32_t _command_id = 1048;
 
         }; // class Network
 

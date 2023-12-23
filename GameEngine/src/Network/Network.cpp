@@ -246,6 +246,7 @@ namespace Exodia::Network {
         std::vector<char> buffer(1024, 0);
         std::memcpy(buffer.data(), message.data(), size);
         std::string id(buffer.begin(), buffer.end());
+        std::cout << "Receive accept connect with id :"<< id << std::endl;
         this->id = id;
         std::cout << "Receive accept connect" << std::endl;
     }
@@ -318,6 +319,12 @@ namespace Exodia::Network {
 
     void Network::ReceiveConnect(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint, Exodia::Network::Header header) {
         (void) size;
+
+        //Check if already Connected
+        if (_connections.find(senderEndpoint.address().to_string() + ":" + std::to_string(senderEndpoint.port())) != _connections.end()) {
+            EXODIA_CORE_WARN("Network::ReceiveConnect() - Already connected to " + senderEndpoint.address().to_string() + ":" + std::to_string(senderEndpoint.port()));
+            return;
+        }
 
         //Adding id to the buffer
         std::vector<char> buffer(0);
@@ -439,6 +446,11 @@ namespace Exodia::Network {
             EXODIA_CORE_WARN("Network::Splitter() - Packet size is not the one indicated got {0} instead of {1} !", copiedBuffer.size(), header.getSize());
             return;
         }
+        if (_command_id == header.getId()) {
+            EXODIA_CORE_WARN("Network::Splitter() - Packet already received !");
+            return;
+        }
+        _command_id = header.getId();
 
         std::unordered_map<unsigned char, std::function<void(const std::vector<char>, size_t, asio::ip::udp::endpoint senderEndpoint, Exodia::Network::Header _header)>> commands;
         commands[0x00] = std::bind(&Network::ReceivePacketInfo, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4); // Packet info for loss calculation

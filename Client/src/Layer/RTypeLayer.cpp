@@ -117,7 +117,6 @@ namespace Exodia {
     void RTypeLayer::OnUpdate(Exodia::Timestep ts)
     {
         EXODIA_PROFILE_FUNCTION();
-
         // Renderer Prep
         {
             EXODIA_PROFILE_SCOPE("Renderer Prep");
@@ -154,7 +153,7 @@ namespace Exodia {
             auto &sc = script.Get();
             auto &tc = tag.Get();
 
-            if (tc.Tag.rfind("Player", std::stoi(this->_Network->id)) != std::string::npos && sc.Instance != nullptr) {
+            if (tc.Tag == "Player_"+this->_Network->id && sc.Instance != nullptr) {
                 sc.Instance->OnKeyPressed(key);
 
                 _Network->SendEvent(key, true);
@@ -174,7 +173,7 @@ namespace Exodia {
             auto &tc = tag.Get();
 
             // TODO: Check if player{client_id}
-            if (tc.Tag.rfind("Player", std::stoi(this->_Network->id)) != std::string::npos && sc.Instance != nullptr) {
+            if (tc.Tag == "Player_"+this->_Network->id && sc.Instance != nullptr) {
                 sc.Instance->OnKeyReleased(key);
 
                 _Network->SendEvent(key, false);
