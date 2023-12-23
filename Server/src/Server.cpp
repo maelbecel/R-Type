@@ -155,7 +155,7 @@ namespace Exodia {
 
             _LastTime = time;
 
-            for (int i = 0; i < _Users.size(); i++) {
+            for (uint32_t i = 0; i < (uint32_t)_Users.size(); i++) {
                 Entity *player = Scenes[GAME]->GetEntityByName("Player_" + std::to_string(i));
 
                 if (player != nullptr) {

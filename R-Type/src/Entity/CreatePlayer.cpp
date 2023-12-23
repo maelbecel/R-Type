@@ -33,6 +33,6 @@ namespace Exodia {
         body.Get().Mass = 0.0f;
         body.Get().GravityScale = 0.0f;
         body.Get().Velocity = glm::vec2{ 0.0f, 0.0f };
-        EXODIA_INFO("Player created");
+        EXODIA_INFO("Player created named Player_" + std::to_string(playerID));
     };
 };
