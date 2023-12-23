@@ -133,7 +133,7 @@ namespace Exodia {
                 }
                 size_t FillData(std::vector<char> &buffer, size_t offset, void *data, size_t size);
 
-                ssize_t GetIndexPacketNeedAck(Connection connection)
+                int64_t GetIndexPacketNeedAck(Connection connection)
                 {
                     for (size_t i = 0; i < _packetNeedAck.size(); i++) {
                         if (_packetNeedAck[i].first == connection)
@@ -150,7 +150,6 @@ namespace Exodia {
                 IOContextManager &_ioContextManager;
                 std::queue<std::pair<std::pair<uint32_t, bool>, asio::ip::udp::endpoint>> _events;
                 std::vector<std::pair<Connection, std::unordered_map<uint64_t, Packet>>> _packetNeedAck;
-                uint32_t _command_id = 1048;
 
         }; // class Network
 

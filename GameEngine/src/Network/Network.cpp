@@ -148,7 +148,7 @@ namespace Exodia::Network {
         if (_connections.size() > 0) {
         for (auto &connection : _connections) {
             connection.second.SendPacket(_socket, packet);
-            ssize_t find = GetIndexPacketNeedAck(connection.second);
+            int64_t find = GetIndexPacketNeedAck(connection.second);
             if (find == -1) {
                 _packetNeedAck.push_back(std::make_pair(connection.second, std::unordered_map<uint64_t, Packet>()));
                 find = _packetNeedAck.size() - 1; // Update the value of find to the new index
@@ -157,7 +157,7 @@ namespace Exodia::Network {
         }
         } else { // If we are the client
             _server_connection.SendPacket(_socket, packet);
-            ssize_t find = GetIndexPacketNeedAck(_server_connection);
+            int64_t find = GetIndexPacketNeedAck(_server_connection);
             if (find == -1) {
                 _packetNeedAck.push_back(std::make_pair(_server_connection, std::unordered_map<uint64_t, Packet>()));
                 find = _packetNeedAck.size() - 1; // Update the value of find to the new index
@@ -446,11 +446,27 @@ namespace Exodia::Network {
             EXODIA_CORE_WARN("Network::Splitter() - Packet size is not the one indicated got {0} instead of {1} !", copiedBuffer.size(), header.getSize());
             return;
         }
-        if (_command_id == header.getId()) {
-            EXODIA_CORE_WARN("Network::Splitter() - Packet already received !");
-            return;
+
+        if (_connections.size() > 0) {
+            auto find = _connections.find(senderEndpoint.address().to_string() + ":" + std::to_string(senderEndpoint.port()));
+            if (find == _connections.end()) {
+                EXODIA_CORE_WARN("Network::Splitter() - Connection not found !");
+                return;
+            }
+            find->second.AddReceivedPacket();
+            if (find->second.GetLastId() >= (int)header.getId()) {
+                EXODIA_CORE_WARN("Network::Splitter() - Packet already received !");
+                return;
+            }
+            find->second.SetLastId(header.getId());
+        } else {
+            _server_connection.AddReceivedPacket();
+            if (_server_connection.GetLastId() >= (int)header.getId()) {
+                EXODIA_CORE_WARN("Network::Splitter() - Packet already received !");
+                return;
+            }
+            _server_connection.SetLastId(header.getId());
         }
-        _command_id = header.getId();
 
         std::unordered_map<unsigned char, std::function<void(const std::vector<char>, size_t, asio::ip::udp::endpoint senderEndpoint, Exodia::Network::Header _header)>> commands;
         commands[0x00] = std::bind(&Network::ReceivePacketInfo, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4); // Packet info for loss calculation
