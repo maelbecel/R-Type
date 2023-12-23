@@ -146,13 +146,23 @@ namespace Exodia::Network {
 
         packet.SetContent(buffer);
         if (_connections.size() > 0) {
-           for (auto &connection : _connections) {
-                connection.second.SendPacket(_socket, packet);
-                _packetNeedAck[connection.second.GetEndpoint()][packet.GetHeader()->GetId()] = packet;
-           }
-        } else {
+        for (auto &connection : _connections) {
+            connection.second.SendPacket(_socket, packet);
+            int64_t find = GetIndexPacketNeedAck(connection.second);
+            if (find == -1) {
+                _packetNeedAck.push_back(std::make_pair(connection.second, std::unordered_map<uint64_t, Packet>()));
+                find = _packetNeedAck.size() - 1; // Update the value of find to the new index
+            }
+            _packetNeedAck[find].second[packet.GetHeader()->GetId()] = packet;
+        }
+        } else { // If we are the client
             _server_connection.SendPacket(_socket, packet);
-            _packetNeedAck[_server_connection.GetEndpoint()][packet.GetHeader()->GetId()] = packet;
+            int64_t find = GetIndexPacketNeedAck(_server_connection);
+            if (find == -1) {
+                _packetNeedAck.push_back(std::make_pair(_server_connection, std::unordered_map<uint64_t, Packet>()));
+                find = _packetNeedAck.size() - 1; // Update the value of find to the new index
+            }
+            _packetNeedAck[find].second[packet.GetHeader()->GetId()] = packet;
         }
     }
 
@@ -255,14 +265,12 @@ namespace Exodia::Network {
         (void) senderEndpoint;
 
         uint64_t command_id = 0;
-        std::vector<char> buffer(sizeof(uint64_t));
         std::memcpy(&command_id, message.data(), sizeof(uint64_t));
-        std::cout << "Command id: " << command_id << std::endl;
-        auto find = _packetNeedAck.find(senderEndpoint);
-        if (find != _packetNeedAck.end()) {
-            auto find2 = find->second.find(command_id);
-            if (find2 != find->second.end()) {
-                find->second.erase(find2);
+        for (auto &connection : _packetNeedAck) {
+            auto find = connection.second.find(command_id);
+            if (find != connection.second.end()) {
+                connection.second.erase(find);
+                break;
             }
         }
     }
@@ -403,6 +411,15 @@ namespace Exodia::Network {
 
     }
 
+    void Network::ResendNeedAck() {
+        for (auto &connection : _packetNeedAck) {
+            for (auto &packet : connection.second) {
+                std::cout << "Resending packet " << std::endl;
+                connection.first.SendPacket(_socket, packet.second);
+            }
+        }
+        std::cout << "---------------------" << std::endl;
+    }
     /**
      * @brief This function is called when a packet is received
      *

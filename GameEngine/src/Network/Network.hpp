@@ -17,6 +17,8 @@
     #include <vector>
     #include <chrono>
     #include <queue>
+    #include <unordered_map>
+
 
 namespace Exodia {
 
@@ -75,6 +77,8 @@ namespace Exodia {
                 void SendEvent(uint32_t event, bool isPressed);                    // 0x82
                 void Splitter(const std::vector<char> &message, size_t size, asio::ip::udp::endpoint senderEndpoint);
 
+                void ResendNeedAck();
+
                 /**
                  * @brief Return an unordered map of pair of string and Connection
                  *
@@ -129,6 +133,15 @@ namespace Exodia {
                 }
                 size_t FillData(std::vector<char> &buffer, size_t offset, void *data, size_t size);
 
+                int64_t GetIndexPacketNeedAck(Connection connection)
+                {
+                    for (size_t i = 0; i < _packetNeedAck.size(); i++) {
+                        if (_packetNeedAck[i].first == connection)
+                            return i;
+                    }
+                    return -1;
+                }
+
             private:
                 World *_world;
                 UDPSocket _socket;
@@ -136,7 +149,7 @@ namespace Exodia {
                 Connection _server_connection;
                 IOContextManager &_ioContextManager;
                 std::queue<std::pair<std::pair<uint32_t, bool>, asio::ip::udp::endpoint>> _events;
-                std::unordered_map<asio::ip::udp::endpoint, std::unordered_map<uint64_t, Packet>> _packetNeedAck;
+                std::vector<std::pair<Connection, std::unordered_map<uint64_t, Packet>>> _packetNeedAck;
 
         }; // class Network
 
