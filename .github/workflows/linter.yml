@@ -21,6 +21,6 @@ jobs:
 
     - name: Auto-format Code
       run: |
-        git diff --name-only HEAD^ HEAD | grep -E '\.(c|cpp|h)$' | xargs clang-format -i -style=file
+        git diff --name-only HEAD~1..HEAD | grep -E '\.(c|cpp|h)$' | xargs -I {} clang-format -i -style=file "{}"
         git diff --exit-code --quiet || git commit -am "Auto-format code using ClangFormat" && git push origin ${{ github.ref }}
 
