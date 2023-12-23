@@ -42,9 +42,10 @@ namespace Exodia {
 
     static std::map<std::filesystem::path, AssetType> AssetExtensionMap = {
         { ".exodia", AssetType::Scene },
-        { ".png", AssetType::Texture2D },
-        { ".jpg", AssetType::Texture2D },
-        { ".jpeg", AssetType::Texture2D }
+        { ".png"   , AssetType::Texture2D },
+        { ".jpg"   , AssetType::Texture2D },
+        { ".jpeg"  , AssetType::Texture2D },
+        { ".mp3"   , AssetType::Sound2D }
     };
 
     static AssetType GetAssetTypeFromFileExtension(const std::filesystem::path &extension)

@@ -44,6 +44,7 @@ set(SOURCES_GAME_ENGINE
     src/Exodia/Renderer/Context/GraphicsContext.cpp
     src/Exodia/Renderer/Shader/Shader.cpp
     src/Exodia/Renderer/Vertex/VertexArray.cpp
+    src/Exodia/Renderer/Sound/Sound.cpp
 
         # -- Debug source files
 
@@ -87,10 +88,11 @@ set(SOURCES_GAME_ENGINE
     src/Exodia/Asset/Importer/TextureImporter.cpp
     src/Exodia/Asset/Importer/AssetImporter.cpp
     src/Exodia/Asset/Importer/SceneImporter.cpp
+    src/Exodia/Asset/Importer/SoundImporter.cpp
     src/Exodia/Asset/Manager/EditorAssetManager.cpp
-        
+
         # -- Exodia Math source files
-    
+
     src/Exodia/Math/Math.cpp
 
     # Platform source files
@@ -112,6 +114,7 @@ set(SOURCES_GAME_ENGINE
     src/Platform/OpenGL/OpenGLTexture.cpp
     src/Platform/OpenGL/OpenGLUniformBuffer.cpp
     src/Platform/OpenGL/OpenGLVertexArray.cpp
+    src/Platform/OpenGL/OpenGLSound.cpp
 
     # Network source files
 
@@ -152,6 +155,7 @@ target_link_libraries(GameEngine PRIVATE
     unofficial::nativefiledialog::nfd
     yaml-cpp::yaml-cpp
     imguizmo::imguizmo
+    FreeALUT::alut
 )
 
 target_include_directories(GameEngine PRIVATE ${INCLUDE_DIRS_GAME_ENGINE})

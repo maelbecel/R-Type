@@ -104,13 +104,11 @@ The IAssetManager class is used to manage IAssets.
 ```mermaid
     graph TD;
     IAssetManager --> EditorAssetManager
-    IAssetManager --> RuntimeAssetManager
 ```
 
 The two classes that inherit from IAssetManager are :
 
 - **EditorAssetManager** : The Editor part of the IAssetManager. It contains the classes that will be used to manage IAssets in the Editor.
-- **RuntimeAssetManager** : The Runtime part of the IAssetManager. It contains the classes that will be used to manage IAssets in the Runtime.
 
 ### GetAsset {id="getasset_1"}
 

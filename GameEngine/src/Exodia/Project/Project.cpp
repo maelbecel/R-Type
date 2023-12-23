@@ -204,11 +204,6 @@ namespace Exodia {
         return _AssetManager;
     }
 
-    Ref<RuntimeAssetManager> Project::GetRuntimeAssetManager() const
-    {
-        return std::static_pointer_cast<RuntimeAssetManager>(_AssetManager);
-    }
-
     Ref<EditorAssetManager> Project::GetEditorAssetManager() const
     {
         return std::static_pointer_cast<EditorAssetManager>(_AssetManager);

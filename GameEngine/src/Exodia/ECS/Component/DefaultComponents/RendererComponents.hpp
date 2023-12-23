@@ -164,6 +164,7 @@ namespace Exodia {
                 EXODIA_CORE_WARN("SpriteRendererComponent deserialization failed: {0}", e.what());
             }
         }
+
         virtual void DrawComponent() override
         {
             std::string label = "None";
