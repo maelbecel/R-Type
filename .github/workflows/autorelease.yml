@@ -62,8 +62,8 @@ jobs:
         draft: false
         prerelease: false
 
-    - name: Upload Release Asset
-      id: upload-release-asset 
+    - name: Upload Release Asset Server
+      id: upload-release-asset-server
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -73,8 +73,8 @@ jobs:
         asset_name: r-type_server
         asset_content_type: application/octet-stream
 
-    - name: Upload Release Asset
-      id: upload-release-asset 
+    - name: Upload Release Asset Client
+      id: upload-release-asset-client
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
