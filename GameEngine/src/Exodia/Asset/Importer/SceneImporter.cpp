@@ -23,7 +23,7 @@ namespace Exodia {
     // Methods //
     /////////////
 
-    Ref<Scene> SceneImporter::ImportScene(UNUSED AssetHandle handle, const AssetSpecification &spec)
+    Ref<Scene> SceneImporter::ImportScene(UNUSED(AssetHandle handle), const AssetSpecification &spec)
     {
         EXODIA_PROFILE_FUNCTION();
 

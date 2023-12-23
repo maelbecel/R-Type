@@ -54,3 +54,6 @@ vgcore.*
 # Editor directories and files
 .idea/
 .vscode/
+
+#Windows
+Release/

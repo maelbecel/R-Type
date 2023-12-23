@@ -130,6 +130,11 @@ namespace Exodia {
 
     Entity *World::CreateEntity(const UUID &uuid, const std::string &name)
     {
+        for (auto entity : _Entities) {
+            if (entity->GetEntityID() == uuid) {
+                return entity;
+            }
+        }
         Entity *entity = std::allocator_traits<EntityAllocator>::allocate(_EntityAllocator, 1);
 
         std::allocator_traits<EntityAllocator>::construct(_EntityAllocator, entity, this, uuid);

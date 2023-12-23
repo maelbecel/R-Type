@@ -8,6 +8,9 @@
 // OpenGL
 #include "OpenGLContext.hpp"
 #include <glad/glad.h>
+#include <AL/al.h>
+#include <AL/alc.h>
+#include <AL/alut.h>
 
 // Exodia Utils
 #include "Utils/Assert.hpp"
@@ -64,6 +67,24 @@ namespace Exodia {
 
         // -- To remove the warning of unused variable -- //
         (void)status;
+
+        ALCdevice *device = alcOpenDevice(nullptr);
+
+        if (!device) {
+            EXODIA_CORE_WARN("Failed to open OpenAL device");
+
+            return;
+        }
+
+        ALCcontext *context = alcCreateContext(device, nullptr);
+
+        if (!alcMakeContextCurrent(context)) {
+            EXODIA_CORE_WARN("Failed to make OpenAL context current");
+
+            return;
+        }
+
+        alutInit(nullptr, nullptr);
     }
 
     void OpenGLContext::SwapBuffers()

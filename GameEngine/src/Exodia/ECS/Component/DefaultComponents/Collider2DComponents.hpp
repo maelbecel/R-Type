@@ -31,7 +31,7 @@ namespace Exodia {
         BoxCollider2DComponent(const BoxCollider2DComponent &) = default;
         BoxCollider2DComponent() : Offset(glm::vec2(0.0f)), Size(glm::vec2(0.5f)), ColliderMask(0xFFFFFFFF) {};
 
-        virtual void Serialize(YAML::Emitter &out) override
+        virtual void Serialize(YAML::Emitter &out)
         {
             out << YAML::Key << "BoxCollider2DComponent";
             out << YAML::BeginMap;
@@ -49,7 +49,7 @@ namespace Exodia {
             out << YAML::EndMap;
         }
 
-        virtual void Deserialize(const YAML::Node &node) override
+        virtual void Deserialize(const YAML::Node &node)
         {
             try {
                 auto box = node["BoxCollider2DComponent"];
@@ -80,7 +80,7 @@ namespace Exodia {
         CircleCollider2DComponent(const CircleCollider2DComponent &) = default;
         CircleCollider2DComponent() : Offset(glm::vec2(0.0f)), Radius(0.5f), ColliderMask(0xFFFFFFFF) {};
 
-        virtual void Serialize(YAML::Emitter &out) override
+        virtual void Serialize(YAML::Emitter &out)
         {
             out << YAML::Key << "CircleCollider2DComponent";
             out << YAML::BeginMap;
@@ -95,7 +95,7 @@ namespace Exodia {
             out << YAML::EndMap;
         }
 
-        virtual void Deserialize(const YAML::Node &node) override
+        virtual void Deserialize(const YAML::Node &node)
         {
             try {
                 auto circle = node["CircleCollider2DComponent"];

@@ -40,7 +40,7 @@ namespace Exodia {
             return std::find(Children.begin(), Children.end(), child) != Children.end();
         }
 
-        virtual void Serialize(YAML::Emitter &out) override
+        virtual void Serialize(YAML::Emitter &out)
         {
             out << YAML::Key << "ChildrenComponent";
             out << YAML::BeginMap;
@@ -55,7 +55,7 @@ namespace Exodia {
             out << YAML::EndMap;
         }
 
-        virtual void Deserialize(const YAML::Node &node) override
+        virtual void Deserialize(const YAML::Node &node)
         {
             try {
                 auto children = node["ChildrenComponent"];
@@ -76,7 +76,7 @@ namespace Exodia {
         ParentComponent(const ParentComponent &) = default;
         ParentComponent(const UUID &parent = UUID(0)) : Parent(parent) {};
 
-        virtual void Serialize(YAML::Emitter &out) override
+        virtual void Serialize(YAML::Emitter &out)
         {
             out << YAML::Key << "ParentComponent";
             out << YAML::BeginMap;
@@ -86,7 +86,7 @@ namespace Exodia {
             out << YAML::EndMap;
         }
 
-        virtual void Deserialize(const YAML::Node &node) override
+        virtual void Deserialize(const YAML::Node &node)
         {
             try {
                 auto parent = node["ParentComponent"];

@@ -2,10 +2,14 @@ cmake_minimum_required(VERSION 3.12)
 
 project(GameEngine LANGUAGES CXX VERSION 1.0.1)
 
-set(CMAKE_BUILD_TYPE Debug)
+set(CMAKE_CXX_STANDARD 17)
 
 # Set compiler flags
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
+if (WIN32)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+else()
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
+endif()
 
 set(GLAD_INCLUDE_DIRS ${CMAKE_BINARY_DIR}/GLAD/include CACHE STRING "GLAD Include directories")
 
@@ -40,6 +44,7 @@ set(SOURCES_GAME_ENGINE
     src/Exodia/Renderer/Context/GraphicsContext.cpp
     src/Exodia/Renderer/Shader/Shader.cpp
     src/Exodia/Renderer/Vertex/VertexArray.cpp
+    src/Exodia/Renderer/Sound/Sound.cpp
 
         # -- Debug source files
 
@@ -57,6 +62,7 @@ set(SOURCES_GAME_ENGINE
     src/Exodia/ECS/System/Script/ScriptSystem.cpp
     src/Exodia/ECS/System/Physics/GravitySystem.cpp
     src/Exodia/ECS/System/Physics/MovingSystem.cpp
+    src/Exodia/ECS/EventSubscriber/EventHover.cpp
 
         # -- Scene source files
 
@@ -82,10 +88,11 @@ set(SOURCES_GAME_ENGINE
     src/Exodia/Asset/Importer/TextureImporter.cpp
     src/Exodia/Asset/Importer/AssetImporter.cpp
     src/Exodia/Asset/Importer/SceneImporter.cpp
+    src/Exodia/Asset/Importer/SoundImporter.cpp
     src/Exodia/Asset/Manager/EditorAssetManager.cpp
-        
+
         # -- Exodia Math source files
-    
+
     src/Exodia/Math/Math.cpp
 
     # Platform source files
@@ -107,10 +114,12 @@ set(SOURCES_GAME_ENGINE
     src/Platform/OpenGL/OpenGLTexture.cpp
     src/Platform/OpenGL/OpenGLUniformBuffer.cpp
     src/Platform/OpenGL/OpenGLVertexArray.cpp
+    src/Platform/OpenGL/OpenGLSound.cpp
 
     # Network source files
 
     src/Network/Network.cpp
+    src/Network/UDPSocket/UDPSocket.cpp
 )
 
 # Set the include directories for the Game Engine Library
@@ -146,6 +155,7 @@ target_link_libraries(GameEngine PRIVATE
     unofficial::nativefiledialog::nfd
     yaml-cpp::yaml-cpp
     imguizmo::imguizmo
+    FreeALUT::alut
 )
 
 target_include_directories(GameEngine PRIVATE ${INCLUDE_DIRS_GAME_ENGINE})

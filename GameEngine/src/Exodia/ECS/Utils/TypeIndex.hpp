@@ -14,7 +14,10 @@
     #include <memory>
     #include <string>
     #include <cstdlib>
+
+#ifdef __GNUC__
     #include <cxxabi.h>
+#endif
 
 namespace Exodia {
 

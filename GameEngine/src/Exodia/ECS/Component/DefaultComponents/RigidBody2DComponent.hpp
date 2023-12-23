@@ -61,7 +61,7 @@ namespace Exodia {
         float GravityScale;
         float Mass;
 
-        virtual void Serialize(YAML::Emitter &out) override
+        virtual void Serialize(YAML::Emitter &out)
         {
             out << YAML::Key << "RigidBody2DComponent";
             out << YAML::BeginMap;
@@ -77,7 +77,7 @@ namespace Exodia {
             out << YAML::EndMap;
         }
 
-        virtual void Deserialize(const YAML::Node &node) override
+        virtual void Deserialize(const YAML::Node &node)
         {
             try {
                 auto rigidBody = node["RigidBody2DComponent"];

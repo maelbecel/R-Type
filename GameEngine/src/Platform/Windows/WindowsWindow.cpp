@@ -142,7 +142,7 @@ namespace Exodia {
             data.EventCallback(event);
         });
 
-        glfwSetKeyCallback(_Window, [](GLFWwindow *window, int key, UNUSED int scancode, int action, UNUSED int mods) {
+        glfwSetKeyCallback(_Window, [](GLFWwindow *window, int key, UNUSED(int scancode), int action, UNUSED(int mods)) {
             WindowData &data = *(WindowData *)glfwGetWindowUserPointer(window);
 
             switch (action) {
@@ -173,7 +173,7 @@ namespace Exodia {
             data.EventCallback(event);
         });
 
-        glfwSetMouseButtonCallback(_Window, [](GLFWwindow *window, int button, int action, UNUSED int mods) {
+        glfwSetMouseButtonCallback(_Window, [](GLFWwindow *window, int button, int action, UNUSED(int mods)) {
             WindowData &data = *(WindowData *)glfwGetWindowUserPointer(window);
 
             switch (action) {

@@ -4,6 +4,43 @@ Replicate of the `rtype` game.
 
 ## Usage & Examples
 
+### VCPKG
+
+- Install VCPKG.
+
+After the installation done, on Linux :
+
+```bash
+./vcpkg/bootstrap-vcpkg.sh
+
+code ~/.bashrc
+```
+
+On the file opened, add this line at the end :
+
+```bash
+export VCPKG_ROOT=/path/vcpkg
+```
+
+Save and close the file.
+
+```bash
+source ~/.bashrc
+```
+
+## Windows
+
+Please install `Visual Studio 17 2022`
+
+```bash
+mkdir build
+cd build
+cmake .. -G "Visual Studio 17 2022" -DCMAKE_TOOLCHAIN_FILE=\path\vcpkg\scripts\buildsystems\vcpkg.cmake -D_WIN32_WINNT=0x0601
+cmake --build . --config Release
+```
+
+## Linux
+
 You can use the bash script `make.sh` if you want to try.
 
 First at all, you will have this menu when you launch the script. Here you can choose which command execute.

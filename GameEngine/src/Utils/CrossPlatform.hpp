@@ -9,7 +9,8 @@
     #define CROSSPLATFORM_HPP_
 
 #if defined(_WIN32) || defined(_WIN64)
-    #include <windows.h>
+    #define WIN32_LEAN_AND_MEAN
+        #include <windows.h>
 
     #define EXODIA_EXPORT extern "C" __declspec(dllexport)
 #else
