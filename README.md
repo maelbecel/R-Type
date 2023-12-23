@@ -74,30 +74,6 @@ cmake --build .
 ./r-type_client [PORT]
 ```
 
-### VCPKG
-
-- Install VCPKG.
-
-After the installation done, on Linux :
-
-```bash
-./vcpkg/bootstrap-vcpkg.sh
-
-code ~/.bashrc
-```
-
-On the file opened, add this line at the end :
-
-```bash
-export VCPKG_ROOT=/path/vcpkg
-```
-
-Save and close the file.
-
-```bash
-source ~/.bashrc
-```
-
 ## UML
 ![GameEngine](doc/GameEngine.jpeg)
 
