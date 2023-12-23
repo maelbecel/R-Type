@@ -18,9 +18,9 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: "Install clang-format"
-        run: sudo apt-get install -y clang-format
+      run: sudo apt-get install -y clang-format
     - name: "Run clang-format"
-        run: find . -iname '*.hpp' -o -iname '*.cpp' ! -path "./Library/*" ! -path "./Packages/*" | xargs clang-format -i -style=file
+      run: find . -iname '*.hpp' -o -iname '*.cpp' ! -path "./Library/*" ! -path "./Packages/*" | xargs clang-format -i -style=file
     - uses: EndBug/add-and-commit@v9
       with:
         author_name: Clang Robot
