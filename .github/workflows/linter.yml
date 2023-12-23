@@ -21,7 +21,8 @@ jobs:
     - uses: DoozyX/clang-format-lint-action@v0.16.2
       with:
         source: '.'
-        extensions: 'h,cpp,c, hpp'
+        extensions: 'cpp'
+        style: 'google'
         clangFormatVersion: 16
         inplace: True
     - uses: EndBug/add-and-commit@v9
