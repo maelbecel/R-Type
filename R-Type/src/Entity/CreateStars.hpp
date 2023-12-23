@@ -19,7 +19,7 @@ namespace Exodia {
      *
      * @param _World
      */
-    void CreateStars(std::map<SceneType, std::shared_ptr<Exodia::Scene>> _World);
+    void CreateStars(std::map<RType::SceneType, std::shared_ptr<Exodia::Scene>> _World);
 };
 
 #endif /* !CREATESTARS_HPP_ */

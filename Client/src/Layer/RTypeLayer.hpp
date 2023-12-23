@@ -31,28 +31,21 @@ namespace Exodia {
             void OnAttach()            override;
             void OnDetach()            override;
             void OnUpdate(Timestep ts) override;
-            void OnImGUIRender()       override;
             void OnEvent(Event &event) override;
 
         private:
             bool OnKeyReleasedEvent(KeyReleasedEvent &event);
             bool OnKeyPressedEvent(KeyPressedEvent &event);
+            bool OnWindowResizeEvent(WindowResizeEvent &event);
 
         ////////////////
         // Attributes //
         ////////////////
-        public:
-            inline static std::map<SceneType, Ref<Scene>> Scenes;
-            inline static SceneType CurrentScene;
-
         private:
-            // TODO: WARNING: This is a temporary solution
-            World *_WorldNetwork;
+            std::map<RType::SceneType, std::pair<RType::SceneState, Ref<Exodia::Scene>>> _Scenes;
+            RType::SceneType _CurrentScene;
 
-            Network::IOContextManager _IOContextManager;
-            Scope<Network::Network>   _Network;
-
-            EditorCamera          _EditorCamera;
+            EditorCamera _WaitingCamera;
     };
 };
 

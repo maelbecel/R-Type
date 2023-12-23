@@ -61,6 +61,8 @@ namespace Exodia {
         float GravityScale;
         float Mass;
 
+        RigidBody2DComponent() : Type(BodyType::Static), Velocity(0.0f), GravityScale(1.0f), Mass(1.0f) {};
+
         virtual void Serialize(YAML::Emitter &out)
         {
             out << YAML::Key << "RigidBody2DComponent";

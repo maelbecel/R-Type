@@ -77,38 +77,38 @@ namespace Exodia {
         EXODIA_INFO("Server initialisation...");
 
         try {
-            CurrentScene = GAME;
+            CurrentScene = RType::SceneType::GAME;
 
-            Scenes[GAME] = CreateRef<Scene>();
+            Scenes[RType::SceneType::GAME] = CreateRef<Scene>();
 
-            SceneSerializer serializer(Scenes[GAME]);
+            SceneSerializer serializer(Scenes[RType::SceneType::GAME]);
 
             serializer.Deserialize("./Assets/Scene/Stage_1.exodia");
             _Network.SendScene("./Assets/Scene/Stage_1.exodia");
 
             _Network.SetWorld(Scenes[CurrentScene]->GetWorldPtr());
 
-            /*Scenes[MENU]->RegisterSystem(new AnimationSystem());
-            Scenes[MENU]->RegisterSystem(new ScriptSystem());
-            Scenes[MENU]->RegisterSystem(new MovingSystem(1.5f));
+            /*Scenes[RType::SceneType::MENU]->RegisterSystem(new AnimationSystem());
+            Scenes[RType::SceneType::MENU]->RegisterSystem(new ScriptSystem());
+            Scenes[RType::SceneType::MENU]->RegisterSystem(new MovingSystem(1.5f));
 
             RType::EntityEventSubscriber *subscribe = new RType::EntityEventSubscriber(_Network);
             CollisionSystem              *collisionSystem = new CollisionSystem();
 
-            Scenes[GAME] = CreateRef<Scene>();
-            Scenes[GAME]->RegisterSystem(new AnimationSystem());
-            Scenes[GAME]->RegisterSystem(new ScriptSystem());
-            Scenes[GAME]->RegisterSystem(new MovingSystem(1.5f));
-            Scenes[GAME]->RegisterSystem(collisionSystem);
-            Scenes[GAME]->Subscribe<Events::OnEntityCreated>(subscribe);
-            Scenes[GAME]->Subscribe<Events::OnEntityDestroyed>(subscribe);
-            Scenes[GAME]->Subscribe<Events::OnCollisionEntered>(collisionSystem);
+            Scenes[RType::SceneType::GAME] = CreateRef<Scene>();
+            Scenes[RType::SceneType::GAME]->RegisterSystem(new AnimationSystem());
+            Scenes[RType::SceneType::GAME]->RegisterSystem(new ScriptSystem());
+            Scenes[RType::SceneType::GAME]->RegisterSystem(new MovingSystem(1.5f));
+            Scenes[RType::SceneType::GAME]->RegisterSystem(collisionSystem);
+            Scenes[RType::SceneType::GAME]->Subscribe<Events::OnEntityCreated>(subscribe);
+            Scenes[RType::SceneType::GAME]->Subscribe<Events::OnEntityDestroyed>(subscribe);
+            Scenes[RType::SceneType::GAME]->Subscribe<Events::OnCollisionEntered>(collisionSystem);
 
             CreatePataPata(Scenes);
             CreateBackground(Scenes);
 
             // Camera creation
-            Entity *cameraEntity = Scenes[GAME]->CreateEntity("Camera");
+            Entity *cameraEntity = Scenes[RType::SceneType::GAME]->CreateEntity("Camera");
 
             auto &camera = cameraEntity->AddComponent<CameraComponent>().Get();
 
@@ -166,7 +166,7 @@ namespace Exodia {
             _LastTime = time;
 
             for (uint32_t i = 0; i < (uint32_t)_Users.size(); i++) {
-                Entity *player = Scenes[GAME]->GetEntityByName("Player_" + std::to_string(i));
+                Entity *player = Scenes[RType::SceneType::GAME]->GetEntityByName("Player_" + std::to_string(i));
 
                 if (player != nullptr) {
                     _Network.SendComponentOf(player, "TagComponent");
@@ -177,11 +177,11 @@ namespace Exodia {
             }
 
             /*
-            if (CurrentScene == GAME) {
-                auto pata = Scenes[GAME]->GetEntityByName("Pata-pata");
+            if (CurrentScene == RType::SceneType::GAME) {
+                auto pata = Scenes[RType::SceneType::GAME]->GetEntityByName("Pata-pata");
 
                 if (pata == nullptr) {
-                    Entity *patata = Scenes[GAME]->CreateEntity("Pata-pata");
+                    Entity *patata = Scenes[RType::SceneType::GAME]->CreateEntity("Pata-pata");
 
                     patata->AddComponent<Health>(1);
                     patata->AddComponent<ScriptComponent>().Get().Bind("PataPata");
@@ -201,7 +201,7 @@ namespace Exodia {
                 //_Network.SendComponentOf(pata, "TransformComponent");
                 //_Network.SendComponentOf(pata, "CircleRendererComponent");
 
-                auto *bullet = Scenes[GAME]->GetEntityByName("BE68");
+                auto *bullet = Scenes[RType::SceneType::GAME]->GetEntityByName("BE68");
 
                 if (bullet != nullptr) {
                     _Network.SendComponentOf(bullet, "TransformComponent");
@@ -258,7 +258,7 @@ namespace Exodia {
             }
             if (newClient) {
                 CreatePlayer(Scenes, (uint32_t)_Users.size());
-                player = Scenes[GAME]->GetEntityByName("Player_" + std::to_string((uint32_t)_Users.size()));
+                player = Scenes[RType::SceneType::GAME]->GetEntityByName("Player_" + std::to_string((uint32_t)_Users.size()));
                 _Users.push_back(User(connection.second, player));
                 EXODIA_INFO("New client connected");
             }

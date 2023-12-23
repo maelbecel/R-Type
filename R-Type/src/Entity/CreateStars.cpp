@@ -11,7 +11,7 @@
 
 namespace Exodia {
 
-    void CreateStars(std::map<SceneType, std::shared_ptr<Exodia::Scene>> world) {
+    void CreateStars(std::map<RType::SceneType, std::shared_ptr<Exodia::Scene>> world) {
         std::random_device rd;
         std::mt19937 gen(rd());
 
@@ -19,7 +19,7 @@ namespace Exodia {
         std::uniform_int_distribution<int>   velocityDist(-8, -1);
 
 		for(int i = 0; i < 60; i++) {
-            Entity *star = world[GAME]->CreateEntity("Star" + std::to_string(i));
+            Entity *star = world[RType::SceneType::GAME]->CreateEntity("Star" + std::to_string(i));
 
             star->AddComponent<ScriptComponent>().Get().Bind("Star");
             star->GetComponent<TransformComponent>().Get().Scale.y = 0.1f;

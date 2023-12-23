@@ -16,10 +16,7 @@ namespace Exodia {
     // Constructor & Destructor //
     //////////////////////////////
 
-    RTypeLayer::RTypeLayer() : Layer("R-Type"), _WorldNetwork(nullptr), _Network(nullptr), _EditorCamera(30.0f, 1.778f, 0.1f, 1000.0f)
-    {
-        CurrentScene = MENU;
-    }
+    RTypeLayer::RTypeLayer() : Layer("R-Type"), _CurrentScene(RType::SceneType::MENU), _WaitingCamera(35.0f, 1.778f, 0.1f, 1000.0f) {};
 
     /////////////
     // Methods //
@@ -27,105 +24,38 @@ namespace Exodia {
 
     void RTypeLayer::OnAttach()
     {
-        EXODIA_PROFILE_FUNCTION();
+        _Scenes.insert(std::make_pair(RType::SceneType::MENU, std::make_pair(RType::SceneState::RUNNING, CreateRef<Scene>("Menu"))));
+        _Scenes.insert(std::make_pair(RType::SceneType::GAME, std::make_pair(RType::SceneState::PAUSED, nullptr)));
 
-        Scenes[MENU] = CreateRef<Scene>();
-        Scenes[MENU]->OnViewportResize(Application::Get().GetWindow().GetWidth(), Application::Get().GetWindow().GetHeight());
-
-        // Create world
-        /*
-        Scenes[MENU]->RegisterSystem(new AnimationSystem());
-        Scenes[MENU]->RegisterSystem(new ScriptSystem());
-        Scenes[MENU]->RegisterSystem(new MovingSystem(1.5f));
-
-        //RType::EntityEventSubscriber *subscribe = new RType::EntityEventSubscriber(_Network);
-        CollisionSystem *collisionSystem = new CollisionSystem();
-
-        Scenes[GAME] = CreateRef<Scene>();
-        Scenes[GAME]->RegisterSystem(new AnimationSystem());
-        Scenes[GAME]->RegisterSystem(new ScriptSystem());
-        Scenes[GAME]->RegisterSystem(new MovingSystem(1.5f));
-        Scenes[GAME]->RegisterSystem(collisionSystem);
-        //Scenes[GAME]->Subscribe<Events::OnEntityCreated>(subscribe);
-        //Scenes[GAME]->Subscribe<Events::OnEntityDestroyed>(subscribe);
-        Scenes[GAME]->Subscribe<Events::OnCollisionEntered>(collisionSystem);
-        Scenes[GAME]->OnViewportResize(Application::Get().GetWindow().GetWidth(), Application::Get().GetWindow().GetHeight());
-
-        _Network->SetWorld(Scenes[CurrentScene]->GetWorldPtr());
-
-        //TODO: Temp code
-
-        // Create the camera entity
-        Entity *cameraEntity = Scenes[GAME]->CreateEntity("Camera");
-
-        auto &camera = cameraEntity->AddComponent<CameraComponent>().Get();
-        cameraEntity->GetComponent<TransformComponent>().Get().Translation = { 0.0f, 0.0f, 15.0f };
-        camera.Camera.SetProjectionType(SceneCamera::ProjectionType::Perspective);
-        camera.Camera.SetViewportSize(Application::Get().GetWindow().GetWidth(), Application::Get().GetWindow().GetHeight());
-*/
-        /* Removing rigid body for static camera
-        auto body_camera = cameraEntity->AddComponent<RigidBody2DComponent>();
-        body_camera.Get().Type = RigidBody2DComponent::BodyType::Dynamic;
-        body_camera.Get().Mass = 0.0f;
-        body_camera.Get().GravityScale = 0.0f;
-        body_camera.Get().Velocity = glm::vec2{ 1.5f, 0.0f };
-        */
-
-        // Create the entities
-        //CreatePlayer(Scenes, 0);
-
-        // Create pata-pata
-        // CreatePataPata(Scenes);
-
-        // Create background
-        /*CreateBackground(Scenes);
-
-        Entity *cameraMenu = Scenes[MENU]->CreateEntity("Camera");
-
-        auto &camera_ = cameraMenu->AddComponent<CameraComponent>().Get();
-        cameraMenu->GetComponent<TransformComponent>().Get().Translation = { 0.0f, 0.0f, 15.0f };
-        camera_.Camera.SetProjectionType(SceneCamera::ProjectionType::Perspective);
-        camera_.Camera.SetViewportSize(1600, 900);
-        cameraMenu->AddComponent<RigidBody2DComponent>().Get().Type = RigidBody2DComponent::BodyType::Static;*/
-
-        // Create stars
-        // CreateStars(Scenes);
-
-        // Create the camera
-        //Scenes[CurrentScene]->OnRuntimeStart();
+        _WaitingCamera.SetViewportSize(Exodia::Application::Get().GetWindow().GetWidth(), Exodia::Application::Get().GetWindow().GetHeight());
     }
 
-    void RTypeLayer::OnDetach()
-    {
-        EXODIA_PROFILE_FUNCTION();
-    }
+    void RTypeLayer::OnDetach() {};
 
     void RTypeLayer::OnUpdate(Exodia::Timestep ts)
     {
         EXODIA_PROFILE_FUNCTION();
+
         // Renderer Prep
         {
-            EXODIA_PROFILE_SCOPE("Renderer Prep");
-
             Exodia::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
             Exodia::RenderCommand::Clear();
         }
 
-        // Scene Update
+        // Render Scene
         {
-            if (CurrentScene == GAME)
-                Scenes[CurrentScene]->OnUpdateRuntime(ts);
-            else {
-                _EditorCamera.OnUpdate(ts);
+            if (_CurrentScene == RType::SceneType::MENU) {};
 
-                Scenes[CurrentScene]->OnUpdateEditor(ts, _EditorCamera);
+            if (_CurrentScene == RType::SceneType::GAME) {
+                if (_Scenes[RType::SceneType::GAME].first == RType::SceneState::RUNNING) {
+                    _Scenes[RType::SceneType::GAME].second->OnUpdateRuntime(ts);
+                } else {
+                    _WaitingCamera.OnUpdate(ts);
+
+                    _Scenes[RType::SceneType::GAME].second->OnUpdateEditor(ts, _WaitingCamera);
+                }
             }
         }
-    }
-
-    void RTypeLayer::OnImGUIRender()
-    {
-        EXODIA_PROFILE_FUNCTION();
     }
 
     void RTypeLayer::OnEvent(Exodia::Event &event)
@@ -134,74 +64,60 @@ namespace Exodia {
 
         dispatcher.Dispatch<KeyPressedEvent>(BIND_EVENT_FN(RTypeLayer::OnKeyPressedEvent));
         dispatcher.Dispatch<KeyReleasedEvent>(BIND_EVENT_FN(RTypeLayer::OnKeyReleasedEvent));
+        dispatcher.Dispatch<WindowResizeEvent>(BIND_EVENT_FN(RTypeLayer::OnWindowResizeEvent));
     }
 
-    bool RTypeLayer::OnKeyPressedEvent(KeyPressedEvent &event) {
+    bool RTypeLayer::OnKeyPressedEvent(KeyPressedEvent &event)
+    {
         int key = event.GetKeyCode();
 
-        if (CurrentScene == MENU) {
-            if (key == Exodia::Key::ENTER) {
-                auto commandLine = Application::Get().GetSpecification().CommandLineArgs;
+        if (_CurrentScene == RType::SceneType::MENU) {
+            _CurrentScene = RType::SceneType::GAME;
 
-                int port = 8083;
-                if (commandLine.Count > 1) {
-                    port = std::stoi(commandLine[1]);
+            Ref<Scene> scene = CreateRef<Scene>("Stage 1");
 
-                    if (port < 1024 || port > 65535) {
-                        Application::Get().Close();
-                        return true;
-                    }
+            SceneSerializer serializer(scene);
+
+            serializer.Deserialize("./Assets/Scene/Stage_1.exodia");
+
+            _Scenes[RType::SceneType::GAME].second = scene;
+
+            // TODO: .. Connect to server and create room
+        } else if (_CurrentScene == RType::SceneType::GAME) {
+            if (_Scenes[RType::SceneType::GAME].first == RType::SceneState::RUNNING) {
+
+                // TODO: Update Scripts...
+            } else {
+                if (key == Key::ENTER) {
+                    _Scenes[RType::SceneType::GAME].first = RType::SceneState::RUNNING;
+
+                    _Scenes[RType::SceneType::GAME].second->RegisterSystem(new Exodia::MovingSystem());
+
+                    _Scenes[RType::SceneType::GAME].second->OnRuntimeStart();
+                    _Scenes[RType::SceneType::GAME].second->OnViewportResize(Exodia::Application::Get().GetWindow().GetWidth(), Exodia::Application::Get().GetWindow().GetHeight());
                 }
-
-                CurrentScene = GAME;
-
-                _WorldNetwork = World::CreateWorld();
-                _Network = CreateScope<Network::Network>(_WorldNetwork, _IOContextManager, port);
-
-                _Network->Loop();
-                _Network->SendAskConnect("127.0.0.1", 8082);
-
-                Scenes[GAME] = CreateRef<Scene>();
-                Scenes[GAME]->SetWorld(_WorldNetwork);
-                Scenes[CurrentScene]->OnRuntimeStart();
             }
-        } else {
-            Scenes[CurrentScene]->GetWorld().ForEach<ScriptComponent, TagComponent>([&](Entity *entity, auto script, auto tag) {
-                auto &sc = script.Get();
-                auto &tc = tag.Get();
-
-                if (tc.Tag == "Player_"+this->_Network->id && sc.Instance != nullptr) {
-                    sc.Instance->OnKeyPressed(key);
-
-                    _Network->SendEvent(key, true);
-                }
-
-                (void)entity;
-            });
         }
+        return true;
+    }
+
+    bool RTypeLayer::OnKeyReleasedEvent(UNUSED(KeyReleasedEvent &event))
+    {
+        return true;
+    }
+
+    bool RTypeLayer::OnWindowResizeEvent(WindowResizeEvent &event)
+    {
+        int width = event.GetWidth();
+        int height = event.GetHeight();
+
+        _WaitingCamera.SetViewportSize(width, height);
+
+        if (_CurrentScene == RType::SceneType::MENU)
+            _Scenes[RType::SceneType::MENU].second->OnViewportResize(width, height);
+        else if (_CurrentScene == RType::SceneType::GAME)
+            _Scenes[RType::SceneType::GAME].second->OnViewportResize(width, height);
 
         return true;
-    };
-
-    bool RTypeLayer::OnKeyReleasedEvent(KeyReleasedEvent &event) {
-        if (CurrentScene == MENU)
-            return true;
-
-        int key = event.GetKeyCode();
-
-        Scenes[CurrentScene]->GetWorld().ForEach<ScriptComponent, TagComponent>([&](Entity *entity, auto script, auto tag) {
-            auto &sc = script.Get();
-            auto &tc = tag.Get();
-
-            // TODO: Check if player{client_id}
-            if (tc.Tag == "Player_"+this->_Network->id && sc.Instance != nullptr) {
-                sc.Instance->OnKeyReleased(key);
-
-                _Network->SendEvent(key, false);
-            }
-
-            (void)entity;
-        });
-        return true;
-    };
+    }
 };

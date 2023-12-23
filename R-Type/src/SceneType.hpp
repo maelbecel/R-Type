@@ -8,9 +8,17 @@
 #ifndef SCENETYPE_HPP_
     #define SCENETYPE_HPP_
 
+namespace RType {
     enum SceneType {
-        GAME,
-        MENU
+        MENU,
+        GAME
     };
+
+    enum SceneState {
+        RUNNING,
+        PAUSED,
+        STOPPED
+    };
+};
 
 #endif /* !SCENETYPE_HPP_ */

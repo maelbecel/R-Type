@@ -18,7 +18,7 @@ namespace Exodia {
      *
      * @param _World
      */
-    void CreateBackground(std::map<SceneType, std::shared_ptr<Exodia::Scene>> _World);
+    void CreateBackground(std::map<RType::SceneType, std::shared_ptr<Exodia::Scene>> _World);
 };
 
 #endif /* !CREATEBACKGROUND_HPP_ */

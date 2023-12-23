@@ -23,6 +23,7 @@
     #include "src/Scripts/BulletPlayer.hpp"
     #include "src/Scripts/Player/Player.hpp"
     #include "src/Scripts/Pata-pata.hpp"
+    #include "src/Scripts/Background.hpp"
 
     #include "src/System/AnimationSystem.hpp"
 
@@ -39,9 +40,9 @@ namespace RType {
     {
         // -- Init the R-Type project ------------------------------------------
 #ifdef _WIN32
-        Ref<Exodia::Project> project = Exodia::Project::Load("../Client/R-Type.proj");
+        Ref<Exodia::Project> project = Exodia::Project::Load("../R-Type/R-Type.proj");
 #else
-        Ref<Exodia::Project> project = Exodia::Project::Load("./Client/R-Type.proj");
+        Ref<Exodia::Project> project = Exodia::Project::Load("./R-Type/R-Type.proj");
 #endif
 
         // -- Register R-Type components ---------------------------------------
@@ -78,6 +79,10 @@ namespace RType {
 
         project->RegisterScript("Player", []() -> Exodia::ScriptableEntity * {
             return new Exodia::Player();
+        });
+
+        project->RegisterScript("BackgroundScript", []() -> Exodia::ScriptableEntity * {
+            return new RType::BackgroundScript();
         });
     }
 };

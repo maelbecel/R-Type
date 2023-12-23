@@ -110,6 +110,9 @@ AssetRegistry:
   - Handle: 7912345678901234567
     Path: Icons/ContentBrowser/GoForward.png
     Type: AssetType::Texture2D
+  - Handle: 8901234567890241216
+    Path: Textures/Tile.png
+    Type: AssetType::Texture2D
   - Handle: 8901234567890123456
     Path: Textures/Gomander#2.png
     Type: AssetType::Texture2D

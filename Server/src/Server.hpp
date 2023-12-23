@@ -41,8 +41,8 @@ namespace Exodia {
         ////////////////
         public:
 
-            inline static std::map<SceneType, Ref<Scene>> Scenes;
-            inline static SceneType CurrentScene = SceneType::GAME;
+            inline static std::map<RType::SceneType, Ref<Scene>> Scenes;
+            inline static RType::SceneType CurrentScene = RType::SceneType::GAME;
 
         private:
 

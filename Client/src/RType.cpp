@@ -38,7 +38,7 @@ namespace Exodia {
 
         ApplicationSpecification spec;
 
-        spec.Name = "Application Example";
+        spec.Name = "R-Type";
         spec.CommandLineArgs = args;
 
         return new RTypeClient(spec);

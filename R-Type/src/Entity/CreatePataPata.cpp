@@ -9,9 +9,9 @@
 
 namespace Exodia {
 
-    void CreatePataPata(std::map<SceneType, std::shared_ptr<Exodia::Scene>> _World)
+    void CreatePataPata(std::map<RType::SceneType, std::shared_ptr<Exodia::Scene>> _World)
     {
-        Entity *patata = _World[GAME]->CreateEntity("Pata-pata");
+        Entity *patata = _World[RType::SceneType::GAME]->CreateEntity("Pata-pata");
 
         patata->AddComponent<Health>(1);
         patata->AddComponent<ScriptComponent>().Get().Bind("PataPata");

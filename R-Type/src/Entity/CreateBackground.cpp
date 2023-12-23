@@ -9,9 +9,9 @@
 
 namespace Exodia {
 
-    void CreateBackground(std::map<SceneType, std::shared_ptr<Exodia::Scene>> _World) {
+    void CreateBackground(std::map<RType::SceneType, std::shared_ptr<Exodia::Scene>> _World) {
         // Create background
-        Entity *background = _World[GAME]->CreateEntity("Background");
+        Entity *background = _World[RType::SceneType::GAME]->CreateEntity("Background");
 
         background->AddComponent<IDComponent>();
         background->AddComponent<CircleRendererComponent>(glm::vec4{ 0.0f, 0.0f, 0.005f, 1.0f });
