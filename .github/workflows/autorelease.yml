@@ -9,6 +9,10 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    container: epitechcontent/epitest-docker
+    timeout-minutes: 20
+    env:
+      VCPKG_ROOT: ${{ github.workspace }}/vcpkg
 
     steps:
     - name: Checkout code
