@@ -73,11 +73,10 @@ namespace Exodia {
                 }
             });
         }
-    
+
         void UDPSocket::Receive(const std::function<void(const std::vector<char>&, size_t, asio::ip::udp::endpoint)>& callback) {
             _socket.async_receive_from(asio::buffer(_receiveBuffer), _senderEndpoint,
                 [this, callback](const asio::error_code& error, std::size_t bytes_received) {
-                    _receive_mutex.lock();
                     std::vector<char> receivedMessage(_receiveBuffer.begin(), _receiveBuffer.begin() + bytes_received);
                     std::cout << std::endl;
                     if (!error) {
@@ -86,10 +85,8 @@ namespace Exodia {
                         callback(receivedMessage, receivedMessage.size(), _senderEndpoint);
 
                         // Call receive again to listen for more messages
-                        _receive_mutex.unlock();
                         Receive(callback);
                     } else {
-                        _receive_mutex.unlock();
                         EXODIA_CORE_ERROR("Error receiving message: ", error.message());
                     }
                 }

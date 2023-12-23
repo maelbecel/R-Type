@@ -113,6 +113,10 @@ namespace Exodia {
                     return header;
                 }
 
+                uint64_t GetId() const {
+                    return _id;
+                }
+
                 static unsigned long GetSize()
                 {
                     return 22;

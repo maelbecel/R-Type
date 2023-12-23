@@ -145,11 +145,15 @@ namespace Exodia::Network {
         buffer.resize(offset);
 
         packet.SetContent(buffer);
-        if (_connections.size() > 0)
-           for (auto &connection : _connections)
+        if (_connections.size() > 0) {
+           for (auto &connection : _connections) {
                 connection.second.SendPacket(_socket, packet);
-        else
+                _packetNeedAck[connection.second.GetEndpoint()][packet.GetHeader()->GetId()] = packet;
+           }
+        } else {
             _server_connection.SendPacket(_socket, packet);
+            _packetNeedAck[_server_connection.GetEndpoint()][packet.GetHeader()->GetId()] = packet;
+        }
     }
 
     /**
@@ -204,10 +208,9 @@ namespace Exodia::Network {
      *
      * @return void
     */
-    void Network::SendAck() {
+    void Network::SendAck(uint64_t command_id) {
         Exodia::Network::Packet packet(0x01);
         std::vector<char> buffer(sizeof(uint64_t));
-        uint64_t command_id;
 
         size_t offset = 0;
         offset = FillData(buffer, offset, &command_id, sizeof(uint64_t));
@@ -254,6 +257,13 @@ namespace Exodia::Network {
         std::vector<char> buffer(sizeof(uint64_t));
         std::memcpy(&command_id, message.data(), sizeof(uint64_t));
         std::cout << "Command id: " << command_id << std::endl;
+        auto find = _packetNeedAck.find(senderEndpoint);
+        if (find != _packetNeedAck.end()) {
+            auto find2 = find->second.find(command_id);
+            if (find2 != find->second.end()) {
+                find->second.erase(find2);
+            }
+        }
     }
 
     /**
@@ -295,6 +305,7 @@ namespace Exodia::Network {
         IComponentContainer *container = func(buffer);
         entity->AddComponent(container);
         EXODIA_CORE_INFO("Network::createEntity() - Component " + component_name + " added to entity " + std::to_string(id));
+        SendAck(header.getId());
     }
 
     void Network::ReceiveConnect(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint, Exodia::Network::Header header) {
