@@ -103,7 +103,6 @@ namespace Exodia {
     void RTypeLayer::OnUpdate(Exodia::Timestep ts)
     {
         EXODIA_PROFILE_FUNCTION();
-
         // Renderer Prep
         {
             EXODIA_PROFILE_SCOPE("Renderer Prep");
@@ -144,9 +143,7 @@ namespace Exodia {
             if (key == Exodia::Key::ENTER) {
                 auto commandLine = Application::Get().GetSpecification().CommandLineArgs;
 
-                // TODO: Temp port ./r-type_client -p {port}
-                int port = 8083; // Default port
-
+                int port = 8083;
                 if (commandLine.Count > 1) {
                     port = std::stoi(commandLine[1]);
 
@@ -173,7 +170,7 @@ namespace Exodia {
                 auto &sc = script.Get();
                 auto &tc = tag.Get();
 
-                if (tc.Tag.rfind("Player", std::stoi(this->_Network->id)) != std::string::npos && sc.Instance != nullptr) {
+                if (tc.Tag == "Player_"+this->_Network->id && sc.Instance != nullptr) {
                     sc.Instance->OnKeyPressed(key);
 
                     _Network->SendEvent(key, true);
@@ -197,7 +194,7 @@ namespace Exodia {
             auto &tc = tag.Get();
 
             // TODO: Check if player{client_id}
-            if (tc.Tag.rfind("Player", std::stoi(this->_Network->id)) != std::string::npos && sc.Instance != nullptr) {
+            if (tc.Tag == "Player_"+this->_Network->id && sc.Instance != nullptr) {
                 sc.Instance->OnKeyReleased(key);
 
                 _Network->SendEvent(key, false);

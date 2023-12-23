@@ -55,7 +55,7 @@ network.loop();
 void receivePacketInfo(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint);
 ```
 
-It allows the network to receive packets information.
+It's use to compute the packet loss.
 
 The method takes the following parameters:
 
