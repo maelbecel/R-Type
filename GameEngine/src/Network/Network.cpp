@@ -233,6 +233,7 @@ namespace Exodia::Network {
         std::vector<char> buffer(1024, 0);
         std::memcpy(buffer.data(), message.data(), size);
         std::string id(buffer.begin(), buffer.end());
+        std::cout << "Receive accept connect with id :"<< id << std::endl;
         this->id = id;
         std::cout << "Receive accept connect" << std::endl;
     }
@@ -299,6 +300,12 @@ namespace Exodia::Network {
 
     void Network::ReceiveConnect(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint, Exodia::Network::Header header) {
         (void) size;
+
+        //Check if already Connected
+        if (_connections.find(senderEndpoint.address().to_string() + ":" + std::to_string(senderEndpoint.port())) != _connections.end()) {
+            EXODIA_CORE_WARN("Network::ReceiveConnect() - Already connected to " + senderEndpoint.address().to_string() + ":" + std::to_string(senderEndpoint.port()));
+            return;
+        }
 
         //Adding id to the buffer
         std::vector<char> buffer(0);
