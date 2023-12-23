@@ -1,8 +1,78 @@
 # EPITECH Project - R-Type
 
-Replicate of the `rtype` game.
+<a href="https://img.shields.io/badge/MADE%20WITH-C%2B%2B-015482" alt="C++">
+    <img src="https://img.shields.io/badge/MADE%20WITH-C%2B%2B-015482" />
+</a>
+<a href="https://img.shields.io/badge/MADE%20WITH-OpenGL-63809f" alt="OpenGL">
+    <img src="https://img.shields.io/badge/MADE%20WITH-OpenGL-63809f">
+</a>
+<a href="https://img.shields.io/badge/MADE%20WITH-VCPKG-f9c438" alt="Vcpkg">
+    <img src="https://img.shields.io/badge/MADE%20WITH-VCPKG-f9c438" />
+</a>
+<a href="https://img.shields.io/badge/MADE%20WITH-CMAKE-CB2030" alt="Cmake">
+    <img src="https://img.shields.io/badge/MADE%20WITH-CMAKE-CB2030" />
+</a>
+
+![Alt text](doc/RType.png)
+
+> This project of the Advanced C++ knowledge unit will introduce you to networked video game development, and will give you the opportunity to explore advanced development techniques as well as to learn good software engineering practices.
+The goal is to implement a multithreaded server and a graphical client for a well-known legacy video game called 'R-Type', using a game engine of your own design.
+
+## Installation
+
+**VCPKG :**
+```bash
+git clone git@github.com:microsoft/vcpkg.git
+```
+
+**Linux :**
+```bash
+./vcpkg/bootstrap-vcpkg.sh
+export VCPKG_ROOT=/path/vcpkg
+source ~./bashrc
+```
+```bash
+mkdir build
+cd build
+```
+
+If you have ninja:
+```
+cmake .. -G Ninja
+ninja
+```
+else:
+```bash
+cmake ..
+cmake --build .
+```
+
+**Windows :**
+```bash
+./vcpkg/bootstrap-vcpkg.bat
+```
+- In advanced parameters system, add the environnement variable : `VCPKG_ROOT`, that contain the `/path/vcpkg`.
+- When it's done, restart your computer.
+
+```bash
+cmake ..
+cmake --build .
+```
 
 ## Usage & Examples
+
+**Products to be delivered**
+`r-type_server` `r-type_client`
+
+**In Terminal**
+```bash
+./r-type_server
+```
+
+**In another terminal**
+```bash
+./r-type_client [PORT]
+```
 
 ### VCPKG
 
@@ -28,49 +98,13 @@ Save and close the file.
 source ~/.bashrc
 ```
 
-## Windows
+## UML
+![GameEngine](doc/GameEngine.jpeg)
 
-Please install `Visual Studio 17 2022`
+## Authors
 
-```bash
-mkdir build
-cd build
-cmake .. -G "Visual Studio 17 2022" -DCMAKE_TOOLCHAIN_FILE=\path\vcpkg\scripts\buildsystems\vcpkg.cmake -D_WIN32_WINNT=0x0601
-cmake --build . --config Release
-```
-
-## Linux
-
-You can use the bash script `make.sh` if you want to try.
-
-First at all, you will have this menu when you launch the script. Here you can choose which command execute.
-
-```bash
-Menu Make:
-1. make
-2. make re
-3. make clean
-4. make fclean
-5. Examples
-6. Sandbox
-0. Quitter
-Choisissez une option (0-6):
-```
-
-If you choose 'Examples' (5) or 'Sandbox' (6), a new menu will be opened.
-
-```bash
-Choisissez une option (0-6): 5
-Menu Examples:
-1. make
-2. make re
-3. make clean
-4. make fclean
-0. Retour au menu principal
-00. Quitter
-Choisissez une option (0-4):
-```
-
-The 'Examples' section is for compiling Game-Engine examples. The goal is to try features from our Game-Engine.
-
-The 'Sandbox' section is our laboratory where we try out all the things we need or want to implement.
+* **Ethan Hernou** _alias_ [@Phara](https://github.com/PharaEthan)
+* **Axel Rohee** _alias_ [@RoheeAxel](https://github.com/RoheeAxel)
+* **Enzo Garnier** _alias_ [@EnzoGrn](https://github.com/EnzoGrn)
+* **Thomas Juin** _alias_ [@Chocofraise](https://github.com/thomasjuin1)
+* **Maël Becel** _alias_ [@Medhi](https://github.com/maelbecel)
