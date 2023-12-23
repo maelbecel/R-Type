@@ -47,10 +47,11 @@ namespace Exodia {
         {
             try {
                 Buffer buffer(sizeof(Tag));
-                std::memcpy(buffer.Data, &Tag, sizeof(Tag));
+                std::memcpy(buffer.Data, Tag.data(), sizeof(Tag));
                 return buffer;
             } catch (const std::exception &e) {
                 EXODIA_CORE_WARN("TagComponent serialization failed: {0}", e.what());
+                return Buffer();
             }
         }
 
@@ -61,7 +62,7 @@ namespace Exodia {
                     Tag = "";
                     return;
                 }
-                std::memcpy(&Tag, buffer.Data, sizeof(Tag));
+                std::memcpy(Tag.data(), buffer.Data, sizeof(Tag));
             } catch (const std::exception &e) {
                 EXODIA_CORE_WARN("TagComponent deserialization failed: {0}", e.what());
             }
