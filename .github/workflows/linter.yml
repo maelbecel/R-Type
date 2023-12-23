@@ -1,4 +1,4 @@
-name: ClangFormat Auto-Formatter
+name: ClangFormat Linter
 
 on:
   push:
@@ -7,21 +7,18 @@ on:
       - CICD
 
 jobs:
-  clang-format:
+  clang-format-check:
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v2
 
-    - name: Install ClangFormat
-      run: |
-        sudo apt-get update
-        sudo apt-get install clang-format
-
-    - name: Auto-format Code
-      run: |
-        git diff --name-only HEAD~1 | grep -E '\.(c|cpp|h)$' | xargs -I {} clang-format -i -style=file "{}"
-        git diff --exit-code --quiet || (git config --global user.email "github-actions[bot]@users.noreply.github.com" && git config --global user.name "GitHub Actions" && git commit -am "Auto-format code using ClangFormat" && git push origin HEAD:${{ github.ref }})
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Run ClangFormat Linter
+      uses: DoozyX/clang-format-lint-action@v0.13
+      with:
+        source: '.'
+        clangFormatVersion: 11
+        command: |
+          -style=file
+          -i
