@@ -429,6 +429,11 @@ namespace Exodia::Network {
             EXODIA_CORE_WARN("Network::Splitter() - Packet size is not the one indicated got {0} instead of {1} !", copiedBuffer.size(), header.getSize());
             return;
         }
+        if (_command_id == header.getId()) {
+            EXODIA_CORE_WARN("Network::Splitter() - Packet already received !");
+            return;
+        }
+        _command_id = header.getId();
 
         std::unordered_map<unsigned char, std::function<void(const std::vector<char>, size_t, asio::ip::udp::endpoint senderEndpoint, Exodia::Network::Header _header)>> commands;
         commands[0x00] = std::bind(&Network::ReceivePacketInfo, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4); // Packet info for loss calculation

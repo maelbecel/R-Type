@@ -173,7 +173,6 @@ namespace Exodia {
             auto &tc = tag.Get();
 
             // TODO: Check if player{client_id}
-
             if (tc.Tag == "Player_"+this->_Network->id && sc.Instance != nullptr) {
                 sc.Instance->OnKeyReleased(key);
 

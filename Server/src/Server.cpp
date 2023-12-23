@@ -166,6 +166,7 @@ namespace Exodia {
                     _Network.SendComponentOf(player, "TagComponent");
                     _Network.SendComponentOf(player, "TransformComponent");
                     _Network.SendComponentOf(player, "CircleRendererComponent");
+                    _Network.SendComponentOf(player, "ScriptComponent");
                 }
             }
 
