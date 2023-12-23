@@ -62,9 +62,18 @@ class Connection {
         bool operator!=(const Connection &connection) const {
             return _endpoint != connection.GetEndpoint();
         }
+
+        int GetLastId() const {
+            return _lastId;
+        }
+
+        void SetLastId(int lastId) {
+            _lastId = lastId;
+        }
     protected:
     private:
         asio::ip::udp::endpoint _endpoint;
+        int _lastId = -1;
         int _sendPacket;
         int _receivedPacket;
 
