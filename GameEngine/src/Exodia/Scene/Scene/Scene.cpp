@@ -262,6 +262,11 @@ namespace Exodia {
         return _World;
     }
 
+    void Scene::SetWorld(World *world)
+    {
+        _World = world;
+    }
+
     Entity *Scene::GetPrimaryCamera()
     {
         Entity *primaryCamera = nullptr;

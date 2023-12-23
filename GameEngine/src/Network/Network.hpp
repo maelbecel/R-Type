@@ -61,14 +61,19 @@ namespace Exodia {
                 void ReceivePacketInfo(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint, Exodia::Network::Header header);   // 0x00
                 void ReceiveAck(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint, Exodia::Network::Header header);          // 0x01
                 void ReceiveConnectAccept(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint, Exodia::Network::Header header);// 0x02
+                void ReceiveScene(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint, Exodia::Network::Header header);        // 0x21
                 void ReceiveComponentOf(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint, Exodia::Network::Header header);  // 0x0c
-                void ReceiveDeleteEntity(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint, Exodia::Network::Header header);        // 0x0e
+                void ReceiveDeleteEntity(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint, Exodia::Network::Header header); // 0x0e
                 void ReceiveConnect(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint, Exodia::Network::Header header);      // 0x81
                 void ReceiveEvent(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint, Exodia::Network::Header header);        // 0x82
+    
 
                 void SendPacketInfo();              // 0x00
                 void SendAck(uint64_t command_id);  // 0x01
                 void SendAcceptConnect();           // 0x02
+
+                void SendScene(const std::string &scene);                          // 0x21
+
                 void SendComponentOf(Entity *entity, std::string component_name);  // 0x0c
                 void SendDeleteEntity(Entity *entity);                             // 0x0e
                 void SendAskConnect(const std::string &ip, short port);            // 0x81

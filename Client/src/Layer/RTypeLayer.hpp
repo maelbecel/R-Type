@@ -51,6 +51,8 @@ namespace Exodia {
 
             Network::IOContextManager _IOContextManager;
             Scope<Network::Network>   _Network;
+
+            EditorCamera          _EditorCamera;
     };
 };
 

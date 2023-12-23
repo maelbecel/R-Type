@@ -38,6 +38,8 @@ namespace Exodia {
 
             ComponentContainer(const Buffer &data)
             {
+                if (data.Size == 0)
+                    return;
                 Data.DeserializeData(data);
             }
 

@@ -86,6 +86,8 @@ namespace Exodia {
 
             // Scene
             EditorCamera          _EditorCamera;
+            OrthographicCameraController _CameraController;
+
             Ref<Scene>            _EditorScene;
             Ref<Scene>            _ActiveScene;
             std::filesystem::path _EditorScenePath;

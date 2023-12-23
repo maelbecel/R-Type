@@ -17,7 +17,7 @@ namespace Exodia {
     // Constructor & Destructor //
     //////////////////////////////
 
-    EditorLayer::EditorLayer() : Layer("Exodia Editor"), _EditorCamera(30.0f, 1.778f, 0.1f, 1000.0f), _ActiveScene(nullptr), _SceneState(SceneState::Edit), _ViewportSize{ 0.0f, 0.0f }, _ViewportHovered(false), _GuizmoType(-1) {};
+    EditorLayer::EditorLayer() : Layer("Exodia Editor"), _EditorCamera(30.0f, 1.778f, 0.1f, 1000.0f), _CameraController(1600.f / 780.0f), _ActiveScene(nullptr), _SceneState(SceneState::Edit), _ViewportSize{ 0.0f, 0.0f }, _ViewportHovered(false), _GuizmoType(-1) {};
 
     /////////////
     // Methods //
@@ -88,7 +88,8 @@ namespace Exodia {
         if (_ViewportSize.x > 0.0f && _ViewportSize.y > 0.0f && (spec.Width != _ViewportSize.x || spec.Height != _ViewportSize.y)) {
             _Framebuffer->Resize((uint32_t)_ViewportSize.x, (uint32_t)_ViewportSize.y);
             _EditorCamera.SetViewportSize(_ViewportSize.x, _ViewportSize.y);
-            
+            _CameraController.OnResize(_ViewportSize.x, _ViewportSize.y);
+
             if (_ActiveScene)
                 _ActiveScene->OnViewportResize((uint32_t)_ViewportSize.x, (uint32_t)_ViewportSize.y);
         }
@@ -318,7 +319,10 @@ namespace Exodia {
         ImGui::End();
     }
 
-    void EditorLayer::OnEvent(UNUSED(Exodia::Event &event)) {};
+    void EditorLayer::OnEvent(UNUSED(Exodia::Event &event))
+    {
+        _CameraController.OnEvent(event);
+    }
 
     /////////////////////
     // Project Methods //

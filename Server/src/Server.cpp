@@ -79,8 +79,16 @@ namespace Exodia {
         try {
             CurrentScene = GAME;
 
-            Scenes[MENU] = CreateRef<Scene>();
-            Scenes[MENU]->RegisterSystem(new AnimationSystem());
+            Scenes[GAME] = CreateRef<Scene>();
+
+            SceneSerializer serializer(Scenes[GAME]);
+
+            serializer.Deserialize("./Assets/Scene/Stage_1.exodia");
+            _Network.SendScene("./Assets/Scene/Stage_1.exodia");
+
+            _Network.SetWorld(Scenes[CurrentScene]->GetWorldPtr());
+
+            /*Scenes[MENU]->RegisterSystem(new AnimationSystem());
             Scenes[MENU]->RegisterSystem(new ScriptSystem());
             Scenes[MENU]->RegisterSystem(new MovingSystem(1.5f));
 
@@ -114,11 +122,9 @@ namespace Exodia {
             body_camera.Get().Type = RigidBody2DComponent::BodyType::Dynamic;
             body_camera.Get().Mass = 0.0f;
             body_camera.Get().GravityScale = 0.0f;
-            body_camera.Get().Velocity = glm::vec2{ 1.5f, 0.0f };
+            body_camera.Get().Velocity = glm::vec2{ 1.5f, 0.0f };*/
 
-            Scenes[CurrentScene]->OnRuntimeStart(); // TODO: Remove and play start only when all players are connected or main player said play
-
-            _Network.SetWorld(Scenes[CurrentScene]->GetWorldPtr());
+            //Scenes[CurrentScene]->OnRuntimeStart(); // TODO: Remove and play start only when all players are connected or main player said play
         } catch (std::exception &error) {
             EXODIA_ERROR("Exception :\n\t{0}", error.what());
         }
@@ -185,8 +191,8 @@ namespace Exodia {
                     patata->AddComponent<CircleRendererComponent>(glm::vec4{ 1.0f, 1.0f, 0.0f, 1.0f});
                 }
 
-                _Network.SendComponentOf(pata, "TransformComponent");
-                _Network.SendComponentOf(pata, "CircleRendererComponent");
+                //_Network.SendComponentOf(pata, "TransformComponent");
+                //_Network.SendComponentOf(pata, "CircleRendererComponent");
 
                 /*
                 auto *bullet = Scenes[GAME]->GetEntityByName("BE68");

@@ -88,6 +88,8 @@ namespace Exodia {
 
             World &GetWorld() const;
 
+            void SetWorld(World *world);
+
             World *GetWorldPtr();
 
             Entity *GetPrimaryCamera();

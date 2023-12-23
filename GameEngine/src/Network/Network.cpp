@@ -7,6 +7,7 @@
 
 #include "Network.hpp"
 #include "Utils/Memory.hpp"
+#include "Exodia/Scene/SceneHeaders.hpp"
 
 namespace Exodia::Network {
 
@@ -79,7 +80,6 @@ namespace Exodia::Network {
     void Network::ReceivePacketInfo(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint, Exodia::Network::Header header) {
         (void) senderEndpoint;
 
-
         if (size != 2 * sizeof(int)) {
             EXODIA_CORE_ERROR("Network::ReceivePacketInfo() - Packet size is not correct !");
             return;
@@ -90,6 +90,18 @@ namespace Exodia::Network {
         std::memcpy(&packet_received, message.data(), sizeof(int));
         std::memcpy(&packet_sent, message.data() + sizeof(int), sizeof(int));
         std::cout << "Packet received: " << packet_received << " Packet sent: " << packet_sent << std::endl;
+    }
+
+    void Network::ReceiveScene(const std::vector<char> message, size_t size, UNUSED(asio::ip::udp::endpoint senderEndpoint), Exodia::Network::Header header) {
+        std::string scene(message.begin(), message.end());
+
+        Ref<Scene> sceneRef = CreateRef<Scene>();
+
+        SceneSerializer serializer(sceneRef);
+
+        serializer.Deserialize(scene);
+
+        _world = sceneRef->GetWorldPtr();
     }
 
     /**
@@ -199,7 +211,9 @@ namespace Exodia::Network {
         std::memcpy(&id, message.data(), sizeof(unsigned long));
 
         Entity *entity = _world->GetEntityByID(id);
+
         _world->DestroyEntity(entity);
+
         EXODIA_CORE_INFO("Network::ReceiveDeleteEntity() - Entity " + std::to_string(id) + " deleted");
     }
 
@@ -364,6 +378,20 @@ namespace Exodia::Network {
             _server_connection.SendPacket(_socket, packet);
     }
 
+    void Network::SendScene(const std::string &scene)
+    {
+        Exodia::Network::Packet packet(0x21);
+        std::vector<char> buffer(scene.begin(), scene.end());
+
+        packet.SetContent(buffer);
+
+        if (_connections.size() > 0) {
+           for (auto &connection : _connections)
+                connection.second.SendPacket(_socket, packet);
+        } else
+            _server_connection.SendPacket(_socket, packet);
+    }
+
     /**
     * @brief Receive an event
     *
@@ -427,6 +455,7 @@ namespace Exodia::Network {
         commands[0x00] = std::bind(&Network::ReceivePacketInfo, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4); // Packet info for loss calculation
         commands[0x01] = std::bind(&Network::ReceiveAck, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4);        // Packet Acknowledgement
         commands[0x02] = std::bind(&Network::ReceiveConnectAccept, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4);     // Accept client connection
+        commands[0x21] = std::bind(&Network::ReceiveScene, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4);        // Send scene        
         commands[0x81] = std::bind(&Network::ReceiveConnect, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4);        // Ask for connection
         commands[0x82] = std::bind(&Network::ReceiveEvent, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4);          // Send an event
         commands[0x0c] = std::bind(&Network::ReceiveComponentOf, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4);     // Send one component of an entity
