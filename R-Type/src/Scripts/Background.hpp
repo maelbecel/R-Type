@@ -40,7 +40,7 @@ namespace RType {
                 std::mt19937 gen(rd());
 
                 std::uniform_real_distribution<float> colorDist(0.9f, 1.0f);
-                std::uniform_int_distribution<int>   velocityDist(-8, -1);
+                std::uniform_int_distribution<int>   velocityDist(-5, -1);
 
                 for(int i = 0; i < 60; i++) {
                     Exodia::Entity *star = HandleEntity->GetWorld()->CreateNewEntity("Star" + std::to_string(i));
