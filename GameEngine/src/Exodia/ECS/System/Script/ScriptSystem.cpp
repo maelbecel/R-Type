@@ -25,7 +25,7 @@ namespace Exodia {
         world->ForEach<ScriptComponent>([&](Entity *entity, auto script) {
             auto &sc = script.Get();
 
-            if (!sc.Instance) {
+            if (!sc.Instance && !sc.Name.empty() && sc.InstantiateScript) {
                 sc.Instance = sc.InstantiateScript(sc.Name);
                 sc.Instance->HandleEntity = entity;
                 sc.Instance->OnCreate();

@@ -100,7 +100,7 @@ namespace Exodia {
         _World->ForEach<ScriptComponent>([&](Entity *entity, auto script) {
             auto &sc = script.Get();
 
-            if (sc.Instance == nullptr) {
+            if (sc.Instance == nullptr && !sc.Name.empty() && sc.InstantiateScript) {
                 sc.Instance = sc.InstantiateScript(sc.Name);
 
                 if (sc.Instance != nullptr) {
@@ -124,7 +124,7 @@ namespace Exodia {
         _World->ForEach<ScriptComponent>([&](Entity *entity, auto script) {
             auto &sc = script.Get();
 
-            if (sc.Instance) {
+            if (sc.Instance && !sc.Name.empty() && sc.DestroyScript) {
                 sc.Instance->OnDestroy();
                 sc.DestroyScript(&sc);
             }
@@ -139,7 +139,7 @@ namespace Exodia {
             _World->ForEach<ScriptComponent>([&](Entity *entity, auto script) {
                 auto &sc = script.Get();
 
-                if (!sc.Instance) {
+                if (!sc.Instance && !sc.Name.empty() && sc.InstantiateScript) {
                     sc.Instance = sc.InstantiateScript(sc.Name);
 
                     if (sc.Instance != nullptr) {

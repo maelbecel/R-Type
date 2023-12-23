@@ -34,11 +34,13 @@ namespace Exodia {
 
         ScriptableEntity *Instance = nullptr;
 
-        std::function<ScriptableEntity *(std::string)>    InstantiateScript;
-        std::function<void(ScriptComponent *)> DestroyScript;
+        std::function<ScriptableEntity *(std::string)> InstantiateScript = nullptr;
+        std::function<void(ScriptComponent *)>         DestroyScript     = nullptr;
 
         void Bind(std::string name)
         {
+            if (name.empty())
+                return;
             Name = name;
 
             InstantiateScript = [](std::string name) -> ScriptableEntity * {
@@ -87,11 +89,11 @@ namespace Exodia {
         virtual Buffer SerializeData() override
         {
             try {
-                if (Name.empty())
-                    return Buffer();
-                Buffer buffer(sizeof(Name));
+                Buffer buffer(sizeof(char) * Name.size());
 
-                std::memcpy(buffer.Data, Name.c_str(), sizeof(Name));
+                std::memcpy(buffer.Data, Name.data(), sizeof(char) * Name.size());
+
+                EXODIA_CORE_WARN("Serialized ScriptComponent '{0}': Data({1})", Name, buffer.Size);
 
                 return buffer;
             } catch (std::exception &error) {
@@ -103,10 +105,8 @@ namespace Exodia {
         virtual void DeserializeData(Buffer data) override
         {
             try {
-                if (data.Size == 0)
-                    return;
-                Memcopy(&Name, data.Data, sizeof(Name));
-
+                for (uint32_t i = 0; i < data.Size; i++)
+                    Name.push_back((char)data.Data[i]);
                 Bind(Name);
             } catch (std::exception &error) {
                 EXODIA_CORE_WARN("ScriptComponent deserialization failed:\n\t{0}", error.what());

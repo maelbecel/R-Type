@@ -48,7 +48,6 @@ namespace Exodia {
 
         Scenes[MENU] = CreateRef<Scene>();
         Scenes[MENU]->RegisterSystem(new AnimationSystem());
-        Scenes[MENU]->RegisterSystem(new ScriptSystem());
         Scenes[MENU]->RegisterSystem(new MovingSystem(1.5f));
         Scenes[MENU]->OnViewportResize(Application::Get().GetWindow().GetWidth(), Application::Get().GetWindow().GetHeight());
 
@@ -57,7 +56,6 @@ namespace Exodia {
 
         Scenes[GAME] = CreateRef<Scene>();
         Scenes[GAME]->RegisterSystem(new AnimationSystem());
-        Scenes[GAME]->RegisterSystem(new ScriptSystem());
         Scenes[GAME]->RegisterSystem(new MovingSystem(1.5f));
         Scenes[GAME]->RegisterSystem(collisionSystem);
         //Scenes[GAME]->Subscribe<Events::OnEntityCreated>(subscribe);
