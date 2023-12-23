@@ -6,21 +6,22 @@
 */
 
 #ifndef CREATEPLAYER_HPP_
-    #define CREATEPLAYER_HPP_
+#define CREATEPLAYER_HPP_
 
-    #include "Component/Animation.hpp"
-    #include "Component/Health.hpp"
-    #include "Scripts/Player/Player.hpp"
-    #include "SceneType.hpp"
+#include "Component/Animation.hpp"
+#include "Component/Health.hpp"
+#include "SceneType.hpp"
+#include "Scripts/Player/Player.hpp"
 
-namespace Exodia {
+namespace Exodia
+{
 
     /**
      * @brief Create a Player object
      *
      * @param _World
      */
-    void CreatePlayer(std::map<SceneType, std::shared_ptr<Exodia::Scene>> _World);
-};
+    void CreatePlayer( std::map<SceneType, std::shared_ptr<Exodia::Scene>> _World );
+}; // namespace Exodia
 
 #endif /* !CREATEPLAYER_HPP_ */

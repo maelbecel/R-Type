@@ -21,7 +21,8 @@
 #include <filesystem>
 #include <imgui.h>
 
-namespace Exodia {
+namespace Exodia
+{
 
     Application *Application::_Instance = nullptr;
 
@@ -29,28 +30,29 @@ namespace Exodia {
     // Constructor & Destructor //
     //////////////////////////////
 
-    Application::Application(const ApplicationSpecification &spec) : _Specification(spec), _Running(true), _Minimized(false), _LastTime(0.0f)
+    Application::Application( const ApplicationSpecification &spec )
+        : _Specification( spec ), _Running( true ), _Minimized( false ), _LastTime( 0.0f )
     {
         EXODIA_PROFILE_FUNCTION();
 
-        EXODIA_CORE_ASSERT(!_Instance, "Application already exists!");
+        EXODIA_CORE_ASSERT( !_Instance, "Application already exists!" );
 
         _Instance = this;
 
         // Set working directory here
-		if (!_Specification.WorkingDirectory.empty())
-		    std::filesystem::current_path(_Specification.WorkingDirectory);
+        if ( !_Specification.WorkingDirectory.empty() )
+            std::filesystem::current_path( _Specification.WorkingDirectory );
 
-		_Window = Window::Create(WindowProps(_Specification.Name));
+        _Window = Window::Create( WindowProps( _Specification.Name ) );
 
-        _Window->SetEventCallback(BIND_EVENT_FN(Application::OnEvent));
-        _Window->SetVSync(false);
+        _Window->SetEventCallback( BIND_EVENT_FN( Application::OnEvent ) );
+        _Window->SetVSync( false );
 
         Renderer::Init();
 
         _ImGuiLayer = new ImGuiLayer();
 
-        PushOverlay(_ImGuiLayer);
+        PushOverlay( _ImGuiLayer );
     }
 
     Application::~Application()
@@ -68,28 +70,30 @@ namespace Exodia {
     {
         EXODIA_PROFILE_FUNCTION();
 
-        while (_Running) {
-            EXODIA_PROFILE_SCOPE("RunLoop");
+        while ( _Running )
+        {
+            EXODIA_PROFILE_SCOPE( "RunLoop" );
 
             float time = _Timer.Elapsed();
 
-            Timestep timestep(time - _LastTime);
+            Timestep timestep( time - _LastTime );
 
             _LastTime = time;
 
-            if (!_Minimized) {
+            if ( !_Minimized )
+            {
                 {
-                    EXODIA_PROFILE_SCOPE("LayerStack OnUpdate");
-                    for (Layer *layer : _LayerStack)
-                        layer->OnUpdate(timestep);
+                    EXODIA_PROFILE_SCOPE( "LayerStack OnUpdate" );
+                    for ( Layer *layer : _LayerStack )
+                        layer->OnUpdate( timestep );
                 }
 
                 // TODO: Put this block in a Thread
                 _ImGuiLayer->Begin();
-                
+
                 {
-                    EXODIA_PROFILE_SCOPE("LayerStack OnImGUIRender");
-                    for (Layer *layer : _LayerStack)
+                    EXODIA_PROFILE_SCOPE( "LayerStack OnImGUIRender" );
+                    for ( Layer *layer : _LayerStack )
                         layer->OnImGUIRender();
                 }
 
@@ -101,58 +105,57 @@ namespace Exodia {
         }
     }
 
-    void Application::Close()
+    void Application::Close() { _Running = false; }
+
+    void Application::OnEvent( Event &event )
     {
-        _Running = false;
-    }
+        EventDispatcher dispatcher( event );
 
-    void Application::OnEvent(Event &event)
-    {
-        EventDispatcher dispatcher(event);
+        dispatcher.Dispatch<WindowCloseEvent>( BIND_EVENT_FN( Application::OnWindowClose ) );
+        dispatcher.Dispatch<WindowResizeEvent>( BIND_EVENT_FN( Application::OnWindowResize ) );
 
-        dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(Application::OnWindowClose));
-        dispatcher.Dispatch<WindowResizeEvent>(BIND_EVENT_FN(Application::OnWindowResize));
-
-        for (auto it = _LayerStack.begin(); it != _LayerStack.end(); ++it) {
-            if (event.Handled)
+        for ( auto it = _LayerStack.begin(); it != _LayerStack.end(); ++it )
+        {
+            if ( event.Handled )
                 break;
-            (*it)->OnEvent(event);
+            ( *it )->OnEvent( event );
         }
     }
 
-    void Application::PushLayer(Layer *layer)
+    void Application::PushLayer( Layer *layer )
     {
         EXODIA_PROFILE_FUNCTION();
 
-        _LayerStack.PushLayer(layer);
+        _LayerStack.PushLayer( layer );
         layer->OnAttach();
     }
 
-    void Application::PushOverlay(Layer *overlay)
+    void Application::PushOverlay( Layer *overlay )
     {
         EXODIA_PROFILE_FUNCTION();
 
-        _LayerStack.PushOverlay(overlay);
+        _LayerStack.PushOverlay( overlay );
         overlay->OnAttach();
     }
 
-    bool Application::OnWindowClose(UNUSED(WindowCloseEvent &event))
+    bool Application::OnWindowClose( UNUSED( WindowCloseEvent &event ) )
     {
         _Running = false;
         return true;
     }
 
-    bool Application::OnWindowResize(WindowResizeEvent &event)
+    bool Application::OnWindowResize( WindowResizeEvent &event )
     {
         EXODIA_PROFILE_FUNCTION();
 
-        if (event.GetWidth() == 0 || event.GetHeight() == 0) {
+        if ( event.GetWidth() == 0 || event.GetHeight() == 0 )
+        {
             _Minimized = true;
             return false;
         }
 
         _Minimized = false;
-        Renderer::OnWindowResize(event.GetWidth(), event.GetHeight());
+        Renderer::OnWindowResize( event.GetWidth(), event.GetHeight() );
 
         return false;
     }
@@ -161,13 +164,7 @@ namespace Exodia {
     // Getters & Setters //
     ///////////////////////
 
-    ImGuiLayer *Application::GetImGuiLayer()
-    {
-        return _ImGuiLayer;
-    }
+    ImGuiLayer *Application::GetImGuiLayer() { return _ImGuiLayer; }
 
-    ApplicationSpecification Application::GetSpecification() const
-    {
-        return _Specification;
-    }
-};
+    ApplicationSpecification Application::GetSpecification() const { return _Specification; }
+}; // namespace Exodia

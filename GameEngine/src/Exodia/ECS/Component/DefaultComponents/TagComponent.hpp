@@ -6,23 +6,25 @@
 */
 
 #ifndef TAGCOMPONENT_HPP_
-    #define TAGCOMPONENT_HPP_
+#define TAGCOMPONENT_HPP_
 
-    // Exodia ECS includes
-    #include "ECS/Interface/Component.hpp"
+// Exodia ECS includes
+#include "ECS/Interface/Component.hpp"
 
-    // Exodia Debug includes
-    #include "Debug/Logs.hpp"
+// Exodia Debug includes
+#include "Debug/Logs.hpp"
 
-namespace Exodia {
+namespace Exodia
+{
 
-    struct TagComponent : public Component {
+    struct TagComponent : public Component
+    {
         std::string Tag;
 
-        TagComponent(const TagComponent &) = default;
-        TagComponent(const std::string &tag = std::string()) : Tag(tag) {};
+        TagComponent( const TagComponent & ) = default;
+        TagComponent( const std::string &tag = std::string() ) : Tag( tag ){};
 
-        virtual void Serialize(YAML::Emitter &out)
+        virtual void Serialize( YAML::Emitter &out )
         {
             out << YAML::Key << "TagComponent";
             out << YAML::BeginMap;
@@ -32,17 +34,20 @@ namespace Exodia {
             out << YAML::EndMap;
         }
 
-        virtual void Deserialize(const YAML::Node &node)
+        virtual void Deserialize( const YAML::Node &node )
         {
-            try {
-                auto tag = node["TagComponent"];
+            try
+            {
+                auto tag = node[ "TagComponent" ];
 
-                Tag = tag["Tag"].as<std::string>();
-            } catch (const YAML::Exception &e) {
-                EXODIA_CORE_WARN("TagComponent deserialization failed: {0}", e.what());
+                Tag = tag[ "Tag" ].as<std::string>();
+            }
+            catch ( const YAML::Exception &e )
+            {
+                EXODIA_CORE_WARN( "TagComponent deserialization failed: {0}", e.what() );
             }
         }
     };
-};
+}; // namespace Exodia
 
 #endif /* !TAGCOMPONENT_HPP_ */

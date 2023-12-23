@@ -6,55 +6,54 @@
 */
 
 #ifndef OPENGLSOUND_HPP_
-    #define OPENGLSOUND_HPP_
+#define OPENGLSOUND_HPP_
 
-    // Exodia Renderer
-    #include "Renderer/Sound/Sound.hpp"
+// Exodia Renderer
+#include "Renderer/Sound/Sound.hpp"
 
-    // OpenAL-Soft include
-    #include <AL/al.h>
-    #include <AL/alc.h>
+// OpenAL-Soft include
+#include <AL/al.h>
+#include <AL/alc.h>
 
-namespace Exodia {
+namespace Exodia
+{
 
-    class OpenGLSound : public Sound2D {
+    class OpenGLSound : public Sound2D
+    {
 
         ///////////////////////////////
         // Constructors & Destructor //
         ///////////////////////////////
-        public:
-
-            OpenGLSound(const std::string &path);
-            ~OpenGLSound() override;
+      public:
+        OpenGLSound( const std::string &path );
+        ~OpenGLSound() override;
 
         /////////////
         // Methods //
         /////////////
-        public:
+      public:
+        void Play() override;
+        void Pause() override;
+        void Stop() override;
 
-            void Play() override;
-            void Pause() override;
-            void Stop() override;
-        
         ///////////////////////
         // Getters & Setters //
         ///////////////////////
-        public:
+      public:
+        void SetVolume( float volume ) override;
+        void SetLoop( bool loop ) override;
 
-            void SetVolume(float volume) override;
-            void SetLoop(bool loop) override;
+        bool IsPlaying() const override;
+        bool IsPaused() const override;
+        bool IsStopped() const override;
 
-            bool IsPlaying() const override;
-            bool IsPaused()  const override;
-            bool IsStopped() const override;
-        
         ////////////////
         // Attributes //
         ////////////////
-        private:
-            ALuint _source;
-            ALuint _buffer;
+      private:
+        ALuint _source;
+        ALuint _buffer;
     };
-};
+}; // namespace Exodia
 
 #endif /* !OPENGLSOUND_HPP_ */

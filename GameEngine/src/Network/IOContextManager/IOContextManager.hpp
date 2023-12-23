@@ -7,17 +7,19 @@
 
 // IOContextManager.hpp
 #ifndef IO_CONTEXT_MANAGER_HPP
-    #define IO_CONTEXT_MANAGER_HPP
+#define IO_CONTEXT_MANAGER_HPP
 
 #include <asio.hpp>
 
-namespace Exodia {
+namespace Exodia
+{
 
-    namespace Network {
+    namespace Network
+    {
 
-    class IOContextManager {
-        public:
-
+        class IOContextManager
+        {
+          public:
             /**
              * @brief Construct a new IOContextManager object and initialize the io_context_
              *
@@ -26,9 +28,9 @@ namespace Exodia {
 
             ~IOContextManager()
             {
-                if (_ioContextThread.joinable())
+                if ( _ioContextThread.joinable() )
                     _ioContextThread.join();
-                if (isRunning_)
+                if ( isRunning_ )
                     io_context_.stop();
             };
 
@@ -37,37 +39,36 @@ namespace Exodia {
              *
              * @return boost::asio::io_context&
              */
-            asio::io_context& getIOContext() {
-                return io_context_;
-            }
+            asio::io_context &getIOContext() { return io_context_; }
 
             /**
              * @brief Run the io_context_
              *
              */
-            void run() {
-                _ioContextThread = std::thread([this]() {
+            void run()
+            {
+                _ioContextThread = std::thread( [ this ]() {
                     isRunning_ = true;
                     io_context_.run();
-                });
+                } );
             }
 
             /**
              * @brief Stop the io_context_
              *
              */
-            void stop() {
+            void stop()
+            {
                 isRunning_ = false;
                 io_context_.stop();
             }
 
-        private:
+          private:
             asio::io_context io_context_;
-            std::thread _ioContextThread;
-            bool isRunning_;
+            std::thread      _ioContextThread;
+            bool             isRunning_;
         };
     } // namespace Network
 } // namespace Exodia
 
 #endif // IO_CONTEXT_MANAGER_HPP
-

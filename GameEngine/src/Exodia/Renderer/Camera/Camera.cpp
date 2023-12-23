@@ -7,20 +7,18 @@
 
 #include "Camera.hpp"
 
-namespace Exodia {
+namespace Exodia
+{
 
     //////////////////////////////
     // Constructor & Destructor //
     //////////////////////////////
 
-    Camera::Camera(const glm::mat4 &projection) : _Projection(projection) {};
+    Camera::Camera( const glm::mat4 &projection ) : _Projection( projection ){};
 
     ///////////////////////
     // Getters & Setters //
     ///////////////////////
 
-    const glm::mat4 &Camera::GetProjection() const
-    {
-        return _Projection;
-    }
-};
+    const glm::mat4 &Camera::GetProjection() const { return _Projection; }
+}; // namespace Exodia

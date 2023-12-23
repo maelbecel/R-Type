@@ -6,24 +6,26 @@
 */
 
 #ifndef CLOCKCOMPONENT_HPP_
-    #define CLOCKCOMPONENT_HPP_
+#define CLOCKCOMPONENT_HPP_
 
-    #include "Exodia.hpp"
+#include "Exodia.hpp"
 
-namespace Exodia {
+namespace Exodia
+{
     /**
      * @brief Clock component.
      *
      * @param ElapsedTime Elapsed time of the entity.
      */
-    struct Clock : public Component {
+    struct Clock : public Component
+    {
         float ElapsedTime;
 
-        Clock(const Clock &) = default;
-        Clock(float ElapsedTime = 0.0f) : ElapsedTime(ElapsedTime) {};
+        Clock( const Clock & ) = default;
+        Clock( float ElapsedTime = 0.0f ) : ElapsedTime( ElapsedTime ){};
 
-        virtual void Serialize(UNUSED(YAML::Emitter &out)) override {};
+        virtual void Serialize( UNUSED( YAML::Emitter &out ) ) override{};
     };
-};
+}; // namespace Exodia
 
 #endif /* !CLOCKCOMPONENT_HPP_ */

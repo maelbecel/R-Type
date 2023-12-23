@@ -6,28 +6,29 @@
 */
 
 #ifndef TEXTUREIMPORTER_HPP_
-    #define TEXTUREIMPORTER_HPP_
+#define TEXTUREIMPORTER_HPP_
 
-    // Exodia Asset includes
-    #include "Asset/Utils/AssetType.hpp"
+// Exodia Asset includes
+#include "Asset/Utils/AssetType.hpp"
 
-    // Exodia Texture includes
-    #include "Renderer/Texture/Texture.hpp"
+// Exodia Texture includes
+#include "Renderer/Texture/Texture.hpp"
 
-namespace Exodia {
+namespace Exodia
+{
 
     class Texture2D;
 
-    class TextureImporter {
+    class TextureImporter
+    {
 
         /////////////
         // Methods //
         /////////////
-        public:
-
-            static Ref<Texture2D> ImportTexture2D(AssetHandle handle, const AssetSpecification &spec);
-            static Ref<Texture2D> LoadTexture2D(const std::filesystem::path &path);
+      public:
+        static Ref<Texture2D> ImportTexture2D( AssetHandle handle, const AssetSpecification &spec );
+        static Ref<Texture2D> LoadTexture2D( const std::filesystem::path &path );
     };
-};
+}; // namespace Exodia
 
 #endif /* !TEXTUREIMPORTER_HPP_ */

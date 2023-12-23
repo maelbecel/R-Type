@@ -6,42 +6,41 @@
 */
 
 #ifndef ENTITYVIEW_HPP_
-    #define ENTITYVIEW_HPP_
+#define ENTITYVIEW_HPP_
 
-    // Exodia ECS Entity includes
-    #include "Entity/EntityIterator.hpp"
+// Exodia ECS Entity includes
+#include "Entity/EntityIterator.hpp"
 
-    // Exodia Utils includes
-    #include "Utils/CrossPlatform.hpp"
+// Exodia Utils includes
+#include "Utils/CrossPlatform.hpp"
 
-namespace Exodia {
+namespace Exodia
+{
 
-    class EntityView {
+    class EntityView
+    {
 
         /////////////////
         // Constructor //
         /////////////////
-        public:
-
-            EntityView(const EntityIterator &first, const EntityIterator &last);
+      public:
+        EntityView( const EntityIterator &first, const EntityIterator &last );
 
         /////////////
         // Methods //
         /////////////
-        public:
+      public:
+        const EntityIterator &begin() const;
 
-            const EntityIterator &begin() const;
-
-            const EntityIterator &end() const;
+        const EntityIterator &end() const;
 
         ////////////////
         // Attributes //
         ////////////////
-        private:
-
-            EntityIterator _FirstIterator;
-            EntityIterator _LastIterator;
+      private:
+        EntityIterator _FirstIterator;
+        EntityIterator _LastIterator;
     };
-};
+}; // namespace Exodia
 
 #endif /* !ENTITYVIEW_HPP_ */
