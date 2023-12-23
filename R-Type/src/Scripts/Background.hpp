@@ -34,7 +34,7 @@ namespace RType {
             void OnCreate() override
             {
                 // -- Generate background, only if we have a renderer ----------
-                if (Exodia::Renderer::GetAPI() != Exodia::RendererAPI::API::None)
+                if (Exodia::Renderer::GetAPI() == Exodia::RendererAPI::API::None)
                     return;
                 std::random_device rd;
                 std::mt19937 gen(rd());
@@ -43,7 +43,7 @@ namespace RType {
                 std::uniform_int_distribution<int>   velocityDist(-8, -1);
 
                 for(int i = 0; i < 60; i++) {
-                    Exodia::Entity *star = HandleEntity->GetWorld()->CreateEntity("Star" + std::to_string(i));
+                    Exodia::Entity *star = HandleEntity->GetWorld()->CreateNewEntity("Star" + std::to_string(i));
 
                     if (!star)
                         return;
