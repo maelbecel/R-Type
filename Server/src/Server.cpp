@@ -204,8 +204,9 @@ namespace Exodia {
 
                 int32_t player_id = _Network.ConnectionPlace(event.second);
 
-                Scenes[CurrentScene]->GetWorld().ForEach<ScriptComponent, TagComponent>([&](Entity *entity, auto script, auto tag) {
+                Scenes[CurrentScene]->GetWorld().ForEach<ScriptComponent, TagComponent, RigidBody2DComponent>([&](Entity *entity, auto script, auto tag, auto RigidBody2D) {
                     (void)entity;
+                    (void)RigidBody2D;
                     auto &sc = script.Get();
                     auto &tc = tag.Get();
 
