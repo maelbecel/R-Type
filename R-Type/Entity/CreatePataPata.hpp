@@ -13,6 +13,7 @@
     #include "Component/Clock.hpp"
     #include "Component/Health.hpp"
     #include "Scripts/Pata-pata.hpp"
+    #include "SceneType.hpp"
 
 namespace Exodia {
 
@@ -21,7 +22,7 @@ namespace Exodia {
      *
      * @param _World
      */
-    void CreatePataPata(World *_World);
+    void CreatePataPata(std::map<SceneType, std::shared_ptr<Exodia::Scene>> _World);
 };
 
 #endif /* !CREATEPATAPATA_HPP_ */

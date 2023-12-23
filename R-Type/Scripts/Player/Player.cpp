@@ -19,14 +19,14 @@ namespace Exodia {
         bullet_tc.Translation.y = tc.Translation.y - 0.05f;
         bullet_tc.Scale.x = 0.5f;
         bullet_tc.Scale.y = 0.5f;
-        auto sprite = bullet->AddComponent<SpriteRendererComponent>();
         bullet->AddComponent<ScriptComponent>().Get().Bind<BulletPlayer>();
         bullet->AddComponent<Animation>(0.0f, 2.0f, 1.0f);
         bullet->AddComponent<BoxCollider2DComponent>();
         bullet->AddComponent<ParentComponent>().Get().Parent = GetComponent<IDComponent>().Get().ID;
 
-        Ref<Texture2D> texture = TextureImporter::LoadTexture2D("Assets/Textures/Missile.png");
-        sprite.Get().Texture = SubTexture2D::CreateFromCoords(texture->Handle, { 0.0f, 0.0f }, { 17.33f, 14.0f }, { 1.0f, 1.0f });
+        // auto sprite = bullet->AddComponent<SpriteRendererComponent>();
+        // Ref<Texture2D> texture = TextureImporter::LoadTexture2D("Assets/Textures/Missile.png");
+        // sprite.Get().Texture = SubTexture2D::CreateFromCoords(texture->Handle, { 0.0f, 0.0f }, { 17.33f, 14.0f }, { 1.0f, 1.0f });
 
         _AttackTimer += ts.GetSeconds();
         _IsAttacking = true;
@@ -113,6 +113,11 @@ namespace Exodia {
 
 
     void Player::OnCollisionEnter(Entity *entity) {
-        EXODIA_INFO("Collision with {0}", entity->GetComponent<TagComponent>().Get().Tag);
+        if (entity->GetComponent<TagComponent>().Get().Tag.rfind("BE", 0) == 0) {
+            EXODIA_INFO("BE {0} hit", entity->GetComponent<TagComponent>().Get().Tag);
+            entity->GetWorld()->DestroyEntity(entity);
+            GetComponent<Health>().Get().CurrentHealth -= 1;
+            EXODIA_INFO("Player health: {0}", GetComponent<Health>().Get().CurrentHealth);
+        }
     };
 }
