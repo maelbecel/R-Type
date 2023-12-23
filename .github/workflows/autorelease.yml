@@ -1,0 +1,84 @@
+name: Build and Release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Install Vcpkg
+      run: |
+        git clone https://github.com/microsoft/vcpkg.git
+        cd vcpkg
+        ./bootstrap-vcpkg.sh
+    - name: Setup Ninja
+      uses: seanmiddleditch/gha-setup-ninja@v4
+    - name: Setup CMake
+      run: |
+        cmake --version
+    - name: Compiling...
+      run: |
+        mkdir build && cd build && cmake .. -G Ninja && ninja && cd ..
+    - name: Check if the executable exists
+      run: |
+        if [ -f r-type_client ] && [ -f r-type_server ]; then exit 0; else exit 1; fi
+      shell: bash
+
+    - name: Upload binaries to release
+      uses: actions/upload-artifact@v2
+      with:
+        name: binaries
+        path: |
+          r-type_server
+          r-type_client
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Download binaries
+      uses: actions/download-artifact@v2
+      with:
+        name: binaries
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        draft: false
+        prerelease: false
+
+    - name: Upload Release Asset
+      id: upload-release-asset 
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }} 
+        asset_path: ./r-type_server
+        asset_name: r-type_server
+        asset_content_type: application/octet-stream
+
+    - name: Upload Release Asset
+      id: upload-release-asset 
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }} 
+        asset_path: ./r-type_client
+        asset_name: r-type_client
+        asset_content_type: application/octet-stream
