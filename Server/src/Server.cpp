@@ -195,34 +195,32 @@ namespace Exodia {
                     _Network.SendComponentOf(bullet, "CircleRendererComponent");
                 }
             }
+        */
+            std::queue<std::pair<std::pair<uint32_t, bool>, asio::ip::udp::endpoint>> events = _Network.GetEvents();
 
-            // std::queue<std::pair<std::pair<uint32_t, bool>, asio::ip::udp::endpoint>> events = _Network.GetEvents();
+            while (!events.empty()) {
+                auto event = events.front();
+                events.pop();
 
-            // while (!events.empty()) {
-            //     auto event = events.front();
+                int32_t player_id = _Network.ConnectionPlace(event.second);
 
-            //     events.pop();
+                Scenes[CurrentScene]->GetWorld().ForEach<ScriptComponent, TagComponent>([&](Entity *entity, auto script, auto tag) {
+                    (void)entity;
+                    auto &sc = script.Get();
+                    auto &tc = tag.Get();
 
-            //     int player_id = _Network.ConnectionPlace(event.second);
-
-            //     Scenes[CurrentScene]->GetWorld().ForEach<ScriptComponent, TagComponent>([&](Entity *entity, auto script, auto tag) {
-            //         (void)entity;
-
-            //         auto &sc = script.Get();
-            //         auto &tc = tag.Get();
-
-            //         if (tc.Tag == std::string("Player_" + std::to_string(player_id)) && sc.Instance != nullptr) {
-            //             std::cout << "Event received: " << event.first.first << std::endl;
-            //             if (event.first.second)
-            //                 sc.Instance->OnKeyPressed(event.first.first);
-            //             else
-            //                 sc.Instance->OnKeyReleased(event.first.first);
-            //         }
-            //     });
-            // }
+                    if (tc.Tag == std::string("Player_" + std::to_string(player_id)) && sc.Instance != nullptr) {
+                        std::cout << "Event received: " << event.first.first << std::endl;
+                        if (event.first.second)
+                            sc.Instance->OnKeyPressed(event.first.first);
+                        else
+                            sc.Instance->OnKeyReleased(event.first.first);
+                    }
+                });
+            }
 
             // _Network.ResendNeedAck();
-            */
+
             Scenes[CurrentScene]->OnUpdateRuntime(timestep);
         } catch (std::exception &error) {
             EXODIA_ERROR("Unable to update the world :\n\t{0}", error.what());

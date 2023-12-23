@@ -115,6 +115,7 @@ namespace Exodia {
         if (transform && velocity && camera_entity && _State != State::DEAD) {
             TransformComponent &camera = camera_entity->GetComponent<TransformComponent>().Get();
 
+            /*
             if (transform.Get().Translation.x < camera.Translation.x - 9.5f) {
                 _State = State::IDLE;
                 transform.Get().Translation.x = camera.Translation.x - 9.5f;
@@ -135,6 +136,7 @@ namespace Exodia {
                 transform.Get().Translation.y = camera.Translation.y + 5.5f;
                 block = true;
             }
+            */
 
             if (!block) {
                 // Move player with keyboard
