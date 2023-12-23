@@ -9,29 +9,31 @@
 #include "ScriptSystem.hpp"
 
 // Exodia Debug includes
-#include "Debug/Profiling.hpp"
 #include "Debug/Logs.hpp"
+#include "Debug/Profiling.hpp"
 
-namespace Exodia {
+namespace Exodia
+{
 
     /////////////
     // Methods //
     /////////////
 
-    void ScriptSystem::Update(World *world, Timestep ts)
+    void ScriptSystem::Update( World *world, Timestep ts )
     {
         EXODIA_PROFILE_FUNCTION();
 
-        world->ForEach<ScriptComponent>([&](UNUSED(Entity *entity), UNUSED(auto script)) {
+        world->ForEach<ScriptComponent>( [ & ]( UNUSED( Entity * entity ), UNUSED( auto script ) ) {
             auto &sc = script.Get();
 
-            if (!sc.Instance) {
-                sc.Instance = sc.InstantiateScript();
+            if ( !sc.Instance )
+            {
+                sc.Instance               = sc.InstantiateScript();
                 sc.Instance->HandleEntity = entity;
                 sc.Instance->OnCreate();
             }
 
-            sc.Instance->OnUpdate(ts);
-        });
+            sc.Instance->OnUpdate( ts );
+        } );
     }
-};
+}; // namespace Exodia

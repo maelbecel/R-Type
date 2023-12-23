@@ -14,7 +14,8 @@
 // Exodia Utils
 #include "Utils/LibrairyLoader.hpp"
 
-namespace Exodia {
+namespace Exodia
+{
 
     ///////////////////////
     // Static Attributes //
@@ -32,37 +33,42 @@ namespace Exodia {
 
         Data = new ScriptEngineData();
 
-        if (std::filesystem::exists(scriptModulePath)) {
-            for (auto &file : std::filesystem::directory_iterator(scriptModulePath)) {    
+        if ( std::filesystem::exists( scriptModulePath ) )
+        {
+            for ( auto &file : std::filesystem::directory_iterator( scriptModulePath ) )
+            {
                 auto path = file.path();
 
-            #ifdef _WIN32
-                if (path.extension() != ".dll")
+#ifdef _WIN32
+                if ( path.extension() != ".dll" )
                     continue;
-            #else
-                if (path.extension() != ".so")
+#else
+                if ( path.extension() != ".so" )
                     continue;
-            #endif
-                void *handle = LibraryLoader::Load(path.string());
+#endif
+                void *handle = LibraryLoader::Load( path.string() );
 
-                if (handle != nullptr)
+                if ( handle != nullptr )
                     continue;
-                auto getScriptableEntity = (ScriptableEntity *(*)(void))LibraryLoader::GetFunction(handle, "CreateScript");
+                auto getScriptableEntity =
+                    ( ScriptableEntity * (*) (void) ) LibraryLoader::GetFunction( handle, "CreateScript" );
 
-                if (!getScriptableEntity) {
-                    LibraryLoader::Close(handle);
+                if ( !getScriptableEntity )
+                {
+                    LibraryLoader::Close( handle );
 
                     continue;
                 }
 
-                Data->ScriptableEntities.push_back(path.stem().string());
+                Data->ScriptableEntities.push_back( path.stem().string() );
             }
         }
     }
 
     void ScriptEngine::Shutdown()
     {
-        if (Data) {
+        if ( Data )
+        {
             delete Data;
             Data = nullptr;
         }
@@ -72,28 +78,27 @@ namespace Exodia {
     // Getters & Setters //
     ///////////////////////
 
-    ScriptableEntity *ScriptEngine::InstantiateScript(const std::string &name)
+    ScriptableEntity *ScriptEngine::InstantiateScript( const std::string &name )
     {
-    #ifdef _WIN32
-        void *handle = LibraryLoader::Load((Project::GetActiveScriptPath() / (name + ".dll")).string());
-    #else
-        void *handle = LibraryLoader::Load((Project::GetActiveScriptPath() / (name + ".so")).string());
-    #endif
+#ifdef _WIN32
+        void *handle = LibraryLoader::Load( ( Project::GetActiveScriptPath() / ( name + ".dll" ) ).string() );
+#else
+        void *handle = LibraryLoader::Load( ( Project::GetActiveScriptPath() / ( name + ".so" ) ).string() );
+#endif
 
-        auto getScriptableEntity = (ScriptableEntity *(*)(void))LibraryLoader::GetFunction(handle, "CreateScript");
+        auto getScriptableEntity =
+            ( ScriptableEntity * (*) (void) ) LibraryLoader::GetFunction( handle, "CreateScript" );
 
-        if (!getScriptableEntity) {
-            EXODIA_CORE_WARN("ScriptEngine::InstantiateScript: Failed to load script {0}", name);
+        if ( !getScriptableEntity )
+        {
+            EXODIA_CORE_WARN( "ScriptEngine::InstantiateScript: Failed to load script {0}", name );
 
-            LibraryLoader::Close(handle);
+            LibraryLoader::Close( handle );
             return nullptr;
         }
 
         return getScriptableEntity();
     }
 
-    std::vector<std::string> ScriptEngine::GetScriptableEntities()
-    {
-        return Data->ScriptableEntities;
-    }
-};
+    std::vector<std::string> ScriptEngine::GetScriptableEntities() { return Data->ScriptableEntities; }
+}; // namespace Exodia

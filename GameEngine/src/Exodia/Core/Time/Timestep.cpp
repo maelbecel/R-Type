@@ -8,25 +8,20 @@
 // Exodia Core
 #include "Timestep.hpp"
 
-namespace Exodia {
+namespace Exodia
+{
 
     ///////////////////////////////
     // Constructor & Desctructor //
     ///////////////////////////////
 
-    Timestep::Timestep(float time) : _Time(time) {};
+    Timestep::Timestep( float time ) : _Time( time ){};
 
     ///////////////////////
     // Getters & Setters //
     ///////////////////////
 
-    float Timestep::GetSeconds() const
-    {
-        return _Time;
-    }
+    float Timestep::GetSeconds() const { return _Time; }
 
-    float Timestep::GetMilliseconds() const
-    {
-        return _Time * 1000.0f;
-    }
-};
+    float Timestep::GetMilliseconds() const { return _Time * 1000.0f; }
+}; // namespace Exodia

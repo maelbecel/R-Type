@@ -7,13 +7,14 @@
 
 // Exodia Renderer
 #include "Buffers.hpp"
-#include "Renderer/Renderer/RendererAPI.hpp"
 #include "Renderer/Renderer/Renderer.hpp"
+#include "Renderer/Renderer/RendererAPI.hpp"
 
 // Entry point
 #include "OpenGL/OpenGLBuffer.hpp"
 
-namespace Exodia {
+namespace Exodia
+{
 
     //////////////////////////////////////////
     ////////////// BufferLayout //////////////
@@ -23,7 +24,7 @@ namespace Exodia {
     // Constructor & Destructor //
     //////////////////////////////
 
-    BufferLayout::BufferLayout(const std::initializer_list<BufferElement> &elements) : _Elements(elements)
+    BufferLayout::BufferLayout( const std::initializer_list<BufferElement> &elements ) : _Elements( elements )
     {
         CalculateOffsetsAndStride();
     }
@@ -32,25 +33,13 @@ namespace Exodia {
     // Methods //
     /////////////
 
-    std::vector<BufferElement>::iterator BufferLayout::begin()
-    {
-        return _Elements.begin();
-    }
+    std::vector<BufferElement>::iterator BufferLayout::begin() { return _Elements.begin(); }
 
-    std::vector<BufferElement>::iterator BufferLayout::end()
-    {
-        return _Elements.end();
-    }
+    std::vector<BufferElement>::iterator BufferLayout::end() { return _Elements.end(); }
 
-    std::vector<BufferElement>::const_iterator BufferLayout::begin() const
-    {
-        return _Elements.begin();
-    }
+    std::vector<BufferElement>::const_iterator BufferLayout::begin() const { return _Elements.begin(); }
 
-    std::vector<BufferElement>::const_iterator BufferLayout::end() const
-    {
-        return _Elements.end();
-    }
+    std::vector<BufferElement>::const_iterator BufferLayout::end() const { return _Elements.end(); }
 
     void BufferLayout::CalculateOffsetsAndStride()
     {
@@ -59,7 +48,8 @@ namespace Exodia {
         _Stride = 0;
 
         // Calculate offsets
-        for (auto &element : _Elements) {
+        for ( auto &element : _Elements )
+        {
             element.Offset = offset;
             offset += element.Size;
             _Stride += element.Size;
@@ -70,35 +60,37 @@ namespace Exodia {
     ////////////// VertexBuffer || Factory //////////////
     /////////////////////////////////////////////////////
 
-    Ref<VertexBuffer> VertexBuffer::Create(uint32_t size)
+    Ref<VertexBuffer> VertexBuffer::Create( uint32_t size )
     {
         RendererAPI::API api = Renderer::GetAPI();
 
-        switch (api) {
-            case RendererAPI::API::None:
-                EXODIA_CORE_ASSERT(false, "RendererAPI::API::None is currently not supported !");
-                return nullptr;
-            case RendererAPI::API::OpenGL:
-                return CreateRef<OpenGLVertexBuffer>(size);
+        switch ( api )
+        {
+        case RendererAPI::API::None:
+            EXODIA_CORE_ASSERT( false, "RendererAPI::API::None is currently not supported !" );
+            return nullptr;
+        case RendererAPI::API::OpenGL:
+            return CreateRef<OpenGLVertexBuffer>( size );
         }
 
-        EXODIA_CORE_ASSERT(false, "Unknown RendererAPI !");
+        EXODIA_CORE_ASSERT( false, "Unknown RendererAPI !" );
         return nullptr;
     }
 
-    Ref<VertexBuffer> VertexBuffer::Create(float *vertices, uint32_t size)
+    Ref<VertexBuffer> VertexBuffer::Create( float *vertices, uint32_t size )
     {
         RendererAPI::API api = Renderer::GetAPI();
 
-        switch (api) {
-            case RendererAPI::API::None:
-                EXODIA_CORE_ASSERT(false, "RendererAPI::API::None is currently not supported !");
-                return nullptr;
-            case RendererAPI::API::OpenGL:
-                return CreateRef<OpenGLVertexBuffer>(vertices, size);
+        switch ( api )
+        {
+        case RendererAPI::API::None:
+            EXODIA_CORE_ASSERT( false, "RendererAPI::API::None is currently not supported !" );
+            return nullptr;
+        case RendererAPI::API::OpenGL:
+            return CreateRef<OpenGLVertexBuffer>( vertices, size );
         }
 
-        EXODIA_CORE_ASSERT(false, "Unknown RendererAPI !");
+        EXODIA_CORE_ASSERT( false, "Unknown RendererAPI !" );
         return nullptr;
     }
 
@@ -106,19 +98,20 @@ namespace Exodia {
     ////////////// IndexBuffer || Factory ///////////////
     /////////////////////////////////////////////////////
 
-    Ref<IndexBuffer> IndexBuffer::Create(uint32_t *indices, uint32_t count)
+    Ref<IndexBuffer> IndexBuffer::Create( uint32_t *indices, uint32_t count )
     {
         RendererAPI::API api = Renderer::GetAPI();
 
-        switch (api) {
-            case RendererAPI::API::None:
-                EXODIA_CORE_ASSERT(false, "RendererAPI::API::None is currently not supported !");
-                return nullptr;
-            case RendererAPI::API::OpenGL:
-                return CreateRef<OpenGLIndexBuffer>(indices, count);
+        switch ( api )
+        {
+        case RendererAPI::API::None:
+            EXODIA_CORE_ASSERT( false, "RendererAPI::API::None is currently not supported !" );
+            return nullptr;
+        case RendererAPI::API::OpenGL:
+            return CreateRef<OpenGLIndexBuffer>( indices, count );
         }
 
-        EXODIA_CORE_ASSERT(false, "Unknown RendererAPI !");
+        EXODIA_CORE_ASSERT( false, "Unknown RendererAPI !" );
         return nullptr;
     }
-};
+}; // namespace Exodia

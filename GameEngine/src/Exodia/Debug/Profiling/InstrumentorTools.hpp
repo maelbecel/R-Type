@@ -6,19 +6,21 @@
 */
 
 #ifndef INSTRUMENTORTOOLS_HPP_
-    #define INSTRUMENTORTOOLS_HPP_
+#define INSTRUMENTORTOOLS_HPP_
 
-    // External includes
-    #include <string>
-    #include <cstdint>
+// External includes
+#include <cstdint>
+#include <string>
 
-namespace Exodia {
+namespace Exodia
+{
 
     /**
      * @brief The ProfileResult struct represents a profiling result for an instrumented code block.
      * It stores the name of the block, start and end times, and the thread ID.
      */
-    struct ProfileResult {
+    struct ProfileResult
+    {
         std::string Name;     /*!< Name of the instrumented code block. */
         long long   Start;    /*!< Start time of the profile in microseconds. */
         long long   End;      /*!< End time of the profile in microseconds. */
@@ -29,9 +31,10 @@ namespace Exodia {
      * @brief The InstrumentationSession struct represents a profiling session.
      * It stores the name of the session.
      */
-    struct InstrumentationSession {
+    struct InstrumentationSession
+    {
         std::string Name; /*!< Name of the profiling session. */
     };
-};
+}; // namespace Exodia
 
 #endif /* !INSTRUMENTORTOOLS_HPP_ */

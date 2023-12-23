@@ -5,59 +5,61 @@
 ** Main
 */
 
-#include <iostream>
-#include <asio.hpp>
 #include "Exodia.hpp"
+#include <asio.hpp>
+#include <iostream>
 
-void my_callback(const std::string &message)
+void my_callback( const std::string &message )
 {
-    (void)message;
+    (void) message;
     std::cout << "Message received: " << message << std::endl;
 }
 
-int main(int ac, char **av)
+int main( int ac, char **av )
 {
-    (void)ac;
-    (void)av;
+    (void) ac;
+    (void) av;
 
     Exodia::Log::Init();
 
     std::cout << "Client have been launched!" << std::endl;
 
-    try {
+    try
+    {
         // Server main
-                 // Server main
+        // Server main
         Exodia::Network::IOContextManager ioContextManager;
 
         // Define a local endpoint to listen on
-        asio::ip::udp::endpoint localEndpoint(asio::ip::address::from_string("127.0.0.1"), 8083);
-        asio::ip::udp::endpoint serverEndpoint(asio::ip::address::from_string("127.0.0.1"), 8082);
+        asio::ip::udp::endpoint localEndpoint( asio::ip::address::from_string( "127.0.0.1" ), 8083 );
+        asio::ip::udp::endpoint serverEndpoint( asio::ip::address::from_string( "127.0.0.1" ), 8082 );
 
         // Create a UDPSocket object for the server
-        Exodia::Network::UDPSocket serverSocket(ioContextManager, localEndpoint);
+        Exodia::Network::UDPSocket serverSocket( ioContextManager, localEndpoint );
 
         // serverSocket.receive(my_callback);
-        Exodia::Network::Header header(1, 1, 2, 2);
+        Exodia::Network::Header header( 1, 1, 2, 2 );
         Exodia::Network::Packet packet;
 
         std::cout << "Header" << header << std::endl;
-        packet.setHeader(header);
+        packet.setHeader( header );
 
-        std::vector<char> buffer(1468, 1);
-        int packet_received = 8;
-        int packet_sent = 12;
-        std::memcpy(buffer.data(), &packet_received, sizeof(int));
-        std::memcpy(buffer.data() + sizeof(int), &packet_sent, sizeof(int));
+        std::vector<char> buffer( 1468, 1 );
+        int               packet_received = 8;
+        int               packet_sent     = 12;
+        std::memcpy( buffer.data(), &packet_received, sizeof( int ) );
+        std::memcpy( buffer.data() + sizeof( int ), &packet_sent, sizeof( int ) );
 
-        packet.setContent(buffer);
+        packet.setContent( buffer );
 
-        serverSocket.send(packet.getBuffer(), 1468, serverEndpoint);
+        serverSocket.send( packet.getBuffer(), 1468, serverEndpoint );
         // Run the IO context to initiate asynchronous operations
         ioContextManager.run();
 
         return 0;
-
-    } catch (std::exception &e) {
+    }
+    catch ( std::exception &e )
+    {
         std::cerr << "Exception: " << e.what() << std::endl;
     }
 }

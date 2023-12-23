@@ -8,15 +8,18 @@
 #include "Entity/EntityView.hpp"
 #include "ECS.hpp"
 
-namespace Exodia {
+namespace Exodia
+{
 
     /////////////////
     // Constructor //
     /////////////////
 
-    EntityView::EntityView(const EntityIterator &first, const EntityIterator &last) : _FirstIterator(first), _LastIterator(last)
+    EntityView::EntityView( const EntityIterator &first, const EntityIterator &last )
+        : _FirstIterator( first ), _LastIterator( last )
     {
-        if (_FirstIterator.Get() == nullptr || (_FirstIterator.Get()->IsPendingDestroy() && !_FirstIterator.IncludePendingDestroy()))
+        if ( _FirstIterator.Get() == nullptr ||
+             ( _FirstIterator.Get()->IsPendingDestroy() && !_FirstIterator.IncludePendingDestroy() ) )
             ++_FirstIterator;
     }
 
@@ -24,13 +27,7 @@ namespace Exodia {
     // Methods //
     /////////////
 
-    const EntityIterator &EntityView::begin() const
-    {
-        return _FirstIterator;
-    }
+    const EntityIterator &EntityView::begin() const { return _FirstIterator; }
 
-    const EntityIterator &EntityView::end() const
-    {
-        return _LastIterator;
-    }
-};
+    const EntityIterator &EntityView::end() const { return _LastIterator; }
+}; // namespace Exodia

@@ -6,25 +6,25 @@
 */
 
 #ifndef ENTRYPOINT_HPP_
-    #define ENTRYPOINT_HPP_
+#define ENTRYPOINT_HPP_
 
-    #include "Exodia.hpp"
+#include "Exodia.hpp"
 
-extern Exodia::Application *Exodia::CreateApplication(ApplicationCommandLineArgs args);
+extern Exodia::Application *Exodia::CreateApplication( ApplicationCommandLineArgs args );
 
-int main(int ac, char **av)
+int main( int ac, char **av )
 {
-    Exodia::Log::Init("R-Type");
+    Exodia::Log::Init( "R-Type" );
 
-    EXODIA_PROFILE_BEGIN_SESSION("Startup", "ExodiaProfile-Startup.json");
-    Exodia::Application *App = Exodia::CreateApplication({ ac, av });
+    EXODIA_PROFILE_BEGIN_SESSION( "Startup", "ExodiaProfile-Startup.json" );
+    Exodia::Application *App = Exodia::CreateApplication( { ac, av } );
     EXODIA_PROFILE_END_SESSION();
 
-    EXODIA_PROFILE_BEGIN_SESSION("Runtime", "ExodiaProfile-Runtime.json");
+    EXODIA_PROFILE_BEGIN_SESSION( "Runtime", "ExodiaProfile-Runtime.json" );
     App->Run();
     EXODIA_PROFILE_END_SESSION();
 
-    EXODIA_PROFILE_BEGIN_SESSION("Shutdown", "ExodiaProfile-Shutdown.json");
+    EXODIA_PROFILE_BEGIN_SESSION( "Shutdown", "ExodiaProfile-Shutdown.json" );
     delete App;
     EXODIA_PROFILE_END_SESSION();
 

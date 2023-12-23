@@ -15,16 +15,14 @@
 // External includes
 #include <cstring>
 
-namespace Exodia {
+namespace Exodia
+{
 
     //////////////////////////////
     // Constructor & Destructor //
     //////////////////////////////
 
-    SceneHierarchy::SceneHierarchy(const Ref<Scene> &context)
-    {
-        SetContext(context);
-    }
+    SceneHierarchy::SceneHierarchy( const Ref<Scene> &context ) { SetContext( context ); }
 
     /////////////
     // Methods //
@@ -38,20 +36,20 @@ namespace Exodia {
 
     void SceneHierarchy::DrawSceneHierarchy()
     {
-        ImGui::Begin("Scene Hierarchy");
+        ImGui::Begin( "Scene Hierarchy" );
 
-        if (_Context) {
-            if (ImGui::BeginPopupContextWindow(0, ImGuiMouseButton_Right)) {
-                if (ImGui::MenuItem("Create Empty Entity"))
-                    _Context->CreateEntity("Empty Entity");
+        if ( _Context )
+        {
+            if ( ImGui::BeginPopupContextWindow( 0, ImGuiMouseButton_Right ) )
+            {
+                if ( ImGui::MenuItem( "Create Empty Entity" ) )
+                    _Context->CreateEntity( "Empty Entity" );
                 ImGui::EndPopup();
             }
 
-            _Context->GetWorld().ForAll([&](Entity *entity) {
-                DrawEntityNode(entity);
-            });
+            _Context->GetWorld().ForAll( [ & ]( Entity *entity ) { DrawEntityNode( entity ); } );
 
-            if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered())
+            if ( ImGui::IsMouseDown( 0 ) && ImGui::IsWindowHovered() )
                 _SelectedEntity = nullptr;
         }
 
@@ -60,86 +58,98 @@ namespace Exodia {
 
     void SceneHierarchy::DrawProperties()
     {
-        ImGui::Begin("Properties");
+        ImGui::Begin( "Properties" );
 
-        if (_SelectedEntity)
-            DrawComponents(_SelectedEntity);
+        if ( _SelectedEntity )
+            DrawComponents( _SelectedEntity );
 
         ImGui::End();
     }
 
-    void SceneHierarchy::DrawEntityNode(Entity *entity)
+    void SceneHierarchy::DrawEntityNode( Entity *entity )
     {
         auto &tag = entity->GetComponent<TagComponent>().Get();
 
-        if (entity->HasComponent<ChildrenComponent>()) {
-            if (entity->HasComponent<ParentComponent>())
+        if ( entity->HasComponent<ChildrenComponent>() )
+        {
+            if ( entity->HasComponent<ParentComponent>() )
                 return;
             auto &children = entity->GetComponent<ChildrenComponent>().Get();
 
-            ImGuiTreeNodeFlags flags = ((_SelectedEntity == entity) ? ImGuiTreeNodeFlags_Selected : 0) | ImGuiTreeNodeFlags_OpenOnArrow;
+            ImGuiTreeNodeFlags flags =
+                ( ( _SelectedEntity == entity ) ? ImGuiTreeNodeFlags_Selected : 0 ) | ImGuiTreeNodeFlags_OpenOnArrow;
 
             flags |= ImGuiTreeNodeFlags_SpanAvailWidth;
 
-            bool opened = ImGui::TreeNodeEx((void *)(uint64_t)(uint32_t)(*entity), flags, "%s", tag.Tag.c_str());
+            bool opened = ImGui::TreeNodeEx( (void *) (uint64_t) (uint32_t) ( *entity ), flags, "%s", tag.Tag.c_str() );
 
-            if (ImGui::IsItemClicked())
+            if ( ImGui::IsItemClicked() )
                 _SelectedEntity = entity;
 
-            if (opened) {
-                for (auto &child : children.Children)
-                    DrawEntityNode(_Context->GetEntityByUUID(child));
+            if ( opened )
+            {
+                for ( auto &child : children.Children )
+                    DrawEntityNode( _Context->GetEntityByUUID( child ) );
                 ImGui::TreePop();
             }
-        } else {
-            ImGuiTreeNodeFlags flags = ((_SelectedEntity == entity) ? ImGuiTreeNodeFlags_Selected : 0) | ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
+        }
+        else
+        {
+            ImGuiTreeNodeFlags flags = ( ( _SelectedEntity == entity ) ? ImGuiTreeNodeFlags_Selected : 0 ) |
+                                       ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
 
             flags |= ImGuiTreeNodeFlags_SpanAvailWidth;
 
-            ImGui::TreeNodeEx((void *)(uint64_t)(uint32_t)(*entity), flags, "%s", tag.Tag.c_str());
+            ImGui::TreeNodeEx( (void *) (uint64_t) (uint32_t) ( *entity ), flags, "%s", tag.Tag.c_str() );
 
-            if (ImGui::IsItemClicked())
+            if ( ImGui::IsItemClicked() )
                 _SelectedEntity = entity;
         }
 
-        bool entityDeleted = false;
-        bool showPopupForThisEntity = (_SelectedEntity == entity);
+        bool entityDeleted          = false;
+        bool showPopupForThisEntity = ( _SelectedEntity == entity );
 
-        if (showPopupForThisEntity && ImGui::BeginPopupContextItem()) {
-            if (ImGui::MenuItem("Delete Entity")) {
+        if ( showPopupForThisEntity && ImGui::BeginPopupContextItem() )
+        {
+            if ( ImGui::MenuItem( "Delete Entity" ) )
+            {
                 entityDeleted = true;
             }
             ImGui::EndPopup();
         }
 
-        if (entityDeleted) {
-            _Context->DestroyEntity(entity);
-            if (_SelectedEntity == entity) {
+        if ( entityDeleted )
+        {
+            _Context->DestroyEntity( entity );
+            if ( _SelectedEntity == entity )
+            {
                 _SelectedEntity = nullptr;
             }
         }
     }
 
-    void SceneHierarchy::DrawComponents(Entity *entity)
+    void SceneHierarchy::DrawComponents( Entity *entity )
     {
-        if (entity->HasComponent<TagComponent>()) {
+        if ( entity->HasComponent<TagComponent>() )
+        {
             auto &tag = entity->GetComponent<TagComponent>().Get().Tag;
-            char buffer[256];
+            char  buffer[ 256 ];
 
-            std::memset(buffer, 0, sizeof(buffer));
-            std::strncpy(buffer, tag.c_str(), sizeof(buffer));
+            std::memset( buffer, 0, sizeof( buffer ) );
+            std::strncpy( buffer, tag.c_str(), sizeof( buffer ) );
 
-            if (ImGui::InputText("Tag", buffer, sizeof(buffer)))
-                tag = std::string(buffer);
+            if ( ImGui::InputText( "Tag", buffer, sizeof( buffer ) ) )
+                tag = std::string( buffer );
         }
 
         ImGui::SameLine();
-        ImGui::PushItemWidth(-1);
+        ImGui::PushItemWidth( -1 );
 
-        if (ImGui::Button("Add Component"))
-            ImGui::OpenPopup("AddComponent");
+        if ( ImGui::Button( "Add Component" ) )
+            ImGui::OpenPopup( "AddComponent" );
 
-        if (ImGui::BeginPopup("AddComponent")) {
+        if ( ImGui::BeginPopup( "AddComponent" ) )
+        {
 
             /*DisplayAddComponentEntry<CameraComponent>("Camera");
             DisplayAddComponentEntry<SpriteRendererComponent>("Sprite Renderer");
@@ -153,7 +163,7 @@ namespace Exodia {
         }
         ImGui::PopItemWidth();
 
-        for (auto &component : entity->GetAllComponents())
+        for ( auto &component : entity->GetAllComponents() )
             component->OnImGuiRender();
     }
 
@@ -161,19 +171,13 @@ namespace Exodia {
     // Getters & Setters //
     ///////////////////////
 
-    void SceneHierarchy::SetContext(Ref<Scene> context)
+    void SceneHierarchy::SetContext( Ref<Scene> context )
     {
-        _Context = context;
+        _Context        = context;
         _SelectedEntity = nullptr;
     }
 
-    void SceneHierarchy::SetSelectedEntity(Entity *entity)
-    {
-        _SelectedEntity = entity;
-    }
+    void SceneHierarchy::SetSelectedEntity( Entity *entity ) { _SelectedEntity = entity; }
 
-    Entity *SceneHierarchy::GetSelectedEntity() const
-    {
-        return _SelectedEntity;
-    }
-};
+    Entity *SceneHierarchy::GetSelectedEntity() const { return _SelectedEntity; }
+}; // namespace Exodia

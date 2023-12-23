@@ -6,67 +6,68 @@
 */
 
 #ifndef VIEWPORTIMGUI_HPP_
-    #define VIEWPORTIMGUI_HPP_
+#define VIEWPORTIMGUI_HPP_
 
-    #include "Exodia.hpp"
-    #include <imgui.h>
-    #include <glm/glm.hpp>
+#include "Exodia.hpp"
+#include <glm/glm.hpp>
+#include <imgui.h>
 
-namespace Exodia {
+namespace Exodia
+{
 
-    class ViewportImGui {
+    class ViewportImGui
+    {
 
         //////////////////////////////
         // Constructor & Destructor //
         //////////////////////////////
-        public:
-
-            ViewportImGui() = default;
-            ~ViewportImGui() = default;
+      public:
+        ViewportImGui()  = default;
+        ~ViewportImGui() = default;
 
         /////////////
         // Methods //
         /////////////
-        public:
+      public:
+        void OnImGuiRender( Ref<Framebuffer> framebuffer )
+        {
+            ImGui::PushStyleVar( ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 } );
 
-            void OnImGuiRender(Ref<Framebuffer> framebuffer)
-            {
-                ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
+            ImGui::Begin( "Viewport" );
+            ImVec2 viewportMinRegion = ImGui::GetWindowContentRegionMin();
+            ImVec2 viewportMaxRegion = ImGui::GetWindowContentRegionMax();
+            ImVec2 viewportOffset    = ImGui::GetWindowPos();
 
-                ImGui::Begin("Viewport");
-                ImVec2 viewportMinRegion = ImGui::GetWindowContentRegionMin();
-                ImVec2 viewportMaxRegion = ImGui::GetWindowContentRegionMax();
-                ImVec2 viewportOffset = ImGui::GetWindowPos();
+            _ViewportBounds[ 0 ] = { viewportMinRegion.x + viewportOffset.x, viewportMinRegion.y + viewportOffset.y };
+            _ViewportBounds[ 1 ] = { viewportMaxRegion.x + viewportOffset.x, viewportMaxRegion.y + viewportOffset.y };
 
-                _ViewportBounds[0] = { viewportMinRegion.x + viewportOffset.x, viewportMinRegion.y + viewportOffset.y };
-                _ViewportBounds[1] = { viewportMaxRegion.x + viewportOffset.x, viewportMaxRegion.y + viewportOffset.y };
+            _ViewportFocused = ImGui::IsWindowFocused();
+            _ViewportHovered = ImGui::IsWindowHovered();
 
-                _ViewportFocused = ImGui::IsWindowFocused();
-                _ViewportHovered = ImGui::IsWindowHovered();
+            Application::Get().GetImGuiLayer()->SetBlockEvents( !_ViewportFocused && !_ViewportHovered );
 
-                Application::Get().GetImGuiLayer()->SetBlockEvents(!_ViewportFocused && !_ViewportHovered);
+            ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
 
-                ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
+            _ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
 
-                _ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
+            uint32_t textureID = framebuffer->GetColorAttachmentRendererID();
 
-                uint32_t textureID = framebuffer->GetColorAttachmentRendererID();
+            ImGui::Image( reinterpret_cast<ImTextureID>( textureID ), ImVec2{ _ViewportSize.x, _ViewportSize.y },
+                          ImVec2{ 0, 1 }, ImVec2{ 1, 0 } );
+            ImGui::End();
 
-                ImGui::Image(reinterpret_cast<ImTextureID>(textureID), ImVec2{ _ViewportSize.x, _ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
-                ImGui::End();
-
-                ImGui::PopStyleVar();
-            }
+            ImGui::PopStyleVar();
+        }
 
         ////////////////
         // Attributes //
         ////////////////
-        private:
-            bool                         _ViewportFocused;
-            bool                         _ViewportHovered;
-            glm::vec2                    _ViewportSize;
-            glm::vec2                    _ViewportBounds[2];
+      private:
+        bool      _ViewportFocused;
+        bool      _ViewportHovered;
+        glm::vec2 _ViewportSize;
+        glm::vec2 _ViewportBounds[ 2 ];
     };
-};
+}; // namespace Exodia
 
 #endif /* !VIEWPORTIMGUI_HPP_ */

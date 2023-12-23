@@ -6,23 +6,21 @@
 */
 
 #include "Entity.hpp"
-#include "World/World.hpp"
 #include "ECS/Events/Events.hpp"
+#include "World/World.hpp"
 
-namespace Exodia {
+namespace Exodia
+{
 
     //////////////////////////////
     // Constructor & Destructor //
     //////////////////////////////
 
-    Entity::Entity() : _World(nullptr), _ID(0), _PendingDestroy(false) {};
+    Entity::Entity() : _World( nullptr ), _ID( 0 ), _PendingDestroy( false ){};
 
-    Entity::Entity(World *world, uint64_t id) : _World(world), _ID(id), _PendingDestroy(false) {};
+    Entity::Entity( World *world, uint64_t id ) : _World( world ), _ID( id ), _PendingDestroy( false ){};
 
-    Entity::~Entity()
-    {
-        RemoveAllComponents();
-    }
+    Entity::~Entity() { RemoveAllComponents(); }
 
     /////////////
     // Methods //
@@ -30,47 +28,48 @@ namespace Exodia {
 
     void Entity::RemoveAllComponents()
     {
-        for (auto pair : _Components) {
-            pair.second->Removed(this);
-            //pair.second->Destroy(_World);
+        for ( auto pair : _Components )
+        {
+            pair.second->Removed( this );
+            // pair.second->Destroy(_World);
         }
 
         _Components.clear();
     }
 
-    Entity *Entity::Duplicate(World *world, UUID uuid, const std::string &name)
+    Entity *Entity::Duplicate( World *world, UUID uuid, const std::string &name )
     {
-        Entity *entity = world->CreateEntity(uuid, name);
+        Entity *entity = world->CreateEntity( uuid, name );
 
-        for (auto pair : _Components)
-            entity->_Components[pair.first] = pair.second;
+        for ( auto pair : _Components )
+            entity->_Components[ pair.first ] = pair.second;
         return entity;
     }
 
-    void Entity::AddComponent(IComponentContainer *component)
+    void Entity::AddComponent( IComponentContainer *component )
     {
-        std::string name = component->GetTypeIndexOfComponent().name();
-        std::string typeIndex = extractTypeName(name.c_str());
+        std::string name      = component->GetTypeIndexOfComponent().name();
+        std::string typeIndex = extractTypeName( name.c_str() );
 
-        auto found = _Components.find(typeIndex);
+        auto found = _Components.find( typeIndex );
 
-        _Components[typeIndex] = component;
+        _Components[ typeIndex ] = component;
 
-        _World->Emit<Events::OnComponentAddedNoTemplate>({ this, typeIndex });
+        _World->Emit<Events::OnComponentAddedNoTemplate>( { this, typeIndex } );
     }
 
-    bool Entity::RemoveComponent(IComponentContainer *component)
+    bool Entity::RemoveComponent( IComponentContainer *component )
     {
-        std::string name = component->GetTypeIndexOfComponent().name();
-        std::string typeIndex = extractTypeName(name.c_str());
+        std::string name      = component->GetTypeIndexOfComponent().name();
+        std::string typeIndex = extractTypeName( name.c_str() );
 
-        auto found = _Components.find(typeIndex);
+        auto found = _Components.find( typeIndex );
 
-        if (found == _Components.end())
+        if ( found == _Components.end() )
             return false;
-        found->second->Removed(this);
-        found->second->Destroy(_World);
-        _Components.erase(found);
+        found->second->Removed( this );
+        found->second->Destroy( _World );
+        _Components.erase( found );
         return true;
     }
 
@@ -78,45 +77,30 @@ namespace Exodia {
     // Getters & Setters //
     ///////////////////////
 
-    World *Entity::GetWorld() const
-    {
-        return _World;
-    }
+    World *Entity::GetWorld() const { return _World; }
 
-    void Entity::SetWorld(World *world)
-    {
-        _World = world;
-    }
+    void Entity::SetWorld( World *world ) { _World = world; }
 
-    uint64_t Entity::GetEntityID() const
-    {
-        return _ID;
-    }
+    uint64_t Entity::GetEntityID() const { return _ID; }
 
-    bool Entity::IsPendingDestroy() const
-    {
-        return _PendingDestroy;
-    }
+    bool Entity::IsPendingDestroy() const { return _PendingDestroy; }
 
-    void Entity::SetPendingDestroy(bool pendingDestroy)
-    {
-        _PendingDestroy = pendingDestroy;
-    }
+    void Entity::SetPendingDestroy( bool pendingDestroy ) { _PendingDestroy = pendingDestroy; }
 
     std::vector<IComponentContainer *> Entity::GetAllComponents()
     {
         std::vector<IComponentContainer *> components;
 
-        for (auto pair : _Components)
-            components.push_back(pair.second);
+        for ( auto pair : _Components )
+            components.push_back( pair.second );
         return components;
     }
 
-    IComponentContainer *Entity::GetComponent(const std::string &index)
+    IComponentContainer *Entity::GetComponent( const std::string &index )
     {
-        auto found = _Components.find(index);
+        auto found = _Components.find( index );
 
-        if (found == _Components.end())
+        if ( found == _Components.end() )
             return nullptr;
         return found->second;
     }
@@ -125,18 +109,9 @@ namespace Exodia {
     // Comparators //
     /////////////////
 
-    bool Entity::operator==(const Entity &other) const
-    {
-        return _ID == other._ID;
-    }
+    bool Entity::operator==( const Entity &other ) const { return _ID == other._ID; }
 
-    bool Entity::operator!=(const Entity &other) const
-    {
-        return !(other == *this);
-    }
+    bool Entity::operator!=( const Entity &other ) const { return !( other == *this ); }
 
-    Entity::operator bool() const
-    {
-        return _ID != 0;
-    }
-};
+    Entity::operator bool() const { return _ID != 0; }
+}; // namespace Exodia

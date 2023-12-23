@@ -11,14 +11,12 @@
 // GLFW includes
 #include <GLFW/glfw3.h>
 
-namespace Exodia {
+namespace Exodia
+{
 
     ///////////////////////
     // Getters & Setters //
     ///////////////////////
 
-    float Time::GetTime()
-    {
-        return (float)glfwGetTime();
-    }
-};
+    float Time::GetTime() { return (float) glfwGetTime(); }
+}; // namespace Exodia

@@ -5,39 +5,40 @@
 ** ApplicationExample
 */
 
-#include "Exodia/EntryPoint.hpp"
 #include "DefaultLayer.hpp"
+#include "Exodia/EntryPoint.hpp"
 
-namespace Exodia {
+namespace Exodia
+{
 
     // -- Application ----------------------------------------------------------
 
-    class ApplicationExample : public Application {
+    class ApplicationExample : public Application
+    {
 
         //////////////////////////////
         // Constructor & Destructor //
         //////////////////////////////
-        public:
+      public:
+        ApplicationExample( const ApplicationSpecification &spec ) : Application( spec )
+        {
+            PushLayer( new DefaultLayer() );
+        }
 
-            ApplicationExample(const ApplicationSpecification &spec) : Application(spec)
-            {
-                PushLayer(new DefaultLayer());
-            }
-
-            ~ApplicationExample() = default;
+        ~ApplicationExample() = default;
     };
 
     // -- Entry Point ----------------------------------------------------------
 
-    Application *CreateApplication(ApplicationCommandLineArgs args)
+    Application *CreateApplication( ApplicationCommandLineArgs args )
     {
         EXODIA_PROFILE_FUNCTION();
 
         ApplicationSpecification spec;
 
-        spec.Name = "Application Example";
+        spec.Name            = "Application Example";
         spec.CommandLineArgs = args;
 
-        return new ApplicationExample(spec);
+        return new ApplicationExample( spec );
     }
-};
+}; // namespace Exodia

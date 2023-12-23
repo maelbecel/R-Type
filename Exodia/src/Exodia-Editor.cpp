@@ -9,36 +9,37 @@
 #include "Layer/EditorLayer.hpp"
 #include <iostream>
 
-namespace Exodia {
+namespace Exodia
+{
 
-    class ExodiaApplication : public Application {
+    class ExodiaApplication : public Application
+    {
 
         //////////////////////////////
         // Constructor & Destructor //
         //////////////////////////////
-        public:
+      public:
+        ExodiaApplication( const ApplicationSpecification &spec ) : Application( spec )
+        {
+            PushLayer( new EditorLayer() );
+        }
 
-            ExodiaApplication(const ApplicationSpecification &spec) : Application(spec)
-            {
-                PushLayer(new EditorLayer());
-            }
-
-            ~ExodiaApplication() = default;
+        ~ExodiaApplication() = default;
     };
 
     /////////////////
     // Entry Point //
     /////////////////
 
-    Application *CreateApplication(ApplicationCommandLineArgs args)
+    Application *CreateApplication( ApplicationCommandLineArgs args )
     {
         EXODIA_PROFILE_FUNCTION();
 
         ApplicationSpecification spec;
 
-        spec.Name = "Exodia Editor";
+        spec.Name            = "Exodia Editor";
         spec.CommandLineArgs = args;
 
-        return new ExodiaApplication(spec);
+        return new ExodiaApplication( spec );
     }
-};
+}; // namespace Exodia

@@ -6,70 +6,79 @@
 */
 
 #ifndef EVENTS_HPP_
-    #define EVENTS_HPP_
+#define EVENTS_HPP_
 
-    // Exodia Utils includes
-    #include "Utils/CrossPlatform.hpp"
-    #include "Utils/TypeIndex.hpp"
+// Exodia Utils includes
+#include "Utils/CrossPlatform.hpp"
+#include "Utils/TypeIndex.hpp"
 
-    // External includes
-    #include <string>
+// External includes
+#include <string>
 
-namespace Exodia {
+namespace Exodia
+{
 
     class Entity;
 
-    template<typename Component>
-    class ComponentHandle;
+    template <typename Component> class ComponentHandle;
 
-    namespace Events {
-        struct OnEntityCreated {
+    namespace Events
+    {
+        struct OnEntityCreated
+        {
             Exodia::Entity *Entity;
         };
 
-        struct OnEntityDestroyed {
+        struct OnEntityDestroyed
+        {
             Exodia::Entity *Entity;
         };
 
-        template<typename Component>
-        struct OnComponentAdded {
+        template <typename Component> struct OnComponentAdded
+        {
             Exodia::Entity                    *Entity;
             Exodia::ComponentHandle<Component> AddedComponent;
         };
 
-        struct OnComponentAddedNoTemplate {
+        struct OnComponentAddedNoTemplate
+        {
             Exodia::Entity *Entity;
             std::string     ComponentType;
         };
 
-        template<typename Component>
-        struct OnComponentRemoved {
+        template <typename Component> struct OnComponentRemoved
+        {
             Exodia::Entity                    *Entity;
             Exodia::ComponentHandle<Component> RemovedComponent;
         };
 
-        struct OnComponentRemovedNoTemplate {
+        struct OnComponentRemovedNoTemplate
+        {
             Exodia::Entity *Entity;
             std::string     ComponentType;
         };
 
-        struct OnCollisionEntered {
+        struct OnCollisionEntered
+        {
             Exodia::Entity *EntityA;
             Exodia::Entity *EntityB;
         };
 
-        struct OnHoveredEnter {
+        struct OnHoveredEnter
+        {
             Exodia::Entity *Entity;
         };
 
-        struct OnHoveredExit {
+        struct OnHoveredExit
+        {
             Exodia::Entity *Entity;
         };
 
-        struct OnClick {
+        struct OnClick
+        {
             Exodia::Entity *Entity;
         };
-    };
-};
+    }; // namespace Events
+};     // namespace Exodia
 
 #endif /* !EVENTS_HPP_ */

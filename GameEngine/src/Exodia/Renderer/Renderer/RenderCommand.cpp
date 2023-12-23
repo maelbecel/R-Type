@@ -11,6 +11,7 @@
 // Entry Point
 #include "OpenGL/OpenGLRendererAPI.hpp"
 
-namespace Exodia {
+namespace Exodia
+{
     RendererAPI *RenderCommand::_RendererAPI = new OpenGLRendererAPI;
 };

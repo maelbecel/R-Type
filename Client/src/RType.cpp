@@ -9,49 +9,46 @@
 #include "Layer/RTypeLayer.hpp"
 #include <iostream>
 
-
-void my_callback(const std::string &message)
+void my_callback( const std::string &message )
 {
-    (void)message;
+    (void) message;
     std::cout << "Message received: " << message << std::endl;
 }
 
-namespace Exodia {
+namespace Exodia
+{
 
-    class RType : public Application {
+    class RType : public Application
+    {
 
         //////////////////////////////
         // Constructor & Destructor //
         //////////////////////////////
-        public:
+      public:
+        RType( const ApplicationSpecification &spec ) : Application( spec ) { PushLayer( new RTypeLayer() ); }
 
-            RType(const ApplicationSpecification &spec) : Application(spec)
-            {
-                PushLayer(new RTypeLayer());
-            }
-
-            ~RType() = default;
+        ~RType() = default;
     };
 
     /////////////////
     // Entry Point //
     /////////////////
 
-    Application *CreateApplication(ApplicationCommandLineArgs args)
+    Application *CreateApplication( ApplicationCommandLineArgs args )
     {
         EXODIA_PROFILE_FUNCTION();
 
 #ifdef _WIN32
-        Project::Load("../Client/R-Type.proj");
+        Project::Load( "../Client/R-Type.proj" );
 #else
-        Project::Load("Client/R-Type.proj");
+        Project::Load( "Client/R-Type.proj" );
 #endif
 
         ApplicationSpecification spec;
 
-        spec.Name = "Application Example";
+        spec.Name            = "Application Example";
         spec.CommandLineArgs = args;
 
-        return new RType(spec);
+        return new RType( spec );
     }
-};
+}; // namespace Exodia

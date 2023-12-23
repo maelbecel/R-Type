@@ -6,60 +6,45 @@
 */
 
 #ifndef COMPONENTHANDLE_HPP_
-    #define COMPONENTHANDLE_HPP_
+#define COMPONENTHANDLE_HPP_
 
-    // Exodia Utils includes
-    #include "Utils/CrossPlatform.hpp"
+// Exodia Utils includes
+#include "Utils/CrossPlatform.hpp"
 
-namespace Exodia {
+namespace Exodia
+{
 
-    template<typename Component>
-    class ComponentHandle {
+    template <typename Component> class ComponentHandle
+    {
 
         /////////////////
         // Constructor //
         /////////////////
-        public:
-
-            ComponentHandle(Component *component = nullptr) : _Component(component) {};
+      public:
+        ComponentHandle( Component *component = nullptr ) : _Component( component ){};
 
         ///////////////////////
         // Getters & Setters //
         ///////////////////////
-        public:
+      public:
+        Component &Get() { return *_Component; }
 
-            Component &Get()
-            {
-                return *_Component;
-            }
-
-            bool IsValid() const
-            {
-                return _Component != nullptr;
-            }
+        bool IsValid() const { return _Component != nullptr; }
 
         ///////////////
         // Operators //
         ///////////////
-        public:
+      public:
+        Component *operator->() const { return _Component; }
 
-            Component *operator->() const
-            {
-                return _Component;
-            }
-
-            operator bool() const
-            {
-                return IsValid();
-            }
+        operator bool() const { return IsValid(); }
 
         ////////////////
         // Attributes //
         ////////////////
-        private:
-
-            Component *_Component;
+      private:
+        Component *_Component;
     };
-};
+}; // namespace Exodia
 
 #endif /* !COMPONENTHANDLE_HPP_ */
