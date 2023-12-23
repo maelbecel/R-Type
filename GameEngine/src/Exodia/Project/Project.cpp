@@ -76,6 +76,14 @@ namespace Exodia {
         RegisterComponent("ScriptComponent", [](Buffer data) -> IComponentContainer * {
             return new ComponentContainer<ScriptComponent>(data);
         });
+
+        RegisterComponent("SoundComponent", [](Buffer data) -> IComponentContainer * {
+            return new ComponentContainer<SoundComponent>(data);
+        });
+
+        RegisterComponent("MusicComponent", [](Buffer data) -> IComponentContainer * {
+            return new ComponentContainer<MusicComponent>(data);
+        });
     }
 
     /////////////

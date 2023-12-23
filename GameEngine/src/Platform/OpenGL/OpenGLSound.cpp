@@ -18,8 +18,13 @@ namespace Exodia {
 
     OpenGLSound::OpenGLSound(const std::string &path)
     {
-        // -- Load the sound -- !WARNING! {.mp3} only
         _buffer = alutCreateBufferFromFile(path.c_str());
+
+        if (_buffer == AL_NONE) {
+            EXODIA_CORE_ERROR("Failed to load sound: {0}", path);
+
+            return;
+        }
 
         // -- Create a source --
         alGenSources(1, &_source);
@@ -46,6 +51,8 @@ namespace Exodia {
 
     void OpenGLSound::Play()
     {
+        if (IsPlaying())
+            return;
         alSourcePlay(_source);
     }
 
