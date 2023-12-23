@@ -231,7 +231,7 @@ namespace Exodia::Network {
     void Network::ReceiveConnectAccept(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint, Exodia::Network::Header header) {
         (void) senderEndpoint;
         std::vector<char> buffer(1024, 0);
-        std::memcpy(buffer.data(), message.data() + Header::GetSize(), size - Header::GetSize());
+        std::memcpy(buffer.data(), message.data(), size);
         std::string id(buffer.begin(), buffer.end());
         this->id = id;
         std::cout << "Receive accept connect" << std::endl;
