@@ -28,15 +28,21 @@ Save and close the file.
 source ~/.bashrc
 ```
 
-## Windows
+On Windows :
+```bash
+./vcpkg/bootstrap-vcpkg.bat
+```
 
-Please install `Visual Studio 17 2022`
+Go on Advanced parameters for setup VCPKG_ROOT :
+`VCPKG_ROOT`: `/path/vcpkg`
+
+## Windows
 
 ```bash
 mkdir build
 cd build
-cmake .. -G "Visual Studio 17 2022" -DCMAKE_TOOLCHAIN_FILE=\path\vcpkg\scripts\buildsystems\vcpkg.cmake -D_WIN32_WINNT=0x0601
-cmake --build . --config Release
+cmake ..
+cmake --build .
 ```
 
 ## Linux

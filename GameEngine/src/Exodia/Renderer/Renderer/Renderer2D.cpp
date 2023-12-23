@@ -660,6 +660,24 @@ namespace Exodia {
         DrawLine(lineVertices[3], lineVertices[0], color, entityID);
     }
 
+        // 7. Sound
+    
+    void Renderer2D::PlaySound(AssetHandle sound)
+    {
+        Ref<Sound2D> soundRef = AssetManager::GetAsset<Sound2D>(sound);
+
+        if (soundRef == nullptr)
+            return;
+        soundRef->Play();
+    }
+
+    void Renderer2D::PlaySound(Ref<Sound2D> sound)
+    {
+        if (sound == nullptr)
+            return;
+        sound->Play();
+    }
+
     /////////////
     // Getters //
     /////////////

@@ -18,5 +18,6 @@
     #include "ECS/Component/DefaultComponents/Collider2DComponents.hpp"
     #include "ECS/Component/DefaultComponents/PrefabComponent.hpp"
     #include "ECS/Component/DefaultComponents/RigidBody2DComponent.hpp"
+    #include "ECS/Component/DefaultComponents/SoundComponent.hpp"
 
 #endif /* !COMPONENTS_HPP_ */
