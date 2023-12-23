@@ -2,11 +2,9 @@ name: ClangFormat Auto-Formatter
 
 on:
   push:
-    paths:
-      - '**/*.c'
-      - '**/*.cpp'
-      - '**/*.h'
-      - '**/*.hpp'
+    branches:
+      - dev
+      - CICD
 
 jobs:
   clang-format:
@@ -23,5 +21,6 @@ jobs:
 
     - name: Auto-format Code
       run: |
-        git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -E '\.(c|cpp|h)$' | xargs clang-format -i -style=file
-        git diff --exit-code --quiet || git commit -am "Auto-format code using ClangFormat" && git push origin ${{ github.head_ref }}
+        git diff --name-only HEAD^ HEAD | grep -E '\.(c|cpp|h)$' | xargs clang-format -i -style=file
+        git diff --exit-code --quiet || git commit -am "Auto-format code using ClangFormat" && git push origin ${{ github.ref }}
+
