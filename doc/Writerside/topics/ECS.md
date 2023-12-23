@@ -6,8 +6,8 @@ It is used to manage the game objects.
 
 It contains the following parts:
 
+- [**Component**](Component.md) : The Component part of the ECS. It contains the classes that will be used to manage components.
 - [**Entity**]() : The Entity part of the ECS. It contains the classes that will be used to manage entities.
-- [**Component**]() : The Component part of the ECS. It contains the classes that will be used to manage components.
 - [**System**]() : The System part of the ECS. It contains the classes that will be used to manage systems.
 - [**Events**]() : The Event part of the ECS. It contains the classes that will be used to manage events.
 - [**EventSubscriber**]() : The EventSubscriber part of the ECS. It contains the classes that will be used to manage event subscribers.
