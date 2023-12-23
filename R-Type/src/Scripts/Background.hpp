@@ -56,8 +56,6 @@ namespace RType {
                     auto body = star->AddComponent<Exodia::RigidBody2DComponent>();
 
                     body.Get().Type = Exodia::RigidBody2DComponent::BodyType::Dynamic;
-                    body.Get().Mass = 0.0f;
-                    body.Get().GravityScale = 0.0f;
                     body.Get().Velocity.x = (float)velocityDist(gen);
                 }
             }
