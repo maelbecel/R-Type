@@ -43,7 +43,6 @@ namespace Exodia {
 
         _Network->Loop();
         _Network->SendAskConnect("127.0.0.1", 8082); // TODO: change ip and port when the server is on a different machine
-
         // Create world
         CurrentScene = GAME;
 
@@ -78,14 +77,16 @@ namespace Exodia {
         camera.Camera.SetProjectionType(SceneCamera::ProjectionType::Perspective);
         camera.Camera.SetViewportSize(Application::Get().GetWindow().GetWidth(), Application::Get().GetWindow().GetHeight());
 
+        /* Removing rigid body for static camera
         auto body_camera = cameraEntity->AddComponent<RigidBody2DComponent>();
         body_camera.Get().Type = RigidBody2DComponent::BodyType::Dynamic;
         body_camera.Get().Mass = 0.0f;
         body_camera.Get().GravityScale = 0.0f;
         body_camera.Get().Velocity = glm::vec2{ 1.5f, 0.0f };
+        */
 
         // Create the entities
-        CreatePlayer(Scenes, 0);
+        //CreatePlayer(Scenes, 0);
 
         // Create pata-pata
         // CreatePataPata(Scenes);
@@ -153,8 +154,7 @@ namespace Exodia {
             auto &sc = script.Get();
             auto &tc = tag.Get();
 
-            //TODO: Check if player{client_id}
-            if (tc.Tag.rfind("Player", 0) != std::string::npos && sc.Instance != nullptr) {
+            if (tc.Tag.rfind("Player", std::stoi(this->_Network->id)) != std::string::npos && sc.Instance != nullptr) {
                 sc.Instance->OnKeyPressed(key);
 
                 _Network->SendEvent(key, true);
@@ -174,7 +174,7 @@ namespace Exodia {
             auto &tc = tag.Get();
 
             // TODO: Check if player{client_id}
-            if (tc.Tag.rfind("Player", 0) != std::string::npos && sc.Instance != nullptr) {
+            if (tc.Tag.rfind("Player", std::stoi(this->_Network->id)) != std::string::npos && sc.Instance != nullptr) {
                 sc.Instance->OnKeyReleased(key);
 
                 _Network->SendEvent(key, false);

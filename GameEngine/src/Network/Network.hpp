@@ -109,6 +109,12 @@ namespace Exodia {
                     return 0;
                 }
 
+                UDPSocket &GetSocket() {
+                    return _socket;
+                }
+
+            std::string id = "0";
+
             private:
                 /**
                  * @brief Use to connect to a user with the ip and port given

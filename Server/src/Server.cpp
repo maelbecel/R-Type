@@ -36,7 +36,9 @@ namespace Exodia {
     {
         EXODIA_CORE_INFO("Server is closing...");
 
-        _InputThread.join();
+        _Running = false;
+        if (_InputThread.joinable())
+            _InputThread.join();
     }
 
     /////////////
@@ -94,16 +96,6 @@ namespace Exodia {
             Scenes[GAME]->Subscribe<Events::OnEntityDestroyed>(subscribe);
             Scenes[GAME]->Subscribe<Events::OnCollisionEntered>(collisionSystem);
 
-            // TODO: Temp player creation
-            for (int i = 0; i < 4; i++) {
-                CreatePlayer(Scenes, i);
-
-                Entity *player = Scenes[GAME]->GetEntityByName("Player_" + std::to_string(i));
-
-                _Network.SendComponentOf(player, "TransformComponent");
-                _Network.SendComponentOf(player, "CircleRendererComponent");
-            }
-
             CreatePataPata(Scenes);
             CreateBackground(Scenes);
             CreateStars(Scenes);
@@ -138,8 +130,11 @@ namespace Exodia {
         EXODIA_INFO("Server is running !");
 
         try {
-            while(_Running)
+            while(_Running) {
+                CheckForNewClients();
                 this->Update();
+                std::this_thread::sleep_for(std::chrono::milliseconds(1000));  // Sleep for 32 milliseconds (30 FPS)
+            }   
         } catch (std::exception &error) {
             EXODIA_ERROR("Exception :\n\t{0}", error.what());
         }
@@ -160,7 +155,7 @@ namespace Exodia {
 
             _LastTime = time;
 
-            for (int i = 0; i < 4; i++) {
+            for (int i = 0; i < _Users.size(); i++) {
                 Entity *player = Scenes[GAME]->GetEntityByName("Player_" + std::to_string(i));
 
                 if (player != nullptr) {
@@ -193,12 +188,13 @@ namespace Exodia {
                 _Network.SendComponentOf(pata, "TransformComponent");
                 _Network.SendComponentOf(pata, "CircleRendererComponent");
 
+                /*
                 auto *bullet = Scenes[GAME]->GetEntityByName("BE68");
 
                 if (bullet != nullptr) {
                     _Network.SendComponentOf(bullet, "TransformComponent");
                     _Network.SendComponentOf(bullet, "CircleRendererComponent");
-                }
+                }*/
             }
 
             std::queue<std::pair<std::pair<uint32_t, bool>, asio::ip::udp::endpoint>> events = _Network.GetEvents();
@@ -229,6 +225,31 @@ namespace Exodia {
             Scenes[CurrentScene]->OnUpdateRuntime(timestep);
         } catch (std::exception &error) {
             EXODIA_ERROR("Unable to update the world :\n\t{0}", error.what());
+        }
+    }
+
+    void Server::CheckForNewClients()
+    {
+        bool newClient = true;
+        Entity *player = nullptr;
+        std::unordered_map<std::string, Connection> connections = _Network.GetConnections();
+
+        if (connections.empty()) {
+            return;
+        }
+        for (auto connection : connections) {
+            for (auto user : _Users) {
+                if (user.GetConnection() == connection.second) {
+                    newClient = false;
+                }
+            }
+            if (newClient) {
+                CreatePlayer(Scenes, (uint32_t)_Users.size());
+                player = Scenes[GAME]->GetEntityByName("Player_" + std::to_string((uint32_t)_Users.size()));
+                _Users.push_back(User(connection.second, player));
+                EXODIA_INFO("New client connected");
+            }
+            newClient = true;
         }
     }
 };

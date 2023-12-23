@@ -23,6 +23,7 @@ set(SOURCES
 
     src/Main.cpp
     src/Server.cpp
+    src/User/User.cpp
 )
 
 # Set include directories for the Exodia Game Engine Application

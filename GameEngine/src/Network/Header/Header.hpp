@@ -113,7 +113,7 @@ namespace Exodia {
                     return header;
                 }
 
-                static size_t GetSize()
+                static unsigned long GetSize()
                 {
                     return 22;
                 }

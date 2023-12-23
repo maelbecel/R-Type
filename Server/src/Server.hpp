@@ -10,6 +10,8 @@
 
     #include "Exodia.hpp"
     #include "SceneType.hpp"
+    #include "User/User.hpp"
+
 
 namespace Exodia {
 
@@ -58,6 +60,10 @@ namespace Exodia {
             bool _Running;
 
             std::thread _InputThread;
+
+            void CheckForNewClients();
+            std::vector<Exodia::User> _Users;
+            
     };
 };
 

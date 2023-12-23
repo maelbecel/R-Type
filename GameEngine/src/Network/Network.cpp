@@ -229,9 +229,11 @@ namespace Exodia::Network {
      * @return void
     */
     void Network::ReceiveConnectAccept(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint, Exodia::Network::Header header) {
-        (void) size;
-        (void) message;
         (void) senderEndpoint;
+        std::vector<char> buffer(1024, 0);
+        std::memcpy(buffer.data(), message.data() + Header::GetSize(), size - Header::GetSize());
+        std::string id(buffer.begin(), buffer.end());
+        this->id = id;
         std::cout << "Receive accept connect" << std::endl;
     }
 
@@ -297,7 +299,12 @@ namespace Exodia::Network {
 
     void Network::ReceiveConnect(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint, Exodia::Network::Header header) {
         (void) size;
-        (void) message;
+
+        //Adding id to the buffer
+        std::vector<char> buffer(0);
+        std::string id = _connections.size() > 0 ? std::to_string(_connections.size()) : "0";
+        buffer = std::vector<char>(id.begin(), id.end());
+
         const std::string name = senderEndpoint.address().to_string() + ":" + std::to_string(senderEndpoint.port());
         auto find = _connections.find(name);
         if (find == _connections.end())
@@ -308,6 +315,7 @@ namespace Exodia::Network {
         Connection connection = _connections[senderEndpoint.address().to_string() + ":" + std::to_string(senderEndpoint.port())];
         connection.AddReceivedPacket();
         Packet packet(0x02);
+        packet.SetContent(buffer);
         std::cout << "Send accept connect" << std::endl;
         connection.SendPacket(_socket, packet);
 
