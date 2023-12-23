@@ -17,13 +17,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - uses: DoozyX/clang-format-lint-action@v0.16.2
-      with:
-        source: '.'
-        extensions: 'cpp'
-        style: 'google'
-        clangFormatVersion: 16
-        inplace: True
+    - name: "Install clang-format"
+        run: sudo apt-get install -y clang-format
+    - name: "Run clang-format"
+        run: find . -iname '*.hpp' -o -iname '*.cpp' ! -path "./Library/*" ! -path "./Packages/*" | xargs clang-format -i -style=file
     - uses: EndBug/add-and-commit@v9
       with:
         author_name: Clang Robot
