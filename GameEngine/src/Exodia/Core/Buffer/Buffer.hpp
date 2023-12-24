@@ -49,6 +49,21 @@ namespace Exodia {
             Size = size;
         }
 
+        void Resize(uint64_t size)
+        {
+            if (size == Size)
+                return;
+            uint8_t *newData = (uint8_t *)std::malloc(size);
+
+            if (Data != nullptr) {
+                std::memcpy(newData, Data, std::min(size, Size));
+                std::free(Data);
+            }
+
+            Data = newData;
+            Size = size;
+        }
+
         void Release()
         {
             if (Data != nullptr) {

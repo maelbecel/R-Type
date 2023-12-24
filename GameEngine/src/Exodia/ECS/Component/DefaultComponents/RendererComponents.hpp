@@ -100,7 +100,7 @@ namespace Exodia {
         virtual Buffer SerializeData() override
         {
             try {
-                Buffer buffer(sizeof(Color) + sizeof(TilingFactor) + sizeof(Texture->GetAssetHandle()) + sizeof(Texture->GetCoords()) + sizeof(Texture->GetTextureCellSize()) + sizeof(Texture->GetTextureSpriteSize()));
+                Buffer buffer(sizeof(Color) + sizeof(TilingFactor) + sizeof(bool));
                 size_t offset = 0;
 
                 std::memcpy(buffer.Data, &Color, sizeof(Color));
@@ -114,6 +114,8 @@ namespace Exodia {
                 offset += sizeof(bool);
 
                 if (Texture) {
+                    buffer.Resize(buffer.Size + sizeof(Texture->GetAssetHandle()) + sizeof(Texture->GetCoords()) + sizeof(Texture->GetTextureCellSize()) + sizeof(Texture->GetTextureSpriteSize()));
+
                     Exodia::AssetHandle assetHandle = Texture->GetAssetHandle();
 
                     std::memcpy(buffer.Data + offset, &assetHandle, sizeof(Texture->GetAssetHandle()));
@@ -123,6 +125,7 @@ namespace Exodia {
                     std::memcpy(buffer.Data + offset, &Texture->GetTextureCellSize(), sizeof(Texture->GetTextureCellSize()));
                     offset += sizeof(Texture->GetTextureCellSize());
                     std::memcpy(buffer.Data + offset, &Texture->GetTextureSpriteSize(), sizeof(Texture->GetTextureSpriteSize()));
+                    offset += sizeof(Texture->GetTextureSpriteSize());
                 }
 
                 return buffer;
@@ -163,6 +166,7 @@ namespace Exodia {
                 offset += sizeof(cellSize);
 
                 Memcopy(&spriteSize, data.Data + offset, sizeof(spriteSize));
+                offset += sizeof(spriteSize);
 
                 Texture = SubTexture2D::CreateFromCoords(assetHandle, coords, cellSize, glm::vec2{1.0f, 1.0f});
 
