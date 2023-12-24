@@ -136,6 +136,7 @@ namespace Exodia {
         if (!_IsPaused) {
 
             // -- Update the Scripts -- //
+            _World->LockMutex();
             _World->ForEach<ScriptComponent>([&](Entity *entity, auto script) {
                 auto &sc = script.Get();
 
@@ -151,6 +152,7 @@ namespace Exodia {
                 if (sc.Instance)
                     sc.Instance->OnUpdate(ts);
             });
+            _World->UnlockMutex();
 
             // -- Update the world -- //
             _World->Update(ts);
@@ -159,6 +161,7 @@ namespace Exodia {
             Camera *mainCamera = nullptr;
             glm::mat4 cameraTransform;
 
+            _World->LockMutex();
             _World->ForEach<TransformComponent, CameraComponent>([&](Entity *entity, auto transform, auto camera) {
                 auto &cc = camera.Get();
                 auto &tc = transform.Get();
@@ -169,6 +172,7 @@ namespace Exodia {
                     return;
                 }
             });
+            _World->UnlockMutex();
 
             // -- Update and draw -- //
             if (mainCamera) {

@@ -145,6 +145,7 @@ namespace Exodia {
 
         int key = event.GetKeyCode();
 
+        Scenes[CurrentScene]->GetWorld().LockMutex();
         Scenes[CurrentScene]->GetWorld().ForEach<ScriptComponent, TagComponent>([&](Entity *entity, auto script, auto tag) {
             
             auto &sc = script.Get();
@@ -158,6 +159,8 @@ namespace Exodia {
 
             (void)entity;
         });
+        Scenes[CurrentScene]->GetWorld().UnlockMutex();
+
         return true;
     };
 
@@ -165,6 +168,7 @@ namespace Exodia {
 
         int key = event.GetKeyCode();
 
+        Scenes[CurrentScene]->GetWorld().LockMutex();
         Scenes[CurrentScene]->GetWorld().ForEach<ScriptComponent, TagComponent>([&](Entity *entity, auto script, auto tag) {
             auto &sc = script.Get();
             auto &tc = tag.Get();
@@ -177,6 +181,8 @@ namespace Exodia {
 
             (void)entity;
         });
+        Scenes[CurrentScene]->GetWorld().UnlockMutex();
+
         return false;
     };
 
