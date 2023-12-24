@@ -220,9 +220,10 @@ namespace Exodia {
                         }
                     }
                     std::cout << "Player id: " << player_id << std::endl;
-                    //if (count % 50 == 0) {
+                    if (count % 50 == 0) {
                         _Network.SendComponentOf(entity, "TransformComponent");
-                    //}
+                    }
+                    _Network.SendComponentOf(entity, "RigidBody2DComponent");
                 });
 
                 Scenes[CurrentScene]->GetWorld().ForEach<TagComponent, TransformComponent>([&](Entity *entity, auto tag, auto transform) {
