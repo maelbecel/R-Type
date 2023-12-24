@@ -18,39 +18,35 @@ namespace Exodia {
     // Constructor & Destructor //
     //////////////////////////////
 
-    DockerLayer::DockerLayer() : Layer("DefaultLayer"), _CameraController(1600.0f / 900.0f), _SquareColor({ 0.2f, 0.3f, 0.8f, 1.0f }) {};
+    DockerLayer::DockerLayer()
+        : Layer("DefaultLayer"), _CameraController(1600.0f / 900.0f), _SquareColor({0.2f, 0.3f, 0.8f, 1.0f}){};
 
     /////////////
     // Methods //
     /////////////
 
-    void DockerLayer::OnAttach()
-    {
+    void DockerLayer::OnAttach() {
         FramebufferSpecification fbSpec;
 
         fbSpec.Width = 1280;
         fbSpec.Height = 720;
-        fbSpec.Attachments = {
-            FramebufferTextureFormat::RGBA8,
-            FramebufferTextureFormat::RED_INTEGER,
-            FramebufferTextureFormat::Depth
-        };
+        fbSpec.Attachments = {FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::RED_INTEGER,
+                              FramebufferTextureFormat::Depth};
 
         _Framebuffer = Framebuffer::Create(fbSpec);
 
-        _Stats    = CreateRef<StatImGui>();
+        _Stats = CreateRef<StatImGui>();
         _Viewport = CreateRef<ViewportImGui>();
     }
 
-    void DockerLayer::OnUpdate(Timestep ts)
-    {
+    void DockerLayer::OnUpdate(Timestep ts) {
         Exodia::Renderer2D::ResetStats();
 
         // Bind the framebuffer
         _Framebuffer->Bind();
 
         // Renderer Prep
-        RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
+        RenderCommand::SetClearColor({0.1f, 0.1f, 0.1f, 1});
         RenderCommand::Clear();
 
         // Clear Entity ID attachment to -1
@@ -62,11 +58,10 @@ namespace Exodia {
         // Renderer Draw
         Renderer2D::BeginScene(_CameraController.GetCamera());
 
-        Renderer2D::DrawRotatedQuad(
-            { 0.0f, 0.0f },      // Position
-            { 0.8f, 0.8f },      // Size
-            glm::radians(-45.0f), // Rotation
-            _SquareColor          // Color
+        Renderer2D::DrawRotatedQuad({0.0f, 0.0f},         // Position
+                                    {0.8f, 0.8f},         // Size
+                                    glm::radians(-45.0f), // Rotation
+                                    _SquareColor          // Color
         );
 
         Renderer2D::EndScene();
@@ -75,12 +70,11 @@ namespace Exodia {
         _Framebuffer->Unbind();
     }
 
-    void DockerLayer::OnImGUIRender()
-    {
+    void DockerLayer::OnImGUIRender() {
         EXODIA_PROFILE_FUNCTION();
 
-        static bool dockspaceOpen                 = true;
-        static bool opt_fullscreen_persistant     = true;
+        static bool dockspaceOpen = true;
+        static bool opt_fullscreen_persistant = true;
         static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
         bool opt_fullscreen = opt_fullscreen_persistant;
 
@@ -95,7 +89,8 @@ namespace Exodia {
             ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
             ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
 
-            window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
+            window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize |
+                            ImGuiWindowFlags_NoMove;
             window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
         }
 
@@ -110,8 +105,8 @@ namespace Exodia {
             ImGui::PopStyleVar(2);
 
         // DockSpace
-        ImGuiIO& io = ImGui::GetIO();
-        ImGuiStyle& style = ImGui::GetStyle();
+        ImGuiIO &io = ImGui::GetIO();
+        ImGuiStyle &style = ImGui::GetStyle();
 
         float minWinSizeX = style.WindowMinSize.x;
 
@@ -138,8 +133,5 @@ namespace Exodia {
         ImGui::End();
     }
 
-    void DockerLayer::OnEvent(Event &event)
-    {
-        _CameraController.OnEvent(event);
-    }
-};
+    void DockerLayer::OnEvent(Event &event) { _CameraController.OnEvent(event); }
+}; // namespace Exodia

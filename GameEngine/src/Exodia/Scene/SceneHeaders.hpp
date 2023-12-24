@@ -6,24 +6,24 @@
 */
 
 #ifndef SCENEHEADERS_HPP_
-    #define SCENEHEADERS_HPP_
+#define SCENEHEADERS_HPP_
 
-    ///////////////////////////////////////////////////////////////////////
-    // Main include file for Exodia Scene                                //
-    // Include this file to use different features for your game's scene //
-    // It will allow you manipulate the scene.                           //
-    ///////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////
+// Main include file for Exodia Scene                                //
+// Include this file to use different features for your game's scene //
+// It will allow you manipulate the scene.                           //
+///////////////////////////////////////////////////////////////////////
 
-    // -- Camera ---------------------------------------------------------------
+// -- Camera ---------------------------------------------------------------
 
-    #include "Exodia/Scene/Camera/SceneCamera.hpp"
+#include "Exodia/Scene/Camera/SceneCamera.hpp"
 
-    // -- Scene ----------------------------------------------------------------
+// -- Scene ----------------------------------------------------------------
 
-    #include "Exodia/Scene/Scene/Scene.hpp"
+#include "Exodia/Scene/Scene/Scene.hpp"
 
-    // -- Serializer -----------------------------------------------------------
+// -- Serializer -----------------------------------------------------------
 
-    #include "Exodia/Scene/Serializer/SceneSerializer.hpp"
+#include "Exodia/Scene/Serializer/SceneSerializer.hpp"
 
 #endif /* !SCENEHEADERS_HPP_ */

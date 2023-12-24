@@ -17,14 +17,13 @@ namespace Exodia {
     // Constructor //
     /////////////////
 
-    GravitySystem::GravitySystem(float gravity) : _Gravity(gravity) {};
+    GravitySystem::GravitySystem(float gravity) : _Gravity(gravity){};
 
     /////////////
     // Methods //
     /////////////
 
-    void GravitySystem::Update(World *world, Timestep ts)
-    {
+    void GravitySystem::Update(World *world, Timestep ts) {
         EXODIA_PROFILE_FUNCTION();
 
         world->ForEach<RigidBody2DComponent>([&](Entity *entity, ComponentHandle<RigidBody2DComponent> rigidBody) {
@@ -34,8 +33,7 @@ namespace Exodia {
         });
     }
 
-    void GravitySystem::ApplyGravity(ComponentHandle<RigidBody2DComponent> rigidBody, Timestep ts)
-    {
+    void GravitySystem::ApplyGravity(ComponentHandle<RigidBody2DComponent> rigidBody, Timestep ts) {
         auto &body = rigidBody.Get();
 
         // Calculate gravitational force based on gravity scale and mass
@@ -44,4 +42,4 @@ namespace Exodia {
         // Update velocity with gravity force considering the timestep
         body.Velocity += gravityForce * (float)ts;
     }
-};
+}; // namespace Exodia

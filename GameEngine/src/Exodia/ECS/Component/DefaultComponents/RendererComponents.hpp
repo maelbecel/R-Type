@@ -6,43 +6,40 @@
 */
 
 #ifndef RENDERERCOMPONENTS_HPP_
-    #define RENDERERCOMPONENTS_HPP_
+#define RENDERERCOMPONENTS_HPP_
 
-    // Exodia Renderer includes
-    #include "Renderer/Texture/SubTexture2D.hpp"
+// Exodia Renderer includes
+#include "Renderer/Texture/SubTexture2D.hpp"
 
-    // Exodia ECS includes
-    #include "ECS/Interface/Component.hpp"
+// Exodia ECS includes
+#include "ECS/Interface/Component.hpp"
 
-    // Exodia Debug includes
-    #include "Debug/Logs.hpp"
+// Exodia Debug includes
+#include "Debug/Logs.hpp"
 
-    // External include
-    #include <glm/glm.hpp>
-    #include <glm/gtc/type_ptr.hpp>
+// External include
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
-    // ImGui includes
-    #include <imgui.h>
+// ImGui includes
+#include <imgui.h>
 
 namespace Exodia {
 
     struct SpriteRendererComponent : public Component {
-        glm::vec4         Color;
+        glm::vec4 Color;
         Ref<SubTexture2D> Texture;
-        float             TilingFactor;
+        float TilingFactor;
 
         SpriteRendererComponent(const SpriteRendererComponent &) = default;
-        SpriteRendererComponent(const glm::vec4 &color = glm::vec4(1.0f)) : Color(color), TilingFactor(1.0f) {};
+        SpriteRendererComponent(const glm::vec4 &color = glm::vec4(1.0f)) : Color(color), TilingFactor(1.0f){};
 
-        virtual void Serialize(YAML::Emitter &out)
-        {
+        virtual void Serialize(YAML::Emitter &out) {
             out << YAML::Key << "SpriteRendererComponent";
             out << YAML::BeginMap;
             {
-                out << YAML::Key << "Color"        << YAML::Value << YAML::Flow;
-                {
-                    out << YAML::BeginSeq << Color.x << Color.y << Color.z << Color.w << YAML::EndSeq;
-                }
+                out << YAML::Key << "Color" << YAML::Value << YAML::Flow;
+                { out << YAML::BeginSeq << Color.x << Color.y << Color.z << Color.w << YAML::EndSeq; }
                 out << YAML::Key << "TilingFactor" << YAML::Value << TilingFactor;
 
                 if (Texture != nullptr && Texture->GetTexture() != nullptr) {
@@ -50,17 +47,17 @@ namespace Exodia {
                     out << YAML::BeginMap;
                     {
                         out << YAML::Key << "AssetHandle" << YAML::Value << (uint64_t)Texture->GetTexture()->Handle;
-                        out << YAML::Key << "Coords"      << YAML::Value << YAML::Flow;
+                        out << YAML::Key << "Coords" << YAML::Value << YAML::Flow;
+                        { out << YAML::BeginSeq << Texture->GetCoords().x << Texture->GetCoords().y << YAML::EndSeq; }
+                        out << YAML::Key << "CellSize" << YAML::Value << YAML::Flow;
                         {
-                            out << YAML::BeginSeq << Texture->GetCoords().x << Texture->GetCoords().y << YAML::EndSeq;
+                            out << YAML::BeginSeq << Texture->GetTextureCellSize().x << Texture->GetTextureCellSize().y
+                                << YAML::EndSeq;
                         }
-                        out << YAML::Key << "CellSize"    << YAML::Value << YAML::Flow;
+                        out << YAML::Key << "SpriteSize" << YAML::Value << YAML::Flow;
                         {
-                            out << YAML::BeginSeq << Texture->GetTextureCellSize().x << Texture->GetTextureCellSize().y << YAML::EndSeq;
-                        }
-                        out << YAML::Key << "SpriteSize"  << YAML::Value << YAML::Flow;
-                        {
-                            out << YAML::BeginSeq << Texture->GetTextureSpriteSize().x << Texture->GetTextureSpriteSize().y << YAML::EndSeq;
+                            out << YAML::BeginSeq << Texture->GetTextureSpriteSize().x
+                                << Texture->GetTextureSpriteSize().y << YAML::EndSeq;
                         }
                     }
                     out << YAML::EndMap;
@@ -69,12 +66,12 @@ namespace Exodia {
             out << YAML::EndMap;
         }
 
-        virtual void Deserialize(const YAML::Node &node)
-        {
+        virtual void Deserialize(const YAML::Node &node) {
             try {
                 auto sprite = node["SpriteRendererComponent"];
 
-                Color = glm::vec4(sprite["Color"][0].as<float>(), sprite["Color"][1].as<float>(), sprite["Color"][2].as<float>(), sprite["Color"][3].as<float>());
+                Color = glm::vec4(sprite["Color"][0].as<float>(), sprite["Color"][1].as<float>(),
+                                  sprite["Color"][2].as<float>(), sprite["Color"][3].as<float>());
 
                 TilingFactor = sprite["TilingFactor"].as<float>();
 
@@ -84,9 +81,11 @@ namespace Exodia {
                     return;
 
                 if (texture["AssetHandle"] && texture["Coords"] && texture["CellSize"] && texture["SpriteSize"]) {
-                    glm::vec2 coords        = glm::vec2(texture["Coords"][0].as<float>(), texture["Coords"][1].as<float>());
-                    glm::vec2 cellSize      = glm::vec2(texture["CellSize"][0].as<float>(), texture["CellSize"][1].as<float>());
-                    glm::vec2 spriteSize    = glm::vec2(texture["SpriteSize"][0].as<float>(), texture["SpriteSize"][1].as<float>());
+                    glm::vec2 coords = glm::vec2(texture["Coords"][0].as<float>(), texture["Coords"][1].as<float>());
+                    glm::vec2 cellSize =
+                        glm::vec2(texture["CellSize"][0].as<float>(), texture["CellSize"][1].as<float>());
+                    glm::vec2 spriteSize =
+                        glm::vec2(texture["SpriteSize"][0].as<float>(), texture["SpriteSize"][1].as<float>());
 
                     AssetHandle assetHandle = texture["AssetHandle"].as<uint64_t>();
 
@@ -97,63 +96,79 @@ namespace Exodia {
             }
         }
 
-        virtual Buffer SerializeData() override
-        {
+        virtual Buffer SerializeData() override {
             try {
-                Buffer buffer(sizeof(Color) + sizeof(TilingFactor) + sizeof(Texture->GetAssetHandle()) + sizeof(Texture->GetCoords()) + sizeof(Texture->GetTextureCellSize()) + sizeof(Texture->GetTextureSpriteSize()));
+                Buffer buffer(sizeof(Color) + sizeof(TilingFactor) + sizeof(bool));
                 size_t offset = 0;
 
                 std::memcpy(buffer.Data, &Color, sizeof(Color));
                 offset += sizeof(Color);
                 std::memcpy(buffer.Data + offset, &TilingFactor, sizeof(TilingFactor));
                 offset += sizeof(TilingFactor);
-                Exodia::AssetHandle assetHandle = Texture->GetAssetHandle();
 
-                std::memcpy(buffer.Data + offset, &assetHandle, sizeof(Texture->GetAssetHandle()));
-                offset += sizeof(Texture->GetAssetHandle());
-                std::memcpy(buffer.Data + offset, &(Texture->GetCoords()), sizeof(Texture->GetCoords()));
-                offset += sizeof(Texture->GetCoords());
-                std::memcpy(buffer.Data + offset, &Texture->GetTextureCellSize(), sizeof(Texture->GetTextureCellSize()));
-                offset += sizeof(Texture->GetTextureCellSize());
-                std::memcpy(buffer.Data + offset, &Texture->GetTextureSpriteSize(), sizeof(Texture->GetTextureSpriteSize()));
+                bool hasTexture = (Texture != nullptr);
+
+                std::memcpy(buffer.Data, &hasTexture, sizeof(bool));
+                offset += sizeof(bool);
+
+                if (Texture) {
+                    buffer.Resize(buffer.Size + sizeof(Texture->GetAssetHandle()) + sizeof(Texture->GetCoords()) +
+                                  sizeof(Texture->GetTextureCellSize()) + sizeof(Texture->GetTextureSpriteSize()));
+
+                    Exodia::AssetHandle assetHandle = Texture->GetAssetHandle();
+
+                    std::memcpy(buffer.Data + offset, &assetHandle, sizeof(Texture->GetAssetHandle()));
+                    offset += sizeof(Texture->GetAssetHandle());
+                    std::memcpy(buffer.Data + offset, &(Texture->GetCoords()), sizeof(Texture->GetCoords()));
+                    offset += sizeof(Texture->GetCoords());
+                    std::memcpy(buffer.Data + offset, &Texture->GetTextureCellSize(),
+                                sizeof(Texture->GetTextureCellSize()));
+                    offset += sizeof(Texture->GetTextureCellSize());
+                    std::memcpy(buffer.Data + offset, &Texture->GetTextureSpriteSize(),
+                                sizeof(Texture->GetTextureSpriteSize()));
+                    offset += sizeof(Texture->GetTextureSpriteSize());
+                }
 
                 return buffer;
-
             } catch (std::exception &e) {
                 EXODIA_CORE_WARN("SpriteRendererComponent serialization failed: {0}", e.what());
                 return Buffer();
             }
         }
 
-        virtual void DeserializeData(Buffer data) override
-        {
+        virtual void DeserializeData(Buffer data) override {
             try {
                 size_t offset = 0;
-                Texture = CreateRef<SubTexture2D>(0);
+                bool hasTexture = false;
 
                 Memcopy(&Color, data.Data + offset, sizeof(Color));
                 offset += sizeof(Color);
                 Memcopy(&TilingFactor, data.Data + offset, sizeof(TilingFactor));
                 offset += sizeof(TilingFactor);
 
-                Exodia::AssetHandle assetHandle = Texture->GetAssetHandle();
+                std::memcpy(&hasTexture, data.Data, sizeof(bool));
+                offset += sizeof(bool);
+
+                if (!hasTexture)
+                    return;
+                Exodia::AssetHandle assetHandle;
+                glm::vec2 coords;
+                glm::vec2 cellSize;
+                glm::vec2 spriteSize;
 
                 Memcopy(&assetHandle, data.Data + offset, sizeof(assetHandle));
-
                 offset += sizeof(assetHandle);
 
-                glm::vec2 coords;
                 Memcopy(&coords, data.Data + offset, sizeof(coords));
                 offset += sizeof(coords);
 
-                glm::vec2 cellSize;
                 Memcopy(&cellSize, data.Data + offset, sizeof(cellSize));
                 offset += sizeof(cellSize);
 
-                glm::vec2 spriteSize;
                 Memcopy(&spriteSize, data.Data + offset, sizeof(spriteSize));
+                offset += sizeof(spriteSize);
 
-                Texture = SubTexture2D::CreateFromCoords(assetHandle, coords, cellSize, spriteSize);
+                // Texture = SubTexture2D::CreateFromCoords(assetHandle, coords, cellSize, spriteSize);
 
                 EXODIA_CORE_TRACE("SpriteRendererComponent deserialization success !");
                 EXODIA_CORE_TRACE("\tAssetHandle : '{0}'", (uint64_t)assetHandle);
@@ -164,8 +179,8 @@ namespace Exodia {
                 EXODIA_CORE_WARN("SpriteRendererComponent deserialization failed: {0}", e.what());
             }
         }
-        virtual void DrawComponent() override
-        {
+
+        virtual void DrawComponent() override {
             std::string label = "None";
             bool isTextureValid = false;
 
@@ -174,10 +189,12 @@ namespace Exodia {
             AssetHandle textureHandle = Texture != nullptr ? Texture->GetAssetHandle() : AssetHandle(0);
 
             if (textureHandle != 0) {
-                if (AssetManager::IsAssetHandleValid(textureHandle) && AssetManager::GetAssetType(textureHandle) == AssetType::Texture2D) {
-                    const AssetSpecification &spec = Project::GetActive()->GetEditorAssetManager()->GetAssetSpecification(textureHandle);
+                if (AssetManager::IsAssetHandleValid(textureHandle) &&
+                    AssetManager::GetAssetType(textureHandle) == AssetType::Texture2D) {
+                    const AssetSpecification &spec =
+                        Project::GetActive()->GetEditorAssetManager()->GetAssetSpecification(textureHandle);
 
-                    label          = spec.Path.filename().string();
+                    label = spec.Path.filename().string();
                     isTextureValid = true;
                 } else
                     label = "Invalid";
@@ -220,51 +237,47 @@ namespace Exodia {
     };
 
     struct CircleRendererComponent : public Component {
-        glm::vec4      Color;
-        float          Thickness;
-        float          Fade;
+        glm::vec4 Color;
+        float Thickness;
+        float Fade;
 
         CircleRendererComponent(const CircleRendererComponent &) = default;
-        CircleRendererComponent(const glm::vec4 &color = glm::vec4(1.0f)) : Color(color), Thickness(1.0f), Fade(0.005f) {};
+        CircleRendererComponent(const glm::vec4 &color = glm::vec4(1.0f))
+            : Color(color), Thickness(1.0f), Fade(0.005f){};
 
-        virtual void Serialize(YAML::Emitter &out)
-        {
+        virtual void Serialize(YAML::Emitter &out) {
             out << YAML::Key << "CircleRendererComponent";
             out << YAML::BeginMap;
             {
-                out << YAML::Key << "Color"     << YAML::Value << YAML::Flow;
-                {
-                    out << YAML::BeginSeq << Color.x << Color.y << Color.z << Color.w << YAML::EndSeq;
-                }
+                out << YAML::Key << "Color" << YAML::Value << YAML::Flow;
+                { out << YAML::BeginSeq << Color.x << Color.y << Color.z << Color.w << YAML::EndSeq; }
                 out << YAML::Key << "Thickness" << YAML::Value << Thickness;
-                out << YAML::Key << "Fade"      << YAML::Value << Fade;
+                out << YAML::Key << "Fade" << YAML::Value << Fade;
             }
             out << YAML::EndMap;
         }
 
-        virtual void Deserialize(const YAML::Node &node)
-        {
+        virtual void Deserialize(const YAML::Node &node) {
             try {
                 auto circle = node["CircleRendererComponent"];
 
-                Color = glm::vec4(circle["Color"][0].as<float>(), circle["Color"][1].as<float>(), circle["Color"][2].as<float>(), circle["Color"][3].as<float>());
+                Color = glm::vec4(circle["Color"][0].as<float>(), circle["Color"][1].as<float>(),
+                                  circle["Color"][2].as<float>(), circle["Color"][3].as<float>());
 
                 Thickness = circle["Thickness"].as<float>();
-                Fade      = circle["Fade"].as<float>();
+                Fade = circle["Fade"].as<float>();
             } catch (YAML::BadConversion &e) {
                 EXODIA_CORE_WARN("CircleRendererComponent deserialization failed: {0}", e.what());
             }
         }
 
-        virtual void DrawComponent() override
-        {
-            ImGui::ColorEdit4("Color"   , glm::value_ptr(Color));
+        virtual void DrawComponent() override {
+            ImGui::ColorEdit4("Color", glm::value_ptr(Color));
             ImGui::DragFloat("Thickness", &Thickness);
-            ImGui::DragFloat("Fade"     , &Fade);
+            ImGui::DragFloat("Fade", &Fade);
         }
 
-        virtual Buffer SerializeData() override
-        {
+        virtual Buffer SerializeData() override {
             try {
                 Buffer buffer(sizeof(Color) + sizeof(Thickness) + sizeof(Fade));
                 size_t offset = 0;
@@ -282,8 +295,7 @@ namespace Exodia {
             }
         }
 
-        virtual void DeserializeData(Buffer data) override
-        {
+        virtual void DeserializeData(Buffer data) override {
             try {
                 size_t offset = 0;
 
@@ -292,11 +304,6 @@ namespace Exodia {
                 Memcopy(&Thickness, data.Data + offset, sizeof(Thickness));
                 offset += sizeof(Thickness);
                 Memcopy(&Fade, data.Data + offset, sizeof(Fade));
-
-                EXODIA_CORE_TRACE("CircleRendererComponent deserialization success !");
-                EXODIA_CORE_TRACE("\tColor     : '{0}, {1}, {2}, {3}'", Color.x, Color.y, Color.z, Color.w);
-                EXODIA_CORE_TRACE("\tThickness : '{0}'", Thickness);
-                EXODIA_CORE_TRACE("\tFade      : '{0}'", Fade);
             } catch (std::exception &e) {
                 EXODIA_CORE_WARN("CircleRendererComponent deserialization failed: {0}", e.what());
             }
@@ -304,6 +311,6 @@ namespace Exodia {
     };
 
     // TODO: Implement Text Renderer Component when available
-};
+}; // namespace Exodia
 
 #endif /* !RENDERERCOMPONENTS_HPP_ */

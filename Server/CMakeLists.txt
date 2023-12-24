@@ -23,6 +23,7 @@ set(SOURCES
 
     src/Main.cpp
     src/Server.cpp
+    src/User/User.cpp
 )
 
 # Set include directories for the Exodia Game Engine Application
@@ -62,6 +63,7 @@ target_link_libraries(r-type_server PRIVATE
     unofficial::nativefiledialog::nfd
     yaml-cpp::yaml-cpp
     imguizmo::imguizmo
+    FreeALUT::alut
 )
 
 target_include_directories(r-type_server PRIVATE ${Stb_INCLUDE_DIR})

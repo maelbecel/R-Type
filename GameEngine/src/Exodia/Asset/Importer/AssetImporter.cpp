@@ -10,6 +10,7 @@
 #include "Asset/Utils/AssetType.hpp"
 #include "Asset/Importer/TextureImporter.hpp"
 #include "Asset/Importer/SceneImporter.hpp"
+#include "Asset/Importer/SoundImporter.hpp"
 
 // Exodia Utils
 #include "Utils/Assert.hpp"
@@ -25,18 +26,21 @@ namespace Exodia {
     ///////////////////////
 
     static std::map<AssetType, AssetImportFunction> AssetImportFunctions = {
-        { AssetType::Scene, SceneImporter::ImportScene },
-        { AssetType::Texture2D, TextureImporter::ImportTexture2D }
-    };
+        {AssetType::Scene, SceneImporter::ImportScene},
+        {AssetType::Texture2D, TextureImporter::ImportTexture2D},
+        {AssetType::Sound2D, SoundImporter::ImportSound2D}};
 
     /////////////
     // Methods //
     /////////////
 
-    Ref<Asset> AssetImporter::ImportAsset(AssetHandle handle, const AssetSpecification &spec)
-    {
-        EXODIA_CORE_ASSERT(AssetImportFunctions.find(spec.Type) != AssetImportFunctions.end(), "No importer available for this asset type");
+    Ref<Asset> AssetImporter::ImportAsset(AssetHandle handle, const AssetSpecification &spec) {
+        if (AssetImportFunctions.find(spec.Type) == AssetImportFunctions.end()) {
+            EXODIA_CORE_ERROR("No importer available for '{0}'", Utils::AssetTypeToString(spec.Type));
+
+            return nullptr;
+        }
 
         return AssetImportFunctions[spec.Type](handle, spec);
     }
-};
+}; // namespace Exodia

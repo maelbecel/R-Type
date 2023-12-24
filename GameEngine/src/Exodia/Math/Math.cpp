@@ -8,12 +8,11 @@
 #include "Math.hpp"
 
 #define GLM_ENABLE_EXPERIMENTAL
-    #include <glm/gtx/matrix_decompose.hpp>
+#include <glm/gtx/matrix_decompose.hpp>
 
 namespace Exodia::Math {
 
-    bool DecomposeTransform(const glm::mat4& transform, glm::vec3& translation, glm::vec3& rotation, glm::vec3& scale)
-    {
+    bool DecomposeTransform(const glm::mat4 &transform, glm::vec3 &translation, glm::vec3 &rotation, glm::vec3 &scale) {
         // From glm::decompose in matrix_decompose.inl
 
         using namespace glm;
@@ -66,4 +65,4 @@ namespace Exodia::Math {
         }
         return true;
     }
-};
+}; // namespace Exodia::Math

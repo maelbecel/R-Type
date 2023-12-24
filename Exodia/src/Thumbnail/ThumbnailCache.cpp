@@ -13,8 +13,7 @@ namespace Exodia {
     // Constructor & Destructor //
     //////////////////////////////
 
-    ThumbnailCache::ThumbnailCache(Ref<Project> project) : _Project(project)
-    {
+    ThumbnailCache::ThumbnailCache(Ref<Project> project) : _Project(project) {
         _CacheDirectory = _Project->GetAssetDirectory() / "Thumbnail.cache";
     }
 
@@ -22,13 +21,13 @@ namespace Exodia {
     // Getters & Setters //
     ///////////////////////
 
-    Ref<Texture2D> ThumbnailCache::GetOrCreateThumbnail(const std::filesystem::path &path)
-    {
+    Ref<Texture2D> ThumbnailCache::GetOrCreateThumbnail(const std::filesystem::path &path) {
         auto absolutePath = _Project->GetAssetAbsolutePath(path);
 
         std::filesystem::file_time_type lastModifiedTime = std::filesystem::last_write_time(absolutePath);
 
-        uint64_t timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(lastModifiedTime.time_since_epoch()).count();
+        uint64_t timestamp =
+            std::chrono::duration_cast<std::chrono::milliseconds>(lastModifiedTime.time_since_epoch()).count();
 
         if (_ImageCache.find(path) != _ImageCache.end()) {
             auto &thumbnail = _ImageCache[path];
@@ -43,7 +42,7 @@ namespace Exodia {
 
         if (!texture)
             return nullptr;
-        
+
         auto &thumbnail = _ImageCache[path];
 
         thumbnail.Timestamp = timestamp;
@@ -51,4 +50,4 @@ namespace Exodia {
 
         return texture;
     }
-};
+}; // namespace Exodia

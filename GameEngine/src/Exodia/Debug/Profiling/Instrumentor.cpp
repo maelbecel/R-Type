@@ -13,15 +13,14 @@ namespace Exodia {
     //////////////////////////////
     // Constructor & Destructor //
     //////////////////////////////
-    
-    Instrumentor::Instrumentor() : _CurrentSession(nullptr), _ProfileCount(0) {};
+
+    Instrumentor::Instrumentor() : _CurrentSession(nullptr), _ProfileCount(0){};
 
     /////////////
     // Methods //
     /////////////
 
-    void Instrumentor::BeginSession(const std::string &name, const std::string &filepath)
-    {
+    void Instrumentor::BeginSession(const std::string &name, const std::string &filepath) {
         // If a session is already running, then close it before starting a new one
         if (_CurrentSession != nullptr)
             EndSession();
@@ -30,11 +29,10 @@ namespace Exodia {
 
         WriteHeader();
 
-        _CurrentSession = new InstrumentationSession({ name });
+        _CurrentSession = new InstrumentationSession({name});
     }
 
-    void Instrumentor::EndSession()
-    {
+    void Instrumentor::EndSession() {
         WriteFooter();
 
         _OutputStream.close();
@@ -47,8 +45,7 @@ namespace Exodia {
         _ProfileCount = 0;
     }
 
-    void Instrumentor::WriteProfile(const ProfileResult &result)
-    {
+    void Instrumentor::WriteProfile(const ProfileResult &result) {
         // If a session is not running, then don't write profile results
         if (_CurrentSession == nullptr)
             return;
@@ -74,17 +71,15 @@ namespace Exodia {
         _OutputStream.flush();
     }
 
-    void Instrumentor::WriteHeader()
-    {
+    void Instrumentor::WriteHeader() {
         // Write the header of the profile data
         _OutputStream << "{\"otherData\": {},\"traceEvents\":[";
         _OutputStream.flush();
     }
 
-    void Instrumentor::WriteFooter()
-    {
+    void Instrumentor::WriteFooter() {
         // Write the footer of the profile data
         _OutputStream << "]}";
         _OutputStream.flush();
     }
-};
+}; // namespace Exodia

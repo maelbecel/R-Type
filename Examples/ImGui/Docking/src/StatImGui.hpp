@@ -6,10 +6,10 @@
 */
 
 #ifndef STATIMGUI_HPP_
-    #define STATIMGUI_HPP_
+#define STATIMGUI_HPP_
 
-    #include "Exodia.hpp"
-    #include <imgui.h>
+#include "Exodia.hpp"
+#include <imgui.h>
 
 namespace Exodia {
 
@@ -18,31 +18,28 @@ namespace Exodia {
         //////////////////////////////
         // Constructor & Destructor //
         //////////////////////////////
-        public:
-
-            StatImGui() = default;
-            ~StatImGui() = default;
+      public:
+        StatImGui() = default;
+        ~StatImGui() = default;
 
         /////////////
         // Methods //
         /////////////
-        public:
+      public:
+        void OnImGuiRender() {
+            auto stats = Renderer2D::GetStats();
 
-            void OnImGuiRender()
-            {
-                auto stats = Renderer2D::GetStats();
+            ImGui::Begin("Stats");
 
-                ImGui::Begin("Stats");
+            ImGui::TextUnformatted("Renderer2D Stats:");
+            ImGui::Text("Draw Calls: %d", stats.DrawCalls);
+            ImGui::Text("Quads: %d", stats.QuadCount);
+            ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
+            ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
 
-                ImGui::TextUnformatted("Renderer2D Stats:");
-                ImGui::Text("Draw Calls: %d", stats.DrawCalls);
-                ImGui::Text("Quads: %d", stats.QuadCount);
-                ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
-                ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
-
-                ImGui::End();
-            }
+            ImGui::End();
+        }
     };
-};
+}; // namespace Exodia
 
 #endif /* !STATIMGUI_HPP_ */
