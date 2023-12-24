@@ -24,7 +24,8 @@ namespace Exodia {
     enum class AssetType : uint16_t {
         None      = 0,
         Scene     = 1,
-        Texture2D = 2
+        Texture2D = 2,
+        Sound2D   = 3
         // TODO: Add more asset types
     };
 
@@ -49,6 +50,8 @@ namespace Exodia {
                     return "AssetType::Scene";
                 case AssetType::Texture2D:
                     return "AssetType::Texture2D";
+                case AssetType::Sound2D:
+                    return "AssetType::Sound2D";
                 // TODO: Add more asset types
                 default:
                     break;
@@ -66,6 +69,8 @@ namespace Exodia {
                 return AssetType::Scene;
             if (type == "AssetType::Texture2D")
                 return AssetType::Texture2D;
+            if (type == "AssetType::Sound2D")
+                return AssetType::Sound2D;
             // TODO: Add more asset types
 
             EXODIA_CORE_ASSERT(false, "Unknown asset type !");

@@ -9,7 +9,6 @@
     #define PROJECT_HPP_
 
     // Exodia Asset includes
-    #include "Asset/Manager/RuntimeAssetManager.hpp"
     #include "Asset/Manager/EditorAssetManager.hpp"
 
     // Exodia ECS includes
@@ -81,7 +80,6 @@ namespace Exodia {
             static Ref<Project>                 GetActive();
 
             Ref<IAssetManager>       GetAssetManager()        const;
-            Ref<RuntimeAssetManager> GetRuntimeAssetManager() const;
             Ref<EditorAssetManager>  GetEditorAssetManager()  const;
 
             void RegisterComponent(std::string component, std::function<IComponentContainer *(Buffer)> factory);

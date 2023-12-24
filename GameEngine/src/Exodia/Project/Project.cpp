@@ -79,6 +79,14 @@ namespace Exodia {
         RegisterComponent("ScriptComponent", [](Buffer data) -> IComponentContainer * {
             return new ComponentContainer<ScriptComponent>(data);
         });
+
+        RegisterComponent("SoundComponent", [](Buffer data) -> IComponentContainer * {
+            return new ComponentContainer<SoundComponent>(data);
+        });
+
+        RegisterComponent("MusicComponent", [](Buffer data) -> IComponentContainer * {
+            return new ComponentContainer<MusicComponent>(data);
+        });
     }
 
     /////////////
@@ -205,11 +213,6 @@ namespace Exodia {
     Ref<IAssetManager> Project::GetAssetManager() const
     {
         return _AssetManager;
-    }
-
-    Ref<RuntimeAssetManager> Project::GetRuntimeAssetManager() const
-    {
-        return std::static_pointer_cast<RuntimeAssetManager>(_AssetManager);
     }
 
     Ref<EditorAssetManager> Project::GetEditorAssetManager() const
