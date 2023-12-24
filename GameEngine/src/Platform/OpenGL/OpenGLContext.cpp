@@ -27,19 +27,17 @@ namespace Exodia {
     // Contructor & Destructor //
     /////////////////////////////
 
-    OpenGLContext::OpenGLContext(GLFWwindow *windowHandle) : _WindowHandle(windowHandle)
-    {
+    OpenGLContext::OpenGLContext(GLFWwindow *windowHandle) : _WindowHandle(windowHandle) {
         EXODIA_CORE_ASSERT(windowHandle, "Window handle is null !");
     }
 
-    OpenGLContext::~OpenGLContext() {};
+    OpenGLContext::~OpenGLContext(){};
 
     /////////////
     // Methods //
     /////////////
 
-    void OpenGLContext::Init()
-    {
+    void OpenGLContext::Init() {
         EXODIA_PROFILE_FUNCTION(); // Performance instrumentation profiling for the function
 
         // -- Set the current context -- //
@@ -58,12 +56,13 @@ namespace Exodia {
 
         // -- OpenGL version check -- //
         int versionMajor;
-		int versionMinor;
+        int versionMinor;
 
         glGetIntegerv(GL_MAJOR_VERSION, &versionMajor);
-		glGetIntegerv(GL_MINOR_VERSION, &versionMinor);
+        glGetIntegerv(GL_MINOR_VERSION, &versionMinor);
 
-		EXODIA_CORE_ASSERT(versionMajor > 4 || (versionMajor == 4 && versionMinor >= 5), "Exodia requires at least OpenGL version 4.5!");
+        EXODIA_CORE_ASSERT(versionMajor > 4 || (versionMajor == 4 && versionMinor >= 5),
+                           "Exodia requires at least OpenGL version 4.5!");
 
         // -- To remove the warning of unused variable -- //
         (void)status;
@@ -87,10 +86,9 @@ namespace Exodia {
         alutInit(nullptr, nullptr);
     }
 
-    void OpenGLContext::SwapBuffers()
-    {
+    void OpenGLContext::SwapBuffers() {
         EXODIA_PROFILE_FUNCTION(); // Performance instrumentation profiling for the function
 
         glfwSwapBuffers(_WindowHandle); // Swap the render buffers
     }
-};
+}; // namespace Exodia

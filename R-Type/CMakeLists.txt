@@ -27,6 +27,8 @@ set(SOURCES_GAME_ENGINE
 
         # -- Events source files
 
+    src/Event/EntityEventSubscriber.cpp
+
         # -- Entity source files
 
     src/Entity/CreateBackground.cpp

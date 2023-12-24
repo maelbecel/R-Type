@@ -6,10 +6,10 @@
 */
 
 #ifndef IEVENTSUBSCRIBER_HPP_
-    #define IEVENTSUBSCRIBER_HPP_
+#define IEVENTSUBSCRIBER_HPP_
 
-    // Exodia Utils includes
-    #include "Utils/CrossPlatform.hpp"
+// Exodia Utils includes
+#include "Utils/CrossPlatform.hpp"
 
 namespace Exodia {
 
@@ -18,9 +18,9 @@ namespace Exodia {
         ////////////////
         // Destructor //
         ////////////////
-        public:
-            virtual ~IEventSubscriber() = default;
+      public:
+        virtual ~IEventSubscriber() = default;
     };
-};
+}; // namespace Exodia
 
 #endif /* !IEVENTSUBSCRIBER_HPP_ */

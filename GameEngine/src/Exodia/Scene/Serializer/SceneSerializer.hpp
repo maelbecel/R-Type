@@ -6,17 +6,17 @@
 */
 
 #ifndef SCENESERIALIZER_HPP_
-    #define SCENESERIALIZER_HPP_
+#define SCENESERIALIZER_HPP_
 
-    // Exodia Scene includes
-    #include "Scene/Scene/Scene.hpp"
+// Exodia Scene includes
+#include "Scene/Scene/Scene.hpp"
 
-    // Exodia Utils includes
-    #include "Utils/Memory.hpp"
+// Exodia Utils includes
+#include "Utils/Memory.hpp"
 
-    // External includes
-    #include <filesystem>
-    #include <yaml-cpp/yaml.h>
+// External includes
+#include <filesystem>
+#include <yaml-cpp/yaml.h>
 
 namespace Exodia {
 
@@ -25,31 +25,27 @@ namespace Exodia {
         //////////////////////////////
         // Constructor & Destructor //
         //////////////////////////////
-        public:
-
-            SceneSerializer(Ref<Scene> scene);
-            ~SceneSerializer() = default;
+      public:
+        SceneSerializer(Ref<Scene> scene);
+        ~SceneSerializer() = default;
 
         /////////////
         // Methods //
         /////////////
-        public:
+      public:
+        void Serialize(const std::filesystem::path &path);
+        void Deserialize(const std::filesystem::path &path);
 
-            void Serialize(const std::filesystem::path &path);
-            void Deserialize(const std::filesystem::path &path);
-
-        private:
-
-            void SerializeEntity(YAML::Emitter &out, Entity *entity);
-            void DeserializeComponent(const std::string &componentType, const YAML::Node &componentNode, Entity *entity);
+      private:
+        void SerializeEntity(YAML::Emitter &out, Entity *entity);
+        void DeserializeComponent(const std::string &componentType, const YAML::Node &componentNode, Entity *entity);
 
         ////////////////
         // Attributes //
         ////////////////
-        private:
-
-            Ref<Scene> _Scene;
+      private:
+        Ref<Scene> _Scene;
     };
-};
+}; // namespace Exodia
 
 #endif /* !SCENESERIALIZER_HPP_ */

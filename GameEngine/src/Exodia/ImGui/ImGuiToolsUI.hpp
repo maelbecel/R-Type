@@ -6,27 +6,28 @@
 */
 
 #ifndef IMGUITOOLSUI_HPP_
-    #define IMGUITOOLSUI_HPP_
+#define IMGUITOOLSUI_HPP_
 
-    // Exodia ECS includes
-    #include "ECS/Entity/Entity.hpp"
+// Exodia ECS includes
+#include "ECS/Entity/Entity.hpp"
 
-    // ImGui includes
-    #include <imgui.h>
-    #include <imgui_internal.h>
-    #include <misc/cpp/imgui_stdlib.h>
+// ImGui includes
+#include <imgui.h>
+#include <imgui_internal.h>
+#include <misc/cpp/imgui_stdlib.h>
 
-    // External includes
-    #include <string>
-    #include <glm/glm.hpp>
-    #include <glm/gtc/type_ptr.hpp>
+// External includes
+#include <string>
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 namespace Exodia {
 
-    template<typename Component, typename UIFunction>
-    inline static void DrawComponent(const std::string &name, Entity *entity, UIFunction function)
-    {
-        const ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed | ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_FramePadding;
+    template <typename Component, typename UIFunction>
+    inline static void DrawComponent(const std::string &name, Entity *entity, UIFunction function) {
+        const ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed |
+                                                 ImGuiTreeNodeFlags_SpanAvailWidth |
+                                                 ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_FramePadding;
 
         if (entity->HasComponent<Component>()) {
             auto &component = entity->GetComponent<Component>().Get();
@@ -34,7 +35,7 @@ namespace Exodia {
 
             ImVec2 contentRegionAvailable = ImGui::GetContentRegionAvail();
 
-            ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2{ 4, 4 });
+            ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2{4, 4});
 
             float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
 
@@ -45,7 +46,7 @@ namespace Exodia {
             ImGui::PopStyleVar();
             ImGui::SameLine(contentRegionAvailable.x - lineHeight * 0.5f);
 
-            if (ImGui::Button("+", ImVec2{ lineHeight, lineHeight }))
+            if (ImGui::Button("+", ImVec2{lineHeight, lineHeight}))
                 ImGui::OpenPopup("ComponentSettings");
 
             if (ImGui::BeginPopup("ComponentSettings")) {
@@ -64,9 +65,9 @@ namespace Exodia {
         }
     }
 
-    inline static void DrawVec3Control(const std::string &label, glm::vec3 &values, float resetValue = 0.0f, float columnWidth = 100.0f)
-    {
-        ImGuiIO& io = ImGui::GetIO();
+    inline static void DrawVec3Control(const std::string &label, glm::vec3 &values, float resetValue = 0.0f,
+                                       float columnWidth = 100.0f) {
+        ImGuiIO &io = ImGui::GetIO();
 
         auto boldFont = io.Fonts->Fonts[0];
 
@@ -76,15 +77,15 @@ namespace Exodia {
         ImGui::TextUnformatted(label.c_str());
         ImGui::NextColumn();
         ImGui::PushMultiItemsWidths(3, ImGui::CalcItemWidth());
-        ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 0, 0 });
+        ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{0, 0});
 
         float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
 
-        ImVec2 buttonSize = { lineHeight + 3.0f, lineHeight };
+        ImVec2 buttonSize = {lineHeight + 3.0f, lineHeight};
 
-        ImGui::PushStyleColor(ImGuiCol_Button       , ImVec4{ 0.8f, 0.1f, 0.15f, 1.0f });
-        ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0.9f, 0.2f, 0.2f, 1.0f });
-        ImGui::PushStyleColor(ImGuiCol_ButtonActive , ImVec4{ 0.8f, 0.1f, 0.15f, 1.0f });
+        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{0.8f, 0.1f, 0.15f, 1.0f});
+        ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{0.9f, 0.2f, 0.2f, 1.0f});
+        ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{0.8f, 0.1f, 0.15f, 1.0f});
         ImGui::PushFont(boldFont);
 
         if (ImGui::Button("X", buttonSize))
@@ -97,9 +98,9 @@ namespace Exodia {
         ImGui::PopItemWidth();
         ImGui::SameLine();
 
-        ImGui::PushStyleColor(ImGuiCol_Button       , ImVec4{ 0.2f, 0.7f, 0.2f, 1.0f });
-        ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0.3f, 0.8f, 0.3f, 1.0f });
-        ImGui::PushStyleColor(ImGuiCol_ButtonActive , ImVec4{ 0.2f, 0.7f, 0.2f, 1.0f });
+        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{0.2f, 0.7f, 0.2f, 1.0f});
+        ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{0.3f, 0.8f, 0.3f, 1.0f});
+        ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{0.2f, 0.7f, 0.2f, 1.0f});
         ImGui::PushFont(boldFont);
 
         if (ImGui::Button("Y", buttonSize))
@@ -112,9 +113,9 @@ namespace Exodia {
         ImGui::PopItemWidth();
         ImGui::SameLine();
 
-        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0.1f, 0.25f, 0.8f, 1.0f });
-        ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0.2f, 0.35f, 0.9f, 1.0f });
-        ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0.1f, 0.25f, 0.8f, 1.0f });
+        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{0.1f, 0.25f, 0.8f, 1.0f});
+        ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{0.2f, 0.35f, 0.9f, 1.0f});
+        ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{0.1f, 0.25f, 0.8f, 1.0f});
         ImGui::PushFont(boldFont);
 
         if (ImGui::Button("Z", buttonSize))
@@ -129,6 +130,6 @@ namespace Exodia {
         ImGui::Columns(1);
         ImGui::PopID();
     }
-};
+}; // namespace Exodia
 
 #endif /* !IMGUITOOLSUI_HPP_ */

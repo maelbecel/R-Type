@@ -6,10 +6,10 @@
 */
 
 #ifndef PROJECTSERIALIZER_HPP_
-    #define PROJECTSERIALIZER_HPP_
+#define PROJECTSERIALIZER_HPP_
 
-    // Exodia Project includes
-    #include "Project/Project.hpp"
+// Exodia Project includes
+#include "Project/Project.hpp"
 
 namespace Exodia {
 
@@ -18,26 +18,23 @@ namespace Exodia {
         //////////////////////////////
         // Constructor & Destructor //
         //////////////////////////////
-        public:
+      public:
+        ProjectSerializer(Ref<Project> project);
+        ~ProjectSerializer() = default;
 
-            ProjectSerializer(Ref<Project> project);
-            ~ProjectSerializer() = default;
-        
         /////////////
         // Methods //
         /////////////
-        public:
-
-            bool Serialize(const std::filesystem::path &path);
-            bool Deserialize(const std::filesystem::path &path);
+      public:
+        bool Serialize(const std::filesystem::path &path);
+        bool Deserialize(const std::filesystem::path &path);
 
         ////////////////
         // Attributes //
         ////////////////
-        private:
-
-            Ref<Project> _Project;
+      private:
+        Ref<Project> _Project;
     };
-};
+}; // namespace Exodia
 
 #endif /* !PROJECTSERIALIZER_HPP_ */

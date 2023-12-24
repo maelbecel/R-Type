@@ -6,14 +6,14 @@
 */
 
 #ifndef SCRIPT_HPP_
-    #define SCRIPT_HPP_
+#define SCRIPT_HPP_
 
-    // -- Script Interface -----------------------------------------------------
+// -- Script Interface -----------------------------------------------------
 
-    #include "Script/Interface/ScriptableEntity.hpp"
+#include "Script/Interface/ScriptableEntity.hpp"
 
-    // -- Script Engine --------------------------------------------------------
+// -- Script Engine --------------------------------------------------------
 
-    #include "Script/Engine/ScriptEngine.hpp"
+#include "Script/Engine/ScriptEngine.hpp"
 
 #endif /* !SCRIPT_HPP_ */

@@ -14,8 +14,7 @@ namespace Exodia {
     // Methods //
     /////////////
 
-    void EventHover::Receive(World *world, const Events::OnHoveredEnter &event)
-    {
+    void EventHover::Receive(World *world, const Events::OnHoveredEnter &event) {
         if (event.Entity->HasComponent<ScriptComponent>()) {
             auto &script = event.Entity->GetComponent<ScriptComponent>().Get();
 
@@ -24,8 +23,7 @@ namespace Exodia {
         }
     }
 
-    void EventHover::Receive(World *world, const Events::OnHoveredExit &event)
-    {
+    void EventHover::Receive(World *world, const Events::OnHoveredExit &event) {
         if (event.Entity->HasComponent<ScriptComponent>()) {
             auto &script = event.Entity->GetComponent<ScriptComponent>().Get();
 
@@ -34,8 +32,7 @@ namespace Exodia {
         }
     }
 
-    void EventHover::Receive(World *world, const Events::OnClick &event)
-    {
+    void EventHover::Receive(World *world, const Events::OnClick &event) {
         if (event.Entity->HasComponent<ScriptComponent>()) {
             auto &script = event.Entity->GetComponent<ScriptComponent>().Get();
 
@@ -43,4 +40,4 @@ namespace Exodia {
                 script.Instance->OnClick();
         }
     }
-};
+}; // namespace Exodia
