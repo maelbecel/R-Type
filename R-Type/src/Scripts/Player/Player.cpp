@@ -31,10 +31,9 @@ namespace Exodia {
         body_bullet.Get().Velocity.x = 0.0f;
         body_bullet.Get().Velocity.y = 0.0f;
 
-        // auto sprite = bullet->AddComponent<SpriteRendererComponent>();
         // Ref<Texture2D> texture = TextureImporter::LoadTexture2D("Assets/Textures/Missile.png");
-        // sprite.Get().Texture = SubTexture2D::CreateFromCoords(texture->Handle, { 0.0f, 0.0f }, { 17.33f, 14.0f }, { 1.0f, 1.0f });
-        bullet->AddComponent<CircleRendererComponent>(glm::vec4{ 1.0f, 0.0f, 0.0f, 1.0f});
+        auto sprite = bullet->AddComponent<SpriteRendererComponent>();
+        sprite.Get().Texture = SubTexture2D::CreateFromCoords(18375012605620, { 0.0f, 0.0f }, { 17.33f, 14.0f }, { 1.0f, 1.0f });
 
         _AttackTimer += ts.GetSeconds();
         _IsAttacking = true;

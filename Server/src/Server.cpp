@@ -94,7 +94,7 @@ namespace Exodia {
             Scenes[GAME]->Subscribe<Events::OnEntityDestroyed>(subscribe);
             Scenes[GAME]->Subscribe<Events::OnCollisionEntered>(collisionSystem);
 
-            // CreatePataPata(Scenes);
+            CreatePataPata(Scenes);
             // CreateBackground(Scenes);
 
             // Camera creation
@@ -196,31 +196,47 @@ namespace Exodia {
                 }
             }
         */
-            std::queue<std::pair<std::pair<uint32_t, bool>, asio::ip::udp::endpoint>> events = _Network.GetEvents();
+            std::vector<std::pair<std::pair<uint32_t, bool>, asio::ip::udp::endpoint>> events = _Network.GetEvents();
 
             while (!events.empty()) {
-                auto event = events.front();
-                events.pop();
-
+                auto event = events[events.size() - 1];
+                (void)event;
                 int32_t player_id = _Network.ConnectionPlace(event.second);
 
-                Scenes[CurrentScene]->GetWorld().ForEach<ScriptComponent, TagComponent, RigidBody2DComponent>([&](Entity *entity, auto script, auto tag, auto RigidBody2D) {
+                Scenes[CurrentScene]->GetWorld().ForEach<ScriptComponent, TagComponent, TransformComponent>([&](Entity *entity, auto script, auto tag, auto transform) {
                     (void)entity;
-                    (void)RigidBody2D;
+                    (void)transform;
                     auto &sc = script.Get();
                     auto &tc = tag.Get();
 
                     if (tc.Tag == std::string("Player_" + std::to_string(player_id)) && sc.Instance != nullptr) {
                         std::cout << "Event received: " << event.first.first << std::endl;
-                        if (event.first.second)
+                        if (event.first.second) {
                             sc.Instance->OnKeyPressed(event.first.first);
-                        else
+                        } else {
                             sc.Instance->OnKeyReleased(event.first.first);
+                            _Network.SendComponentOf(entity, "TransformComponent");
+                        }
+                    }
+                    std::cout << "Player id: " << player_id << std::endl;
+                });
+
+                Scenes[CurrentScene]->GetWorld().ForEach<TagComponent>([&](Entity *entity, auto tag) {
+                    (void)entity;
+                    (void)tag;
+                    if (tag.Get().Tag.rfind("Bullet") != std::string::npos) {
+                        std::cout << "Bullet" << std::endl;
                     }
                 });
+                events.pop_back();
             }
 
             // _Network.ResendNeedAck();
+            // Scenes[CurrentScene]->ForEach<TransformComponent>([&](Entity *entity, auto transform) {
+            //     (void)entity;
+            //     (void)transform;
+            //     _Network.SendComponentOf(entity, "TransformComponent");
+            // });
 
             Scenes[CurrentScene]->OnUpdateRuntime(timestep);
         } catch (std::exception &error) {
@@ -232,7 +248,7 @@ namespace Exodia {
     {
         bool newClient = true;
         Entity *player = nullptr;
-        std::unordered_map<std::string, Connection> connections = _Network.GetConnections();
+        std::map<std::string, Connection> connections = _Network.GetConnections();
 
         if (connections.empty()) {
             return;
@@ -248,19 +264,29 @@ namespace Exodia {
                 player = Scenes[GAME]->GetEntityByName("Player_" + std::to_string((uint32_t)_Users.size()));
                 _Users.push_back(User(connection.second, player));
 
-                Scenes[GAME]->GetWorld().ForEach<TagComponent, RigidBody2DComponent>([&](Entity *entity, auto tag, auto body) {
+                Scenes[GAME]->GetWorld().ForEach<TagComponent>([&](Entity *entity, auto tag) {
                     std::cout << tag.Get().Tag << std::endl;
                     if (tag.Get().Tag.rfind("Player_") != std::string::npos) {
                         _Network.SendComponentOf(entity, "TagComponent");
                         _Network.SendComponentOf(entity, "TransformComponent");
                         _Network.SendComponentOf(entity, "SpriteRendererComponent");
-                        body.Get().Velocity.x = 0.5f;
                         _Network.SendComponentOf(entity, "RigidBody2DComponent");
                         _Network.SendComponentOf(entity, "Animation");
                         _Network.SendComponentOf(entity, "Health");
                         _Network.SendComponentOf(entity, "ScriptComponent");
                     }
+
+                    if (tag.Get().Tag == "Pata-pata") {
+                        _Network.SendComponentOf(entity, "TagComponent");
+                        _Network.SendComponentOf(entity, "TransformComponent");
+                        _Network.SendComponentOf(entity, "SpriteRendererComponent");
+                        _Network.SendComponentOf(entity, "RigidBody2DComponent");
+                        _Network.SendComponentOf(entity, "Animation");
+                        _Network.SendComponentOf(entity, "Health");
+                        // _Network.SendComponentOf(entity, "ScriptComponent");
+                    }
                 });
+
 
 
                 EXODIA_INFO("New client connected");

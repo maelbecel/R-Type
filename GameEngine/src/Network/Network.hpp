@@ -88,7 +88,7 @@ namespace Exodia {
                  *
                  * @return std::unordered_map<std::string, Connection> Unordered map of pair of string and Connection
                 */
-                std::unordered_map<std::string, Connection> &GetConnections() {
+                std::map<std::string, Connection> &GetConnections() {
                     return _connections;
                 }
 
@@ -97,22 +97,23 @@ namespace Exodia {
                  *
                  * @return a copy of the queue of uint32_t representing the events received
                 */
-                std::queue<std::pair<std::pair<uint32_t, bool>, asio::ip::udp::endpoint>> GetEvents() {
-                    std::queue<std::pair<std::pair<uint32_t, bool>, asio::ip::udp::endpoint>> flushedEvents = std::move(_events);
+                std::vector<std::pair<std::pair<uint32_t, bool>, asio::ip::udp::endpoint>> GetEvents() {
+                    std::vector<std::pair<std::pair<uint32_t, bool>, asio::ip::udp::endpoint>> flushedEvents = std::move(_events);
                     return flushedEvents;
                 }
 
                 //Need to modify this function to have a good index
-                uint32_t ConnectionPlace(asio::ip::udp::endpoint endpoint)
+                int32_t ConnectionPlace(asio::ip::udp::endpoint endpoint)
                 {
-                    uint32_t i = 0;
+                    int32_t i = 0;
 
                     for (auto &connection : _connections) {
+                        std::cout << connection.second.GetEndpoint() << ", " << i << std::endl;
                         if (connection.second.GetEndpoint() == endpoint)
                             return i;
                         i++;
                     }
-                    return 0;
+                    return -1;
                 }
 
                 UDPSocket &GetSocket() {
@@ -147,10 +148,10 @@ namespace Exodia {
             private:
                 World *_world;
                 UDPSocket _socket;
-                std::unordered_map<std::string, Connection> _connections;
+                std::map<std::string, Connection> _connections;
                 Connection _server_connection;
                 IOContextManager &_ioContextManager;
-                std::queue<std::pair<std::pair<uint32_t, bool>, asio::ip::udp::endpoint>> _events;
+                std::vector<std::pair<std::pair<uint32_t, bool>, asio::ip::udp::endpoint>> _events;
                 std::vector<std::pair<Connection, std::unordered_map<uint64_t, Packet>>> _packetNeedAck;
 
         }; // class Network

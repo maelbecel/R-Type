@@ -407,7 +407,7 @@ namespace Exodia::Network {
         std::pair<std::pair<uint32_t, bool>, asio::ip::udp::endpoint> eventPair;
         eventPair.first = std::make_pair(event, isPressed);
         eventPair.second = senderEndpoint;
-        _events.push(eventPair);
+        _events.push_back(eventPair);
 
     }
 
