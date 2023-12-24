@@ -19,6 +19,11 @@
         <toc-element topic="Client.md"/>
         <toc-element topic="Game-Engine.md">
             <toc-element topic="Exodia.md">
+                <toc-element topic="Scene.md">
+                    <toc-element topic="Scene-SceneSerializer.md"/>
+                    <toc-element topic="Scene-Scene.md"/>
+                    <toc-element topic="Scene-Camera.md"/>
+                </toc-element>
                 <toc-element topic="Renderer.md">
                     <toc-element topic="Renderer-Vertex.md"/>
                     <toc-element topic="Renderer-Texture.md">
