@@ -137,7 +137,7 @@ namespace Exodia {
                 });
                 count += 1;
                 */
-                std::this_thread::sleep_for(std::chrono::milliseconds(32));  // Sleep for 32 milliseconds (30 FPS)
+                std::this_thread::sleep_for(std::chrono::milliseconds(5));  // Sleep for 32 milliseconds (30 FPS)
             }
         } catch (std::exception &error) {
             EXODIA_ERROR("Exception :\n\t{0}", error.what());
@@ -225,11 +225,15 @@ namespace Exodia {
                     //}
                 });
 
-                Scenes[CurrentScene]->GetWorld().ForEach<TagComponent>([&](Entity *entity, auto tag) {
+                Scenes[CurrentScene]->GetWorld().ForEach<TagComponent, TransformComponent>([&](Entity *entity, auto tag, auto transform) {
                     (void)entity;
                     (void)tag;
+                    (void)transform;
+                    std::cout << "Tag: " << tag.Get().Tag << std::endl;
                     if (tag.Get().Tag.rfind("Bullet") != std::string::npos) {
                         std::cout << "Bullet" << std::endl;
+                        _Network.SendComponentOf(entity, "TagComponent");
+                        _Network.SendComponentOf(entity, "SpriteRendererComponent");
                     }
                 });
                 events.pop_back();

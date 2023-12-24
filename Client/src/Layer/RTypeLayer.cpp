@@ -125,6 +125,16 @@ namespace Exodia {
 
         // Update the world
         Scenes[CurrentScene]->OnUpdateRuntime(ts);
+
+        Scenes[CurrentScene]->GetWorld().ForEach<TagComponent, TransformComponent>([&](Entity *entity, auto tag, auto transform) {
+            (void)entity;
+            (void)tag;
+            std::cout << "Tag: " << tag.Get().Tag << std::endl;
+            if (tag.Get().Tag.rfind("Bullet") != std::string::npos) {
+                std::cout << "Bullet" << std::endl;
+                std::cout << "Translation: " << transform.Get().Translation.x << ", " << transform.Get().Translation.y << std::endl;
+            }
+        });
     }
 
     void RTypeLayer::OnImGUIRender()
