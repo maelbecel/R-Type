@@ -189,6 +189,11 @@ namespace Exodia {
 
 
     void Player::OnCollisionEnter(Entity *entity) {
+        if (entity->GetComponent<TagComponent>() && entity->GetComponent<TagComponent>().Get().Tag == "Ground") {
+            GetComponent<RigidBody2DComponent>().Get().Velocity.y = 0.0f;
+            return;
+        }
+
         if (entity->GetComponent<TagComponent>().Get().Tag.rfind("BE", 0) == 0) {
             EXODIA_INFO("BE {0} hit", entity->GetComponent<TagComponent>().Get().Tag);
             entity->GetWorld()->DestroyEntity(entity);

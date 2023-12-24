@@ -28,6 +28,8 @@ namespace Exodia {
         _Scenes.insert(std::make_pair(RType::SceneType::GAME, std::make_pair(RType::SceneState::PAUSED, nullptr)));
 
         _WaitingCamera.SetViewportSize(Exodia::Application::Get().GetWindow().GetWidth(), Exodia::Application::Get().GetWindow().GetHeight());
+
+        Renderer2D::SetLineWidth(4.0f);
     }
 
     void RTypeLayer::OnDetach() {};
@@ -49,6 +51,32 @@ namespace Exodia {
             if (_CurrentScene == RType::SceneType::GAME) {
                 if (_Scenes[RType::SceneType::GAME].first == RType::SceneState::RUNNING) {
                     _Scenes[RType::SceneType::GAME].second->OnUpdateRuntime(ts);
+
+                    Entity *camera = _Scenes[RType::SceneType::GAME].second->GetPrimaryCamera();
+
+                    if (!camera)
+                        return;
+
+                    Renderer2D::BeginScene(camera->GetComponent<CameraComponent>().Get().Camera, camera->GetComponent<TransformComponent>().Get().GetTransform());
+
+                    _Scenes[RType::SceneType::GAME].second->ForEach<TransformComponent, BoxCollider2DComponent>([&](Entity *entity, auto transform, auto box) {
+                        (void)entity;
+
+                        auto &tc = transform.Get();
+                        auto &bc = box.Get();
+
+                        glm::vec3 translation = tc.Translation + glm::vec3(bc.Offset, 0.001f);
+                        glm::vec3 scale       = tc.Scale       * glm::vec3(bc.Size * 2.0f, 1.0f);
+
+                        glm::mat4 transformMatrix = glm::translate(glm::mat4(1.0f), translation) * glm::rotate(glm::mat4(1.0f), tc.Rotation.z , glm::vec3(0.0f, 0.0f, 1.0f)) * glm::scale(glm::mat4(1.0f), scale);
+
+                        if (bc.ColliderMask & 000001)
+                            Renderer2D::DrawRect(transformMatrix, glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+                        if (bc.ColliderMask & 000010)
+                            Renderer2D::DrawRect(transformMatrix, glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
+                    });
+
+                    Renderer2D::EndScene();
                 } else {
                     _WaitingCamera.OnUpdate(ts);
 
@@ -85,13 +113,39 @@ namespace Exodia {
             // TODO: .. Connect to server and create room
         } else if (_CurrentScene == RType::SceneType::GAME) {
             if (_Scenes[RType::SceneType::GAME].first == RType::SceneState::RUNNING) {
+                _Scenes[RType::SceneType::GAME].second->ForEach<ScriptComponent>([&](Entity *entity, auto script) {
+                    auto &sc = script.Get();
 
-                // TODO: Update Scripts...
+                    if (sc.Instance)
+                        sc.Instance->OnKeyPressed(key);
+                    (void)entity;
+                });
             } else {
                 if (key == Key::ENTER) {
                     _Scenes[RType::SceneType::GAME].first = RType::SceneState::RUNNING;
 
                     _Scenes[RType::SceneType::GAME].second->RegisterSystem(new Exodia::MovingSystem());
+                    _Scenes[RType::SceneType::GAME].second->RegisterSystem(new Exodia::CollisionSystem());
+
+                    // -- TEMP -----
+                    /*Entity *entity = _Scenes[RType::SceneType::GAME].second->CreateEntity("Player");
+
+                    entity->AddComponent<Health>(1);
+                    entity->AddComponent<ScriptComponent>().Get().Bind("Player");
+                    entity->AddComponent<Animation>(1.0f, 2.0f, 0.1f);
+                    entity->GetComponent<TransformComponent>().Get().Scale.y = 0.5f;
+                    entity->AddComponent<BoxCollider2DComponent>().Get().ColliderMask = 000010;
+
+                    // Set entity sprite
+                    auto sprite = entity->AddComponent<SpriteRendererComponent>();
+                    sprite.Get().Texture = SubTexture2D::CreateFromCoords(12345678901234578, { 2.0f, 4.0f }, { 33.2f, 17.2f }, { 1.0f, 1.0f });
+
+                    // Set entity rigidbody
+                    auto body = entity->AddComponent<RigidBody2DComponent>();
+
+                    body.Get().Type = RigidBody2DComponent::BodyType::Dynamic;
+                    body.Get().GravityScale = 0.0f;*/
+                    // --------
 
                     _Scenes[RType::SceneType::GAME].second->OnRuntimeStart();
                     _Scenes[RType::SceneType::GAME].second->OnViewportResize(Exodia::Application::Get().GetWindow().GetWidth(), Exodia::Application::Get().GetWindow().GetHeight());
