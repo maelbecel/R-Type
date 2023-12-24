@@ -20,6 +20,12 @@
         <toc-element topic="Game-Engine.md">
             <toc-element topic="Exodia.md">
                 <toc-element topic="ECS.md">
+                    <toc-element topic="Utils-ECS.md"/>
+                    <toc-element topic="World.md"/>
+                    <toc-element topic="Interface.md"/>
+                    <toc-element topic="EventSubscriber.md"/>
+                    <toc-element topic="Events.md"/>
+                    <toc-element topic="System.md"/>
                     <toc-element topic="Entity.md"/>
                     <toc-element topic="Component.md"/>
                 </toc-element>
