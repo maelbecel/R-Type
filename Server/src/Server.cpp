@@ -95,7 +95,6 @@ namespace Exodia {
             Scenes[GAME]->Subscribe<Events::OnCollisionEntered>(collisionSystem);
 
             CreatePataPata(Scenes);
-            // CreateBackground(Scenes);
 
             // Camera creation
             Entity *cameraEntity = Scenes[GAME]->CreateEntity("Camera");

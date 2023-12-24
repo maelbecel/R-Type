@@ -37,6 +37,7 @@ namespace Exodia {
         private:
             bool OnKeyReleasedEvent(KeyReleasedEvent &event);
             bool OnKeyPressedEvent(KeyPressedEvent &event);
+            bool OnWindowResizeEvent(WindowResizeEvent &event);
 
         ////////////////
         // Attributes //

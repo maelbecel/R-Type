@@ -89,9 +89,6 @@ namespace Exodia {
         // Create pata-pata
         // CreatePataPata(Scenes);
 
-        // Create background
-        CreateBackground(Scenes);
-
         Entity *cameraMenu = Scenes[MENU]->CreateEntity("Camera");
 
         auto &camera_ = cameraMenu->AddComponent<CameraComponent>().Get();
@@ -141,6 +138,7 @@ namespace Exodia {
 
         dispatcher.Dispatch<KeyPressedEvent>(BIND_EVENT_FN(RTypeLayer::OnKeyPressedEvent));
         dispatcher.Dispatch<KeyReleasedEvent>(BIND_EVENT_FN(RTypeLayer::OnKeyReleasedEvent));
+        dispatcher.Dispatch<WindowResizeEvent>(BIND_EVENT_FN(RTypeLayer::OnWindowResizeEvent));
     }
 
     bool RTypeLayer::OnKeyPressedEvent(KeyPressedEvent &event) {
@@ -180,4 +178,12 @@ namespace Exodia {
         });
         return false;
     };
+
+    bool RTypeLayer::OnWindowResizeEvent(WindowResizeEvent &event)
+    {
+        if (Scenes[CurrentScene] != nullptr)
+            Scenes[CurrentScene]->OnViewportResize(event.GetWidth(), event.GetHeight());
+
+        return true;
+    }
 };
