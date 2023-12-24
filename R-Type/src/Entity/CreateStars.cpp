@@ -16,16 +16,16 @@ namespace Exodia {
         std::mt19937 gen(rd());
 
         std::uniform_real_distribution<float> colorDist(0.9f, 1.0f);
-        std::uniform_int_distribution<int>   velocityDist(-8, -1);
+        std::uniform_int_distribution<int> velocityDist(-8, -1);
 
-		for(int i = 0; i < 60; i++) {
+        for (int i = 0; i < 60; i++) {
             Entity *star = world[GAME]->CreateEntity("Star" + std::to_string(i));
 
             star->AddComponent<ScriptComponent>().Get().Bind("Star");
             star->GetComponent<TransformComponent>().Get().Scale.y = 0.1f;
             star->GetComponent<TransformComponent>().Get().Scale.x = 0.1f;
             star->AddComponent<Clock>();
-            star->AddComponent<CircleRendererComponent>(glm::vec4{ 0.9f, 0.9f, colorDist(gen), 0.9f });
+            star->AddComponent<CircleRendererComponent>(glm::vec4{0.9f, 0.9f, colorDist(gen), 0.9f});
 
             auto body = star->AddComponent<RigidBody2DComponent>();
 
@@ -35,4 +35,4 @@ namespace Exodia {
             body.Get().Velocity.x = (float)velocityDist(gen);
         }
     };
-};
+}; // namespace Exodia

@@ -22,8 +22,7 @@ namespace Exodia {
     // Constructor & Destructor //
     //////////////////////////////
 
-    OpenGLVertexBuffer::OpenGLVertexBuffer(uint32_t size)
-    {
+    OpenGLVertexBuffer::OpenGLVertexBuffer(uint32_t size) {
         EXODIA_PROFILE_FUNCTION(); // Performance instrumentation profiling for the function
 
         glCreateBuffers(1, &_RendererID);                              // Create the buffer
@@ -31,8 +30,7 @@ namespace Exodia {
         glBufferData(GL_ARRAY_BUFFER, size, nullptr, GL_DYNAMIC_DRAW); // Allocate the buffer
     }
 
-    OpenGLVertexBuffer::OpenGLVertexBuffer(float *vertices, uint32_t size)
-    {
+    OpenGLVertexBuffer::OpenGLVertexBuffer(float *vertices, uint32_t size) {
         EXODIA_PROFILE_FUNCTION(); // Performance instrumentation profiling for the function
 
         glCreateBuffers(1, &_RendererID);                              // Create the buffer
@@ -40,8 +38,7 @@ namespace Exodia {
         glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW); // Allocate the buffer
     }
 
-    OpenGLVertexBuffer::~OpenGLVertexBuffer()
-    {
+    OpenGLVertexBuffer::~OpenGLVertexBuffer() {
         EXODIA_PROFILE_FUNCTION(); // Performance instrumentation profiling for the function
 
         glDeleteBuffers(1, &_RendererID); // Delete the buffer
@@ -51,15 +48,13 @@ namespace Exodia {
     // Methods //
     /////////////
 
-    void OpenGLVertexBuffer::Bind() const
-    {
+    void OpenGLVertexBuffer::Bind() const {
         EXODIA_PROFILE_FUNCTION(); // Performance instrumentation profiling for the function
 
         glBindBuffer(GL_ARRAY_BUFFER, _RendererID); // Bind the buffer
     }
 
-    void OpenGLVertexBuffer::Unbind() const
-    {
+    void OpenGLVertexBuffer::Unbind() const {
         EXODIA_PROFILE_FUNCTION(); // Performance instrumentation profiling for the function
 
         glBindBuffer(GL_ARRAY_BUFFER, 0); // Unbind the buffer
@@ -69,18 +64,11 @@ namespace Exodia {
     // Setters & Getters //
     ///////////////////////
 
-    void OpenGLVertexBuffer::SetLayout(const BufferLayout &layout)
-    {
-        _Layout = layout;
-    }
+    void OpenGLVertexBuffer::SetLayout(const BufferLayout &layout) { _Layout = layout; }
 
-    const BufferLayout &OpenGLVertexBuffer::GetLayout()
-    {
-        return _Layout;
-    }
+    const BufferLayout &OpenGLVertexBuffer::GetLayout() { return _Layout; }
 
-    void OpenGLVertexBuffer::SetData(const void *data, uint32_t size)
-    {
+    void OpenGLVertexBuffer::SetData(const void *data, uint32_t size) {
         glBindBuffer(GL_ARRAY_BUFFER, _RendererID);      // Bind the buffer
         glBufferSubData(GL_ARRAY_BUFFER, 0, size, data); // Set the data
     }
@@ -93,8 +81,7 @@ namespace Exodia {
     // Constructor & Destructor //
     //////////////////////////////
 
-    OpenGLIndexBuffer::OpenGLIndexBuffer(uint32_t *indices, uint32_t count) : _Count(count)
-    {
+    OpenGLIndexBuffer::OpenGLIndexBuffer(uint32_t *indices, uint32_t count) : _Count(count) {
         EXODIA_PROFILE_FUNCTION(); // Performance instrumentation profiling for the function
 
         glCreateBuffers(1, &_RendererID);                                                         // Create the buffer
@@ -102,8 +89,7 @@ namespace Exodia {
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(uint32_t), indices, GL_STATIC_DRAW); // Allocate the buffer
     }
 
-    OpenGLIndexBuffer::~OpenGLIndexBuffer()
-    {
+    OpenGLIndexBuffer::~OpenGLIndexBuffer() {
         EXODIA_PROFILE_FUNCTION(); // Performance instrumentation profiling for the function
 
         glDeleteBuffers(1, &_RendererID); // Delete the buffer
@@ -113,15 +99,13 @@ namespace Exodia {
     // Methods //
     /////////////
 
-    void OpenGLIndexBuffer::Bind() const
-    {
+    void OpenGLIndexBuffer::Bind() const {
         EXODIA_PROFILE_FUNCTION(); // Performance instrumentation profiling for the function
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _RendererID); // Bind the buffer
     }
 
-    void OpenGLIndexBuffer::Unbind() const
-    {
+    void OpenGLIndexBuffer::Unbind() const {
         EXODIA_PROFILE_FUNCTION(); // Performance instrumentation profiling for the function
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0); // Unbind the buffer
@@ -131,8 +115,5 @@ namespace Exodia {
     // Getters //
     /////////////
 
-    uint32_t OpenGLIndexBuffer::GetCount() const
-    {
-        return _Count;
-    }
-};
+    uint32_t OpenGLIndexBuffer::GetCount() const { return _Count; }
+}; // namespace Exodia

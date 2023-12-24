@@ -6,12 +6,12 @@
 */
 
 #ifndef PLAYER_HPP_
-    #define PLAYER_HPP_
+#define PLAYER_HPP_
 
-    // Exodia includes
-    #include "Exodia.hpp"
-    #include "Scripts/BulletPlayer.hpp"
-    #include "Component/Health.hpp"
+// Exodia includes
+#include "Exodia.hpp"
+#include "Scripts/BulletPlayer.hpp"
+#include "Component/Health.hpp"
 
 namespace Exodia {
 
@@ -20,60 +20,47 @@ namespace Exodia {
         //////////////
         //  Enums   //
         //////////////
-        public:
-            enum class State {
-                IDLE = 0,
-                MOVE_UP,
-                MOVE_DOWN,
-                DEAD
-            };
+      public:
+        enum class State { IDLE = 0, MOVE_UP, MOVE_DOWN, DEAD };
 
         /////////////
         // Methods //
         /////////////
-        public:
+      public:
+        void OnCreate() override {
+            _State = State::IDLE;
+            _AttackTimer = 0.0f;
+            _IsAttacking = false;
+            _IsCharging = false;
+        }
 
-            void OnCreate() override
-            {
-                _State = State::IDLE;
-                _AttackTimer = 0.0f;
-                _IsAttacking = false;
-                _IsCharging = false;
-            }
+        void OnUpdate(Timestep ts) override;
 
-            void OnUpdate(Timestep ts) override;
+        void OnKeyPressed(int keycode) override;
 
-            void OnKeyPressed(int keycode) override;
+        void OnKeyReleased(int keycode) override;
 
-            void OnKeyReleased(int keycode) override;
+        void CreateBullet(Timestep ts, TransformComponent &tc);
 
-            void CreateBullet(Timestep ts, TransformComponent &tc);
+        void OnCollisionEnter(Entity *entity) override;
 
-            void OnCollisionEnter(Entity *entity) override;
+        ////////////////////////
+        // Getters && Setters //
+        ////////////////////////
+        State GetState() const { return _State; }
 
-            ////////////////////////
-            // Getters && Setters //
-            ////////////////////////
-            State GetState() const
-            {
-                return _State;
-            }
-
-            float GetAttackTimer() const
-            {
-                return _AttackTimer;
-            }
+        float GetAttackTimer() const { return _AttackTimer; }
 
         ////////////////
         // Attributes //
         ////////////////
-        private:
-            State _State;
-            float _AttackTimer;
-            bool _IsAttacking;
-            bool _IsCharging;
-            bool _IsShooting = false;
+      private:
+        State _State;
+        float _AttackTimer;
+        bool _IsAttacking;
+        bool _IsCharging;
+        bool _IsShooting = false;
     };
-};
+}; // namespace Exodia
 
 #endif /* !PLAYER_HPP_ */

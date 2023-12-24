@@ -31,22 +31,19 @@ namespace Exodia {
     // Methods //
     /////////////
 
-    void Renderer2D::Init()
-    {
+    void Renderer2D::Init() {
         EXODIA_PROFILE_FUNCTION(); // Performance instrumentation profiling for the function
 
         // Initialize Renderer2D data and set default values
         _Data = CreateScope<Renderer2D::Renderer2DData>();
         _Data->QuadVertexArray = VertexArray::Create();
         _Data->QuadVertexBuffer = VertexBuffer::Create(Renderer2DData::MaxVertices * sizeof(QuadVertex));
-        _Data->QuadVertexBuffer->SetLayout({
-            { ShaderDataType::Float3, "a_Position"     },
-            { ShaderDataType::Float4, "a_Color"        },
-            { ShaderDataType::Float2, "a_TexCoord"     },
-            { ShaderDataType::Float , "a_TexIndex"     },
-            { ShaderDataType::Float , "a_TilingFactor" },
-            { ShaderDataType::Int   , "a_EntityID"     }
-        });
+        _Data->QuadVertexBuffer->SetLayout({{ShaderDataType::Float3, "a_Position"},
+                                            {ShaderDataType::Float4, "a_Color"},
+                                            {ShaderDataType::Float2, "a_TexCoord"},
+                                            {ShaderDataType::Float, "a_TexIndex"},
+                                            {ShaderDataType::Float, "a_TilingFactor"},
+                                            {ShaderDataType::Int, "a_EntityID"}});
         _Data->QuadVertexArray->AddVertexBuffer(_Data->QuadVertexBuffer);
         _Data->QuadVertexBufferBase = new QuadVertex[Renderer2DData::MaxVertices];
 
@@ -71,26 +68,21 @@ namespace Exodia {
 
         _Data->CircleVertexArray = VertexArray::Create();
         _Data->CircleVertexBuffer = VertexBuffer::Create(Renderer2DData::MaxVertices * sizeof(CircleVertex));
-        _Data->CircleVertexBuffer->SetLayout({
-            { ShaderDataType::Float3, "a_WorldPosition" },
-            { ShaderDataType::Float3, "a_LocalPosition" },
-            { ShaderDataType::Float4, "a_Color"         },
-            { ShaderDataType::Float,  "a_Thickness"     },
-            { ShaderDataType::Float,  "a_Fade"          },
-            { ShaderDataType::Int,    "a_EntityID"      }
-        });
+        _Data->CircleVertexBuffer->SetLayout({{ShaderDataType::Float3, "a_WorldPosition"},
+                                              {ShaderDataType::Float3, "a_LocalPosition"},
+                                              {ShaderDataType::Float4, "a_Color"},
+                                              {ShaderDataType::Float, "a_Thickness"},
+                                              {ShaderDataType::Float, "a_Fade"},
+                                              {ShaderDataType::Int, "a_EntityID"}});
         _Data->CircleVertexArray->AddVertexBuffer(_Data->CircleVertexBuffer);
         _Data->CircleVertexArray->SetIndexBuffer(quadIndexBuffer);
         _Data->CircleVertexBufferBase = new CircleVertex[Renderer2DData::MaxVertices];
 
-
         _Data->LineVertexArray = VertexArray::Create();
         _Data->LineVertexBuffer = VertexBuffer::Create(_Data->MaxVertices * sizeof(LineVertex));
-        _Data->LineVertexBuffer->SetLayout({
-            { ShaderDataType::Float3, "a_Position" },
-            { ShaderDataType::Float4, "a_Color"    },
-            { ShaderDataType::Int,    "a_EntityID" }
-        });
+        _Data->LineVertexBuffer->SetLayout({{ShaderDataType::Float3, "a_Position"},
+                                            {ShaderDataType::Float4, "a_Color"},
+                                            {ShaderDataType::Int, "a_EntityID"}});
         _Data->LineVertexArray->AddVertexBuffer(_Data->LineVertexBuffer);
         _Data->LineVertexBufferBase = new LineVertex[_Data->MaxVertices];
 
@@ -106,16 +98,15 @@ namespace Exodia {
 
         _Data->TextureSlot[0] = _Data->WhiteTexture;
 
-        _Data->QuadVertexPosition[0] = { -0.5f, -0.5f, 0.0f, 1.0f };
-        _Data->QuadVertexPosition[1] = {  0.5f, -0.5f, 0.0f, 1.0f };
-        _Data->QuadVertexPosition[2] = {  0.5f,  0.5f, 0.0f, 1.0f };
-        _Data->QuadVertexPosition[3] = { -0.5f,  0.5f, 0.0f, 1.0f };
-        
+        _Data->QuadVertexPosition[0] = {-0.5f, -0.5f, 0.0f, 1.0f};
+        _Data->QuadVertexPosition[1] = {0.5f, -0.5f, 0.0f, 1.0f};
+        _Data->QuadVertexPosition[2] = {0.5f, 0.5f, 0.0f, 1.0f};
+        _Data->QuadVertexPosition[3] = {-0.5f, 0.5f, 0.0f, 1.0f};
+
         _Data->CameraUniformBuffer = UniformBuffer::Create(sizeof(CameraData), 0);
     }
 
-    void Renderer2D::Shutdown()
-    {
+    void Renderer2D::Shutdown() {
         EXODIA_PROFILE_FUNCTION(); // Performance instrumentation profiling for the function
 
         if (_Data && _Data->QuadVertexBufferBase != nullptr) {
@@ -126,8 +117,7 @@ namespace Exodia {
         _Data = nullptr;
     }
 
-    void Renderer2D::BeginScene(const OrthographicCamera &camera)
-    {
+    void Renderer2D::BeginScene(const OrthographicCamera &camera) {
         EXODIA_PROFILE_FUNCTION(); // Performance instrumentation profiling for the function
 
         if (_Data == nullptr)
@@ -140,8 +130,7 @@ namespace Exodia {
         ResetBatch();
     }
 
-    void Renderer2D::BeginScene(const Camera &camera, const glm::mat4 &transform)
-    {
+    void Renderer2D::BeginScene(const Camera &camera, const glm::mat4 &transform) {
         EXODIA_PROFILE_FUNCTION(); // Performance instrumentation profiling for the function
 
         if (_Data == nullptr)
@@ -153,8 +142,7 @@ namespace Exodia {
         ResetBatch();
     }
 
-    void Renderer2D::BeginScene(const EditorCamera &camera)
-    {
+    void Renderer2D::BeginScene(const EditorCamera &camera) {
         EXODIA_PROFILE_FUNCTION(); // Performance instrumentation profiling for the function
 
         if (_Data == nullptr)
@@ -166,8 +154,7 @@ namespace Exodia {
         ResetBatch();
     }
 
-    void Renderer2D::EndScene()
-    {
+    void Renderer2D::EndScene() {
         EXODIA_PROFILE_FUNCTION(); // Performance instrumentation profiling for the function
 
         if (_Data == nullptr)
@@ -176,11 +163,11 @@ namespace Exodia {
         Flush();
     }
 
-    void Renderer2D::Flush()
-    {
+    void Renderer2D::Flush() {
         if (_Data->QuadIndexCount) {
             // Calculate data size
-            uint32_t dataSize = (uint32_t)((uint8_t *)_Data->QuadVertexBufferPtr - (uint8_t *)_Data->QuadVertexBufferBase);
+            uint32_t dataSize =
+                (uint32_t)((uint8_t *)_Data->QuadVertexBufferPtr - (uint8_t *)_Data->QuadVertexBufferBase);
 
             _Data->QuadVertexBuffer->SetData(_Data->QuadVertexBufferBase, dataSize);
 
@@ -198,7 +185,8 @@ namespace Exodia {
 
         if (_Data->CircleIndexCount) {
             // Calculate data size
-            uint32_t dataSize = (uint32_t)((uint8_t *)_Data->CircleVertexBufferPtr - (uint8_t *)_Data->CircleVertexBufferBase);
+            uint32_t dataSize =
+                (uint32_t)((uint8_t *)_Data->CircleVertexBufferPtr - (uint8_t *)_Data->CircleVertexBufferBase);
 
             _Data->CircleVertexBuffer->SetData(_Data->CircleVertexBufferBase, dataSize);
 
@@ -214,7 +202,8 @@ namespace Exodia {
 
         if (_Data->LineVertexCount) {
             // Calculate data size
-            uint32_t dataSize = (uint32_t)((uint8_t *)_Data->LineVertexBufferPtr - (uint8_t *)_Data->LineVertexBufferBase);
+            uint32_t dataSize =
+                (uint32_t)((uint8_t *)_Data->LineVertexBufferPtr - (uint8_t *)_Data->LineVertexBufferBase);
 
             _Data->LineVertexBuffer->SetData(_Data->LineVertexBufferBase, dataSize);
 
@@ -230,13 +219,9 @@ namespace Exodia {
         }
     }
 
-    void Renderer2D::ResetStats()
-    {
-        std::memset(&_Data->Stats, 0, sizeof(Statistics));
-    }
+    void Renderer2D::ResetStats() { std::memset(&_Data->Stats, 0, sizeof(Statistics)); }
 
-    void Renderer2D::FlushAndReset()
-    {
+    void Renderer2D::FlushAndReset() {
         // Flush
         EndScene();
 
@@ -244,8 +229,7 @@ namespace Exodia {
         ResetBatch();
     }
 
-    void Renderer2D::ResetBatch()
-    {
+    void Renderer2D::ResetBatch() {
         // Set default values
         _Data->QuadIndexCount = 0;
         _Data->QuadVertexBufferPtr = _Data->QuadVertexBufferBase;
@@ -258,33 +242,26 @@ namespace Exodia {
 
     // ----- Primitives ----- //
 
-        // 1. Quad
+    // 1. Quad
 
-    void Renderer2D::DrawQuad(const glm::vec2 &position, const glm::vec2 &size, const glm::vec4 &color)
-    {
-        DrawQuad({ position.x, position.y, 0.0f }, size, color);
+    void Renderer2D::DrawQuad(const glm::vec2 &position, const glm::vec2 &size, const glm::vec4 &color) {
+        DrawQuad({position.x, position.y, 0.0f}, size, color);
     }
 
-    void Renderer2D::DrawQuad(const glm::vec3 &position, const glm::vec2 &size, const glm::vec4 &color)
-    {
+    void Renderer2D::DrawQuad(const glm::vec3 &position, const glm::vec2 &size, const glm::vec4 &color) {
         EXODIA_PROFILE_FUNCTION(); // Performance instrumentation profiling for the function
 
-        glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
+        glm::mat4 transform =
+            glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), {size.x, size.y, 1.0f});
 
         DrawQuad(transform, color);
     }
 
-    void Renderer2D::DrawQuad(const glm::mat4 &transform, const glm::vec4 &color, int entityID)
-    {
+    void Renderer2D::DrawQuad(const glm::mat4 &transform, const glm::vec4 &color, int entityID) {
         EXODIA_PROFILE_FUNCTION(); // Performance instrumentation profiling for the function
 
         constexpr uint32_t quadVertexCount = 4;
-        constexpr glm::vec2 textureCoords[] = {
-            { 0.0f, 0.0f },
-            { 1.0f, 0.0f },
-            { 1.0f, 1.0f },
-            { 0.0f, 1.0f }
-        };
+        constexpr glm::vec2 textureCoords[] = {{0.0f, 0.0f}, {1.0f, 0.0f}, {1.0f, 1.0f}, {0.0f, 1.0f}};
 
         // Check if we need to flush or if we can continue
         if (_Data->QuadIndexCount >= Renderer2DData::MaxIndices)
@@ -306,34 +283,30 @@ namespace Exodia {
         _Data->Stats.QuadCount++;
     }
 
-    void Renderer2D::DrawQuad(const glm::vec2 &position, const glm::vec2 &size, const Ref<Texture2D> &texture, float tilingFactor, const glm::vec4 &tintColor)
-    {
-        DrawQuad({ position.x, position.y, 0.0f }, size, texture, tilingFactor, tintColor);
+    void Renderer2D::DrawQuad(const glm::vec2 &position, const glm::vec2 &size, const Ref<Texture2D> &texture,
+                              float tilingFactor, const glm::vec4 &tintColor) {
+        DrawQuad({position.x, position.y, 0.0f}, size, texture, tilingFactor, tintColor);
     }
 
-    void Renderer2D::DrawQuad(const glm::vec3 &position, const glm::vec2 &size, const Ref<Texture2D> &texture, float tilingFactor, const glm::vec4 &tintColor)
-    {
+    void Renderer2D::DrawQuad(const glm::vec3 &position, const glm::vec2 &size, const Ref<Texture2D> &texture,
+                              float tilingFactor, const glm::vec4 &tintColor) {
         EXODIA_PROFILE_FUNCTION(); // Performance instrumentation profiling for the function
 
-        glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
+        glm::mat4 transform =
+            glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), {size.x, size.y, 1.0f});
 
         DrawQuad(transform, texture, tilingFactor, tintColor);
     }
 
-    void Renderer2D::DrawQuad(const glm::mat4 &transform, const Ref<Texture2D> &texture, float tilingFactor, const glm::vec4 &tintColor, int entityID)
-    {
+    void Renderer2D::DrawQuad(const glm::mat4 &transform, const Ref<Texture2D> &texture, float tilingFactor,
+                              const glm::vec4 &tintColor, int entityID) {
         EXODIA_PROFILE_FUNCTION(); // Performance instrumentation profiling for the function
 
         if (texture == nullptr)
             return DrawQuad(transform, tintColor, entityID);
 
         constexpr uint32_t quadVertexCount = 4;
-        constexpr glm::vec2 textureCoords[] = {
-            { 0.0f, 0.0f },
-            { 1.0f, 0.0f },
-            { 1.0f, 1.0f },
-            { 0.0f, 1.0f }
-        };
+        constexpr glm::vec2 textureCoords[] = {{0.0f, 0.0f}, {1.0f, 0.0f}, {1.0f, 1.0f}, {0.0f, 1.0f}};
 
         // Check if we need to flush or if we can continue
         if (_Data->QuadIndexCount >= Renderer2DData::MaxIndices)
@@ -350,7 +323,7 @@ namespace Exodia {
         }
 
         // If the texture is not in the texture slot, add it
-		if (textureIndex == 0.0f) {
+        if (textureIndex == 0.0f) {
             // Check if we can add a new texture
             if (_Data->TextureSlotIndex >= Renderer2DData::MaxTextureSlot)
                 FlushAndReset();
@@ -373,23 +346,23 @@ namespace Exodia {
         _Data->Stats.QuadCount++;
     }
 
-    void Renderer2D::DrawQuad(const glm::vec2 &position, const glm::vec2 &size, const Ref<SubTexture2D> &subTexture, float tilingFactor, const glm::vec4 &tintColor)
-    {
-        DrawQuad({ position.x, position.y, 0.0f }, size, subTexture, tilingFactor, tintColor);
+    void Renderer2D::DrawQuad(const glm::vec2 &position, const glm::vec2 &size, const Ref<SubTexture2D> &subTexture,
+                              float tilingFactor, const glm::vec4 &tintColor) {
+        DrawQuad({position.x, position.y, 0.0f}, size, subTexture, tilingFactor, tintColor);
     }
 
-    void Renderer2D::DrawQuad(const glm::vec3 &position, const glm::vec2 &size, const Ref<SubTexture2D> &subTexture, float tilingFactor, const glm::vec4 &tintColor)
-    {
+    void Renderer2D::DrawQuad(const glm::vec3 &position, const glm::vec2 &size, const Ref<SubTexture2D> &subTexture,
+                              float tilingFactor, const glm::vec4 &tintColor) {
         EXODIA_PROFILE_FUNCTION(); // Performance instrumentation profiling for the function
 
-        glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
+        glm::mat4 transform =
+            glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), {size.x, size.y, 1.0f});
 
         DrawQuad(transform, subTexture, tilingFactor, tintColor);
-
     }
 
-    void Renderer2D::DrawQuad(const glm::mat4 &transform, const Ref<SubTexture2D> &subTexture, float tilingFactor, const glm::vec4 &tintColor, int entityID)
-    {
+    void Renderer2D::DrawQuad(const glm::mat4 &transform, const Ref<SubTexture2D> &subTexture, float tilingFactor,
+                              const glm::vec4 &tintColor, int entityID) {
         EXODIA_PROFILE_FUNCTION(); // Performance instrumentation profiling for the function
 
         constexpr uint32_t quadVertexCount = 4;
@@ -417,7 +390,7 @@ namespace Exodia {
         }
 
         // If the texture is not in the texture slot, add it
-		if (textureIndex == 0.0f) {
+        if (textureIndex == 0.0f) {
             // Check if we can add a new texture
             if (_Data->TextureSlotIndex >= Renderer2DData::MaxTextureSlot)
                 FlushAndReset();
@@ -440,24 +413,19 @@ namespace Exodia {
         _Data->Stats.QuadCount++;
     }
 
-        // 2. Rotated Quad
+    // 2. Rotated Quad
 
-    void Renderer2D::DrawRotatedQuad(const glm::vec2 &position, const glm::vec2 &size, float rotation, const glm::vec4 &color)
-    {
-        DrawRotatedQuad({ position.x, position.y, 0.0f }, size, rotation, color);
+    void Renderer2D::DrawRotatedQuad(const glm::vec2 &position, const glm::vec2 &size, float rotation,
+                                     const glm::vec4 &color) {
+        DrawRotatedQuad({position.x, position.y, 0.0f}, size, rotation, color);
     }
 
-    void Renderer2D::DrawRotatedQuad(const glm::vec3 &position, const glm::vec2 &size, float rotation, const glm::vec4 &color)
-    {
+    void Renderer2D::DrawRotatedQuad(const glm::vec3 &position, const glm::vec2 &size, float rotation,
+                                     const glm::vec4 &color) {
         EXODIA_PROFILE_FUNCTION(); // Performance instrumentation profiling for the function
 
         constexpr uint32_t quadVertexCount = 4;
-        constexpr glm::vec2 textureCoords[] = {
-            { 0.0f, 0.0f },
-            { 1.0f, 0.0f },
-            { 1.0f, 1.0f },
-            { 0.0f, 1.0f }
-        };
+        constexpr glm::vec2 textureCoords[] = {{0.0f, 0.0f}, {1.0f, 0.0f}, {1.0f, 1.0f}, {0.0f, 1.0f}};
 
         // Check if we need to flush or if we can continue
         if (_Data->QuadIndexCount >= Renderer2DData::MaxIndices)
@@ -466,7 +434,9 @@ namespace Exodia {
         const float textureIndex = 0.0f; // White texture
         const float tilingFactor = 1.0f;
 
-        glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::rotate(glm::mat4(1.0f), rotation, { 0.0f, 0.0f, 1.0f }) * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
+        glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) *
+                              glm::rotate(glm::mat4(1.0f), rotation, {0.0f, 0.0f, 1.0f}) *
+                              glm::scale(glm::mat4(1.0f), {size.x, size.y, 1.0f});
 
         for (uint32_t i = 0; i < quadVertexCount; i++) {
             _Data->QuadVertexBufferPtr->Position = transform * _Data->QuadVertexPosition[i];
@@ -480,22 +450,17 @@ namespace Exodia {
         _Data->Stats.QuadCount++;
     }
 
-    void Renderer2D::DrawRotatedQuad(const glm::vec2 &position, const glm::vec2 &size, float rotation, const Ref<Texture2D> &texture, float tilingFactor, const glm::vec4 &tintColor)
-    {
-        DrawRotatedQuad({ position.x, position.y, 0.0f }, size, rotation, texture, tilingFactor, tintColor);
+    void Renderer2D::DrawRotatedQuad(const glm::vec2 &position, const glm::vec2 &size, float rotation,
+                                     const Ref<Texture2D> &texture, float tilingFactor, const glm::vec4 &tintColor) {
+        DrawRotatedQuad({position.x, position.y, 0.0f}, size, rotation, texture, tilingFactor, tintColor);
     }
 
-    void Renderer2D::DrawRotatedQuad(const glm::vec3 &position, const glm::vec2 &size, float rotation, const Ref<Texture2D> &texture, float tilingFactor, const glm::vec4 &tintColor)
-    {
+    void Renderer2D::DrawRotatedQuad(const glm::vec3 &position, const glm::vec2 &size, float rotation,
+                                     const Ref<Texture2D> &texture, float tilingFactor, const glm::vec4 &tintColor) {
         EXODIA_PROFILE_FUNCTION(); // Performance instrumentation profiling for the function
 
         constexpr uint32_t quadVertexCount = 4;
-        constexpr glm::vec2 textureCoords[] = {
-            { 0.0f, 0.0f },
-            { 1.0f, 0.0f },
-            { 1.0f, 1.0f },
-            { 0.0f, 1.0f }
-        };
+        constexpr glm::vec2 textureCoords[] = {{0.0f, 0.0f}, {1.0f, 0.0f}, {1.0f, 1.0f}, {0.0f, 1.0f}};
 
         // Check if we need to flush or if we can continue
         if (_Data->QuadIndexCount >= Renderer2DData::MaxIndices)
@@ -512,7 +477,7 @@ namespace Exodia {
         }
 
         // If the texture is not in the texture slot, add it
-		if (textureIndex == 0.0f) {
+        if (textureIndex == 0.0f) {
             // Check if we can add a new texture
             if (_Data->TextureSlotIndex >= Renderer2DData::MaxTextureSlot)
                 FlushAndReset();
@@ -522,7 +487,9 @@ namespace Exodia {
             _Data->TextureSlotIndex++;
         }
 
-        glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::rotate(glm::mat4(1.0f), rotation, { 0.0f, 0.0f, 1.0f }) * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
+        glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) *
+                              glm::rotate(glm::mat4(1.0f), rotation, {0.0f, 0.0f, 1.0f}) *
+                              glm::scale(glm::mat4(1.0f), {size.x, size.y, 1.0f});
 
         for (uint32_t i = 0; i < quadVertexCount; i++) {
             _Data->QuadVertexBufferPtr->Position = transform * _Data->QuadVertexPosition[i];
@@ -536,13 +503,15 @@ namespace Exodia {
         _Data->Stats.QuadCount++;
     }
 
-    void Renderer2D::DrawRotatedQuad(const glm::vec2 &position, const glm::vec2 &size, float rotation, const Ref<SubTexture2D> &subTexture, float tilingFactor, const glm::vec4 &tintColor)
-    {
-        DrawRotatedQuad({ position.x, position.y, 0.0f }, size, rotation, subTexture, tilingFactor, tintColor);
+    void Renderer2D::DrawRotatedQuad(const glm::vec2 &position, const glm::vec2 &size, float rotation,
+                                     const Ref<SubTexture2D> &subTexture, float tilingFactor,
+                                     const glm::vec4 &tintColor) {
+        DrawRotatedQuad({position.x, position.y, 0.0f}, size, rotation, subTexture, tilingFactor, tintColor);
     }
 
-    void Renderer2D::DrawRotatedQuad(const glm::vec3 &position, const glm::vec2 &size, float rotation, const Ref<SubTexture2D> &subTexture, float tilingFactor, const glm::vec4 &tintColor)
-    {
+    void Renderer2D::DrawRotatedQuad(const glm::vec3 &position, const glm::vec2 &size, float rotation,
+                                     const Ref<SubTexture2D> &subTexture, float tilingFactor,
+                                     const glm::vec4 &tintColor) {
         EXODIA_PROFILE_FUNCTION(); // Performance instrumentation profiling for the function
 
         constexpr uint32_t quadVertexCount = 4;
@@ -564,7 +533,7 @@ namespace Exodia {
         }
 
         // If the texture is not in the texture slot, add it
-		if (textureIndex == 0.0f) {
+        if (textureIndex == 0.0f) {
             // Check if we can add a new texture
             if (_Data->TextureSlotIndex >= Renderer2DData::MaxTextureSlot)
                 FlushAndReset();
@@ -574,7 +543,9 @@ namespace Exodia {
             _Data->TextureSlotIndex++;
         }
 
-        glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::rotate(glm::mat4(1.0f), rotation, { 0.0f, 0.0f, 1.0f }) * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
+        glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) *
+                              glm::rotate(glm::mat4(1.0f), rotation, {0.0f, 0.0f, 1.0f}) *
+                              glm::scale(glm::mat4(1.0f), {size.x, size.y, 1.0f});
 
         for (uint32_t i = 0; i < quadVertexCount; i++) {
             _Data->QuadVertexBufferPtr->Position = transform * _Data->QuadVertexPosition[i];
@@ -588,25 +559,24 @@ namespace Exodia {
         _Data->Stats.QuadCount++;
     }
 
-        // 3. Quad Sprite
+    // 3. Quad Sprite
 
-    void Renderer2D::DrawSprite(const glm::mat4 &transform, SpriteRendererComponent &src, int entityID)
-    {
+    void Renderer2D::DrawSprite(const glm::mat4 &transform, SpriteRendererComponent &src, int entityID) {
         if (src.Texture != nullptr && src.Texture->GetTexture() != nullptr)
             DrawQuad(transform, src.Texture, src.TilingFactor, src.Color, entityID);
         else
             DrawQuad(transform, src.Color, entityID);
     }
 
-        // 4. Circle
-    
-    void Renderer2D::DrawCircle(const glm::mat4 &transform, const glm::vec4 &color, float thickness, float fade, int entityID)
-    {
+    // 4. Circle
+
+    void Renderer2D::DrawCircle(const glm::mat4 &transform, const glm::vec4 &color, float thickness, float fade,
+                                int entityID) {
         EXODIA_PROFILE_FUNCTION();
 
-		// TODO: implement for circles
-		// if (_Data->QuadIndexCount >= Renderer2DData::MaxIndices)
-		// 	FlushAndReset();
+        // TODO: implement for circles
+        // if (_Data->QuadIndexCount >= Renderer2DData::MaxIndices)
+        // 	FlushAndReset();
 
         if (!_Data)
             return;
@@ -624,10 +594,9 @@ namespace Exodia {
         _Data->Stats.QuadCount++;
     }
 
-        // 5. Lines
-    
-    void Renderer2D::DrawLine(const glm::vec3 &pointA, const glm::vec3 &pointB, const glm::vec4 &color, int entityID)
-    {
+    // 5. Lines
+
+    void Renderer2D::DrawLine(const glm::vec3 &pointA, const glm::vec3 &pointB, const glm::vec4 &color, int entityID) {
         _Data->LineVertexBufferPtr->Position = pointA;
         _Data->LineVertexBufferPtr->Color = color;
         _Data->LineVertexBufferPtr->EntityID = entityID;
@@ -641,10 +610,9 @@ namespace Exodia {
         _Data->LineVertexCount += 2;
     }
 
-        // 6. Rectangle
+    // 6. Rectangle
 
-    void Renderer2D::DrawRect(const glm::vec3 &position, const glm::vec2 &size, const glm::vec4 &color, int entityID)
-    {
+    void Renderer2D::DrawRect(const glm::vec3 &position, const glm::vec2 &size, const glm::vec4 &color, int entityID) {
         glm::vec3 pointA = glm::vec3(position.x - size.x * 0.5f, position.y - size.y * 0.5f, position.z);
         glm::vec3 pointB = glm::vec3(position.x + size.x * 0.5f, position.y - size.y * 0.5f, position.z);
         glm::vec3 pointC = glm::vec3(position.x + size.x * 0.5f, position.y + size.y * 0.5f, position.z);
@@ -656,23 +624,21 @@ namespace Exodia {
         DrawLine(pointD, pointA, color, entityID);
     }
 
-    void Renderer2D::DrawRect(const glm::mat4 &transform, const glm::vec4 &color, int entityID)
-    {
+    void Renderer2D::DrawRect(const glm::mat4 &transform, const glm::vec4 &color, int entityID) {
         glm::vec3 lineVertices[4];
 
         for (size_t i = 0; i < 4; i++)
             lineVertices[i] = transform * _Data->QuadVertexPosition[i];
-        
+
         DrawLine(lineVertices[0], lineVertices[1], color, entityID);
         DrawLine(lineVertices[1], lineVertices[2], color, entityID);
         DrawLine(lineVertices[2], lineVertices[3], color, entityID);
         DrawLine(lineVertices[3], lineVertices[0], color, entityID);
     }
 
-        // 7. Sound
-    
-    void Renderer2D::PlaySound(AssetHandle sound)
-    {
+    // 7. Sound
+
+    void Renderer2D::PlaySound(AssetHandle sound) {
         Ref<Sound2D> soundRef = AssetManager::GetAsset<Sound2D>(sound);
 
         if (soundRef == nullptr)
@@ -680,8 +646,7 @@ namespace Exodia {
         soundRef->Play();
     }
 
-    void Renderer2D::PlaySound(Ref<Sound2D> sound)
-    {
+    void Renderer2D::PlaySound(Ref<Sound2D> sound) {
         if (sound == nullptr)
             return;
         sound->Play();
@@ -691,18 +656,9 @@ namespace Exodia {
     // Getters //
     /////////////
 
-    const Renderer2D::Statistics &Renderer2D::GetStats()
-    {
-        return _Data->Stats;
-    }
+    const Renderer2D::Statistics &Renderer2D::GetStats() { return _Data->Stats; }
 
-    float Renderer2D::GetLineWidth()
-    {
-        return _Data->LineWidth;
-    }
+    float Renderer2D::GetLineWidth() { return _Data->LineWidth; }
 
-    void Renderer2D::SetLineWidth(float width)
-    {
-        _Data->LineWidth = width;
-    }
-};
+    void Renderer2D::SetLineWidth(float width) { _Data->LineWidth = width; }
+}; // namespace Exodia

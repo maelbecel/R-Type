@@ -20,14 +20,13 @@ namespace Exodia {
     // Constructor & Destructor //
     //////////////////////////////
 
-    DefaultLayer::DefaultLayer() : Layer("DefaultLayer"), _CameraController(1600.0f / 900.0f) {};
+    DefaultLayer::DefaultLayer() : Layer("DefaultLayer"), _CameraController(1600.0f / 900.0f){};
 
     /////////////
     // Methods //
     /////////////
 
-    void DefaultLayer::OnAttach()
-    {
+    void DefaultLayer::OnAttach() {
         EXODIA_PROFILE_FUNCTION();
 
         // Create world
@@ -39,7 +38,7 @@ namespace Exodia {
         Entity *entity = _World->CreateEntity("Player");
 
         entity->AddComponent<IDComponent>();
-        entity->AddComponent<SpriteRendererComponent>(glm::vec4{ 0.8f, 0.2f, 0.3f, 1.0f });
+        entity->AddComponent<SpriteRendererComponent>(glm::vec4{0.8f, 0.2f, 0.3f, 1.0f});
         entity->AddComponent<Health>(185);
         entity->AddComponent<ScriptComponent>().Get().Bind("Player");
         entity->AddComponent<SpriteRendererComponent>();
@@ -49,12 +48,12 @@ namespace Exodia {
         // Set entity sprite
         auto sprite = entity->GetComponent<SpriteRendererComponent>();
         Ref<Texture2D> texture = Texture2D::Create("Assets/Textures/Player.png");
-        sprite.Get().Texture = SubTexture2D::CreateFromCoords(texture, { 2.0f, 4.0f }, { 33.2f, 17.2f }, { 1.0f, 1.0f });
+        sprite.Get().Texture = SubTexture2D::CreateFromCoords(texture, {2.0f, 4.0f}, {33.2f, 17.2f}, {1.0f, 1.0f});
 
         Entity *patata = _World->CreateEntity("Pata-pata");
 
         patata->AddComponent<IDComponent>();
-        patata->AddComponent<SpriteRendererComponent>(glm::vec4{ 0.8f, 0.2f, 0.3f, 1.0f });
+        patata->AddComponent<SpriteRendererComponent>(glm::vec4{0.8f, 0.2f, 0.3f, 1.0f});
         patata->AddComponent<Health>(185);
         patata->AddComponent<ScriptComponent>().Get().Bind("PataPata");
         patata->AddComponent<SpriteRendererComponent>();
@@ -63,26 +62,22 @@ namespace Exodia {
         // Set entity sprite
         auto sprite2 = patata->GetComponent<SpriteRendererComponent>();
         Ref<Texture2D> texture2 = Texture2D::Create("Assets/Textures/Pata-Pata.png");
-        sprite2.Get().Texture = SubTexture2D::CreateFromCoords(texture2, { 0.0f, 0.0f }, { 33.3125f, 36.0f }, { 1.0f, 1.0f });
+        sprite2.Get().Texture = SubTexture2D::CreateFromCoords(texture2, {0.0f, 0.0f}, {33.3125f, 36.0f}, {1.0f, 1.0f});
 
         // Create camera
         _CameraController.SetZoomLevel(5.0f);
     }
 
-    void DefaultLayer::OnDetach()
-    {
-        EXODIA_PROFILE_FUNCTION();
-    }
+    void DefaultLayer::OnDetach() { EXODIA_PROFILE_FUNCTION(); }
 
-    void DefaultLayer::OnUpdate(Exodia::Timestep ts)
-    {
+    void DefaultLayer::OnUpdate(Exodia::Timestep ts) {
         // Update
         _CameraController.OnUpdate(ts);
 
         _World->Update(ts);
 
         // Renderer Prep
-        Exodia::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
+        Exodia::RenderCommand::SetClearColor({0.1f, 0.1f, 0.1f, 1});
         Exodia::RenderCommand::Clear();
 
         Renderer2D::BeginScene(_CameraController.GetCamera());
@@ -92,10 +87,9 @@ namespace Exodia {
             auto id = entity->GetComponent<IDComponent>();
 
             if (transform && id) {
-                Renderer2D::DrawSprite(
-                    transform.Get().GetTransform(), // Transform
-                    sprite.Get(),                   // SpriteRendererComponent
-                    (int)id.Get().ID                // Entity ID
+                Renderer2D::DrawSprite(transform.Get().GetTransform(), // Transform
+                                       sprite.Get(),                   // SpriteRendererComponent
+                                       (int)id.Get().ID                // Entity ID
                 );
             }
         });
@@ -103,8 +97,5 @@ namespace Exodia {
         Renderer2D::EndScene();
     }
 
-    void DefaultLayer::OnEvent(Exodia::Event &event)
-    {
-        _CameraController.OnEvent(event);
-    }
-};
+    void DefaultLayer::OnEvent(Exodia::Event &event) { _CameraController.OnEvent(event); }
+}; // namespace Exodia

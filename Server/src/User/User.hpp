@@ -12,36 +12,23 @@
 
 namespace Exodia {
     class User {
-        public:
-            User(Connection &connection);
-            User(Connection &connection, Entity *pawn);
-            ~User();
+      public:
+        User(Connection &connection);
+        User(Connection &connection, Entity *pawn);
+        ~User();
 
-            Connection GetConnection() const
-            {
-                return _Connection;
-            }
+        Connection GetConnection() const { return _Connection; }
 
-            void SetConnection(Connection connection)
-            {
-                _Connection = connection;
-            }
+        void SetConnection(Connection connection) { _Connection = connection; }
 
-            Entity *GetPawn() const
-            {
-                return _Pawn;
-            }
+        Entity *GetPawn() const { return _Pawn; }
 
-            void SetPawn(Entity *pawn)
-            {
-                _Pawn = pawn;
-            }
+        void SetPawn(Entity *pawn) { _Pawn = pawn; }
 
-        protected:
-        private:
-            Connection _Connection;
-            Entity *_Pawn;
-            
+      protected:
+      private:
+        Connection _Connection;
+        Entity *_Pawn;
     };
-}; // namespace Exodia
+};     // namespace Exodia
 #endif /* !USER_HPP_ */

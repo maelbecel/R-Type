@@ -17,21 +17,20 @@ namespace Exodia {
     // Constructor & Destructor //
     //////////////////////////////
 
-    DefaultLayer::DefaultLayer() : Layer("DefaultLayer"), _CameraController(1600.0f / 900.0f) {};
+    DefaultLayer::DefaultLayer() : Layer("DefaultLayer"), _CameraController(1600.0f / 900.0f){};
 
     /////////////
     // Methods //
     /////////////
 
-    void DefaultLayer::OnAttach()
-    {
+    void DefaultLayer::OnAttach() {
         EXODIA_PROFILE_FUNCTION();
 
         _World = World::CreateWorld();
 
         Entity *entity = _World->CreateEntity("Player");
 
-        entity->AddComponent<SpriteRendererComponent>(glm::vec4{ 0.8f, 0.2f, 0.3f, 1.0f });
+        entity->AddComponent<SpriteRendererComponent>(glm::vec4{0.8f, 0.2f, 0.3f, 1.0f});
 
         auto script = entity->AddComponent<ScriptComponent>();
 
@@ -42,22 +41,20 @@ namespace Exodia {
         _World->RegisterSystem(new ScriptSystem());
     }
 
-    void DefaultLayer::OnDetach()
-    {
+    void DefaultLayer::OnDetach() {
         EXODIA_PROFILE_FUNCTION();
 
         _World->DestroyWorld();
     }
 
-    void DefaultLayer::OnUpdate(Exodia::Timestep ts)
-    {
+    void DefaultLayer::OnUpdate(Exodia::Timestep ts) {
         // Update
         _CameraController.OnUpdate(ts);
 
         /*_World->ForEach<ScriptComponent>([&](Entity *entity, ComponentHandle<ScriptComponent> script)
         {
             auto &sc = script.Get();
-        
+
             if (!sc.Instance) {
                 sc.Instance = sc.InstantiateScript();
                 sc.Instance->HandleEntity = *entity;
@@ -70,7 +67,7 @@ namespace Exodia {
         _World->Update(ts);
 
         // Renderer Prep
-        Exodia::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
+        Exodia::RenderCommand::SetClearColor({0.1f, 0.1f, 0.1f, 1});
         Exodia::RenderCommand::Clear();
 
         Renderer2D::BeginScene(_CameraController.GetCamera());
@@ -80,10 +77,9 @@ namespace Exodia {
             auto id = entity->GetComponent<IDComponent>();
 
             if (transform && id) {
-                Renderer2D::DrawSprite(
-                    transform.Get().GetTransform(), // Transform
-                    sprite.Get(),                   // SpriteRendererComponent
-                    (int)id.Get().ID                // Entity ID
+                Renderer2D::DrawSprite(transform.Get().GetTransform(), // Transform
+                                       sprite.Get(),                   // SpriteRendererComponent
+                                       (int)id.Get().ID                // Entity ID
                 );
             }
         });
@@ -91,8 +87,5 @@ namespace Exodia {
         Renderer2D::EndScene();
     }
 
-    void DefaultLayer::OnEvent(Exodia::Event &event)
-    {
-        _CameraController.OnEvent(event);
-    }
-};
+    void DefaultLayer::OnEvent(Exodia::Event &event) { _CameraController.OnEvent(event); }
+}; // namespace Exodia

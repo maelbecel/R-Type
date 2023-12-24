@@ -16,22 +16,17 @@ namespace Exodia {
         //////////////////////////////
         // Constructor & Destructor //
         //////////////////////////////
-        public:
+      public:
+        RTypeClient(const ApplicationSpecification &spec) : Application(spec) { PushLayer(new RTypeLayer()); }
 
-            RTypeClient(const ApplicationSpecification &spec) : Application(spec)
-            {
-                PushLayer(new RTypeLayer());
-            }
-
-            ~RTypeClient() = default;
+        ~RTypeClient() = default;
     };
 
     /////////////////
     // Entry Point //
     /////////////////
 
-    Application *CreateApplication(ApplicationCommandLineArgs args)
-    {
+    Application *CreateApplication(ApplicationCommandLineArgs args) {
         EXODIA_PROFILE_FUNCTION();
 
         RType::InitRType();
@@ -43,4 +38,4 @@ namespace Exodia {
 
         return new RTypeClient(spec);
     }
-};
+}; // namespace Exodia

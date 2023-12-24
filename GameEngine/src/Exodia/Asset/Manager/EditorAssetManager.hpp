@@ -6,13 +6,13 @@
 */
 
 #ifndef EDITORASSETMANAGER_HPP_
-    #define EDITORASSETMANAGER_HPP_
+#define EDITORASSETMANAGER_HPP_
 
-    // Exodia Asset includes
-    #include "Asset/Manager/IAssetManager.hpp"
+// Exodia Asset includes
+#include "Asset/Manager/IAssetManager.hpp"
 
-    // External includes
-    #include <map>
+// External includes
+#include <map>
 
 namespace Exodia {
 
@@ -23,44 +23,40 @@ namespace Exodia {
         //////////////////////////////
         // Constructor & Destructor //
         //////////////////////////////
-        public:
-
-            EditorAssetManager() = default;
-            ~EditorAssetManager() = default;
+      public:
+        EditorAssetManager() = default;
+        ~EditorAssetManager() = default;
 
         /////////////
         // Methods //
         /////////////
-        public:
+      public:
+        void ImportAsset(const std::filesystem::path &path);
 
-            void ImportAsset(const std::filesystem::path &path);
-
-            void SerializeAssetRegistry();
-            bool DeserializeAssetRegistry();
+        void SerializeAssetRegistry();
+        bool DeserializeAssetRegistry();
 
         ///////////////////////
         // Getters & Setters //
         ///////////////////////
-        public:
+      public:
+        virtual Ref<Asset> GetAsset(AssetHandle handle) override;
+        virtual AssetType GetAssetType(AssetHandle handle) const override;
+        virtual bool IsAssetHandleValid(AssetHandle handle) const override;
+        virtual bool IsAssetLoaded(AssetHandle handle) const override;
 
-            virtual Ref<Asset> GetAsset(AssetHandle handle)                 override;
-            virtual AssetType  GetAssetType(AssetHandle handle)       const override;
-            virtual bool       IsAssetHandleValid(AssetHandle handle) const override;
-            virtual bool       IsAssetLoaded(AssetHandle handle)      const override;
+        const AssetSpecification &GetAssetSpecification(AssetHandle handle) const;
+        const AssetRegistry &GetAssetRegistry() const;
 
-            const AssetSpecification &GetAssetSpecification(AssetHandle handle) const;
-            const AssetRegistry      &GetAssetRegistry()                        const;
+        const std::filesystem::path &GetFilePath(AssetHandle handle) const;
 
-            const std::filesystem::path &GetFilePath(AssetHandle handle) const;
- 
         ////////////////
         // Attributes //
         ////////////////
-        private:
-
-            AssetRegistry _AssetRegistry;
-            AssetMap      _LoadedAssets;
+      private:
+        AssetRegistry _AssetRegistry;
+        AssetMap _LoadedAssets;
     };
-};
+}; // namespace Exodia
 
 #endif /* !EDITORASSETMANAGER_HPP_ */

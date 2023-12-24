@@ -6,11 +6,11 @@
 */
 
 #ifndef CREATESTARS_HPP_
-    #define CREATESTARS_HPP_
+#define CREATESTARS_HPP_
 
-    #include "Component/Clock.hpp"
-    #include "Scripts/Star.hpp"
-    #include "SceneType.hpp"
+#include "Component/Clock.hpp"
+#include "Scripts/Star.hpp"
+#include "SceneType.hpp"
 
 namespace Exodia {
 
@@ -20,6 +20,6 @@ namespace Exodia {
      * @param _World
      */
     void CreateStars(std::map<SceneType, std::shared_ptr<Exodia::Scene>> _World);
-};
+}; // namespace Exodia
 
 #endif /* !CREATESTARS_HPP_ */

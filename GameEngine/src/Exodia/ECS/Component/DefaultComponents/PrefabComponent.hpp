@@ -6,16 +6,16 @@
 */
 
 #ifndef PREFABCOMPONENT_HPP_
-    #define PREFABCOMPONENT_HPP_
+#define PREFABCOMPONENT_HPP_
 
-    // Exodia UUID includes
-    #include "Core/ID/UUID.hpp"
+// Exodia UUID includes
+#include "Core/ID/UUID.hpp"
 
-    // Exodia Debug includes
-    #include "Debug/Logs.hpp"
+// Exodia Debug includes
+#include "Debug/Logs.hpp"
 
-    // Exodia ECS includes
-    #include "ECS/Interface/Component.hpp"
+// Exodia ECS includes
+#include "ECS/Interface/Component.hpp"
 
 namespace Exodia {
 
@@ -23,25 +23,19 @@ namespace Exodia {
         std::vector<UUID> Children;
 
         ChildrenComponent(const ChildrenComponent &) = default;
-        ChildrenComponent() : Children(std::vector<UUID>()) {};
+        ChildrenComponent() : Children(std::vector<UUID>()){};
 
-        void AddChild(const UUID &child)
-        {
-            Children.push_back(child);
-        }
+        void AddChild(const UUID &child) { Children.push_back(child); }
 
-        void RemoveChild(const UUID &child)
-        {
+        void RemoveChild(const UUID &child) {
             Children.erase(std::remove(Children.begin(), Children.end(), child), Children.end());
         }
 
-        bool HasChild(const UUID &child)
-        {
+        bool HasChild(const UUID &child) {
             return std::find(Children.begin(), Children.end(), child) != Children.end();
         }
 
-        virtual void Serialize(YAML::Emitter &out)
-        {
+        virtual void Serialize(YAML::Emitter &out) {
             out << YAML::Key << "ChildrenComponent";
             out << YAML::BeginMap;
             {
@@ -55,8 +49,7 @@ namespace Exodia {
             out << YAML::EndMap;
         }
 
-        virtual void Deserialize(const YAML::Node &node)
-        {
+        virtual void Deserialize(const YAML::Node &node) {
             try {
                 auto children = node["ChildrenComponent"];
 
@@ -67,8 +60,7 @@ namespace Exodia {
             }
         }
 
-        Buffer SerializeData() override
-        {
+        Buffer SerializeData() override {
             try {
                 uint32_t size = sizeof(uint64_t) * (uint32_t)Children.size();
                 Buffer buffer(size);
@@ -82,8 +74,7 @@ namespace Exodia {
             return Buffer();
         }
 
-        void DeserializeData(Buffer data) override
-        {
+        void DeserializeData(Buffer data) override {
             try {
                 for (uint32_t i = 0; i < (data.Size / sizeof(uint64_t)); i++) {
                     uint64_t child = 0;
@@ -104,20 +95,16 @@ namespace Exodia {
         UUID Parent;
 
         ParentComponent(const ParentComponent &) = default;
-        ParentComponent(const UUID &parent = UUID(0)) : Parent(parent) {};
+        ParentComponent(const UUID &parent = UUID(0)) : Parent(parent){};
 
-        virtual void Serialize(YAML::Emitter &out)
-        {
+        virtual void Serialize(YAML::Emitter &out) {
             out << YAML::Key << "ParentComponent";
             out << YAML::BeginMap;
-            {
-                out << YAML::Key << "Parent" << YAML::Value << (uint64_t)Parent;
-            }
+            { out << YAML::Key << "Parent" << YAML::Value << (uint64_t)Parent; }
             out << YAML::EndMap;
         }
 
-        virtual void Deserialize(const YAML::Node &node)
-        {
+        virtual void Deserialize(const YAML::Node &node) {
             try {
                 auto parent = node["ParentComponent"];
 
@@ -127,8 +114,7 @@ namespace Exodia {
             }
         }
 
-        Buffer SerializeData() override
-        {
+        Buffer SerializeData() override {
             try {
                 uint32_t size = sizeof(uint64_t);
                 Buffer buffer(size);
@@ -141,8 +127,7 @@ namespace Exodia {
             return Buffer();
         }
 
-        void DeserializeData(Buffer data) override
-        {
+        void DeserializeData(Buffer data) override {
             try {
                 uint64_t parent = 0;
 
@@ -156,6 +141,6 @@ namespace Exodia {
 
         // TODO: Add a display to the component
     };
-};
+}; // namespace Exodia
 
 #endif /* !PREFABCOMPONENT_HPP_ */

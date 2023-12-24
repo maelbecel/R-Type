@@ -10,8 +10,7 @@
 #include "Exodia.hpp"
 #include "Server.hpp"
 
-int main(void)
-{
+int main(void) {
     Exodia::Log::Init();
 
     Exodia::Project::Load("./Client/R-Type.proj");

@@ -16,7 +16,7 @@ namespace Exodia::Network {
      * @param ip (Type: const std::string &) The ip of the server
      * @param port (Type: short) The port of the server
      * @return void
-    */
+     */
     void Network::SendAskConnect(const std::string &ip, short port) {
         connect(ip, port);
         Packet packet(0x81);
@@ -32,14 +32,15 @@ namespace Exodia::Network {
      * @return void
      */
     void Network::Loop() {
-        _socket.Receive(std::bind(&Network::Splitter, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
+        _socket.Receive(
+            std::bind(&Network::Splitter, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
     }
 
     /**
      * @brief Send number of packet received and sent
      *
      * @return void
-    */
+     */
     void Network::SendPacketInfo() {
         Exodia::Network::Packet packet(0x00);
         std::vector<char> buffer(2 * sizeof(int));
@@ -47,7 +48,7 @@ namespace Exodia::Network {
         packet.SetContent(buffer);
 
         if (_connections.size() > 0) {
-           for (auto &connection : _connections) {
+            for (auto &connection : _connections) {
                 int32_t received = connection.second.GetReceivedPacket();
                 int32_t sent = connection.second.GetSendPacket();
 
@@ -56,7 +57,7 @@ namespace Exodia::Network {
                 offset = FillData(buffer, offset, &sent, sizeof(int));
                 packet.SetContent(buffer);
                 connection.second.SendPacket(_socket, packet);
-           }
+            }
         } else {
             int32_t received = _server_connection.GetReceivedPacket();
             int32_t sent = _server_connection.GetSendPacket();
@@ -75,10 +76,10 @@ namespace Exodia::Network {
      * @param message (Type: const std::vector<char>) The message received
      * @param size (Type: size_t) The size of the message
      * @param senderEndpoint (Type: asio::ip::udp::endpoint) The endpoint of the sender
-    */
-    void Network::ReceivePacketInfo(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint, Exodia::Network::Header header) {
-        (void) senderEndpoint;
-
+     */
+    void Network::ReceivePacketInfo(const std::vector<char> message, size_t size,
+                                    asio::ip::udp::endpoint senderEndpoint, Exodia::Network::Header header) {
+        (void)senderEndpoint;
 
         if (size != 2 * sizeof(int)) {
             EXODIA_CORE_ERROR("Network::ReceivePacketInfo() - Packet size is not correct !");
@@ -101,7 +102,7 @@ namespace Exodia::Network {
      * @param size (Type: size_t) The size of the data
      *
      * @return size_t The offset after filling the buffer
-    */
+     */
     size_t Network::FillData(std::vector<char> &buffer, size_t offset, void *data, size_t size) {
         std::memcpy(buffer.data() + offset, data, size);
         return offset + size;
@@ -114,7 +115,7 @@ namespace Exodia::Network {
      * @param component_name (Type: std::string) The name of the component to send
      *
      * @return void
-    */
+     */
     void Network::SendComponentOf(Entity *entity, std::string component_name) {
         Exodia::Network::Packet packet(0x0c);
         std::vector<char> buffer(1468, 0);
@@ -137,24 +138,24 @@ namespace Exodia::Network {
         size_t size_of_data = data.Size;
         size_t offset = 0;
 
-        offset = FillData(buffer, offset, &entity_id, sizeof(unsigned long));           // Set id of entity
-        offset = FillData(buffer, offset, &size_of_string, sizeof(unsigned int));       // Set size of name
-        offset = FillData(buffer, offset, component_name.data(), component_name.size());// Set name
-        offset = FillData(buffer, offset, &size_of_data, sizeof(uint32_t));             // Set size of data
-        offset = FillData(buffer, offset, data.Data, size_of_data);                     // Set data
+        offset = FillData(buffer, offset, &entity_id, sizeof(unsigned long));            // Set id of entity
+        offset = FillData(buffer, offset, &size_of_string, sizeof(unsigned int));        // Set size of name
+        offset = FillData(buffer, offset, component_name.data(), component_name.size()); // Set name
+        offset = FillData(buffer, offset, &size_of_data, sizeof(uint32_t));              // Set size of data
+        offset = FillData(buffer, offset, data.Data, size_of_data);                      // Set data
         buffer.resize(offset);
 
         packet.SetContent(buffer);
         if (_connections.size() > 0) {
-        for (auto &connection : _connections) {
-            connection.second.SendPacket(_socket, packet);
-            int64_t find = GetIndexPacketNeedAck(connection.second);
-            if (find == -1) {
-                _packetNeedAck.push_back(std::make_pair(connection.second, std::unordered_map<uint64_t, Packet>()));
-                find = _packetNeedAck.size() - 1; // Update the value of find to the new index
+            for (auto &connection : _connections) {
+                connection.second.SendPacket(_socket, packet);
+                int64_t find = GetIndexPacketNeedAck(connection.second);
+                if (find == -1) {
+                    _packetNeedAck.push_back(std::make_pair(connection.second, std::unordered_map<uint64_t, Packet>()));
+                    find = _packetNeedAck.size() - 1; // Update the value of find to the new index
+                }
+                _packetNeedAck[find].second[packet.GetHeader()->GetId()] = packet;
             }
-            _packetNeedAck[find].second[packet.GetHeader()->GetId()] = packet;
-        }
         } else { // If we are the client
             _server_connection.SendPacket(_socket, packet);
             int64_t find = GetIndexPacketNeedAck(_server_connection);
@@ -172,7 +173,7 @@ namespace Exodia::Network {
      * @param entity (Type: Entity *) The entity to delete
      *
      * @return void
-    */
+     */
     void Network::SendDeleteEntity(Entity *entity) {
         if (entity == nullptr) {
             EXODIA_CORE_ERROR("Network::SendDeleteEntity() - Entity is null !");
@@ -186,7 +187,7 @@ namespace Exodia::Network {
         offset = FillData(buffer, offset, &entity_id, sizeof(unsigned long));
         packet.SetContent(buffer);
         if (_connections.size() > 0)
-           for (auto &connection : _connections)
+            for (auto &connection : _connections)
                 connection.second.SendPacket(_socket, packet);
         else
             _server_connection.SendPacket(_socket, packet);
@@ -200,10 +201,11 @@ namespace Exodia::Network {
      * @param senderEndpoint (Type: asio::ip::udp::endpoint) The endpoint of the sender
      *
      * @return void
-    */
-    void Network::ReceiveDeleteEntity(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint, Exodia::Network::Header header) {
-        (void) size;
-        (void) senderEndpoint;
+     */
+    void Network::ReceiveDeleteEntity(const std::vector<char> message, size_t size,
+                                      asio::ip::udp::endpoint senderEndpoint, Exodia::Network::Header header) {
+        (void)size;
+        (void)senderEndpoint;
 
         _world->LockMutex();
         unsigned long id = 0;
@@ -219,7 +221,7 @@ namespace Exodia::Network {
      * @brief Send Acknowledgement
      *
      * @return void
-    */
+     */
     void Network::SendAck(uint64_t command_id) {
         Exodia::Network::Packet packet(0x01);
         std::vector<char> buffer(sizeof(uint64_t));
@@ -228,7 +230,7 @@ namespace Exodia::Network {
         offset = FillData(buffer, offset, &command_id, sizeof(uint64_t));
         packet.SetContent(buffer);
         if (_connections.size() > 0)
-           for (auto &connection : _connections)
+            for (auto &connection : _connections)
                 connection.second.SendPacket(_socket, packet);
         else
             _server_connection.SendPacket(_socket, packet);
@@ -242,13 +244,14 @@ namespace Exodia::Network {
      * @param senderEndpoint (Type: asio::ip::udp::endpoint) The endpoint of the sender
      *
      * @return void
-    */
-    void Network::ReceiveConnectAccept(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint, Exodia::Network::Header header) {
-        (void) senderEndpoint;
+     */
+    void Network::ReceiveConnectAccept(const std::vector<char> message, size_t size,
+                                       asio::ip::udp::endpoint senderEndpoint, Exodia::Network::Header header) {
+        (void)senderEndpoint;
         std::vector<char> buffer(size, 0);
         std::memcpy(buffer.data(), message.data(), size);
         std::string id(buffer.begin(), buffer.end());
-        std::cout << "Receive accept connect with id :"<< id << std::endl;
+        std::cout << "Receive accept connect with id :" << id << std::endl;
         this->id = id;
         std::cout << "Receive accept connect" << std::endl;
     }
@@ -261,10 +264,11 @@ namespace Exodia::Network {
      * @param senderEndpoint (Type: asio::ip::udp::endpoint) The endpoint of the sender
      *
      * @return void
-    */
-    void Network::ReceiveAck(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint, Exodia::Network::Header header) {
-        (void) size;
-        (void) senderEndpoint;
+     */
+    void Network::ReceiveAck(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint,
+                             Exodia::Network::Header header) {
+        (void)size;
+        (void)senderEndpoint;
 
         uint64_t command_id = 0;
         std::memcpy(&command_id, message.data(), sizeof(uint64_t));
@@ -285,10 +289,11 @@ namespace Exodia::Network {
      * @param senderEndpoint (Type: asio::ip::udp::endpoint) The endpoint of the sender
      *
      * @return void
-    */
-    void Network::ReceiveComponentOf(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint, Exodia::Network::Header header) {
-        (void) size;
-        (void) senderEndpoint;
+     */
+    void Network::ReceiveComponentOf(const std::vector<char> message, size_t size,
+                                     asio::ip::udp::endpoint senderEndpoint, Exodia::Network::Header header) {
+        (void)size;
+        (void)senderEndpoint;
 
         unsigned long id = 0;
         unsigned int size_of_string = 0;
@@ -298,15 +303,20 @@ namespace Exodia::Network {
         std::memcpy(&id, message.data(), sizeof(unsigned long));
         std::memcpy(&size_of_string, message.data() + sizeof(unsigned long), sizeof(unsigned int));
         component_name.resize(size_of_string, 0);
-        std::memcpy(component_name.data(), message.data() + sizeof(unsigned long) + sizeof(unsigned int), size_of_string);
-        std::memcpy(&size_of_data, message.data() + sizeof(unsigned long) + sizeof(unsigned int) + size_of_string, sizeof(uint32_t));
+        std::memcpy(component_name.data(), message.data() + sizeof(unsigned long) + sizeof(unsigned int),
+                    size_of_string);
+        std::memcpy(&size_of_data, message.data() + sizeof(unsigned long) + sizeof(unsigned int) + size_of_string,
+                    sizeof(uint32_t));
         std::vector<char> data(size_of_data, 0);
-        std::memcpy(data.data(), message.data() + sizeof(unsigned long) + sizeof(unsigned int) + size_of_string + sizeof(uint32_t), size_of_data);
+        std::memcpy(data.data(),
+                    message.data() + sizeof(unsigned long) + sizeof(unsigned int) + size_of_string + sizeof(uint32_t),
+                    size_of_data);
 
         _world->LockMutex();
         Entity *entity = _world->CreateEntity(id);
 
-        std::function<Exodia::IComponentContainer *(Exodia::Buffer)> func = Project::GetActive()->GetComponentFactory(component_name);
+        std::function<Exodia::IComponentContainer *(Exodia::Buffer)> func =
+            Project::GetActive()->GetComponentFactory(component_name);
         if (!func) {
             _world->UnlockMutex();
             std::string error = "Network::ReceiveComponentOF() - component " + component_name + " not found !";
@@ -318,20 +328,24 @@ namespace Exodia::Network {
         IComponentContainer *container = func(buffer);
         entity->AddComponent(container);
         _world->UnlockMutex();
-        EXODIA_CORE_INFO("Network::createEntity() - Component " + component_name + " added to entity " + std::to_string(id));
+        EXODIA_CORE_INFO("Network::createEntity() - Component " + component_name + " added to entity " +
+                         std::to_string(id));
         SendAck(header.getId());
     }
 
-    void Network::ReceiveConnect(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint, Exodia::Network::Header header) {
-        (void) size;
+    void Network::ReceiveConnect(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint,
+                                 Exodia::Network::Header header) {
+        (void)size;
 
-        //Check if already Connected
-        if (_connections.find(senderEndpoint.address().to_string() + ":" + std::to_string(senderEndpoint.port())) != _connections.end()) {
-            EXODIA_CORE_WARN("Network::ReceiveConnect() - Already connected to " + senderEndpoint.address().to_string() + ":" + std::to_string(senderEndpoint.port()));
+        // Check if already Connected
+        if (_connections.find(senderEndpoint.address().to_string() + ":" + std::to_string(senderEndpoint.port())) !=
+            _connections.end()) {
+            EXODIA_CORE_WARN("Network::ReceiveConnect() - Already connected to " +
+                             senderEndpoint.address().to_string() + ":" + std::to_string(senderEndpoint.port()));
             return;
         }
 
-        //Adding id to the buffer
+        // Adding id to the buffer
         std::vector<char> buffer(0);
         std::string id = _connections.size() > 0 ? std::to_string(_connections.size()) : "0";
         buffer = std::vector<char>(id.begin(), id.end());
@@ -339,17 +353,19 @@ namespace Exodia::Network {
         const std::string name = senderEndpoint.address().to_string() + ":" + std::to_string(senderEndpoint.port());
         auto find = _connections.find(name);
         if (find == _connections.end())
-            _connections[senderEndpoint.address().to_string() + ":" + std::to_string(senderEndpoint.port())] = Connection(senderEndpoint);
-        std::string connect = "Connected to " + senderEndpoint.address().to_string() + ":" + std::to_string(senderEndpoint.port());
+            _connections[senderEndpoint.address().to_string() + ":" + std::to_string(senderEndpoint.port())] =
+                Connection(senderEndpoint);
+        std::string connect =
+            "Connected to " + senderEndpoint.address().to_string() + ":" + std::to_string(senderEndpoint.port());
         EXODIA_CORE_INFO(connect);
 
-        Connection connection = _connections[senderEndpoint.address().to_string() + ":" + std::to_string(senderEndpoint.port())];
+        Connection connection =
+            _connections[senderEndpoint.address().to_string() + ":" + std::to_string(senderEndpoint.port())];
         connection.AddReceivedPacket();
         Packet packet(0x02);
         packet.SetContent(buffer);
         std::cout << "Send accept connect" << std::endl;
         connection.SendPacket(_socket, packet);
-
     }
 
     void Network::SendAcceptConnect() {
@@ -358,7 +374,7 @@ namespace Exodia::Network {
 
         packet.SetContent(buffer);
         if (_connections.size() > 0)
-           for (auto &connection : _connections)
+            for (auto &connection : _connections)
                 connection.second.SendPacket(_socket, packet);
         else
             _server_connection.SendPacket(_socket, packet);
@@ -368,7 +384,7 @@ namespace Exodia::Network {
      * @brief Send an event
      *
      * @param event (Type: uint32_t) The event to send
-    */
+     */
     void Network::SendEvent(uint32_t event, bool isPressed) {
         Exodia::Network::Packet packet(0x82);
         std::vector<char> buffer(sizeof(uint32_t) + sizeof(bool));
@@ -378,24 +394,25 @@ namespace Exodia::Network {
         offset = FillData(buffer, offset, &isPressed, sizeof(bool));
         packet.SetContent(buffer);
         if (_connections.size() > 0) {
-           for (auto &connection : _connections)
+            for (auto &connection : _connections)
                 connection.second.SendPacket(_socket, packet);
         } else
             _server_connection.SendPacket(_socket, packet);
     }
 
     /**
-    * @brief Receive an event
-    *
-    * @details This function is called when an event is received and it add it to the event queue
-    *
-    * @param message (Type: const std::vector<char>) The message received
-    * @param size (Type: size_t) The size of the message
-    * @param senderEndpoint (Type: asio::ip::udp::endpoint) The endpoint of the sender
-    */
-    void Network::ReceiveEvent(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint, Exodia::Network::Header header) {
-        (void) size;
-        (void) message;
+     * @brief Receive an event
+     *
+     * @details This function is called when an event is received and it add it to the event queue
+     *
+     * @param message (Type: const std::vector<char>) The message received
+     * @param size (Type: size_t) The size of the message
+     * @param senderEndpoint (Type: asio::ip::udp::endpoint) The endpoint of the sender
+     */
+    void Network::ReceiveEvent(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint,
+                               Exodia::Network::Header header) {
+        (void)size;
+        (void)message;
         float Timestamp = 0;
         uint32_t event = 0;
         bool isPressed = false;
@@ -413,7 +430,6 @@ namespace Exodia::Network {
         eventPair.first = std::make_pair(event, isPressed);
         eventPair.second = senderEndpoint;
         _events.push_back(eventPair);
-
     }
 
     void Network::ResendNeedAck() {
@@ -435,12 +451,13 @@ namespace Exodia::Network {
      * @param senderEndpoint (Type: asio::ip::udp::endpoint) The endpoint of the sender
      *
      * @return void
-    */
+     */
     void Network::Splitter(const std::vector<char> &message, size_t size, asio::ip::udp::endpoint senderEndpoint) {
-        (void) size;
+        (void)size;
         std::vector<char> copiedBuffer(message.begin(), message.begin() + size);
         Header header = Header::fillHeader(copiedBuffer);
-        // std::cout << "Command: " << header.VerbaliseCommand() << " Timestamp: " << header.getTimestamp() << " Id: " << header.getId() << " Size: " << header.getSize() << std::endl;
+        // std::cout << "Command: " << header.VerbaliseCommand() << " Timestamp: " << header.getTimestamp() << " Id: "
+        // << header.getId() << " Size: " << header.getSize() << std::endl;
         EXODIA_CORE_INFO("{0}", header.toString());
 
         std::vector<char> content;
@@ -448,13 +465,14 @@ namespace Exodia::Network {
             content = std::vector<char>(copiedBuffer.begin() + int(Header::GetSize()), copiedBuffer.end());
 
         if (header.getSize() != content.size()) {
-            EXODIA_CORE_WARN("Network::Splitter() - Packet size is not the one indicated got {0} instead of {1} !", copiedBuffer.size(), header.getSize());
+            EXODIA_CORE_WARN("Network::Splitter() - Packet size is not the one indicated got {0} instead of {1} !",
+                             copiedBuffer.size(), header.getSize());
             return;
         }
 
         // if (_connections.size() > 0) {
-        //     auto find = _connections.find(senderEndpoint.address().to_string() + ":" + std::to_string(senderEndpoint.port()));
-        //     if (find == _connections.end()) {
+        //     auto find = _connections.find(senderEndpoint.address().to_string() + ":" +
+        //     std::to_string(senderEndpoint.port())); if (find == _connections.end()) {
         //         EXODIA_CORE_WARN("Network::Splitter() - Connection not found !"); TODO : Check if we need to do this
         //         return;
         //     }
@@ -473,14 +491,24 @@ namespace Exodia::Network {
         //     _server_connection.SetLastId(header.getId());
         // }
 
-        std::unordered_map<unsigned char, std::function<void(const std::vector<char>, size_t, asio::ip::udp::endpoint senderEndpoint, Exodia::Network::Header _header)>> commands;
-        commands[0x00] = std::bind(&Network::ReceivePacketInfo, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4); // Packet info for loss calculation
-        commands[0x01] = std::bind(&Network::ReceiveAck, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4);        // Packet Acknowledgement
-        commands[0x02] = std::bind(&Network::ReceiveConnectAccept, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4);     // Accept client connection
-        commands[0x81] = std::bind(&Network::ReceiveConnect, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4);        // Ask for connection
-        commands[0x82] = std::bind(&Network::ReceiveEvent, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4);          // Send an event
-        commands[0x0c] = std::bind(&Network::ReceiveComponentOf, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4);     // Send one component of an entity
-        commands[0x0e] = std::bind(&Network::ReceiveDeleteEntity, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4);        // Send delete entity
+        std::unordered_map<unsigned char,
+                           std::function<void(const std::vector<char>, size_t, asio::ip::udp::endpoint senderEndpoint,
+                                              Exodia::Network::Header _header)>>
+            commands;
+        commands[0x00] = std::bind(&Network::ReceivePacketInfo, this, std::placeholders::_1, std::placeholders::_2,
+                                   std::placeholders::_3, std::placeholders::_4); // Packet info for loss calculation
+        commands[0x01] = std::bind(&Network::ReceiveAck, this, std::placeholders::_1, std::placeholders::_2,
+                                   std::placeholders::_3, std::placeholders::_4); // Packet Acknowledgement
+        commands[0x02] = std::bind(&Network::ReceiveConnectAccept, this, std::placeholders::_1, std::placeholders::_2,
+                                   std::placeholders::_3, std::placeholders::_4); // Accept client connection
+        commands[0x81] = std::bind(&Network::ReceiveConnect, this, std::placeholders::_1, std::placeholders::_2,
+                                   std::placeholders::_3, std::placeholders::_4); // Ask for connection
+        commands[0x82] = std::bind(&Network::ReceiveEvent, this, std::placeholders::_1, std::placeholders::_2,
+                                   std::placeholders::_3, std::placeholders::_4); // Send an event
+        commands[0x0c] = std::bind(&Network::ReceiveComponentOf, this, std::placeholders::_1, std::placeholders::_2,
+                                   std::placeholders::_3, std::placeholders::_4); // Send one component of an entity
+        commands[0x0e] = std::bind(&Network::ReceiveDeleteEntity, this, std::placeholders::_1, std::placeholders::_2,
+                                   std::placeholders::_3, std::placeholders::_4); // Send delete entity
         commands[header.getCommand()](content, header.getSize(), senderEndpoint, header);
     }
-};
+}; // namespace Exodia::Network

@@ -15,8 +15,9 @@ namespace Exodia {
     // Constructor & Destructor //
     //////////////////////////////
 
-    Server::Server(short port): _WorldNetwork(World::CreateWorld()), _Network(_WorldNetwork, _IOContextManager, port), _LastTime(0.0f), _Running(true)
-    {
+    Server::Server(short port)
+        : _WorldNetwork(World::CreateWorld()), _Network(_WorldNetwork, _IOContextManager, port), _LastTime(0.0f),
+          _Running(true) {
         EXODIA_INFO("Server is starting...");
 
         _InputThread = std::thread([&] {
@@ -32,8 +33,7 @@ namespace Exodia {
         });
     }
 
-    Server::~Server()
-    {
+    Server::~Server() {
         EXODIA_CORE_INFO("Server is closing...");
 
         _Running = false;
@@ -45,8 +45,7 @@ namespace Exodia {
     // Methods //
     /////////////
 
-    void Server::HandleCommand(const std::string &command)
-    {
+    void Server::HandleCommand(const std::string &command) {
         EXODIA_TRACE("Command received : '{0}'", command);
 
         if (command == "stop")
@@ -60,14 +59,14 @@ namespace Exodia {
                 EXODIA_TRACE("\t-> No clients connected");
 
             for (auto connection : _Network.GetConnections())
-                EXODIA_TRACE("\t-> IP '{0}' : Port '{1}'", connection.second.GetEndpoint().port(), connection.second.GetEndpoint().address().to_string());
+                EXODIA_TRACE("\t-> IP '{0}' : Port '{1}'", connection.second.GetEndpoint().port(),
+                             connection.second.GetEndpoint().address().to_string());
             EXODIA_TRACE("\nEntities '{0}'", _WorldNetwork->GetCount());
         } else if (command == "packet")
             _Network.SendPacketInfo();
     }
 
-    void Server::Init()
-    {
+    void Server::Init() {
         while (_Network.GetConnections().empty()) {
             EXODIA_TRACE("Waiting for clients to connect...");
 
@@ -84,7 +83,7 @@ namespace Exodia {
             Scenes[MENU]->RegisterSystem(new MovingSystem(1.5f));
 
             RType::EntityEventSubscriber *subscribe = new RType::EntityEventSubscriber(_Network);
-            CollisionSystem              *collisionSystem = new CollisionSystem();
+            CollisionSystem *collisionSystem = new CollisionSystem();
 
             Scenes[GAME] = CreateRef<Scene>();
             Scenes[GAME]->RegisterSystem(new AnimationSystem());
@@ -101,8 +100,8 @@ namespace Exodia {
 
             auto &camera = cameraEntity->AddComponent<CameraComponent>().Get();
 
-            cameraEntity->GetComponent<TransformComponent>().Get().Translation = { 0.0f, 0.0f, 15.0f };
-            cameraEntity->GetComponent<TransformComponent>().Get().Rotation = { 0.0f, 0.0f, 45.0f };
+            cameraEntity->GetComponent<TransformComponent>().Get().Translation = {0.0f, 0.0f, 15.0f};
+            cameraEntity->GetComponent<TransformComponent>().Get().Rotation = {0.0f, 0.0f, 45.0f};
             camera.Camera.SetProjectionType(SceneCamera::ProjectionType::Perspective);
 
             auto body_camera = cameraEntity->AddComponent<RigidBody2DComponent>();
@@ -110,9 +109,10 @@ namespace Exodia {
             body_camera.Get().Type = RigidBody2DComponent::BodyType::Dynamic;
             body_camera.Get().Mass = 0.0f;
             body_camera.Get().GravityScale = 0.0f;
-            body_camera.Get().Velocity = glm::vec2{ 1.5f, 0.0f };
+            body_camera.Get().Velocity = glm::vec2{1.5f, 0.0f};
 
-            Scenes[CurrentScene]->OnRuntimeStart(); // TODO: Remove and play start only when all players are connected or main player said play
+            Scenes[CurrentScene]->OnRuntimeStart(); // TODO: Remove and play start only when all players are connected
+                                                    // or main player said play
 
             _Network.SetWorld(Scenes[CurrentScene]->GetWorldPtr());
         } catch (std::exception &error) {
@@ -121,23 +121,22 @@ namespace Exodia {
         EXODIA_INFO("Server initialised !");
     }
 
-    void Server::Run()
-    {
+    void Server::Run() {
         EXODIA_INFO("Server is running !");
 
         try {
-            while(_Running) {
+            while (_Running) {
                 CheckForNewClients();
                 this->Update();
                 /*
-                Scenes[CurrentScene]->GetWorld().ForEach<IDComponent, TagComponent>([&](Entity *entity, auto id, auto tag) {
-                    (void)entity;
+                Scenes[CurrentScene]->GetWorld().ForEach<IDComponent, TagComponent>([&](Entity *entity, auto id, auto
+                tag) { (void)entity;
 
                     EXODIA_INFO("Entity '{0}': {1}", (uint64_t)id.Get().ID, tag.Get().Tag);
                 });
                 count += 1;
                 */
-                std::this_thread::sleep_for(std::chrono::milliseconds(16));  // Sleep for 32 milliseconds (30 FPS)
+                std::this_thread::sleep_for(std::chrono::milliseconds(16)); // Sleep for 32 milliseconds (30 FPS)
             }
         } catch (std::exception &error) {
             EXODIA_ERROR("Exception :\n\t{0}", error.what());
@@ -145,25 +144,21 @@ namespace Exodia {
         EXODIA_INFO("Server stopped !");
     }
 
-    void Server::Stop()
-    {
-        _Running = false;
-    }
+    void Server::Stop() { _Running = false; }
 
-    void Server::Update()
-    {
+    void Server::Update() {
         try {
             float time = _Timer.Elapsed();
 
             Timestep timestep(time - _LastTime);
 
             _LastTime = time;
-            //EXODIA_CORE_ERROR("Count : {0}", count);
-            //for (uint32_t i = 0; i < (uint32_t)_Users.size(); i++) {
-                // Entity *player = Scenes[GAME]->GetEntityByName("Player_" + std::to_string(i));
+            // EXODIA_CORE_ERROR("Count : {0}", count);
+            // for (uint32_t i = 0; i < (uint32_t)_Users.size(); i++) {
+            //  Entity *player = Scenes[GAME]->GetEntityByName("Player_" + std::to_string(i));
 
-                // if (player != nullptr) {
-                // }
+            // if (player != nullptr) {
+            // }
             //}
 
             /*
@@ -205,34 +200,36 @@ namespace Exodia {
                 (void)event;
                 int32_t player_id = _Network.ConnectionPlace(event.second);
 
-                Scenes[CurrentScene]->GetWorld().ForEach<ScriptComponent, TagComponent, TransformComponent>([&](Entity *entity, auto script, auto tag, auto transform) {
-                    (void)entity;
-                    (void)transform;
-                    auto &sc = script.Get();
-                    auto &tc = tag.Get();
+                Scenes[CurrentScene]->GetWorld().ForEach<ScriptComponent, TagComponent, TransformComponent>(
+                    [&](Entity *entity, auto script, auto tag, auto transform) {
+                        (void)entity;
+                        (void)transform;
+                        auto &sc = script.Get();
+                        auto &tc = tag.Get();
 
-                    if (tc.Tag == std::string("Player_" + std::to_string(player_id)) && sc.Instance != nullptr) {
-                        if (event.first.second) {
-                            sc.Instance->OnKeyPressed(event.first.first);
-                        } else {
-                            sc.Instance->OnKeyReleased(event.first.first);
+                        if (tc.Tag == std::string("Player_" + std::to_string(player_id)) && sc.Instance != nullptr) {
+                            if (event.first.second) {
+                                sc.Instance->OnKeyPressed(event.first.first);
+                            } else {
+                                sc.Instance->OnKeyReleased(event.first.first);
+                            }
                         }
-                    }
-                    if (count % 50 == 0) {
-                        _Network.SendComponentOf(entity, "TransformComponent");
-                    }
-                    _Network.SendComponentOf(entity, "RigidBody2DComponent");
-                });
+                        if (count % 50 == 0) {
+                            _Network.SendComponentOf(entity, "TransformComponent");
+                        }
+                        _Network.SendComponentOf(entity, "RigidBody2DComponent");
+                    });
 
-                Scenes[CurrentScene]->GetWorld().ForEach<TagComponent, TransformComponent>([&](Entity *entity, auto tag, auto transform) {
-                    (void)entity;
-                    (void)tag;
-                    (void)transform;
-                    if (tag.Get().Tag.rfind("Bullet") != std::string::npos) {
-                        _Network.SendComponentOf(entity, "TagComponent");
-                        _Network.SendComponentOf(entity, "SpriteRendererComponent");
-                    }
-                });
+                Scenes[CurrentScene]->GetWorld().ForEach<TagComponent, TransformComponent>(
+                    [&](Entity *entity, auto tag, auto transform) {
+                        (void)entity;
+                        (void)tag;
+                        (void)transform;
+                        if (tag.Get().Tag.rfind("Bullet") != std::string::npos) {
+                            _Network.SendComponentOf(entity, "TagComponent");
+                            _Network.SendComponentOf(entity, "SpriteRendererComponent");
+                        }
+                    });
                 events.pop_back();
             }
 
@@ -249,8 +246,7 @@ namespace Exodia {
         }
     }
 
-    void Server::CheckForNewClients()
-    {
+    void Server::CheckForNewClients() {
         bool newClient = true;
         Entity *player = nullptr;
         std::map<std::string, Connection> connections = _Network.GetConnections();
@@ -294,9 +290,8 @@ namespace Exodia {
                 });
 
                 EXODIA_INFO("New client connected");
-
             }
             newClient = true;
         }
     }
-};
+}; // namespace Exodia

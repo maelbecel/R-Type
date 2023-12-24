@@ -16,8 +16,7 @@ namespace Exodia {
     // Constructors & Destructor //
     ///////////////////////////////
 
-    OpenGLSound::OpenGLSound(const std::string &path)
-    {
+    OpenGLSound::OpenGLSound(const std::string &path) {
         _buffer = alutCreateBufferFromFile(path.c_str());
 
         if (_buffer == AL_NONE) {
@@ -36,8 +35,7 @@ namespace Exodia {
         alSourcei(_source, AL_SOURCE_RELATIVE, AL_TRUE); // Set the source to 2D
     }
 
-    OpenGLSound::~OpenGLSound()
-    {
+    OpenGLSound::~OpenGLSound() {
         // -- Delete the source --
         alDeleteSources(1, &_source);
 
@@ -49,39 +47,25 @@ namespace Exodia {
     // Methods //
     /////////////
 
-    void OpenGLSound::Play()
-    {
+    void OpenGLSound::Play() {
         if (IsPlaying())
             return;
         alSourcePlay(_source);
     }
 
-    void OpenGLSound::Pause()
-    {
-        alSourcePause(_source);
-    }
+    void OpenGLSound::Pause() { alSourcePause(_source); }
 
-    void OpenGLSound::Stop()
-    {
-        alSourceStop(_source);
-    }
+    void OpenGLSound::Stop() { alSourceStop(_source); }
 
     ///////////////////////
     // Getters & Setters //
     ///////////////////////
 
-    void OpenGLSound::SetVolume(float volume)
-    {
-        alSourcef(_source, AL_GAIN, volume);
-    }
+    void OpenGLSound::SetVolume(float volume) { alSourcef(_source, AL_GAIN, volume); }
 
-    void OpenGLSound::SetLoop(bool loop)
-    {
-        alSourcei(_source, AL_LOOPING, loop);
-    }
+    void OpenGLSound::SetLoop(bool loop) { alSourcei(_source, AL_LOOPING, loop); }
 
-    bool OpenGLSound::IsPlaying() const
-    {
+    bool OpenGLSound::IsPlaying() const {
         ALint state;
 
         alGetSourcei(_source, AL_SOURCE_STATE, &state);
@@ -89,8 +73,7 @@ namespace Exodia {
         return state == AL_PLAYING;
     }
 
-    bool OpenGLSound::IsPaused() const
-    {
+    bool OpenGLSound::IsPaused() const {
         ALint state;
 
         alGetSourcei(_source, AL_SOURCE_STATE, &state);
@@ -98,12 +81,11 @@ namespace Exodia {
         return state == AL_PAUSED;
     }
 
-    bool OpenGLSound::IsStopped() const
-    {
+    bool OpenGLSound::IsStopped() const {
         ALint state;
 
         alGetSourcei(_source, AL_SOURCE_STATE, &state);
 
         return state == AL_STOPPED;
     }
-};
+}; // namespace Exodia

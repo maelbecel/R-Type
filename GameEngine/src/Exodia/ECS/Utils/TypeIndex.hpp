@@ -6,17 +6,17 @@
 */
 
 #ifndef TYPEINDEX_HPP_
-    #define TYPEINDEX_HPP_
+#define TYPEINDEX_HPP_
 
-    // External includes
-    #include <typeindex>
-    #include <typeinfo>
-    #include <memory>
-    #include <string>
-    #include <cstdlib>
+// External includes
+#include <typeindex>
+#include <typeinfo>
+#include <memory>
+#include <string>
+#include <cstdlib>
 
 #ifdef __GNUC__
-    #include <cxxabi.h>
+#include <cxxabi.h>
 #endif
 
 namespace Exodia {
@@ -24,17 +24,12 @@ namespace Exodia {
     class Entity;
 
     typedef std::allocator<Exodia::Entity> Allocator;
-    typedef std::type_index                TypeIndex;
+    typedef std::type_index TypeIndex;
 
-    template<typename T>
-    inline static TypeIndex GetTypeIndex()
-    {
-        return std::type_index(typeid(T));
-    }
+    template <typename T> inline static TypeIndex GetTypeIndex() { return std::type_index(typeid(T)); }
 
-    inline static std::string demangle(const char *name)
-    {
-    #ifdef __GNUC__
+    inline static std::string demangle(const char *name) {
+#ifdef __GNUC__
         int status = 0;
         char *demangled = abi::__cxa_demangle(name, nullptr, nullptr, &status);
 
@@ -44,12 +39,11 @@ namespace Exodia {
 
             return result;
         }
-    #endif
+#endif
         return name;
     }
 
-    inline static std::string extractTypeName(const char *name)
-    {
+    inline static std::string extractTypeName(const char *name) {
         std::string typeName = demangle(name);
         size_t colons = typeName.find_last_of(':');
 
@@ -58,13 +52,11 @@ namespace Exodia {
         return typeName;
     }
 
-    template<typename T>
-    inline static std::string GetTypeName()
-    {
+    template <typename T> inline static std::string GetTypeName() {
         std::string typeName = GetTypeIndex<T>().name();
 
         return extractTypeName(typeName.c_str());
     }
-};
+}; // namespace Exodia
 
 #endif /* !TYPEINDEX_HPP_ */

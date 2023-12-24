@@ -6,13 +6,13 @@
 */
 
 #ifndef TAGCOMPONENT_HPP_
-    #define TAGCOMPONENT_HPP_
+#define TAGCOMPONENT_HPP_
 
-    // Exodia ECS includes
-    #include "ECS/Interface/Component.hpp"
+// Exodia ECS includes
+#include "ECS/Interface/Component.hpp"
 
-    // Exodia Debug includes
-    #include "Debug/Logs.hpp"
+// Exodia Debug includes
+#include "Debug/Logs.hpp"
 
 namespace Exodia {
 
@@ -20,20 +20,16 @@ namespace Exodia {
         std::string Tag;
 
         TagComponent(const TagComponent &) = default;
-        TagComponent(const std::string &tag = std::string()) : Tag(tag) {};
+        TagComponent(const std::string &tag = std::string()) : Tag(tag){};
 
-        virtual void Serialize(YAML::Emitter &out)
-        {
+        virtual void Serialize(YAML::Emitter &out) {
             out << YAML::Key << "TagComponent";
             out << YAML::BeginMap;
-            {
-                out << YAML::Key << "Tag" << YAML::Value << Tag;
-            }
+            { out << YAML::Key << "Tag" << YAML::Value << Tag; }
             out << YAML::EndMap;
         }
 
-        virtual void Deserialize(const YAML::Node &node)
-        {
+        virtual void Deserialize(const YAML::Node &node) {
             try {
                 auto tag = node["TagComponent"];
 
@@ -43,8 +39,7 @@ namespace Exodia {
             }
         }
 
-        virtual Buffer SerializeData()
-        {
+        virtual Buffer SerializeData() {
             try {
                 Buffer buffer(sizeof(char) * Tag.size());
 
@@ -57,8 +52,7 @@ namespace Exodia {
             }
         }
 
-        virtual void DeserializeData(Buffer buffer)
-        {
+        virtual void DeserializeData(Buffer buffer) {
             try {
                 for (uint32_t i = 0; i < buffer.Size; i++)
                     Tag.push_back((char)buffer.Data[i]);
@@ -67,6 +61,6 @@ namespace Exodia {
             }
         }
     };
-};
+}; // namespace Exodia
 
 #endif /* !TAGCOMPONENT_HPP_ */
