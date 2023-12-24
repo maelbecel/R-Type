@@ -151,11 +151,12 @@ namespace Exodia {
             auto &sc = script.Get();
             auto &tc = tag.Get();
 
-            if ((tc.Tag.compare("Player_"+this->_Network->id) == 0) && sc.Instance != nullptr) {
+            if ((tc.Tag.compare("Player_" + _Network->id) == 0) && sc.Instance != nullptr) {
                 sc.Instance->OnKeyPressed(key);
+
                 _Network->SendEvent(key, true);
             }
-            if (sc.Instance == nullptr)
+
             (void)entity;
         });
         return true;
@@ -169,9 +170,9 @@ namespace Exodia {
             auto &sc = script.Get();
             auto &tc = tag.Get();
 
-            // TODO: Check if player{client_id}
-            if ((tc.Tag.compare("Player_"+this->_Network->id) == 0) && sc.Instance != nullptr) {
+            if ((tc.Tag.compare("Player_" + _Network->id) == 0) && sc.Instance != nullptr) {
                 sc.Instance->OnKeyReleased(key);
+
                 _Network->SendEvent(key, false);
             }
 

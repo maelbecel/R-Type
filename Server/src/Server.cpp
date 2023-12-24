@@ -261,11 +261,12 @@ namespace Exodia {
             }
             if (newClient) {
                 CreatePlayer(Scenes, (uint32_t)_Users.size());
+
                 player = Scenes[GAME]->GetEntityByName("Player_" + std::to_string((uint32_t)_Users.size()));
+
                 _Users.push_back(User(connection.second, player));
 
                 Scenes[GAME]->GetWorld().ForEach<TagComponent>([&](Entity *entity, auto tag) {
-                    std::cout << tag.Get().Tag << std::endl;
                     if (tag.Get().Tag.rfind("Player_") != std::string::npos) {
                         _Network.SendComponentOf(entity, "TagComponent");
                         _Network.SendComponentOf(entity, "TransformComponent");
@@ -276,7 +277,7 @@ namespace Exodia {
                         _Network.SendComponentOf(entity, "ScriptComponent");
                     }
 
-                    if (tag.Get().Tag == "Pata-pata") {
+                    /*if (tag.Get().Tag == "Pata-pata") {
                         _Network.SendComponentOf(entity, "TagComponent");
                         _Network.SendComponentOf(entity, "TransformComponent");
                         _Network.SendComponentOf(entity, "SpriteRendererComponent");
@@ -284,7 +285,7 @@ namespace Exodia {
                         _Network.SendComponentOf(entity, "Animation");
                         _Network.SendComponentOf(entity, "Health");
                         // _Network.SendComponentOf(entity, "ScriptComponent");
-                    }
+                    }*/
                 });
 
 

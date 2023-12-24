@@ -608,6 +608,9 @@ namespace Exodia {
 		// if (_Data->QuadIndexCount >= Renderer2DData::MaxIndices)
 		// 	FlushAndReset();
 
+        if (!_Data)
+            return;
+
         for (size_t i = 0; i < 4; i++) {
             _Data->CircleVertexBufferPtr->WorldPosition = transform * _Data->QuadVertexPosition[i];
             _Data->CircleVertexBufferPtr->LocalPosition = _Data->QuadVertexPosition[i] * 2.0f;

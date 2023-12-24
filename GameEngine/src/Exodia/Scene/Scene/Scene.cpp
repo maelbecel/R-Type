@@ -220,6 +220,9 @@ namespace Exodia {
             return;
 
         _World->ForEach<TransformComponent, SpriteRendererComponent, IDComponent>([&](Entity *entity, auto transform, auto sprite, auto id) {
+            if (!transform || !sprite || !id)
+                return;
+
             auto &tc = transform.Get();
             auto &sc = sprite.Get();
             auto &ic = id.Get();
