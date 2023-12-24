@@ -219,6 +219,7 @@ namespace Exodia {
         if (RendererAPI::GetAPI() == RendererAPI::API::None)
             return;
 
+        _World->LockMutex();
         _World->ForEach<TransformComponent, SpriteRendererComponent, IDComponent>([&](Entity *entity, auto transform, auto sprite, auto id) {
             auto &tc = transform.Get();
             auto &sc = sprite.Get();
@@ -226,6 +227,7 @@ namespace Exodia {
 
             Renderer2D::DrawSprite(tc.GetTransform(), sc, (int)ic.ID);
         });
+        _World->UnlockMutex();
 
         /*_World->ForEach<TransformComponent, CircleRendererComponent, IDComponent>([&](Entity *entity, auto transform, auto circle, auto id) {
             auto &tc = transform.Get();

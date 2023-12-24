@@ -43,7 +43,7 @@ namespace Exodia {
                     std::cout << "Entity not found " << parent.Get().Parent << std::endl;
                 }
 
-                EXODIA_INFO("Animation {0}", animation.Get().CurrentFrame);
+                //EXODIA_INFO("Animation {0}", animation.Get().CurrentFrame);
 
 
                 // Paramètres de la fonction sinus

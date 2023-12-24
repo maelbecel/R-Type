@@ -205,11 +205,13 @@ namespace Exodia::Network {
         (void) size;
         (void) senderEndpoint;
 
+        _world->LockMutex();
         unsigned long id = 0;
         std::memcpy(&id, message.data(), sizeof(unsigned long));
 
         Entity *entity = _world->GetEntityByID(id);
         _world->DestroyEntity(entity);
+        _world->UnlockMutex();
         EXODIA_CORE_INFO("Network::ReceiveDeleteEntity() - Entity " + std::to_string(id) + " deleted");
     }
 
@@ -301,10 +303,12 @@ namespace Exodia::Network {
         std::vector<char> data(size_of_data, 0);
         std::memcpy(data.data(), message.data() + sizeof(unsigned long) + sizeof(unsigned int) + size_of_string + sizeof(uint32_t), size_of_data);
 
+        _world->LockMutex();
         Entity *entity = _world->CreateEntity(id);
 
         std::function<Exodia::IComponentContainer *(Exodia::Buffer)> func = Project::GetActive()->GetComponentFactory(component_name);
         if (!func) {
+            _world->UnlockMutex();
             std::string error = "Network::ReceiveComponentOF() - component " + component_name + " not found !";
             EXODIA_CORE_ERROR(error);
             return;
@@ -313,6 +317,7 @@ namespace Exodia::Network {
         Exodia::Buffer buffer(data.data(), size_of_data);
         IComponentContainer *container = func(buffer);
         entity->AddComponent(container);
+        _world->UnlockMutex();
         EXODIA_CORE_INFO("Network::createEntity() - Component " + component_name + " added to entity " + std::to_string(id));
         SendAck(header.getId());
     }

@@ -138,7 +138,6 @@ namespace Exodia {
             {
                 if (GetCount() == 0)
                     return;
-
                 for (auto *entity : View<Entities ...>(includePendingDestroy))
                     function(entity, entity->template GetComponent<Entities>()...);
                 MergeEntities();
@@ -158,6 +157,9 @@ namespace Exodia {
             EntityView AllEntities(bool includePendingDestroy = false);
 
             void Update(Timestep ts);
+
+            void LockMutex() { _Mutex.lock(); };
+            void UnlockMutex() { _Mutex.unlock(); };
 
         private:
             void MergeEntities();
@@ -189,6 +191,8 @@ namespace Exodia {
             std::vector<EntitySystem *>                     _DisabledSystems;
 
             std::unordered_map<uint64_t, uint64_t> _IndexToUUIDMap;
+
+            std::mutex _Mutex;
 
             std::unordered_map<TypeIndex, std::vector<IEventSubscriber *, SubscriberPtrAllocator>, std::hash<TypeIndex>, std::equal_to<TypeIndex>, SubscriberPairAllocator> _Subscribers;
     };

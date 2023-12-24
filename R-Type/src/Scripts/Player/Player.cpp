@@ -14,8 +14,6 @@ namespace Exodia {
 
         Entity *bullet = HandleEntity->GetWorld()->CreateNewEntity("Bullet" + std::to_string(HandleEntity->GetWorld()->GetCount()));
 
-        if (!bullet || !bullet->HasComponent<TransformComponent>())
-            return;
         TransformComponent &bullet_tc = bullet->GetComponent<TransformComponent>().Get();
         bullet_tc.Translation.x = tc.Translation.x + 0.7f;
         bullet_tc.Translation.y = tc.Translation.y - 0.05f;
@@ -27,9 +25,6 @@ namespace Exodia {
         bullet->AddComponent<ParentComponent>().Get().Parent = GetComponent<IDComponent>().Get().ID;
 
         auto body_bullet = bullet->AddComponent<RigidBody2DComponent>();
-
-        if (!body_bullet)
-            return;
         body_bullet.Get().Type = RigidBody2DComponent::BodyType::Dynamic;
         body_bullet.Get().Mass = 0.0f;
         body_bullet.Get().GravityScale = 0.0f;
@@ -38,24 +33,19 @@ namespace Exodia {
 
         // Ref<Texture2D> texture = TextureImporter::LoadTexture2D("Assets/Textures/Missile.png");
         auto sprite = bullet->AddComponent<SpriteRendererComponent>();
-        if (!sprite)
-            return;
         sprite.Get().Texture = SubTexture2D::CreateFromCoords(18375012605620, { 0.0f, 0.0f }, { 17.33f, 14.0f }, { 1.0f, 1.0f });
 
+        _AttackTimer += ts.GetSeconds();
         _IsAttacking = true;
     }
 
     void Player::OnUpdate(Timestep ts) {
-        _AttackTimer += ts.GetSeconds();
-        /*
         if (_IsCharging) {
             _AttackTimer += ts.GetSeconds();
-        }*/
-        if (_IsShooting && _AttackTimer >= 0.1f) {
-            if (GetComponent<TransformComponent>())
-                CreateBullet(ts, GetComponent<TransformComponent>().Get());
+        }
+        if (_IsShooting) {
+            CreateBullet(ts, GetComponent<TransformComponent>().Get());
             _IsShooting = false;
-            _AttackTimer = 0.0f;
         }
 
         if (!GetComponent<Health>())
@@ -63,8 +53,8 @@ namespace Exodia {
 
         if (_State != State::DEAD && GetComponent<Health>().Get().CurrentHealth == 0) {
             EXODIA_INFO("Player is dead");
-            //auto velocity = GetComponent<RigidBody2DComponent>();
-            //auto camera_entity = HandleEntity->GetWorld()->GetEntityByTag("Camera");
+            auto velocity = GetComponent<RigidBody2DComponent>();
+            auto camera_entity = HandleEntity->GetWorld()->GetEntityByTag("Camera");
             // if (!velocity || !camera_entity)
             //     return;
             // velocity.Get().Velocity.x = camera_entity->GetComponent<RigidBody2DComponent>().Get().Velocity.x;
@@ -171,11 +161,10 @@ namespace Exodia {
             }
 
             // Simple attack
-            /*
             if (keycode == Key::SPACE && !_IsAttacking) {
                 EXODIA_INFO("Player is shooting");
                 _IsShooting = true;
-            }*/
+            }
 
             // Charge attack
             if (keycode == Key::Q && !_IsCharging) {
@@ -199,9 +188,9 @@ namespace Exodia {
                 velocity.Get().Velocity.y = 0.0f;
             }
 
-            if (keycode == Key::SPACE) {
+            if (keycode == Key::SPACE && _IsAttacking) {
                 _AttackTimer = 0.0f;
-                _IsShooting = true;
+                _IsAttacking = false;
             }
 
             if (keycode == Key::Q && _IsCharging) {

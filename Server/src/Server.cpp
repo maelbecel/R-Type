@@ -137,7 +137,7 @@ namespace Exodia {
                 });
                 count += 1;
                 */
-                std::this_thread::sleep_for(std::chrono::milliseconds(5));  // Sleep for 32 milliseconds (30 FPS)
+                std::this_thread::sleep_for(std::chrono::milliseconds(16));  // Sleep for 32 milliseconds (30 FPS)
             }
         } catch (std::exception &error) {
             EXODIA_ERROR("Exception :\n\t{0}", error.what());
@@ -212,14 +212,12 @@ namespace Exodia {
                     auto &tc = tag.Get();
 
                     if (tc.Tag == std::string("Player_" + std::to_string(player_id)) && sc.Instance != nullptr) {
-                        std::cout << "Event received: " << event.first.first << std::endl;
                         if (event.first.second) {
                             sc.Instance->OnKeyPressed(event.first.first);
                         } else {
                             sc.Instance->OnKeyReleased(event.first.first);
                         }
                     }
-                    std::cout << "Player id: " << player_id << std::endl;
                     if (count % 50 == 0) {
                         _Network.SendComponentOf(entity, "TransformComponent");
                     }
@@ -230,9 +228,7 @@ namespace Exodia {
                     (void)entity;
                     (void)tag;
                     (void)transform;
-                    std::cout << "Tag: " << tag.Get().Tag << std::endl;
                     if (tag.Get().Tag.rfind("Bullet") != std::string::npos) {
-                        std::cout << "Bullet" << std::endl;
                         _Network.SendComponentOf(entity, "TagComponent");
                         _Network.SendComponentOf(entity, "SpriteRendererComponent");
                     }
