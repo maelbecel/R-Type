@@ -20,6 +20,7 @@
         <toc-element topic="Game-Engine.md">
             <toc-element topic="Exodia.md">
                 <toc-element topic="Renderer.md">
+                    <toc-element topic="Renderer-Vertex.md"/>
                     <toc-element topic="Renderer-Texture.md">
                         <toc-element topic="Renderer-Texture-SubTexture2D.md"/>
                         <toc-element topic="Renderer-Texture-Texture.md"/>
