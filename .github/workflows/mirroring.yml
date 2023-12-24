@@ -64,7 +64,7 @@ jobs:
       - name: Check if the executable exists
         run: |
           ls
-       shell: pwsh
+        shell: pwsh
 
   tests:
     name: Testing...
