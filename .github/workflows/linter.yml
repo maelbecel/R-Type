@@ -8,6 +8,13 @@ on:
       - server
       - game-engine
       - fix/CICD
+  pull_request:
+    branches:
+      - dev
+      - client
+      - server
+      - game-engine
+      - fix/CICD
 
 jobs:
   build:
