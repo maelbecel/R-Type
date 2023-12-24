@@ -396,8 +396,11 @@ namespace Exodia {
         const glm::vec2 *textureCoords = subTexture->GetTextureCoords();
         const Ref<Texture2D> texture = subTexture->GetTexture();
 
-        if (texture == nullptr)
+        if (textureCoords == nullptr || texture == nullptr)
             return DrawQuad(transform, tintColor, entityID);
+
+        if (!_Data)
+            return;
 
         // Check if we need to flush or if we can continue
         if (_Data->QuadIndexCount >= Renderer2DData::MaxIndices)
