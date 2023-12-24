@@ -138,7 +138,7 @@ Instrumentor &instrumentor = Instrumentor::Get();
 
 The InstrumentationTimer class is used to manage the instrumentation timers.
 
-### Constructor
+### Constructor {id=constructor1}
 
 ```c++
 InstrumentationTimer(const char *name);
