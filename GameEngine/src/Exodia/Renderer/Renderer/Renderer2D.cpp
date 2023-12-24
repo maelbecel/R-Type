@@ -592,7 +592,7 @@ namespace Exodia {
 
     void Renderer2D::DrawSprite(const glm::mat4 &transform, SpriteRendererComponent &src, int entityID)
     {
-        if (src.Texture && src.Texture->GetTexture())
+        if (src.Texture != nullptr && src.Texture->GetTexture() != nullptr)
             DrawQuad(transform, src.Texture, src.TilingFactor, src.Color, entityID);
         else
             DrawQuad(transform, src.Color, entityID);

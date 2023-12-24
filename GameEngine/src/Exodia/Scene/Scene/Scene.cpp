@@ -220,9 +220,6 @@ namespace Exodia {
             return;
 
         _World->ForEach<TransformComponent, SpriteRendererComponent, IDComponent>([&](Entity *entity, auto transform, auto sprite, auto id) {
-            if (!transform || !sprite || !id)
-                return;
-
             auto &tc = transform.Get();
             auto &sc = sprite.Get();
             auto &ic = id.Get();
@@ -230,16 +227,13 @@ namespace Exodia {
             Renderer2D::DrawSprite(tc.GetTransform(), sc, (int)ic.ID);
         });
 
-        _World->ForEach<TransformComponent, CircleRendererComponent, IDComponent>([&](Entity *entity, auto transform, auto circle, auto id) {
-            if (!transform || !circle || !id)
-                return;
-
+        /*_World->ForEach<TransformComponent, CircleRendererComponent, IDComponent>([&](Entity *entity, auto transform, auto circle, auto id) {
             auto &tc = transform.Get();
             auto &cc = circle.Get();
             auto &ic = id.Get();
 
             Renderer2D::DrawCircle(tc.GetTransform(), cc.Color, cc.Thickness, cc.Fade, (int)ic.ID);
-        });
+        });*/
 
         // TODO: When text rendering will be implemented (in Renderer2D);
     }
