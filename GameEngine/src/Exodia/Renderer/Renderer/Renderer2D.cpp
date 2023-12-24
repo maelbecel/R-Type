@@ -5,6 +5,11 @@
 ** Renderer2D
 */
 
+// GLM includes
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 // Exodia Renderer
 #include "Renderer2D.hpp"
 #include "Renderer/Renderer/RenderCommand.hpp"
@@ -16,12 +21,11 @@
 #include "Debug/Profiling.hpp"
 
 // External include
-#include <glm/gtc/matrix_transform.hpp>
 #include <cstring>
 
 namespace Exodia {
 
-    static Renderer2D::Renderer2DData *_Data; /* !< Renderer2D data */
+    static Scope<Renderer2D::Renderer2DData> _Data = nullptr; /* !< Renderer2D data */
 
     /////////////
     // Methods //
@@ -32,7 +36,7 @@ namespace Exodia {
         EXODIA_PROFILE_FUNCTION(); // Performance instrumentation profiling for the function
 
         // Initialize Renderer2D data and set default values
-        _Data = new Renderer2DData;
+        _Data = CreateScope<Renderer2D::Renderer2DData>();
         _Data->QuadVertexArray = VertexArray::Create();
         _Data->QuadVertexBuffer = VertexBuffer::Create(Renderer2DData::MaxVertices * sizeof(QuadVertex));
         _Data->QuadVertexBuffer->SetLayout({
@@ -114,20 +118,20 @@ namespace Exodia {
     {
         EXODIA_PROFILE_FUNCTION(); // Performance instrumentation profiling for the function
 
-        if (_Data->QuadVertexBufferBase != nullptr) {
+        if (_Data && _Data->QuadVertexBufferBase != nullptr) {
             delete[] _Data->QuadVertexBufferBase;
             _Data->QuadVertexBufferBase = nullptr;
         }
 
-        if (_Data != nullptr) {
-            delete _Data;
-            _Data = nullptr;
-        }
+        _Data = nullptr;
     }
 
     void Renderer2D::BeginScene(const OrthographicCamera &camera)
     {
         EXODIA_PROFILE_FUNCTION(); // Performance instrumentation profiling for the function
+
+        if (_Data == nullptr)
+            return;
 
         // Bind shader and set view projection matrix
         _Data->CameraBuffer.ViewProjection = camera.GetViewProjectionMatrix();
@@ -140,6 +144,9 @@ namespace Exodia {
     {
         EXODIA_PROFILE_FUNCTION(); // Performance instrumentation profiling for the function
 
+        if (_Data == nullptr)
+            return;
+
         _Data->CameraBuffer.ViewProjection = camera.GetProjection() * glm::inverse(transform);
         _Data->CameraUniformBuffer->SetData(&_Data->CameraBuffer, sizeof(CameraData));
 
@@ -149,6 +156,9 @@ namespace Exodia {
     void Renderer2D::BeginScene(const EditorCamera &camera)
     {
         EXODIA_PROFILE_FUNCTION(); // Performance instrumentation profiling for the function
+
+        if (_Data == nullptr)
+            return;
 
         _Data->CameraBuffer.ViewProjection = camera.GetViewProjection();
         _Data->CameraUniformBuffer->SetData(&_Data->CameraBuffer, sizeof(CameraData));
@@ -160,6 +170,9 @@ namespace Exodia {
     {
         EXODIA_PROFILE_FUNCTION(); // Performance instrumentation profiling for the function
 
+        if (_Data == nullptr)
+            return;
+
         Flush();
     }
 
@@ -167,7 +180,7 @@ namespace Exodia {
     {
         if (_Data->QuadIndexCount) {
             // Calculate data size
-            uint32_t dataSize = (uint8_t *)_Data->QuadVertexBufferPtr - (uint8_t *)_Data->QuadVertexBufferBase;
+            uint32_t dataSize = (uint32_t)((uint8_t *)_Data->QuadVertexBufferPtr - (uint8_t *)_Data->QuadVertexBufferBase);
 
             _Data->QuadVertexBuffer->SetData(_Data->QuadVertexBufferBase, dataSize);
 
@@ -185,7 +198,7 @@ namespace Exodia {
 
         if (_Data->CircleIndexCount) {
             // Calculate data size
-            uint32_t dataSize = (uint8_t *)_Data->CircleVertexBufferPtr - (uint8_t *)_Data->CircleVertexBufferBase;
+            uint32_t dataSize = (uint32_t)((uint8_t *)_Data->CircleVertexBufferPtr - (uint8_t *)_Data->CircleVertexBufferBase);
 
             _Data->CircleVertexBuffer->SetData(_Data->CircleVertexBufferBase, dataSize);
 
@@ -201,7 +214,7 @@ namespace Exodia {
 
         if (_Data->LineVertexCount) {
             // Calculate data size
-            uint32_t dataSize = (uint8_t *)_Data->LineVertexBufferPtr - (uint8_t *)_Data->LineVertexBufferBase;
+            uint32_t dataSize = (uint32_t)((uint8_t *)_Data->LineVertexBufferPtr - (uint8_t *)_Data->LineVertexBufferBase);
 
             _Data->LineVertexBuffer->SetData(_Data->LineVertexBufferBase, dataSize);
 
@@ -645,6 +658,24 @@ namespace Exodia {
         DrawLine(lineVertices[1], lineVertices[2], color, entityID);
         DrawLine(lineVertices[2], lineVertices[3], color, entityID);
         DrawLine(lineVertices[3], lineVertices[0], color, entityID);
+    }
+
+        // 7. Sound
+    
+    void Renderer2D::PlaySound(AssetHandle sound)
+    {
+        Ref<Sound2D> soundRef = AssetManager::GetAsset<Sound2D>(sound);
+
+        if (soundRef == nullptr)
+            return;
+        soundRef->Play();
+    }
+
+    void Renderer2D::PlaySound(Ref<Sound2D> sound)
+    {
+        if (sound == nullptr)
+            return;
+        sound->Play();
     }
 
     /////////////

@@ -10,14 +10,17 @@
 #include "Exodia.hpp"
 #include "Server.hpp"
 
-int main(int ac, char **av)
+int main(void)
 {
-    (void)ac;
-    (void)av;
-
     Exodia::Log::Init();
 
+#ifdef _WIN32
+    Exodia::Project::Load("../Client/R-Type.proj");
+#else
     Exodia::Project::Load("./Client/R-Type.proj");
+#endif
+
+    Exodia::RendererAPI::SetGraphical(false);
 
     std::cout << "Server is waiting for infos !" << std::endl;
 

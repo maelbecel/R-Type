@@ -41,6 +41,12 @@ namespace Exodia {
     {
         EXODIA_PROFILE_FUNCTION();
 
+#ifdef _WIN32
+        Project::Load("../Client/R-Type.proj");
+#else
+        Project::Load("Client/R-Type.proj");
+#endif
+
         ApplicationSpecification spec;
 
         spec.Name = "Application Example";

@@ -42,9 +42,10 @@ namespace Exodia {
 
     static std::map<std::filesystem::path, AssetType> AssetExtensionMap = {
         { ".exodia", AssetType::Scene },
-        { ".png", AssetType::Texture2D },
-        { ".jpg", AssetType::Texture2D },
-        { ".jpeg", AssetType::Texture2D }
+        { ".png"   , AssetType::Texture2D },
+        { ".jpg"   , AssetType::Texture2D },
+        { ".jpeg"  , AssetType::Texture2D },
+        { ".wav"   , AssetType::Sound2D }
     };
 
     static AssetType GetAssetTypeFromFileExtension(const std::filesystem::path &extension)
@@ -130,7 +131,7 @@ namespace Exodia {
         YAML::Node data;
 
         try {
-            data = YAML::LoadFile(path);
+            data = YAML::LoadFile(path.string());
         } catch (const YAML::ParserException &e) {
             EXODIA_CORE_ERROR("Failed to deserialize asset registry `{}`:\n\t{}", path.string(), e.what());
 

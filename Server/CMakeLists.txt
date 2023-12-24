@@ -5,11 +5,15 @@ project(r-type_server LANGUAGES CXX VERSION 1.0.1)
 set(CMAKE_BUILD_TYPE Debug)
 
 # Set C++ standard
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Set compiler flags
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Werror")
+if (MSVC)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4 /WX")
+else()
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Werror")
+endif()
 
 set(GAME_ENGINE_DIR  ${CMAKE_SOURCE_DIR}/GameEngine)
 set(R_TYPE_DIR  ${CMAKE_SOURCE_DIR}/R-Type)
@@ -19,13 +23,6 @@ set(SOURCES
 
     src/Main.cpp
     src/Server.cpp
-    # R-Type ECS sources files
-
-    ${R_TYPE_DIR}/Entity/CreateBackground.cpp
-    ${R_TYPE_DIR}/Entity/CreatePlayer.cpp
-    ${R_TYPE_DIR}/Entity/CreatePataPata.cpp
-    ${R_TYPE_DIR}/Entity/CreateStars.cpp
-    ${R_TYPE_DIR}/Scripts/Player/Player.cpp
 )
 
 # Set include directories for the Exodia Game Engine Application
@@ -35,6 +32,7 @@ set(INCLUDE_DIRS
 
     # R-Type include directories
     ${R_TYPE_DIR}
+    ${R_TYPE_DIR}/src
 
     # GameEngine include directories
     ${GAME_ENGINE_DIR}/src
@@ -51,6 +49,7 @@ add_executable(r-type_server ${SOURCES})
 
 target_link_libraries(r-type_server PRIVATE
     GameEngine
+    R-Type
     glad::glad
     glfw
     imgui
@@ -63,6 +62,7 @@ target_link_libraries(r-type_server PRIVATE
     unofficial::nativefiledialog::nfd
     yaml-cpp::yaml-cpp
     imguizmo::imguizmo
+    FreeALUT::alut
 )
 
 target_include_directories(r-type_server PRIVATE ${Stb_INCLUDE_DIR})

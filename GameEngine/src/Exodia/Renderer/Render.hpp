@@ -26,6 +26,10 @@
     #include "Exodia/Renderer/Texture/SubTexture2D.hpp"
     #include "Exodia/Renderer/Texture/Texture.hpp"
 
+    // -- Sound ----------------------------------------------------------------
+
+    #include "Exodia/Renderer/Sound/Sound.hpp"
+
     // -- Camera ---------------------------------------------------------------
 
     #include "Exodia/Renderer/Camera/OrthographicCameraController.hpp"

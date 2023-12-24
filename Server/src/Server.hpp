@@ -23,6 +23,9 @@ namespace Exodia {
             void Update();
             void Stop() { _running = false; };
 
+        public:
+            void RegisterComponent(std::string name, std::function<IComponentContainer *(Buffer)> factory);
+
         protected:
 
         public:
@@ -32,6 +35,7 @@ namespace Exodia {
         private:
             // WARNING: This is a temporary solution
             Exodia::World *_worldNetwork = Exodia::World::CreateWorld();
+            std::unordered_map<std::string, std::function<IComponentContainer *(Buffer)>> _ComponentFactory;
 
             // Network is used to manage the network with the clients
             Network::IOContextManager _ioContextManager;

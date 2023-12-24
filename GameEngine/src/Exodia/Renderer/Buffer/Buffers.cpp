@@ -7,6 +7,7 @@
 
 // Exodia Renderer
 #include "Buffers.hpp"
+#include "Renderer/Renderer/RendererAPI.hpp"
 #include "Renderer/Renderer/Renderer.hpp"
 
 // Entry point
@@ -71,7 +72,9 @@ namespace Exodia {
 
     Ref<VertexBuffer> VertexBuffer::Create(uint32_t size)
     {
-        switch (Renderer::GetAPI()) {
+        RendererAPI::API api = Renderer::GetAPI();
+
+        switch (api) {
             case RendererAPI::API::None:
                 EXODIA_CORE_ASSERT(false, "RendererAPI::API::None is currently not supported !");
                 return nullptr;
@@ -85,7 +88,9 @@ namespace Exodia {
 
     Ref<VertexBuffer> VertexBuffer::Create(float *vertices, uint32_t size)
     {
-        switch (Renderer::GetAPI()) {
+        RendererAPI::API api = Renderer::GetAPI();
+
+        switch (api) {
             case RendererAPI::API::None:
                 EXODIA_CORE_ASSERT(false, "RendererAPI::API::None is currently not supported !");
                 return nullptr;
@@ -103,7 +108,9 @@ namespace Exodia {
 
     Ref<IndexBuffer> IndexBuffer::Create(uint32_t *indices, uint32_t count)
     {
-        switch (Renderer::GetAPI()) {
+        RendererAPI::API api = Renderer::GetAPI();
+
+        switch (api) {
             case RendererAPI::API::None:
                 EXODIA_CORE_ASSERT(false, "RendererAPI::API::None is currently not supported !");
                 return nullptr;

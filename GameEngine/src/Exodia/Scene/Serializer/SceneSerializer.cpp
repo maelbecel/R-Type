@@ -36,7 +36,7 @@ namespace Exodia {
         out << YAML::Key << "Scene" << YAML::Value << _Scene->GetName();
         out << YAML::Key << "Entities" << YAML::Value << YAML::BeginSeq;
         {
-            _Scene->GetWorld().ForEach<IDComponent>([&](Entity *entity, UNUSED auto id) {
+            _Scene->GetWorld().ForEach<IDComponent>([&](Entity *entity, auto id) {
                 out << YAML::BeginMap;
                 out << YAML::Key << "Entity" << YAML::Value << id.Get().ID;
                 {
@@ -55,11 +55,13 @@ namespace Exodia {
 
     void SceneSerializer::Deserialize(const std::filesystem::path &path)
     {
+        std::string filepath = path.string();
+
         try {
-            YAML::Node data = YAML::LoadFile(path);
+            YAML::Node data = YAML::LoadFile(filepath);
 
             if (!data["Scene"]) {
-                EXODIA_CORE_ERROR("Scene file '{0}' is invalid !", path.string());
+                EXODIA_CORE_ERROR("Scene file '{0}' is invalid !", filepath);
                 return;
             }
 
@@ -92,9 +94,9 @@ namespace Exodia {
                 }
             }
         } catch (const YAML::BadConversion& e) {
-            EXODIA_CORE_ERROR("Failed to deserialize scene file '{0}':\n\t{1}", path.string(), e.what());
+            EXODIA_CORE_ERROR("Failed to deserialize scene file '{0}':\n\t{1}", filepath, e.what());
         } catch (const YAML::Exception& e) {
-            EXODIA_CORE_ERROR("Failed to deserialize scene file '{0}':\n\t{1}", path.string(), e.what());
+            EXODIA_CORE_ERROR("Failed to deserialize scene file '{0}':\n\t{1}", filepath, e.what());
         }
     }
 

@@ -36,7 +36,7 @@ namespace Exodia {
         void Bind()
         {
             InstantiateScript = []() -> ScriptableEntity * {
-                return static_cast<ScriptableEntitScriptableEntityy *>(new T());
+                return static_cast<ScriptableEntity *>(new T());
             };
 
             DestroyScript = [](ScriptComponent *script) {
