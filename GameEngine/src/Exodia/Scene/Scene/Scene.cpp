@@ -233,13 +233,15 @@ namespace Exodia {
         });
         _World->UnlockMutex();
 
-        /*_World->ForEach<TransformComponent, CircleRendererComponent, IDComponent>([&](Entity *entity, auto transform, auto circle, auto id) {
+        _World->LockMutex();
+        _World->ForEach<TransformComponent, CircleRendererComponent, IDComponent>([&](Entity *entity, auto transform, auto circle, auto id) {
             auto &tc = transform.Get();
             auto &cc = circle.Get();
             auto &ic = id.Get();
 
             Renderer2D::DrawCircle(tc.GetTransform(), cc.Color, cc.Thickness, cc.Fade, (int)ic.ID);
-        });*/
+        });
+        _World->UnlockMutex();
 
         // TODO: When text rendering will be implemented (in Renderer2D);
     }
