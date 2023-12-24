@@ -125,7 +125,6 @@ namespace Exodia {
 
         // Update the world
         Scenes[CurrentScene]->OnUpdateRuntime(ts);
-
     }
 
     void RTypeLayer::OnImGUIRender()
