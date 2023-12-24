@@ -43,7 +43,7 @@ namespace Exodia {
 
             inline static std::map<SceneType, Ref<Scene>> Scenes;
             inline static SceneType CurrentScene = SceneType::GAME;
-
+            uint64_t count = 0;
         private:
 
             // TODO: WARNING: This is a temporary solution
