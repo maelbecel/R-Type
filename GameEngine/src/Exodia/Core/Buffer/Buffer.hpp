@@ -56,7 +56,12 @@ namespace Exodia {
             uint8_t *newData = (uint8_t *)std::malloc(size);
 
             if (Data != nullptr) {
-                std::memcpy(newData, Data, std::min(size, Size));
+                #ifdef _WIN32
+                    uint64_t minSize = size < Size ? static_cast<uint64_t>(size) : static_cast<uint64_t>(Size);
+                #else
+                    uint64_t minSize = std::min(size, Size);
+                #endif
+                std::memcpy(newData, Data, minSize);
                 std::free(Data);
             }
 

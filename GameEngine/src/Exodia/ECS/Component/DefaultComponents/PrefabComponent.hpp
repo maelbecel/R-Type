@@ -70,10 +70,10 @@ namespace Exodia {
         Buffer SerializeData() override
         {
             try {
-                uint32_t size = sizeof(uint64_t) * Children.size();
+                uint32_t size = sizeof(uint64_t) * (uint32_t)Children.size();
                 Buffer buffer(size);
 
-                for (uint32_t i = 0; i < Children.size(); i++)
+                for (uint32_t i = 0; i < (uint64_t)Children.size(); i++)
                     std::memcpy(buffer.Data + sizeof(uint64_t) * i, &Children[i], sizeof(uint64_t));
             } catch (std::exception &e) {
                 EXODIA_CORE_WARN("ChildrenComponent serialization failed: {0}", e.what());

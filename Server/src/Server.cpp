@@ -129,12 +129,14 @@ namespace Exodia {
             while(_Running) {
                 CheckForNewClients();
                 this->Update();
+                /*
                 Scenes[CurrentScene]->GetWorld().ForEach<IDComponent, TagComponent>([&](Entity *entity, auto id, auto tag) {
                     (void)entity;
 
                     EXODIA_INFO("Entity '{0}': {1}", (uint64_t)id.Get().ID, tag.Get().Tag);
                 });
                 count += 1;
+                */
                 std::this_thread::sleep_for(std::chrono::milliseconds(32));  // Sleep for 32 milliseconds (30 FPS)
             }
         } catch (std::exception &error) {
@@ -156,13 +158,13 @@ namespace Exodia {
             Timestep timestep(time - _LastTime);
 
             _LastTime = time;
-            EXODIA_CORE_ERROR("Count : {0}", count);
-            for (uint32_t i = 0; i < (uint32_t)_Users.size(); i++) {
+            //EXODIA_CORE_ERROR("Count : {0}", count);
+            //for (uint32_t i = 0; i < (uint32_t)_Users.size(); i++) {
                 // Entity *player = Scenes[GAME]->GetEntityByName("Player_" + std::to_string(i));
 
                 // if (player != nullptr) {
                 // }
-            }
+            //}
 
             /*
             if (CurrentScene == GAME) {
@@ -218,9 +220,9 @@ namespace Exodia {
                         }
                     }
                     std::cout << "Player id: " << player_id << std::endl;
-                    if (count % 50 == 0) {
+                    //if (count % 50 == 0) {
                         _Network.SendComponentOf(entity, "TransformComponent");
-                    }
+                    //}
                 });
 
                 Scenes[CurrentScene]->GetWorld().ForEach<TagComponent>([&](Entity *entity, auto tag) {
