@@ -94,10 +94,10 @@ It saves a scene to a file.
 
 The method takes the following parameters:
 
-| Name  | Type                     | Description        |
-|-------|--------------------------|--------------------|
-| scene | Ref<Scene>               | The scene          |
-| path  | std::filesystem::path    | The path           |
+| Name  | Type                  | Description        |
+|-------|-----------------------|--------------------|
+| scene | Ref\<Scene\>          | The scene          |
+| path  | std::filesystem::path | The path           |
 
 Here is an example of how to use it:
 

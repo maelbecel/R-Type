@@ -9,3 +9,25 @@ It defines the following classes:
 - [**EntityView**](#entityview) : The EntityView class is used to manage entity views.
 - [**EntityViewIterator**](#entityviewiterator) : The EntityViewIterator class is used to manage entity view iterators.
 
+
+## Entity
+
+The `Entity` class is used to manage entities.
+
+## EntityComponentIterator
+
+The `EntityComponentIterator` class is used to manage entity component iterators.
+
+## EntityIterator
+
+The `EntityIterator` class is used to manage entity iterators.
+
+## EntityView
+
+The `EntityView` class is used to manage entity views.
+
+## EntityViewIterator
+
+The `EntityViewIterator` class is used to manage entity view iterators.
+
+

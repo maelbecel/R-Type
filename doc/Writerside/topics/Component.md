@@ -1,6 +1,6 @@
 # Component
 
-The Component part of the ECS, contain all the [Default Components](Default-Components.md).
+The Component part of the ECS, contain all the [Default Components](Components.md).
 
 It defines two classes:
 - [**ComponentContainer**](#componentcontainer)
