@@ -231,6 +231,9 @@ namespace Exodia {
         });
 
         _World->ForEach<TransformComponent, CircleRendererComponent, IDComponent>([&](Entity *entity, auto transform, auto circle, auto id) {
+            if (!transform || !circle || !id)
+                return;
+
             auto &tc = transform.Get();
             auto &cc = circle.Get();
             auto &ic = id.Get();

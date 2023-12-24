@@ -277,18 +277,16 @@ namespace Exodia {
                         _Network.SendComponentOf(entity, "ScriptComponent");
                     }
 
-                    /*if (tag.Get().Tag == "Pata-pata") {
+                    if (tag.Get().Tag == "Pata-pata") {
                         _Network.SendComponentOf(entity, "TagComponent");
                         _Network.SendComponentOf(entity, "TransformComponent");
                         _Network.SendComponentOf(entity, "SpriteRendererComponent");
                         _Network.SendComponentOf(entity, "RigidBody2DComponent");
                         _Network.SendComponentOf(entity, "Animation");
                         _Network.SendComponentOf(entity, "Health");
-                        // _Network.SendComponentOf(entity, "ScriptComponent");
-                    }*/
+                        _Network.SendComponentOf(entity, "ScriptComponent");
+                    }
                 });
-
-
 
                 EXODIA_INFO("New client connected");
 
