@@ -80,3 +80,7 @@ Choisissez une option (0-4):
 The 'Examples' section is for compiling Game-Engine examples. The goal is to try features from our Game-Engine.
 
 The 'Sandbox' section is our laboratory where we try out all the things we need or want to implement.
+
+## Documentation
+
+You can read the full documentation [here](http://etipech.me)
