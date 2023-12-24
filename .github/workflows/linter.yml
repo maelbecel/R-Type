@@ -1,0 +1,27 @@
+name: ClangFormat Linter
+
+on:
+  push:
+    branches:
+      - dev
+      - client
+      - server
+      - game-engine
+      - fix/CICD
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: "Install clang-format"
+      run: sudo apt-get install -y clang-format
+    - name: "Run clang-format"
+      run: find . -iname '*.hpp' -o -iname '*.cpp' ! -path "./build/*" | xargs clang-format -i -style=file
+    - uses: EndBug/add-and-commit@v9
+      with:
+        author_name: Clang Robot
+        author_email: robot@example.com
+        message: 'style (*): Committing clang-format changes'
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
