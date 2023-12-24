@@ -63,6 +63,10 @@ namespace Exodia {
         Scenes[GAME]->Subscribe<Events::OnCollisionEntered>(collisionSystem);
         Scenes[GAME]->OnViewportResize(Application::Get().GetWindow().GetWidth(), Application::Get().GetWindow().GetHeight());
 
+        Entity *music = Scenes[GAME]->CreateEntity("Background");
+
+        music->AddComponent<MusicComponent>(124013371145915, 0.5f, true);
+
         _Network->SetWorld(Scenes[CurrentScene]->GetWorldPtr());
 
         //TODO: Temp code

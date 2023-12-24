@@ -14,6 +14,7 @@
 // Exodia Renderer includes
 #include "Renderer/Renderer/Renderer2D.hpp"
 #include "Renderer/Renderer/RendererAPI.hpp"
+#include "Renderer/Renderer/Renderer.hpp"
 
 namespace Exodia {
 
@@ -110,7 +111,7 @@ namespace Exodia {
             }
         });
 
-        if (RendererAPI::IsGraphical() == false)
+        if (Renderer::GetAPI() == RendererAPI::API::None)
             return;
 
         _World->ForEach<MusicComponent>([&](Entity *entity, auto music) {
