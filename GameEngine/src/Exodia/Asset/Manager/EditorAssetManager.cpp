@@ -29,8 +29,7 @@ namespace Exodia {
     // Yaml-cpp operator overloads //
     /////////////////////////////////
 
-    YAML::Emitter &operator<<(YAML::Emitter &out, const std::string_view &str)
-    {
+    YAML::Emitter &operator<<(YAML::Emitter &out, const std::string_view &str) {
         out << std::string(str.data(), str.size());
 
         return out;
@@ -40,16 +39,13 @@ namespace Exodia {
     // Static variables & Functions //
     //////////////////////////////////
 
-    static std::map<std::filesystem::path, AssetType> AssetExtensionMap = {
-        { ".exodia", AssetType::Scene },
-        { ".png"   , AssetType::Texture2D },
-        { ".jpg"   , AssetType::Texture2D },
-        { ".jpeg"  , AssetType::Texture2D },
-        { ".wav"   , AssetType::Sound2D }
-    };
+    static std::map<std::filesystem::path, AssetType> AssetExtensionMap = {{".exodia", AssetType::Scene},
+                                                                           {".png", AssetType::Texture2D},
+                                                                           {".jpg", AssetType::Texture2D},
+                                                                           {".jpeg", AssetType::Texture2D},
+                                                                           {".wav", AssetType::Sound2D}};
 
-    static AssetType GetAssetTypeFromFileExtension(const std::filesystem::path &extension)
-    {
+    static AssetType GetAssetTypeFromFileExtension(const std::filesystem::path &extension) {
         auto it = AssetExtensionMap.find(extension);
 
         if (it == AssetExtensionMap.end()) {
@@ -64,9 +60,8 @@ namespace Exodia {
     // Methods //
     /////////////
 
-    void EditorAssetManager::ImportAsset(const std::filesystem::path &path)
-    {
-        AssetHandle        handle;
+    void EditorAssetManager::ImportAsset(const std::filesystem::path &path) {
+        AssetHandle handle;
         AssetSpecification spec;
 
         spec.Path = path;
@@ -88,15 +83,14 @@ namespace Exodia {
         if (asset) {
             asset->Handle = handle;
 
-            _LoadedAssets[handle]  = asset;
+            _LoadedAssets[handle] = asset;
             _AssetRegistry[handle] = spec;
 
             SerializeAssetRegistry();
         }
     }
 
-    void EditorAssetManager::SerializeAssetRegistry()
-    {
+    void EditorAssetManager::SerializeAssetRegistry() {
         auto path = Project::GetActiveAssetRegistryPath();
 
         YAML::Emitter out;
@@ -110,8 +104,8 @@ namespace Exodia {
 
                 out << YAML::BeginMap;
                 out << YAML::Key << "Handle" << YAML::Value << handle;
-                out << YAML::Key << "Path"   << YAML::Value << filepath;
-                out << YAML::Key << "Type"   << YAML::Value << Utils::AssetTypeToString(spec.Type);
+                out << YAML::Key << "Path" << YAML::Value << filepath;
+                out << YAML::Key << "Type" << YAML::Value << Utils::AssetTypeToString(spec.Type);
                 out << YAML::EndMap;
             }
 
@@ -124,8 +118,7 @@ namespace Exodia {
         file << out.c_str();
     }
 
-    bool EditorAssetManager::DeserializeAssetRegistry()
-    {
+    bool EditorAssetManager::DeserializeAssetRegistry() {
         auto path = Project::GetActiveAssetRegistryPath();
 
         YAML::Node data;
@@ -166,8 +159,7 @@ namespace Exodia {
     // Getters & Setters //
     ///////////////////////
 
-    Ref<Asset> EditorAssetManager::GetAsset(AssetHandle handle)
-    {
+    Ref<Asset> EditorAssetManager::GetAsset(AssetHandle handle) {
         if (!IsAssetHandleValid(handle))
             return nullptr;
         Ref<Asset> asset = nullptr;
@@ -191,39 +183,32 @@ namespace Exodia {
         return asset;
     }
 
-    AssetType EditorAssetManager::GetAssetType(AssetHandle handle) const
-    {
+    AssetType EditorAssetManager::GetAssetType(AssetHandle handle) const {
         if (!IsAssetHandleValid(handle))
             return AssetType::None;
         return _AssetRegistry.at(handle).Type;
     }
 
-    bool EditorAssetManager::IsAssetHandleValid(AssetHandle handle) const
-    {
+    bool EditorAssetManager::IsAssetHandleValid(AssetHandle handle) const {
         return handle != 0 && _AssetRegistry.find(handle) != _AssetRegistry.end();
     }
 
-    bool EditorAssetManager::IsAssetLoaded(AssetHandle handle) const
-    {
+    bool EditorAssetManager::IsAssetLoaded(AssetHandle handle) const {
         return _LoadedAssets.find(handle) != _LoadedAssets.end();
     }
 
-    const AssetSpecification &EditorAssetManager::GetAssetSpecification(AssetHandle handle) const
-    {
+    const AssetSpecification &EditorAssetManager::GetAssetSpecification(AssetHandle handle) const {
         auto it = _AssetRegistry.find(handle);
 
-        EXODIA_CORE_ASSERT(it != _AssetRegistry.end(), "EditorAssetManager::GetAssetSpecification() - Asset handle not found !");
+        EXODIA_CORE_ASSERT(it != _AssetRegistry.end(),
+                           "EditorAssetManager::GetAssetSpecification() - Asset handle not found !");
 
         return it->second;
     }
 
-    const AssetRegistry &EditorAssetManager::GetAssetRegistry() const
-    {
-        return _AssetRegistry;
-    }
+    const AssetRegistry &EditorAssetManager::GetAssetRegistry() const { return _AssetRegistry; }
 
-    const std::filesystem::path &EditorAssetManager::GetFilePath(AssetHandle handle) const
-    {
+    const std::filesystem::path &EditorAssetManager::GetFilePath(AssetHandle handle) const {
         return GetAssetSpecification(handle).Path;
     }
-};
+}; // namespace Exodia

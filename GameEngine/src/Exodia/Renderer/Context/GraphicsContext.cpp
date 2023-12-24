@@ -18,17 +18,16 @@ namespace Exodia {
     // Factory //
     /////////////
 
-    Scope<GraphicsContext> GraphicsContext::Create(void *window)
-    {
+    Scope<GraphicsContext> GraphicsContext::Create(void *window) {
         switch (RendererAPI::GetAPI()) {
-            case RendererAPI::API::None:
-                EXODIA_CORE_ASSERT(false, "RendererAPI::None is not supported !");
-            case RendererAPI::API::OpenGL:
-                return CreateScope<OpenGLContext>(static_cast<GLFWwindow *>(window));
-            default:
-                break;
+        case RendererAPI::API::None:
+            EXODIA_CORE_ASSERT(false, "RendererAPI::None is not supported !");
+        case RendererAPI::API::OpenGL:
+            return CreateScope<OpenGLContext>(static_cast<GLFWwindow *>(window));
+        default:
+            break;
         }
         EXODIA_CORE_ASSERT(false, "Unknown RendererAPI !");
         return nullptr;
     }
-};
+}; // namespace Exodia

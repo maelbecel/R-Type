@@ -9,8 +9,7 @@
 
 using namespace Exodia;
 
-int main()
-{
+int main() {
     std::cout << "Creating world..." << std::endl;
 
     Ref<Project> project = Project::New();
@@ -21,11 +20,11 @@ int main()
 
     std::cout << "Creating entity..." << std::endl;
 
-    Project::GetActive()->RegisterComponent("Transform", [](Buffer data) -> IComponentContainer * {
-        return new ComponentContainer<Transform>(data);
-    });
+    Project::GetActive()->RegisterComponent(
+        "Transform", [](Buffer data) -> IComponentContainer * { return new ComponentContainer<Transform>(data); });
 
-    std::function<Exodia::IComponentContainer *(Exodia::Buffer)> func = Project::GetActive()->GetComponentFactory("Transform");
+    std::function<Exodia::IComponentContainer *(Exodia::Buffer)> func =
+        Project::GetActive()->GetComponentFactory("Transform");
 
     ComponentContainer<Transform> *container = (ComponentContainer<Transform> *)func(Buffer(sizeof(Transform)));
 
@@ -35,7 +34,7 @@ int main()
 
     entity->AddComponent(container);
 
-    //entity->AddComponent<Transform>(glm::vec3(0.0f, 5.0f, 0.0f));
+    // entity->AddComponent<Transform>(glm::vec3(0.0f, 5.0f, 0.0f));
     entity->AddComponent<Health>(175);
 
     world->Update(Timestep(1.0f / 60.0f));
@@ -52,7 +51,8 @@ int main()
     transform = entity->GetComponent<Transform>();
 
     if (transform /* or transform.IsValid() */)
-        std::cout << "My position is " << transform.Get().Translation.x << ", " << transform.Get().Translation.y << std::endl;
+        std::cout << "My position is " << transform.Get().Translation.x << ", " << transform.Get().Translation.y
+                  << std::endl;
     else
         std::cout << "I don't have a Transform component !" << std::endl;
 
@@ -60,7 +60,7 @@ int main()
 
     world->Subscribe<TakeDamageEvent>(subscriber);
 
-    world->Emit<TakeDamageEvent>(TakeDamageEvent{ 25 });
+    world->Emit<TakeDamageEvent>(TakeDamageEvent{25});
 
     ComponentHandle<Health> health = entity->GetComponent<Health>();
 

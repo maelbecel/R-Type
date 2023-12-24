@@ -22,7 +22,7 @@
 
 // Stb includes
 #define STB_IMAGE_IMPLEMENTATION
-    #include "stb_image.h"
+#include "stb_image.h"
 
 namespace Exodia {
 
@@ -30,20 +30,18 @@ namespace Exodia {
     // Methods //
     /////////////
 
-    Ref<Texture2D> TextureImporter::ImportTexture2D(UNUSED(AssetHandle handle), const AssetSpecification &spec)
-    {
+    Ref<Texture2D> TextureImporter::ImportTexture2D(UNUSED(AssetHandle handle), const AssetSpecification &spec) {
         EXODIA_PROFILE_FUNCTION();
 
         return LoadTexture2D(Project::GetActiveAssetDirectory() / spec.Path);
     }
 
-    Ref<Texture2D> TextureImporter::LoadTexture2D(const std::filesystem::path &path)
-    {
+    Ref<Texture2D> TextureImporter::LoadTexture2D(const std::filesystem::path &path) {
         EXODIA_PROFILE_FUNCTION();
 
         Buffer data;
-        int width    = 0;
-        int height   = 0;
+        int width = 0;
+        int height = 0;
         int channels = 0;
 
         stbi_set_flip_vertically_on_load(1);
@@ -61,7 +59,7 @@ namespace Exodia {
 
         TextureSpecification textureSpec;
 
-        textureSpec.Width  = width;
+        textureSpec.Width = width;
         textureSpec.Height = height;
         textureSpec.Format = ImageFormat::RGBA8;
 
@@ -70,4 +68,4 @@ namespace Exodia {
         data.Release();
         return texture;
     }
-};
+}; // namespace Exodia

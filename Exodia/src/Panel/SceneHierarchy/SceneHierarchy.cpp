@@ -21,23 +21,18 @@ namespace Exodia {
     // Constructor & Destructor //
     //////////////////////////////
 
-    SceneHierarchy::SceneHierarchy(const Ref<Scene> &context)
-    {
-        SetContext(context);
-    }
+    SceneHierarchy::SceneHierarchy(const Ref<Scene> &context) { SetContext(context); }
 
     /////////////
     // Methods //
     /////////////
 
-    void SceneHierarchy::OnImGuiRender()
-    {
+    void SceneHierarchy::OnImGuiRender() {
         DrawSceneHierarchy();
         DrawProperties();
     }
 
-    void SceneHierarchy::DrawSceneHierarchy()
-    {
+    void SceneHierarchy::DrawSceneHierarchy() {
         ImGui::Begin("Scene Hierarchy");
 
         if (_Context) {
@@ -47,9 +42,7 @@ namespace Exodia {
                 ImGui::EndPopup();
             }
 
-            _Context->GetWorld().ForAll([&](Entity *entity) {
-                DrawEntityNode(entity);
-            });
+            _Context->GetWorld().ForAll([&](Entity *entity) { DrawEntityNode(entity); });
 
             if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered())
                 _SelectedEntity = nullptr;
@@ -58,8 +51,7 @@ namespace Exodia {
         ImGui::End();
     }
 
-    void SceneHierarchy::DrawProperties()
-    {
+    void SceneHierarchy::DrawProperties() {
         ImGui::Begin("Properties");
 
         if (_SelectedEntity)
@@ -68,8 +60,7 @@ namespace Exodia {
         ImGui::End();
     }
 
-    void SceneHierarchy::DrawEntityNode(Entity *entity)
-    {
+    void SceneHierarchy::DrawEntityNode(Entity *entity) {
         auto &tag = entity->GetComponent<TagComponent>().Get();
 
         if (entity->HasComponent<ChildrenComponent>()) {
@@ -77,7 +68,8 @@ namespace Exodia {
                 return;
             auto &children = entity->GetComponent<ChildrenComponent>().Get();
 
-            ImGuiTreeNodeFlags flags = ((_SelectedEntity == entity) ? ImGuiTreeNodeFlags_Selected : 0) | ImGuiTreeNodeFlags_OpenOnArrow;
+            ImGuiTreeNodeFlags flags =
+                ((_SelectedEntity == entity) ? ImGuiTreeNodeFlags_Selected : 0) | ImGuiTreeNodeFlags_OpenOnArrow;
 
             flags |= ImGuiTreeNodeFlags_SpanAvailWidth;
 
@@ -92,7 +84,8 @@ namespace Exodia {
                 ImGui::TreePop();
             }
         } else {
-            ImGuiTreeNodeFlags flags = ((_SelectedEntity == entity) ? ImGuiTreeNodeFlags_Selected : 0) | ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
+            ImGuiTreeNodeFlags flags = ((_SelectedEntity == entity) ? ImGuiTreeNodeFlags_Selected : 0) |
+                                       ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
 
             flags |= ImGuiTreeNodeFlags_SpanAvailWidth;
 
@@ -120,8 +113,7 @@ namespace Exodia {
         }
     }
 
-    void SceneHierarchy::DrawComponents(Entity *entity)
-    {
+    void SceneHierarchy::DrawComponents(Entity *entity) {
         if (entity->HasComponent<TagComponent>()) {
             auto &tag = entity->GetComponent<TagComponent>().Get().Tag;
             char buffer[256];
@@ -161,19 +153,12 @@ namespace Exodia {
     // Getters & Setters //
     ///////////////////////
 
-    void SceneHierarchy::SetContext(Ref<Scene> context)
-    {
+    void SceneHierarchy::SetContext(Ref<Scene> context) {
         _Context = context;
         _SelectedEntity = nullptr;
     }
 
-    void SceneHierarchy::SetSelectedEntity(Entity *entity)
-    {
-        _SelectedEntity = entity;
-    }
+    void SceneHierarchy::SetSelectedEntity(Entity *entity) { _SelectedEntity = entity; }
 
-    Entity *SceneHierarchy::GetSelectedEntity() const
-    {
-        return _SelectedEntity;
-    }
-};
+    Entity *SceneHierarchy::GetSelectedEntity() const { return _SelectedEntity; }
+}; // namespace Exodia

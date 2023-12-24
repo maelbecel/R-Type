@@ -14,10 +14,12 @@ namespace Exodia {
     // Constructor & Destructor //
     //////////////////////////////
 
-    World::World(Allocator allocator) : _EntityAllocator(allocator), _SystemAllocator(allocator), _Entities({}, EntityPtrAllocator(allocator)), _Systems({}, SystemPtrAllocator(allocator)), _Subscribers({}, 0, std::hash<TypeIndex>(), std::equal_to<TypeIndex>(), SubscriberPtrAllocator(allocator)) {};
+    World::World(Allocator allocator)
+        : _EntityAllocator(allocator), _SystemAllocator(allocator), _Entities({}, EntityPtrAllocator(allocator)),
+          _Systems({}, SystemPtrAllocator(allocator)),
+          _Subscribers({}, 0, std::hash<TypeIndex>(), std::equal_to<TypeIndex>(), SubscriberPtrAllocator(allocator)){};
 
-    World::~World()
-    {
+    World::~World() {
         for (auto *system : _Systems)
             system->Unconfigure(this);
 
@@ -25,7 +27,7 @@ namespace Exodia {
             if (!entity->IsPendingDestroy()) {
                 entity->SetPendingDestroy(true);
 
-                Emit<Events::OnEntityDestroyed>({ entity });
+                Emit<Events::OnEntityDestroyed>({entity});
             }
 
             std::allocator_traits<EntityAllocator>::destroy(_EntityAllocator, entity);
@@ -44,8 +46,7 @@ namespace Exodia {
     // Methods //
     /////////////
 
-    World *World::CreateWorld(Allocator allocator)
-    {
+    World *World::CreateWorld(Allocator allocator) {
         WorldAllocator worldAllocator(allocator);
 
         World *world = std::allocator_traits<WorldAllocator>::allocate(worldAllocator, 1);
@@ -55,16 +56,14 @@ namespace Exodia {
         return world;
     }
 
-    void World::DestroyWorld()
-    {
+    void World::DestroyWorld() {
         WorldAllocator allocator(_EntityAllocator);
 
         std::allocator_traits<WorldAllocator>::destroy(allocator, this);
         std::allocator_traits<WorldAllocator>::deallocate(allocator, this, 1);
     }
 
-    Entity *World::CreateNewEntity(const std::string &name)
-    {
+    Entity *World::CreateNewEntity(const std::string &name) {
         Entity *entity = std::allocator_traits<EntityAllocator>::allocate(_EntityAllocator, 1);
         UUID entityID = UUID();
 
@@ -80,13 +79,12 @@ namespace Exodia {
 
         _MergedEntities.push_back(entity);
 
-        Emit<Events::OnEntityCreated>({ entity });
+        Emit<Events::OnEntityCreated>({entity});
 
         return entity;
     }
 
-    Entity *World::CreateNewEntity(const UUID &uuid, const std::string &name)
-    {
+    Entity *World::CreateNewEntity(const UUID &uuid, const std::string &name) {
         Entity *entity = std::allocator_traits<EntityAllocator>::allocate(_EntityAllocator, 1);
 
         std::allocator_traits<EntityAllocator>::construct(_EntityAllocator, entity, this, uuid);
@@ -101,13 +99,12 @@ namespace Exodia {
 
         _MergedEntities.push_back(entity);
 
-        Emit<Events::OnEntityCreated>({ entity });
+        Emit<Events::OnEntityCreated>({entity});
 
         return entity;
     }
 
-    Entity *World::CreateEntity(const std::string &name)
-    {
+    Entity *World::CreateEntity(const std::string &name) {
         Entity *entity = std::allocator_traits<EntityAllocator>::allocate(_EntityAllocator, 1);
         UUID entityID = UUID();
 
@@ -123,13 +120,12 @@ namespace Exodia {
 
         _Entities.push_back(entity);
 
-        Emit<Events::OnEntityCreated>({ entity });
+        Emit<Events::OnEntityCreated>({entity});
 
         return entity;
     }
 
-    Entity *World::CreateEntity(const UUID &uuid, const std::string &name)
-    {
+    Entity *World::CreateEntity(const UUID &uuid, const std::string &name) {
         for (auto entity : _Entities) {
             if (entity->GetEntityID() == uuid) {
                 return entity;
@@ -149,13 +145,12 @@ namespace Exodia {
 
         _Entities.push_back(entity);
 
-        Emit<Events::OnEntityCreated>({ entity });
+        Emit<Events::OnEntityCreated>({entity});
 
         return entity;
     }
 
-    void World::DestroyEntity(Entity *entity, bool immediate)
-    {
+    void World::DestroyEntity(Entity *entity, bool immediate) {
         if (entity == nullptr)
             return;
 
@@ -173,14 +168,14 @@ namespace Exodia {
 
                 _Entities.erase(std::remove(_Entities.begin(), _Entities.end(), entity), _Entities.end());
 
-                //std::allocator_traits<EntityAllocator>::destroy(_EntityAllocator, entity);
-                //std::allocator_traits<EntityAllocator>::deallocate(_EntityAllocator, entity, 1);
+                // std::allocator_traits<EntityAllocator>::destroy(_EntityAllocator, entity);
+                // std::allocator_traits<EntityAllocator>::deallocate(_EntityAllocator, entity, 1);
             }
             entity->SetPendingDestroy(true);
             return;
         }
 
-        Emit<Events::OnEntityDestroyed>({ entity });
+        Emit<Events::OnEntityDestroyed>({entity});
 
         if (immediate) {
             if (_IndexToUUIDMap.find(entity->GetEntityID()) != _IndexToUUIDMap.end())
@@ -188,37 +183,39 @@ namespace Exodia {
 
             _Entities.erase(std::remove(_Entities.begin(), _Entities.end(), entity), _Entities.end());
 
-            //std::allocator_traits<EntityAllocator>::destroy(_EntityAllocator, entity);
-            //std::allocator_traits<EntityAllocator>::deallocate(_EntityAllocator, entity, 1);
+            // std::allocator_traits<EntityAllocator>::destroy(_EntityAllocator, entity);
+            // std::allocator_traits<EntityAllocator>::deallocate(_EntityAllocator, entity, 1);
         }
     }
 
-    bool World::CleanUp()
-    {
+    bool World::CleanUp() {
         uint64_t count = 0;
 
-        _Entities.erase(std::remove_if(_Entities.begin(), _Entities.end(), [&, this](Entity *entity) {
-            if (entity->IsPendingDestroy()) {
-                //std::allocator_traits<EntityAllocator>::destroy(_EntityAllocator, entity);
-                //std::allocator_traits<EntityAllocator>::deallocate(_EntityAllocator, entity, 1);
+        _Entities.erase(std::remove_if(_Entities.begin(), _Entities.end(),
+                                       [&, this](Entity *entity) {
+                                           if (entity->IsPendingDestroy()) {
+                                               // std::allocator_traits<EntityAllocator>::destroy(_EntityAllocator,
+                                               // entity);
+                                               // std::allocator_traits<EntityAllocator>::deallocate(_EntityAllocator,
+                                               // entity, 1);
 
-                count++;
+                                               count++;
 
-                return true;
-            }
-            return false;
-        }), _Entities.end());
+                                               return true;
+                                           }
+                                           return false;
+                                       }),
+                        _Entities.end());
 
         return count > 0;
     }
 
-    void World::Reset()
-    {
+    void World::Reset() {
         for (auto *entity : _Entities) {
             if (!entity->IsPendingDestroy()) {
                 entity->SetPendingDestroy(true);
 
-                Emit<Events::OnEntityDestroyed>({ entity });
+                Emit<Events::OnEntityDestroyed>({entity});
             }
             _IndexToUUIDMap.erase(_IndexToUUIDMap.find(entity->GetEntityID()));
 
@@ -228,24 +225,21 @@ namespace Exodia {
         _Entities.clear();
     }
 
-    EntitySystem *World::RegisterSystem(EntitySystem *system)
-    {
+    EntitySystem *World::RegisterSystem(EntitySystem *system) {
         _Systems.push_back(system);
-        
+
         system->Configure(this);
 
         return system;
     }
 
-    void World::UnregisterSystem(EntitySystem *system)
-    {
+    void World::UnregisterSystem(EntitySystem *system) {
         _Systems.erase(std::remove(_Systems.begin(), _Systems.end(), system), _Systems.end());
 
         system->Unconfigure(this);
     }
 
-    void World::EnableSystem(EntitySystem *system)
-    {
+    void World::EnableSystem(EntitySystem *system) {
         auto it = std::find(_DisabledSystems.begin(), _DisabledSystems.end(), system);
 
         if (it != _DisabledSystems.end()) {
@@ -255,8 +249,7 @@ namespace Exodia {
         }
     }
 
-    void World::DisableSystem(EntitySystem *system)
-    {
+    void World::DisableSystem(EntitySystem *system) {
         auto it = std::find(_Systems.begin(), _Systems.end(), system);
 
         if (it != _Systems.end()) {
@@ -266,8 +259,7 @@ namespace Exodia {
         }
     }
 
-    void World::UnsubscribeAll(void *subscriber)
-    {
+    void World::UnsubscribeAll(void *subscriber) {
         for (auto sub : _Subscribers) {
             sub.second.erase(std::remove(sub.second.begin(), sub.second.end(), subscriber), sub.second.end());
 
@@ -276,32 +268,28 @@ namespace Exodia {
         }
     }
 
-    void World::ForAll(std::function<void(Entity *)> function, bool includePendingDestroy)
-    {
+    void World::ForAll(std::function<void(Entity *)> function, bool includePendingDestroy) {
         if (GetCount() == 0)
             return;
         for (auto *entity : AllEntities(includePendingDestroy))
             function(entity);
     }
 
-    EntityView World::AllEntities(bool includePendingDestroy)
-    {
+    EntityView World::AllEntities(bool includePendingDestroy) {
         EntityIterator first(this, 0, false, includePendingDestroy);
         EntityIterator last(this, GetCount(), true, includePendingDestroy);
 
         return EntityView(first, last);
     }
 
-    void World::Update(Timestep ts)
-    {
+    void World::Update(Timestep ts) {
         CleanUp();
 
         for (auto *system : _Systems)
             system->Update(this, ts);
     }
 
-    void World::MergeEntities()
-    {
+    void World::MergeEntities() {
         for (auto *entity : _MergedEntities)
             _Entities.push_back(entity);
         _MergedEntities.clear();
@@ -311,13 +299,9 @@ namespace Exodia {
     // Getters & Setters //
     ///////////////////////
 
-    uint64_t World::GetCount() const
-    {
-        return _Entities.size();
-    }
+    uint64_t World::GetCount() const { return _Entities.size(); }
 
-    Entity *World::GetEntityByIndex(uint64_t index)
-    {
+    Entity *World::GetEntityByIndex(uint64_t index) {
         auto it = _IndexToUUIDMap.find(index);
 
         EXODIA_ASSERT(it != _IndexToUUIDMap.end(), "Entity not found for the given index");
@@ -325,8 +309,7 @@ namespace Exodia {
         return GetEntityByID(it->second);
     }
 
-    Entity *World::GetEntityByID(uint64_t id) const
-    {
+    Entity *World::GetEntityByID(uint64_t id) const {
         if (id == Entity::InvalidEntityID)
             return nullptr;
         for (auto *entity : _Entities)
@@ -335,8 +318,7 @@ namespace Exodia {
         return nullptr;
     }
 
-    Entity *World::GetEntityByTag(const std::string &name) const
-    {
+    Entity *World::GetEntityByTag(const std::string &name) const {
         for (auto *entity : _Entities) {
             auto tag = entity->GetComponent<TagComponent>();
 
@@ -346,8 +328,5 @@ namespace Exodia {
         return nullptr;
     }
 
-    World::EntityAllocator &World::GetPrimaryAllocator()
-    {
-        return _EntityAllocator;
-    }
-};
+    World::EntityAllocator &World::GetPrimaryAllocator() { return _EntityAllocator; }
+}; // namespace Exodia

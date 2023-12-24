@@ -16,10 +16,10 @@ namespace Exodia {
     // Constructor & Destructor //
     //////////////////////////////
 
-    RTypeLayer::RTypeLayer() : Layer("R-Type"), network(_worldNetwork, ioContextManager, 8083), _CameraController(1600.0f / 900.0f)
-    {
+    RTypeLayer::RTypeLayer()
+        : Layer("R-Type"), network(_worldNetwork, ioContextManager, 8083), _CameraController(1600.0f / 900.0f){
 
-    };
+                                                                           };
 
     /////////////
     // Methods //
@@ -29,21 +29,38 @@ namespace Exodia {
         _ComponentFactory.emplace(name, factory);
     }
 
-    void RTypeLayer::OnAttach()
-    {
+    void RTypeLayer::OnAttach() {
         EXODIA_PROFILE_FUNCTION();
 
         // Register components
-        RegisterComponent("IDComponent", [](UNUSED(Buffer data)) -> IComponentContainer * { return new ComponentContainer<IDComponent>(); });
-        RegisterComponent("TransformComponent", [](UNUSED(Buffer data)) -> IComponentContainer * { return new ComponentContainer<TransformComponent>(); });
-        RegisterComponent("SpriteRendererComponent", [](UNUSED(Buffer data)) -> IComponentContainer * { return new ComponentContainer<SpriteRendererComponent>(); });
-        RegisterComponent("BoxCollider2DComponent", [](UNUSED(Buffer data)) -> IComponentContainer * { return new ComponentContainer<BoxCollider2DComponent>(); });
-        RegisterComponent("CircleRendererComponent", [](UNUSED(Buffer data)) -> IComponentContainer * { return new ComponentContainer<CircleRendererComponent>(); });
-        RegisterComponent("RigidBody2DComponent", [](UNUSED(Buffer data)) -> IComponentContainer * { return new ComponentContainer<RigidBody2DComponent>(); });
-        RegisterComponent("ScriptComponent", [](UNUSED(Buffer data)) -> IComponentContainer * { return new ComponentContainer<ScriptComponent>(); });
-        RegisterComponent("Health", [](UNUSED(Buffer data)) -> IComponentContainer * { return new ComponentContainer<Health>(); });
-        RegisterComponent("Animation", [](UNUSED(Buffer data)) -> IComponentContainer * { return new ComponentContainer<Animation>(); });
-        RegisterComponent("Clock", [](UNUSED(Buffer data)) -> IComponentContainer * { return new ComponentContainer<Clock>(); });
+        RegisterComponent("IDComponent", [](UNUSED(Buffer data)) -> IComponentContainer * {
+            return new ComponentContainer<IDComponent>();
+        });
+        RegisterComponent("TransformComponent", [](UNUSED(Buffer data)) -> IComponentContainer * {
+            return new ComponentContainer<TransformComponent>();
+        });
+        RegisterComponent("SpriteRendererComponent", [](UNUSED(Buffer data)) -> IComponentContainer * {
+            return new ComponentContainer<SpriteRendererComponent>();
+        });
+        RegisterComponent("BoxCollider2DComponent", [](UNUSED(Buffer data)) -> IComponentContainer * {
+            return new ComponentContainer<BoxCollider2DComponent>();
+        });
+        RegisterComponent("CircleRendererComponent", [](UNUSED(Buffer data)) -> IComponentContainer * {
+            return new ComponentContainer<CircleRendererComponent>();
+        });
+        RegisterComponent("RigidBody2DComponent", [](UNUSED(Buffer data)) -> IComponentContainer * {
+            return new ComponentContainer<RigidBody2DComponent>();
+        });
+        RegisterComponent("ScriptComponent", [](UNUSED(Buffer data)) -> IComponentContainer * {
+            return new ComponentContainer<ScriptComponent>();
+        });
+        RegisterComponent(
+            "Health", [](UNUSED(Buffer data)) -> IComponentContainer * { return new ComponentContainer<Health>(); });
+        RegisterComponent("Animation", [](UNUSED(Buffer data)) -> IComponentContainer * {
+            return new ComponentContainer<Animation>();
+        });
+        RegisterComponent("Clock",
+                          [](UNUSED(Buffer data)) -> IComponentContainer * { return new ComponentContainer<Clock>(); });
 
         // if (commandLine.Count > 1) {
         //     Application::Get().Close();
@@ -52,18 +69,15 @@ namespace Exodia {
 
         FramebufferSpecification fbSpec;
 
-        fbSpec.Width  = Application::Get().GetWindow().GetWidth();
+        fbSpec.Width = Application::Get().GetWindow().GetWidth();
         fbSpec.Height = Application::Get().GetWindow().GetHeight();
-        fbSpec.Attachments = {
-            FramebufferTextureFormat::RGBA8,
-            FramebufferTextureFormat::RED_INTEGER,
-            FramebufferTextureFormat::Depth
-        };
+        fbSpec.Attachments = {FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::RED_INTEGER,
+                              FramebufferTextureFormat::Depth};
 
         _Framebuffer = Framebuffer::Create(fbSpec);
 
         // Server main
-        //Exodia::Network::IOContextManager ioContextManager;
+        // Exodia::Network::IOContextManager ioContextManager;
 
         // Define a local endpoint to listen on
         // asio::ip::udp::endpoint localEndpoint(asio::ip::address::from_string("127.0.0.1"), 8082);
@@ -92,7 +106,7 @@ namespace Exodia {
         // Create the camera entity
         Entity *cameraEntity = _World[GAME]->CreateEntity("Camera");
         auto &camera = cameraEntity->AddComponent<CameraComponent>().Get();
-        cameraEntity->GetComponent<TransformComponent>().Get().Translation = { 0.0f, 0.0f, 15.0f };
+        cameraEntity->GetComponent<TransformComponent>().Get().Translation = {0.0f, 0.0f, 15.0f};
         camera.Camera.SetProjectionType(SceneCamera::ProjectionType::Perspective);
         camera.Camera.SetViewportSize(1600, 900);
 
@@ -100,11 +114,10 @@ namespace Exodia {
         body_camera.Get().Type = RigidBody2DComponent::BodyType::Dynamic;
         body_camera.Get().Mass = 0.0f;
         body_camera.Get().GravityScale = 0.0f;
-        body_camera.Get().Velocity = glm::vec2{ 1.5f, 0.0f };
+        body_camera.Get().Velocity = glm::vec2{1.5f, 0.0f};
 
         // Create the entities
         CreatePlayer(_World);
-
 
         // Create pata-pata
         CreatePataPata(_World);
@@ -129,7 +142,7 @@ namespace Exodia {
 
         Entity *cameraMenu = _World[MENU]->CreateEntity("Camera");
         auto &camera_ = cameraMenu->AddComponent<CameraComponent>().Get();
-        cameraMenu->GetComponent<TransformComponent>().Get().Translation = { 0.0f, 0.0f, 15.0f };
+        cameraMenu->GetComponent<TransformComponent>().Get().Translation = {0.0f, 0.0f, 15.0f};
         camera_.Camera.SetProjectionType(SceneCamera::ProjectionType::Perspective);
         camera_.Camera.SetViewportSize(1600, 900);
         cameraMenu->AddComponent<RigidBody2DComponent>().Get().Type = RigidBody2DComponent::BodyType::Static;
@@ -142,20 +155,16 @@ namespace Exodia {
         _World[_currentScene]->OnRuntimeStart();
     }
 
-    void RTypeLayer::OnDetach()
-    {
-        EXODIA_PROFILE_FUNCTION();
-    }
+    void RTypeLayer::OnDetach() { EXODIA_PROFILE_FUNCTION(); }
 
-    void RTypeLayer::OnUpdate(Exodia::Timestep ts)
-    {
+    void RTypeLayer::OnUpdate(Exodia::Timestep ts) {
         EXODIA_PROFILE_FUNCTION();
 
         // Renderer Prep
         {
             EXODIA_PROFILE_SCOPE("Renderer Prep");
 
-            Exodia::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
+            Exodia::RenderCommand::SetClearColor({0.1f, 0.1f, 0.1f, 1});
             Exodia::RenderCommand::Clear();
         }
 
@@ -182,8 +191,8 @@ namespace Exodia {
                 // Set entity sprite
                 // auto sprite = patata->AddComponent<SpriteRendererComponent>();
                 // Ref<Texture2D> texture = TextureImporter::LoadTexture2D("Assets/Textures/Pata-Pata.png");
-                // sprite.Get().Texture = SubTexture2D::CreateFromCoords(texture->Handle, { 0.0f, 0.0f }, { 33.3125f, 36.0f }, { 1.0f, 1.0f });
-
+                // sprite.Get().Texture = SubTexture2D::CreateFromCoords(texture->Handle, { 0.0f, 0.0f },
+                // { 33.3125f, 36.0f }, { 1.0f, 1.0f });
             }
         }
         // Update the world
@@ -194,7 +203,8 @@ namespace Exodia {
         //     EXODIA_PROFILE_SCOPE("Renderer Draw");
         //     Exodia::Renderer2D::BeginScene(_CameraController.GetCamera());
 
-        //     _World->ForEach<CircleRendererComponent>([&](Entity *entity, ComponentHandle<CircleRendererComponent> circle) {
+        //     _World->ForEach<CircleRendererComponent>([&](Entity *entity, ComponentHandle<CircleRendererComponent>
+        //     circle) {
         //         auto transform = entity->GetComponent<TransformComponent>();
         //         auto id = entity->GetComponent<IDComponent>();
 
@@ -209,7 +219,8 @@ namespace Exodia {
         //         }
         //     });
 
-        //     _World->ForEach<SpriteRendererComponent>([&](Entity *entity, ComponentHandle<SpriteRendererComponent> sprite) {
+        //     _World->ForEach<SpriteRendererComponent>([&](Entity *entity, ComponentHandle<SpriteRendererComponent>
+        //     sprite) {
         //         auto transform = entity->GetComponent<TransformComponent>();
         //         auto id = entity->GetComponent<IDComponent>();
 
@@ -226,18 +237,13 @@ namespace Exodia {
         // }
     }
 
-    void RTypeLayer::OnImGUIRender()
-    {
-        EXODIA_PROFILE_FUNCTION();
-    }
+    void RTypeLayer::OnImGUIRender() { EXODIA_PROFILE_FUNCTION(); }
 
-    void RTypeLayer::OnEvent(Exodia::Event &event)
-    {
+    void RTypeLayer::OnEvent(Exodia::Event &event) {
         _CameraController.OnEvent(event);
         EventDispatcher dispatcher(event);
         dispatcher.Dispatch<KeyPressedEvent>(BIND_EVENT_FN(RTypeLayer::OnKeyPressedEvent));
         dispatcher.Dispatch<KeyReleasedEvent>(BIND_EVENT_FN(RTypeLayer::OnKeyReleasedEvent));
-
     }
 
     bool RTypeLayer::OnKeyPressedEvent(KeyPressedEvent &event) {
@@ -245,15 +251,15 @@ namespace Exodia {
         int key = event.GetKeyCode();
 
         EXODIA_INFO("pressed {0}", key);
-        _World[_currentScene]->GetWorld().ForEach<ScriptComponent, TagComponent>([&](Entity *entity, auto script, auto tag) {
-            (void)entity;
+        _World[_currentScene]->GetWorld().ForEach<ScriptComponent, TagComponent>(
+            [&](Entity *entity, auto script, auto tag) {
+                (void)entity;
 
-            if (tag.Get().Tag.rfind("Player", 0) != std::string::npos && script.Get().Instance != nullptr) {
-                script.Get().Instance->OnKeyPressed(key);
-            }
-        });
+                if (tag.Get().Tag.rfind("Player", 0) != std::string::npos && script.Get().Instance != nullptr) {
+                    script.Get().Instance->OnKeyPressed(key);
+                }
+            });
         return true;
-
     };
 
     bool RTypeLayer::OnKeyReleasedEvent(KeyReleasedEvent &event) {
@@ -262,13 +268,14 @@ namespace Exodia {
 
         EXODIA_INFO("released {0}", key);
 
-        _World[_currentScene]->GetWorld().ForEach<ScriptComponent, TagComponent>([&](Entity *entity, auto script, auto tag) {
-            (void)entity;
+        _World[_currentScene]->GetWorld().ForEach<ScriptComponent, TagComponent>(
+            [&](Entity *entity, auto script, auto tag) {
+                (void)entity;
 
-            if (tag.Get().Tag.rfind("Player", 0) != std::string::npos && script.Get().Instance != nullptr) {
-                script.Get().Instance->OnKeyReleased(key);
-            }
-        });
+                if (tag.Get().Tag.rfind("Player", 0) != std::string::npos && script.Get().Instance != nullptr) {
+                    script.Get().Instance->OnKeyReleased(key);
+                }
+            });
         return false;
     };
-};
+}; // namespace Exodia

@@ -17,25 +17,23 @@ namespace Exodia {
     // Constructor & Destructor //
     //////////////////////////////
 
-    EditorLayer::EditorLayer() : Layer("Exodia Editor"), _EditorCamera(30.0f, 1.778f, 0.1f, 1000.0f), _ActiveScene(nullptr), _SceneState(SceneState::Edit), _ViewportSize{ 0.0f, 0.0f }, _ViewportHovered(false), _GuizmoType(-1) {};
+    EditorLayer::EditorLayer()
+        : Layer("Exodia Editor"), _EditorCamera(30.0f, 1.778f, 0.1f, 1000.0f), _ActiveScene(nullptr),
+          _SceneState(SceneState::Edit), _ViewportSize{0.0f, 0.0f}, _ViewportHovered(false), _GuizmoType(-1){};
 
     /////////////
     // Methods //
     /////////////
 
-    void EditorLayer::OnAttach()
-    {
+    void EditorLayer::OnAttach() {
         EXODIA_PROFILE_FUNCTION();
 
         Exodia::FramebufferSpecification fbSpec;
 
-        fbSpec.Width       = Application::Get().GetWindow().GetWidth();
-        fbSpec.Height      = Application::Get().GetWindow().GetHeight();
-        fbSpec.Attachments = {
-            FramebufferTextureFormat::RGBA8,
-            FramebufferTextureFormat::RED_INTEGER,
-            FramebufferTextureFormat::Depth
-        };
+        fbSpec.Width = Application::Get().GetWindow().GetWidth();
+        fbSpec.Height = Application::Get().GetWindow().GetHeight();
+        fbSpec.Attachments = {FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::RED_INTEGER,
+                              FramebufferTextureFormat::Depth};
 
         _Framebuffer = Exodia::Framebuffer::Create(fbSpec);
 
@@ -64,20 +62,16 @@ namespace Exodia {
             // TODO: If the user have no project create one and ask for a path and a name
         }
 
-        _PlayButton  = TextureImporter::LoadTexture2D("./Assets/Icons/ToolBar/PlayButton.png");
-        _StopButton  = TextureImporter::LoadTexture2D("./Assets/Icons/ToolBar/StopButton.png");
+        _PlayButton = TextureImporter::LoadTexture2D("./Assets/Icons/ToolBar/PlayButton.png");
+        _StopButton = TextureImporter::LoadTexture2D("./Assets/Icons/ToolBar/StopButton.png");
         _PauseButton = TextureImporter::LoadTexture2D("./Assets/Icons/ToolBar/PauseButton.png");
 
         Renderer2D::SetLineWidth(4.0f);
     }
 
-    void EditorLayer::OnDetach()
-    {
-        EXODIA_PROFILE_FUNCTION();
-    }
+    void EditorLayer::OnDetach() { EXODIA_PROFILE_FUNCTION(); }
 
-    void EditorLayer::OnUpdate(UNUSED(Exodia::Timestep ts))
-    {
+    void EditorLayer::OnUpdate(UNUSED(Exodia::Timestep ts)) {
         EXODIA_PROFILE_FUNCTION();
 
         Renderer2D::ResetStats();
@@ -85,10 +79,11 @@ namespace Exodia {
         FramebufferSpecification spec = _Framebuffer->GetSpecification();
 
         // Resize the viewport
-        if (_ViewportSize.x > 0.0f && _ViewportSize.y > 0.0f && (spec.Width != _ViewportSize.x || spec.Height != _ViewportSize.y)) {
+        if (_ViewportSize.x > 0.0f && _ViewportSize.y > 0.0f &&
+            (spec.Width != _ViewportSize.x || spec.Height != _ViewportSize.y)) {
             _Framebuffer->Resize((uint32_t)_ViewportSize.x, (uint32_t)_ViewportSize.y);
             _EditorCamera.SetViewportSize(_ViewportSize.x, _ViewportSize.y);
-            
+
             if (_ActiveScene)
                 _ActiveScene->OnViewportResize((uint32_t)_ViewportSize.x, (uint32_t)_ViewportSize.y);
         }
@@ -97,27 +92,27 @@ namespace Exodia {
         _Framebuffer->Bind();
 
         // Clear the screen
-        RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
+        RenderCommand::SetClearColor({0.1f, 0.1f, 0.1f, 1});
         RenderCommand::Clear();
         _Framebuffer->ClearAttachment(1, -1);
 
-        switch(_SceneState) {
-            case SceneState::Edit:
-                _EditorCamera.OnUpdate(ts);
+        switch (_SceneState) {
+        case SceneState::Edit:
+            _EditorCamera.OnUpdate(ts);
 
-                if (_ActiveScene)
-                    _ActiveScene->OnUpdateEditor(ts, _EditorCamera);
-                break;
-            case SceneState::Play:
-                if (_ActiveScene)
-                    _ActiveScene->OnUpdateRuntime(ts);
-                break;
-            default:
-                break;
+            if (_ActiveScene)
+                _ActiveScene->OnUpdateEditor(ts, _EditorCamera);
+            break;
+        case SceneState::Play:
+            if (_ActiveScene)
+                _ActiveScene->OnUpdateRuntime(ts);
+            break;
+        default:
+            break;
         }
 
-         // Get Mouse Position in the Viewport window
-        auto[mx, my] = ImGui::GetMousePos();
+        // Get Mouse Position in the Viewport window
+        auto [mx, my] = ImGui::GetMousePos();
 
         mx -= _ViewportBounds[0].x;
         my -= _ViewportBounds[0].y;
@@ -142,14 +137,13 @@ namespace Exodia {
         _Framebuffer->Unbind();
     }
 
-    void EditorLayer::OnImGUIRender()
-    {
+    void EditorLayer::OnImGUIRender() {
         EXODIA_PROFILE_FUNCTION();
 
-            // -- DockSpace ----------------------------------------------------
+        // -- DockSpace ----------------------------------------------------
 
-        static bool dockspaceOpen                 = true;
-        static bool opt_fullscreen_persistant     = true;
+        static bool dockspaceOpen = true;
+        static bool opt_fullscreen_persistant = true;
         static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
         bool opt_fullscreen = opt_fullscreen_persistant;
 
@@ -164,7 +158,8 @@ namespace Exodia {
             ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
             ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
 
-            window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
+            window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize |
+                            ImGuiWindowFlags_NoMove;
             window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
         }
 
@@ -179,8 +174,8 @@ namespace Exodia {
             ImGui::PopStyleVar(2);
 
         // DockSpace
-        ImGuiIO& io = ImGui::GetIO();
-        ImGuiStyle& style = ImGui::GetStyle();
+        ImGuiIO &io = ImGui::GetIO();
+        ImGuiStyle &style = ImGui::GetStyle();
 
         float minWinSizeX = style.WindowMinSize.x;
 
@@ -192,7 +187,7 @@ namespace Exodia {
 
         style.WindowMinSize.x = minWinSizeX;
 
-            // -- Menu Bar -----------------------------------------------------
+        // -- Menu Bar -----------------------------------------------------
 
         if (ImGui::BeginMenuBar()) {
             if (ImGui::BeginMenu("File")) {
@@ -209,36 +204,36 @@ namespace Exodia {
                 ImGui::Separator();
 
                 if (ImGui::MenuItem("Exit"))
-                    Application::Get().Close();                
+                    Application::Get().Close();
                 ImGui::EndMenu();
             }
             ImGui::EndMenuBar();
         }
 
-            // -- Tool Bar -----------------------------------------------------
+        // -- Tool Bar -----------------------------------------------------
 
         ToolBarRendering();
 
-            // -- Scene Hierarchy ----------------------------------------------
+        // -- Scene Hierarchy ----------------------------------------------
 
         _SceneHierarchy.OnImGuiRender();
 
-            // -- Content Browser ----------------------------------------------
+        // -- Content Browser ----------------------------------------------
 
         if (_ContentBrowser)
             _ContentBrowser->OnImGuiRender();
 
-            // -- Viewport -----------------------------------------------------
+        // -- Viewport -----------------------------------------------------
 
-        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{0, 0});
         ImGui::Begin("Viewport");
 
         ImVec2 viewportMinRegion = ImGui::GetWindowContentRegionMin();
         ImVec2 viewportMaxRegion = ImGui::GetWindowContentRegionMax();
         ImVec2 viewportOffset = ImGui::GetWindowPos();
 
-        _ViewportBounds[0] = { viewportMinRegion.x + viewportOffset.x, viewportMinRegion.y + viewportOffset.y };
-        _ViewportBounds[1] = { viewportMaxRegion.x + viewportOffset.x, viewportMaxRegion.y + viewportOffset.y };
+        _ViewportBounds[0] = {viewportMinRegion.x + viewportOffset.x, viewportMinRegion.y + viewportOffset.y};
+        _ViewportBounds[1] = {viewportMaxRegion.x + viewportOffset.x, viewportMaxRegion.y + viewportOffset.y};
 
         _ViewportHovered = ImGui::IsWindowHovered();
 
@@ -246,11 +241,12 @@ namespace Exodia {
 
         ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
 
-        _ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
+        _ViewportSize = {viewportPanelSize.x, viewportPanelSize.y};
 
-        ImGui::Image(reinterpret_cast<ImTextureID>(_Framebuffer->GetColorAttachmentRendererID()), ImVec2{ _ViewportSize.x, _ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+        ImGui::Image(reinterpret_cast<ImTextureID>(_Framebuffer->GetColorAttachmentRendererID()),
+                     ImVec2{_ViewportSize.x, _ViewportSize.y}, ImVec2{0, 1}, ImVec2{1, 0});
 
-            // 1. Drag and Drop
+        // 1. Drag and Drop
         if (ImGui::BeginDragDropTarget()) {
             const ImGuiPayload *payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM");
 
@@ -262,14 +258,15 @@ namespace Exodia {
             ImGui::EndDragDropTarget();
         }
 
-            // 2. ImGuizmo
+        // 2. ImGuizmo
 
         Entity *selectedEntity = _SceneHierarchy.GetSelectedEntity();
 
         if (selectedEntity && selectedEntity->GetEntityID() != Entity::InvalidEntityID && _GuizmoType != -1) {
             ImGuizmo::SetOrthographic(false);
             ImGuizmo::SetDrawlist();
-            ImGuizmo::SetRect(_ViewportBounds[0].x, _ViewportBounds[0].y, _ViewportBounds[1].x - _ViewportBounds[0].x, _ViewportBounds[1].y - _ViewportBounds[0].y);
+            ImGuizmo::SetRect(_ViewportBounds[0].x, _ViewportBounds[0].y, _ViewportBounds[1].x - _ViewportBounds[0].x,
+                              _ViewportBounds[1].y - _ViewportBounds[0].y);
 
             // -- Editor Camera
             const glm::mat4 &cameraProjection = _EditorCamera.GetProjection();
@@ -290,9 +287,11 @@ namespace Exodia {
                 if (_GuizmoType == ImGuizmo::OPERATION::ROTATE)
                     snapValue = 45.0f;
 
-                float snapValues[3] = { snapValue, snapValue, snapValue };
+                float snapValues[3] = {snapValue, snapValue, snapValue};
 
-                ImGuizmo::Manipulate(glm::value_ptr(cameraView), glm::value_ptr(cameraProjection), (ImGuizmo::OPERATION)_GuizmoType, ImGuizmo::MODE::LOCAL, glm::value_ptr(transform), nullptr, snap ? snapValues : nullptr);
+                ImGuizmo::Manipulate(glm::value_ptr(cameraView), glm::value_ptr(cameraProjection),
+                                     (ImGuizmo::OPERATION)_GuizmoType, ImGuizmo::MODE::LOCAL, glm::value_ptr(transform),
+                                     nullptr, snap ? snapValues : nullptr);
 
                 if (ImGuizmo::IsUsing()) {
                     glm::vec3 translation;
@@ -304,8 +303,8 @@ namespace Exodia {
                     glm::vec3 deltaRotation = rotation - tc.Rotation;
 
                     tc.Translation = translation;
-                    tc.Rotation   += deltaRotation;
-                    tc.Scale       = scale;
+                    tc.Rotation += deltaRotation;
+                    tc.Scale = scale;
                 }
             }
         }
@@ -313,24 +312,20 @@ namespace Exodia {
         ImGui::End();
         ImGui::PopStyleVar();
 
-            // -- End DockSpace ------------------------------------------------
+        // -- End DockSpace ------------------------------------------------
 
         ImGui::End();
     }
 
-    void EditorLayer::OnEvent(UNUSED(Exodia::Event &event)) {};
+    void EditorLayer::OnEvent(UNUSED(Exodia::Event &event)){};
 
     /////////////////////
     // Project Methods //
     /////////////////////
 
-    void EditorLayer::NewProject()
-    {
-        Project::New();
-    }
+    void EditorLayer::NewProject() { Project::New(); }
 
-    bool EditorLayer::OpenProject()
-    {
+    bool EditorLayer::OpenProject() {
         std::string path = FileDialog::OpenFile("proj");
 
         if (path.empty())
@@ -340,8 +335,7 @@ namespace Exodia {
         return true;
     }
 
-    void EditorLayer::OpenProject(const std::filesystem::path &path)
-    {
+    void EditorLayer::OpenProject(const std::filesystem::path &path) {
         if (Project::Load(path)) {
             ScriptEngine::Init();
 
@@ -354,29 +348,27 @@ namespace Exodia {
         }
     }
 
-    //TODO: void SaveProject(const std::filesystem::path &path);
+    // TODO: void SaveProject(const std::filesystem::path &path);
 
     ///////////////////
     // Scene Methods //
     ///////////////////
 
-    void EditorLayer::NewScene()
-    {
-        _ActiveScene     = CreateRef<Scene>();
+    void EditorLayer::NewScene() {
+        _ActiveScene = CreateRef<Scene>();
 
-        _EditorScene     = _ActiveScene;
+        _EditorScene = _ActiveScene;
 
         _EditorScenePath = std::filesystem::path();
 
         _SceneHierarchy.SetContext(_ActiveScene);
     }
 
-    void EditorLayer::OpenScene(AssetHandle handle)
-    {
+    void EditorLayer::OpenScene(AssetHandle handle) {
         if (_SceneState != SceneState::Edit)
             OnSceneStop();
         Ref<Scene> readOnly = AssetManager::GetAsset<Scene>(handle);
-        Ref<Scene> scene    = Scene::Copy(readOnly);
+        Ref<Scene> scene = Scene::Copy(readOnly);
 
         _EditorScene = scene;
         _ActiveScene = _EditorScene;
@@ -385,16 +377,14 @@ namespace Exodia {
         _EditorScenePath = Project::GetActive()->GetEditorAssetManager()->GetFilePath(handle);
     }
 
-    void EditorLayer::SaveScene()
-    {
+    void EditorLayer::SaveScene() {
         if (!_EditorScenePath.empty())
             SceneImporter::SaveScene(_ActiveScene, _EditorScenePath);
         else
             SaveSceneAs();
     }
 
-    void EditorLayer::SaveSceneAs()
-    {
+    void EditorLayer::SaveSceneAs() {
         std::string path = FileDialog::SaveFile("exodia");
 
         if (path.empty())
@@ -405,8 +395,7 @@ namespace Exodia {
         _EditorScenePath = path;
     }
 
-    void EditorLayer::OnSceneStart()
-    {
+    void EditorLayer::OnSceneStart() {
         _SceneState = SceneState::Play;
 
         _ActiveScene = Scene::Copy(_EditorScene);
@@ -415,8 +404,7 @@ namespace Exodia {
         _SceneHierarchy.SetContext(_ActiveScene);
     }
 
-    void EditorLayer::OnSceneStop()
-    {
+    void EditorLayer::OnSceneStop() {
         if (_SceneState == SceneState::Play)
             _ActiveScene->OnRuntimeStop();
         _SceneState = SceneState::Edit;
@@ -429,11 +417,10 @@ namespace Exodia {
     // ImGui Methods //
     ///////////////////
 
-    void EditorLayer::ToolBarRendering()
-    {
-        ImGui::PushStyleVar  (ImGuiStyleVar_WindowPadding   , ImVec2(0, 2));
-        ImGui::PushStyleVar  (ImGuiStyleVar_ItemInnerSpacing, ImVec2(0, 0));
-        ImGui::PushStyleColor(ImGuiCol_Button               , ImVec4(0, 0, 0, 0));
+    void EditorLayer::ToolBarRendering() {
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 2));
+        ImGui::PushStyleVar(ImGuiStyleVar_ItemInnerSpacing, ImVec2(0, 0));
+        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
 
         auto &colors = ImGui::GetStyle().Colors;
         const auto &buttonHovered = colors[ImGuiCol_ButtonHovered];
@@ -443,7 +430,8 @@ namespace Exodia {
         const auto &buttonActive = colors[ImGuiCol_ButtonActive];
 
         ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(buttonActive.x, buttonActive.y, buttonActive.z, 0.5f));
-        ImGui::Begin("##toolbar", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+        ImGui::Begin("##toolbar", nullptr,
+                     ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
 
         bool toolbarEnabled = (bool)_ActiveScene;
 
@@ -462,7 +450,9 @@ namespace Exodia {
         if (hasPlayButton) {
             Ref<Texture2D> icon = (_SceneState == SceneState::Edit) ? _PlayButton : _StopButton;
 
-            if (ImGui::ImageButton(reinterpret_cast<ImTextureID>(icon->GetRendererID()), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0, ImVec4(0, 0, 0, 0), tintColor) && toolbarEnabled) {
+            if (ImGui::ImageButton(reinterpret_cast<ImTextureID>(icon->GetRendererID()), ImVec2(size, size),
+                                   ImVec2(0, 0), ImVec2(1, 1), 0, ImVec4(0, 0, 0, 0), tintColor) &&
+                toolbarEnabled) {
                 if (_SceneState == SceneState::Edit)
                     OnSceneStart();
                 else if (_SceneState == SceneState::Play)
@@ -477,7 +467,9 @@ namespace Exodia {
             {
                 Ref<Texture2D> icon = _PauseButton;
 
-                if (ImGui::ImageButton(reinterpret_cast<ImTextureID>(icon->GetRendererID()), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0, ImVec4(0, 0, 0, 0), tintColor) && toolbarEnabled)
+                if (ImGui::ImageButton(reinterpret_cast<ImTextureID>(icon->GetRendererID()), ImVec2(size, size),
+                                       ImVec2(0, 0), ImVec2(1, 1), 0, ImVec4(0, 0, 0, 0), tintColor) &&
+                    toolbarEnabled)
                     _ActiveScene->SetPaused(!isPaused);
             }
         }
@@ -487,15 +479,15 @@ namespace Exodia {
         ImGui::End();
     }
 
-    void EditorLayer::OnOverlayRender()
-    {
+    void EditorLayer::OnOverlayRender() {
         if (_SceneState == SceneState::Play) {
             Entity *camera = _ActiveScene->GetPrimaryCamera();
 
             if (!camera)
                 return;
 
-            Renderer2D::BeginScene(camera->GetComponent<CameraComponent>().Get().Camera, camera->GetComponent<TransformComponent>().Get().GetTransform());
+            Renderer2D::BeginScene(camera->GetComponent<CameraComponent>().Get().Camera,
+                                   camera->GetComponent<TransformComponent>().Get().GetTransform());
         } else
             Renderer2D::BeginScene(_EditorCamera);
 
@@ -514,4 +506,4 @@ namespace Exodia {
 
         Renderer2D::EndScene();
     }
-};
+}; // namespace Exodia

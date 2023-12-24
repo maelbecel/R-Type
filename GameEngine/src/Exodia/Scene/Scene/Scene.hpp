@@ -6,16 +6,16 @@
 */
 
 #ifndef SCENE_HPP_
-    #define SCENE_HPP_
+#define SCENE_HPP_
 
-    // Exodia Asset includes
-    #include "Asset/Asset.hpp"
+// Exodia Asset includes
+#include "Asset/Asset.hpp"
 
-    // Exodia ECS includes
-    #include "ECS/World/World.hpp"
+// Exodia ECS includes
+#include "ECS/World/World.hpp"
 
-    // Exodia Renderer includes
-    #include "Renderer/Camera/EditorCamera.hpp"
+// Exodia Renderer includes
+#include "Renderer/Camera/EditorCamera.hpp"
 
 namespace Exodia {
 
@@ -24,96 +24,90 @@ namespace Exodia {
         //////////////////////////////
         // Constructor & Destructor //
         //////////////////////////////
-        public:
-
-            Scene(const std::string &name = "Untitled Scene");
-            ~Scene();
+      public:
+        Scene(const std::string &name = "Untitled Scene");
+        ~Scene();
 
         /////////////
         // Methods //
         /////////////
-        public:
+      public:
+        static Ref<Scene> Copy(Ref<Scene> other);
 
-            static Ref<Scene> Copy(Ref<Scene> other);
+        // -- Entity -------------------------------------------------------
 
-            // -- Entity -------------------------------------------------------
+        Entity *CreateEntity(const std::string &name = std::string());
+        Entity *CreateEntityWithUUID(UUID uuid, const std::string &name = std::string());
+        Entity *DuplicateEntity(Entity *entity);
+        void DestroyEntity(Entity *entity);
 
-            Entity *CreateEntity(const std::string &name = std::string());
-            Entity *CreateEntityWithUUID(UUID uuid, const std::string &name = std::string());
-            Entity *DuplicateEntity(Entity *entity);
-            void DestroyEntity(Entity *entity);
+        // -- Runtime ------------------------------------------------------
 
-            // -- Runtime ------------------------------------------------------
+        void OnRuntimeStart();
+        void OnRuntimeStop();
+        void OnUpdateRuntime(Timestep ts);
 
-            void OnRuntimeStart();
-            void OnRuntimeStop();
-            void OnUpdateRuntime(Timestep ts);
+        // -- Editor -------------------------------------------------------
 
-            // -- Editor -------------------------------------------------------
+        void OnUpdateEditor(Timestep ts, EditorCamera &camera);
 
-            void OnUpdateEditor(Timestep ts, EditorCamera &camera);
+        // -- Viewport -----------------------------------------------------
 
-            // -- Viewport -----------------------------------------------------
+        void OnViewportResize(uint32_t width, uint32_t height);
 
-            void OnViewportResize(uint32_t width, uint32_t height);
+        // -- World --------------------------------------------------------
 
-            // -- World --------------------------------------------------------
+        template <typename... Components>
+        void
+        ForEach(typename std::common_type<std::function<void(Entity *, ComponentHandle<Components>...)>>::type function,
+                bool includePendingDestroy = false) {
+            if (_World)
+                _World->ForEach<Components...>(function, includePendingDestroy);
+        }
 
-            template<typename ...Components>
-            void ForEach(typename std::common_type<std::function<void(Entity *, ComponentHandle<Components>...)>>::type function, bool includePendingDestroy = false)
-            {
-                if (_World)
-                    _World->ForEach<Components...>(function, includePendingDestroy);
-            }
+        void RegisterSystem(EntitySystem *system);
 
-            void RegisterSystem(EntitySystem *system);
+        template <typename Event> void Subscribe(EventSubscriber<Event> *subscriber) {
+            _World->Subscribe<Event>(subscriber);
+        }
 
-            template<typename Event>
-            void Subscribe(EventSubscriber<Event> *subscriber)
-            {
-                _World->Subscribe<Event>(subscriber);
-            }
-
-        private:
-            
-            void RenderScene();
+      private:
+        void RenderScene();
 
         ///////////////////////
         // Getters & Setters //
         ///////////////////////
-        public:
+      public:
+        const std::string &GetName() const;
+        void SetName(const std::string &name);
 
-            const std::string &GetName() const;
-            void SetName(const std::string &name);
+        World &GetWorld() const;
 
-            World &GetWorld() const;
+        Entity *GetPrimaryCamera();
+        Entity *GetEntityByName(const std::string &name);
+        Entity *GetEntityByUUID(UUID uuid);
 
-            Entity *GetPrimaryCamera();
-            Entity *GetEntityByName(const std::string &name);
-            Entity *GetEntityByUUID(UUID uuid);
+        bool IsRunning() const;
+        bool IsPaused() const;
 
-            bool IsRunning() const;
-            bool IsPaused() const;
+        void SetPaused(bool paused);
 
-            void SetPaused(bool paused);
-
-            virtual AssetType GetType() const override;
+        virtual AssetType GetType() const override;
 
         ////////////////
         // Attributes //
         ////////////////
-        private:
+      private:
+        std::string _Name;
+        uint32_t _ViewportWidth;
+        uint32_t _ViewportHeight;
+        World *_World;
 
-            std::string _Name;
-            uint32_t    _ViewportWidth;
-            uint32_t    _ViewportHeight;
-            World      *_World;
+        bool _IsRunning;
+        bool _IsPaused;
 
-            bool _IsRunning;
-            bool _IsPaused;
-
-            std::vector<EntitySystem *> _Systems;
+        std::vector<EntitySystem *> _Systems;
     };
-};
+}; // namespace Exodia
 
 #endif /* !SCENE_HPP_ */
