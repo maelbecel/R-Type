@@ -18,14 +18,29 @@
 > This project of the Advanced C++ knowledge unit will introduce you to networked video game development, and will give you the opportunity to explore advanced development techniques as well as to learn good software engineering practices.
 The goal is to implement a multithreaded server and a graphical client for a well-known legacy video game called 'R-Type', using a game engine of your own design.
 
-## Installation
+## Table of Contents
 
-**VCPKG :**
+1. [Usage & Examples](#usage--examples)
+    1. [VCPKG](#vcpkg)
+    2. [Windows](#windows)
+    3. [Linux](#linux)
+2. [UML](#uml)
+3. [Contact](#contact)
+4. [Documentation](#documentation)
+
+## Usage & Examples
+
+### VCPKG
+
+- Install VCPKG.
+
+After the installation done, on Linux :
+
 ```bash
 git clone git@github.com:microsoft/vcpkg.git
 ```
 
-**Linux :**
+### Linux
 ```bash
 ./vcpkg/bootstrap-vcpkg.sh
 export VCPKG_ROOT=/path/vcpkg
@@ -48,7 +63,7 @@ cmake --build .
 ```
 
 
-**Windows :**
+### Windows :
 ```bash
 ./vcpkg/bootstrap-vcpkg.bat
 ```
@@ -78,10 +93,21 @@ cmake --build .
 ## UML
 ![GameEngine](doc/GameEngine.jpeg)
 
-## Authors
+## Contact
 
-* **Ethan Hernou** _alias_ [@Phara](https://github.com/PharaEthan)
-* **Axel Rohee** _alias_ [@RoheeAxel](https://github.com/RoheeAxel)
-* **Enzo Garnier** _alias_ [@EnzoGrn](https://github.com/EnzoGrn)
-* **Thomas Juin** _alias_ [@Chocofraise](https://github.com/thomasjuin1)
-* **Maël Becel** _alias_ [@Medhi](https://github.com/maelbecel)
+If you have any questions or concerns, please feel free to contact us :
+
+- Game Engine
+    - [PharaEthan](https://github.com/PharaEthan) ethan.hernou@epitech.eu
+
+- Client
+    - [maelbecel](https://github.com/maelbecel) mael1.becel@epitech.eu
+    - [EnzoGrn](https://github.com/EnzoGrn) enzo.garnier@epitech.eu
+
+- Server
+    - [RoheeAxel](https://github.com/RoheeAxel) axel.rohee@epitech.eu
+    - [Chocofraise](https://github.com/thomasjuin1) thomas.juin@epitech.eu
+
+## Documentation
+
+You can read the full documentation [here](http://etipech.me)
