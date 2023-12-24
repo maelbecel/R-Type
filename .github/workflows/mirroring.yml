@@ -60,15 +60,18 @@ jobs:
           cmake --version
       - name: Set VCPKG_ROOT and Run CMake
         run: |
-          mkdir build && cd build && cmake .. && cmake --build . && cd ..
-      - name: Check if the executable exists
-        run: |
-          ls
-        shell: pwsh
+          mkdir build && cd build && cmake .. && cmake --build . && cd .. && ls
+    #  - name: Check if the executable exists
+    #    run: |
+    #      IF (Test-Path .\Release\r-type_client.exe) -and (Test-Path .\Release\r-type_server.exe) { exit 0 }
+    #      exit 1
+    #    shell: pwsh
 
   tests:
     name: Testing...
-    needs: linux-compilation
+    needs:
+      - linux-compilation
+      - windows-compilation
     runs-on: ubuntu-latest
     container: epitechcontent/epitest-docker
     timeout-minutes: 10
