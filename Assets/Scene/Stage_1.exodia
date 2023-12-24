@@ -53,7 +53,7 @@ Entities:
     TagComponent:
       Tag: Ground
     TransformComponent:
-      Translation: [-3, -5.75, 0]
+      Translation: [-3, -5.75, -0.1]
       Rotation: [0, 0, 0]
       Scale: [6, 6, 1]
   - Entity: 1535145605273773898
@@ -77,7 +77,7 @@ Entities:
     TagComponent:
       Tag: Ground
     TransformComponent:
-      Translation: [1, -2.75, 0]
+      Translation: [1, -2.75, -0.1]
       Rotation: [0, 0, 0]
       Scale: [2, 2, 1]
   - Entity: 4241258188033773898
@@ -101,7 +101,7 @@ Entities:
     TagComponent:
       Tag: Ground
     TransformComponent:
-      Translation: [3, -3.25, 0]
+      Translation: [3, -3.25, -0.1]
       Rotation: [0, 0, 0]
       Scale: [2, 2, 1]
   - Entity: 1541524841524
@@ -125,7 +125,7 @@ Entities:
     TagComponent:
       Tag: Ground
     TransformComponent:
-      Translation: [9, -7.75, 0]
+      Translation: [9, -7.75, -0.1]
       Rotation: [0, 0, 0]
       Scale: [10, 10, 1]
   - Entity: 158008412125
@@ -149,6 +149,6 @@ Entities:
     TagComponent:
       Tag: Ground
     TransformComponent:
-      Translation: [15, -3.25, 0]
+      Translation: [15, -3.25, -0.1]
       Rotation: [0, 0, 0]
       Scale: [2, 2, 1]
