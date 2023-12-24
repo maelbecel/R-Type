@@ -30,9 +30,9 @@ The FramebufferAttachmentSpecification is a struct that contains the data of a f
 
 It contains the following values:
 
-| Name | Type | Description |
-|------|------|-------------|
-| Attachments | std::vector<FramebufferTextureSpecification> | The attachments |
+| Name | Type                                           | Description |
+|------|------------------------------------------------|-------------|
+| Attachments | std::vector\<FramebufferTextureSpecification\> | The attachments |
 
 ## FramebufferSpecification
 

@@ -12,9 +12,9 @@ It initializes a new Serializer.
 
 It takes the following parameters:
 
-| Name     | Type         | Description |
-|----------|--------------|-------------|
-| project | Ref<Project> | The project |
+| Name     | Type           | Description |
+|----------|----------------|-------------|
+| project | Ref\<Project\> | The project |
 
 It can be used like this:
 
