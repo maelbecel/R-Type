@@ -51,7 +51,7 @@ Entities:
       Size: [0.5, 0.5]
       Mask: 000010
     TagComponent:
-      Tag: Ground
+      Tag: 0b00101
     TransformComponent:
       Translation: [-3, -5.75, -0.1]
       Rotation: [0, 0, 0]
@@ -75,7 +75,7 @@ Entities:
       Size: [0.5, 0.5]
       Mask: 000010
     TagComponent:
-      Tag: Ground
+      Tag: 0b00101
     TransformComponent:
       Translation: [1, -2.75, -0.1]
       Rotation: [0, 0, 0]
@@ -99,7 +99,7 @@ Entities:
       Size: [0.5, 0.5]
       Mask: 000010
     TagComponent:
-      Tag: Ground
+      Tag: 0b00101
     TransformComponent:
       Translation: [3, -3.25, -0.1]
       Rotation: [0, 0, 0]
@@ -123,7 +123,7 @@ Entities:
       Size: [0.5, 0.5]
       Mask: 000010
     TagComponent:
-      Tag: Ground
+      Tag: 0b00101
     TransformComponent:
       Translation: [9, -7.75, -0.1]
       Rotation: [0, 0, 0]
@@ -147,7 +147,7 @@ Entities:
       Size: [0.5, 0.5]
       Mask: 000010
     TagComponent:
-      Tag: Ground
+      Tag: 0b00101
     TransformComponent:
       Translation: [15, -3.25, -0.1]
       Rotation: [0, 0, 0]

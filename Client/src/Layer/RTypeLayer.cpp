@@ -128,7 +128,7 @@ namespace Exodia {
                     _Scenes[RType::SceneType::GAME].second->RegisterSystem(new Exodia::CollisionSystem());
 
                     // -- TEMP -----
-                    /*Entity *entity = _Scenes[RType::SceneType::GAME].second->CreateEntity("Player");
+                    Entity *entity = _Scenes[RType::SceneType::GAME].second->CreateEntity("Player");
 
                     entity->AddComponent<Health>(1);
                     entity->AddComponent<ScriptComponent>().Get().Bind("Player");
@@ -144,7 +144,7 @@ namespace Exodia {
                     auto body = entity->AddComponent<RigidBody2DComponent>();
 
                     body.Get().Type = RigidBody2DComponent::BodyType::Dynamic;
-                    body.Get().GravityScale = 0.0f;*/
+                    body.Get().GravityScale = 0.0f;
                     // --------
 
                     _Scenes[RType::SceneType::GAME].second->OnRuntimeStart();

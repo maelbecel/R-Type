@@ -21,7 +21,7 @@ namespace Exodia {
         bullet_tc.Scale.y = 0.5f;
         bullet->AddComponent<ScriptComponent>().Get().Bind("BulletPlayer");
         bullet->AddComponent<Animation>(0.0f, 2.0f, 1.0f);
-        bullet->AddComponent<BoxCollider2DComponent>();
+        bullet->AddComponent<BoxCollider2DComponent>().Get().ColliderMask = 0b11111;
         bullet->AddComponent<ParentComponent>().Get().Parent = GetComponent<IDComponent>().Get().ID;
 
         auto body_bullet = bullet->AddComponent<RigidBody2DComponent>();

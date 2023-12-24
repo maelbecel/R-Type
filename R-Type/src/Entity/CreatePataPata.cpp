@@ -17,7 +17,7 @@ namespace Exodia {
         patata->AddComponent<ScriptComponent>().Get().Bind("PataPata");
         patata->AddComponent<Animation>(1.0f, 8.0f, 0.1f);
         patata->AddComponent<Clock>();
-        patata->AddComponent<BoxCollider2DComponent>();
+        patata->AddComponent<BoxCollider2DComponent>().Get().ColliderMask = 0b11100;
 
         auto body_patata = patata->AddComponent<RigidBody2DComponent>();
 

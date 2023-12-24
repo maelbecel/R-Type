@@ -47,7 +47,7 @@ namespace Exodia {
                 bullet_tc.Translation.y = tc.Translation.y;
                 bullet->AddComponent<ScriptComponent>().Get().Bind("BulletEnnemy");
                 bullet->AddComponent<Animation>(8.0f, 12.0f, 0.0795f);
-                bullet->AddComponent<BoxCollider2DComponent>();
+                bullet->AddComponent<BoxCollider2DComponent>().Get().ColliderMask = 0b11110;
                 bullet->AddComponent<ParentComponent>().Get().Parent = GetComponent<IDComponent>().Get().ID;
                 bullet->GetComponent<TransformComponent>().Get().Scale = { 0.5f, 0.5f, 0.0f };
 
