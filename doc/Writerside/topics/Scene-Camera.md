@@ -5,7 +5,7 @@ The Camera part of the Scene. It contains the classes that will be used to creat
 It defines the class `SceneCamera` that herits from `Camera`.
 
 ```mermaid
-Graph TD;
+graph TD;
     Camera --> SceneCamera;
 ```
 

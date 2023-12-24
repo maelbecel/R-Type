@@ -7,7 +7,7 @@ The `Scene` class herits for the `Asset` class.
 It defines the class `Scene`.
 
 ```mermaid
-Graph TD;
+graph TD;
     Asset --> Scene;
 ```
 
@@ -43,11 +43,11 @@ It copies the scene.
 
 It takes the following parameters:
 
-| Name  | Type         | Description |
-|-------|--------------|-------------|
-| other | const Ref<Scene>& | The other  |
+| Name  | Type                | Description |
+|-------|---------------------|-------------|
+| other | const Ref\<Scene\>& | The other  |
 
-It returns a Ref<Scene>.
+It returns a Ref\<Scene\>.
 
 It can be used like this:
 

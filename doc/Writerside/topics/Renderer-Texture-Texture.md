@@ -8,7 +8,7 @@ It defines two classes :
 - [**Texture2D**](#texture2d) : The Texture2D class of the Renderer. It contains the classes that will be used to create 2D textures.
 
 ```mermaid
-Graph TD;
+graph TD;
     Asset --> Texture;
     Texture --> Texture2D;
 ```
@@ -43,7 +43,7 @@ It defines the following properties:
 The Texture class of the Texture. It contains the classes that will be used to create textures.
 
 ```mermaid
-Graph TD;
+graph TD;
     Asset --> Texture;
 ```
 
@@ -167,7 +167,7 @@ const TextureSpecification& spec = texture->GetSpecification();
 The Texture2D class of the Texture. It contains the classes that will be used to create 2D textures.
 
 ```mermaid
-Graph TD;
+graph TD;
     Asset --> Texture;
     Texture --> Texture2D;
 ```

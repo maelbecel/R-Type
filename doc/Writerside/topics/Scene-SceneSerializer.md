@@ -14,9 +14,9 @@ It constructs the SceneSerializer.
 
 It takes the following parameters:
 
-| Name  | Type         | Description |
-|-------|--------------|-------------|
-| scene | const Ref<Scene> | The scene   |
+| Name  | Type               | Description |
+|-------|--------------------|-------------|
+| scene | const Ref\<Scene\> | The scene   |
 
 It can be used like this:
 

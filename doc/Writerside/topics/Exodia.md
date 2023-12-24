@@ -13,7 +13,7 @@ This part of the Game Engine is divided in multiple parts :
 - [**Project**](Project.md) : The project part of the Game Engine. It contains the classes that will be used to create a project.
 - [**Renderer**](Renderer.md) : The renderer part of the Game Engine. It contains the classes that will be used to render the game.
 - [**Scene**](Scene.md) : The scene part of the Game Engine. It contains the classes that will be used to create a scene.
-- [**Script**]() : The script part of the Game Engine. It contains the classes that will be used to create a script.
+- [**Script**](Script.md) : The script part of the Game Engine. It contains the classes that will be used to create a script.
 
 It also contains an entrypoint that will be used to create the game : 
 

@@ -267,10 +267,10 @@ It adds a shader.
 
 It takes the following parameters:
 
-| Name   | Type               | Description   |
-|--------|--------------------|---------------|
-| shader | const Ref<Shader>& | The shader    |
-| name   | const std::string& | The name      |
+| Name   | Type                 | Description   |
+|--------|----------------------|---------------|
+| shader | const Ref\<Shader\>& | The shader    |
+| name   | const std::string&   | The name      |
 
 It can be used like this:
 
@@ -290,8 +290,9 @@ It takes the following parameters:
 
 | Name | Type               | Description |
 |------|--------------------|-------------|
+| name | const std::string& | The name    |
 
-It returns a Ref<Shader>.
+It returns a Ref\<Shader\>.
 
 It can be used like this:
 
@@ -319,5 +320,4 @@ It can be used like this:
 
 ```c++
 bool exists = ShaderLibrary.Exists("Texture");
-```
 ```

@@ -19,6 +19,10 @@
         <toc-element topic="Client.md"/>
         <toc-element topic="Game-Engine.md">
             <toc-element topic="Exodia.md">
+                <toc-element topic="Script.md">
+                    <toc-element topic="Script-ScriptableEntity.md"/>
+                    <toc-element topic="Script-ScriptEngine.md"/>
+                </toc-element>
                 <toc-element topic="Scene.md">
                     <toc-element topic="Scene-SceneSerializer.md"/>
                     <toc-element topic="Scene-Scene.md"/>

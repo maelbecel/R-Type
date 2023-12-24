@@ -5,9 +5,9 @@ The Sound part of the Renderer. It contains the classes that will be used to cre
 It defines the class `Sound` and the class `Sound2D`.
 
 ```mermaid
-Graph TD;
-    Asset --> Sound;
-    Sound --> Sound2D;
+graph TD;
+    Asset-->Sound;
+    Sound-->Sound2D;
 ```
 
 IT contains the following  methods:
@@ -149,7 +149,7 @@ The Sound2D class. It inherits from the Sound class.
 It defines the class `Sound2D`.
 
 ```mermaid
-Graph TD;
+graph TD;
     Sound --> Sound2D;
 ```
 
