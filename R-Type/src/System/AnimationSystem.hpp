@@ -26,6 +26,8 @@ namespace Exodia {
             // Methods
             virtual void Update(World *world, Timestep ts) override
             {
+
+                world->LockMutex();
                 // WARNING: This is a temporary solution
                 // world->ForEach<SpriteRendererComponent, Animation>([&](Entity *entity, auto sprite, auto animation) {
                 world->ForEach<Animation>([&](Entity *entity, ComponentHandle<Animation> animation) {
@@ -109,6 +111,7 @@ namespace Exodia {
                         }
                     }
                 });
+                world->UnlockMutex();
             }
 
         //    virtual void OnCollisionEnter(Entity *entity) override

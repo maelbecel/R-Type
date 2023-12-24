@@ -36,6 +36,7 @@ namespace Exodia {
         {
             EXODIA_PROFILE_SCOPE("CollisionSystem::Update::BoxCollider2D");
 
+            world->LockMutex();
             world->ForEach<BoxCollider2DComponent, TransformComponent>([&](Entity *entityA, ComponentHandle<BoxCollider2DComponent> colliderA, ComponentHandle<TransformComponent> transformA) {
                 world->ForEach<BoxCollider2DComponent, TransformComponent>([&](Entity *entityB, ComponentHandle<BoxCollider2DComponent> colliderB, ComponentHandle<TransformComponent> transformB) {
                     if (std::find(collisions.begin(), collisions.end(), std::make_pair(entityB, entityA)) != collisions.end())
@@ -53,11 +54,13 @@ namespace Exodia {
                         collisions.push_back(std::make_pair(entityA, entityB));
                 });
             });
+            world->UnlockMutex();
         }
 
         {
             EXODIA_PROFILE_SCOPE("CollisionSystem::Update::CircleCollider2D");
 
+            world->LockMutex();
             world->ForEach<CircleCollider2DComponent, TransformComponent>([&](Entity *entityA, ComponentHandle<CircleCollider2DComponent> colliderA, ComponentHandle<TransformComponent> transformA) {
                 world->ForEach<CircleCollider2DComponent, TransformComponent>([&](Entity *entityB, ComponentHandle<CircleCollider2DComponent> colliderB, ComponentHandle<TransformComponent> transformB) {
                     if (std::find(collisions.begin(), collisions.end(), std::make_pair(entityB, entityA)) != collisions.end())
@@ -67,6 +70,7 @@ namespace Exodia {
                         collisions.push_back(std::make_pair(entityA, entityB));
                 });
             });
+            world->UnlockMutex();
         }
 
         CompareCollisions(collisions);

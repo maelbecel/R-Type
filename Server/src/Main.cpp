@@ -5,32 +5,25 @@
 ** Main
 */
 
-#include <iostream>
-#include <asio.hpp>
-#include "Exodia.hpp"
+#include "R-Type.hpp"
 #include "Server.hpp"
 
 int main(void)
 {
     Exodia::Log::Init();
+    Exodia::RendererAPI::SetAPI(Exodia::RendererAPI::API::None);
 
-#ifdef _WIN32
-    Exodia::Project::Load("../Client/R-Type.proj");
-#else
-    Exodia::Project::Load("./Client/R-Type.proj");
-#endif
-
-    Exodia::RendererAPI::SetGraphical(false);
-
-    std::cout << "Server is waiting for infos !" << std::endl;
+    RType::InitRType();
 
     try {
         Exodia::Server server(8082);
+
         server.Init();
         server.Run();
-        return 0;
-
-    } catch (std::exception &e) {
-        std::cerr << "Exception: " << e.what() << std::endl;
+    } catch (std::exception &error) {
+        EXODIA_ERROR("Exception :\n\t{0}", error.what());
+        
+        return 84;
     }
+    return 0;
 }

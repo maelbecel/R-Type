@@ -3,4 +3,4 @@ project(Network)
 
 # Add the server subdirectory
 add_subdirectory(UDPWrapper)
-
+add_subdirectory(ComponentSend)

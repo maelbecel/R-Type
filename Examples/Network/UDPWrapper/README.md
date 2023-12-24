@@ -15,9 +15,9 @@ public:
     UDPSocket(IOContextManager& ioContextManager, const asio::ip::udp::endpoint& endpoint);
 
     // Methods
-    void send(const std::vector<char> message, size_t size, const asio::ip::udp::endpoint& endpoint);
+    void Send(const std::vector<char> message, size_t size, const asio::ip::udp::endpoint& endpoint);
     template <typename Callback>
-    void receive(Callback callback);
+    void Receive(Callback callback);
     asio::ip::udp::endpoint getSenderEndpoint() const;
     asio::ip::udp::socket& getSocket();
 

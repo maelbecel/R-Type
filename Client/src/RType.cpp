@@ -7,30 +7,23 @@
 
 #include "Exodia/EntryPoint.hpp"
 #include "Layer/RTypeLayer.hpp"
-#include <iostream>
-
-
-void my_callback(const std::string &message)
-{
-    (void)message;
-    std::cout << "Message received: " << message << std::endl;
-}
+#include "R-Type.hpp"
 
 namespace Exodia {
 
-    class RType : public Application {
+    class RTypeClient : public Application {
 
         //////////////////////////////
         // Constructor & Destructor //
         //////////////////////////////
         public:
 
-            RType(const ApplicationSpecification &spec) : Application(spec)
+            RTypeClient(const ApplicationSpecification &spec) : Application(spec)
             {
                 PushLayer(new RTypeLayer());
             }
 
-            ~RType() = default;
+            ~RTypeClient() = default;
     };
 
     /////////////////
@@ -41,17 +34,13 @@ namespace Exodia {
     {
         EXODIA_PROFILE_FUNCTION();
 
-#ifdef _WIN32
-        Project::Load("../Client/R-Type.proj");
-#else
-        Project::Load("Client/R-Type.proj");
-#endif
+        RType::InitRType();
 
         ApplicationSpecification spec;
 
         spec.Name = "Application Example";
         spec.CommandLineArgs = args;
 
-        return new RType(spec);
+        return new RTypeClient(spec);
     }
 };

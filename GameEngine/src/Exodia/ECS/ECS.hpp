@@ -108,9 +108,6 @@ namespace Exodia {
     {
         auto found = _Components.find(GetTypeName<Component>());
 
-        EXODIA_ASSERT(found != _Components.end(), "Component not found in _Components map");
-        EXODIA_ASSERT(found->second != nullptr  , "ComponentContainer is nullptr");
-
         if (found == _Components.end() || found->second == nullptr)
             return ComponentHandle<Component>();
         return ComponentHandle<Component>(&reinterpret_cast<ComponentContainer<Component> *>(found->second)->Data);

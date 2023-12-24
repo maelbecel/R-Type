@@ -97,7 +97,7 @@ namespace Exodia {
         _Framebuffer->Bind();
 
         // Clear the screen
-        RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
+        RenderCommand::SetClearColor({ 0.0f, 0.0f, 0.0f, 1 });
         RenderCommand::Clear();
         _Framebuffer->ClearAttachment(1, -1);
 

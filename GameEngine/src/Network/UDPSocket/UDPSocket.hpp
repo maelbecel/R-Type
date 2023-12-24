@@ -47,16 +47,16 @@ class UDPSocket {
          * @param message (Type: std::string &) The message to send
          * @param endpoint (Type: const asio::ip::udp::endpoint &) The endpoint to send the message to
          */
-        void send(const std::vector<char> message, size_t size, const asio::ip::udp::endpoint& endpoint);
+        void Send(const std::vector<char> message, size_t size, const asio::ip::udp::endpoint& endpoint);
 
-        void send(Exodia::Network::Packet &packet ,const asio::ip::udp::endpoint& endpoint);
+        void Send(Exodia::Network::Packet &packet ,const asio::ip::udp::endpoint& endpoint);
 
         /**
          * @brief Receive data asynchronously
          *
          * @param callback (Type: void (*)(const std::string&)) The callback to call when a message is received
          */
-        void receive(const std::function<void(const std::vector<char> &, size_t, asio::ip::udp::endpoint)> &callback);
+        void Receive(const std::function<void(const std::vector<char> &, size_t, asio::ip::udp::endpoint)> &callback);
 
         /**
          * @brief Get the Sender Endpoint object

@@ -8,9 +8,11 @@
 #ifndef HEADER_HPP_
     #define HEADER_HPP_
 
-    #include <iostream>
-    #include <vector>
-    #include <cstring>
+#include <iostream>
+#include <vector>
+#include <cstring>
+#include <iomanip>
+#define _CRT_SECURE_NO_WARNINGS
     #include <ctime>
 
 #ifdef _WIN32
@@ -31,6 +33,14 @@ namespace Exodia {
         class Header {
             public:
 
+                Header(uint8_t command) : _command(command), _timestamp(0), _id(0), _size(0)
+                {
+                    using MillisecondsType = std::chrono::milliseconds::rep;
+
+                    MillisecondsType timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+
+                    _timestamp = static_cast<float>(timestamp);
+                };
                 /**
                  * @brief Construct a new Header object
                  * Construct a new Header object with the given command, id and size
@@ -103,7 +113,11 @@ namespace Exodia {
                     return header;
                 }
 
-                static size_t GetSize()
+                uint64_t GetId() const {
+                    return _id;
+                }
+
+                static unsigned long GetSize()
                 {
                     return 22;
                 }
@@ -121,11 +135,50 @@ namespace Exodia {
                 unsigned long getId() const { return _id; };
                 unsigned long getSize() const { return _size; };
 
-                friend std::ostream& operator<<(std::ostream& os, const Header& header) {
-                    os << "Command: " << header._command << std::endl;
-                    os << "Timestamp: " << header._timestamp << std::endl;
-                    os << "ID: " << header._id << std::endl;
-                    os << "Size: " << header._size << std::endl;
+
+                /**
+                 * @brief Return string representation of a command
+                 *
+                 * @return std::string String representation of the command
+                */
+                std::string VerbaliseCommand() const
+                {
+                    std::unordered_map<unsigned char, std::string> commands;
+                    std::string command;
+
+                    commands[0x00] = "Packet info";
+                    commands[0x01] = "Acknowledgement";
+                    commands[0x02] = "Accept client connection";
+                    commands[0x81] = "Ask for connection";
+                    commands[0x82] = "New Event";
+                    commands[0x0c] = "Create component";
+                    command = commands[getCommand()];
+
+                    if (command.empty())
+                        command = "Unknown command";
+
+                    return command;
+                }
+
+                std::string toString()
+                {
+                    std::string str;
+
+                    str += "Header: ";
+                    str += "Command: '" + VerbaliseCommand() + "'";
+                    str += " ID: "     + std::to_string(_id);
+                    str += " Size: "   + std::to_string(_size) + "\n";
+
+                    return str;
+                }
+
+                friend std::ostream& operator<<(std::ostream &os, const Header &header)
+                {
+                    os << "Header: ";
+                    os << "Command: '" << header.VerbaliseCommand() << "'";
+                    os << " ID: "      << header._id;
+                    os << " Size: "    << header._size << std::endl;
+
                     return os;
                 }
 

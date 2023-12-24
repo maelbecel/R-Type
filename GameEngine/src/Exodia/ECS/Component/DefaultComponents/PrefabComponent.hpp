@@ -67,6 +67,36 @@ namespace Exodia {
             }
         }
 
+        Buffer SerializeData() override
+        {
+            try {
+                uint32_t size = sizeof(uint64_t) * (uint32_t)Children.size();
+                Buffer buffer(size);
+
+                for (uint32_t i = 0; i < (uint64_t)Children.size(); i++)
+                    std::memcpy(buffer.Data + sizeof(uint64_t) * i, &Children[i], sizeof(uint64_t));
+            } catch (std::exception &e) {
+                EXODIA_CORE_WARN("ChildrenComponent serialization failed: {0}", e.what());
+            }
+
+            return Buffer();
+        }
+
+        void DeserializeData(Buffer data) override
+        {
+            try {
+                for (uint32_t i = 0; i < (data.Size / sizeof(uint64_t)); i++) {
+                    uint64_t child = 0;
+
+                    std::memcpy(&child, data.Data + sizeof(uint64_t) * i, sizeof(uint64_t));
+
+                    Children.push_back(child);
+                }
+            } catch (std::exception &e) {
+                EXODIA_CORE_WARN("ChildrenComponent deserialization failed: {0}", e.what());
+            }
+        }
+
         // TODO: Add a display to the component
     };
 
@@ -93,6 +123,33 @@ namespace Exodia {
 
                 Parent = parent["Parent"].as<uint64_t>();
             } catch (YAML::BadConversion &e) {
+                EXODIA_CORE_WARN("ParentComponent deserialization failed: {0}", e.what());
+            }
+        }
+
+        Buffer SerializeData() override
+        {
+            try {
+                uint32_t size = sizeof(uint64_t);
+                Buffer buffer(size);
+
+                std::memcpy(buffer.Data, &Parent, sizeof(uint64_t));
+            } catch (std::exception &e) {
+                EXODIA_CORE_WARN("ParentComponent serialization failed: {0}", e.what());
+            }
+
+            return Buffer();
+        }
+
+        void DeserializeData(Buffer data) override
+        {
+            try {
+                uint64_t parent = 0;
+
+                std::memcpy(&parent, data.Data, sizeof(uint64_t));
+
+                Parent = parent;
+            } catch (std::exception &e) {
                 EXODIA_CORE_WARN("ParentComponent deserialization failed: {0}", e.what());
             }
         }

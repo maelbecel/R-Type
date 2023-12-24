@@ -21,15 +21,14 @@ class Connection {
         };
 
         Connection() = default;
-
-        ~Connection()
-        {
-        };
+        ~Connection() = default;
 
         void SendPacket(Exodia::Network::UDPSocket &socket, Exodia::Network::Packet &packet) {
+            packet.GetHeader()->setSize((unsigned long)packet.GetContent().size());
             packet.GetHeader()->SetId(_sendPacket);
+            std::cout << "Sending packet to " << _endpoint << std::endl;
             for (int i = 0; i < 2; i++)
-                socket.send(packet, _endpoint);
+                socket.Send(packet, _endpoint);
             _sendPacket++;
         }
 
@@ -64,9 +63,18 @@ class Connection {
         bool operator!=(const Connection &connection) const {
             return _endpoint != connection.GetEndpoint();
         }
+
+        int GetLastId() const {
+            return _lastId;
+        }
+
+        void SetLastId(int lastId) {
+            _lastId = lastId;
+        }
     protected:
     private:
         asio::ip::udp::endpoint _endpoint;
+        int _lastId = -1;
         int _sendPacket;
         int _receivedPacket;
 

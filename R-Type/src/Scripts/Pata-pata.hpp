@@ -45,13 +45,17 @@ namespace Exodia {
                 TransformComponent &bullet_tc = bullet->GetComponent<TransformComponent>().Get();
                 bullet_tc.Translation.x = tc.Translation.x;
                 bullet_tc.Translation.y = tc.Translation.y;
-                bullet->AddComponent<ScriptComponent>().Get().Bind<BulletEnnemy>();
+                bullet->AddComponent<ScriptComponent>().Get().Bind("BulletEnnemy");
                 bullet->AddComponent<Animation>(8.0f, 12.0f, 0.0795f);
                 bullet->AddComponent<BoxCollider2DComponent>();
                 bullet->AddComponent<ParentComponent>().Get().Parent = GetComponent<IDComponent>().Get().ID;
                 bullet->GetComponent<TransformComponent>().Get().Scale = { 0.5f, 0.5f, 0.0f };
 
-                auto player = HandleEntity->GetWorld()->GetEntityByTag("Player")->GetComponent<TransformComponent>();
+                if (HandleEntity->GetWorld()->GetEntityByTag("Player_0") == nullptr)
+                    return;
+
+                auto player = HandleEntity->GetWorld()->GetEntityByTag("Player_0")->GetComponent<TransformComponent>();
+
                 auto body_bullet = bullet->AddComponent<RigidBody2DComponent>();
 
                 body_bullet.Get().Type = RigidBody2DComponent::BodyType::Dynamic;

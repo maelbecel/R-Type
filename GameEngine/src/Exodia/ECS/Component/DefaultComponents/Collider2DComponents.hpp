@@ -63,6 +63,35 @@ namespace Exodia {
             }
         }
 
+        Buffer SerializeData() override
+        {
+            try {
+                uint32_t size = sizeof(glm::vec2) * 2 + sizeof(uint32_t);
+                Buffer   data(size);
+
+                std::memcpy(data.Data, &Offset, sizeof(glm::vec2));
+                std::memcpy(data.Data + sizeof(glm::vec2), &Size, sizeof(glm::vec2));
+                std::memcpy(data.Data + sizeof(glm::vec2) * 2, &ColliderMask, sizeof(uint32_t));
+
+                return data;
+            } catch (const std::exception &error) {
+                EXODIA_CORE_WARN("BoxCollider2DComponent serialization failed:\n\t{0}", error.what());
+            }
+
+            return Buffer();
+        }
+
+        void DeserializeData(Buffer data) override
+        {
+            try {
+                std::memcpy(&Offset, data.Data, sizeof(glm::vec2));
+                std::memcpy(&Size, data.Data + sizeof(glm::vec2), sizeof(glm::vec2));
+                std::memcpy(&ColliderMask, data.Data + sizeof(glm::vec2) * 2, sizeof(uint32_t));
+            } catch (const std::exception &error) {
+                EXODIA_CORE_WARN("BoxCollider2DComponent deserialization failed:\n\t{0}", error.what());
+            }
+        }
+
         virtual void DrawComponent() override
         {
             ImGui::DragFloat2("Offset", glm::value_ptr(Offset));
@@ -107,6 +136,35 @@ namespace Exodia {
                 ColliderMask = circle["Mask"].as<uint32_t>();
             } catch (YAML::BadConversion &e) {
                 EXODIA_CORE_WARN("CircleCollider2DComponent deserialization failed: {0}", e.what());
+            }
+        }
+
+        Buffer SerializeData() override
+        {
+            try {
+                uint32_t size = sizeof(glm::vec2) + sizeof(float) + sizeof(uint32_t);
+                Buffer   data(size);
+
+                std::memcpy(data.Data, &Offset, sizeof(glm::vec2));
+                std::memcpy(data.Data + sizeof(glm::vec2), &Radius, sizeof(float));
+                std::memcpy(data.Data + sizeof(glm::vec2) + sizeof(float), &ColliderMask, sizeof(uint32_t));
+
+                return data;
+            } catch (const std::exception &error) {
+                EXODIA_CORE_WARN("CircleCollider2DComponent serialization failed:\n\t{0}", error.what());
+            }
+
+            return Buffer();
+        }
+
+        void DeserializeData(Buffer data) override
+        {
+            try {
+                std::memcpy(&Offset, data.Data, sizeof(glm::vec2));
+                std::memcpy(&Radius, data.Data + sizeof(glm::vec2), sizeof(float));
+                std::memcpy(&ColliderMask, data.Data + sizeof(glm::vec2) + sizeof(float), sizeof(uint32_t));
+            } catch (const std::exception &error) {
+                EXODIA_CORE_WARN("CircleCollider2DComponent deserialization failed:\n\t{0}", error.what());
             }
         }
 

@@ -13,6 +13,9 @@
 #include "ECS/Component/Components.hpp"
 #include "ECS/Component/ComponentContainer.hpp"
 
+// Exodia Script includes
+#include "Script/Interface/ScriptableEntity.hpp"
+
 // Exodia Utils includes
 #include "Utils/Assert.hpp"
 
@@ -235,16 +238,30 @@ namespace Exodia {
 
     std::function<IComponentContainer *(Buffer)> Project::GetComponentFactory(std::string component)
     {
-        if (!this) {
-            return nullptr;
-        }
-
         auto it = _ComponentFactory.find(component);
+
         if (it == _ComponentFactory.end())
-        {
             return nullptr;
+        return it->second;
+    }
+
+    void Project::RegisterScript(std::string script, std::function<ScriptableEntity *()> factory)
+    {
+        if (_ScriptFactory.find(script) != _ScriptFactory.end()) {
+            EXODIA_CORE_WARN("Project::RegisterScript() - Script factory already exists !");
+
+            return;
         }
 
+        _ScriptFactory[script] = factory;
+    }
+
+    std::function<ScriptableEntity *()> Project::GetScriptFactory(std::string script)
+    {
+        auto it = _ScriptFactory.find(script);
+
+        if (it == _ScriptFactory.end())
+            return nullptr;
         return it->second;
     }
 };

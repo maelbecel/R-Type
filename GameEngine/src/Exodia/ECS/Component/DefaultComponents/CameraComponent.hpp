@@ -81,6 +81,71 @@ namespace Exodia {
             }
         }
 
+        Buffer SerializeData() override
+        {
+            try {
+                uint32_t size = sizeof(SceneCamera::ProjectionType) + sizeof(float) * 6 + sizeof(bool) * 2;
+                Buffer   data(size);
+
+                SceneCamera::ProjectionType projectionType         = Camera.GetProjectionType();
+                float                       perspectiveVerticalFOV = Camera.GetPerspectiveVerticalFOV();
+                float                       perspectiveNearClip    = Camera.GetPerspectiveNearClip();
+                float                       perspectiveFarClip     = Camera.GetPerspectiveFarClip();
+                float                       orthographicSize       = Camera.GetOrthographicSize();
+                float                       orthographicNearClip   = Camera.GetOrthographicNearClip();
+                float                       orthographicFarClip    = Camera.GetOrthographicFarClip();
+
+                std::memcpy(data.Data, &projectionType, sizeof(SceneCamera::ProjectionType));
+                std::memcpy(data.Data + sizeof(SceneCamera::ProjectionType), &perspectiveVerticalFOV, sizeof(float));
+                std::memcpy(data.Data + sizeof(SceneCamera::ProjectionType) + sizeof(float), &perspectiveNearClip, sizeof(float));
+                std::memcpy(data.Data + sizeof(SceneCamera::ProjectionType) + sizeof(float) * 2, &perspectiveFarClip, sizeof(float));
+                std::memcpy(data.Data + sizeof(SceneCamera::ProjectionType) + sizeof(float) * 3, &orthographicSize, sizeof(float));
+                std::memcpy(data.Data + sizeof(SceneCamera::ProjectionType) + sizeof(float) * 4, &orthographicNearClip, sizeof(float));
+                std::memcpy(data.Data + sizeof(SceneCamera::ProjectionType) + sizeof(float) * 5, &orthographicFarClip, sizeof(float));
+                std::memcpy(data.Data + sizeof(SceneCamera::ProjectionType) + sizeof(float) * 6, &Primary, sizeof(bool));
+                std::memcpy(data.Data + sizeof(SceneCamera::ProjectionType) + sizeof(float) * 6 + sizeof(bool), &FixedAspectRatio, sizeof(bool));
+
+                return data;
+            } catch (const std::exception &error) {
+                EXODIA_CORE_WARN("CameraComponent serialization failed:\n\t{0}", error.what());
+            }
+
+            return Buffer();
+        }
+
+        void DeserializeData(Buffer buffer) override
+        {
+            try {
+                SceneCamera::ProjectionType projectionType;
+                float                       perspectiveVerticalFOV;
+                float                       perspectiveNearClip;
+                float                       perspectiveFarClip;
+                float                       orthographicSize;
+                float                       orthographicNearClip;
+                float                       orthographicFarClip;
+
+                std::memcpy(&projectionType, buffer.Data, sizeof(SceneCamera::ProjectionType));
+                std::memcpy(&perspectiveVerticalFOV, buffer.Data + sizeof(SceneCamera::ProjectionType), sizeof(float));
+                std::memcpy(&perspectiveNearClip, buffer.Data + sizeof(SceneCamera::ProjectionType) + sizeof(float), sizeof(float));
+                std::memcpy(&perspectiveFarClip, buffer.Data + sizeof(SceneCamera::ProjectionType) + sizeof(float) * 2, sizeof(float));
+                std::memcpy(&orthographicSize, buffer.Data + sizeof(SceneCamera::ProjectionType) + sizeof(float) * 3, sizeof(float));
+                std::memcpy(&orthographicNearClip, buffer.Data + sizeof(SceneCamera::ProjectionType) + sizeof(float) * 4, sizeof(float));
+                std::memcpy(&orthographicFarClip, buffer.Data + sizeof(SceneCamera::ProjectionType) + sizeof(float) * 5, sizeof(float));
+                std::memcpy(&Primary, buffer.Data + sizeof(SceneCamera::ProjectionType) + sizeof(float) * 6, sizeof(bool));
+                std::memcpy(&FixedAspectRatio, buffer.Data + sizeof(SceneCamera::ProjectionType) + sizeof(float) * 6 + sizeof(bool), sizeof(bool));
+
+                Camera.SetProjectionType(projectionType);
+                Camera.SetPerspectiveVerticalFOV(perspectiveVerticalFOV);
+                Camera.SetPerspectiveNearClip(perspectiveNearClip);
+                Camera.SetPerspectiveFarClip(perspectiveFarClip);
+                Camera.SetOrthographicSize(orthographicSize);
+                Camera.SetOrthographicNearClip(orthographicNearClip);
+                Camera.SetOrthographicFarClip(orthographicFarClip);
+            } catch (const std::exception &error) {
+                EXODIA_CORE_WARN("CameraComponent deserialization failed:\n\t{0}", error.what());
+            }
+        }
+
         virtual void DrawComponent() override
         {
             ImGui::Checkbox("Primary", &Primary);

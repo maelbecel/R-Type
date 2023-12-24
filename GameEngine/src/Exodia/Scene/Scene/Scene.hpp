@@ -88,6 +88,8 @@ namespace Exodia {
 
             World &GetWorld() const;
 
+            World *GetWorldPtr();
+
             Entity *GetPrimaryCamera();
             Entity *GetEntityByName(const std::string &name);
             Entity *GetEntityByUUID(UUID uuid);

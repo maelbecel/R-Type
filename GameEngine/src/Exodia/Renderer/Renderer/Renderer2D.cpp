@@ -396,6 +396,12 @@ namespace Exodia {
         const glm::vec2 *textureCoords = subTexture->GetTextureCoords();
         const Ref<Texture2D> texture = subTexture->GetTexture();
 
+        if (textureCoords == nullptr || texture == nullptr)
+            return DrawQuad(transform, tintColor, entityID);
+
+        if (!_Data)
+            return;
+
         // Check if we need to flush or if we can continue
         if (_Data->QuadIndexCount >= Renderer2DData::MaxIndices)
             FlushAndReset();
@@ -586,7 +592,7 @@ namespace Exodia {
 
     void Renderer2D::DrawSprite(const glm::mat4 &transform, SpriteRendererComponent &src, int entityID)
     {
-        if (src.Texture && src.Texture->GetTexture())
+        if (src.Texture != nullptr && src.Texture->GetTexture() != nullptr)
             DrawQuad(transform, src.Texture, src.TilingFactor, src.Color, entityID);
         else
             DrawQuad(transform, src.Color, entityID);
@@ -601,6 +607,9 @@ namespace Exodia {
 		// TODO: implement for circles
 		// if (_Data->QuadIndexCount >= Renderer2DData::MaxIndices)
 		// 	FlushAndReset();
+
+        if (!_Data)
+            return;
 
         for (size_t i = 0; i < 4; i++) {
             _Data->CircleVertexBufferPtr->WorldPosition = transform * _Data->QuadVertexPosition[i];

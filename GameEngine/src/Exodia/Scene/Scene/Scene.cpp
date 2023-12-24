@@ -14,6 +14,7 @@
 // Exodia Renderer includes
 #include "Renderer/Renderer/Renderer2D.hpp"
 #include "Renderer/Renderer/RendererAPI.hpp"
+#include "Renderer/Renderer/Renderer.hpp"
 
 namespace Exodia {
 
@@ -100,8 +101,8 @@ namespace Exodia {
         _World->ForEach<ScriptComponent>([&](Entity *entity, auto script) {
             auto &sc = script.Get();
 
-            if (sc.Instance == nullptr) {
-                sc.Instance = sc.InstantiateScript();
+            if (sc.Instance == nullptr && !sc.Name.empty() && sc.InstantiateScript) {
+                sc.Instance = sc.InstantiateScript(sc.Name);
 
                 if (sc.Instance != nullptr) {
                     sc.Instance->HandleEntity = entity;
@@ -110,7 +111,7 @@ namespace Exodia {
             }
         });
 
-        if (RendererAPI::IsGraphical() == false)
+        if (Renderer::GetAPI() == RendererAPI::API::None)
             return;
 
         _World->ForEach<MusicComponent>([&](Entity *entity, auto music) {
@@ -142,7 +143,7 @@ namespace Exodia {
         _World->ForEach<ScriptComponent>([&](Entity *entity, auto script) {
             auto &sc = script.Get();
 
-            if (sc.Instance) {
+            if (sc.Instance && !sc.Name.empty() && sc.DestroyScript) {
                 sc.Instance->OnDestroy();
                 sc.DestroyScript(&sc);
             }
@@ -154,11 +155,12 @@ namespace Exodia {
         if (!_IsPaused) {
 
             // -- Update the Scripts -- //
+            _World->LockMutex();
             _World->ForEach<ScriptComponent>([&](Entity *entity, auto script) {
                 auto &sc = script.Get();
 
-                if (!sc.Instance) {
-                    sc.Instance = sc.InstantiateScript();
+                if (!sc.Instance && !sc.Name.empty() && sc.InstantiateScript) {
+                    sc.Instance = sc.InstantiateScript(sc.Name);
 
                     if (sc.Instance != nullptr) {
                         sc.Instance->HandleEntity = entity;
@@ -169,6 +171,7 @@ namespace Exodia {
                 if (sc.Instance)
                     sc.Instance->OnUpdate(ts);
             });
+            _World->UnlockMutex();
 
             // -- Update the world -- //
             _World->Update(ts);
@@ -177,6 +180,7 @@ namespace Exodia {
             Camera *mainCamera = nullptr;
             glm::mat4 cameraTransform;
 
+            _World->LockMutex();
             _World->ForEach<TransformComponent, CameraComponent>([&](Entity *entity, auto transform, auto camera) {
                 auto &cc = camera.Get();
                 auto &tc = transform.Get();
@@ -187,6 +191,7 @@ namespace Exodia {
                     return;
                 }
             });
+            _World->UnlockMutex();
 
             // -- Update and draw -- //
             if (mainCamera) {
@@ -234,9 +239,10 @@ namespace Exodia {
 
     void Scene::RenderScene()
     {
-        if (RendererAPI::IsGraphical() == false)
+        if (RendererAPI::GetAPI() == RendererAPI::API::None)
             return;
 
+        _World->LockMutex();
         _World->ForEach<TransformComponent, SpriteRendererComponent, IDComponent>([&](Entity *entity, auto transform, auto sprite, auto id) {
             auto &tc = transform.Get();
             auto &sc = sprite.Get();
@@ -244,7 +250,9 @@ namespace Exodia {
 
             Renderer2D::DrawSprite(tc.GetTransform(), sc, (int)ic.ID);
         });
+        _World->UnlockMutex();
 
+        _World->LockMutex();
         _World->ForEach<TransformComponent, CircleRendererComponent, IDComponent>([&](Entity *entity, auto transform, auto circle, auto id) {
             auto &tc = transform.Get();
             auto &cc = circle.Get();
@@ -252,6 +260,7 @@ namespace Exodia {
 
             Renderer2D::DrawCircle(tc.GetTransform(), cc.Color, cc.Thickness, cc.Fade, (int)ic.ID);
         });
+        _World->UnlockMutex();
 
         // TODO: When text rendering will be implemented (in Renderer2D);
 
@@ -288,6 +297,11 @@ namespace Exodia {
     World &Scene::GetWorld() const
     {
         return *_World;
+    }
+
+    World *Scene::GetWorldPtr()
+    {
+        return _World;
     }
 
     Entity *Scene::GetPrimaryCamera()

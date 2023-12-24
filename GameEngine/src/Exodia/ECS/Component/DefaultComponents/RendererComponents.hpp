@@ -100,25 +100,35 @@ namespace Exodia {
         virtual Buffer SerializeData() override
         {
             try {
-                Buffer buffer(sizeof(Color) + sizeof(TilingFactor) + sizeof(Texture->GetAssetHandle()) + sizeof(Texture->GetCoords()) + sizeof(Texture->GetTextureCellSize()) + sizeof(Texture->GetTextureSpriteSize()));
+                Buffer buffer(sizeof(Color) + sizeof(TilingFactor) + sizeof(bool));
                 size_t offset = 0;
 
                 std::memcpy(buffer.Data, &Color, sizeof(Color));
                 offset += sizeof(Color);
                 std::memcpy(buffer.Data + offset, &TilingFactor, sizeof(TilingFactor));
                 offset += sizeof(TilingFactor);
-                Exodia::AssetHandle assetHandle = Texture->GetAssetHandle();
 
-                std::memcpy(buffer.Data + offset, &assetHandle, sizeof(Texture->GetAssetHandle()));
-                offset += sizeof(Texture->GetAssetHandle());
-                std::memcpy(buffer.Data + offset, &(Texture->GetCoords()), sizeof(Texture->GetCoords()));
-                offset += sizeof(Texture->GetCoords());
-                std::memcpy(buffer.Data + offset, &Texture->GetTextureCellSize(), sizeof(Texture->GetTextureCellSize()));
-                offset += sizeof(Texture->GetTextureCellSize());
-                std::memcpy(buffer.Data + offset, &Texture->GetTextureSpriteSize(), sizeof(Texture->GetTextureSpriteSize()));
+                bool hasTexture = (Texture != nullptr);
+
+                std::memcpy(buffer.Data, &hasTexture, sizeof(bool));
+                offset += sizeof(bool);
+
+                if (Texture) {
+                    buffer.Resize(buffer.Size + sizeof(Texture->GetAssetHandle()) + sizeof(Texture->GetCoords()) + sizeof(Texture->GetTextureCellSize()) + sizeof(Texture->GetTextureSpriteSize()));
+
+                    Exodia::AssetHandle assetHandle = Texture->GetAssetHandle();
+
+                    std::memcpy(buffer.Data + offset, &assetHandle, sizeof(Texture->GetAssetHandle()));
+                    offset += sizeof(Texture->GetAssetHandle());
+                    std::memcpy(buffer.Data + offset, &(Texture->GetCoords()), sizeof(Texture->GetCoords()));
+                    offset += sizeof(Texture->GetCoords());
+                    std::memcpy(buffer.Data + offset, &Texture->GetTextureCellSize(), sizeof(Texture->GetTextureCellSize()));
+                    offset += sizeof(Texture->GetTextureCellSize());
+                    std::memcpy(buffer.Data + offset, &Texture->GetTextureSpriteSize(), sizeof(Texture->GetTextureSpriteSize()));
+                    offset += sizeof(Texture->GetTextureSpriteSize());
+                }
 
                 return buffer;
-
             } catch (std::exception &e) {
                 EXODIA_CORE_WARN("SpriteRendererComponent serialization failed: {0}", e.what());
                 return Buffer();
@@ -129,31 +139,36 @@ namespace Exodia {
         {
             try {
                 size_t offset = 0;
-                Texture = CreateRef<SubTexture2D>(0);
+                bool hasTexture = false;
 
                 Memcopy(&Color, data.Data + offset, sizeof(Color));
                 offset += sizeof(Color);
                 Memcopy(&TilingFactor, data.Data + offset, sizeof(TilingFactor));
                 offset += sizeof(TilingFactor);
 
-                Exodia::AssetHandle assetHandle = Texture->GetAssetHandle();
+                std::memcpy(&hasTexture, data.Data, sizeof(bool));
+                offset += sizeof(bool);
+
+                if (!hasTexture)
+                    return;
+                Exodia::AssetHandle assetHandle;
+                glm::vec2 coords;
+                glm::vec2 cellSize;
+                glm::vec2 spriteSize;
 
                 Memcopy(&assetHandle, data.Data + offset, sizeof(assetHandle));
-
                 offset += sizeof(assetHandle);
 
-                glm::vec2 coords;
                 Memcopy(&coords, data.Data + offset, sizeof(coords));
                 offset += sizeof(coords);
 
-                glm::vec2 cellSize;
                 Memcopy(&cellSize, data.Data + offset, sizeof(cellSize));
                 offset += sizeof(cellSize);
 
-                glm::vec2 spriteSize;
                 Memcopy(&spriteSize, data.Data + offset, sizeof(spriteSize));
+                offset += sizeof(spriteSize);
 
-                Texture = SubTexture2D::CreateFromCoords(assetHandle, coords, cellSize, spriteSize);
+                //Texture = SubTexture2D::CreateFromCoords(assetHandle, coords, cellSize, spriteSize);
 
                 EXODIA_CORE_TRACE("SpriteRendererComponent deserialization success !");
                 EXODIA_CORE_TRACE("\tAssetHandle : '{0}'", (uint64_t)assetHandle);
@@ -293,11 +308,6 @@ namespace Exodia {
                 Memcopy(&Thickness, data.Data + offset, sizeof(Thickness));
                 offset += sizeof(Thickness);
                 Memcopy(&Fade, data.Data + offset, sizeof(Fade));
-
-                EXODIA_CORE_TRACE("CircleRendererComponent deserialization success !");
-                EXODIA_CORE_TRACE("\tColor     : '{0}, {1}, {2}, {3}'", Color.x, Color.y, Color.z, Color.w);
-                EXODIA_CORE_TRACE("\tThickness : '{0}'", Thickness);
-                EXODIA_CORE_TRACE("\tFade      : '{0}'", Fade);
             } catch (std::exception &e) {
                 EXODIA_CORE_WARN("CircleRendererComponent deserialization failed: {0}", e.what());
             }

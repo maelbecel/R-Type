@@ -140,12 +140,15 @@ namespace Exodia {
 
         auto assetRegistry = data["AssetRegistry"];
 
-        if (!assetRegistry)
+        if (!assetRegistry) {
+            EXODIA_CORE_WARN("Asset registry not found in `{}`", path.string());
+
             return false;
+        }
+
         for (const auto &node : assetRegistry) {
             if (!node["Handle"] || !node["Path"] || !node["Type"])
                 continue;
-
             try {
                 AssetHandle handle = node["Handle"].as<uint64_t>();
 
@@ -172,9 +175,13 @@ namespace Exodia {
             return nullptr;
         Ref<Asset> asset = nullptr;
 
-        if (IsAssetLoaded(handle))
-            asset = _LoadedAssets.at(handle);
-        else {
+        if (IsAssetLoaded(handle)) {
+            try {
+                asset = _LoadedAssets.at(handle);
+            } catch (const std::out_of_range &e) {
+                EXODIA_CORE_ERROR("Failed to get asset `{}`:\n\t{}", (uint64_t)handle, e.what());
+            }
+        } else {
             const AssetSpecification &spec = GetAssetSpecification(handle);
 
             asset = AssetImporter::ImportAsset(handle, spec);
@@ -185,7 +192,8 @@ namespace Exodia {
                 return nullptr;
             }
 
-            _LoadedAssets[handle] = asset;
+            //TODO: ASSET MANAGER BUG (don't load texture when server is running)
+            //_LoadedAssets[handle] = asset;
         }
 
         return asset;

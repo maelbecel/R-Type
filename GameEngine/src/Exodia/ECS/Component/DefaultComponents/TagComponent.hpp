@@ -42,6 +42,30 @@ namespace Exodia {
                 EXODIA_CORE_WARN("TagComponent deserialization failed: {0}", e.what());
             }
         }
+
+        virtual Buffer SerializeData()
+        {
+            try {
+                Buffer buffer(sizeof(char) * Tag.size());
+
+                std::memcpy(buffer.Data, Tag.data(), sizeof(char) * Tag.size());
+
+                return buffer;
+            } catch (const std::exception &e) {
+                EXODIA_CORE_WARN("TagComponent serialization failed: {0}", e.what());
+                return Buffer();
+            }
+        }
+
+        virtual void DeserializeData(Buffer buffer)
+        {
+            try {
+                for (uint32_t i = 0; i < buffer.Size; i++)
+                    Tag.push_back((char)buffer.Data[i]);
+            } catch (const std::exception &e) {
+                EXODIA_CORE_WARN("TagComponent deserialization failed: {0}", e.what());
+            }
+        }
     };
 };
 
