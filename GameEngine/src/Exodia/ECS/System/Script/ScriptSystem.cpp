@@ -18,14 +18,15 @@ namespace Exodia {
     // Methods //
     /////////////
 
-    void ScriptSystem::Update(World *world, Timestep ts) {
+    void ScriptSystem::Update(World *world, Timestep ts)
+    {
         EXODIA_PROFILE_FUNCTION();
 
-        world->ForEach<ScriptComponent>([&](UNUSED(Entity * entity), UNUSED(auto script)) {
+        world->ForEach<ScriptComponent>([&](Entity *entity, auto script) {
             auto &sc = script.Get();
 
-            if (!sc.Instance) {
-                sc.Instance = sc.InstantiateScript();
+            if (!sc.Instance && !sc.Name.empty() && sc.InstantiateScript) {
+                sc.Instance = sc.InstantiateScript(sc.Name);
                 sc.Instance->HandleEntity = entity;
                 sc.Instance->OnCreate();
             }
@@ -33,4 +34,4 @@ namespace Exodia {
             sc.Instance->OnUpdate(ts);
         });
     }
-}; // namespace Exodia
+};

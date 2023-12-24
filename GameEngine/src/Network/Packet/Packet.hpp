@@ -14,59 +14,80 @@
 namespace Exodia {
     namespace Network {
         class Packet {
-          public:
-            Packet() : _content(std::vector<char>()) { _header = CreateScope<Header>(0, 0, 0); };
+            public:
+                Packet(uint8_t command) : _content(std::vector<char>())
+                {
+                    _header = std::make_unique<Header>(command);
+                };
 
-            Packet(Header header, std::vector<char> content) : _content(content) {
-                _header = CreateScope<Header>(header);
-                _header->setSize((unsigned long)_content.size());
-            };
+                Packet() : _content(std::vector<char>())
+                {
+                    _header = CreateScope<Header>(0, 0, 0);
+                };
 
-            Packet(const Packet &packet) : _content(packet._content) {
-                _header = CreateScope<Header>(*packet._header);
-            };
+                Packet(Header header, std::vector<char> content) : _content(content)
+                {
+                    _header = CreateScope<Header>(header);
+                    _header->setSize((unsigned long)_content.size());
+                };
 
-            ~Packet() = default;
+                Packet(const Packet &packet) : _content(packet._content)
+                {
+                    _header = CreateScope<Header>(*packet._header);
+                };
 
-            void SetHeader(Header header) {
-                _header = CreateScope<Header>(header);
-                _header->setSize((unsigned long)_content.size());
-            }
+                ~Packet() = default;
 
-            void SetContent(std::vector<char> content) { _content = content; }
+                void SetHeader(Header header)
+                {
+                    _header = CreateScope<Header>(header);
+                    _header->setSize((unsigned long)_content.size());
+                }
 
-            void Set(Header header, std::vector<char> content) {
-                _header = CreateScope<Header>(header);
-                _content = content;
-                _header->setSize((unsigned long)_content.size());
-            }
+                void SetContent(std::vector<char> content)
+                {
+                    _content = content;
+                }
 
-            std::vector<char> GetBuffer() const {
-                std::vector<char> buffer(Header::GetSize() + _content.size());
+                void Set(Header header, std::vector<char> content)
+                {
+                    _header = CreateScope<Header>(header);
+                    _content = content;
+                    _header->setSize((unsigned long)_content.size());
+                }
 
-                _header->fillBuffer(buffer);
-                std::memcpy(buffer.data() + Header::GetSize(), _content.data(), _content.size());
-                return buffer;
-            }
+                std::vector<char> GetBuffer() const {
+                    std::vector<char> buffer(Header::GetSize() + _content.size());
 
-            std::unique_ptr<Header> &GetHeader() { return _header; }
+                    _header->fillBuffer(buffer);
+                    std::memcpy(buffer.data() + Header::GetSize(), _content.data(), _content.size());
+                    return buffer;
+                }
 
-            size_t GetSize() { return Header::GetSize() + _content.size(); }
+                std::unique_ptr<Header> &GetHeader() {
+                    return _header;
+                }
 
-            std::vector<char> GetContent() { return _content; }
+                size_t GetSize() {
+                    return Header::GetSize() + _content.size();
+                }
 
-            Packet &operator=(const Packet &packet) {
-                _header = std::make_unique<Header>(*packet._header);
-                _content = packet._content;
-                return *this;
-            }
+                std::vector<char> GetContent() {
+                    return _content;
+                }
 
-          protected:
-          private:
-            Scope<Header> _header;
-            std::vector<char> _content;
+                Packet &operator=(const Packet &packet) {
+                    _header = std::make_unique<Header>(*packet._header);
+                    _content = packet._content;
+                    return *this;
+                }
+            
+            protected:
+            private:
+                Scope<Header> _header;
+                std::vector<char> _content;
         };
-    }; // namespace Network
-};     // namespace Exodia
+    };
+};
 
 #endif /* !PACKET_HPP_ */

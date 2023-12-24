@@ -19,20 +19,20 @@ namespace Exodia {
     // Factory //
     /////////////
 
-    Ref<VertexArray> VertexArray::Create() {
+    Ref<VertexArray> VertexArray::Create()
+    {
         RendererAPI::API api = Renderer::GetAPI();
 
         switch (api) {
-        case RendererAPI::API::None:
-            EXODIA_CORE_ASSERT(false, "RendererAPI::API::None is currently not supported!");
-            return nullptr;
-        case RendererAPI::API::OpenGL:
-            return CreateRef<OpenGLVertexArray>();
-        default:
-            break;
+            case RendererAPI::API::None:
+                return nullptr;
+            case RendererAPI::API::OpenGL:
+                return CreateRef<OpenGLVertexArray>();
+            default:
+                break;
         }
 
         EXODIA_CORE_ASSERT(false, "Unknown RendererAPI!");
         return nullptr;
     }
-}; // namespace Exodia
+};

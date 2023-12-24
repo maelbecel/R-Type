@@ -6,48 +6,65 @@
 */
 
 #ifndef SERVER_HPP_
-#define SERVER_HPP_
+    #define SERVER_HPP_
 
-#include "Exodia.hpp"
-#include "SceneType.hpp"
+    #include "Exodia.hpp"
+    #include "SceneType.hpp"
+    #include "User/User.hpp"
+
 
 namespace Exodia {
 
     class Server {
-      public:
-        Server(short port);
-        ~Server();
-        void HandleCommand(const std::string &command);
-        void Init();
-        void Run();
-        void Update();
-        void Stop() { _running = false; };
 
-      public:
-        void RegisterComponent(std::string name, std::function<IComponentContainer *(Buffer)> factory);
+        //////////////////////////////
+        // Constructor & Destructor //
+        //////////////////////////////
+        public:
 
-      protected:
-      public:
-        inline static std::map<SceneType, std::shared_ptr<Exodia::Scene>> _World;
-        inline static SceneType _currentScene;
+            Server(short port);
+            ~Server();
 
-      private:
-        // WARNING: This is a temporary solution
-        Exodia::World *_worldNetwork = Exodia::World::CreateWorld();
-        std::unordered_map<std::string, std::function<IComponentContainer *(Buffer)>> _ComponentFactory;
+        /////////////
+        // Methods //
+        /////////////
+        public:
 
-        // Network is used to manage the network with the clients
-        Network::IOContextManager _ioContextManager;
-        Network::Network _network;
+            void HandleCommand(const std::string &command);
+            void Init();
+            void Run();
+            void Update();
+            void Stop();
 
-        // Timestep is used to manage the time
-        Timer _Timer;
-        float _lastTime;
+        ////////////////
+        // Attributes //
+        ////////////////
+        public:
 
-        bool _running = true;
+            inline static std::map<SceneType, Ref<Scene>> Scenes;
+            inline static SceneType CurrentScene = SceneType::GAME;
+            uint64_t count = 0;
+        private:
 
-        std::thread _inputThread;
+            // TODO: WARNING: This is a temporary solution
+            World *_WorldNetwork;
+
+            // Network is used to manage the network with the clients
+            Network::IOContextManager _IOContextManager;
+            Network::Network          _Network;
+
+            // Timestep is used to manage the time
+            Timer _Timer;
+            float _LastTime;
+
+            bool _Running;
+
+            std::thread _InputThread;
+
+            void CheckForNewClients();
+            std::vector<Exodia::User> _Users;
+            
     };
-} // namespace Exodia
+};
 
 #endif /* !SERVER_HPP_ */

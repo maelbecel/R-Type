@@ -13,6 +13,9 @@
 #include "ECS/Component/Components.hpp"
 #include "ECS/Component/ComponentContainer.hpp"
 
+// Exodia Script includes
+#include "Script/Interface/ScriptableEntity.hpp"
+
 // Exodia Utils includes
 #include "Utils/Assert.hpp"
 
@@ -22,7 +25,8 @@ namespace Exodia {
     // Constructor & Destructor //
     //////////////////////////////
 
-    Project::Project() {
+    Project::Project()
+    {
         RegisterComponent("IDComponent", [](Buffer data) -> IComponentContainer * {
             return new ComponentContainer<IDComponent>(data);
         });
@@ -89,13 +93,15 @@ namespace Exodia {
     // Methods //
     /////////////
 
-    Ref<Project> Project::New() {
+    Ref<Project> Project::New()
+    {
         _ActiveProject = CreateRef<Project>();
 
         return _ActiveProject;
     }
 
-    Ref<Project> Project::Load(const std::filesystem::path &path) {
+    Ref<Project> Project::Load(const std::filesystem::path &path)
+    {
         Ref<Project> project = CreateRef<Project>();
 
         ProjectSerializer serializer(project);
@@ -116,7 +122,8 @@ namespace Exodia {
         return project;
     }
 
-    bool Project::SaveActive(const std::filesystem::path &path) {
+    bool Project::SaveActive(const std::filesystem::path &path)
+    {
         ProjectSerializer serializer(_ActiveProject);
 
         if (!serializer.Serialize(path))
@@ -129,73 +136,97 @@ namespace Exodia {
     // Getters & Setters //
     ///////////////////////
 
-    const std::filesystem::path &Project::GetProjectDirectory() { return _ProjectDirectory; }
+    const std::filesystem::path &Project::GetProjectDirectory()
+    {
+        return _ProjectDirectory;
+    }
 
-    std::filesystem::path Project::GetAssetDirectory() {
+    std::filesystem::path Project::GetAssetDirectory()
+    {
         EXODIA_CORE_ASSERT(_ActiveProject, "Project::GetAssetDirectory() - No active project !");
 
         return GetProjectDirectory() / _ActiveProject->_Config.AssetsDirectory;
     }
 
-    std::filesystem::path Project::GetAssetFilePath(const std::filesystem::path &path) {
+    std::filesystem::path Project::GetAssetFilePath(const std::filesystem::path &path)
+    {
         return GetAssetDirectory() / path;
     }
 
-    std::filesystem::path Project::GetAssetRegistryPath() {
+    std::filesystem::path Project::GetAssetRegistryPath()
+    {
         EXODIA_CORE_ASSERT(_ActiveProject, "Project::GetAssetRegistryPath() - No active project !");
 
         return GetAssetDirectory() / _ActiveProject->_Config.AssetRegistryPath;
     }
 
-    std::filesystem::path Project::GetAssetAbsolutePath(const std::filesystem::path &path) {
+    std::filesystem::path Project::GetAssetAbsolutePath(const std::filesystem::path &path)
+    {
         return GetAssetDirectory() / path;
     }
 
-    std::filesystem::path Project::GetScriptPath() {
+    std::filesystem::path Project::GetScriptPath()
+    {
         return GetAssetDirectory() / _ActiveProject->_Config.ScriptsDirectory;
     }
 
-    const std::filesystem::path &Project::GetActiveProjectDirectory() {
+    const std::filesystem::path &Project::GetActiveProjectDirectory()
+    {
         EXODIA_CORE_ASSERT(_ActiveProject, "Project::GetActiveProjectDirectory() - No active project !");
 
         return _ActiveProject->GetProjectDirectory();
     }
 
-    std::filesystem::path Project::GetActiveAssetDirectory() {
+    std::filesystem::path Project::GetActiveAssetDirectory()
+    {
         EXODIA_CORE_ASSERT(_ActiveProject, "Project::GetAssetDirectory() - No active project !");
 
         return _ActiveProject->GetAssetDirectory();
     }
 
-    std::filesystem::path Project::GetActiveAssetFilePath(const std::filesystem::path &path) {
+    std::filesystem::path Project::GetActiveAssetFilePath(const std::filesystem::path &path)
+    {
         EXODIA_CORE_ASSERT(_ActiveProject, "Project::GetAssetFilePath() - No active project !");
 
         return _ActiveProject->GetAssetFilePath(path);
     }
 
-    std::filesystem::path Project::GetActiveAssetRegistryPath() {
+    std::filesystem::path Project::GetActiveAssetRegistryPath()
+    {
         EXODIA_CORE_ASSERT(_ActiveProject, "Project::GetAssetRegistryPath() - No active project !");
 
         return _ActiveProject->GetAssetRegistryPath();
     }
 
-    std::filesystem::path Project::GetActiveScriptPath() {
+    std::filesystem::path Project::GetActiveScriptPath()
+    {
         EXODIA_CORE_ASSERT(_ActiveProject, "Project::GetScriptPath() - No active project !");
 
         return _ActiveProject->GetScriptPath();
     }
 
-    Ref<Project> Project::GetActive() { return _ActiveProject; }
+    Ref<Project> Project::GetActive()
+    {
+        return _ActiveProject;
+    }
 
-    Ref<IAssetManager> Project::GetAssetManager() const { return _AssetManager; }
+    Ref<IAssetManager> Project::GetAssetManager() const
+    {
+        return _AssetManager;
+    }
 
-    Ref<EditorAssetManager> Project::GetEditorAssetManager() const {
+    Ref<EditorAssetManager> Project::GetEditorAssetManager() const
+    {
         return std::static_pointer_cast<EditorAssetManager>(_AssetManager);
     }
 
-    ProjectConfig &Project::GetConfig() { return _Config; }
+    ProjectConfig &Project::GetConfig()
+    {
+        return _Config;
+    }
 
-    void Project::RegisterComponent(std::string component, std::function<IComponentContainer *(Buffer)> factory) {
+    void Project::RegisterComponent(std::string component, std::function<IComponentContainer *(Buffer)> factory)
+    {
         if (_ComponentFactory.find(component) != _ComponentFactory.end()) {
             EXODIA_CORE_WARN("Project::RegisterComponent() - Component factory already exists !");
 
@@ -205,16 +236,32 @@ namespace Exodia {
         _ComponentFactory[component] = factory;
     }
 
-    std::function<IComponentContainer *(Buffer)> Project::GetComponentFactory(std::string component) {
-        if (!this) {
-            return nullptr;
-        }
-
+    std::function<IComponentContainer *(Buffer)> Project::GetComponentFactory(std::string component)
+    {
         auto it = _ComponentFactory.find(component);
-        if (it == _ComponentFactory.end()) {
-            return nullptr;
-        }
 
+        if (it == _ComponentFactory.end())
+            return nullptr;
         return it->second;
     }
-}; // namespace Exodia
+
+    void Project::RegisterScript(std::string script, std::function<ScriptableEntity *()> factory)
+    {
+        if (_ScriptFactory.find(script) != _ScriptFactory.end()) {
+            EXODIA_CORE_WARN("Project::RegisterScript() - Script factory already exists !");
+
+            return;
+        }
+
+        _ScriptFactory[script] = factory;
+    }
+
+    std::function<ScriptableEntity *()> Project::GetScriptFactory(std::string script)
+    {
+        auto it = _ScriptFactory.find(script);
+
+        if (it == _ScriptFactory.end())
+            return nullptr;
+        return it->second;
+    }
+};

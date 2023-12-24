@@ -6,26 +6,28 @@
 */
 
 #ifndef PROJECT_HPP_
-#define PROJECT_HPP_
+    #define PROJECT_HPP_
 
-// Exodia Asset includes
-#include "Asset/Manager/EditorAssetManager.hpp"
+    // Exodia Asset includes
+    #include "Asset/Manager/EditorAssetManager.hpp"
 
-// Exodia ECS includes
-#include "ECS/Interface/IComponentContainer.hpp"
+    // Exodia ECS includes
+    #include "ECS/Interface/IComponentContainer.hpp"
 
-// Exodia Core includes
-#include "Core/Buffer/Buffer.hpp"
+    // Exodia Core includes
+    #include "Core/Buffer/Buffer.hpp"
 
-// Exodia Utils includes
-#include "Utils/Memory.hpp"
+    // Exodia Utils includes
+    #include "Utils/Memory.hpp"
 
-// External includes
-#include <unordered_map>
-#include <filesystem>
-#include <functional>
+    // External includes
+    #include <unordered_map>
+    #include <filesystem>
+    #include <functional>
 
 namespace Exodia {
+
+    class ScriptableEntity;
 
     struct ProjectConfig {
         std::string Name = "Untitled";
@@ -42,62 +44,71 @@ namespace Exodia {
         //////////////////////////////
         // Constructor & Destructor //
         //////////////////////////////
-      public:
-        Project();
-        ~Project() = default;
+        public:
+
+            Project();
+            ~Project() = default;
 
         /////////////
         // Methods //
         /////////////
-      public:
-        static Ref<Project> New();
-        static Ref<Project> Load(const std::filesystem::path &path);
+        public:
 
-        static bool SaveActive(const std::filesystem::path &path);
+            static Ref<Project> New();
+            static Ref<Project> Load(const std::filesystem::path &path);
+
+            static bool SaveActive(const std::filesystem::path &path);
 
         ///////////////////////
         // Getters & Setters //
         ///////////////////////
-      public:
-        const std::filesystem::path &GetProjectDirectory();
-        std::filesystem::path GetAssetDirectory();
-        std::filesystem::path GetAssetFilePath(const std::filesystem::path &path);
-        std::filesystem::path GetAssetRegistryPath();
-        std::filesystem::path GetAssetAbsolutePath(const std::filesystem::path &path);
-        std::filesystem::path GetScriptPath();
+        public:
 
-        static const std::filesystem::path &GetActiveProjectDirectory();
-        static std::filesystem::path GetActiveAssetDirectory();
-        static std::filesystem::path GetActiveAssetFilePath(const std::filesystem::path &path);
-        static std::filesystem::path GetActiveAssetRegistryPath();
-        static std::filesystem::path GetActiveScriptPath();
+            const std::filesystem::path &GetProjectDirectory();
+            std::filesystem::path        GetAssetDirectory();
+            std::filesystem::path        GetAssetFilePath(const std::filesystem::path &path);
+            std::filesystem::path        GetAssetRegistryPath();
+            std::filesystem::path        GetAssetAbsolutePath(const std::filesystem::path &path);
+            std::filesystem::path        GetScriptPath();
 
-        static Ref<Project> GetActive();
+            static const std::filesystem::path &GetActiveProjectDirectory();
+            static std::filesystem::path        GetActiveAssetDirectory();
+            static std::filesystem::path        GetActiveAssetFilePath(const std::filesystem::path &path);
+            static std::filesystem::path        GetActiveAssetRegistryPath();
+            static std::filesystem::path        GetActiveScriptPath();
 
-        Ref<IAssetManager> GetAssetManager() const;
-        Ref<EditorAssetManager> GetEditorAssetManager() const;
+            static Ref<Project>                 GetActive();
 
-        void RegisterComponent(std::string component, std::function<IComponentContainer *(Buffer)> factory);
-        std::function<IComponentContainer *(Buffer)> GetComponentFactory(std::string component);
+            Ref<IAssetManager>       GetAssetManager()        const;
+            Ref<EditorAssetManager>  GetEditorAssetManager()  const;
 
-        ProjectConfig &GetConfig();
+            void RegisterComponent(std::string component, std::function<IComponentContainer *(Buffer)> factory);
+            std::function<IComponentContainer *(Buffer)> GetComponentFactory(std::string component);
 
+            void RegisterScript(std::string script, std::function<ScriptableEntity *()> factory);
+            std::function<ScriptableEntity *()> GetScriptFactory(std::string script);
+
+            ProjectConfig &GetConfig();
+        
         ////////////////
         // Attributes //
         ////////////////
-      private:
-        ProjectConfig _Config;
-        std::filesystem::path _ProjectDirectory;
-        Ref<IAssetManager> _AssetManager;
+        private:
 
-        std::unordered_map<std::string, std::function<IComponentContainer *(Buffer)>> _ComponentFactory;
+            ProjectConfig         _Config;
+            std::filesystem::path _ProjectDirectory;
+            Ref<IAssetManager>    _AssetManager;
+            
+            std::unordered_map<std::string, std::function<IComponentContainer *(Buffer)>> _ComponentFactory;
+            std::unordered_map<std::string, std::function<ScriptableEntity    *()>>       _ScriptFactory;
 
         ///////////////////
         // Singletons... //
         ///////////////////
-      private:
-        inline static Ref<Project> _ActiveProject;
+        private:
+
+            inline static Ref<Project> _ActiveProject;
     };
-}; // namespace Exodia
+};
 
 #endif /* !PROJECT_HPP_ */

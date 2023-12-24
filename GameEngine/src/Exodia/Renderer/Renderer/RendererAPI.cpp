@@ -11,6 +11,4 @@
 namespace Exodia {
 
     RendererAPI::API RendererAPI::_API = RendererAPI::API::OpenGL;
-
-    bool RendererAPI::_IsGraphical = true;
-}; // namespace Exodia
+};

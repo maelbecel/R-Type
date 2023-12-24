@@ -6,138 +6,198 @@
 */
 
 #ifndef HEADER_HPP_
-#define HEADER_HPP_
+    #define HEADER_HPP_
 
 #include <iostream>
 #include <vector>
 #include <cstring>
-#include <ctime>
+#include <iomanip>
+#define _CRT_SECURE_NO_WARNINGS
+    #include <ctime>
 
 #ifdef _WIN32
-#include <winsock2.h>
-#include <ws2tcpip.h>
+    #include <winsock2.h>
+    #include <ws2tcpip.h>
 #else
-#include <arpa/inet.h>
+    #include <arpa/inet.h>
 #endif
 
-template <typename T> T swapEndianness(T value) {
-    std::reverse(reinterpret_cast<char *>(&value), reinterpret_cast<char *>(&value) + sizeof(T));
+template <typename T>
+T swapEndianness(T value) {
+    std::reverse(reinterpret_cast<char*>(&value), reinterpret_cast<char*>(&value) + sizeof(T));
     return value;
 }
 
 namespace Exodia {
     namespace Network {
         class Header {
-          public:
-            /**
-             * @brief Construct a new Header object
-             * Construct a new Header object with the given command, id and size
-             *
-             * @param command (Type: char ) The command of the header
-             * @param id (Type: unsigned long) The id of the header
-             * @param size (Type: unsigned long) The size of the packet
-             */
-            Header(unsigned char command, unsigned long id, unsigned long size)
-                : _command(command), _id(id), _size(size) {
-                using MillisecondsType = std::chrono::milliseconds::rep;
+            public:
 
-                MillisecondsType timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(
-                                                 std::chrono::system_clock::now().time_since_epoch())
-                                                 .count();
+                Header(uint8_t command) : _command(command), _timestamp(0), _id(0), _size(0)
+                {
+                    using MillisecondsType = std::chrono::milliseconds::rep;
 
-                _timestamp = static_cast<float>(timestamp);
-            }
+                    MillisecondsType timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 
-            Header(const Header &header)
-                : _command(header._command), _timestamp(header._timestamp), _id(header._id), _size(header._size){};
+                    _timestamp = static_cast<float>(timestamp);
+                };
+                /**
+                 * @brief Construct a new Header object
+                 * Construct a new Header object with the given command, id and size
+                 *
+                 * @param command (Type: char ) The command of the header
+                 * @param id (Type: unsigned long) The id of the header
+                 * @param size (Type: unsigned long) The size of the packet
+                 */
+                Header(unsigned char command, unsigned long id, unsigned long size) : _command(command), _id(id), _size(size)
+                {
+                    using MillisecondsType = std::chrono::milliseconds::rep;
 
-            ~Header() = default;
+                    MillisecondsType timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 
-            void fillBuffer(std::vector<char> &buffer) const {
-                size_t index = 0;
+                    _timestamp = static_cast<float>(timestamp);
+                }
 
-                char swappedCommand = swapEndianness(_command);
-                std::memcpy(buffer.data(), &swappedCommand, sizeof(char));
-                index += sizeof(char);
+                Header(const Header &header) : _command(header._command), _timestamp(header._timestamp), _id(header._id), _size(header._size) {};
 
-                float swappedTimestamp = swapEndianness(_timestamp);
-                std::memcpy(buffer.data() + index, &swappedTimestamp, sizeof(float));
-                index += sizeof(float);
+                ~Header() = default;
 
-                unsigned long swappedId = swapEndianness(_id);
-                std::memcpy(buffer.data() + index, &swappedId, sizeof(unsigned long));
-                index += sizeof(unsigned long);
+                void fillBuffer(std::vector<char>& buffer) const {
+                    size_t index = 0;
 
-                unsigned long swappedSize = swapEndianness(_size);
-                std::memcpy(buffer.data() + index, &swappedSize, sizeof(unsigned long));
-            }
+                    char swappedCommand = swapEndianness(_command);
+                    std::memcpy(buffer.data(), &swappedCommand, sizeof(char));
+                    index += sizeof(char);
 
-            // Static function to fill a Header from a buffer
-            static Header fillHeader(const std::vector<char> buffer) {
-                size_t index = 0;
+                    float swappedTimestamp = swapEndianness(_timestamp);
+                    std::memcpy(buffer.data() + index, &swappedTimestamp, sizeof(float));
+                    index += sizeof(float);
 
-                if (buffer.size() < 22)
-                    return Header(0, 0, 0);
+                    unsigned long swappedId = swapEndianness(_id);
+                    std::memcpy(buffer.data() + index, &swappedId, sizeof(unsigned long));
+                    index += sizeof(unsigned long);
 
-                char swappedCommand;
-                std::memcpy(&swappedCommand, buffer.data(), sizeof(char));
-                index += sizeof(char);
-                char command = swapEndianness(swappedCommand);
+                    unsigned long swappedSize = swapEndianness(_size);
+                    std::memcpy(buffer.data() + index, &swappedSize, sizeof(unsigned long));
+                }
 
-                float swappedTimestamp;
-                std::memcpy(&swappedTimestamp, buffer.data() + index, sizeof(float));
-                index += sizeof(float);
-                float timestamp = swapEndianness(swappedTimestamp);
+                // Static function to fill a Header from a buffer
+                static Header fillHeader(const std::vector<char> buffer) {
+                    size_t index = 0;
 
-                unsigned long swappedId;
-                std::memcpy(&swappedId, buffer.data() + index, sizeof(unsigned long));
-                index += sizeof(unsigned long);
-                unsigned long id = swapEndianness(swappedId);
+                    if (buffer.size() < 22)
+                        return Header(0, 0, 0);
 
-                unsigned long swappedSize;
-                std::memcpy(&swappedSize, buffer.data() + index, sizeof(unsigned long));
-                unsigned long size = swapEndianness(swappedSize);
+                    char swappedCommand;
+                    std::memcpy(&swappedCommand, buffer.data(), sizeof(char));
+                    index += sizeof(char);
+                    char command = swapEndianness(swappedCommand);
 
-                Header header(command, id, size);
-                header._timestamp = timestamp;
+                    float swappedTimestamp;
+                    std::memcpy(&swappedTimestamp, buffer.data() + index, sizeof(float));
+                    index += sizeof(float);
+                    float timestamp = swapEndianness(swappedTimestamp);
 
-                return header;
-            }
+                    unsigned long swappedId;
+                    std::memcpy(&swappedId, buffer.data() + index, sizeof(unsigned long));
+                    index += sizeof(unsigned long);
+                    unsigned long id = swapEndianness(swappedId);
 
-            static size_t GetSize() { return 22; }
+                    unsigned long swappedSize;
+                    std::memcpy(&swappedSize, buffer.data() + index, sizeof(unsigned long));
+                    unsigned long size = swapEndianness(swappedSize);
 
-            void setSize(unsigned long size) { _size = size; }
+                    Header header(command, id, size);
+                    header._timestamp = timestamp;
 
-            void SetId(unsigned long id) { _id = id; }
+                    return header;
+                }
 
-            unsigned char getCommand() const { return _command; };
-            float getTimestamp() const { return _timestamp; };
-            unsigned long getId() const { return _id; };
-            unsigned long getSize() const { return _size; };
+                uint64_t GetId() const {
+                    return _id;
+                }
 
-            friend std::ostream &operator<<(std::ostream &os, const Header &header) {
-                os << "Command: " << header._command << std::endl;
-                os << "Timestamp: " << header._timestamp << std::endl;
-                os << "ID: " << header._id << std::endl;
-                os << "Size: " << header._size << std::endl;
-                return os;
-            }
+                static unsigned long GetSize()
+                {
+                    return 22;
+                }
 
-            Header &operator=(const Header &header) {
-                _command = header._command;
-                _timestamp = header._timestamp;
-                _id = header._id;
-                _size = header._size;
-                return *this;
-            }
+                void setSize(unsigned long size) {
+                    _size = size;
+                }
 
-          private:
-            unsigned char _command;
-            float _timestamp;
-            unsigned long _id;
-            unsigned long _size;
+                void SetId(unsigned long id) {
+                    _id = id;
+                }
+
+                unsigned char getCommand() const { return _command; };
+                float getTimestamp() const { return _timestamp; };
+                unsigned long getId() const { return _id; };
+                unsigned long getSize() const { return _size; };
+
+
+                /**
+                 * @brief Return string representation of a command
+                 *
+                 * @return std::string String representation of the command
+                */
+                std::string VerbaliseCommand() const
+                {
+                    std::unordered_map<unsigned char, std::string> commands;
+                    std::string command;
+
+                    commands[0x00] = "Packet info";
+                    commands[0x01] = "Acknowledgement";
+                    commands[0x02] = "Accept client connection";
+                    commands[0x81] = "Ask for connection";
+                    commands[0x82] = "New Event";
+                    commands[0x0c] = "Create component";
+                    command = commands[getCommand()];
+
+                    if (command.empty())
+                        command = "Unknown command";
+
+                    return command;
+                }
+
+                std::string toString()
+                {
+                    std::string str;
+
+                    str += "Header: ";
+                    str += "Command: '" + VerbaliseCommand() + "'";
+                    str += " ID: "     + std::to_string(_id);
+                    str += " Size: "   + std::to_string(_size) + "\n";
+
+                    return str;
+                }
+
+                friend std::ostream& operator<<(std::ostream &os, const Header &header)
+                {
+                    os << "Header: ";
+                    os << "Command: '" << header.VerbaliseCommand() << "'";
+                    os << " ID: "      << header._id;
+                    os << " Size: "    << header._size << std::endl;
+
+                    return os;
+                }
+
+                Header &operator=(const Header &header) {
+                    _command = header._command;
+                    _timestamp = header._timestamp;
+                    _id = header._id;
+                    _size = header._size;
+                    return *this;
+                }
+
+            private:
+                unsigned char _command;
+                float _timestamp;
+                unsigned long _id;
+                unsigned long _size;
         };
-    }; // namespace Network
-};     // namespace Exodia
+    };
+};
+
 
 #endif /* !HEADER_HPP_ */

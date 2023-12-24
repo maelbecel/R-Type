@@ -34,11 +34,9 @@ namespace Exodia {
 
         auto script = entity->AddComponent<ScriptComponent>();
 
-        script.Get().Bind<Player>();
+        script.Get().Bind("Player");
 
         Entity *hello = _World->CreateEntity();
-
-        hello->AddComponent<ScriptComponent>().Get().Bind<ExampleScript>();
 
         _World->RegisterSystem(new ScriptSystem());
     }
