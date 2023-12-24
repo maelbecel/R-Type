@@ -25,7 +25,8 @@ namespace Exodia {
         body_patata.Get().GravityScale = 0.0f;
         body_patata.Get().Velocity.x = 0.0f;
         // Set entity sprite
-        auto sprite = patata->AddComponent<SpriteRendererComponent>();
+        auto sprite = patata->AddComponent<SpriteRendererComponent>(glm::vec4{ 0.8f, 0.2f, 0.3f, 1.0f });
+        //auto sprite = patata->AddComponent<SpriteRendererComponent>();
         sprite.Get().Texture = SubTexture2D::CreateFromCoords(90123456789012678, { 0.0f, 0.0f }, { 33.3125f, 36.0f }, { 1.0f, 1.0f });
 
         auto transform = patata->GetComponent<TransformComponent>();
