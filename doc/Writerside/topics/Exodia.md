@@ -9,7 +9,7 @@ This part of the Game Engine is divided in multiple parts :
 - [**ECS**](ECS.md) : The ECS part of the Game Engine. It contains the classes that will be used to create the ECS.
 - [**Events**](Events.md) : The events part of the Game Engine. It contains the classes that will be used to handle events.
 - [**ImGUI**](ImGUI-GUI.md) : The ImGui part of the Game Engine. It contains the classes that will be used to create and use ImGui.
-- [**Math**]() : The math part of the Game Engine. It contains the classes that will be used to do math.
+- [**Math**](Math.md) : The math part of the Game Engine. It contains the classes that will be used to do math.
 - [**Project**]() : The project part of the Game Engine. It contains the classes that will be used to create a project.
 - [**Renderer**]() : The renderer part of the Game Engine. It contains the classes that will be used to render the game.
 - [**Scene**]() : The scene part of the Game Engine. It contains the classes that will be used to create a scene.

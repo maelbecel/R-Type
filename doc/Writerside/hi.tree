@@ -19,6 +19,7 @@
         <toc-element topic="Client.md"/>
         <toc-element topic="Game-Engine.md">
             <toc-element topic="Exodia.md">
+                <toc-element topic="Math.md"/>
                 <toc-element topic="ImGUI-GUI.md">
                     <toc-element topic="ImGuiToolsUI.md"/>
                     <toc-element topic="ImGuiLayer.md"/>
