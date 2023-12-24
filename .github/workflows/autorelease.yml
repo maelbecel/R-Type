@@ -56,7 +56,7 @@ jobs:
       uses: actions/download-artifact@v2
       with:
         name: binaries
-    
+
     - name: Verification
       run: |
         ls
@@ -71,5 +71,6 @@ jobs:
         gh release create "$tag" \
             --repo="$GITHUB_REPOSITORY" \
             --title="${GITHUB_REPOSITORY#*/} ${tag#v}" \
-            --generate-notes \
-            --assets=./r-type_client,./r-type_server
+            --generate-notes && \
+        gh release upload "$tag" ./r-type_client && \
+        gh release upload "$tag" ./r-type_server
