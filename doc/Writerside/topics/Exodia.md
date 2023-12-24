@@ -10,7 +10,7 @@ This part of the Game Engine is divided in multiple parts :
 - [**Events**](Events.md) : The events part of the Game Engine. It contains the classes that will be used to handle events.
 - [**ImGUI**](ImGUI-GUI.md) : The ImGui part of the Game Engine. It contains the classes that will be used to create and use ImGui.
 - [**Math**](Math.md) : The math part of the Game Engine. It contains the classes that will be used to do math.
-- [**Project**]() : The project part of the Game Engine. It contains the classes that will be used to create a project.
+- [**Project**](Project.md) : The project part of the Game Engine. It contains the classes that will be used to create a project.
 - [**Renderer**]() : The renderer part of the Game Engine. It contains the classes that will be used to render the game.
 - [**Scene**]() : The scene part of the Game Engine. It contains the classes that will be used to create a scene.
 - [**Script**]() : The script part of the Game Engine. It contains the classes that will be used to create a script.
