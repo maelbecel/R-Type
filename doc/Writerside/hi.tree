@@ -20,6 +20,7 @@
         <toc-element topic="Game-Engine.md">
             <toc-element topic="Exodia.md">
                 <toc-element topic="Renderer.md">
+                    <toc-element topic="Renderer-Context-md.md"/>
                     <toc-element topic="Renderer-Camera.md">
                         <toc-element topic="Camera-OrthographicCameraController.md"/>
                         <toc-element topic="Camera-OrthographicCamera.md"/>

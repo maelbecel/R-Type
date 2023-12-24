@@ -6,7 +6,7 @@ It's divided in multiple parts :
 
 - [**Buffer**](Renderer-Buffer.md) : The Buffer part of the Renderer. It contains the classes that will be used to create buffers.
 - [**Camera**](Renderer-Camera.md) : The Camera part of the Renderer. It contains the classes that will be used to create cameras.
-- [**Context**](Renderer-Context.md) : The Context part of the Renderer. It contains the classes that will be used to create contexts.
+- [**Context**](Renderer-Context-md.md) : The Context part of the Renderer. It contains the classes that will be used to create contexts.
 - [**Renderer**](Renderer-Renderer.md) : The Renderer part of the Renderer. It contains the classes that will be used to create the renderer.
 - [**Shader**](Renderer-Shader.md) : The Shader part of the Renderer. It contains the classes that will be used to create shaders.
 - [**Sound**](Renderer-Sound.md) : The Sound part of the Renderer. It contains the classes that will be used to create sounds.
