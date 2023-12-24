@@ -6,37 +6,36 @@
 */
 
 #ifndef R_TYPE_HPP_
-    #define R_TYPE_HPP_
+#define R_TYPE_HPP_
 
-    ///////////////////////////////////////////////
-    // Main include file for R-Type              //
-    // Include this file to use the R-Type logic //
-    // And create your own R-Type game           //
-    ///////////////////////////////////////////////
+///////////////////////////////////////////////
+// Main include file for R-Type              //
+// Include this file to use the R-Type logic //
+// And create your own R-Type game           //
+///////////////////////////////////////////////
 
-    #include "Exodia.hpp"
+#include "Exodia.hpp"
 
-    #include "src/Component/Animation.hpp"
-    #include "src/Component/Clock.hpp"
-    #include "src/Component/Health.hpp"
+#include "src/Component/Animation.hpp"
+#include "src/Component/Clock.hpp"
+#include "src/Component/Health.hpp"
 
-    #include "src/Scripts/BulletPlayer.hpp"
-    #include "src/Scripts/Player/Player.hpp"
-    #include "src/Scripts/Pata-pata.hpp"
+#include "src/Scripts/BulletPlayer.hpp"
+#include "src/Scripts/Player/Player.hpp"
+#include "src/Scripts/Pata-pata.hpp"
 
-    #include "src/System/AnimationSystem.hpp"
+#include "src/System/AnimationSystem.hpp"
 
-    #include "src/Event/EntityEventSubscriber.hpp"
+#include "src/Event/EntityEventSubscriber.hpp"
 
-    #include "src/Entity/CreatePataPata.hpp"
-    #include "src/Entity/CreatePlayer.hpp"
-    #include "src/Entity/CreateBackground.hpp"
-    #include "src/Entity/CreateStars.hpp"
+#include "src/Entity/CreatePataPata.hpp"
+#include "src/Entity/CreatePlayer.hpp"
+#include "src/Entity/CreateBackground.hpp"
+#include "src/Entity/CreateStars.hpp"
 
 namespace RType {
 
-    inline static void InitRType()
-    {
+    inline static void InitRType() {
         // -- Init the R-Type project ------------------------------------------
 #ifdef _WIN32
         Ref<Exodia::Project> project = Exodia::Project::Load("../Client/R-Type.proj");
@@ -60,26 +59,18 @@ namespace RType {
 
         // -- Register R-Type scripts ------------------------------------------
 
-        project->RegisterScript("Star", []() -> Exodia::ScriptableEntity * {
-            return new Exodia::Star();
-        });
+        project->RegisterScript("Star", []() -> Exodia::ScriptableEntity * { return new Exodia::Star(); });
 
-        project->RegisterScript("PataPata", []() -> Exodia::ScriptableEntity * {
-            return new Exodia::PataPata();
-        });
+        project->RegisterScript("PataPata", []() -> Exodia::ScriptableEntity * { return new Exodia::PataPata(); });
 
-        project->RegisterScript("BulletPlayer", []() -> Exodia::ScriptableEntity * {
-            return new Exodia::BulletPlayer();
-        });
+        project->RegisterScript("BulletPlayer",
+                                []() -> Exodia::ScriptableEntity * { return new Exodia::BulletPlayer(); });
 
-        project->RegisterScript("BulletEnnemy", []() -> Exodia::ScriptableEntity * {
-            return new Exodia::BulletEnnemy();
-        });
+        project->RegisterScript("BulletEnnemy",
+                                []() -> Exodia::ScriptableEntity * { return new Exodia::BulletEnnemy(); });
 
-        project->RegisterScript("Player", []() -> Exodia::ScriptableEntity * {
-            return new Exodia::Player();
-        });
+        project->RegisterScript("Player", []() -> Exodia::ScriptableEntity * { return new Exodia::Player(); });
     }
-};
+}; // namespace RType
 
 #endif /* !R_TYPE_HPP_ */

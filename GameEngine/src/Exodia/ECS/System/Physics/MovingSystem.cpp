@@ -17,19 +17,19 @@ namespace Exodia {
     // Constructor //
     /////////////////
 
-    MovingSystem::MovingSystem(float gravity) : _Gravity(gravity) {};
+    MovingSystem::MovingSystem(float gravity) : _Gravity(gravity){};
 
     /////////////
     // Methods //
     /////////////
 
-    void MovingSystem::Update(World *world, Timestep ts)
-    {
+    void MovingSystem::Update(World *world, Timestep ts) {
         EXODIA_PROFILE_FUNCTION();
 
         world->LockMutex();
-        world->ForEach<RigidBody2DComponent, TransformComponent>([&](Entity *entity, ComponentHandle<RigidBody2DComponent> rigidBody, ComponentHandle<TransformComponent> transform)
-        {
+        world->ForEach<RigidBody2DComponent, TransformComponent>([&](Entity *entity,
+                                                                     ComponentHandle<RigidBody2DComponent> rigidBody,
+                                                                     ComponentHandle<TransformComponent> transform) {
             if (rigidBody.Get().Type == RigidBody2DComponent::BodyType::Static)
                 return;
             ApplyVelocity(rigidBody, transform, ts);
@@ -37,8 +37,8 @@ namespace Exodia {
         world->UnlockMutex();
     }
 
-    void MovingSystem::ApplyVelocity(ComponentHandle<RigidBody2DComponent> rigidBody, ComponentHandle<TransformComponent> transform, Timestep ts)
-    {
+    void MovingSystem::ApplyVelocity(ComponentHandle<RigidBody2DComponent> rigidBody,
+                                     ComponentHandle<TransformComponent> transform, Timestep ts) {
         auto &rb = rigidBody.Get();
         auto &tc = transform.Get();
         float deltaTime = ts;
@@ -58,4 +58,4 @@ namespace Exodia {
         // Update the velocity based on the calculated force and time
         rb.Velocity += force * deltaTime;
     }
-};
+}; // namespace Exodia

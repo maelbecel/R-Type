@@ -27,8 +27,7 @@ namespace Exodia {
     // Methods //
     /////////////
 
-    void CollisionSystem::Update(World *world, Timestep ts)
-    {
+    void CollisionSystem::Update(World *world, Timestep ts) {
         EXODIA_PROFILE_FUNCTION();
 
         std::vector<std::pair<Entity *, Entity *>> collisions;
@@ -37,23 +36,31 @@ namespace Exodia {
             EXODIA_PROFILE_SCOPE("CollisionSystem::Update::BoxCollider2D");
 
             world->LockMutex();
-            world->ForEach<BoxCollider2DComponent, TransformComponent>([&](Entity *entityA, ComponentHandle<BoxCollider2DComponent> colliderA, ComponentHandle<TransformComponent> transformA) {
-                world->ForEach<BoxCollider2DComponent, TransformComponent>([&](Entity *entityB, ComponentHandle<BoxCollider2DComponent> colliderB, ComponentHandle<TransformComponent> transformB) {
-                    if (std::find(collisions.begin(), collisions.end(), std::make_pair(entityB, entityA)) != collisions.end())
-                        return;
+            world->ForEach<BoxCollider2DComponent, TransformComponent>(
+                [&](Entity *entityA, ComponentHandle<BoxCollider2DComponent> colliderA,
+                    ComponentHandle<TransformComponent> transformA) {
+                    world->ForEach<BoxCollider2DComponent, TransformComponent>(
+                        [&](Entity *entityB, ComponentHandle<BoxCollider2DComponent> colliderB,
+                            ComponentHandle<TransformComponent> transformB) {
+                            if (std::find(collisions.begin(), collisions.end(), std::make_pair(entityB, entityA)) !=
+                                collisions.end())
+                                return;
 
-                    if (entityA != entityB && CheckCollision(colliderA, transformA, colliderB, transformB))
-                        collisions.push_back(std::make_pair(entityA, entityB));
+                            if (entityA != entityB && CheckCollision(colliderA, transformA, colliderB, transformB))
+                                collisions.push_back(std::make_pair(entityA, entityB));
+                        });
+
+                    world->ForEach<CircleCollider2DComponent, TransformComponent>(
+                        [&](Entity *entityB, ComponentHandle<CircleCollider2DComponent> colliderB,
+                            ComponentHandle<TransformComponent> transformB) {
+                            if (std::find(collisions.begin(), collisions.end(), std::make_pair(entityB, entityA)) !=
+                                collisions.end())
+                                return;
+
+                            if (CheckCollision(colliderA, transformA, colliderB, transformB))
+                                collisions.push_back(std::make_pair(entityA, entityB));
+                        });
                 });
-
-                world->ForEach<CircleCollider2DComponent, TransformComponent>([&](Entity *entityB, ComponentHandle<CircleCollider2DComponent> colliderB, ComponentHandle<TransformComponent> transformB) {
-                    if (std::find(collisions.begin(), collisions.end(), std::make_pair(entityB, entityA)) != collisions.end())
-                        return;
-
-                    if (CheckCollision(colliderA, transformA, colliderB, transformB))
-                        collisions.push_back(std::make_pair(entityA, entityB));
-                });
-            });
             world->UnlockMutex();
         }
 
@@ -61,23 +68,27 @@ namespace Exodia {
             EXODIA_PROFILE_SCOPE("CollisionSystem::Update::CircleCollider2D");
 
             world->LockMutex();
-            world->ForEach<CircleCollider2DComponent, TransformComponent>([&](Entity *entityA, ComponentHandle<CircleCollider2DComponent> colliderA, ComponentHandle<TransformComponent> transformA) {
-                world->ForEach<CircleCollider2DComponent, TransformComponent>([&](Entity *entityB, ComponentHandle<CircleCollider2DComponent> colliderB, ComponentHandle<TransformComponent> transformB) {
-                    if (std::find(collisions.begin(), collisions.end(), std::make_pair(entityB, entityA)) != collisions.end())
-                        return;
+            world->ForEach<CircleCollider2DComponent, TransformComponent>(
+                [&](Entity *entityA, ComponentHandle<CircleCollider2DComponent> colliderA,
+                    ComponentHandle<TransformComponent> transformA) {
+                    world->ForEach<CircleCollider2DComponent, TransformComponent>(
+                        [&](Entity *entityB, ComponentHandle<CircleCollider2DComponent> colliderB,
+                            ComponentHandle<TransformComponent> transformB) {
+                            if (std::find(collisions.begin(), collisions.end(), std::make_pair(entityB, entityA)) !=
+                                collisions.end())
+                                return;
 
-                    if (entityA != entityB && CheckCollision(colliderA, transformA, colliderB, transformB))
-                        collisions.push_back(std::make_pair(entityA, entityB));
+                            if (entityA != entityB && CheckCollision(colliderA, transformA, colliderB, transformB))
+                                collisions.push_back(std::make_pair(entityA, entityB));
+                        });
                 });
-            });
             world->UnlockMutex();
         }
 
         CompareCollisions(collisions);
     }
 
-    void CollisionSystem::Receive(World *world, const Events::OnCollisionEntered &event)
-    {
+    void CollisionSystem::Receive(World *world, const Events::OnCollisionEntered &event) {
         EXODIA_PROFILE_FUNCTION();
 
         Entity *entityA = event.EntityA;
@@ -101,8 +112,10 @@ namespace Exodia {
         }
     }
 
-    bool CollisionSystem::CheckCollision(ComponentHandle<BoxCollider2DComponent> collider1, ComponentHandle<TransformComponent> transform1, ComponentHandle<BoxCollider2DComponent> collider2, ComponentHandle<TransformComponent> transform2)
-    {
+    bool CollisionSystem::CheckCollision(ComponentHandle<BoxCollider2DComponent> collider1,
+                                         ComponentHandle<TransformComponent> transform1,
+                                         ComponentHandle<BoxCollider2DComponent> collider2,
+                                         ComponentHandle<TransformComponent> transform2) {
         auto &boxTransform1 = transform1.Get();
         auto &boxCollider1 = collider1.Get();
         auto &boxTransform2 = transform2.Get();
@@ -123,12 +136,14 @@ namespace Exodia {
         return collisionDetected;
     }
 
-    bool CollisionSystem::CheckCollision(ComponentHandle<BoxCollider2DComponent> collider1, ComponentHandle<TransformComponent> transform1, ComponentHandle<CircleCollider2DComponent> collider2, ComponentHandle<TransformComponent> transform2)
-    {
-        auto &boxTransform    = transform1.Get();
-        auto &boxCollider     = collider1.Get();
+    bool CollisionSystem::CheckCollision(ComponentHandle<BoxCollider2DComponent> collider1,
+                                         ComponentHandle<TransformComponent> transform1,
+                                         ComponentHandle<CircleCollider2DComponent> collider2,
+                                         ComponentHandle<TransformComponent> transform2) {
+        auto &boxTransform = transform1.Get();
+        auto &boxCollider = collider1.Get();
         auto &circleTransform = transform2.Get();
-        auto &circleCollider  = collider2.Get();
+        auto &circleCollider = collider2.Get();
 
         uint32_t colliderMask1 = boxCollider.ColliderMask;
         uint32_t colliderMask2 = circleCollider.ColliderMask;
@@ -136,12 +151,12 @@ namespace Exodia {
         if ((colliderMask1 & colliderMask2) == 0)
             return false;
 
-        //TODO: Enhance this function
-        glm::vec2 boxSize       = boxCollider.Size;
-        glm::vec2 boxPosition    = glm::vec2(boxTransform.Translation.x, boxTransform.Translation.y);
-        glm::vec3 boxRotation    = boxTransform.Rotation;
+        // TODO: Enhance this function
+        glm::vec2 boxSize = boxCollider.Size;
+        glm::vec2 boxPosition = glm::vec2(boxTransform.Translation.x, boxTransform.Translation.y);
+        glm::vec3 boxRotation = boxTransform.Rotation;
         glm::vec2 circlePosition = glm::vec2(circleTransform.Translation.x, circleTransform.Translation.y);
-        float circleRadius       = circleCollider.Radius;
+        float circleRadius = circleCollider.Radius;
 
         glm::vec2 circleLocalPos = circlePosition - boxPosition;
 
@@ -160,18 +175,20 @@ namespace Exodia {
         float closestY = glm::clamp(rotatedCircleLocalPos.y, -boxSize.y / 2.0f, boxSize.y / 2.0f);
 
         glm::vec2 closestPoint = glm::vec2(closestX, closestY);
-        glm::vec2 distanceVec  = rotatedCircleLocalPos - closestPoint;
-        float distance         = glm::length(distanceVec);
+        glm::vec2 distanceVec = rotatedCircleLocalPos - closestPoint;
+        float distance = glm::length(distanceVec);
 
         return (distance <= circleRadius);
     }
 
-    bool CollisionSystem::CheckCollision(ComponentHandle<CircleCollider2DComponent> collider1, ComponentHandle<TransformComponent> transform1, ComponentHandle<CircleCollider2DComponent> collider2, ComponentHandle<TransformComponent> transform2)
-    {
+    bool CollisionSystem::CheckCollision(ComponentHandle<CircleCollider2DComponent> collider1,
+                                         ComponentHandle<TransformComponent> transform1,
+                                         ComponentHandle<CircleCollider2DComponent> collider2,
+                                         ComponentHandle<TransformComponent> transform2) {
         auto &circleTransform1 = transform1.Get();
-        auto &circleCollider1  = collider1.Get();
+        auto &circleCollider1 = collider1.Get();
         auto &circleTransform2 = transform2.Get();
-        auto &circleCollider2  = collider2.Get();
+        auto &circleCollider2 = collider2.Get();
 
         uint32_t colliderMask1 = circleCollider1.ColliderMask;
         uint32_t colliderMask2 = circleCollider2.ColliderMask;
@@ -179,7 +196,7 @@ namespace Exodia {
         if ((colliderMask1 & colliderMask2) == 0)
             return false;
 
-        //TODO: Enhance this function
+        // TODO: Enhance this function
 
         // Extract necessary parameters for calculations
         glm::vec2 position1 = glm::vec2(circleTransform1.Translation.x, circleTransform1.Translation.y);
@@ -210,20 +227,21 @@ namespace Exodia {
         return false; // No collision
     }
 
-    CollisionSystem::BoundingBox CollisionSystem::CalculateTransformedBoundingBox(const BoxCollider2DComponent &collider, const TransformComponent &transform)
-    {
+    CollisionSystem::BoundingBox
+    CollisionSystem::CalculateTransformedBoundingBox(const BoxCollider2DComponent &collider,
+                                                     const TransformComponent &transform) {
         // Get the size and offset from the collider
         glm::vec2 size = collider.Size;
         glm::vec2 offset = collider.Offset;
 
         // Transform the size according to the entity's scale
-        size *= glm::vec2({ transform.Scale.x, transform.Scale.y });
+        size *= glm::vec2({transform.Scale.x, transform.Scale.y});
 
         // Transform the offset according to the entity's rotation
-        glm::vec2 rotatedOffset = glm::vec2({ transform.Rotation.x, transform.Rotation.y }) * offset;
+        glm::vec2 rotatedOffset = glm::vec2({transform.Rotation.x, transform.Rotation.y}) * offset;
 
         // Calculate the center of the box based on the translation and rotated offset
-        glm::vec2 center = glm::vec2({ transform.Translation.x, transform.Translation.y }) + rotatedOffset;
+        glm::vec2 center = glm::vec2({transform.Translation.x, transform.Translation.y}) + rotatedOffset;
 
         // Calculate the minimum and maximum points of the bounding box
         BoundingBox bbox;
@@ -233,8 +251,7 @@ namespace Exodia {
         return bbox;
     }
 
-    bool CollisionSystem::IntersectBoundingBoxes(const BoundingBox &box1, const BoundingBox &box2)
-    {
+    bool CollisionSystem::IntersectBoundingBoxes(const BoundingBox &box1, const BoundingBox &box2) {
         // Check for intersection along each axis (x, y)
         bool collisionX = (box1.max.x >= box2.min.x) && (box1.min.x <= box2.max.x);
         bool collisionY = (box1.max.y >= box2.min.y) && (box1.min.y <= box2.max.y);
@@ -243,8 +260,7 @@ namespace Exodia {
         return collisionX && collisionY;
     }
 
-    void CollisionSystem::EmitOnCollisionEnterEvent(Entity *entityA, Entity *entityB)
-    {
+    void CollisionSystem::EmitOnCollisionEnterEvent(Entity *entityA, Entity *entityB) {
         Events::OnCollisionEntered event;
 
         event.EntityA = entityA;
@@ -253,8 +269,7 @@ namespace Exodia {
         entityA->GetWorld()->Emit<Events::OnCollisionEntered>(event);
     }
 
-    void CollisionSystem::CompareCollisions(const std::vector<std::pair<Entity *, Entity *>> &collisions)
-    {
+    void CollisionSystem::CompareCollisions(const std::vector<std::pair<Entity *, Entity *>> &collisions) {
         if (collisions.empty()) {
             _LastCollisions.clear();
             return;
@@ -268,14 +283,17 @@ namespace Exodia {
                 bool found = false;
 
                 for (auto &newCollision : collisions) {
-                    if ((collision.first == newCollision.first && collision.second == newCollision.second) || (collision.first == newCollision.second && collision.second == newCollision.first)) {
+                    if ((collision.first == newCollision.first && collision.second == newCollision.second) ||
+                        (collision.first == newCollision.second && collision.second == newCollision.first)) {
                         found = true;
                         break;
                     }
                 }
 
                 if (found == false) {
-                    EXODIA_CORE_INFO("Collision between {0} and {1}", collision.first->GetComponent<TagComponent>().Get().Tag, collision.second->GetComponent<TagComponent>().Get().Tag);
+                    EXODIA_CORE_INFO("Collision between {0} and {1}",
+                                     collision.first->GetComponent<TagComponent>().Get().Tag,
+                                     collision.second->GetComponent<TagComponent>().Get().Tag);
                     EmitOnCollisionEnterEvent(collision.first, collision.second);
                 }
             }
@@ -283,4 +301,4 @@ namespace Exodia {
 
         _LastCollisions = collisions;
     }
-};
+}; // namespace Exodia

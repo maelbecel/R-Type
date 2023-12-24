@@ -6,39 +6,37 @@
 */
 
 #ifndef ENTITYEVENTSUBSCRIBER_HPP_
-    #define ENTITYEVENTSUBSCRIBER_HPP_
+#define ENTITYEVENTSUBSCRIBER_HPP_
 
-    // Exodia include
-    #include "Exodia.hpp"
+// Exodia include
+#include "Exodia.hpp"
 
 namespace RType {
 
-    class EntityEventSubscriber : public Exodia::EventSubscriber<Exodia::Events::OnEntityCreated>, public Exodia::EventSubscriber<Exodia::Events::OnEntityDestroyed> {
+    class EntityEventSubscriber : public Exodia::EventSubscriber<Exodia::Events::OnEntityCreated>,
+                                  public Exodia::EventSubscriber<Exodia::Events::OnEntityDestroyed> {
 
         //////////////////////////////
         // Constructor & Destructor //
         //////////////////////////////
-        public:
+      public:
+        EntityEventSubscriber(const Exodia::Network::Network &network) : _Network(network){};
 
-            EntityEventSubscriber(const Exodia::Network::Network &network) : _Network(network) {};
-
-            virtual ~EntityEventSubscriber() override = default;
+        virtual ~EntityEventSubscriber() override = default;
 
         /////////////
         // Methods //
         /////////////
-        public:
-
-            virtual void Receive(Exodia::World *world, const Exodia::Events::OnEntityCreated   &event) override;
-            virtual void Receive(Exodia::World *world, const Exodia::Events::OnEntityDestroyed &event) override;
+      public:
+        virtual void Receive(Exodia::World *world, const Exodia::Events::OnEntityCreated &event) override;
+        virtual void Receive(Exodia::World *world, const Exodia::Events::OnEntityDestroyed &event) override;
 
         ////////////////
         // Attributes //
         ////////////////
-        private:
-            const Exodia::Network::Network &_Network;
+      private:
+        const Exodia::Network::Network &_Network;
     };
-};
+}; // namespace RType
 
 #endif /* !ENTITYEVENTSUBSCRIBER_HPP_ */
-

@@ -16,14 +16,10 @@ namespace Exodia {
         //////////////////////////////
         // Constructor & Destructor //
         //////////////////////////////
-        public:
+      public:
+        RTypeClient(const ApplicationSpecification &spec) : Application(spec) { PushLayer(new RTypeLayer()); }
 
-            RTypeClient(const ApplicationSpecification &spec) : Application(spec)
-            {
-                PushLayer(new RTypeLayer());
-            }
-
-            ~RTypeClient() = default;
+        ~RTypeClient() = default;
     };
 
     /////////////////

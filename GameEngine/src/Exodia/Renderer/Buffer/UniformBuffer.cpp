@@ -19,20 +19,19 @@ namespace Exodia {
     // Factory //
     /////////////
 
-    Ref<UniformBuffer> UniformBuffer::Create(uint32_t size, uint32_t binding)
-    {
+    Ref<UniformBuffer> UniformBuffer::Create(uint32_t size, uint32_t binding) {
         RendererAPI::API api = Renderer::GetAPI();
 
         switch (api) {
-            case RendererAPI::API::None:
-                return nullptr;
-            case RendererAPI::API::OpenGL:
-                return CreateRef<OpenGLUniformBuffer>(size, binding);
-            default:
-                break;
+        case RendererAPI::API::None:
+            return nullptr;
+        case RendererAPI::API::OpenGL:
+            return CreateRef<OpenGLUniformBuffer>(size, binding);
+        default:
+            break;
         }
 
         EXODIA_CORE_ASSERT(false, "Unknown RendererAPI !");
         return nullptr;
     }
-};
+}; // namespace Exodia

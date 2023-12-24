@@ -9,8 +9,7 @@
 
 namespace Exodia {
 
-    void CreatePataPata(std::map<SceneType, std::shared_ptr<Exodia::Scene>> _World)
-    {
+    void CreatePataPata(std::map<SceneType, std::shared_ptr<Exodia::Scene>> _World) {
         Entity *patata = _World[GAME]->CreateEntity("Pata-pata");
 
         patata->AddComponent<Health>(1);
@@ -25,9 +24,10 @@ namespace Exodia {
         body_patata.Get().GravityScale = 0.0f;
         body_patata.Get().Velocity.x = 0.0f;
         // Set entity sprite
-        auto sprite = patata->AddComponent<SpriteRendererComponent>(glm::vec4{ 0.8f, 0.2f, 0.3f, 1.0f });
-        //auto sprite = patata->AddComponent<SpriteRendererComponent>();
-        sprite.Get().Texture = SubTexture2D::CreateFromCoords(90123456789012678, { 0.0f, 0.0f }, { 33.3125f, 36.0f }, { 1.0f, 1.0f });
+        auto sprite = patata->AddComponent<SpriteRendererComponent>(glm::vec4{0.8f, 0.2f, 0.3f, 1.0f});
+        // auto sprite = patata->AddComponent<SpriteRendererComponent>();
+        sprite.Get().Texture =
+            SubTexture2D::CreateFromCoords(90123456789012678, {0.0f, 0.0f}, {33.3125f, 36.0f}, {1.0f, 1.0f});
 
         auto transform = patata->GetComponent<TransformComponent>();
         if (!transform)
@@ -36,4 +36,4 @@ namespace Exodia {
         // patata->AddComponent<CircleRendererComponent>(glm::vec4{ 1.0f, 1.0f, 0.0f, 1.0f});
         EXODIA_INFO("Pata-pata created");
     };
-}
+} // namespace Exodia

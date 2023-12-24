@@ -6,9 +6,9 @@
 */
 
 #ifndef HEALTHCOMPONENT_HPP_
-    #define HEALTHCOMPONENT_HPP_
+#define HEALTHCOMPONENT_HPP_
 
-    #include "Exodia.hpp"
+#include "Exodia.hpp"
 
 namespace Exodia {
 
@@ -18,15 +18,14 @@ namespace Exodia {
      * @param CurrentHealth Current health of the entity.
      * @param MaxHealth Max health of the entity.
      */
-    struct Health: public Component {
+    struct Health : public Component {
         int CurrentHealth;
         int MaxHealth;
 
         Health(const Health &) = default;
-        Health(int maxHealth = 100) : CurrentHealth(maxHealth), MaxHealth(maxHealth) {};
+        Health(int maxHealth = 100) : CurrentHealth(maxHealth), MaxHealth(maxHealth){};
 
-        Buffer SerializeData() override
-        {
+        Buffer SerializeData() override {
             try {
                 uint64_t size = sizeof(int) * 2;
                 Buffer buffer(size);
@@ -42,8 +41,7 @@ namespace Exodia {
             }
         }
 
-        void DeserializeData(Buffer buffer) override
-        {
+        void DeserializeData(Buffer buffer) override {
             try {
                 uint64_t size = 0;
                 Memcopy(&CurrentHealth, buffer.Data, sizeof(int));
@@ -54,6 +52,6 @@ namespace Exodia {
             }
         }
     };
-};
+}; // namespace Exodia
 
 #endif /* !HEALTHCOMPONENT_HPP_ */

@@ -6,10 +6,10 @@
 */
 
 #ifndef RTYPELAYER_HPP_
-    #define RTYPELAYER_HPP_
+#define RTYPELAYER_HPP_
 
-    #include "Exodia.hpp"
-    #include "R-Type.hpp"
+#include "Exodia.hpp"
+#include "R-Type.hpp"
 
 namespace Exodia {
 
@@ -18,41 +18,39 @@ namespace Exodia {
         //////////////////////////////
         // Constructor & Destructor //
         //////////////////////////////
-        public:
-
-            RTypeLayer();
-            ~RTypeLayer() = default;
+      public:
+        RTypeLayer();
+        ~RTypeLayer() = default;
 
         /////////////
         // Methods //
         /////////////
-        public:
+      public:
+        void OnAttach() override;
+        void OnDetach() override;
+        void OnUpdate(Timestep ts) override;
+        void OnImGUIRender() override;
+        void OnEvent(Event &event) override;
 
-            void OnAttach()            override;
-            void OnDetach()            override;
-            void OnUpdate(Timestep ts) override;
-            void OnImGUIRender()       override;
-            void OnEvent(Event &event) override;
-
-        private:
-            bool OnKeyReleasedEvent(KeyReleasedEvent &event);
-            bool OnKeyPressedEvent(KeyPressedEvent &event);
-            bool OnWindowResizeEvent(WindowResizeEvent &event);
+      private:
+        bool OnKeyReleasedEvent(KeyReleasedEvent &event);
+        bool OnKeyPressedEvent(KeyPressedEvent &event);
+        bool OnWindowResizeEvent(WindowResizeEvent &event);
 
         ////////////////
         // Attributes //
         ////////////////
-        public:
-            inline static std::map<SceneType, Ref<Scene>> Scenes;
-            inline static SceneType CurrentScene;
+      public:
+        inline static std::map<SceneType, Ref<Scene>> Scenes;
+        inline static SceneType CurrentScene;
 
-        private:
-            // TODO: WARNING: This is a temporary solution
-            World *_WorldNetwork;
+      private:
+        // TODO: WARNING: This is a temporary solution
+        World *_WorldNetwork;
 
-            Network::IOContextManager _IOContextManager;
-            Scope<Network::Network>   _Network;
+        Network::IOContextManager _IOContextManager;
+        Scope<Network::Network> _Network;
     };
-};
+}; // namespace Exodia
 
 #endif /* !RTYPELAYER_HPP_ */

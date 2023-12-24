@@ -21,7 +21,7 @@ int main(void) {
         server.Run();
     } catch (std::exception &error) {
         EXODIA_ERROR("Exception :\n\t{0}", error.what());
-        
+
         return 84;
     }
     return 0;

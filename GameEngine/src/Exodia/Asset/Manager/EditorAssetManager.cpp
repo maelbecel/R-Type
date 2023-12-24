@@ -184,7 +184,7 @@ namespace Exodia {
                 return nullptr;
             }
 
-            //TODO: ASSET MANAGER BUG (don't load texture when server is running)
+            // TODO: ASSET MANAGER BUG (don't load texture when server is running)
             //_LoadedAssets[handle] = asset;
         }
 

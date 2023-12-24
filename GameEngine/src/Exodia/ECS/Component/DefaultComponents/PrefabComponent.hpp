@@ -60,8 +60,7 @@ namespace Exodia {
             }
         }
 
-        Buffer SerializeData() override
-        {
+        Buffer SerializeData() override {
             try {
                 uint32_t size = sizeof(uint64_t) * (uint32_t)Children.size();
                 Buffer buffer(size);
@@ -75,8 +74,7 @@ namespace Exodia {
             return Buffer();
         }
 
-        void DeserializeData(Buffer data) override
-        {
+        void DeserializeData(Buffer data) override {
             try {
                 for (uint32_t i = 0; i < (data.Size / sizeof(uint64_t)); i++) {
                     uint64_t child = 0;
@@ -116,8 +114,7 @@ namespace Exodia {
             }
         }
 
-        Buffer SerializeData() override
-        {
+        Buffer SerializeData() override {
             try {
                 uint32_t size = sizeof(uint64_t);
                 Buffer buffer(size);
@@ -130,8 +127,7 @@ namespace Exodia {
             return Buffer();
         }
 
-        void DeserializeData(Buffer data) override
-        {
+        void DeserializeData(Buffer data) override {
             try {
                 uint64_t parent = 0;
 

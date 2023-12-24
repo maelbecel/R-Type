@@ -6,9 +6,9 @@
 */
 
 #ifndef __DEFAULT_LAYER_HPP__
-    #define __DEFAULT_LAYER_HPP__
+#define __DEFAULT_LAYER_HPP__
 
-    #include "Exodia.hpp"
+#include "Exodia.hpp"
 
 namespace Exodia {
 
@@ -17,29 +17,27 @@ namespace Exodia {
         //////////////////////////////
         // Constructor & Destructor //
         //////////////////////////////
-        public:
-
-            DefaultLayer();
-            ~DefaultLayer() = default;
+      public:
+        DefaultLayer();
+        ~DefaultLayer() = default;
 
         /////////////
         // Methods //
         /////////////
-        public:
-
-            void OnAttach()            override;
-            void OnUpdate(Timestep ts) override;
-            void OnEvent(Event &event) override;
+      public:
+        void OnAttach() override;
+        void OnUpdate(Timestep ts) override;
+        void OnEvent(Event &event) override;
 
         ////////////////
         // Attributes //
         ////////////////
-        private:
-            Network::IOContextManager    _ioContextManager;
-            World *                      _World;
-            Network::Network             _Network;
-            OrthographicCameraController _CameraController;
+      private:
+        Network::IOContextManager _ioContextManager;
+        World *_World;
+        Network::Network _Network;
+        OrthographicCameraController _CameraController;
     };
-};
+}; // namespace Exodia
 
 #endif // __DEFAULT_LAYER_HPP__

@@ -108,8 +108,7 @@ namespace Exodia {
             ImGui::DragFloat("Mass", &Mass);
         }
 
-        virtual Buffer SerializeData() override
-        {
+        virtual Buffer SerializeData() override {
             try {
                 uint32_t size = sizeof(BodyType) + sizeof(float) * 2 + sizeof(glm::vec2);
                 Buffer buffer(size);
@@ -126,8 +125,7 @@ namespace Exodia {
             }
         }
 
-        virtual void DeserializeData(Buffer buffer) override
-        {
+        virtual void DeserializeData(Buffer buffer) override {
             try {
                 std::memcpy(&Type, buffer.Data, sizeof(BodyType));
                 std::memcpy(&Velocity, buffer.Data + sizeof(BodyType), sizeof(glm::vec2));

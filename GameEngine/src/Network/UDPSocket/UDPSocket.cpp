@@ -11,7 +11,8 @@ namespace Exodia {
 
     namespace Network {
 
-        UDPSocket::UDPSocket(IOContextManager& ioContextManager, const asio::ip::udp::endpoint& endpoint) : _socket(ioContextManager.getIOContext()), _senderEndpoint() {
+        UDPSocket::UDPSocket(IOContextManager &ioContextManager, const asio::ip::udp::endpoint &endpoint)
+            : _socket(ioContextManager.getIOContext()), _senderEndpoint() {
             // Construct the UDP socket using the provided IOContextManager
             asio::error_code error;
             if (_socket.is_open())
@@ -44,14 +45,15 @@ namespace Exodia {
          * @param endpoint (Type: asio::ip::udp::endpoint) The endpoint to send the message to
          *
          * @return void
-        */
-        void UDPSocket::Send(const std::vector<char> message, size_t size, const asio::ip::udp::endpoint& endpoint) {
+         */
+        void UDPSocket::Send(const std::vector<char> message, size_t size, const asio::ip::udp::endpoint &endpoint) {
             // Send data asynchronously
-            _socket.async_send_to(asio::buffer(message, size), endpoint, [this](const asio::error_code& error, std::size_t bytes_transferred) {
-                if (error) {
-                    EXODIA_CORE_ERROR("Error sending data: ", error.message());
-                }
-            });
+            _socket.async_send_to(asio::buffer(message, size), endpoint,
+                                  [this](const asio::error_code &error, std::size_t bytes_transferred) {
+                                      if (error) {
+                                          EXODIA_CORE_ERROR("Error sending data: ", error.message());
+                                      }
+                                  });
         }
 
         /**
@@ -61,36 +63,40 @@ namespace Exodia {
          * @param endpoint (Type: asio::ip::udp::endpoint) The endpoint to send the packet to
          *
          * @return void
-        */
-        void UDPSocket::Send(Exodia::Network::Packet &packet ,const asio::ip::udp::endpoint& endpoint) {
+         */
+        void UDPSocket::Send(Exodia::Network::Packet &packet, const asio::ip::udp::endpoint &endpoint) {
             _senderEndpoint = endpoint;
             std::vector<char> message = packet.GetBuffer();
             size_t size = message.size();
 
-            _socket.async_send_to(asio::buffer(message, size), endpoint, [this](const asio::error_code& error, std::size_t bytes_transferred) {
-                if (error) {
-                    EXODIA_CORE_ERROR("Error sending data on {0}:{1}: ", _senderEndpoint.address().to_string(), _senderEndpoint.port(), error.message());
-                }
-            });
+            _socket.async_send_to(asio::buffer(message, size), endpoint,
+                                  [this](const asio::error_code &error, std::size_t bytes_transferred) {
+                                      if (error) {
+                                          EXODIA_CORE_ERROR(
+                                              "Error sending data on {0}:{1}: ", _senderEndpoint.address().to_string(),
+                                              _senderEndpoint.port(), error.message());
+                                      }
+                                  });
         }
 
-        void UDPSocket::Receive(const std::function<void(const std::vector<char>&, size_t, asio::ip::udp::endpoint)>& callback) {
+        void UDPSocket::Receive(
+            const std::function<void(const std::vector<char> &, size_t, asio::ip::udp::endpoint)> &callback) {
             _socket.async_receive_from(asio::buffer(_receiveBuffer), _senderEndpoint,
-                [this, callback](const asio::error_code& error, std::size_t bytes_received) {
-                    std::vector<char> receivedMessage(_receiveBuffer.begin(), _receiveBuffer.begin() + bytes_received);
-                    std::cout << std::endl;
-                    if (!error) {
+                                       [this, callback](const asio::error_code &error, std::size_t bytes_received) {
+                                           std::vector<char> receivedMessage(_receiveBuffer.begin(),
+                                                                             _receiveBuffer.begin() + bytes_received);
+                                           std::cout << std::endl;
+                                           if (!error) {
 
-                        // Call the callback with the received data
-                        callback(receivedMessage, receivedMessage.size(), _senderEndpoint);
+                                               // Call the callback with the received data
+                                               callback(receivedMessage, receivedMessage.size(), _senderEndpoint);
 
-                        // Call receive again to listen for more messages
-                        Receive(callback);
-                    } else {
-                        EXODIA_CORE_ERROR("Error receiving message: ", error.message());
-                    }
-                }
-            );
+                                               // Call receive again to listen for more messages
+                                               Receive(callback);
+                                           } else {
+                                               EXODIA_CORE_ERROR("Error receiving message: ", error.message());
+                                           }
+                                       });
         }
-    }
-}
+    } // namespace Network
+} // namespace Exodia

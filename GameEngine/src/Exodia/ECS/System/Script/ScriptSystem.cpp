@@ -18,8 +18,7 @@ namespace Exodia {
     // Methods //
     /////////////
 
-    void ScriptSystem::Update(World *world, Timestep ts)
-    {
+    void ScriptSystem::Update(World *world, Timestep ts) {
         EXODIA_PROFILE_FUNCTION();
 
         world->ForEach<ScriptComponent>([&](Entity *entity, auto script) {
@@ -34,4 +33,4 @@ namespace Exodia {
             sc.Instance->OnUpdate(ts);
         });
     }
-};
+}; // namespace Exodia

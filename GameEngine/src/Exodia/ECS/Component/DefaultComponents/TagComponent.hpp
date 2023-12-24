@@ -39,8 +39,7 @@ namespace Exodia {
             }
         }
 
-        virtual Buffer SerializeData()
-        {
+        virtual Buffer SerializeData() {
             try {
                 Buffer buffer(sizeof(char) * Tag.size());
 
@@ -53,8 +52,7 @@ namespace Exodia {
             }
         }
 
-        virtual void DeserializeData(Buffer buffer)
-        {
+        virtual void DeserializeData(Buffer buffer) {
             try {
                 for (uint32_t i = 0; i < buffer.Size; i++)
                     Tag.push_back((char)buffer.Data[i]);

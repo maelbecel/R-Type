@@ -6,26 +6,26 @@
 */
 
 #ifndef SCRIPTCOMPONENT_HPP_
-    #define SCRIPTCOMPONENT_HPP_
+#define SCRIPTCOMPONENT_HPP_
 
-    // Exodia Script includes
-    #include "Script/Interface/ScriptableEntity.hpp"
-    #include "Script/Engine/ScriptEngine.hpp"
+// Exodia Script includes
+#include "Script/Interface/ScriptableEntity.hpp"
+#include "Script/Engine/ScriptEngine.hpp"
 
-    #include "Utils/LibrairyLoader.hpp"
+#include "Utils/LibrairyLoader.hpp"
 
-    // Exodia Debug includes
-    #include "Debug/Logs.hpp"
+// Exodia Debug includes
+#include "Debug/Logs.hpp"
 
-    // Exodia ECS includes
-    #include "ECS/Interface/Component.hpp"
+// Exodia ECS includes
+#include "ECS/Interface/Component.hpp"
 
-    // Exodia Project includes
-    #include "Project/Project.hpp"
+// Exodia Project includes
+#include "Project/Project.hpp"
 
-    // External includes
-    #include <string>
-    #include <functional>
+// External includes
+#include <string>
+#include <functional>
 
 namespace Exodia {
 
@@ -35,10 +35,9 @@ namespace Exodia {
         ScriptableEntity *Instance = nullptr;
 
         std::function<ScriptableEntity *(std::string)> InstantiateScript = nullptr;
-        std::function<void(ScriptComponent *)>         DestroyScript     = nullptr;
+        std::function<void(ScriptComponent *)> DestroyScript = nullptr;
 
-        void Bind(std::string name)
-        {
+        void Bind(std::string name) {
             if (name.empty())
                 return;
             Name = name;
@@ -63,18 +62,14 @@ namespace Exodia {
             };
         }
 
-        virtual void Serialize(YAML::Emitter &out)
-        {
+        virtual void Serialize(YAML::Emitter &out) {
             out << YAML::Key << "ScriptComponent";
             out << YAML::BeginMap;
-            {
-                out << YAML::Key << "Name" << YAML::Value << Name;
-            }
+            { out << YAML::Key << "Name" << YAML::Value << Name; }
             out << YAML::EndMap;
         }
 
-        virtual void Deserialize(const YAML::Node &node)
-        {
+        virtual void Deserialize(const YAML::Node &node) {
             try {
                 auto script = node["ScriptComponent"];
 
@@ -86,8 +81,7 @@ namespace Exodia {
             }
         }
 
-        virtual Buffer SerializeData() override
-        {
+        virtual Buffer SerializeData() override {
             try {
                 Buffer buffer(sizeof(char) * Name.size());
 
@@ -102,8 +96,7 @@ namespace Exodia {
             return Buffer();
         }
 
-        virtual void DeserializeData(Buffer data) override
-        {
+        virtual void DeserializeData(Buffer data) override {
             try {
                 for (uint32_t i = 0; i < data.Size; i++)
                     Name.push_back((char)data.Data[i]);
@@ -113,6 +106,6 @@ namespace Exodia {
             }
         }
     };
-};
+}; // namespace Exodia
 
 #endif /* !SCRIPTCOMPONENT_HPP_ */

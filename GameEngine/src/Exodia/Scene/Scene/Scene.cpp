@@ -22,28 +22,24 @@ namespace Exodia {
     // Constructor & Destructor //
     //////////////////////////////
 
-    Scene::Scene(const std::string &name) : _Name(name), _ViewportWidth(0), _ViewportHeight(0), _IsRunning(false), _IsPaused(false)
-    {
+    Scene::Scene(const std::string &name)
+        : _Name(name), _ViewportWidth(0), _ViewportHeight(0), _IsRunning(false), _IsPaused(false) {
         _World = World::CreateWorld();
     }
 
-    Scene::~Scene()
-    {
-        _World->DestroyWorld();
-    }
+    Scene::~Scene() { _World->DestroyWorld(); }
 
     /////////////
     // Methods //
     /////////////
 
-    Ref<Scene> Scene::Copy(Ref<Scene> other)
-    {
+    Ref<Scene> Scene::Copy(Ref<Scene> other) {
         if (other == nullptr)
             return nullptr;
 
         Ref<Scene> copyScene = CreateRef<Scene>(other->GetName());
 
-        copyScene->_ViewportWidth  = other->_ViewportWidth;
+        copyScene->_ViewportWidth = other->_ViewportWidth;
         copyScene->_ViewportHeight = other->_ViewportHeight;
 
         auto &srcWorld = other->GetWorld();
@@ -59,30 +55,19 @@ namespace Exodia {
         return copyScene;
     }
 
-    Entity *Scene::CreateEntity(const std::string &name)
-    {
-        return _World->CreateEntity(name);
-    }
+    Entity *Scene::CreateEntity(const std::string &name) { return _World->CreateEntity(name); }
 
-    Entity *Scene::CreateEntityWithUUID(UUID uuid, const std::string &name)
-    {
-        return _World->CreateEntity(uuid, name);
-    }
+    Entity *Scene::CreateEntityWithUUID(UUID uuid, const std::string &name) { return _World->CreateEntity(uuid, name); }
 
-    Entity *Scene::DuplicateEntity(Entity *entity)
-    {
+    Entity *Scene::DuplicateEntity(Entity *entity) {
         std::string name = entity->GetComponent<TagComponent>().Get().Tag;
 
         return entity->Duplicate(_World, UUID(), name);
     }
 
-    void Scene::DestroyEntity(Entity *entity)
-    {
-        _World->DestroyEntity(entity);
-    }
+    void Scene::DestroyEntity(Entity *entity) { _World->DestroyEntity(entity); }
 
-    void Scene::OnRuntimeStart()
-    {
+    void Scene::OnRuntimeStart() {
         if (_IsRunning)
             OnRuntimeStop();
 
@@ -130,8 +115,7 @@ namespace Exodia {
         });
     }
 
-    void Scene::OnRuntimeStop()
-    {
+    void Scene::OnRuntimeStop() {
         if (!_IsRunning)
             return;
 
@@ -150,8 +134,7 @@ namespace Exodia {
         });
     }
 
-    void Scene::OnUpdateRuntime(Timestep ts)
-    {
+    void Scene::OnUpdateRuntime(Timestep ts) {
         if (!_IsPaused) {
 
             // -- Update the Scripts -- //
@@ -204,8 +187,7 @@ namespace Exodia {
         }
     }
 
-    void Scene::OnUpdateEditor(UNUSED(Timestep ts), EditorCamera &camera)
-    {
+    void Scene::OnUpdateEditor(UNUSED(Timestep ts), EditorCamera &camera) {
         Renderer2D::BeginScene(camera);
 
         RenderScene();
@@ -213,11 +195,10 @@ namespace Exodia {
         Renderer2D::EndScene();
     }
 
-    void Scene::OnViewportResize(uint32_t width, uint32_t height)
-    {
+    void Scene::OnViewportResize(uint32_t width, uint32_t height) {
         if (_ViewportWidth == width && _ViewportHeight == height)
             return;
-        _ViewportWidth  = width;
+        _ViewportWidth = width;
         _ViewportHeight = height;
 
         _World->ForEach<CameraComponent>([&](Entity *entity, auto camera) {
@@ -229,37 +210,37 @@ namespace Exodia {
         });
     }
 
-    void Scene::RegisterSystem(EntitySystem *system)
-    {
+    void Scene::RegisterSystem(EntitySystem *system) {
         if (_IsRunning)
             _World->RegisterSystem(system);
         else
             _Systems.push_back(system);
     }
 
-    void Scene::RenderScene()
-    {
+    void Scene::RenderScene() {
         if (RendererAPI::GetAPI() == RendererAPI::API::None)
             return;
 
         _World->LockMutex();
-        _World->ForEach<TransformComponent, SpriteRendererComponent, IDComponent>([&](Entity *entity, auto transform, auto sprite, auto id) {
-            auto &tc = transform.Get();
-            auto &sc = sprite.Get();
-            auto &ic = id.Get();
+        _World->ForEach<TransformComponent, SpriteRendererComponent, IDComponent>(
+            [&](Entity *entity, auto transform, auto sprite, auto id) {
+                auto &tc = transform.Get();
+                auto &sc = sprite.Get();
+                auto &ic = id.Get();
 
-            Renderer2D::DrawSprite(tc.GetTransform(), sc, (int)ic.ID);
-        });
+                Renderer2D::DrawSprite(tc.GetTransform(), sc, (int)ic.ID);
+            });
         _World->UnlockMutex();
 
         _World->LockMutex();
-        _World->ForEach<TransformComponent, CircleRendererComponent, IDComponent>([&](Entity *entity, auto transform, auto circle, auto id) {
-            auto &tc = transform.Get();
-            auto &cc = circle.Get();
-            auto &ic = id.Get();
+        _World->ForEach<TransformComponent, CircleRendererComponent, IDComponent>(
+            [&](Entity *entity, auto transform, auto circle, auto id) {
+                auto &tc = transform.Get();
+                auto &cc = circle.Get();
+                auto &ic = id.Get();
 
-            Renderer2D::DrawCircle(tc.GetTransform(), cc.Color, cc.Thickness, cc.Fade, (int)ic.ID);
-        });
+                Renderer2D::DrawCircle(tc.GetTransform(), cc.Color, cc.Thickness, cc.Fade, (int)ic.ID);
+            });
         _World->UnlockMutex();
 
         // TODO: When text rendering will be implemented (in Renderer2D);
@@ -284,28 +265,15 @@ namespace Exodia {
     // Getters & Setters //
     ///////////////////////
 
-    const std::string &Scene::GetName() const
-    {
-        return _Name;
-    }
+    const std::string &Scene::GetName() const { return _Name; }
 
-    void Scene::SetName(const std::string &name)
-    {
-        _Name = name;
-    }
+    void Scene::SetName(const std::string &name) { _Name = name; }
 
-    World &Scene::GetWorld() const
-    {
-        return *_World;
-    }
+    World &Scene::GetWorld() const { return *_World; }
 
-    World *Scene::GetWorldPtr()
-    {
-        return _World;
-    }
+    World *Scene::GetWorldPtr() { return _World; }
 
-    Entity *Scene::GetPrimaryCamera()
-    {
+    Entity *Scene::GetPrimaryCamera() {
         Entity *primaryCamera = nullptr;
 
         _World->ForEach<CameraComponent>([&](Entity *entity, auto camera) {
@@ -320,8 +288,7 @@ namespace Exodia {
         return primaryCamera;
     }
 
-    Entity *Scene::GetEntityByName(const std::string &name)
-    {
+    Entity *Scene::GetEntityByName(const std::string &name) {
         Entity *entity = nullptr;
 
         _World->ForEach<TagComponent>([&](Entity *entt, auto tag) {
@@ -336,8 +303,7 @@ namespace Exodia {
         return entity;
     }
 
-    Entity *Scene::GetEntityByUUID(UUID uuid)
-    {
+    Entity *Scene::GetEntityByUUID(UUID uuid) {
         Entity *entity = nullptr;
 
         _World->ForEach<IDComponent>([&](Entity *entt, auto id) {
@@ -352,23 +318,11 @@ namespace Exodia {
         return entity;
     }
 
-    bool Scene::IsRunning() const
-    {
-        return _IsRunning;
-    }
+    bool Scene::IsRunning() const { return _IsRunning; }
 
-    bool Scene::IsPaused() const
-    {
-        return _IsPaused;
-    }
+    bool Scene::IsPaused() const { return _IsPaused; }
 
-    void Scene::SetPaused(bool paused)
-    {
-        _IsPaused = paused;
-    }
+    void Scene::SetPaused(bool paused) { _IsPaused = paused; }
 
-    AssetType Scene::GetType() const
-    {
-        return AssetType::Scene;
-    }
-};
+    AssetType Scene::GetType() const { return AssetType::Scene; }
+}; // namespace Exodia
