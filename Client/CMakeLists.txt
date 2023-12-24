@@ -65,6 +65,7 @@ target_link_libraries(r-type_client PRIVATE
     unofficial::nativefiledialog::nfd
     yaml-cpp::yaml-cpp
     imguizmo::imguizmo
+    FreeALUT::alut
 )
 
 target_include_directories(r-type_client PRIVATE ${Stb_INCLUDE_DIR})
