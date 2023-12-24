@@ -86,7 +86,7 @@ namespace Exodia {
         {
             try {
                 for (uint32_t i = 0; i < (data.Size / sizeof(uint64_t)); i++) {
-                    UUID child(0);
+                    uint64_t child = 0;
 
                     std::memcpy(&child, data.Data + sizeof(uint64_t) * i, sizeof(uint64_t));
 
@@ -144,7 +144,11 @@ namespace Exodia {
         void DeserializeData(Buffer data) override
         {
             try {
-                std::memcpy(&Parent, data.Data, sizeof(uint64_t));
+                uint64_t parent = 0;
+
+                std::memcpy(&parent, data.Data, sizeof(uint64_t));
+
+                Parent = parent;
             } catch (std::exception &e) {
                 EXODIA_CORE_WARN("ParentComponent deserialization failed: {0}", e.what());
             }

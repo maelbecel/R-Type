@@ -81,7 +81,7 @@ namespace Exodia {
             return Buffer();
         }
 
-        void DeserializeData(Buffer &data) override
+        void DeserializeData(Buffer data) override
         {
             try {
                 std::memcpy(&Offset, data.Data, sizeof(glm::vec2));
@@ -157,7 +157,7 @@ namespace Exodia {
             return Buffer();
         }
 
-        void DeserializeData(Buffer &data) override
+        void DeserializeData(Buffer data) override
         {
             try {
                 std::memcpy(&Offset, data.Data, sizeof(glm::vec2));
