@@ -5,6 +5,7 @@ on:
       - main
       - dev
       - fix/Compilation-windows
+      - fix/CICD
 
 env:
   MIRROR_URL:
