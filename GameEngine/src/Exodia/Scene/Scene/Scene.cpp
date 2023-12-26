@@ -13,6 +13,7 @@
 
 // Exodia Renderer includes
 #include "Renderer/Renderer/Renderer2D.hpp"
+#include "Renderer/Renderer/RendererAPI.hpp"
 
 namespace Exodia {
 
@@ -108,6 +109,24 @@ namespace Exodia {
                 }
             }
         });
+
+        if (RendererAPI::IsGraphical() == false)
+            return;
+
+        _World->ForEach<MusicComponent>([&](Entity *entity, auto music) {
+            auto &sc = music.Get();
+
+            Ref<Sound2D> sound = AssetManager::GetAsset<Sound2D>(sc.Handle);
+
+            if (sound == nullptr)
+                return;
+            if (sc.Play) {
+                sound->SetVolume(sc.Volume);
+                sound->SetLoop(true);
+
+                Renderer2D::PlaySound(sc.Handle);
+            }
+        });
     }
 
     void Scene::OnRuntimeStop()
@@ -160,10 +179,11 @@ namespace Exodia {
 
             _World->ForEach<TransformComponent, CameraComponent>([&](Entity *entity, auto transform, auto camera) {
                 auto &cc = camera.Get();
+                auto &tc = transform.Get();
 
                 if (cc.Primary) {
                     mainCamera = &cc.Camera;
-                    cameraTransform = transform.Get().GetTransform();
+                    cameraTransform = tc.GetTransform();
                     return;
                 }
             });
@@ -179,7 +199,7 @@ namespace Exodia {
         }
     }
 
-    void Scene::OnUpdateEditor(UNUSED Timestep ts, EditorCamera &camera)
+    void Scene::OnUpdateEditor(UNUSED(Timestep ts), EditorCamera &camera)
     {
         Renderer2D::BeginScene(camera);
 
@@ -214,6 +234,9 @@ namespace Exodia {
 
     void Scene::RenderScene()
     {
+        if (RendererAPI::IsGraphical() == false)
+            return;
+
         _World->ForEach<TransformComponent, SpriteRendererComponent, IDComponent>([&](Entity *entity, auto transform, auto sprite, auto id) {
             auto &tc = transform.Get();
             auto &sc = sprite.Get();
@@ -231,6 +254,21 @@ namespace Exodia {
         });
 
         // TODO: When text rendering will be implemented (in Renderer2D);
+
+        _World->ForEach<SoundComponent>([&](Entity *entity, auto sound) {
+            auto &sc = sound.Get();
+
+            Ref<Sound2D> soundRef = AssetManager::GetAsset<Sound2D>(sc.Handle);
+
+            if (soundRef == nullptr)
+                return;
+            if (sc.Play && !soundRef->IsPlaying()) {
+                soundRef->SetVolume(sc.Volume);
+                soundRef->SetLoop(false);
+
+                Renderer2D::PlaySound(sc.Handle);
+            }
+        });
     }
 
     ///////////////////////

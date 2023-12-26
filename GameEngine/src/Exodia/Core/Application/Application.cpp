@@ -136,7 +136,7 @@ namespace Exodia {
         overlay->OnAttach();
     }
 
-    bool Application::OnWindowClose(UNUSED WindowCloseEvent &event)
+    bool Application::OnWindowClose(UNUSED(WindowCloseEvent &event))
     {
         _Running = false;
         return true;

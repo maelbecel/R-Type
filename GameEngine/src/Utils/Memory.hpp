@@ -22,7 +22,11 @@
     //////////////////////////////////////////////////////////////////
     #define BIT(x) (1 << x)
 
-    #define UNUSED __attribute__((unused)) // For unused variables
+#ifdef _MSC_VER // MSVC (Microsoft Visual C++)
+    #define UNUSED(x) __pragma(warning(suppress:4100)) x
+#else
+    #define UNUSED(x) __attribute__((unused)) x
+#endif
 
     // Replace the std::shared_ptr into Ref
     template <typename T>

@@ -27,7 +27,7 @@ namespace Exodia {
         // Destructor //
         ////////////////
         public:
-            
+
             virtual ~IAssetManager() = default;
 
         ///////////////////////

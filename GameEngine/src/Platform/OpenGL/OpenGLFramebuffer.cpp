@@ -42,7 +42,7 @@ namespace Exodia {
     OpenGLFramebuffer::~OpenGLFramebuffer()
     {
         glDeleteFramebuffers(1, &_RendererID);
-        glDeleteTextures(_ColorAttachments.size(), _ColorAttachments.data());
+        glDeleteTextures((GLsizei)_ColorAttachments.size(), _ColorAttachments.data());
         glDeleteTextures(1, &_DepthAttachment);
     }
 
@@ -99,7 +99,7 @@ namespace Exodia {
         // Delete the old framebuffer object
         if (_RendererID) {
             glDeleteFramebuffers(1, &_RendererID);
-            glDeleteTextures(_ColorAttachments.size(), _ColorAttachments.data());
+            glDeleteTextures((GLsizei)_ColorAttachments.size(), _ColorAttachments.data());
             glDeleteTextures(1, &_DepthAttachment);
 
             _ColorAttachments.clear();
@@ -119,17 +119,17 @@ namespace Exodia {
         if (_ColorAttachmentSpecifications.size()) {
             _ColorAttachments.resize(_ColorAttachmentSpecifications.size());
 
-            Utils::CreateTextures(multisample, _ColorAttachments.data(), _ColorAttachments.size());
+            Utils::CreateTextures(multisample, _ColorAttachments.data(), (uint32_t)_ColorAttachments.size());
 
             for (size_t i = 0; i < _ColorAttachments.size(); i++) {
                 Utils::BindTexture(multisample, _ColorAttachments[i]);
 
                 switch (_ColorAttachmentSpecifications[i].TextureFormat) {
                     case FramebufferTextureFormat::RGBA8:
-                        Utils::AttachColorTexture(_ColorAttachments[i], _Specification.Samples, GL_RGBA8, GL_RGBA, _Specification.Width, _Specification.Height, i);
+                        Utils::AttachColorTexture(_ColorAttachments[i], (int)_Specification.Samples, GL_RGBA8, GL_RGBA, _Specification.Width, _Specification.Height, (int)i);
                         break;
                     case FramebufferTextureFormat::RED_INTEGER:
-                        Utils::AttachColorTexture(_ColorAttachments[i], _Specification.Samples, GL_R32I, GL_RED_INTEGER, _Specification.Width, _Specification.Height, i);
+                        Utils::AttachColorTexture(_ColorAttachments[i], (int)_Specification.Samples, GL_R32I, GL_RED_INTEGER, _Specification.Width, _Specification.Height, (int)i);
                         break;
                     default:
                         break;
@@ -153,7 +153,7 @@ namespace Exodia {
 
             GLenum buffers[4] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3 };
 
-            glDrawBuffers(_ColorAttachments.size(), buffers);
+            glDrawBuffers((GLsizei)_ColorAttachments.size(), buffers);
         } else if (_ColorAttachments.empty())
             glDrawBuffer(GL_NONE); // Only depth-pass
 

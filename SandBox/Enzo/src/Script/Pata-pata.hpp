@@ -27,7 +27,7 @@ namespace Exodia {
                 std::cout << "PataPata created" << std::endl;
             }
 
-            void OnUpdate(UNUSED Timestep ts) override
+            void OnUpdate(UNUSED(Timestep ts)) override
             {
                 auto transform = GetComponent<TransformComponent>();
 

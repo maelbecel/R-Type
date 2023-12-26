@@ -22,7 +22,7 @@ namespace Exodia {
     {
         EXODIA_PROFILE_FUNCTION();
 
-        world->ForEach<ScriptComponent>([&](UNUSED Entity *entity, UNUSED ComponentHandle<ScriptComponent> script) {
+        world->ForEach<ScriptComponent>([&](UNUSED(Entity *entity), UNUSED(auto script)) {
             auto &sc = script.Get();
 
             if (!sc.Instance) {

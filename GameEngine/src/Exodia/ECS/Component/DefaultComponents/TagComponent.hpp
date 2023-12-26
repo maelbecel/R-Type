@@ -22,7 +22,7 @@ namespace Exodia {
         TagComponent(const TagComponent &) = default;
         TagComponent(const std::string &tag = std::string()) : Tag(tag) {};
 
-        virtual void Serialize(YAML::Emitter &out) override
+        virtual void Serialize(YAML::Emitter &out)
         {
             out << YAML::Key << "TagComponent";
             out << YAML::BeginMap;
@@ -32,7 +32,7 @@ namespace Exodia {
             out << YAML::EndMap;
         }
 
-        virtual void Deserialize(const YAML::Node &node) override
+        virtual void Deserialize(const YAML::Node &node)
         {
             try {
                 auto tag = node["TagComponent"];

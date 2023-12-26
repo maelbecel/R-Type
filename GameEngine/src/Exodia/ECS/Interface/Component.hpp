@@ -11,6 +11,9 @@
     // Exodia Core includes
     #include "Core/Buffer/Buffer.hpp"
 
+    // Exodia Utils includes
+    #include "Utils/Memory.hpp"
+
     // External includes
     #include <yaml-cpp/yaml.h>
     #include <string>
@@ -27,8 +30,8 @@ namespace Exodia {
             Memcopy(&data, this, sizeof(*this));
         }
 
-        virtual void Serialize(UNUSED   YAML::Emitter &out)     {};
-        virtual void Deserialize(UNUSED const YAML::Node &node) {};
+        virtual void Serialize(UNUSED(YAML::Emitter &out))       {};
+        virtual void Deserialize(UNUSED(const YAML::Node &node)) {};
 
         virtual void DrawComponent() {};
 

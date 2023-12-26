@@ -23,12 +23,12 @@
     #include "Exodia/Asset/Manager/AssetManager.hpp"
     #include "Exodia/Asset/Manager/EditorAssetManager.hpp"
     #include "Exodia/Asset/Manager/IAssetManager.hpp"
-    #include "Exodia/Asset/Manager/RuntimeAssetManager.hpp"
 
     // -- AssetImporter --------------------------------------------------------
 
     #include "Exodia/Asset/Importer/AssetImporter.hpp"
     #include "Exodia/Asset/Importer/TextureImporter.hpp"
     #include "Exodia/Asset/Importer/SceneImporter.hpp"
+    #include "Exodia/Asset/Importer/SoundImporter.hpp"
 
 #endif /* !ASSET_HPP_ */

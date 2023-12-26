@@ -16,6 +16,9 @@
 #include "Core/Key/KeyCodes.hpp"
 #include "Core/Key/Input.hpp"
 
+// External includes
+#include <algorithm>
+
 namespace Exodia {
 
     //////////////////////////////
@@ -91,7 +94,9 @@ namespace Exodia {
         EXODIA_PROFILE_FUNCTION(); // Performance instrumentation profiling for the function
 
         _ZoomLevel -= event.GetYOffset() * 0.25f;
-        _ZoomLevel = std::max(_ZoomLevel, 0.25f);
+
+        #undef max
+        _ZoomLevel  = std::max(_ZoomLevel, 0.25f);
 
         CalculateView();
         return false;

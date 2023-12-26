@@ -138,6 +138,7 @@ namespace Exodia {
             {
                 if (GetCount() == 0)
                     return;
+
                 for (auto *entity : View<Entities ...>(includePendingDestroy))
                     function(entity, entity->template GetComponent<Entities>()...);
                 MergeEntities();

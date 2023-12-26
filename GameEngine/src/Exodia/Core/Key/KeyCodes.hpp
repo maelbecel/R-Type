@@ -88,7 +88,7 @@ namespace Exodia::Key {
         TAB         = 258,
         BACKSPACE   = 259,
         INSERT      = 260,
-        DELETE      = 261,
+        Delete      = 261, // DELETE Already defined in windows.h
         RIGHT       = 262,
         LEFT        = 263,
         DOWN        = 264,
