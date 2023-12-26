@@ -12,8 +12,7 @@
 
 namespace Exodia {
 
-    static void createSpaceShip(World *world, glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f))
-    {
+    static void createSpaceShip(World *world, glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f)) {
         Entity *entity = world->CreateEntity();
 
         entity->AddComponent<IDComponent>();
@@ -24,7 +23,7 @@ namespace Exodia {
 
         Ref<Texture2D> texture = TextureImporter::LoadTexture2D("Assets/Textures/Shell.png");
 
-        sprite->Texture = SubTexture2D::CreateFromCoords(texture->Handle, { 0.0f, 2.0f }, { 33.0f, 33.0f }, { 1.0f, 1.0f });
+        sprite->Texture = SubTexture2D::CreateFromCoords(texture->Handle, {0.0f, 2.0f}, {33.0f, 33.0f}, {1.0f, 1.0f});
     }
 
     // -- Layer ----------------------------------------------------------------
@@ -33,14 +32,13 @@ namespace Exodia {
     // Constructor & Destructor //
     //////////////////////////////
 
-    DefaultLayer::DefaultLayer() : Layer("DefaultLayer"), _CameraController(1600.0f / 900.0f) {};
+    DefaultLayer::DefaultLayer() : Layer("DefaultLayer"), _CameraController(1600.0f / 900.0f){};
 
     /////////////
     // Methods //
     /////////////
 
-    void DefaultLayer::OnAttach()
-    {
+    void DefaultLayer::OnAttach() {
         EXODIA_PROFILE_FUNCTION();
 
         auto commandLine = Application::Get().GetSpecification().CommandLineArgs;
@@ -67,20 +65,18 @@ namespace Exodia {
         createSpaceShip(_World, glm::vec3(-1.0f, 0.0f, 0.0f));
     }
 
-    void DefaultLayer::OnDetach()
-    {
+    void DefaultLayer::OnDetach() {
         EXODIA_PROFILE_FUNCTION();
 
         _World->DestroyWorld();
     }
 
-    void DefaultLayer::OnUpdate(Timestep ts)
-    {
+    void DefaultLayer::OnUpdate(Timestep ts) {
         // Update
         _CameraController.OnUpdate(ts);
 
         // Renderer Prep
-        RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
+        RenderCommand::SetClearColor({0.1f, 0.1f, 0.1f, 1});
         RenderCommand::Clear();
 
         // Renderer Draw
@@ -93,10 +89,9 @@ namespace Exodia {
             auto id = entity->GetComponent<IDComponent>();
 
             if (transform && id) {
-                Renderer2D::DrawSprite(
-                    transform.Get().GetTransform(), // Transform
-                    sprite.Get(),                   // SpriteRendererComponent
-                    (int)id.Get().ID                // Entity ID
+                Renderer2D::DrawSprite(transform.Get().GetTransform(), // Transform
+                                       sprite.Get(),                   // SpriteRendererComponent
+                                       (int)id.Get().ID                // Entity ID
                 );
             }
         });
@@ -104,13 +99,9 @@ namespace Exodia {
         Renderer2D::EndScene();
     }
 
-    void DefaultLayer::OnEvent(Exodia::Event &event)
-    {
-        _CameraController.OnEvent(event);
-    }
+    void DefaultLayer::OnEvent(Exodia::Event &event) { _CameraController.OnEvent(event); }
 
-    bool DefaultLayer::OpenProject()
-    {
+    bool DefaultLayer::OpenProject() {
         std::string path = FileDialog::OpenFile("proj");
 
         if (path.empty())
@@ -120,8 +111,5 @@ namespace Exodia {
         return true;
     }
 
-    void DefaultLayer::OpenProject(const std::filesystem::path &path)
-    {
-        Project::Load(path);
-    }
-};
+    void DefaultLayer::OpenProject(const std::filesystem::path &path) { Project::Load(path); }
+}; // namespace Exodia

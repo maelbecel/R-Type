@@ -6,29 +6,29 @@
 */
 
 #ifndef ASSET_HPP_
-    #define ASSET_HPP_
+#define ASSET_HPP_
 
-    ////////////////////////////////////////////////
-    // Main include file for Exodia Asset Manager //
-    // Include this file to use Asset Manager     //
-    // It will allow you to load assets           //
-    ////////////////////////////////////////////////
+////////////////////////////////////////////////
+// Main include file for Exodia Asset Manager //
+// Include this file to use Asset Manager     //
+// It will allow you to load assets           //
+////////////////////////////////////////////////
 
-    // -- AssetUtils -----------------------------------------------------------
+// -- AssetUtils -----------------------------------------------------------
 
-    #include "Exodia/Asset/Utils/AssetType.hpp"
+#include "Exodia/Asset/Utils/AssetType.hpp"
 
-    // -- AssetManager ---------------------------------------------------------
+// -- AssetManager ---------------------------------------------------------
 
-    #include "Exodia/Asset/Manager/AssetManager.hpp"
-    #include "Exodia/Asset/Manager/EditorAssetManager.hpp"
-    #include "Exodia/Asset/Manager/IAssetManager.hpp"
+#include "Exodia/Asset/Manager/AssetManager.hpp"
+#include "Exodia/Asset/Manager/EditorAssetManager.hpp"
+#include "Exodia/Asset/Manager/IAssetManager.hpp"
 
-    // -- AssetImporter --------------------------------------------------------
+// -- AssetImporter --------------------------------------------------------
 
-    #include "Exodia/Asset/Importer/AssetImporter.hpp"
-    #include "Exodia/Asset/Importer/TextureImporter.hpp"
-    #include "Exodia/Asset/Importer/SceneImporter.hpp"
-    #include "Exodia/Asset/Importer/SoundImporter.hpp"
+#include "Exodia/Asset/Importer/AssetImporter.hpp"
+#include "Exodia/Asset/Importer/TextureImporter.hpp"
+#include "Exodia/Asset/Importer/SceneImporter.hpp"
+#include "Exodia/Asset/Importer/SoundImporter.hpp"
 
 #endif /* !ASSET_HPP_ */

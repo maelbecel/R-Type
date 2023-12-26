@@ -6,53 +6,53 @@
 */
 
 #ifndef RENDER_HPP_
-    #define RENDER_HPP_
+#define RENDER_HPP_
 
-    /////////////////////////////////////////////////
-    // Main include file for Exodia Render         //
-    // Include this file to use Render             //
-    // It will allow you to render your game       //
-    /////////////////////////////////////////////////
+/////////////////////////////////////////////////
+// Main include file for Exodia Render         //
+// Include this file to use Render             //
+// It will allow you to render your game       //
+/////////////////////////////////////////////////
 
-    // -- Renderer -------------------------------------------------------------
+// -- Renderer -------------------------------------------------------------
 
-    #include "Exodia/Renderer/Renderer/Renderer.hpp"
-    #include "Exodia/Renderer/Renderer/Renderer2D.hpp"
-    #include "Exodia/Renderer/Renderer/RendererAPI.hpp"
-    #include "Exodia/Renderer/Renderer/RenderCommand.hpp"
+#include "Exodia/Renderer/Renderer/Renderer.hpp"
+#include "Exodia/Renderer/Renderer/Renderer2D.hpp"
+#include "Exodia/Renderer/Renderer/RendererAPI.hpp"
+#include "Exodia/Renderer/Renderer/RenderCommand.hpp"
 
-    // -- Texture --------------------------------------------------------------
+// -- Texture --------------------------------------------------------------
 
-    #include "Exodia/Renderer/Texture/SubTexture2D.hpp"
-    #include "Exodia/Renderer/Texture/Texture.hpp"
+#include "Exodia/Renderer/Texture/SubTexture2D.hpp"
+#include "Exodia/Renderer/Texture/Texture.hpp"
 
-    // -- Sound ----------------------------------------------------------------
+// -- Sound ----------------------------------------------------------------
 
-    #include "Exodia/Renderer/Sound/Sound.hpp"
+#include "Exodia/Renderer/Sound/Sound.hpp"
 
-    // -- Camera ---------------------------------------------------------------
+// -- Camera ---------------------------------------------------------------
 
-    #include "Exodia/Renderer/Camera/OrthographicCameraController.hpp"
-    #include "Exodia/Renderer/Camera/OrthographicCamera.hpp"
-    #include "Exodia/Renderer/Camera/EditorCamera.hpp"
-    #include "Exodia/Renderer/Camera/Camera.hpp"
+#include "Exodia/Renderer/Camera/OrthographicCameraController.hpp"
+#include "Exodia/Renderer/Camera/OrthographicCamera.hpp"
+#include "Exodia/Renderer/Camera/EditorCamera.hpp"
+#include "Exodia/Renderer/Camera/Camera.hpp"
 
-    // -- Buffer ---------------------------------------------------------------
+// -- Buffer ---------------------------------------------------------------
 
-    #include "Exodia/Renderer/Buffer/Framebuffer.hpp"
-    #include "Exodia/Renderer/Buffer/UniformBuffer.hpp"
-    #include "Exodia/Renderer/Buffer/Buffers.hpp"
+#include "Exodia/Renderer/Buffer/Framebuffer.hpp"
+#include "Exodia/Renderer/Buffer/UniformBuffer.hpp"
+#include "Exodia/Renderer/Buffer/Buffers.hpp"
 
-    // -- Context --------------------------------------------------------------
+// -- Context --------------------------------------------------------------
 
-    #include "Exodia/Renderer/Context/GraphicsContext.hpp"
+#include "Exodia/Renderer/Context/GraphicsContext.hpp"
 
-    // -- Vertex ---------------------------------------------------------------
+// -- Vertex ---------------------------------------------------------------
 
-    #include "Exodia/Renderer/Vertex/VertexArray.hpp"
+#include "Exodia/Renderer/Vertex/VertexArray.hpp"
 
-    // -- Shader ---------------------------------------------------------------
+// -- Shader ---------------------------------------------------------------
 
-    #include "Exodia/Renderer/Shader/Shader.hpp"
+#include "Exodia/Renderer/Shader/Shader.hpp"
 
 #endif /* !RENDER_HPP_ */

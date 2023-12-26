@@ -6,74 +6,74 @@
 */
 
 #ifndef EXODIA_HPP_
-    #define EXODIA_HPP_
+#define EXODIA_HPP_
 
-    /////////////////////////////////////////
-    // Main include file for Exodia        //
-    // Include this file to use the engine //
-    // And create your own application     //
-    /////////////////////////////////////////
+/////////////////////////////////////////
+// Main include file for Exodia        //
+// Include this file to use the engine //
+// And create your own application     //
+/////////////////////////////////////////
 
-    // -- Core -----------------------------------------------------------------
+// -- Core -----------------------------------------------------------------
 
-    #include "Exodia/Core/Core.hpp"
+#include "Exodia/Core/Core.hpp"
 
-    // -- Entity Component System ----------------------------------------------
+// -- Entity Component System ----------------------------------------------
 
-    #include "Exodia/ECS/ECS.hpp"
+#include "Exodia/ECS/ECS.hpp"
 
-    // -- Exodia Events --------------------------------------------------------
+// -- Exodia Events --------------------------------------------------------
 
-    #include "Exodia/Events/ApplicationEvent.hpp"
-    #include "Exodia/Events/MouseEvent.hpp"
-    #include "Exodia/Events/KeyEvent.hpp"
-    #include "Exodia/Events/Event.hpp"
+#include "Exodia/Events/ApplicationEvent.hpp"
+#include "Exodia/Events/MouseEvent.hpp"
+#include "Exodia/Events/KeyEvent.hpp"
+#include "Exodia/Events/Event.hpp"
 
-    // -- Exodia Asset Manager -------------------------------------------------
+// -- Exodia Asset Manager -------------------------------------------------
 
-    #include "Exodia/Asset/Asset.hpp"
+#include "Exodia/Asset/Asset.hpp"
 
-    // -- Exodia ImGui ---------------------------------------------------------
+// -- Exodia ImGui ---------------------------------------------------------
 
-    #include "Exodia/ImGui/ImGuiLayer.hpp"
-    #include "Exodia/ImGui/ImGuiToolsUI.hpp"
+#include "Exodia/ImGui/ImGuiLayer.hpp"
+#include "Exodia/ImGui/ImGuiToolsUI.hpp"
 
-    // -- Exodia Renderer ------------------------------------------------------
+// -- Exodia Renderer ------------------------------------------------------
 
-    #include "Exodia/Renderer/Render.hpp"
+#include "Exodia/Renderer/Render.hpp"
 
-    // -- Exodia Scene ---------------------------------------------------------
+// -- Exodia Scene ---------------------------------------------------------
 
-    #include "Exodia/Scene/SceneHeaders.hpp"
+#include "Exodia/Scene/SceneHeaders.hpp"
 
-    // -- Exodia Project -------------------------------------------------------
+// -- Exodia Project -------------------------------------------------------
 
-    #include "Exodia/Project/Project.hpp"
-    #include "Exodia/Project/ProjectSerializer.hpp"
+#include "Exodia/Project/Project.hpp"
+#include "Exodia/Project/ProjectSerializer.hpp"
 
-    // -- Exodia Script --------------------------------------------------------
+// -- Exodia Script --------------------------------------------------------
 
-    #include "Exodia/Script/Script.hpp"
+#include "Exodia/Script/Script.hpp"
 
-    // -- Exodia Debug ---------------------------------------------------------
+// -- Exodia Debug ---------------------------------------------------------
 
-    #include "Exodia/Debug/Profiling.hpp"
-    #include "Exodia/Debug/Logs.hpp"
+#include "Exodia/Debug/Profiling.hpp"
+#include "Exodia/Debug/Logs.hpp"
 
-    // -- Exodia Math ----------------------------------------------------------
+// -- Exodia Math ----------------------------------------------------------
 
-    #include "Exodia/Math/Math.hpp"
+#include "Exodia/Math/Math.hpp"
 
-    // -- Exodia Network -------------------------------------------------------
+// -- Exodia Network -------------------------------------------------------
 
-    #include "Network/Network.hpp"
+#include "Network/Network.hpp"
 
-    // -- Exodia Utils ---------------------------------------------------------
+// -- Exodia Utils ---------------------------------------------------------
 
-    #include "Utils/CrossPlatform.hpp"
-    #include "Utils/PlatformUtils.hpp"
-    #include "Utils/LibrairyLoader.hpp"
-    #include "Utils/Memory.hpp"
-    #include "Utils/Assert.hpp"
+#include "Utils/CrossPlatform.hpp"
+#include "Utils/PlatformUtils.hpp"
+#include "Utils/LibrairyLoader.hpp"
+#include "Utils/Memory.hpp"
+#include "Utils/Assert.hpp"
 
 #endif /* !EXODIA_HPP_ */

@@ -7,7 +7,7 @@
 
 // IOContextManager.hpp
 #ifndef IO_CONTEXT_MANAGER_HPP
-    #define IO_CONTEXT_MANAGER_HPP
+#define IO_CONTEXT_MANAGER_HPP
 
 #include <asio.hpp>
 
@@ -15,17 +15,15 @@ namespace Exodia {
 
     namespace Network {
 
-    class IOContextManager {
-        public:
-
+        class IOContextManager {
+          public:
             /**
              * @brief Construct a new IOContextManager object and initialize the io_context_
              *
              */
             IOContextManager() : io_context_() { isRunning_ = false; }
 
-            ~IOContextManager()
-            {
+            ~IOContextManager() {
                 if (_ioContextThread.joinable())
                     _ioContextThread.join();
                 if (isRunning_)
@@ -37,9 +35,7 @@ namespace Exodia {
              *
              * @return boost::asio::io_context&
              */
-            asio::io_context& getIOContext() {
-                return io_context_;
-            }
+            asio::io_context &getIOContext() { return io_context_; }
 
             /**
              * @brief Run the io_context_
@@ -61,7 +57,7 @@ namespace Exodia {
                 io_context_.stop();
             }
 
-        private:
+          private:
             asio::io_context io_context_;
             std::thread _ioContextThread;
             bool isRunning_;
@@ -70,4 +66,3 @@ namespace Exodia {
 } // namespace Exodia
 
 #endif // IO_CONTEXT_MANAGER_HPP
-
