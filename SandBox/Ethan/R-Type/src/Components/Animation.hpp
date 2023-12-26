@@ -39,8 +39,20 @@ namespace RType {
 
         int CurrentFrameIndex; // !< Integer indicating the current frame of the animation
 
-        AnimationComponent(const AnimationComponent &other) = default;
+        AnimationComponent(const AnimationComponent &other) : Frames(other.Frames), IsPlaying(other.IsPlaying), Repeat(other.Repeat), FrameRate(other.FrameRate), FrameTimer(other.FrameTimer), CurrentFrameIndex(other.CurrentFrameIndex) {};
         AnimationComponent(const std::vector<Ref<Exodia::SubTexture2D>> &frames = {}) : Frames(frames), IsPlaying(false), Repeat(false), FrameRate(0.0f), FrameTimer(0.0f), CurrentFrameIndex(0) {};
+
+        AnimationComponent &operator=(const AnimationComponent &other)
+        {
+            Frames            = other.Frames;
+            IsPlaying         = other.IsPlaying;
+            Repeat            = other.Repeat;
+            FrameRate         = other.FrameRate;
+            FrameTimer        = other.FrameTimer;
+            CurrentFrameIndex = other.CurrentFrameIndex;
+
+            return *this;
+        }
 
         //TODO: Save in a file the animation
         //TODO: Load from a file the animation

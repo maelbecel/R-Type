@@ -34,6 +34,10 @@
 
     #include "Systems/AnimationSystem.hpp"
 
+    // -- R-Type Scripts includes ----------------------------------------------
+
+    #include "Scripts/Intro.hpp"
+
 namespace RType {
 
     inline static void EntryPoint()
@@ -47,6 +51,9 @@ namespace RType {
         });
 
         // -- Register R-Type Scripts ------------------------------------------
+        project->RegisterScript("Intro", []() -> Exodia::ScriptableEntity * {
+            return new Intro();
+        });
 
         // -- Register R-Type Systems ------------------------------------------
     }
