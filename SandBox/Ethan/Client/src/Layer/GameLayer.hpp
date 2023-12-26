@@ -16,6 +16,13 @@
 
 namespace RType {
 
+    enum SceneType {
+        LOADING,
+        MENU,
+        GAME,
+        END
+    };
+
     class GameLayer : public Exodia::Layer {
 
         //////////////////////////////
@@ -25,6 +32,21 @@ namespace RType {
 
             GameLayer();
             ~GameLayer() = default;
+
+        /////////////
+        // Methods //
+        /////////////
+        public:
+
+            void OnAttach() override;
+            void OnUpdate(Exodia::Timestep ts) override;
+
+        ////////////////
+        // Attributes //
+        ////////////////
+        private:
+
+            Ref<Exodia::Scene> _Scene;        
     };
 };
 

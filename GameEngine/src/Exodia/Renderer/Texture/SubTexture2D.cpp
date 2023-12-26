@@ -122,4 +122,20 @@ namespace Exodia {
 
         calculateTextureCoords();
     }
-}; // namespace Exodia
+
+    ///////////////
+    // Operators //
+    ///////////////
+
+    SubTexture2D &SubTexture2D::operator=(const SubTexture2D &other)
+    {
+        _AssetHandle = other._AssetHandle;
+        _Coords      = other._Coords;
+        _CellSize    = other._CellSize;
+        _SpriteSize  = other._SpriteSize;
+
+        calculateTextureCoords();
+
+        return *this;
+    }
+};

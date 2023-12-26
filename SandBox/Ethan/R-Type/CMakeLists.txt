@@ -25,6 +25,8 @@ set(SOURCES_GAME_ENGINE
 
         # -- System source files
 
+        src/Systems/AnimationSystem.cpp
+
         # -- Script source files
 
         # -- Events source files

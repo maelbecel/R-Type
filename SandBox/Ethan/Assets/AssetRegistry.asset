@@ -1,4 +1,13 @@
 AssetRegistry:
+  - Handle: 51584511521520
+    Path: Textures/Intro/LoadingScreen.png
+    Type: AssetType::Texture2D
+  - Handle: 51584511521211
+    Path: Textures/Intro/LiftIn.png
+    Type: AssetType::Texture2D
+  - Handle: 120584531521562
+    Path: Textures/Intro/LiftOut.png
+    Type: AssetType::Texture2D
   - Handle: 15815285158415
     Path: Icons/ToolBar/PauseButton.png
     Type: AssetType::Texture2D

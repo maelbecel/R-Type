@@ -90,6 +90,13 @@ namespace Exodia {
         void SetTextureSpriteSize(const glm::vec2 &spriteSize);
         void SetTexture(const AssetHandle &handle);
 
+        ///////////////
+        // Operators //
+        ///////////////
+        public:
+
+          SubTexture2D &operator=(const SubTexture2D &other);
+
         ////////////////
         // Attributes //
         ////////////////

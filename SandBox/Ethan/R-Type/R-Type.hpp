@@ -22,6 +22,18 @@
 
     #include "Settings/Config.hpp"
 
+    // -- R-Type Components includes -------------------------------------------
+
+    #include "Components/Animation.hpp"
+
+    // -- R-Type Events includes -----------------------------------------------
+
+    #include "Events/AnimationEvent.hpp"
+
+    // -- R-Type Systems includes ----------------------------------------------
+
+    #include "Systems/AnimationSystem.hpp"
+
 namespace RType {
 
     inline static void EntryPoint()
@@ -30,6 +42,9 @@ namespace RType {
         Ref<Exodia::Project> project = Exodia::Project::Load("Assets/R-Type.proj");
 
         // -- Register R-Type Components ---------------------------------------
+        project->RegisterComponent("AnimationComponent", [](Exodia::Buffer data) -> Exodia::IComponentContainer * {
+            return new Exodia::ComponentContainer<AnimationComponent>(data);
+        });
 
         // -- Register R-Type Scripts ------------------------------------------
 
