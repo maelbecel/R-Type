@@ -185,7 +185,7 @@ namespace Exodia {
             }
 
             // TODO: ASSET MANAGER BUG (don't load texture when server is running)
-            //_LoadedAssets[handle] = asset;
+            _LoadedAssets[handle] = asset;
         }
 
         return asset;

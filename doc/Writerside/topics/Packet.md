@@ -47,9 +47,9 @@ It sets the content.
 
 The method takes the following parameters:
 
-| Name    | Type               | Description        |
-|---------|--------------------|--------------------|
-| content | std::vector<char>& | The content        |
+| Name    | Type                 | Description        |
+|---------|----------------------|--------------------|
+| content | std::vector\<char\>& | The content        |
 
 Here is an example of how to use it:
 
@@ -68,10 +68,10 @@ It sets the header and the content.
 
 The method takes the following parameters:
 
-| Name    | Type               | Description        |
-|---------|--------------------|--------------------|
-| header  | Header             | The header         |
-| content | std::vector<char>& | The content        |
+| Name    | Type                 | Description        |
+|---------|----------------------|--------------------|
+| header  | Header               | The header         |
+| content | std::vector\<char\>& | The content        |
 
 Here is an example of how to use it:
 

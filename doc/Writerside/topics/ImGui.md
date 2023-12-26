@@ -245,6 +245,7 @@ void OnImGuiRender(Ref<Framebuffer> framebuffer)
 ```
 
 Here is the result :
+
 ![ViewPort](../../../Examples/ImGui/Docking/images/viewport.png)
 
 ## Go further

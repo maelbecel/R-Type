@@ -35,10 +35,10 @@ Draws the specified vertex array.
 
 It takes the following parameters:
 
-| Name        | Type                    | Description                                                                 |
-|-------------|-------------------------|-----------------------------------------------------------------------------|
-| vertexArray | const Ref<VertexArray>  | A reference to the vertex array to draw.                                    |
-| indexCount  | uint32_t                | The number of indices to draw.                                              |
+| Name        | Type                     | Description                                                                 |
+|-------------|--------------------------|-----------------------------------------------------------------------------|
+| vertexArray | const Ref\<VertexArray\> | A reference to the vertex array to draw.                                    |
+| indexCount  | uint32_t                 | The number of indices to draw.                                              |
 
 Here is an example of how to use it:
 ```c++
@@ -56,10 +56,10 @@ Draws the specified vertex array as lines.
 
 It takes the following parameters:
 
-| Name        | Type                    | Description                                                                 |
-|-------------|-------------------------|-----------------------------------------------------------------------------|
-| vertexArray | const Ref<VertexArray>  | A reference to the vertex array to draw.                                    |
-| indexCount  | uint32_t                | The number of indices to draw.                                              |
+| Name        | Type                     | Description                                                                 |
+|-------------|--------------------------|-----------------------------------------------------------------------------|
+| vertexArray | const Ref\<VertexArray\> | A reference to the vertex array to draw.                                    |
+| indexCount  | uint32_t                 | The number of indices to draw.                                              |
 
 Here is an example of how to use it:
 ```c++

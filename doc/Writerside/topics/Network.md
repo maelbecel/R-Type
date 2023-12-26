@@ -59,11 +59,11 @@ It's use to compute the packet loss.
 
 The method takes the following parameters:
 
-| Name           | Type                        | Description             |
-|----------------|-----------------------------|-------------------------|
-| message        | const std::vector<char>     | The message             |
-| size           | size_t                      | The size of the message |
-| senderEndpoint | asio::ip::udp::endpoint     | The sender endpoint     |
+| Name           | Type                      | Description             |
+|----------------|---------------------------|-------------------------|
+| message        | const std::vector\<char\> | The message             |
+| size           | size_t                    | The size of the message |
+| senderEndpoint | asio::ip::udp::endpoint   | The sender endpoint     |
 
 Here is an example of how to use it:
 
@@ -84,11 +84,11 @@ It allows the network to receive acks. Ack is the short for acknowledgment.
 
 The method takes the following parameters:
 
-| Name           | Type                        | Description             |
-|----------------|-----------------------------|-------------------------|
-| message        | const std::vector<char>     | The message             |
-| size           | size_t                      | The size of the message |
-| senderEndpoint | asio::ip::udp::endpoint     | The sender endpoint     |
+| Name           | Type                      | Description             |
+|----------------|---------------------------|-------------------------|
+| message        | const std::vector\<char\> | The message             |
+| size           | size_t                    | The size of the message |
+| senderEndpoint | asio::ip::udp::endpoint   | The sender endpoint     |
 
 Here is an example of how to use it:
 
@@ -109,11 +109,11 @@ It allows the network to receive connect accepts.
 
 The method takes the following parameters:
 
-| Name           | Type                        | Description             |
-|----------------|-----------------------------|-------------------------|
-| message        | const std::vector<char>     | The message             |
-| size           | size_t                      | The size of the message |
-| senderEndpoint | asio::ip::udp::endpoint     | The sender endpoint     |
+| Name           | Type                      | Description             |
+|----------------|---------------------------|-------------------------|
+| message        | const std::vector\<char\> | The message             |
+| size           | size_t                    | The size of the message |
+| senderEndpoint | asio::ip::udp::endpoint   | The sender endpoint     |
 
 Here is an example of how to use it:
 
@@ -134,11 +134,11 @@ It allows the network to receive entities.
 
 The method takes the following parameters:
 
-| Name           | Type                        | Description             |
-|----------------|-----------------------------|-------------------------|
-| message        | const std::vector<char>     | The message             |
-| size           | size_t                      | The size of the message |
-| senderEndpoint | asio::ip::udp::endpoint     | The sender endpoint     |
+| Name           | Type                      | Description             |
+|----------------|---------------------------|-------------------------|
+| message        | const std::vector\<char\> | The message             |
+| size           | size_t                    | The size of the message |
+| senderEndpoint | asio::ip::udp::endpoint   | The sender endpoint     |
 
 Here is an example of how to use it:
 
@@ -159,11 +159,11 @@ It allows the network to receive connects.
 
 The method takes the following parameters:
 
-| Name           | Type                        | Description             |
-|----------------|-----------------------------|-------------------------|
-| message        | const std::vector<char>     | The message             |
-| size           | size_t                      | The size of the message |
-| senderEndpoint | asio::ip::udp::endpoint     | The sender endpoint     |
+| Name           | Type                      | Description             |
+|----------------|---------------------------|-------------------------|
+| message        | const std::vector\<char\> | The message             |
+| size           | size_t                    | The size of the message |
+| senderEndpoint | asio::ip::udp::endpoint   | The sender endpoint     |
 
 Here is an example of how to use it:
 
@@ -184,11 +184,11 @@ It allows the network to receive events.
     
 The method takes the following parameters:
 
-| Name           | Type                        | Description             |
-|----------------|-----------------------------|-------------------------|
-| message        | const std::vector<char>     | The message             |
-| size           | size_t                      | The size of the message |
-| senderEndpoint | asio::ip::udp::endpoint     | The sender endpoint     |
+| Name           | Type                      | Description             |
+|----------------|---------------------------|-------------------------|
+| message        | const std::vector\<char\> | The message             |
+| size           | size_t                    | The size of the message |
+| senderEndpoint | asio::ip::udp::endpoint   | The sender endpoint     |
 
 Here is an example of how to use it:
 
@@ -318,12 +318,12 @@ It fills the data.
 
 The method takes the following parameters:
 
-| Name   | Type               | Description             |
-|--------|--------------------|-------------------------|
-| buffer | std::vector<char>& | The buffer              |
-| offset | size_t             | The offset              |
-| data   | void*              | The data                |
-| size   | size_t             | The size of the data    |
+| Name   | Type                 | Description             |
+|--------|----------------------|-------------------------|
+| buffer | std::vector\<char\>& | The buffer              |
+| offset | size_t               | The offset              |
+| data   | void*                | The data                |
+| size   | size_t               | The size of the data    |
 
 Here is an example of how to use it:
 
@@ -345,11 +345,11 @@ It splits the message.
 
 The method takes the following parameters:
 
-| Name           | Type                        | Description             |
-|----------------|-----------------------------|-------------------------|
-| message        | const std::vector<char>     | The message             |
-| size           | size_t                      | The size of the message |
-| senderEndpoint | asio::ip::udp::endpoint     | The sender endpoint     |
+| Name           | Type                      | Description             |
+|----------------|---------------------------|-------------------------|
+| message        | const std::vector\<char\> | The message             |
+| size           | size_t                    | The size of the message |
+| senderEndpoint | asio::ip::udp::endpoint   | The sender endpoint     |
 
 Here is an example of how to use it:
 
