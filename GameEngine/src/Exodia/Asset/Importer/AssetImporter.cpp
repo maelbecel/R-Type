@@ -26,9 +26,11 @@ namespace Exodia {
     ///////////////////////
 
     static std::map<AssetType, AssetImportFunction> AssetImportFunctions = {
-        {AssetType::Scene, SceneImporter::ImportScene},
-        {AssetType::Texture2D, TextureImporter::ImportTexture2D},
-        {AssetType::Sound2D, SoundImporter::ImportSound2D}};
+        { AssetType::Scene, SceneImporter::ImportScene },
+        { AssetType::Texture2D, TextureImporter::ImportTexture2D },
+        { AssetType::Sound2D, SoundImporter::ImportSound2D },
+        { AssetType::Font, FontImporter::ImportFont }
+    };
 
     /////////////
     // Methods //

@@ -11,6 +11,8 @@
 // Exodia Utils
 #include "Utils/Memory.hpp"
 
+#include "Debug/Logs.hpp"
+
 // External include
 #include <cstdint>
 #include <cstdlib>
@@ -34,6 +36,7 @@ namespace Exodia {
             Buffer buffer(other.Size);
 
             std::memcpy(buffer.Data, other.Data, other.Size);
+
             return buffer;
         }
 
@@ -50,11 +53,8 @@ namespace Exodia {
             uint8_t *newData = (uint8_t *)std::malloc(size);
 
             if (Data != nullptr) {
-#ifdef _WIN32
-                uint64_t minSize = size < Size ? static_cast<uint64_t>(size) : static_cast<uint64_t>(Size);
-#else
-                uint64_t minSize = std::min(size, Size);
-#endif
+                uint64_t minSize = size < Size ? size : Size;
+
                 std::memcpy(newData, Data, minSize);
                 std::free(Data);
             }

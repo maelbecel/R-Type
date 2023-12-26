@@ -45,6 +45,9 @@ namespace Exodia {
     OpenGLTexture::~OpenGLTexture() {
         EXODIA_PROFILE_FUNCTION(); // Performance instrumentation profiling for the function
 
+        if (_Data.Size > 0)
+            _Data.Release();
+
         if (_IsLoaded)
             glDeleteTextures(1, &_RendererID); // Delete the OpenGL texture
     }
@@ -81,13 +84,21 @@ namespace Exodia {
         // Check if the data size is the entire texture
         uint32_t bpp = _DataFormat == GL_RGBA ? 4 : 3;
 
-        EXODIA_ASSERT(data.Size == _Width * _Height * bpp, "Data must be entire texture !");
+        if (data.Size != _Width * _Height * bpp) {
+            EXODIA_CORE_ERROR("Data must be entire texture !");
+
+            return;
+        }
 
         // Upload the data to the texture
         glTextureSubImage2D(_RendererID, 0, 0, 0, _Width, _Height, _DataFormat, GL_UNSIGNED_BYTE, data.Data);
 
-        // -- To remove the warning of unused variable -- //
-        (void)bpp;
+        _Data = Buffer::Copy(data);
+    }
+
+    Buffer OpenGLTexture::GetData() const
+    {
+        return _Data;
     }
 
     bool OpenGLTexture::IsLoaded() const { return _IsLoaded; }

@@ -100,6 +100,7 @@ namespace Exodia {
          * @param data (Type: Buffer) The data to set.
          */
         virtual void SetData(Buffer data) = 0;
+        virtual Buffer GetData() const = 0;
 
         virtual bool IsLoaded() const = 0;
 

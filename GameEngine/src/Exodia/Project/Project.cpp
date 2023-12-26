@@ -70,10 +70,9 @@ namespace Exodia {
             return new ComponentContainer<CircleRendererComponent>(data);
         });
 
-        // TODO: Add the text renderer component when the text rendering is available.
-        /*RegisterComponent("TextRendererComponent", [](Buffer data) -> IComponentContainer * {
+        RegisterComponent("TextRendererComponent", [](Buffer data) -> IComponentContainer * {
             return new ComponentContainer<TextRendererComponent>(data);
-        });*/
+        });
 
         RegisterComponent("ScriptComponent", [](Buffer data) -> IComponentContainer * {
             return new ComponentContainer<ScriptComponent>(data);
