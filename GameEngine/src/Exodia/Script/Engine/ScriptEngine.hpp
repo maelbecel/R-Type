@@ -6,13 +6,13 @@
 */
 
 #ifndef SCRIPTENGINE_HPP_
-    #define SCRIPTENGINE_HPP_
+#define SCRIPTENGINE_HPP_
 
-    // External includes
-    #include <unordered_map>
-    #include <functional>
-    #include <string>
-    #include <vector>
+// External includes
+#include <unordered_map>
+#include <functional>
+#include <string>
+#include <vector>
 
 namespace Exodia {
 
@@ -27,26 +27,23 @@ namespace Exodia {
         /////////////
         // Methods //
         /////////////
-        public:
-
-            static void Init();
-            static void Shutdown();
+      public:
+        static void Init();
+        static void Shutdown();
 
         ///////////////////////
         // Getters & Setters //
         ///////////////////////
-        public:
-
-            static ScriptableEntity *InstantiateScript(const std::string &name);
-            static std::vector<std::string> GetScriptableEntities();
+      public:
+        static ScriptableEntity *InstantiateScript(const std::string &name);
+        static std::vector<std::string> GetScriptableEntities();
 
         ////////////////
         // Attributes //
         ////////////////
-        public:
-
-            static ScriptEngineData *Data;
+      public:
+        static ScriptEngineData *Data;
     };
-};
+}; // namespace Exodia
 
 #endif /* !SCRIPTENGINE_HPP_ */

@@ -6,10 +6,10 @@
 */
 
 #ifndef OPENGLUNIFORMBUFFER_HPP_
-    #define OPENGLUNIFORMBUFFER_HPP_
+#define OPENGLUNIFORMBUFFER_HPP_
 
-    // Exodia Renderer includes
-    #include "Renderer/Buffer/UniformBuffer.hpp"
+// Exodia Renderer includes
+#include "Renderer/Buffer/UniformBuffer.hpp"
 
 namespace Exodia {
 
@@ -18,24 +18,22 @@ namespace Exodia {
         //////////////////////////////
         // Constructor & Destructor //
         //////////////////////////////
-        public:
-
-            OpenGLUniformBuffer(uint32_t size, uint32_t binding);
-            ~OpenGLUniformBuffer();
+      public:
+        OpenGLUniformBuffer(uint32_t size, uint32_t binding);
+        ~OpenGLUniformBuffer();
 
         ///////////////////////
         // Setters & Getters //
         ///////////////////////
-        public:
+      public:
+        virtual void SetData(const void *data, uint32_t size, uint32_t offset = 0) override;
 
-            virtual void SetData(const void *data, uint32_t size, uint32_t offset = 0) override;
-        
         ////////////////
         // Attributes //
         ////////////////
-        private:
-            uint32_t _RendererID; /*!< The OpenGL uniform buffer ID */
+      private:
+        uint32_t _RendererID; /*!< The OpenGL uniform buffer ID */
     };
-};
+}; // namespace Exodia
 
 #endif /* !OPENGLUNIFORMBUFFER_HPP_ */

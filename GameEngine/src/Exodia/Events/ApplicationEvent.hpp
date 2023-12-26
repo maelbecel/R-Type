@@ -6,22 +6,22 @@
 */
 
 #ifndef APPLICATIONEVENT_HPP_
-    #define APPLICATIONEVENT_HPP_
+#define APPLICATIONEVENT_HPP_
 
-    // Exodia Utils
-    #include "Utils/CrossPlatform.hpp"
+// Exodia Utils
+#include "Utils/CrossPlatform.hpp"
 
-    // Exodia Events
-    #include "Events/Event.hpp"
+// Exodia Events
+#include "Events/Event.hpp"
 
-    // External includes
-    #include <sstream>
-    #include <filesystem>
-    #include <vector>
+// External includes
+#include <sstream>
+#include <filesystem>
+#include <vector>
 
-    ///////////////////////////////////////////////////////////////////////////////
-    // In this file, we define all the event that are related to the application //
-    ///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+// In this file, we define all the event that are related to the application //
+///////////////////////////////////////////////////////////////////////////////
 
 namespace Exodia {
 
@@ -33,73 +33,63 @@ namespace Exodia {
         ////////////////////////////////////////
         // Constructor & Destructor (default) //
         ////////////////////////////////////////
-        public:
+      public:
+        /**
+         * @brief Construct a new Window Resize Event object
+         * Class that will be call when the window is resized
+         * @param width  The new width of the window
+         * @param height The new height of the window
+         */
+        WindowResizeEvent(unsigned int width, unsigned int height) : _Width(width), _Height(height){};
 
-            /**
-             * @brief Construct a new Window Resize Event object
-             * Class that will be call when the window is resized
-             * @param width  The new width of the window
-             * @param height The new height of the window
-             */
-            WindowResizeEvent(unsigned int width, unsigned int height) : _Width(width), _Height(height) {};
-
-            /**
-             * @brief Destroy the Window Resize Event object
-             */
-            ~WindowResizeEvent() override = default;
+        /**
+         * @brief Destroy the Window Resize Event object
+         */
+        ~WindowResizeEvent() override = default;
 
         /////////////
         // Methods //
         /////////////
-        public:
+      public:
+        /**
+         * @brief ToString function
+         * Call this function for print the event in the console (debug)
+         * @return std::string : WindowResizeEvent: {width}, {height}
+         */
+        std::string ToString() const override {
+            std::stringstream ss;
 
-            /**
-             * @brief ToString function
-             * Call this function for print the event in the console (debug)
-             * @return std::string : WindowResizeEvent: {width}, {height}
-             */
-            std::string ToString() const override
-            {
-                std::stringstream ss;
-
-                ss << "WindowResizeEvent: " << _Width << ", " << _Height;
-                return ss.str();
-            }
+            ss << "WindowResizeEvent: " << _Width << ", " << _Height;
+            return ss.str();
+        }
 
         ///////////////////////
         // Getters & Setters //
         ///////////////////////
-        public:
+      public:
+        /**
+         * @brief Get the Width object
+         * Call this function for know the width of the window
+         * @return unsigned int The width of the window
+         */
+        inline unsigned int GetWidth() const { return _Width; }
 
-            /**
-             * @brief Get the Width object
-             * Call this function for know the width of the window
-             * @return unsigned int The width of the window
-             */
-            inline unsigned int GetWidth() const
-            {
-                return _Width;
-            }
+        /**
+         * @brief Get the Height object
+         * Call this function for know the height of the window
+         * @return unsigned int The height of the window
+         */
+        inline unsigned int GetHeight() const { return _Height; }
 
-            /**
-             * @brief Get the Height object
-             * Call this function for know the height of the window
-             * @return unsigned int The height of the window
-             */
-            inline unsigned int GetHeight() const
-            {
-                return _Height;
-            }
-      
-            EVENT_CLASS_TYPE(WindowResize)                     // Define the event type
-            EVENT_CLASS_CATEGORY(EventCategory::EventCategoryApplication) // Define the event category
-  
+        EVENT_CLASS_TYPE(WindowResize)                                // Define the event type
+        EVENT_CLASS_CATEGORY(EventCategory::EventCategoryApplication) // Define the event category
+
         ////////////////
         // Attributes //
         ////////////////
-        private:
-            unsigned int _Width;  /*!< The width of the window */
-            unsigned int _Height; /*!< The height of the window */
+      private:
+        unsigned int _Width;  /*!< The width of the window */
+        unsigned int _Height; /*!< The height of the window */
     };
 
     /**
@@ -110,24 +100,23 @@ namespace Exodia {
         //////////////////////////////////////////////////
         // Constructor (default) & Destructor (default) //
         //////////////////////////////////////////////////
-        public:
+      public:
+        /**
+         * @brief Construct a new Window Close Event object
+         */
+        WindowCloseEvent() = default;
 
-            /**
-             * @brief Construct a new Window Close Event object
-             */
-            WindowCloseEvent() = default;
-
-            /**
-             * @brief Destroy the Window Close Event object
-             */
-            ~WindowCloseEvent() override = default;
+        /**
+         * @brief Destroy the Window Close Event object
+         */
+        ~WindowCloseEvent() override = default;
 
         /////////////
         // Setters //
         /////////////
-        public:
-            EVENT_CLASS_TYPE(WindowClose);                      // Define the event type
-            EVENT_CLASS_CATEGORY(EventCategory::EventCategoryApplication); // Define the event category
+      public:
+        EVENT_CLASS_TYPE(WindowClose);                                 // Define the event type
+        EVENT_CLASS_CATEGORY(EventCategory::EventCategoryApplication); // Define the event category
     };
 
     /**
@@ -140,24 +129,23 @@ namespace Exodia {
         //////////////////////////////////////////////////
         // Constructor (default) & Destructor (default) //
         //////////////////////////////////////////////////
-        public:
+      public:
+        /**
+         * @brief Construct a new App Tick Event object
+         */
+        AppTickEvent() = default;
 
-            /**
-             * @brief Construct a new App Tick Event object
-             */
-            AppTickEvent() = default;
+        /**
+         * @brief Destroy the App Tick Event object
+         */
+        ~AppTickEvent() override = default;
 
-            /**
-             * @brief Destroy the App Tick Event object
-             */
-            ~AppTickEvent() override = default;
-        
         /////////////
         // Setters //
         /////////////
-        public:
-            EVENT_CLASS_TYPE(AppTick);                          // Define the event type
-            EVENT_CLASS_CATEGORY(EventCategory::EventCategoryApplication); // Define the event category
+      public:
+        EVENT_CLASS_TYPE(AppTick);                                     // Define the event type
+        EVENT_CLASS_CATEGORY(EventCategory::EventCategoryApplication); // Define the event category
     };
 
     /**
@@ -170,24 +158,23 @@ namespace Exodia {
         //////////////////////////////////////////////////
         // Constructor (default) & Destructor (default) //
         //////////////////////////////////////////////////
-        public:
+      public:
+        /**
+         * @brief Construct a new App Update Event object
+         */
+        AppUpdateEvent() = default;
 
-            /**
-             * @brief Construct a new App Update Event object
-             */
-            AppUpdateEvent() = default;
+        /**
+         * @brief Destroy the App Update Event object
+         */
+        ~AppUpdateEvent() override = default;
 
-            /**
-             * @brief Destroy the App Update Event object
-             */
-            ~AppUpdateEvent() override = default;
-        
         /////////////
         // Setters //
         /////////////
-        public:
-            EVENT_CLASS_TYPE(AppUpdate);                        // Define the event type
-            EVENT_CLASS_CATEGORY(EventCategory::EventCategoryApplication); // Define the event category
+      public:
+        EVENT_CLASS_TYPE(AppUpdate);                                   // Define the event type
+        EVENT_CLASS_CATEGORY(EventCategory::EventCategoryApplication); // Define the event category
     };
 
     /**
@@ -199,22 +186,21 @@ namespace Exodia {
         //////////////////////////////////////////////////
         // Constructor (default) & Destructor (default) //
         //////////////////////////////////////////////////
-        public:
+      public:
+        /**
+         * @brief Construct a new App Render Event object
+         */
+        AppRenderEvent() = default;
 
-            /**
-             * @brief Construct a new App Render Event object
-             */
-            AppRenderEvent() = default;
+        /**
+         * @brief Destroy the App Render Event object
+         */
+        ~AppRenderEvent() override = default;
 
-            /**
-             * @brief Destroy the App Render Event object
-             */
-            ~AppRenderEvent() override = default;
-        
         // Setters
-        public:
-            EVENT_CLASS_TYPE(AppRender);                        // Define the event type
-            EVENT_CLASS_CATEGORY(EventCategory::EventCategoryApplication); // Define the event category
+      public:
+        EVENT_CLASS_TYPE(AppRender);                                   // Define the event type
+        EVENT_CLASS_CATEGORY(EventCategory::EventCategoryApplication); // Define the event category
     };
 
     class WindowDropEvent : public Event {
@@ -222,31 +208,25 @@ namespace Exodia {
         //////////////////////////////
         // Constructor & Destructor //
         //////////////////////////////
-        public:
-
-            WindowDropEvent(const std::vector<std::filesystem::path>  &paths) : _Paths(paths) {};
-            WindowDropEvent(const std::vector<std::filesystem::path> &&paths) : _Paths(std::move(paths)) {};
+      public:
+        WindowDropEvent(const std::vector<std::filesystem::path> &paths) : _Paths(paths){};
+        WindowDropEvent(const std::vector<std::filesystem::path> &&paths) : _Paths(std::move(paths)){};
 
         ///////////////////////
         // Getters & Setters //
         ///////////////////////
-        public:
+      public:
+        const std::vector<std::filesystem::path> &GetPaths() const { return _Paths; };
 
-            const std::vector<std::filesystem::path> &GetPaths() const
-            {
-                return _Paths;
-            };
+        EVENT_CLASS_TYPE(WindowDrop);                                  // Define the event type
+        EVENT_CLASS_CATEGORY(EventCategory::EventCategoryApplication); // Define the event category
 
-            EVENT_CLASS_TYPE(WindowDrop);                                  // Define the event type
-            EVENT_CLASS_CATEGORY(EventCategory::EventCategoryApplication); // Define the event category
-        
         ////////////////
         // Attributes //
         ////////////////
-        private:
-
-            std::vector<std::filesystem::path> _Paths; /*!< The paths of the files dropped */
+      private:
+        std::vector<std::filesystem::path> _Paths; /*!< The paths of the files dropped */
     };
-};
+}; // namespace Exodia
 
 #endif /* !APPLICATIONEVENT_HPP_ */

@@ -22,26 +22,23 @@ namespace Exodia {
     // Constructor & Destructor //
     //////////////////////////////
 
-    SceneSerializer::SceneSerializer(Ref<Scene> scene) : _Scene(scene) {};
+    SceneSerializer::SceneSerializer(Ref<Scene> scene) : _Scene(scene){};
 
     /////////////
     // Methods //
     /////////////
 
-    void SceneSerializer::Serialize(const std::filesystem::path &path)
-    {
+    void SceneSerializer::Serialize(const std::filesystem::path &path) {
         YAML::Emitter out;
 
         out << YAML::BeginMap;
         out << YAML::Key << "Scene" << YAML::Value << _Scene->GetName();
         out << YAML::Key << "Entities" << YAML::Value << YAML::BeginSeq;
         {
-            _Scene->GetWorld().ForEach<IDComponent>([&](Entity *entity, UNUSED auto id) {
+            _Scene->GetWorld().ForEach<IDComponent>([&](Entity *entity, auto id) {
                 out << YAML::BeginMap;
                 out << YAML::Key << "Entity" << YAML::Value << id.Get().ID;
-                {
-                    SerializeEntity(out, entity);
-                }
+                { SerializeEntity(out, entity); }
                 out << YAML::EndMap;
             });
         }
@@ -53,13 +50,14 @@ namespace Exodia {
         fout << out.c_str();
     }
 
-    void SceneSerializer::Deserialize(const std::filesystem::path &path)
-    {
+    void SceneSerializer::Deserialize(const std::filesystem::path &path) {
+        std::string filepath = path.string();
+
         try {
-            YAML::Node data = YAML::LoadFile(path);
+            YAML::Node data = YAML::LoadFile(filepath);
 
             if (!data["Scene"]) {
-                EXODIA_CORE_ERROR("Scene file '{0}' is invalid !", path.string());
+                EXODIA_CORE_ERROR("Scene file '{0}' is invalid !", filepath);
                 return;
             }
 
@@ -91,25 +89,25 @@ namespace Exodia {
                     }
                 }
             }
-        } catch (const YAML::BadConversion& e) {
-            EXODIA_CORE_ERROR("Failed to deserialize scene file '{0}':\n\t{1}", path.string(), e.what());
-        } catch (const YAML::Exception& e) {
-            EXODIA_CORE_ERROR("Failed to deserialize scene file '{0}':\n\t{1}", path.string(), e.what());
+        } catch (const YAML::BadConversion &e) {
+            EXODIA_CORE_ERROR("Failed to deserialize scene file '{0}':\n\t{1}", filepath, e.what());
+        } catch (const YAML::Exception &e) {
+            EXODIA_CORE_ERROR("Failed to deserialize scene file '{0}':\n\t{1}", filepath, e.what());
         }
     }
 
-    void SceneSerializer::SerializeEntity(YAML::Emitter &out, Entity *entity)
-    {
+    void SceneSerializer::SerializeEntity(YAML::Emitter &out, Entity *entity) {
         for (auto &component : entity->GetAllComponents()) {
             if (component)
                 component->Serialize(out);
         }
     }
 
-    void SceneSerializer::DeserializeComponent(const std::string &componentType, const YAML::Node &componentNode, Entity *entity)
-    {
+    void SceneSerializer::DeserializeComponent(const std::string &componentType, const YAML::Node &componentNode,
+                                               Entity *entity) {
         try {
-            std::function<IComponentContainer *(Buffer)> func = Project::GetActive()->GetComponentFactory(componentType);
+            std::function<IComponentContainer *(Buffer)> func =
+                Project::GetActive()->GetComponentFactory(componentType);
 
             if (!func) {
                 EXODIA_CORE_WARN("Component '{0}' is not registered !", componentType);
@@ -125,4 +123,4 @@ namespace Exodia {
             EXODIA_CORE_ERROR("Error deserializing component '{0}': {1}", componentType, e.what());
         }
     }
-};
+}; // namespace Exodia

@@ -1,0 +1,8 @@
+---
+Language:        Cpp
+IndentWidth:     4
+TabWidth:        4
+UseTab:          Never
+NamespaceIndentation: All
+ColumnLimit:     120
+SortIncludes:    false

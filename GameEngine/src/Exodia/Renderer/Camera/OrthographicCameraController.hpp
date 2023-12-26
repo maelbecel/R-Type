@@ -6,17 +6,17 @@
 */
 
 #ifndef ORTHOGRAPHICCAMERACONTROLLER_HPP_
-    #define ORTHOGRAPHICCAMERACONTROLLER_HPP_
+#define ORTHOGRAPHICCAMERACONTROLLER_HPP_
 
-    // Exodia Renderer
-    #include "Renderer/Camera/OrthographicCamera.hpp"
+// Exodia Renderer
+#include "Renderer/Camera/OrthographicCamera.hpp"
 
-    // Exodia Core
-    #include "Core/Time/Timestep.hpp"
+// Exodia Core
+#include "Core/Time/Timestep.hpp"
 
-    // Exodia Events
-    #include "Events/ApplicationEvent.hpp"
-    #include "Events/MouseEvent.hpp"
+// Exodia Events
+#include "Events/ApplicationEvent.hpp"
+#include "Events/MouseEvent.hpp"
 
 namespace Exodia {
 
@@ -35,10 +35,7 @@ namespace Exodia {
          *
          * @return (Type: Float) The width of the camera's projection bounds.
          */
-        float GetWidth()
-        {
-            return Right - Left;
-        }
+        float GetWidth() { return Right - Left; }
 
         /**
          * @brief Get the height of the camera's projection bounds.
@@ -46,10 +43,7 @@ namespace Exodia {
          *
          * @return (Type: Float) The height of the camera's projection bounds.
          */
-        float GetHeight()
-        {
-            return Top - Bottom;
-        }
+        float GetHeight() { return Top - Bottom; }
     };
 
     /**
@@ -61,75 +55,71 @@ namespace Exodia {
         //////////////////////////////
         // Constructor & Destructor //
         //////////////////////////////
-        public:
+      public:
+        /**
+         * @brief Construct an OrthographicCameraController
+         *
+         * @param aspectRatio (Type: Float) The aspect ratio of the camera's projection
+         * @param rotation    (Type: Bool)  If true, enables camera rotation (default is false)
+         */
+        OrthographicCameraController(float aspectRatio, bool rotation = false);
 
-            /**
-             * @brief Construct an OrthographicCameraController
-             *
-             * @param aspectRatio (Type: Float) The aspect ratio of the camera's projection
-             * @param rotation    (Type: Bool)  If true, enables camera rotation (default is false)
-             */
-            OrthographicCameraController(float aspectRatio, bool rotation = false);
-
-            /**
-             * @brief Destructor for OrthographicCameraController
-             */
-            ~OrthographicCameraController() = default;
+        /**
+         * @brief Destructor for OrthographicCameraController
+         */
+        ~OrthographicCameraController() = default;
 
         /////////////
         // Methods //
         /////////////
-        public:
+      public:
+        /**
+         * @brief Update the camera's state based on elapsed time.
+         *
+         * @param ts (Type: Timestep) The timestep since the last frame
+         */
+        void OnUpdate(Timestep ts);
 
-            /**
-             * @brief Update the camera's state based on elapsed time.
-             *
-             * @param ts (Type: Timestep) The timestep since the last frame
-             */
-            void OnUpdate(Timestep ts);
+        /**
+         * @brief Handle events related to the camera
+         *
+         * @param event (Type: Event) The event to handle
+         */
+        void OnEvent(Event &event);
 
-            /**
-             * @brief Handle events related to the camera
-             *
-             * @param event (Type: Event) The event to handle
-             */
-            void OnEvent(Event &event);
+        /**
+         * @brief Resize the bounds of the camera's projection.
+         *
+         * @param width  (Type: Float) The new width of the camera's projection
+         * @param height (Type: Float) The new height of the camera's projection
+         */
+        void OnResize(float width, float height);
 
-            /**
-             * @brief Resize the bounds of the camera's projection.
-             *
-             * @param width  (Type: Float) The new width of the camera's projection
-             * @param height (Type: Float) The new height of the camera's projection
-             */
-            void OnResize(float width, float height);
+      private:
+        /**
+         * @brief Calculate the view matrix of the camera depend on its position, rotation and the zoom level.
+         * Call this method to calculate the view matrix of the camera.
+         */
+        void CalculateView();
 
-        private:
+        /**
+         * @brief Handle the MouseScrolledEvent
+         * @param event (Type: MouseScrolledEvent) The MouseScrolledEvent to handle
+         * @return      (Type: Bool)               True if the event was handled, false otherwise
+         */
+        bool OnMouseScrolled(MouseScrolledEvent &event);
 
-            /**
-             * @brief Calculate the view matrix of the camera depend on its position, rotation and the zoom level.
-             * Call this method to calculate the view matrix of the camera.
-             */
-            void CalculateView();
-
-            /**
-             * @brief Handle the MouseScrolledEvent
-             * @param event (Type: MouseScrolledEvent) The MouseScrolledEvent to handle
-             * @return      (Type: Bool)               True if the event was handled, false otherwise
-             */
-            bool OnMouseScrolled(MouseScrolledEvent &event);
-
-            /**
-             * @brief Handle the WindowResizeEvent
-             * @param event (Type: WindowResizeEvent) The WindowResizeEvent to handle
-             * @return      (Type: Bool)              True if the event was handled, false otherwise
-             */
-            bool OnWindowResized(WindowResizeEvent &event);
+        /**
+         * @brief Handle the WindowResizeEvent
+         * @param event (Type: WindowResizeEvent) The WindowResizeEvent to handle
+         * @return      (Type: Bool)              True if the event was handled, false otherwise
+         */
+        bool OnWindowResized(WindowResizeEvent &event);
 
         ///////////////////////
         // Getters & Setters //
         ///////////////////////
-        public:
-
+      public:
         /**
          * @brief Get the OrthographicCamera controlled by this controller
          *
@@ -140,7 +130,8 @@ namespace Exodia {
         /**
          * @brief Get the const OrthographicCamera controlled by this controller
          *
-         * @return (Type: const OrthographicCamera) Const reference to the OrthographicCamera controlled by this controller
+         * @return (Type: const OrthographicCamera) Const reference to the OrthographicCamera controlled by this
+         * controller
          */
         const OrthographicCamera &GetCamera() const;
 
@@ -168,17 +159,17 @@ namespace Exodia {
         ////////////////
         // Attributes //
         ////////////////
-        private:
-            float                    _ZoomLevel;              /*!< The zoom level of the Orthographic Camera */
-            OrthographicCameraBounds _Bounds;                 /*!< The bounds of the Orthographic Camera */
-            OrthographicCamera       _Camera;                 /*!< The Orthographic Camera to control */
-            float                    _AspectRatio;            /*!< The aspect ratio of the Orthographic Camera */
-            bool                     _Rotation;               /*!< If the Orthographic Camera is rotating */
-            glm::vec3                _CameraPos;              /*!< The position of the Orthographic Camera */
-            float                    _CameraRotation;         /*!< The rotation of the Orthographic Camera */
-            float                    _CameraTranslationSpeed; /*!< The translation speed of the Orthographic Camera */
-            float                    _CameraRotationSpeed;    /*!< The rotation speed of the Orthographic Camera */
+      private:
+        float _ZoomLevel;                 /*!< The zoom level of the Orthographic Camera */
+        OrthographicCameraBounds _Bounds; /*!< The bounds of the Orthographic Camera */
+        OrthographicCamera _Camera;       /*!< The Orthographic Camera to control */
+        float _AspectRatio;               /*!< The aspect ratio of the Orthographic Camera */
+        bool _Rotation;                   /*!< If the Orthographic Camera is rotating */
+        glm::vec3 _CameraPos;             /*!< The position of the Orthographic Camera */
+        float _CameraRotation;            /*!< The rotation of the Orthographic Camera */
+        float _CameraTranslationSpeed;    /*!< The translation speed of the Orthographic Camera */
+        float _CameraRotationSpeed;       /*!< The rotation speed of the Orthographic Camera */
     };
-};
+}; // namespace Exodia
 
 #endif /* !ORTHOGRAPHICCAMERACONTROLLER_HPP_ */

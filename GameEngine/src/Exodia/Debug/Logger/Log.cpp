@@ -28,8 +28,7 @@ namespace Exodia {
     // Methods //
     /////////////
 
-    void Log::Init(const std::string &appName)
-    {
+    void Log::Init(const std::string &appName) {
         // -- Init spdlog ------------------------------------------------------
         std::vector<spdlog::sink_ptr> logSinks;
 
@@ -55,4 +54,4 @@ namespace Exodia {
 
         spdlog::register_logger(_ClientLogger);
     }
-};
+}; // namespace Exodia

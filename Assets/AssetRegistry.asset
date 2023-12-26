@@ -116,7 +116,7 @@ AssetRegistry:
   - Handle: 9012345678901234567
     Path: Textures/Gomander#3.png
     Type: AssetType::Texture2D
-  - Handle: 9012345678901234678
+  - Handle: 90123456789012678
     Path: Textures/Pata-Pata.png
     Type: AssetType::Texture2D
   - Handle: 9012357890123456789
@@ -125,7 +125,7 @@ AssetRegistry:
   - Handle: 12345678901234567890
     Path: Textures/Gomander#4.png
     Type: AssetType::Texture2D
-  - Handle: 12345678901234578901
+  - Handle: 12345678901234578
     Path: Textures/Player.png
     Type: AssetType::Texture2D
   - Handle: 12346890123456789012
@@ -134,6 +134,12 @@ AssetRegistry:
   - Handle: 12401337114591583034
     Path: Textures/Baldur.png
     Type: AssetType::Texture2D
+  - Handle: 124013371145915
+    Path: Sound/Music/BattleTheme.wav
+    Type: AssetType::Sound2D
   - Handle: 18375016605620543235
     Path: test.exodia
     Type: AssetType::Scene
+  - Handle: 18375012605620
+    Path: Textures/Missile.png
+    Type: AssetType::Texture2D

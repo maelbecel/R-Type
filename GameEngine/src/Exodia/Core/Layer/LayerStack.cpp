@@ -6,10 +6,11 @@
 */
 
 // Exodia Core
-#include "Core/Layer/LayerStack.hpp"
+#include "LayerStack.hpp"
 
 // External includes
 #include <algorithm>
+#include <sstream>
 
 namespace Exodia {
 
@@ -17,10 +18,9 @@ namespace Exodia {
     // Constructor & Destructor //
     //////////////////////////////
 
-    LayerStack::LayerStack() : _LayerInsertIndex(0) {};
+    LayerStack::LayerStack() : _LayerInsertIndex(0){};
 
-    LayerStack::~LayerStack()
-    {
+    LayerStack::~LayerStack() {
         for (Layer *layer : _Layers) {
             if (layer)
                 delete layer;
@@ -31,19 +31,14 @@ namespace Exodia {
     // Methods //
     /////////////
 
-    void LayerStack::PushLayer(Layer *layer)
-    {
+    void LayerStack::PushLayer(Layer *layer) {
         _Layers.emplace(_Layers.begin() + _LayerInsertIndex, layer);
         _LayerInsertIndex++;
     }
 
-    void LayerStack::PushOverlay(Layer *overlay)
-    {
-        _Layers.emplace_back(overlay);
-    }
+    void LayerStack::PushOverlay(Layer *overlay) { _Layers.emplace_back(overlay); }
 
-    void LayerStack::PopLayer(Layer *layer)
-    {
+    void LayerStack::PopLayer(Layer *layer) {
         std::vector<Exodia::Layer *>::iterator it = std::find(_Layers.begin(), _Layers.end(), layer);
 
         // If the layer is found, erase it
@@ -53,8 +48,7 @@ namespace Exodia {
         }
     }
 
-    void LayerStack::PopOverlay(Layer *overlay)
-    {
+    void LayerStack::PopOverlay(Layer *overlay) {
         std::vector<Exodia::Layer *>::iterator it = std::find(_Layers.begin(), _Layers.end(), overlay);
 
         // If the layer is found, erase it
@@ -66,43 +60,19 @@ namespace Exodia {
     // Iterator methods //
     //////////////////////
 
-    std::vector<Layer *>::const_iterator LayerStack::begin() const
-    {
-        return _Layers.begin();
-    }
+    std::vector<Layer *>::const_iterator LayerStack::begin() const { return _Layers.begin(); }
 
-    std::vector<Layer *>::const_iterator LayerStack::begin()
-    {
-        return _Layers.begin();
-    }
+    std::vector<Layer *>::const_iterator LayerStack::begin() { return _Layers.begin(); }
 
-    std::vector<Layer *>::const_iterator LayerStack::end() const
-    {
-        return _Layers.end();
-    }
+    std::vector<Layer *>::const_iterator LayerStack::end() const { return _Layers.end(); }
 
-    std::vector<Layer *>::const_iterator LayerStack::end()
-    {
-        return _Layers.end();
-    }
+    std::vector<Layer *>::const_iterator LayerStack::end() { return _Layers.end(); }
 
-    std::vector<Layer *>::const_reverse_iterator LayerStack::rbegin() const
-    {
-        return _Layers.rbegin();
-    }
+    std::vector<Layer *>::const_reverse_iterator LayerStack::rbegin() const { return _Layers.rbegin(); }
 
-    std::vector<Layer *>::const_reverse_iterator LayerStack::rbegin()
-    {
-        return _Layers.rbegin();
-    }
+    std::vector<Layer *>::const_reverse_iterator LayerStack::rbegin() { return _Layers.rbegin(); }
 
-    std::vector<Layer *>::const_reverse_iterator LayerStack::rend() const
-    {
-        return _Layers.rend();
-    }
+    std::vector<Layer *>::const_reverse_iterator LayerStack::rend() const { return _Layers.rend(); }
 
-    std::vector<Layer *>::const_reverse_iterator LayerStack::rend()
-    {
-        return _Layers.rend();
-    }
-};
+    std::vector<Layer *>::const_reverse_iterator LayerStack::rend() { return _Layers.rend(); }
+}; // namespace Exodia

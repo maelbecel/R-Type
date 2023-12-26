@@ -6,13 +6,13 @@
 */
 
 #ifndef IDCOMPONENT_HPP_
-    #define IDCOMPONENT_HPP_
+#define IDCOMPONENT_HPP_
 
-    // Exodia UUID includes
-    #include "Core/ID/UUID.hpp"
+// Exodia UUID includes
+#include "Core/ID/UUID.hpp"
 
-    // Exodia ECS includes
-    #include "ECS/Interface/Component.hpp"
+// Exodia ECS includes
+#include "ECS/Interface/Component.hpp"
 
 namespace Exodia {
 
@@ -20,8 +20,8 @@ namespace Exodia {
         UUID ID;
 
         IDComponent(const IDComponent &) = default;
-        IDComponent(const UUID &uuid = UUID()) : ID(uuid) {};
+        IDComponent(const UUID &uuid = UUID()) : ID(uuid){};
     };
-};
+}; // namespace Exodia
 
 #endif /* !IDCOMPONENT_HPP_ */

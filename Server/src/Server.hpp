@@ -6,45 +6,60 @@
 */
 
 #ifndef SERVER_HPP_
-    #define SERVER_HPP_
+#define SERVER_HPP_
 
-    #include "Exodia.hpp"
-    #include "SceneType.hpp"
+#include "Exodia.hpp"
+#include "SceneType.hpp"
+#include "User/User.hpp"
 
 namespace Exodia {
 
     class Server {
-        public:
-            Server(short port);
-            ~Server();
-            void HandleCommand(const std::string &command);
-            void Init();
-            void Run();
-            void Update();
-            void Stop() { _running = false; };
 
-        protected:
+        //////////////////////////////
+        // Constructor & Destructor //
+        //////////////////////////////
+      public:
+        Server(short port);
+        ~Server();
 
-        public:
-            inline static std::map<SceneType, std::shared_ptr<Exodia::Scene>> _World;
-            inline static SceneType _currentScene;
+        /////////////
+        // Methods //
+        /////////////
+      public:
+        void HandleCommand(const std::string &command);
+        void Init();
+        void Run();
+        void Update();
+        void Stop();
 
-        private:
-            // WARNING: This is a temporary solution
-            Exodia::World *_worldNetwork = Exodia::World::CreateWorld();
+        ////////////////
+        // Attributes //
+        ////////////////
+      public:
+        inline static std::map<SceneType, Ref<Scene>> Scenes;
+        inline static SceneType CurrentScene = SceneType::GAME;
+        uint64_t count = 0;
 
-            // Network is used to manage the network with the clients
-            Network::IOContextManager _ioContextManager;
-            Network::Network _network;
+      private:
+        // TODO: WARNING: This is a temporary solution
+        World *_WorldNetwork;
 
-            // Timestep is used to manage the time
-            Timer _Timer;
-            float _lastTime;
+        // Network is used to manage the network with the clients
+        Network::IOContextManager _IOContextManager;
+        Network::Network _Network;
 
-            bool _running = true;
+        // Timestep is used to manage the time
+        Timer _Timer;
+        float _LastTime;
 
-            std::thread _inputThread;
+        bool _Running;
+
+        std::thread _InputThread;
+
+        void CheckForNewClients();
+        std::vector<Exodia::User> _Users;
     };
-}
+}; // namespace Exodia
 
 #endif /* !SERVER_HPP_ */

@@ -6,13 +6,13 @@
 */
 
 #ifndef ENTITYSYSTEM_HPP_
-    #define ENTITYSYSTEM_HPP_
+#define ENTITYSYSTEM_HPP_
 
-    // Exodia Core includes
-    #include "Exodia/Core/Time/Timestep.hpp"
+// Exodia Core includes
+#include "Exodia/Core/Time/Timestep.hpp"
 
-    // Exodia Utils includes
-    #include "Utils/CrossPlatform.hpp"
+// Exodia Utils includes
+#include "Utils/CrossPlatform.hpp"
 
 namespace Exodia {
 
@@ -22,31 +22,22 @@ namespace Exodia {
         ////////////////
         // Destructor //
         ////////////////
-        public:
-
-            virtual ~EntitySystem() = default;
+      public:
+        virtual ~EntitySystem() = default;
 
         /////////////
         // Methods //
         /////////////
-        public:
+      public:
+        virtual void Configure(World *world) { (void)world; }
 
-            virtual void Configure(World *world)
-            {
-                (void)world;
-            }
+        virtual void Unconfigure(World *world) { (void)world; }
 
-            virtual void Unconfigure(World *world)
-            {
-                (void)world;
-            }
-
-            virtual void Update(World *world, Timestep ts)
-            {
-                (void)world;
-                (void)ts;
-            }
+        virtual void Update(World *world, Timestep ts) {
+            (void)world;
+            (void)ts;
+        }
     };
-};
+}; // namespace Exodia
 
 #endif /* !ENTITYSYSTEM_HPP_ */

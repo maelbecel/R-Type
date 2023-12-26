@@ -23,15 +23,13 @@ namespace Exodia {
     // Methods //
     /////////////
 
-    Ref<Scene> SceneImporter::ImportScene(UNUSED AssetHandle handle, const AssetSpecification &spec)
-    {
+    Ref<Scene> SceneImporter::ImportScene(UNUSED(AssetHandle handle), const AssetSpecification &spec) {
         EXODIA_PROFILE_FUNCTION();
 
         return LoadScene(Project::GetActiveAssetDirectory() / spec.Path);
     }
 
-    Ref<Scene> SceneImporter::LoadScene(const std::filesystem::path &path)
-    {
+    Ref<Scene> SceneImporter::LoadScene(const std::filesystem::path &path) {
         EXODIA_PROFILE_FUNCTION();
 
         Ref<Scene> scene = CreateRef<Scene>();
@@ -42,12 +40,11 @@ namespace Exodia {
         return scene;
     }
 
-    void SceneImporter::SaveScene(Ref<Scene> scene, const std::filesystem::path &path)
-    {
+    void SceneImporter::SaveScene(Ref<Scene> scene, const std::filesystem::path &path) {
         EXODIA_PROFILE_FUNCTION();
 
         SceneSerializer serializer(scene);
 
         serializer.Serialize(Project::GetActiveAssetDirectory() / path);
     }
-};
+}; // namespace Exodia

@@ -35,13 +35,13 @@ namespace Exodia {
 
     /**
      * @brief GLFW error callback function.
-     * This static function is used as an error callback for GLFW library. It logs GLFW errors with the provided error code and description.
+     * This static function is used as an error callback for GLFW library. It logs GLFW errors with the provided error
+     * code and description.
      *
      * @param error       (Type: int)          The error code reported by GLFW.
      * @param description (Type: char const *) The error description provided by GLFW.
      */
-    static void GLFWErrorCallback(int error, char const *description)
-    {
+    static void GLFWErrorCallback(int error, char const *description) {
         EXODIA_CORE_ERROR("GLFW Error ({0}): {1}", error, description);
     }
 
@@ -49,24 +49,19 @@ namespace Exodia {
     // Factory //
     /////////////
 
-    Scope<Window> Window::Create(const WindowProps &props)
-    {
-        return CreateScope<WindowsWindow>(props);
-    }
+    Scope<Window> Window::Create(const WindowProps &props) { return CreateScope<WindowsWindow>(props); }
 
     //////////////////////////////
     // Constructor & Destructor //
     //////////////////////////////
 
-    WindowsWindow::WindowsWindow(const WindowProps &props)
-    {
+    WindowsWindow::WindowsWindow(const WindowProps &props) {
         EXODIA_PROFILE_FUNCTION(); // Performance instrumentation profiling for the function
 
         Init(props); // Initialize the window
     }
 
-    WindowsWindow::~WindowsWindow()
-    {
+    WindowsWindow::~WindowsWindow() {
         EXODIA_PROFILE_FUNCTION(); // Performance instrumentation profiling for the function
 
         Shutdown(); // Shutdown the window
@@ -76,8 +71,7 @@ namespace Exodia {
     // Methods //
     /////////////
 
-    void WindowsWindow::Init(const WindowProps &props)
-    {
+    void WindowsWindow::Init(const WindowProps &props) {
         EXODIA_PROFILE_FUNCTION(); // Performance instrumentation profiling for the function
 
         // Initialize the WindowData properties
@@ -106,13 +100,7 @@ namespace Exodia {
         {
             EXODIA_PROFILE_SCOPE("glfwCreateWindow"); // Performance instrumentation profiling for the scope
 
-            _Window = glfwCreateWindow(
-                (int)props.Width,
-                (int)props.Height,
-                _Data.Title.c_str(),
-                nullptr,
-                nullptr
-            );
+            _Window = glfwCreateWindow((int)props.Width, (int)props.Height, _Data.Title.c_str(), nullptr, nullptr);
             GLFWWindowCount++; // Increment the number of GLFW windows
         }
 
@@ -142,29 +130,30 @@ namespace Exodia {
             data.EventCallback(event);
         });
 
-        glfwSetKeyCallback(_Window, [](GLFWwindow *window, int key, UNUSED int scancode, int action, UNUSED int mods) {
-            WindowData &data = *(WindowData *)glfwGetWindowUserPointer(window);
+        glfwSetKeyCallback(_Window,
+                           [](GLFWwindow *window, int key, UNUSED(int scancode), int action, UNUSED(int mods)) {
+                               WindowData &data = *(WindowData *)glfwGetWindowUserPointer(window);
 
-            switch (action) {
-                case GLFW_PRESS: {
-                    KeyPressedEvent event(key, 0);
-                    data.EventCallback(event);
-                    break;
-                }
+                               switch (action) {
+                               case GLFW_PRESS: {
+                                   KeyPressedEvent event(key, 0);
+                                   data.EventCallback(event);
+                                   break;
+                               }
 
-                case GLFW_RELEASE: {
-                    KeyReleasedEvent event(key);
-                    data.EventCallback(event);
-                    break;
-                }
+                               case GLFW_RELEASE: {
+                                   KeyReleasedEvent event(key);
+                                   data.EventCallback(event);
+                                   break;
+                               }
 
-                case GLFW_REPEAT: {
-                    KeyPressedEvent event(key, true);
-                    data.EventCallback(event);
-                    break;
-                }
-            }
-        });
+                               case GLFW_REPEAT: {
+                                   KeyPressedEvent event(key, true);
+                                   data.EventCallback(event);
+                                   break;
+                               }
+                               }
+                           });
 
         glfwSetCharCallback(_Window, [](GLFWwindow *window, unsigned int keycode) {
             WindowData &data = *(WindowData *)glfwGetWindowUserPointer(window);
@@ -173,21 +162,21 @@ namespace Exodia {
             data.EventCallback(event);
         });
 
-        glfwSetMouseButtonCallback(_Window, [](GLFWwindow *window, int button, int action, UNUSED int mods) {
+        glfwSetMouseButtonCallback(_Window, [](GLFWwindow *window, int button, int action, UNUSED(int mods)) {
             WindowData &data = *(WindowData *)glfwGetWindowUserPointer(window);
 
             switch (action) {
-                case GLFW_PRESS: {
-                    MouseButtonPressedEvent event(button);
-                    data.EventCallback(event);
-                    break;
-                }
+            case GLFW_PRESS: {
+                MouseButtonPressedEvent event(button);
+                data.EventCallback(event);
+                break;
+            }
 
-                case GLFW_RELEASE: {
-                    MouseButtonReleasedEvent event(button);
-                    data.EventCallback(event);
-                    break;
-                }
+            case GLFW_RELEASE: {
+                MouseButtonReleasedEvent event(button);
+                data.EventCallback(event);
+                break;
+            }
             }
         });
 
@@ -218,8 +207,7 @@ namespace Exodia {
         });
     }
 
-    void WindowsWindow::Shutdown()
-    {
+    void WindowsWindow::Shutdown() {
         EXODIA_PROFILE_FUNCTION(); // Performance instrumentation profiling for the function
 
         glfwDestroyWindow(_Window); // Destroy the GLFW window
@@ -230,8 +218,7 @@ namespace Exodia {
             glfwTerminate(); // Terminate GLFW if there is no more windows
     }
 
-    void WindowsWindow::OnUpdate()
-    {
+    void WindowsWindow::OnUpdate() {
         EXODIA_PROFILE_FUNCTION(); // Performance instrumentation profiling for the function
 
         glfwPollEvents();
@@ -243,8 +230,7 @@ namespace Exodia {
     // Setters //
     /////////////
 
-    void WindowsWindow::SetVSync(bool enabled)
-    {
+    void WindowsWindow::SetVSync(bool enabled) {
         EXODIA_PROFILE_FUNCTION();
 
         if (enabled)
@@ -255,8 +241,5 @@ namespace Exodia {
         _Data.VSync = enabled;
     }
 
-    bool WindowsWindow::IsVSync() const
-    {
-        return _Data.VSync;
-    }
-};
+    bool WindowsWindow::IsVSync() const { return _Data.VSync; }
+}; // namespace Exodia

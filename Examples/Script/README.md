@@ -29,7 +29,7 @@ class ScriptableEntity {
          *
          * @param ts The timestep.
          */
-        virtual void OnUpdate(UNUSED Timestep ts) {};
+        virtual void OnUpdate(UNUSED(Timestep ts)) {};
 
 
         template<typename Component>

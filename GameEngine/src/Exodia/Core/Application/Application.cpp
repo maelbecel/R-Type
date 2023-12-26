@@ -29,8 +29,8 @@ namespace Exodia {
     // Constructor & Destructor //
     //////////////////////////////
 
-    Application::Application(const ApplicationSpecification &spec) : _Specification(spec), _Running(true), _Minimized(false), _LastTime(0.0f)
-    {
+    Application::Application(const ApplicationSpecification &spec)
+        : _Specification(spec), _Running(true), _Minimized(false), _LastTime(0.0f) {
         EXODIA_PROFILE_FUNCTION();
 
         EXODIA_CORE_ASSERT(!_Instance, "Application already exists!");
@@ -38,10 +38,10 @@ namespace Exodia {
         _Instance = this;
 
         // Set working directory here
-		if (!_Specification.WorkingDirectory.empty())
-		    std::filesystem::current_path(_Specification.WorkingDirectory);
+        if (!_Specification.WorkingDirectory.empty())
+            std::filesystem::current_path(_Specification.WorkingDirectory);
 
-		_Window = Window::Create(WindowProps(_Specification.Name));
+        _Window = Window::Create(WindowProps(_Specification.Name));
 
         _Window->SetEventCallback(BIND_EVENT_FN(Application::OnEvent));
         _Window->SetVSync(false);
@@ -53,8 +53,7 @@ namespace Exodia {
         PushOverlay(_ImGuiLayer);
     }
 
-    Application::~Application()
-    {
+    Application::~Application() {
         EXODIA_PROFILE_FUNCTION();
 
         Renderer::Shutdown();
@@ -64,8 +63,7 @@ namespace Exodia {
     // Methods //
     /////////////
 
-    void Application::Run()
-    {
+    void Application::Run() {
         EXODIA_PROFILE_FUNCTION();
 
         while (_Running) {
@@ -86,7 +84,7 @@ namespace Exodia {
 
                 // TODO: Put this block in a Thread
                 _ImGuiLayer->Begin();
-                
+
                 {
                     EXODIA_PROFILE_SCOPE("LayerStack OnImGUIRender");
                     for (Layer *layer : _LayerStack)
@@ -99,15 +97,18 @@ namespace Exodia {
 
             _Window->OnUpdate();
         }
+
+        {
+            EXODIA_PROFILE_SCOPE("LayerStack OnDetach");
+
+            for (Layer *layer : _LayerStack)
+                layer->OnDetach();
+        }
     }
 
-    void Application::Close()
-    {
-        _Running = false;
-    }
+    void Application::Close() { _Running = false; }
 
-    void Application::OnEvent(Event &event)
-    {
+    void Application::OnEvent(Event &event) {
         EventDispatcher dispatcher(event);
 
         dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(Application::OnWindowClose));
@@ -120,30 +121,27 @@ namespace Exodia {
         }
     }
 
-    void Application::PushLayer(Layer *layer)
-    {
+    void Application::PushLayer(Layer *layer) {
         EXODIA_PROFILE_FUNCTION();
 
         _LayerStack.PushLayer(layer);
         layer->OnAttach();
     }
 
-    void Application::PushOverlay(Layer *overlay)
-    {
+    void Application::PushOverlay(Layer *overlay) {
         EXODIA_PROFILE_FUNCTION();
 
         _LayerStack.PushOverlay(overlay);
         overlay->OnAttach();
     }
 
-    bool Application::OnWindowClose(UNUSED WindowCloseEvent &event)
-    {
+    bool Application::OnWindowClose(UNUSED(WindowCloseEvent &event)) {
         _Running = false;
+
         return true;
     }
 
-    bool Application::OnWindowResize(WindowResizeEvent &event)
-    {
+    bool Application::OnWindowResize(WindowResizeEvent &event) {
         EXODIA_PROFILE_FUNCTION();
 
         if (event.GetWidth() == 0 || event.GetHeight() == 0) {
@@ -161,13 +159,7 @@ namespace Exodia {
     // Getters & Setters //
     ///////////////////////
 
-    ImGuiLayer *Application::GetImGuiLayer()
-    {
-        return _ImGuiLayer;
-    }
+    ImGuiLayer *Application::GetImGuiLayer() { return _ImGuiLayer; }
 
-    ApplicationSpecification Application::GetSpecification() const
-    {
-        return _Specification;
-    }
-};
+    ApplicationSpecification Application::GetSpecification() const { return _Specification; }
+}; // namespace Exodia

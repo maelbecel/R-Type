@@ -18,14 +18,16 @@ namespace Exodia {
     // Constructor & Destructor //
     //////////////////////////////
 
-    ContentBrowser::ContentBrowser(Ref<Project> project) : _Project(project), _ThumbnailCache(CreateRef<ThumbnailCache>(project)), _BaseDirectory(project->GetAssetDirectory()), _CurrentDirectory(_BaseDirectory), _LastDirectory(_BaseDirectory)
-    {
+    ContentBrowser::ContentBrowser(Ref<Project> project)
+        : _Project(project), _ThumbnailCache(CreateRef<ThumbnailCache>(project)),
+          _BaseDirectory(project->GetAssetDirectory()), _CurrentDirectory(_BaseDirectory),
+          _LastDirectory(_BaseDirectory) {
         _TreeNodes.push_back(TreeNode(".", 0));
 
         _DirectoryIcon = TextureImporter::LoadTexture2D("./Assets/Icons/ContentBrowser/DirectoryIcon.png");
-        _FileIcon      = TextureImporter::LoadTexture2D("./Assets/Icons/ContentBrowser/FileIcon.png");
-        _GoBack        = TextureImporter::LoadTexture2D("./Assets/Icons/ContentBrowser/GoBack.png");
-        _GoForward     = TextureImporter::LoadTexture2D("./Assets/Icons/ContentBrowser/GoForward.png");
+        _FileIcon = TextureImporter::LoadTexture2D("./Assets/Icons/ContentBrowser/FileIcon.png");
+        _GoBack = TextureImporter::LoadTexture2D("./Assets/Icons/ContentBrowser/GoBack.png");
+        _GoForward = TextureImporter::LoadTexture2D("./Assets/Icons/ContentBrowser/GoForward.png");
 
         RefreshTreeAsset();
     }
@@ -34,8 +36,7 @@ namespace Exodia {
     // Methods //
     /////////////
 
-    void ContentBrowser::OnImGuiRender()
-    {
+    void ContentBrowser::OnImGuiRender() {
         ImGui::Begin("Content Browser");
 
         DrawHeaders();
@@ -43,7 +44,7 @@ namespace Exodia {
         static float padding = 45.0f;
         static float thumbnailSize = 150.0f;
 
-        float cellSize   = thumbnailSize + padding;
+        float cellSize = thumbnailSize + padding;
         float panelWidth = ImGui::GetContentRegionAvail().x;
 
         int columnCount = (int)(panelWidth / cellSize);
@@ -59,12 +60,11 @@ namespace Exodia {
         ImGui::End();
     }
 
-    void ContentBrowser::DrawHeaders()
-    {
+    void ContentBrowser::DrawHeaders() {
         if (_CurrentDirectory != std::filesystem::path(_BaseDirectory)) {
             ImGui::SameLine();
 
-            if (ImGui::ImageButton(reinterpret_cast<ImTextureID>(_GoBack->GetRendererID()), { 15, 15 }, { 0, 1 }, { 1, 0 })) {
+            if (ImGui::ImageButton(reinterpret_cast<ImTextureID>(_GoBack->GetRendererID()), {15, 15}, {0, 1}, {1, 0})) {
                 _LastDirectory = _CurrentDirectory;
                 _CurrentDirectory = _CurrentDirectory.parent_path();
             }
@@ -73,7 +73,8 @@ namespace Exodia {
         if (_LastDirectory != _CurrentDirectory) {
             ImGui::SameLine();
 
-            if (ImGui::ImageButton(reinterpret_cast<ImTextureID>(_GoForward->GetRendererID()), { 15, 15 }, { 0, 1 }, { 1, 0 }))
+            if (ImGui::ImageButton(reinterpret_cast<ImTextureID>(_GoForward->GetRendererID()), {15, 15}, {0, 1},
+                                   {1, 0}))
                 _CurrentDirectory = _LastDirectory;
         }
 
@@ -85,13 +86,12 @@ namespace Exodia {
         ImGui::Separator();
     }
 
-    void ContentBrowser::DrawFile(float thumbnailSize)
-    {
+    void ContentBrowser::DrawFile(float thumbnailSize) {
         for (auto &directoryEntry : std::filesystem::directory_iterator(_CurrentDirectory)) {
-            const auto &path         = directoryEntry.path();
-            std::string filename     = path.filename().string();
+            const auto &path = directoryEntry.path();
+            std::string filename = path.filename().string();
             Ref<Texture2D> thumbnail = _DirectoryIcon;
-            bool isDirectory         = directoryEntry.is_directory();
+            bool isDirectory = directoryEntry.is_directory();
 
             if (_SearchFilter.length() > 0 && filename.find(_SearchFilter) == std::string::npos)
                 continue;
@@ -108,7 +108,8 @@ namespace Exodia {
             }
 
             ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
-            ImGui::ImageButton(reinterpret_cast<ImTextureID>(thumbnail->GetRendererID()), { thumbnailSize, thumbnailSize }, { 0, 1 }, { 1, 0 });
+            ImGui::ImageButton(reinterpret_cast<ImTextureID>(thumbnail->GetRendererID()),
+                               {thumbnailSize, thumbnailSize}, {0, 1}, {1, 0});
 
             if (!isDirectory && ImGui::BeginPopupContextItem()) {
                 if (ImGui::MenuItem("Import")) {
@@ -141,8 +142,7 @@ namespace Exodia {
         }
     }
 
-    void ContentBrowser::RefreshTreeAsset()
-    {
+    void ContentBrowser::RefreshTreeAsset() {
         const auto &assetRegistry = _Project->GetEditorAssetManager()->GetAssetRegistry();
 
         for (const auto &[handle, spec] : assetRegistry) {
@@ -171,8 +171,7 @@ namespace Exodia {
     // Getters & Setters //
     ///////////////////////
 
-    AssetHandle ContentBrowser::GetAssetFromPathInTree(const std::filesystem::path &path)
-    {
+    AssetHandle ContentBrowser::GetAssetFromPathInTree(const std::filesystem::path &path) {
         const auto &assetRegistry = _Project->GetEditorAssetManager()->GetAssetRegistry();
 
         for (const auto &[handle, spec] : assetRegistry) {
@@ -183,4 +182,4 @@ namespace Exodia {
         EXODIA_CORE_ASSERT(false, "Asset not found !");
         return 0;
     }
-};
+}; // namespace Exodia
