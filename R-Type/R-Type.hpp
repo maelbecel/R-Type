@@ -21,6 +21,7 @@
 #include "src/Component/Health.hpp"
 
 #include "src/Scripts/BulletPlayer/BulletPlayer.hpp"
+#include "src/Scripts/BulletEnnemy/BulletEnnemy.hpp"
 #include "src/Scripts/Player/Player.hpp"
 #include "src/Scripts/Pata-pata/Pata-pata.hpp"
 
@@ -57,7 +58,7 @@ namespace RType {
 
         // -- Register R-Type scripts ------------------------------------------
 
-        project->RegisterScript("Star", []() -> Exodia::ScriptableEntity * { return new Exodia::Star(); });
+        project->RegisterScript("Star", []() -> Exodia::ScriptableEntity * { return new RType::Star(); });
 
         project->RegisterScript("PataPata", []() -> Exodia::ScriptableEntity * { return new PataPata(); });
 
@@ -65,7 +66,7 @@ namespace RType {
                                 []() -> Exodia::ScriptableEntity * { return new RType::BulletPlayer(); });
 
         project->RegisterScript("BulletEnnemy",
-                                []() -> Exodia::ScriptableEntity * { return new Exodia::BulletEnnemy(); });
+                                []() -> Exodia::ScriptableEntity * { return new RType::BulletEnnemy(); });
 
         project->RegisterScript("Player", []() -> Exodia::ScriptableEntity * { return new RType::Player(); });
     }

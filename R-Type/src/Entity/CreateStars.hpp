@@ -9,7 +9,7 @@
 #define CREATESTARS_HPP_
 
 #include "Component/Clock.hpp"
-#include "Scripts/Star.hpp"
+#include "Scripts/Star/Star.hpp"
 #include "SceneType.hpp"
 
 namespace Exodia {

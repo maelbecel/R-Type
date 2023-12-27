@@ -9,6 +9,8 @@
 #include "R-Type.hpp"
 #include <thread>
 
+using namespace RType;
+
 namespace Exodia {
 
     //////////////////////////////

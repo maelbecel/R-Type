@@ -245,6 +245,7 @@ namespace Exodia {
 
         // TODO: When text rendering will be implemented (in Renderer2D);
 
+        _World->LockMutex();
         _World->ForEach<SoundComponent>([&](Entity *entity, auto sound) {
             auto &sc = sound.Get();
 
@@ -259,6 +260,7 @@ namespace Exodia {
                 Renderer2D::PlaySound(sc.Handle);
             }
         });
+        _World->UnlockMutex();
     }
 
     ///////////////////////

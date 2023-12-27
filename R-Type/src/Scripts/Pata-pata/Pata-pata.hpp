@@ -12,7 +12,7 @@
 #include "Component/Animation.hpp"
 #include "Component/Clock.hpp"
 #include "Component/Health.hpp"
-#include "Scripts/BulletEnnemy.hpp"
+#include "Scripts/BulletEnnemy/BulletEnnemy.hpp"
 
 #include <cmath>
 #include <random>

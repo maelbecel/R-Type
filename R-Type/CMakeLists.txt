@@ -26,6 +26,9 @@ set(SOURCES_GAME_ENGINE
     src/Scripts/Player/Player.cpp
     src/Scripts/Pata-pata/Pata-pata.cpp
     src/Scripts/BulletPlayer/BulletPlayer.cpp
+    src/Scripts/BulletEnnemy/BulletEnnemy.cpp
+    src/Scripts/Star/Star.cpp
+    src/System/AnimationSystem.cpp
 
         # -- Events source files
 
