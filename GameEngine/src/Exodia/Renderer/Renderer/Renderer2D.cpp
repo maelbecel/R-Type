@@ -720,11 +720,11 @@ namespace Exodia {
             if (c == 'm')
                 x -= glyph.Width / 2 * fsScale + params.Kerning;
             else if (c == 'i' || c == 'l')
-                x += glyph.Width * 1.25 * fsScale + params.Kerning;
+                x += glyph.Width * 1.25f * fsScale + params.Kerning;
             else if (c == 'r')
                 x += glyph.Width * fsScale + params.Kerning;
             else if (c == 'E')
-                x += glyph.Width * 0.75 * fsScale + params.Kerning;
+                x += glyph.Width * 0.75f * fsScale + params.Kerning;
 
             glm::vec2 texCoordMin(glyph.TextureCoord);
             glm::vec2 texCoordMax(glyph.TextureCoord + fsScale);
