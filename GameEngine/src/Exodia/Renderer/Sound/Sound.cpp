@@ -19,17 +19,16 @@ namespace Exodia {
     // Factory //
     /////////////
 
-    Ref<Sound2D> Sound2D::Create(const std::string &path)
-    {
+    Ref<Sound2D> Sound2D::Create(const std::string &path) {
         RendererAPI::API api = Renderer::GetAPI();
 
         switch (api) {
-            case RendererAPI::API::None:
-                return nullptr;
-            case RendererAPI::API::OpenGL:
-                return CreateRef<OpenGLSound>(path);
-            default:
-                break;
+        case RendererAPI::API::None:
+            return nullptr;
+        case RendererAPI::API::OpenGL:
+            return CreateRef<OpenGLSound>(path);
+        default:
+            break;
         }
 
         EXODIA_CORE_ASSERT(false, "Unknown RendererAPI !");
@@ -40,13 +39,7 @@ namespace Exodia {
     // Getters & Setters //
     ///////////////////////
 
-    AssetType Sound2D::GetStaticType()
-    {
-        return AssetType::Sound2D;
-    }
+    AssetType Sound2D::GetStaticType() { return AssetType::Sound2D; }
 
-    AssetType Sound2D::GetType() const
-    {
-        return GetStaticType();
-    }
-};
+    AssetType Sound2D::GetType() const { return GetStaticType(); }
+}; // namespace Exodia

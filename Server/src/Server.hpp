@@ -6,49 +6,60 @@
 */
 
 #ifndef SERVER_HPP_
-    #define SERVER_HPP_
+#define SERVER_HPP_
 
-    #include "Exodia.hpp"
-    #include "SceneType.hpp"
+#include "Exodia.hpp"
+#include "SceneType.hpp"
+#include "User/User.hpp"
 
 namespace Exodia {
 
     class Server {
-        public:
-            Server(short port);
-            ~Server();
-            void HandleCommand(const std::string &command);
-            void Init();
-            void Run();
-            void Update();
-            void Stop() { _running = false; };
 
-        public:
-            void RegisterComponent(std::string name, std::function<IComponentContainer *(Buffer)> factory);
+        //////////////////////////////
+        // Constructor & Destructor //
+        //////////////////////////////
+      public:
+        Server(short port);
+        ~Server();
 
-        protected:
+        /////////////
+        // Methods //
+        /////////////
+      public:
+        void HandleCommand(const std::string &command);
+        void Init();
+        void Run();
+        void Update();
+        void Stop();
 
-        public:
-            inline static std::map<SceneType, std::shared_ptr<Exodia::Scene>> _World;
-            inline static SceneType _currentScene;
+        ////////////////
+        // Attributes //
+        ////////////////
+      public:
+        inline static std::map<SceneType, Ref<Scene>> Scenes;
+        inline static SceneType CurrentScene = SceneType::GAME;
+        uint64_t count = 0;
 
-        private:
-            // WARNING: This is a temporary solution
-            Exodia::World *_worldNetwork = Exodia::World::CreateWorld();
-            std::unordered_map<std::string, std::function<IComponentContainer *(Buffer)>> _ComponentFactory;
+      private:
+        // TODO: WARNING: This is a temporary solution
+        World *_WorldNetwork;
 
-            // Network is used to manage the network with the clients
-            Network::IOContextManager _ioContextManager;
-            Network::Network _network;
+        // Network is used to manage the network with the clients
+        Network::IOContextManager _IOContextManager;
+        Network::Network _Network;
 
-            // Timestep is used to manage the time
-            Timer _Timer;
-            float _lastTime;
+        // Timestep is used to manage the time
+        Timer _Timer;
+        float _LastTime;
 
-            bool _running = true;
+        bool _Running;
 
-            std::thread _inputThread;
+        std::thread _InputThread;
+
+        void CheckForNewClients();
+        std::vector<Exodia::User> _Users;
     };
-}
+}; // namespace Exodia
 
 #endif /* !SERVER_HPP_ */

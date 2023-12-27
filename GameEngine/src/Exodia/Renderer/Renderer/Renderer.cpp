@@ -24,28 +24,22 @@ namespace Exodia {
     // Methods //
     /////////////
 
-    void Renderer::Init()
-    {
+    void Renderer::Init() {
         EXODIA_PROFILE_FUNCTION(); // Performance instrumentation profiling for the function
 
         RenderCommand::Init();
         Renderer2D::Init();
     }
 
-    void Renderer::Shutdown()
-    {
-        Renderer2D::Shutdown();
-    }
+    void Renderer::Shutdown() { Renderer2D::Shutdown(); }
 
-    void Renderer::BeginScene(OrthographicCamera &camera)
-    {
+    void Renderer::BeginScene(OrthographicCamera &camera) {
         _SceneData->ViewProjectionMatrix = camera.GetViewProjectionMatrix();
     }
 
-    void Renderer::EndScene() {};
+    void Renderer::EndScene(){};
 
-    void Renderer::Submit(const Ref<Shader> &shader, const Ref<VertexArray> &vertexArray, const glm::mat4 &transform)
-    {
+    void Renderer::Submit(const Ref<Shader> &shader, const Ref<VertexArray> &vertexArray, const glm::mat4 &transform) {
         shader->Bind();
 
         shader->SetMat4("u_ViewProjection", _SceneData->ViewProjectionMatrix);
@@ -56,8 +50,5 @@ namespace Exodia {
         RenderCommand::DrawIndexed(vertexArray);
     }
 
-    void Renderer::OnWindowResize(uint32_t width, uint32_t height)
-    {
-        RenderCommand::SetViewport(0, 0, width, height);
-    }
-};
+    void Renderer::OnWindowResize(uint32_t width, uint32_t height) { RenderCommand::SetViewport(0, 0, width, height); }
+}; // namespace Exodia

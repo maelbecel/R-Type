@@ -6,13 +6,13 @@
 */
 
 #ifndef ENTITYITERATOR_HPP_
-    #define ENTITYITERATOR_HPP_
+#define ENTITYITERATOR_HPP_
 
-    // Exodia Utils includes
-    #include "Utils/CrossPlatform.hpp"
+// Exodia Utils includes
+#include "Utils/CrossPlatform.hpp"
 
-    // External includes
-    #include <cstddef>
+// External includes
+#include <cstddef>
 
 namespace Exodia {
 
@@ -24,51 +24,47 @@ namespace Exodia {
         /////////////////
         // Constructor //
         /////////////////
-        public:
-
-            EntityIterator(World *world, size_t index, bool isEnd, bool includePendingDestroy);
+      public:
+        EntityIterator(World *world, size_t index, bool isEnd, bool includePendingDestroy);
 
         ///////////////////////
         // Getters & Setters //
         ///////////////////////
-        public:
+      public:
+        size_t GetIndex() const;
 
-            size_t GetIndex() const;
+        bool IsEnd() const;
 
-            bool IsEnd() const;
+        bool IncludePendingDestroy() const;
 
-            bool IncludePendingDestroy() const;
+        World *GetWorld() const;
 
-            World *GetWorld() const;
-
-            Entity *Get() const;
+        Entity *Get() const;
 
         ///////////////
         // Operators //
         ///////////////
-        public:
+      public:
+        Entity *operator*() const;
 
-            Entity *operator*() const;
-
-            EntityIterator &operator++();
+        EntityIterator &operator++();
 
         ////////////////
         // Comparator //
         ////////////////
-        public:
-
-            bool operator==(const EntityIterator &other) const;
-            bool operator!=(const EntityIterator &other) const;
+      public:
+        bool operator==(const EntityIterator &other) const;
+        bool operator!=(const EntityIterator &other) const;
 
         ////////////////
         // Attributes //
         ////////////////
-        private:
-            Exodia::World *_World;
-            size_t                _Index;
-            bool                 _IsEnd;
-            bool                 _IncludePendingDestroy;
+      private:
+        Exodia::World *_World;
+        size_t _Index;
+        bool _IsEnd;
+        bool _IncludePendingDestroy;
     };
-};
+}; // namespace Exodia
 
 #endif /* !ENTITYITERATOR_HPP_ */

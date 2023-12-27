@@ -9,24 +9,19 @@
 #include <asio.hpp>
 #include "Exodia.hpp"
 
-void my_callback(const std::string &message)
-{
+void my_callback(const std::string &message) {
     (void)message;
     std::cout << "Message received: " << message << std::endl;
 }
 
-int main(int ac, char **av)
-{
-    (void)ac;
-    (void)av;
-
+int main(void) {
     Exodia::Log::Init();
 
     std::cout << "Client have been launched!" << std::endl;
 
     try {
         // Server main
-                 // Server main
+        // Server main
         Exodia::Network::IOContextManager ioContextManager;
 
         // Define a local endpoint to listen on
@@ -37,11 +32,11 @@ int main(int ac, char **av)
         Exodia::Network::UDPSocket serverSocket(ioContextManager, localEndpoint);
 
         // serverSocket.receive(my_callback);
-        Exodia::Network::Header header(1, 1, 2, 2);
+        Exodia::Network::Header header(1, 1, 2);
         Exodia::Network::Packet packet;
 
         std::cout << "Header" << header << std::endl;
-        packet.setHeader(header);
+        packet.SetHeader(header);
 
         std::vector<char> buffer(1468, 1);
         int packet_received = 8;
@@ -49,9 +44,9 @@ int main(int ac, char **av)
         std::memcpy(buffer.data(), &packet_received, sizeof(int));
         std::memcpy(buffer.data() + sizeof(int), &packet_sent, sizeof(int));
 
-        packet.setContent(buffer);
+        packet.SetContent(buffer);
 
-        serverSocket.send(packet.getBuffer(), 1468, serverEndpoint);
+        serverSocket.Send(packet.GetBuffer(), 1468, serverEndpoint);
         // Run the IO context to initiate asynchronous operations
         ioContextManager.run();
 

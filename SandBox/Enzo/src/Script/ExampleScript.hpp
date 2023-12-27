@@ -6,21 +6,17 @@
 */
 
 #ifndef EXAMPLESCRIPT_HPP_
-    #define EXAMPLESCRIPT_HPP_
+#define EXAMPLESCRIPT_HPP_
 
-    #include "Exodia.hpp"
+#include "Exodia.hpp"
 
 namespace Exodia {
 
     class ExampleScript : public ScriptableEntity {
 
-        public:
-
-            void OnCreate() override
-            {
-                std::cout << "Hello world !" << std::endl;
-            }
+      public:
+        void OnCreate() override { std::cout << "Hello world !" << std::endl; }
     };
-};
+}; // namespace Exodia
 
 #endif /* !EXAMPLESCRIPT_HPP_ */

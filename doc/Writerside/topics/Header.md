@@ -55,9 +55,9 @@ It fills the buffer with the header.
 
 The method takes the following parameters:
 
-| Name   | Type               | Description        |
-|--------|--------------------|--------------------|
-| buffer | std::vector<char>& | The buffer         |
+| Name   | Type                 | Description        |
+|--------|----------------------|--------------------|
+| buffer | std::vector\<char\>& | The buffer         |
 
 Here is an example of how to use it:
 

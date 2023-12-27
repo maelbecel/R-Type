@@ -9,15 +9,12 @@
 #include <asio.hpp>
 #include "Exodia.hpp"
 
-
-void my_callback(const std::string &message)
-{
+void my_callback(const std::string &message) {
     (void)message;
     std::cout << "Message received: " << message << std::endl;
 }
 
-int main(int ac, char **av)
-{
+int main(int ac, char **av) {
     (void)ac;
     (void)av;
 

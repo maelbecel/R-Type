@@ -17,8 +17,5 @@ namespace Exodia {
     // Getters & Setters //
     ///////////////////////
 
-    float Time::GetTime()
-    {
-        return (float)glfwGetTime();
-    }
-};
+    float Time::GetTime() { return (float)glfwGetTime(); }
+}; // namespace Exodia

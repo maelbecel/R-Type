@@ -1,3 +1,3 @@
 # Client
 
-Start typing here...
+Client documentation will come soon

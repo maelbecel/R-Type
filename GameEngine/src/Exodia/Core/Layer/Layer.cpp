@@ -18,25 +18,19 @@ namespace Exodia {
     // Constructor & Destructor //
     //////////////////////////////
 
-    Layer::Layer(const std::string &name) : _DebugName(name) {};
+    Layer::Layer(const std::string &name) : _DebugName(name){};
 
     /////////////
     // Methods //
     /////////////
 
-    void Layer::OnAttach() {};
+    void Layer::OnAttach(){};
 
-    void Layer::OnDetach() {};
+    void Layer::OnDetach(){};
 
-    void Layer::OnUpdate(Timestep ts)
-    {
-        (void)ts;
-    }
+    void Layer::OnUpdate(Timestep ts) { (void)ts; }
 
-    void Layer::OnImGUIRender() {};
+    void Layer::OnImGUIRender(){};
 
-    void Layer::OnEvent(Event &event)
-    {
-        (void)event;
-    }
-};
+    void Layer::OnEvent(Event &event) { (void)event; }
+}; // namespace Exodia
