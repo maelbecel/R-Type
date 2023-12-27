@@ -48,7 +48,7 @@ Timestamp - 32 bit (4 bytes) float representing the time in seconds.
 Event - 32 bit (4 bytes) unsigned integer representing the event type.
 Id - 64 bit (8 bytes) unsigned integer representing the id of the command
     use for implementing acknoledgement.
-GameEvents - - Null terminated string prefixed with a 32 bit (4 bytes) unsigned
+GameEvents - Null terminated string prefixed with a 32 bit (4 bytes) unsigned
     integer representing the length of the string.
 Size - 64 bit (8 bytes) unsigned integer representing the size of the content
     of the packet.

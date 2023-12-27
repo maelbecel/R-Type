@@ -323,16 +323,23 @@ namespace Exodia::Network {
         // }
 
         std::unordered_map<unsigned char,
-                           std::function<void(const std::vector<char>, size_t, asio::ip::udp::endpoint senderEndpoint,
-                                              Exodia::Network::Header _header)>>
-            commands;
+            std::function<void(const std::vector<char>, size_t, asio::ip::udp::endpoint senderEndpoint,
+            Exodia::Network::Header _header)>> commands;
+
         commands[0x00] = COMMAND_NETWORK(Network::ReceivePacketInfo); // Packet info
         commands[0x01] = COMMAND_NETWORK(Network::ReceiveAck); // Packet Acknowledgement
         commands[0x02] = COMMAND_NETWORK(Network::ReceiveConnectAccept); // Accept client connection
-        commands[0x81] = COMMAND_NETWORK(Network::ReceiveConnect); // Ask for connection
-        commands[0x8b] = COMMAND_NETWORK(Network::ReceiveEvent); // Send an event
+        commands[0x03] = COMMAND_NETWORK(Network::ReceiveConnectReject); // Reject client connection
+        commands[0x0b] = COMMAND_NETWORK(Network::ReceiveSystemLoad); // Send system load
         commands[0x0c] = COMMAND_NETWORK(Network::ReceiveComponentOf); // Send one component of an entity
+        commands[0x0d] = COMMAND_NETWORK(Network::ReceiveGameEvent); // Send delete component of an entity
         commands[0x0e] = COMMAND_NETWORK(Network::ReceiveDeleteEntity); // Send delete entity
+        commands[0x0f] = COMMAND_NETWORK(Network::ReceiveDeleteComponentOf); // Send delete component of an entity
+        commands[0x10] = COMMAND_NETWORK(Network::ReceiveImportantEvent); // Send an important event
+        commands[0x81] = COMMAND_NETWORK(Network::ReceiveConnect); // Ask for connection
+        commands[0x82] = COMMAND_NETWORK(Network::ReceiveDisconnect); // Reject client connection
+        commands[0x8b] = COMMAND_NETWORK(Network::ReceiveEvent); // Send an event
+
         commands[header.getCommand()](content, header.getSize(), senderEndpoint, header);
     }
 }; // namespace Exodia::Network

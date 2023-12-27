@@ -25,6 +25,13 @@ namespace Exodia::Network {
         return offset + size;
     }
 
+    /**
+     * @brief Send packet wheter we are the server or the client
+     *
+     * @param packet (Type: Packet) The packet to send
+     *
+     * @return void
+    */
     void Network::SendPacket(Packet packet) {
         if (_connections.size() > 0) {
             for (auto &connection : _connections)
@@ -33,6 +40,13 @@ namespace Exodia::Network {
             _server_connection.SendPacket(_socket, packet);
     }
 
+    /**
+     * @brief Send an important packet wheter we are the server or the client so it will be resend if not ack
+     *
+     * @param packet (Type: Packet) The packet to send
+     *
+     * @return void
+    */
     void Network::SendImportantPacket(Packet packet) {
         if (_connections.size() > 0) { // If we are the server
             for (auto &connection : _connections) {
@@ -242,7 +256,11 @@ namespace Exodia::Network {
 
     void Network::SendDisconnect()
     {
-        //TODO: Send disconnect
+        Exodia::Network::Packet packet(0x82);
+        std::vector<char> buffer(0);
+
+        packet.SetContent(buffer);
+        SendPacket(packet);
     }
 
     void Network::ResendNeedAck() {
