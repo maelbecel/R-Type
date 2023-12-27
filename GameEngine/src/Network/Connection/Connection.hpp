@@ -57,6 +57,7 @@ class Connection {
     int _lastId = -1;
     int _sendPacket;
     int _receivedPacket;
+    uint64_t worldId = 0;
 };
 
 #endif /* !CONNECTION_HPP_ */

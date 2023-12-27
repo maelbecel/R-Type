@@ -145,7 +145,7 @@ namespace Exodia {
             }
 
           private:
-            World *_world;
+            std::unordered_map<uint64_t, World *> _worlds;
             UDPSocket _socket;
             std::map<std::string, Connection> _connections;
             Connection _server_connection;
