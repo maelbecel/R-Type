@@ -10,6 +10,7 @@
 
 // R-Type Games includes
 #include "R-Type.hpp"
+#include "Layer/GameLayer.hpp"
 
 namespace RType {
 
@@ -61,10 +62,12 @@ namespace RType {
         int key = event.GetKeyCode();
 
         if (key == Key::ENTER) {
-            // -- Stop the scene -- //
-            // -- Go to the next scene -- //
+            Ref<GameLayer> game = GameLayer::GetInstance();
 
-            _Scene->OnRuntimeStop();
+            if (!game)
+                return false;
+
+            game->SetScene(SceneType::MENU, true);
             return true;
         }
         return false;

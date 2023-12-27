@@ -26,8 +26,9 @@ set(SOURCES
     src/Layer/GameLayer.cpp
 
         # R-Type GameScene sources files
-    
+
     src/GameScene/LoadingScene.cpp
+    src/GameScene/MenuScene.cpp
 )
 
 # Set include directories for the Exodia Game Engine Application

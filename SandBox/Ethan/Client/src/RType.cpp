@@ -20,7 +20,9 @@ namespace RType {
 
             RTypeApplication(const Exodia::ApplicationSpecification &spec) : Application(spec)
             {
-                PushLayer(new GameLayer());
+                Ref<Exodia::Layer> gameLayer = GameLayer::New();
+
+                PushLayer(gameLayer.get());
             }
 
             ~RTypeApplication() = default;
