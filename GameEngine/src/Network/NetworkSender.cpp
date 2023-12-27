@@ -10,6 +10,20 @@
 
 namespace Exodia::Network {
 
+    /**
+     * @brief Fill a buffer with data and return the offset after filling
+     *
+     * @param buffer (Type: std::vector<char> &) The buffer to fill
+     * @param offset (Type: size_t) The offset to start filling the buffer
+     * @param data (Type: void *) The data to put in the buffer
+     * @param size (Type: size_t) The size of the data
+     *
+     * @return size_t The offset after filling the buffer
+     */
+    size_t Network::FillData(std::vector<char> &buffer, size_t offset, void *data, size_t size) {
+        std::memcpy(buffer.data() + offset, data, size);
+        return offset + size;
+    }
 
     void Network::SendPacket(Packet packet) {
         if (_connections.size() > 0) {
@@ -89,21 +103,6 @@ namespace Exodia::Network {
             packet.SetContent(buffer);
             _server_connection.SendPacket(_socket, packet);
         }
-    }
-
-    /**
-     * @brief Fill a buffer with data and return the offset after filling
-     *
-     * @param buffer (Type: std::vector<char> &) The buffer to fill
-     * @param offset (Type: size_t) The offset to start filling the buffer
-     * @param data (Type: void *) The data to put in the buffer
-     * @param size (Type: size_t) The size of the data
-     *
-     * @return size_t The offset after filling the buffer
-     */
-    size_t Network::FillData(std::vector<char> &buffer, size_t offset, void *data, size_t size) {
-        std::memcpy(buffer.data() + offset, data, size);
-        return offset + size;
     }
 
     /**

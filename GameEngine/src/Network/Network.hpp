@@ -63,13 +63,19 @@ namespace Exodia {
             // Methods //
             /////////////
             void Loop();
-            void ReceivePacketInfo(RECEIVE_ARG);    // 0x00
-            void ReceiveAck(RECEIVE_ARG);           // 0x01
-            void ReceiveConnectAccept(RECEIVE_ARG); // 0x02
-            void ReceiveComponentOf(RECEIVE_ARG);   // 0x0c
-            void ReceiveDeleteEntity(RECEIVE_ARG);  // 0x0e
-            void ReceiveConnect(RECEIVE_ARG);       // 0x81
-            void ReceiveEvent(RECEIVE_ARG);         // 0x82
+            void ReceivePacketInfo(RECEIVE_ARG);        // 0x00
+            void ReceiveAck(RECEIVE_ARG);               // 0x01
+            void ReceiveConnectAccept(RECEIVE_ARG);     // 0x02
+            void ReceiveConnectReject(RECEIVE_ARG);     // 0x03
+            void ReceiveSystemLoad(RECEIVE_ARG);        // 0x0b
+            void ReceiveComponentOf(RECEIVE_ARG);       // 0x0c
+            void ReceiveGameEvent(RECEIVE_ARG);         // 0x0d
+            void ReceiveDeleteEntity(RECEIVE_ARG);      // 0x0e
+            void ReceiveDeleteComponentOf(RECEIVE_ARG); // 0x0f
+            void ReceiveImportantEvent(RECEIVE_ARG);    // 0x10
+            void ReceiveConnect(RECEIVE_ARG);           // 0x81
+            void ReceiveDisconnect(RECEIVE_ARG);        // 0x82
+            void ReceiveEvent(RECEIVE_ARG);             // 0x8b
 
             void SendPacket(Exodia::Network::Packet packet);
             void SendImportantPacket(Exodia::Network::Packet packet);
