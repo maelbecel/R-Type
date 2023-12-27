@@ -9,6 +9,7 @@
 #include <imgui.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <sstream>
 
 namespace Exodia {
 
@@ -151,7 +152,11 @@ namespace Exodia {
                 auto &sc = script.Get();
                 auto &tc = tag.Get();
 
-                if ((tc.Tag.compare("Player_" + _Network->id) == 0) && sc.Instance != nullptr) {
+                std::ostringstream oss;
+                oss << _Network->GetId();
+                std::string player = "Player_" + oss.str();
+
+                if ((tc.Tag.compare(player) == 0) && sc.Instance != nullptr) {
                     sc.Instance->OnKeyPressed(key);
 
                     _Network->SendEvent(key, true);
@@ -174,7 +179,11 @@ namespace Exodia {
                 auto &sc = script.Get();
                 auto &tc = tag.Get();
 
-                if ((tc.Tag.compare("Player_" + _Network->id) == 0) && sc.Instance != nullptr) {
+                std::ostringstream oss;
+                oss << _Network->GetId();
+                std::string player = "Player_" + oss.str();
+
+                if ((tc.Tag.compare(player) == 0) && sc.Instance != nullptr) {
                     sc.Instance->OnKeyReleased(key);
 
                     _Network->SendEvent(key, false);

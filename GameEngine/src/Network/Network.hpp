@@ -26,6 +26,7 @@ namespace Exodia {
 
         #define COMMAND_NETWORK(x) std::bind(&x, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4);
         #define RECEIVE_ARG const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint, Exodia::Network::Header header
+        #define STRING_FROM_ENDPOINT(x) x.address().to_string() + ":" + std::to_string(x.port())
 
         class Network {
           public:
@@ -116,9 +117,9 @@ namespace Exodia {
                 return -1;
             }
 
-            UDPSocket &GetSocket() { return _socket; }
+            uint64_t GetId() { return id; }
 
-            std::string id = "0";
+            UDPSocket &GetSocket() { return _socket; }
 
           private:
             void ReceivePacketInfo(RECEIVE_ARG);        // 0x00
@@ -156,7 +157,9 @@ namespace Exodia {
             }
 
           private:
+            uint64_t id = 0;
             World *_world;
+            // std::unordered_map<uint64_t, World *> _gameInstances;
             UDPSocket _socket;
             std::map<std::string, Connection> _connections;
             Connection _server_connection;

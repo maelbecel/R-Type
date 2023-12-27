@@ -75,12 +75,8 @@ namespace Exodia::Network {
      */
     void Network::ReceiveConnectAccept(RECEIVE_ARG) {
         (void)senderEndpoint;
-        std::vector<char> buffer(size, 0);
-        std::memcpy(buffer.data(), message.data(), size);
-        std::string id(buffer.begin(), buffer.end());
+        std::memcpy(&this->id, message.data(), sizeof(unsigned long));
         std::cout << "Receive accept connect with id :" << id << std::endl;
-        this->id = id;
-        std::cout << "Receive accept connect" << std::endl;
     }
 
     void Network::ReceiveConnectReject(RECEIVE_ARG) {
@@ -210,29 +206,29 @@ namespace Exodia::Network {
         (void)size;
 
         // Check if already Connected
-        if (_connections.find(senderEndpoint.address().to_string() + ":" + std::to_string(senderEndpoint.port())) !=
+        if (_connections.find(STRING_FROM_ENDPOINT(senderEndpoint)) !=
             _connections.end()) {
             EXODIA_CORE_WARN("Network::ReceiveConnect() - Already connected to " +
-                             senderEndpoint.address().to_string() + ":" + std::to_string(senderEndpoint.port()));
+                             STRING_FROM_ENDPOINT(senderEndpoint));
             return;
         }
 
         // Adding id to the buffer
-        std::vector<char> buffer(0);
-        std::string id = _connections.size() > 0 ? std::to_string(_connections.size()) : "0";
-        buffer = std::vector<char>(id.begin(), id.end());
+        std::vector<char> buffer(sizeof(uint64_t));
+        uint64_t id = _connections.size() > 0 ? _connections.size() : 0;
+        std::cout << "Receive connect with id :" << id << std::endl;
+        std::memcpy(buffer.data(), &id, sizeof(uint64_t));
 
-        const std::string name = senderEndpoint.address().to_string() + ":" + std::to_string(senderEndpoint.port());
+        const std::string name = STRING_FROM_ENDPOINT(senderEndpoint);
         auto find = _connections.find(name);
         if (find == _connections.end())
-            _connections[senderEndpoint.address().to_string() + ":" + std::to_string(senderEndpoint.port())] =
+            _connections[STRING_FROM_ENDPOINT(senderEndpoint)] =
                 Connection(senderEndpoint);
-        std::string connect =
-            "Connected to " + senderEndpoint.address().to_string() + ":" + std::to_string(senderEndpoint.port());
+        std::string connect = "Connected to " + STRING_FROM_ENDPOINT(senderEndpoint);
         EXODIA_CORE_INFO(connect);
 
         Connection connection =
-            _connections[senderEndpoint.address().to_string() + ":" + std::to_string(senderEndpoint.port())];
+            _connections[STRING_FROM_ENDPOINT(senderEndpoint)];
         connection.AddReceivedPacket();
         Packet packet(0x02);
         packet.SetContent(buffer);

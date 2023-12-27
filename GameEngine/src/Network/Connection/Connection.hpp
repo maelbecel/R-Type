@@ -19,6 +19,13 @@ class Connection {
         _receivedPacket = 0;
     };
 
+    Connection(asio::ip::udp::endpoint endpoint, uint64_t worldId) {
+        _endpoint = endpoint;
+        _sendPacket = 0;
+        _receivedPacket = 0;
+        _worldId = worldId;
+    };
+
     Connection() = default;
     ~Connection() = default;
 
@@ -36,6 +43,8 @@ class Connection {
     void AddReceivedPacket() { _receivedPacket++; }
 
     void SetReceivedPacket(int packet) { _receivedPacket = packet; }
+
+    void SetWorldId(uint64_t worldId) { _worldId = worldId; }
 
     int GetSendPacket() { return _sendPacket; }
 
@@ -57,7 +66,7 @@ class Connection {
     int _lastId = -1;
     int _sendPacket;
     int _receivedPacket;
-    uint64_t worldId = 0;
+    uint64_t _worldId = 0;
 };
 
 #endif /* !CONNECTION_HPP_ */
