@@ -24,6 +24,8 @@ set(SOURCES_GAME_ENGINE
         # -- Script source files
 
     src/Scripts/Player/Player.cpp
+    src/Scripts/Pata-pata/Pata-pata.cpp
+    src/Scripts/BulletPlayer/BulletPlayer.cpp
 
         # -- Events source files
 
@@ -32,8 +34,6 @@ set(SOURCES_GAME_ENGINE
         # -- Entity source files
 
     src/Entity/CreateBackground.cpp
-    src/Entity/CreatePataPata.cpp
-    src/Entity/CreatePlayer.cpp
     src/Entity/CreateStars.cpp
 
         # -- Component source files
@@ -42,6 +42,8 @@ set(SOURCES_GAME_ENGINE
 # Set the include directories for the Game Engine Library
 set(INCLUDE_DIRS_GAME_ENGINE
     src/
+
+    src/Entity/
 
     # GameEngine include directories
     ${GAME_ENGINE_DIR}/src

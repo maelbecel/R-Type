@@ -20,8 +20,8 @@ namespace Exodia {
 
         for (int i = 0; i < 60; i++) {
             Entity *star = world[GAME]->CreateEntity("Star" + std::to_string(i));
-
             star->AddComponent<ScriptComponent>().Get().Bind("Star");
+
             star->GetComponent<TransformComponent>().Get().Scale.y = 0.1f;
             star->GetComponent<TransformComponent>().Get().Scale.x = 0.1f;
             star->AddComponent<Clock>();

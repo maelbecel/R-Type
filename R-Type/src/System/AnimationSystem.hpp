@@ -11,7 +11,9 @@
 #include "Exodia.hpp"
 #include "Component/Animation.hpp"
 #include "Scripts/Player/Player.hpp"
-#include "Scripts/Pata-pata.hpp"
+#include "Scripts/Pata-pata/Pata-pata.hpp"
+
+using namespace RType;
 
 namespace Exodia {
 
@@ -28,8 +30,8 @@ namespace Exodia {
 
             world->LockMutex();
             // WARNING: This is a temporary solution
-            // world->ForEach<SpriteRendererComponent, Animation>([&](Entity *entity, auto sprite, auto animation) {
-            world->ForEach<Animation>([&](Entity *entity, ComponentHandle<Animation> animation) {
+            world->ForEach<SpriteRendererComponent, Animation>([&](Entity *entity, auto sprite, auto animation) {
+            // world->ForEach<Animation>([&](Entity *entity, ComponentHandle<Animation> animation) {
                 // check if entity is player
                 if (entity->GetComponent<TagComponent>().Get().Tag.rfind("Player", 0) == 0) {
                     UpdateAnimation<Player>(entity, [&](Player *player) {
@@ -96,14 +98,14 @@ namespace Exodia {
                     anim.ElapsedTime += ts.GetSeconds();
 
                     // Vérifier si 0.5 seconde s'est écoulée
-                    if (anim.ElapsedTime >= 0.075f) {
+                    if (anim.ElapsedTime >= 0.05f) {
                         anim.CurrentFrame += 1;
 
                         if (anim.CurrentFrame >= anim.MaxFrame)
                             anim.CurrentFrame = anim.MaxFrame;
 
                         // WARNING: This is a temporary solution
-                        // sprite.Get().Texture->SetCoords({ anim.CurrentFrame, 0.0f });
+                        sprite.Get().Texture->SetCoords({ anim.CurrentFrame, 0.0f });
 
                         // Réinitialiser le compteur
                         anim.ElapsedTime = 0.0f;

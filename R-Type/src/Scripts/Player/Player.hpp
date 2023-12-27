@@ -10,10 +10,12 @@
 
 // Exodia includes
 #include "Exodia.hpp"
-#include "Scripts/BulletPlayer.hpp"
+#include "Scripts/BulletPlayer/BulletPlayer.hpp"
 #include "Component/Health.hpp"
 
-namespace Exodia {
+using namespace Exodia;
+
+namespace RType {
 
     class Player : public ScriptableEntity {
 
@@ -27,28 +29,20 @@ namespace Exodia {
         // Methods //
         /////////////
       public:
-        void OnCreate() override {
-            _State = State::IDLE;
-            _AttackTimer = 0.0f;
-            _IsAttacking = false;
-            _IsCharging = false;
-        }
-
+        void OnCreate() override;
         void OnUpdate(Timestep ts) override;
-
         void OnKeyPressed(int keycode) override;
-
         void OnKeyReleased(int keycode) override;
-
-        void CreateBullet(Timestep ts, TransformComponent &tc);
-
         void OnCollisionEnter(Entity *entity) override;
+
+      private:
+        void Shoot(Timestep ts, TransformComponent &tc);
 
         ////////////////////////
         // Getters && Setters //
         ////////////////////////
+      public:
         State GetState() const { return _State; }
-
         float GetAttackTimer() const { return _AttackTimer; }
 
         ////////////////
@@ -61,6 +55,6 @@ namespace Exodia {
         bool _IsCharging;
         bool _IsShooting = false;
     };
-}; // namespace Exodia
+}; // namespace RType
 
 #endif /* !PLAYER_HPP_ */

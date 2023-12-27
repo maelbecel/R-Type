@@ -10,7 +10,9 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-namespace Exodia {
+using namespace Exodia;
+
+namespace RType {
 
     //////////////////////////////
     // Constructor & Destructor //
@@ -22,8 +24,7 @@ namespace Exodia {
     // Methods //
     /////////////
 
-    void RTypeLayer::OnAttach() {
-        EXODIA_PROFILE_FUNCTION();
+    int RTypeLayer::GetPort() {
 
         auto commandLine = Application::Get().GetSpecification().CommandLineArgs;
 
@@ -34,23 +35,38 @@ namespace Exodia {
 
             if (port < 1024 || port > 65535) {
                 Application::Get().Close();
-                return;
+                return -1;
             }
         }
+        return port;
+    }
 
+    void RTypeLayer::ConnectToServer(int port) {
         _Network = CreateScope<Network::Network>(_WorldNetwork, _IOContextManager, port);
 
         _Network->Loop();
-        _Network->SendAskConnect("127.0.0.1",
-                                 8082); // TODO: change ip and port when the server is on a different machine
+        _Network->SendAskConnect("127.0.0.1", 8082);
+        // TODO: change ip and port when the server is on a different machine
+    }
+
+    void RTypeLayer::OnAttach() {
+        EXODIA_PROFILE_FUNCTION();
+
+        int port = GetPort();
+
+        if (port == -1)
+            return;
+
+        ConnectToServer(port);
+
         // Create world
         CurrentScene = GAME;
 
-        Scenes[MENU] = CreateRef<Scene>();
-        Scenes[MENU]->RegisterSystem(new AnimationSystem());
-        Scenes[MENU]->RegisterSystem(new MovingSystem(1.5f));
-        Scenes[MENU]->OnViewportResize(Application::Get().GetWindow().GetWidth(),
-                                       Application::Get().GetWindow().GetHeight());
+        // Scenes[MENU] = CreateRef<Scene>();
+        // Scenes[MENU]->RegisterSystem(new AnimationSystem());
+        // Scenes[MENU]->RegisterSystem(new MovingSystem(1.5f));
+        // Scenes[MENU]->OnViewportResize(Application::Get().GetWindow().GetWidth(),
+        //                                Application::Get().GetWindow().GetHeight());
 
         // RType::EntityEventSubscriber *subscribe = new RType::EntityEventSubscriber(_Network);
         CollisionSystem *collisionSystem = new CollisionSystem();
@@ -91,21 +107,18 @@ namespace Exodia {
         */
 
         // Create the entities
-        // CreatePlayer(Scenes, 0);
+        int playerID = 0;
+        // TODO: Ask server for playerID
+        Entity *entity = Scenes[GAME]->CreateEntity("Player_" + std::to_string(playerID));
+        entity->AddComponent<ScriptComponent>().Get().Bind("Player");
+
 
         // Create pata-pata
-        // CreatePataPata(Scenes);
-
-        Entity *cameraMenu = Scenes[MENU]->CreateEntity("Camera");
-
-        auto &camera_ = cameraMenu->AddComponent<CameraComponent>().Get();
-        cameraMenu->GetComponent<TransformComponent>().Get().Translation = {0.0f, 0.0f, 15.0f};
-        camera_.Camera.SetProjectionType(SceneCamera::ProjectionType::Perspective);
-        camera_.Camera.SetViewportSize(1600, 900);
-        cameraMenu->AddComponent<RigidBody2DComponent>().Get().Type = RigidBody2DComponent::BodyType::Static;
+        Entity *patata = Scenes[GAME]->CreateEntity("Pata-pata");
+        patata->AddComponent<ScriptComponent>().Get().Bind("PataPata");
 
         // Create stars
-        // CreateStars(Scenes);
+        CreateStars(Scenes);
 
         // Create the camera
         Scenes[CurrentScene]->OnRuntimeStart();

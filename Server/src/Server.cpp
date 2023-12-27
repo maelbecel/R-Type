@@ -93,7 +93,10 @@ namespace Exodia {
             Scenes[GAME]->Subscribe<Events::OnEntityDestroyed>(subscribe);
             Scenes[GAME]->Subscribe<Events::OnCollisionEntered>(collisionSystem);
 
-            CreatePataPata(Scenes);
+
+            // Create pata-pata
+            Entity *patata = Scenes[GAME]->CreateEntity("Pata-pata");
+            patata->AddComponent<ScriptComponent>().Get().Bind("PataPata");
 
             // Camera creation
             Entity *cameraEntity = Scenes[GAME]->CreateEntity("Camera");
@@ -104,13 +107,13 @@ namespace Exodia {
             cameraEntity->GetComponent<TransformComponent>().Get().Rotation = {0.0f, 0.0f, 45.0f};
             camera.Camera.SetProjectionType(SceneCamera::ProjectionType::Perspective);
 
+            /* Removing rigid body for static camera
             auto body_camera = cameraEntity->AddComponent<RigidBody2DComponent>();
-
             body_camera.Get().Type = RigidBody2DComponent::BodyType::Dynamic;
             body_camera.Get().Mass = 0.0f;
             body_camera.Get().GravityScale = 0.0f;
-            body_camera.Get().Velocity = glm::vec2{1.5f, 0.0f};
-
+            body_camera.Get().Velocity = glm::vec2{ 1.5f, 0.0f };
+            */
             Scenes[CurrentScene]->OnRuntimeStart(); // TODO: Remove and play start only when all players are connected
                                                     // or main player said play
 
@@ -261,9 +264,11 @@ namespace Exodia {
                 }
             }
             if (newClient) {
-                CreatePlayer(Scenes, (uint32_t)_Users.size());
+                uint32_t userID = _Users.size();
+                Entity *entity = Scenes[GAME]->CreateEntity("Player_" + std::to_string(userID));
+                entity->AddComponent<ScriptComponent>().Get().Bind("Player");
 
-                player = Scenes[GAME]->GetEntityByName("Player_" + std::to_string((uint32_t)_Users.size()));
+                player = Scenes[GAME]->GetEntityByName("Player_" + std::to_string(userID));
 
                 _Users.push_back(User(connection.second, player));
 
