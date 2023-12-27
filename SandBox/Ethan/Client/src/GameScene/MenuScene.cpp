@@ -22,7 +22,7 @@ namespace RType {
 
     void MenuScene::OnCreate()
     {
-        _Scene = CreateRef<Scene>("Intro");
+        _Scene = CreateRef<Scene>("Menu");
 
         SceneSerializer serializer(_Scene);
 

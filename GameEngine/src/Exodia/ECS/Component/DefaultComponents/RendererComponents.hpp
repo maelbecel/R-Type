@@ -81,15 +81,13 @@ namespace Exodia {
                     return;
 
                 if (texture["AssetHandle"] && texture["Coords"] && texture["CellSize"] && texture["SpriteSize"]) {
-                    glm::vec2 coords = glm::vec2(texture["Coords"][0].as<float>(), texture["Coords"][1].as<float>());
-                    glm::vec2 cellSize =
-                        glm::vec2(texture["CellSize"][0].as<float>(), texture["CellSize"][1].as<float>());
-                    glm::vec2 spriteSize =
-                        glm::vec2(texture["SpriteSize"][0].as<float>(), texture["SpriteSize"][1].as<float>());
+                    glm::vec2 coords     = glm::vec2(texture["Coords"][0].as<float>()    , texture["Coords"][1].as<float>());
+                    glm::vec2 cellSize   = glm::vec2(texture["CellSize"][0].as<float>()  , texture["CellSize"][1].as<float>());
+                    glm::vec2 spriteSize = glm::vec2(texture["SpriteSize"][0].as<float>(), texture["SpriteSize"][1].as<float>());
 
                     AssetHandle assetHandle = texture["AssetHandle"].as<uint64_t>();
 
-                    Texture = CreateRef<SubTexture2D>(assetHandle, coords, cellSize, spriteSize);
+                    Texture = SubTexture2D::CreateFromCoords(assetHandle, coords, cellSize, spriteSize);
                 }
             } catch (YAML::BadConversion &error) {
                 EXODIA_CORE_WARN("SpriteRendererComponent has invalid data !\n\t{0}", error.what());

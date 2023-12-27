@@ -17,6 +17,9 @@ AssetRegistry:
   - Handle: 87458454125102332
     Path: Sound/Music/AttractMode.ogg
     Type: AssetType::Sound2D
+  - Handle: 8452581520512152
+    Path: Textures/Tileset/Mars_Tiles.png
+    Type: AssetType::Texture2D
   - Handle: 85648856213210235
     Path: Scene/Loading.exodia
     Type: AssetType::Scene
