@@ -185,7 +185,6 @@ namespace Exodia {
 
                 if ((tc.Tag.compare(player) == 0) && sc.Instance != nullptr) {
                     sc.Instance->OnKeyReleased(key);
-
                     _Network->SendEvent(key, false);
                 }
 

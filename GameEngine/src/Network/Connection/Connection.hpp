@@ -50,13 +50,15 @@ class Connection {
 
     int GetReceivedPacket() { return _receivedPacket; }
 
+    int GetLastId() const { return _lastId; }
+
+    uint64_t GetWorldId() const { return _worldId; }
+
     asio::ip::udp::endpoint GetEndpoint() const { return _endpoint; }
 
     bool operator==(const Connection &connection) const { return _endpoint == connection.GetEndpoint(); }
 
     bool operator!=(const Connection &connection) const { return _endpoint != connection.GetEndpoint(); }
-
-    int GetLastId() const { return _lastId; }
 
     void SetLastId(int lastId) { _lastId = lastId; }
 
