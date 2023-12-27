@@ -32,6 +32,14 @@ namespace RType {
             void OnDestroy() override;
 
             void OnUpdate(Exodia::Timestep ts) override;
+            void OnEvent(Exodia::Event &event) override;
+
+        ////////////
+        // Events //
+        ////////////
+        private:
+
+            bool OnKeyPressedEvent(Exodia::KeyPressedEvent &event);
 
         ////////////////
         // Attributes //

@@ -45,6 +45,28 @@ namespace RType {
 
     void LoadingScene::OnUpdate(Timestep ts)
     {
-        _Scene->OnUpdateRuntime(ts);
+        if (_Scene->IsRunning())
+            _Scene->OnUpdateRuntime(ts);
+    }
+
+    void LoadingScene::OnEvent(Event &event)
+    {
+        EventDispatcher dispatcher(event);
+
+        dispatcher.Dispatch<KeyPressedEvent>(BIND_EVENT_FN(LoadingScene::OnKeyPressedEvent));
+    }
+
+    bool LoadingScene::OnKeyPressedEvent(KeyPressedEvent &event)
+    {
+        int key = event.GetKeyCode();
+
+        if (key == Key::ENTER) {
+            // -- Stop the scene -- //
+            // -- Go to the next scene -- //
+
+            _Scene->OnRuntimeStop();
+            return true;
+        }
+        return false;
     }
 };

@@ -47,4 +47,9 @@ namespace RType {
 
         _Scenes[_CurrentScene]->OnUpdate(ts);
     }
+
+    void GameLayer::OnEvent(Event& event)
+    {
+        _Scenes[_CurrentScene]->OnEvent(event);
+    }
 };

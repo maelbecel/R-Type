@@ -41,9 +41,7 @@ bin*
 ExodiaProfile-*.json
 
 # Binaries for programs and plugins
-r-type_client
-r-type_server
-r-type_game
+r-type_*
 exodia
 
 # ImGui

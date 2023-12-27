@@ -31,6 +31,7 @@ namespace RType {
             virtual void OnDestroy() = 0;
 
             virtual void OnUpdate(Exodia::Timestep ts) = 0;
+            virtual void OnEvent(Exodia::Event &event) = 0;
     };
 };
 
