@@ -14,6 +14,7 @@ find_package(glad  CONFIG REQUIRED) # glad::glad
     # -- Audio Library ---------------------------------------------------------
 find_package(OpenAL   CONFIG REQUIRED) # OpenAL::OpenAL
 find_package(FreeALUT CONFIG REQUIRED) # FreeALUT::alut
+find_package(Vorbis   CONFIG REQUIRED) # Vorbis::vorbisfile
 
     # -- Serialization Library -------------------------------------------------
 find_package(yaml-cpp CONFIG REQUIRED) # yaml-cpp::yaml-cpp

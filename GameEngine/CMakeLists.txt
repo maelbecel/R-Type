@@ -159,6 +159,7 @@ target_link_libraries(GameEngine PRIVATE
     yaml-cpp::yaml-cpp
     imguizmo::imguizmo
     FreeALUT::alut
+    Vorbis::vorbisfile
 )
 
 target_include_directories(GameEngine PRIVATE ${INCLUDE_DIRS_GAME_ENGINE})

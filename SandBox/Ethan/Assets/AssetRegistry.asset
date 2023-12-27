@@ -14,6 +14,9 @@ AssetRegistry:
   - Handle: 4521854574125
     Path: Font/R-Type/ClassicColored.png
     Type: AssetType::Font
+  - Handle: 87458454125102332
+    Path: Sound/Music/AttractMode.ogg
+    Type: AssetType::Sound2D
 
   - Handle: 15815285158415
     Path: Icons/ToolBar/PauseButton.png

@@ -41,3 +41,7 @@ Entities:
       FadeOutSpeed: 0.4
       shouldFadeIn: true
       shouldFadeOut: false
+    MusicComponent:
+      Handle: 124013371145915
+      Volume: 0.5
+      Play: true
