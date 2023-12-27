@@ -7,6 +7,7 @@
 
 #include "GameLayer.hpp"
 #include "R-Type.hpp"
+#include "GameScene/LoadingScene.hpp"
 
 namespace RType {
 
@@ -16,7 +17,7 @@ namespace RType {
     // Constructor & Destructor //
     //////////////////////////////
 
-    GameLayer::GameLayer() : Layer("R-Type Layer")
+    GameLayer::GameLayer() : Layer("R-Type Layer"), _CurrentScene(LOADING)
     {
         RType::EntryPoint();
 
@@ -32,22 +33,11 @@ namespace RType {
 
     void GameLayer::OnAttach()
     {
-        _Scene = CreateRef<Scene>("Intro");
+        // -- Init the different scenes -- //
+        _Scenes.emplace(LOADING, CreateRef<LoadingScene>());
 
-        SceneSerializer serializer(_Scene);
-
-        serializer.Deserialize("./Assets/Scene/Loading.exodia");
-
-        // -- Scene System -- //
-        _Scene->RegisterSystem(new ClockSystem());
-        _Scene->RegisterSystem(new AnimationSystem());
-        _Scene->RegisterSystem(new FadeSystem());
-
-        // -- Resizing the viewport -- //
-        _Scene->OnViewportResize(Application::Get().GetWindow().GetWidth(), Application::Get().GetWindow().GetHeight());
-
-        // -- Start the scene -- //
-        _Scene->OnRuntimeStart();
+        // -- Create the first scene -- //
+        _Scenes[LOADING]->OnCreate();
     }
 
     void GameLayer::OnUpdate(Timestep ts)
@@ -55,6 +45,6 @@ namespace RType {
         RenderCommand::SetClearColor({ 0.0f, 0.0f, 0.0f, 1.0f });
         RenderCommand::Clear();
 
-        _Scene->OnUpdateRuntime(ts);
+        _Scenes[_CurrentScene]->OnUpdate(ts);
     }
 };

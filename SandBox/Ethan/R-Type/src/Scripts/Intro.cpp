@@ -111,8 +111,6 @@ namespace RType {
         transform.Get().Translation = { -1.25f, 0.00f, 0.0f };
         transform.Get().Scale       = {  0.25f, 0.25f, 1.0f };
 
-        entity->AddComponent<ClockComponent>(3.0f, true, true);
-
         auto text = entity->AddComponent<TextRendererComponent>("PRESS START");
 
         text.Get().Font = CLASSIC;

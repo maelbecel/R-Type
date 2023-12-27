@@ -11,8 +11,11 @@
     // Exodia includes
     #include "Exodia.hpp"
 
-    // R-Type includes
+    // R-Type Games includes
     #include "R-Type.hpp"
+
+    // R-Type Client includes
+    #include "GameScene/GameScene.hpp"
 
 namespace RType {
 
@@ -46,7 +49,8 @@ namespace RType {
         ////////////////
         private:
 
-            Ref<Exodia::Scene> _Scene;        
+            std::map<SceneType, Ref<GameScene>> _Scenes;
+            SceneType _CurrentScene;
     };
 };
 
