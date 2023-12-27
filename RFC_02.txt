@@ -77,17 +77,15 @@ ServerCommand
         Content: [GameEvents]
     0x0e - Send deleted entities MUST get an acknowledge
         Content: [Entity]
-    0x10 - Send deleted components on entities MUST get an acknowledge
+    0x0f - Send deleted components on entities MUST get an acknowledge
         Content: [Entity][Component][Content_of_a_component]
-    0x11 - Send events
-        Content: [Event]
+    0x10 - Send important events the bool is true if the event is a key press false if it is a key release MUST get an acknowledge
+        Content: [Event][Bool]
 ClientCommand
     0x81 - Connect MUST get an acknowledge
         Content: [Timestamp][Id]
     0x82 - Disconnect
     0x8b - Send events release the bool is true if the event is a key press false if it is a key release
-        Content: [Event][Bool]
-    0x8c - Send important events the bool is true if the event is a key press false if it is a key release MUST get an acknowledge
         Content: [Event][Bool]
 
 Details

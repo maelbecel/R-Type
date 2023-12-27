@@ -118,7 +118,8 @@ set(SOURCES_GAME_ENGINE
 
     # Network source files
 
-    src/Network/Network.cpp
+    src/Network/NetworkSender.cpp
+    src/Network/NetworkReceiver.cpp
     src/Network/UDPSocket/UDPSocket.cpp
 )
 
