@@ -24,7 +24,8 @@ namespace Exodia {
 
     namespace Network {
 
-        #define COMMAND_NETWORK(x) std::bind(&x, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4);
+#define COMMAND_NETWORK(x)                                                                                             \
+    std::bind(&x, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4);
         class Network {
           public:
             //////////////////////////////
@@ -76,19 +77,19 @@ namespace Exodia {
             void ReceiveEvent(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint,
                               Exodia::Network::Header header); // 0x82
 
-            void SendPacketInfo();                                                  // 0x00
-            void SendAck(uint64_t command_id);                                      // 0x01
-            void SendAcceptConnect();                                               // 0x02
-            void SendRejectConnect();                                               // 0x03
-            void SendSystemLoad();                                                  // 0x0b
-            void SendComponentOf(Entity *entity, std::string component_name);       // 0x0c
-            void SendGameEvent();                                                   // 0x0d
-            void SendDeleteEntity(Entity *entity);                                  // 0x0e
-            void SendDeleteComponent(Entity *entity, std::string component_name);   // 0x0f
-            void SendImportantEvent(uint32_t event, bool isPressed);                // 0x10
-            void SendAskConnect(const std::string &ip, short port);                 // 0x81
-            void SendDisconnect();                                                  // 0x82
-            void SendEvent(uint32_t event, bool isPressed);                         // 0x8b
+            void SendPacketInfo();                                                // 0x00
+            void SendAck(uint64_t command_id);                                    // 0x01
+            void SendAcceptConnect();                                             // 0x02
+            void SendRejectConnect();                                             // 0x03
+            void SendSystemLoad();                                                // 0x0b
+            void SendComponentOf(Entity *entity, std::string component_name);     // 0x0c
+            void SendGameEvent();                                                 // 0x0d
+            void SendDeleteEntity(Entity *entity);                                // 0x0e
+            void SendDeleteComponent(Entity *entity, std::string component_name); // 0x0f
+            void SendImportantEvent(uint32_t event, bool isPressed);              // 0x10
+            void SendAskConnect(const std::string &ip, short port);               // 0x81
+            void SendDisconnect();                                                // 0x82
+            void SendEvent(uint32_t event, bool isPressed);                       // 0x8b
             void Splitter(const std::vector<char> &message, size_t size, asio::ip::udp::endpoint senderEndpoint);
 
             void ResendNeedAck();

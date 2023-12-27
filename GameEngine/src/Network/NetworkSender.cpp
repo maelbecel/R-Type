@@ -211,8 +211,7 @@ namespace Exodia::Network {
             _server_connection.SendPacket(_socket, packet);
     }
 
-    void Network::SendRejectConnect()
-    {
+    void Network::SendRejectConnect() {
         Exodia::Network::Packet packet(0x03);
         std::vector<char> buffer(0);
 
@@ -224,33 +223,28 @@ namespace Exodia::Network {
             _server_connection.SendPacket(_socket, packet);
     }
 
-    void Network::SendSystemLoad()
-    {
-        //TODO: Send system load
+    void Network::SendSystemLoad() {
+        // TODO: Send system load
     }
 
-    void Network::SendGameEvent()
-    {
-        //TODO: Send game event
+    void Network::SendGameEvent() {
+        // TODO: Send game event
     }
 
-    void Network::SendDeleteComponent(Entity *entity, std::string component_name)
-    {
+    void Network::SendDeleteComponent(Entity *entity, std::string component_name) {
         (void)entity;
         (void)component_name;
-        //TODO: Send delete component
+        // TODO: Send delete component
     }
 
-    void Network::SendImportantEvent(uint32_t event, bool isPressed)
-    {
+    void Network::SendImportantEvent(uint32_t event, bool isPressed) {
         (void)event;
         (void)isPressed;
-        //TODO: Send important event
+        // TODO: Send important event
     }
 
-    void Network::SendDisconnect()
-    {
-        //TODO: Send disconnect
+    void Network::SendDisconnect() {
+        // TODO: Send disconnect
     }
 
     void Network::ResendNeedAck() {
