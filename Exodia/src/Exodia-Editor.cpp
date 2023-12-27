@@ -16,22 +16,17 @@ namespace Exodia {
         //////////////////////////////
         // Constructor & Destructor //
         //////////////////////////////
-        public:
+      public:
+        ExodiaApplication(const ApplicationSpecification &spec) : Application(spec) { PushLayer(new EditorLayer()); }
 
-            ExodiaApplication(const ApplicationSpecification &spec) : Application(spec)
-            {
-                PushLayer(new EditorLayer());
-            }
-
-            ~ExodiaApplication() = default;
+        ~ExodiaApplication() = default;
     };
 
     /////////////////
     // Entry Point //
     /////////////////
 
-    Application *CreateApplication(ApplicationCommandLineArgs args)
-    {
+    Application *CreateApplication(ApplicationCommandLineArgs args) {
         EXODIA_PROFILE_FUNCTION();
 
         ApplicationSpecification spec;
@@ -41,4 +36,4 @@ namespace Exodia {
 
         return new ExodiaApplication(spec);
     }
-};
+}; // namespace Exodia

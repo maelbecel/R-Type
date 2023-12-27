@@ -35,11 +35,11 @@ It sends a message to a server.
 
 The method takes the following parameters:
 
-| Name     | Type                    | Description            |
-|----------|-------------------------|------------------------|
-| message  | std::vector<char>       | The message            |
-| size     | size_t                  | The size of the message|
-| endpoint | asio::ip::udp::endpoint | The endpoint           |
+| Name     | Type                    | Description             |
+|----------|-------------------------|-------------------------|
+| message  | std::vector\<char\>     | The message             |
+| size     | size_t                  | The size of the message |
+| endpoint | asio::ip::udp::endpoint | The endpoint            |
 
 Here is an example of how to use it:
 

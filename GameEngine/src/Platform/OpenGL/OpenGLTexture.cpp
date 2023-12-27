@@ -21,12 +21,12 @@ namespace Exodia {
     // Constructor & Destructor //
     //////////////////////////////
 
-    OpenGLTexture::OpenGLTexture(const TextureSpecification &spec, Buffer data) : _Specification(spec), _Width(spec.Width), _Height(spec.Height), _IsLoaded(false)
-    {
+    OpenGLTexture::OpenGLTexture(const TextureSpecification &spec, Buffer data)
+        : _Specification(spec), _Width(spec.Width), _Height(spec.Height), _IsLoaded(false) {
         EXODIA_PROFILE_FUNCTION(); // Performance instrumentation profiling for the function
 
         _InternalFormat = Utils::ExodiaImageFormatToGLInternalFormat(spec.Format);
-        _DataFormat     = Utils::ExodiaImageFormatToGLDataFormat(spec.Format);
+        _DataFormat = Utils::ExodiaImageFormatToGLDataFormat(spec.Format);
 
         // Create the texture
         glCreateTextures(GL_TEXTURE_2D, 1, &_RendererID);
@@ -35,15 +35,14 @@ namespace Exodia {
         // Set the texture parameters
         glTextureParameteri(_RendererID, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         glTextureParameteri(_RendererID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        glTextureParameteri(_RendererID, GL_TEXTURE_WRAP_S    , GL_REPEAT);
-        glTextureParameteri(_RendererID, GL_TEXTURE_WRAP_T    , GL_REPEAT);
+        glTextureParameteri(_RendererID, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTextureParameteri(_RendererID, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
         if (data)
             SetData(data);
     }
 
-    OpenGLTexture::~OpenGLTexture()
-    {
+    OpenGLTexture::~OpenGLTexture() {
         EXODIA_PROFILE_FUNCTION(); // Performance instrumentation profiling for the function
 
         if (_IsLoaded)
@@ -54,8 +53,7 @@ namespace Exodia {
     // Methods //
     /////////////
 
-    void OpenGLTexture::Bind(uint32_t slot) const
-    {
+    void OpenGLTexture::Bind(uint32_t slot) const {
         EXODIA_PROFILE_FUNCTION(); // Performance instrumentation profiling for the function
 
         glBindTextureUnit(slot, _RendererID); // Bind the OpenGL texture to a texture slot
@@ -65,32 +63,19 @@ namespace Exodia {
     // Comparator //
     ////////////////
 
-    bool OpenGLTexture::operator==(const Texture &other) const
-    {
-        return _RendererID == other.GetRendererID();
-    }
+    bool OpenGLTexture::operator==(const Texture &other) const { return _RendererID == other.GetRendererID(); }
 
     ///////////////////////
     // Getters & Setters //
     ///////////////////////
 
-    uint32_t OpenGLTexture::GetWidth() const
-    {
-        return _Width;
-    }
+    uint32_t OpenGLTexture::GetWidth() const { return _Width; }
 
-    uint32_t OpenGLTexture::GetHeight() const
-    {
-        return _Height;
-    }
+    uint32_t OpenGLTexture::GetHeight() const { return _Height; }
 
-    uint32_t OpenGLTexture::GetRendererID() const
-    {
-        return _RendererID;
-    }
+    uint32_t OpenGLTexture::GetRendererID() const { return _RendererID; }
 
-    void OpenGLTexture::SetData(Buffer data)
-    {
+    void OpenGLTexture::SetData(Buffer data) {
         EXODIA_PROFILE_FUNCTION(); // Performance instrumentation profiling for the function
 
         // Check if the data size is the entire texture
@@ -105,13 +90,7 @@ namespace Exodia {
         (void)bpp;
     }
 
-    bool OpenGLTexture::IsLoaded() const
-    {
-        return _IsLoaded;
-    }
+    bool OpenGLTexture::IsLoaded() const { return _IsLoaded; }
 
-    const TextureSpecification &OpenGLTexture::GetSpecification() const
-    {
-        return _Specification;
-    }
-};
+    const TextureSpecification &OpenGLTexture::GetSpecification() const { return _Specification; }
+}; // namespace Exodia

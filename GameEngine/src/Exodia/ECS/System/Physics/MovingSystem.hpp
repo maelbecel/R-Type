@@ -6,14 +6,14 @@
 */
 
 #ifndef MOVINGSYSTEM_HPP_
-    #define MOVINGSYSTEM_HPP_
+#define MOVINGSYSTEM_HPP_
 
-    // Exodia ECS Interface includes
-    #include "Interface/EntitySystem.hpp"
+// Exodia ECS Interface includes
+#include "Interface/EntitySystem.hpp"
 
-    // Exodia ECS Component includes
-    #include "Component/Components.hpp"
-    #include "Component/ComponentHandle.hpp"
+// Exodia ECS Component includes
+#include "Component/Components.hpp"
+#include "Component/ComponentHandle.hpp"
 
 namespace Exodia {
 
@@ -21,30 +21,30 @@ namespace Exodia {
     struct RigidBody2DComponent;
 
     class MovingSystem : public EntitySystem {
-        
+
         //////////////////////////////
         // Constructor & Destructor //
         //////////////////////////////
-        public:
-
-            MovingSystem(float gravity = 9.81f);
-            ~MovingSystem() override = default;
+      public:
+        MovingSystem(float gravity = 9.81f);
+        ~MovingSystem() override = default;
 
         /////////////
         // Methods //
         /////////////
-        public:
-            virtual void Update(World *world, Timestep ts) override;
+      public:
+        virtual void Update(World *world, Timestep ts) override;
 
-        private:
-            void ApplyVelocity(ComponentHandle<RigidBody2DComponent> rigidBody, ComponentHandle<TransformComponent> transform, Timestep ts);
+      private:
+        void ApplyVelocity(ComponentHandle<RigidBody2DComponent> rigidBody,
+                           ComponentHandle<TransformComponent> transform, Timestep ts);
 
         ////////////////
         // Attributes //
         ////////////////
-        private:
-            float _Gravity;
+      private:
+        float _Gravity;
     };
-};
+}; // namespace Exodia
 
 #endif /* !MOVINGSYSTEM_HPP_ */

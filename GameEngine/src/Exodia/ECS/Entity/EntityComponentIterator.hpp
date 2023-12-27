@@ -6,86 +6,64 @@
 */
 
 #ifndef ENTITYCOMPONENTITERATOR_HPP_
-    #define ENTITYCOMPONENTITERATOR_HPP_
+#define ENTITYCOMPONENTITERATOR_HPP_
 
-    // Exodia Utils includes
-    #include "Utils/CrossPlatform.hpp"
+// Exodia Utils includes
+#include "Utils/CrossPlatform.hpp"
 
 namespace Exodia {
 
     class World;
 
-    template<typename ...Components>
-    class EntityComponentIterator {
+    template <typename... Components> class EntityComponentIterator {
 
         /////////////////
         // Constructor //
         /////////////////
-        public:
-
-            EntityComponentIterator(World *world, size_t index, bool isEnd, bool includePendingDestroy);
+      public:
+        EntityComponentIterator(World *world, size_t index, bool isEnd, bool includePendingDestroy);
 
         ///////////////////////
         // Getters & Setters //
         ///////////////////////
-        public:
+      public:
+        size_t GetIndex() const { return _Index; }
 
-            size_t GetIndex() const
-            {
-                return _Index;
-            }
+        bool IsEnd() const;
 
-            bool IsEnd() const;
+        bool IncludePendingDestroy() const { return _IncludePendingDestroy; }
 
-            bool IncludePendingDestroy() const
-            {
-                return _IncludePendingDestroy;
-            }
+        World *GetWorld() const { return _World; }
 
-            World *GetWorld() const
-            {
-                return _World;
-            }
-
-            Entity *Get() const;
+        Entity *Get() const;
 
         ///////////////
         // Operators //
         ///////////////
-        public:
+      public:
+        Entity *operator*() const { return Get(); }
 
-            Entity *operator*() const
-            {
-                return Get();
-            }
-
-            EntityComponentIterator<Components ...> &operator++();
+        EntityComponentIterator<Components...> &operator++();
 
         /////////////////
         // Comparators //
         /////////////////
-        public:
+      public:
+        bool operator==(const EntityComponentIterator<Components...> &other) const {
+            return _World == other._World && IsEnd() == other.IsEnd() && _Index == other._Index;
+        }
 
-            bool operator==(const EntityComponentIterator<Components ...> &other) const
-            {
-                return _World == other._World && IsEnd() == other.IsEnd() && _Index == other._Index;
-            }
-
-            bool operator!=(const EntityComponentIterator<Components ...> &other) const
-            {
-                return !(*this == other);
-            }
+        bool operator!=(const EntityComponentIterator<Components...> &other) const { return !(*this == other); }
 
         ////////////////
         // Attributes //
         ////////////////
-        private:
-
-            World *_World;
-            size_t _Index;
-            bool   _IsEnd;
-            bool   _IncludePendingDestroy;
+      private:
+        World *_World;
+        size_t _Index;
+        bool _IsEnd;
+        bool _IncludePendingDestroy;
     };
-};
+}; // namespace Exodia
 
 #endif /* !ENTITYCOMPONENTITERATOR_HPP_ */

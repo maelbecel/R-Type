@@ -15,13 +15,13 @@
 #include <nfd.h>
 
 #ifdef _WIN32
-    #include <GLFW/glfw3.h>
-    #define GLFW_EXPOSE_NATIVE_WIN32
-        #include <GLFW/glfw3native.h>
+#include <GLFW/glfw3.h>
+#define GLFW_EXPOSE_NATIVE_WIN32
+#include <GLFW/glfw3native.h>
 #else
-    #define GLFW_EXPOSE_NATIVE_X11
-        #include <GLFW/glfw3.h>
-        #include <GLFW/glfw3native.h>
+#define GLFW_EXPOSE_NATIVE_X11
+#include <GLFW/glfw3.h>
+#include <GLFW/glfw3native.h>
 #endif
 
 // External includes
@@ -34,8 +34,7 @@ namespace Exodia {
     // Methods //
     /////////////
 
-    std::string FileDialog::OpenFile(const char *filter)
-    {
+    std::string FileDialog::OpenFile(const char *filter) {
         std::string path;
         nfdchar_t *outPath = nullptr;
         nfdresult_t result = NFD_OpenDialog(filter, nullptr, &outPath);
@@ -48,7 +47,7 @@ namespace Exodia {
 
         if (path.empty())
             return "";
-        
+
         try {
             std::string extension = path.substr(path.find_last_of(".") + 1);
 
@@ -65,8 +64,7 @@ namespace Exodia {
         return path;
     }
 
-    std::string FileDialog::SaveFile(const char *filter)
-    {
+    std::string FileDialog::SaveFile(const char *filter) {
         std::string path;
         nfdchar_t *outPath = nullptr;
         nfdresult_t result = NFD_SaveDialog(filter, nullptr, &outPath);
@@ -79,4 +77,4 @@ namespace Exodia {
         }
         return "";
     }
-};
+}; // namespace Exodia

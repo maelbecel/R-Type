@@ -18,14 +18,15 @@ namespace Exodia {
     // Constructor & Destructor //
     //////////////////////////////
 
-    DefaultLayer::DefaultLayer() : Layer("DefaultLayer"), _World(World::CreateWorld()), _Network(_World, _ioContextManager, 7071), _CameraController(1600.0f / 900.0f) {};
+    DefaultLayer::DefaultLayer()
+        : Layer("DefaultLayer"), _World(World::CreateWorld()), _Network(_World, _ioContextManager, 7071),
+          _CameraController(1600.0f / 900.0f){};
 
     /////////////
     // Methods //
     /////////////
 
-    void DefaultLayer::OnAttach()
-    {
+    void DefaultLayer::OnAttach() {
         Project::Load("./Client/R-Type.proj");
 
         _Network.Loop();
@@ -38,32 +39,25 @@ namespace Exodia {
         entity->AddComponent<SpriteRendererComponent>(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
     }
 
-    void DefaultLayer::OnUpdate(Exodia::Timestep ts)
-    {
+    void DefaultLayer::OnUpdate(Exodia::Timestep ts) {
         // Update
         _CameraController.OnUpdate(ts);
         _World->Update(ts);
 
         // Renderer Prep
-        Exodia::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
+        Exodia::RenderCommand::SetClearColor({0.1f, 0.1f, 0.1f, 1});
         Exodia::RenderCommand::Clear();
 
         // Renderer Draw
         Exodia::Renderer2D::BeginScene(_CameraController.GetCamera());
 
-        _World->ForEach<SpriteRendererComponent, TransformComponent, IDComponent>([&](UNUSED(Entity *entity), auto sprite, auto transform, auto id) {
-            Renderer2D::DrawSprite(
-                transform.Get().GetTransform(),
-                sprite.Get(),
-                id.Get().ID
-            );
-        });
+        _World->ForEach<SpriteRendererComponent, TransformComponent, IDComponent>(
+            [&](UNUSED(Entity * entity), auto sprite, auto transform, auto id) {
+                Renderer2D::DrawSprite(transform.Get().GetTransform(), sprite.Get(), id.Get().ID);
+            });
 
         Exodia::Renderer2D::EndScene();
     }
 
-    void DefaultLayer::OnEvent(Exodia::Event &event)
-    {
-        _CameraController.OnEvent(event);
-    }
-};
+    void DefaultLayer::OnEvent(Exodia::Event &event) { _CameraController.OnEvent(event); }
+}; // namespace Exodia

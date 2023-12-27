@@ -23,8 +23,7 @@
 
 namespace Exodia {
 
-    static GLenum ShaderTypeFromString(const std::string &type)
-    {
+    static GLenum ShaderTypeFromString(const std::string &type) {
         if (type == "vertex")
             return GL_VERTEX_SHADER;
         if (type == "fragment" || type == "pixel")
@@ -38,8 +37,8 @@ namespace Exodia {
     // Constructor & Destructor //
     //////////////////////////////
 
-    OpenGLShader::OpenGLShader(const std::string &name, const std::string &vertexSrc, const std::string &fragmentSrc) : _Name(name)
-    {
+    OpenGLShader::OpenGLShader(const std::string &name, const std::string &vertexSrc, const std::string &fragmentSrc)
+        : _Name(name) {
         EXODIA_PROFILE_FUNCTION();
 
         std::unordered_map<GLenum, std::string> shaderSources;
@@ -50,8 +49,7 @@ namespace Exodia {
         Compile(shaderSources);
     }
 
-    OpenGLShader::OpenGLShader(const std::string &filepath)
-    {
+    OpenGLShader::OpenGLShader(const std::string &filepath) {
         EXODIA_PROFILE_FUNCTION();
 
         std::string ShaderSrc = ReadFile(filepath);
@@ -72,8 +70,7 @@ namespace Exodia {
         _Name = filepath.substr(lastSlash, count);
     }
 
-    OpenGLShader::~OpenGLShader()
-    {
+    OpenGLShader::~OpenGLShader() {
         EXODIA_PROFILE_FUNCTION();
 
         glDeleteProgram(_RendererID);
@@ -83,71 +80,61 @@ namespace Exodia {
     // Methods //
     /////////////
 
-    void OpenGLShader::Bind() const
-    {
+    void OpenGLShader::Bind() const {
         EXODIA_PROFILE_FUNCTION();
 
         glUseProgram(_RendererID);
     }
 
-    void OpenGLShader::Unbind() const
-    {
+    void OpenGLShader::Unbind() const {
         EXODIA_PROFILE_FUNCTION();
 
         glUseProgram(0);
     }
 
-    void OpenGLShader::UploadUniformInt(const std::string &name, int value)
-    {
+    void OpenGLShader::UploadUniformInt(const std::string &name, int value) {
         GLint location = glGetUniformLocation(_RendererID, name.c_str());
 
         glUniform1i(location, value);
     }
 
-    void OpenGLShader::UploadUniformFloat(const std::string &name, float value)
-    {
+    void OpenGLShader::UploadUniformFloat(const std::string &name, float value) {
         GLint location = glGetUniformLocation(_RendererID, name.c_str());
 
         glUniform1f(location, value);
     }
 
-    void OpenGLShader::UploadUniformFloat2(const std::string &name, const glm::vec2 &values)
-    {
+    void OpenGLShader::UploadUniformFloat2(const std::string &name, const glm::vec2 &values) {
         GLint location = glGetUniformLocation(_RendererID, name.c_str());
 
         glUniform2f(location, values.x, values.y);
     }
 
-    void OpenGLShader::UploadUniformFloat3(const std::string &name, const glm::vec3 &values)
-    {
+    void OpenGLShader::UploadUniformFloat3(const std::string &name, const glm::vec3 &values) {
         GLint location = glGetUniformLocation(_RendererID, name.c_str());
 
         glUniform3f(location, values.x, values.y, values.z);
     }
 
-    void OpenGLShader::UploadUniformFloat4(const std::string &name, const glm::vec4 &values)
-    {
+    void OpenGLShader::UploadUniformFloat4(const std::string &name, const glm::vec4 &values) {
         GLint location = glGetUniformLocation(_RendererID, name.c_str());
 
         glUniform4f(location, values.x, values.y, values.z, values.w);
     }
 
-    void OpenGLShader::UploadUniformMat3(const std::string &name, const glm::mat3 &matrix)
-    {
+    void OpenGLShader::UploadUniformMat3(const std::string &name, const glm::mat3 &matrix) {
         GLint location = glGetUniformLocation(_RendererID, name.c_str());
 
         glUniformMatrix3fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
     }
 
-    void OpenGLShader::UploadUniformMat4(const std::string &name, const glm::mat4 &matrix)
-    {
+    void OpenGLShader::UploadUniformMat4(const std::string &name, const glm::mat4 &matrix) {
         GLint location = glGetUniformLocation(_RendererID, name.c_str());
 
         glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
     }
 
-    std::string OpenGLShader::ReadFile(const std::string &filepath)
-    {
+    std::string OpenGLShader::ReadFile(const std::string &filepath) {
         EXODIA_PROFILE_FUNCTION();
 
         std::ifstream in(filepath, std::ios::in | std::ios::binary);
@@ -165,8 +152,7 @@ namespace Exodia {
         return contents;
     }
 
-    std::unordered_map<GLenum, std::string> OpenGLShader::PreProcess(const std::string &source)
-    {
+    std::unordered_map<GLenum, std::string> OpenGLShader::PreProcess(const std::string &source) {
         EXODIA_PROFILE_FUNCTION();
 
         std::unordered_map<GLenum, std::string> shaderSources;
@@ -182,27 +168,29 @@ namespace Exodia {
 
             size_t begin = pos + typeTokenLength + 1;
             std::string type = source.substr(begin, eol - begin);
-            
+
             EXODIA_CORE_ASSERT(ShaderTypeFromString(type), "Invalid shader type specified");
 
             size_t nextLinePos = source.find_first_not_of("\r\n", eol);
-            
+
             EXODIA_CORE_ASSERT(nextLinePos != std::string::npos, "Syntax error");
 
             pos = source.find(typeToken, nextLinePos);
-            shaderSources[ShaderTypeFromString(type)] = (pos == std::string::npos) ? source.substr(nextLinePos) : source.substr(nextLinePos, pos - nextLinePos);
+            shaderSources[ShaderTypeFromString(type)] =
+                (pos == std::string::npos) ? source.substr(nextLinePos) : source.substr(nextLinePos, pos - nextLinePos);
         }
 
         return shaderSources;
     }
 
-    void OpenGLShader::Compile(const std::unordered_map<GLenum, std::string> &shaderSources)
-    {
+    void OpenGLShader::Compile(const std::unordered_map<GLenum, std::string> &shaderSources) {
         EXODIA_PROFILE_FUNCTION();
 
         GLuint program = glCreateProgram();
 
-        EXODIA_CORE_ASSERT(shaderSources.size() <= MAX_SHADER_SUPPORTED, std::string("We only support " + std::to_string(MAX_SHADER_SUPPORTED) + " shaders for now !").c_str());
+        EXODIA_CORE_ASSERT(
+            shaderSources.size() <= MAX_SHADER_SUPPORTED,
+            std::string("We only support " + std::to_string(MAX_SHADER_SUPPORTED) + " shaders for now !").c_str());
 
         std::array<GLenum, MAX_SHADER_SUPPORTED> glShaderIDs;
         int glShaderIDIndex = 0;
@@ -259,7 +247,7 @@ namespace Exodia {
             glGetProgramInfoLog(program, maxLength, &maxLength, &infoLog[0]);
             // We don't need the program anymore.
             glDeleteProgram(program);
-            
+
             for (auto id : glShaderIDs)
                 glDeleteShader(id);
 
@@ -276,60 +264,50 @@ namespace Exodia {
     // Getters & Setters //
     ///////////////////////
 
-    const std::string &OpenGLShader::GetName() const
-    {
-        return _Name;
-    }
+    const std::string &OpenGLShader::GetName() const { return _Name; }
 
-    void OpenGLShader::SetInt(const std::string &name, int value)
-    {
+    void OpenGLShader::SetInt(const std::string &name, int value) {
         EXODIA_PROFILE_FUNCTION();
 
         UploadUniformInt(name, value);
     }
 
-    void OpenGLShader::SetIntArray(const std::string &name, int *values, uint32_t count)
-    {
+    void OpenGLShader::SetIntArray(const std::string &name, int *values, uint32_t count) {
         EXODIA_PROFILE_FUNCTION();
 
         GLint location = glGetUniformLocation(_RendererID, name.c_str());
-    
+
         if (location != -1)
             glUniform1iv(location, count, values);
     }
 
-    void OpenGLShader::SetFloat(const std::string &name, float value)
-    {
+    void OpenGLShader::SetFloat(const std::string &name, float value) {
         EXODIA_PROFILE_FUNCTION();
 
         UploadUniformFloat(name, value);
     }
 
-    void OpenGLShader::SetFloat2(const std::string &name, const glm::vec2 &value)
-    {
+    void OpenGLShader::SetFloat2(const std::string &name, const glm::vec2 &value) {
         EXODIA_PROFILE_FUNCTION();
 
         UploadUniformFloat2(name, value);
     }
 
-    void OpenGLShader::SetFloat3(const std::string &name, const glm::vec3 &value)
-    {
+    void OpenGLShader::SetFloat3(const std::string &name, const glm::vec3 &value) {
         EXODIA_PROFILE_FUNCTION();
 
         UploadUniformFloat3(name, value);
     }
 
-    void OpenGLShader::SetFloat4(const std::string &name, const glm::vec4 &value)
-    {
+    void OpenGLShader::SetFloat4(const std::string &name, const glm::vec4 &value) {
         EXODIA_PROFILE_FUNCTION();
 
         UploadUniformFloat4(name, value);
     }
 
-    void OpenGLShader::SetMat4(const std::string &name, const glm::mat4 &value)
-    {
+    void OpenGLShader::SetMat4(const std::string &name, const glm::mat4 &value) {
         EXODIA_PROFILE_FUNCTION();
 
         UploadUniformMat4(name, value);
     }
-};
+}; // namespace Exodia

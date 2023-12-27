@@ -6,13 +6,13 @@
 */
 
 #ifndef CREATEPATAPATA_HPP_
-    #define CREATEPATAPATA_HPP_
+#define CREATEPATAPATA_HPP_
 
-    #include "Component/Animation.hpp"
-    #include "Component/Clock.hpp"
-    #include "Component/Health.hpp"
-    #include "Scripts/Pata-pata.hpp"
-    #include "SceneType.hpp"
+#include "Component/Animation.hpp"
+#include "Component/Clock.hpp"
+#include "Component/Health.hpp"
+#include "Scripts/Pata-pata.hpp"
+#include "SceneType.hpp"
 
 namespace Exodia {
 
@@ -22,6 +22,6 @@ namespace Exodia {
      * @param _World
      */
     void CreatePataPata(std::map<SceneType, std::shared_ptr<Exodia::Scene>> _World);
-};
+}; // namespace Exodia
 
 #endif /* !CREATEPATAPATA_HPP_ */

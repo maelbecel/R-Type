@@ -134,6 +134,12 @@ AssetRegistry:
   - Handle: 12401337114591583034
     Path: Textures/Baldur.png
     Type: AssetType::Texture2D
+  - Handle: 124013371145915
+    Path: Sound/Music/BattleTheme.wav
+    Type: AssetType::Sound2D
   - Handle: 18375016605620543235
     Path: test.exodia
     Type: AssetType::Scene
+  - Handle: 18375012605620
+    Path: Textures/Missile.png
+    Type: AssetType::Texture2D

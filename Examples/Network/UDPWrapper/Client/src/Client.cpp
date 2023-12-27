@@ -9,21 +9,19 @@
 #include <asio.hpp>
 #include "Exodia.hpp"
 
-void my_callback(const std::string &message)
-{
+void my_callback(const std::string &message) {
     (void)message;
     std::cout << "Message received: " << message << std::endl;
 }
 
-int main(void)
-{
+int main(void) {
     Exodia::Log::Init();
 
     std::cout << "Client have been launched!" << std::endl;
 
     try {
         // Server main
-                 // Server main
+        // Server main
         Exodia::Network::IOContextManager ioContextManager;
 
         // Define a local endpoint to listen on
