@@ -20,13 +20,28 @@ namespace RType {
     // Methods //
     /////////////
 
-    void MenuScene::OnCreate() {};
+    void MenuScene::OnCreate()
+    {
+        _Scene = CreateRef<Scene>("Intro");
+
+        SceneSerializer serializer(_Scene);
+
+        serializer.Deserialize("./Assets/Scene/Menu.exodia");
+
+        // -- Scene System -- //
+
+        // -- Resizing the viewport -- //
+        _Scene->OnViewportResize(Application::Get().GetWindow().GetWidth(), Application::Get().GetWindow().GetHeight());
+
+        // -- Start the scene -- //
+        _Scene->OnRuntimeStart();
+    }
 
     void MenuScene::OnDestroy() {};
 
-    void MenuScene::OnUpdate(UNUSED(Timestep ts))
+    void MenuScene::OnUpdate(Timestep ts)
     {
-        EXODIA_INFO("MenuScene::OnUpdate");
+        _Scene->OnUpdateRuntime(ts);
     }
 
     void MenuScene::OnEvent(Event &event)

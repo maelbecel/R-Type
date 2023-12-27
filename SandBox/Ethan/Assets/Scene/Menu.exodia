@@ -1,0 +1,31 @@
+Scene: Menu
+Entities:
+  - Entity: 455125451521210515
+    TagComponent:
+      Tag: Camera
+    TransformComponent:
+      Translation: [0, 0, 6]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    CameraComponent:
+      Camera:
+        ProjectionType: 0
+        PerspectiveFOV: 45
+        PerspectiveNear: 0.01
+        PerspectiveFar: 1000
+        OrthographicSize: 10
+        OrthographicNear: -1
+        OrthographicFar: 1
+      Primary: true
+      FixedAspectRatio: true
+  - Entity: 584348634361310
+    TagComponent:
+      Tag: Background
+    TransformComponent:
+      Translation: [0, 0, -0.5]
+      Rotation: [0, 0, 0]
+      Scale: [13, 8, 1]
+    MusicComponent:
+      Handle: 124013371145915
+      Volume: 0.5
+      Play: true

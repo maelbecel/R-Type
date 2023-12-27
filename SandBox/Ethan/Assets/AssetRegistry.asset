@@ -17,6 +17,12 @@ AssetRegistry:
   - Handle: 87458454125102332
     Path: Sound/Music/AttractMode.ogg
     Type: AssetType::Sound2D
+  - Handle: 85648856213210235
+    Path: Scene/Loading.exodia
+    Type: AssetType::Scene
+  - Handle: 485486136481684421
+    Path: Scene/Menu.exodia
+    Type: AssetType::Scene
 
   - Handle: 15815285158415
     Path: Icons/ToolBar/PauseButton.png

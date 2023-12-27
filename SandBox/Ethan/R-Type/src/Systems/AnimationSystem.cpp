@@ -36,7 +36,8 @@ namespace RType {
                 sc.Texture           = ac.Frames[ac.CurrentFrameIndex];
 
                 if (ac.CurrentFrameIndex == ac.Frames.size() - 1) {
-                    ac.CurrentFrameIndex = 0;
+                    if (ac.Repeat == true)
+                        ac.CurrentFrameIndex = 0;
                     ac.FrameTimer        = 0.0f;
                 }
 
