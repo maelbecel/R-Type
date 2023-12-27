@@ -10,6 +10,37 @@
 
 namespace Exodia::Network {
 
+
+    void Network::SendPacket(Packet packet) {
+        if (_connections.size() > 0) {
+            for (auto &connection : _connections)
+                connection.second.SendPacket(_socket, packet);
+        } else
+            _server_connection.SendPacket(_socket, packet);
+    }
+
+    void Network::SendImportantPacket(Packet packet) {
+        if (_connections.size() > 0) { // If we are the server
+            for (auto &connection : _connections) {
+                connection.second.SendPacket(_socket, packet);
+                int64_t find = GetIndexPacketNeedAck(connection.second);
+                if (find == -1) {
+                    _packetNeedAck.push_back(std::make_pair(connection.second, std::unordered_map<uint64_t, Packet>()));
+                    find = _packetNeedAck.size() - 1; // Update the value of find to the new index
+                }
+                _packetNeedAck[find].second[packet.GetHeader()->GetId()] = packet;
+            }
+        } else { // If we are the client
+            _server_connection.SendPacket(_socket, packet);
+            int64_t find = GetIndexPacketNeedAck(_server_connection);
+            if (find == -1) {
+                _packetNeedAck.push_back(std::make_pair(_server_connection, std::unordered_map<uint64_t, Packet>()));
+                find = _packetNeedAck.size() - 1; // Update the value of find to the new index
+            }
+            _packetNeedAck[find].second[packet.GetHeader()->GetId()] = packet;
+        }
+    }
+
     /**
      * @brief send a packet to request connection to the server
      *
@@ -113,25 +144,7 @@ namespace Exodia::Network {
         buffer.resize(offset);
 
         packet.SetContent(buffer);
-        if (_connections.size() > 0) {
-            for (auto &connection : _connections) {
-                connection.second.SendPacket(_socket, packet);
-                int64_t find = GetIndexPacketNeedAck(connection.second);
-                if (find == -1) {
-                    _packetNeedAck.push_back(std::make_pair(connection.second, std::unordered_map<uint64_t, Packet>()));
-                    find = _packetNeedAck.size() - 1; // Update the value of find to the new index
-                }
-                _packetNeedAck[find].second[packet.GetHeader()->GetId()] = packet;
-            }
-        } else { // If we are the client
-            _server_connection.SendPacket(_socket, packet);
-            int64_t find = GetIndexPacketNeedAck(_server_connection);
-            if (find == -1) {
-                _packetNeedAck.push_back(std::make_pair(_server_connection, std::unordered_map<uint64_t, Packet>()));
-                find = _packetNeedAck.size() - 1; // Update the value of find to the new index
-            }
-            _packetNeedAck[find].second[packet.GetHeader()->GetId()] = packet;
-        }
+        SendImportantPacket(packet);
     }
 
     /**
@@ -153,11 +166,7 @@ namespace Exodia::Network {
         uint64_t offset = 0;
         offset = FillData(buffer, offset, &entity_id, sizeof(unsigned long));
         packet.SetContent(buffer);
-        if (_connections.size() > 0)
-            for (auto &connection : _connections)
-                connection.second.SendPacket(_socket, packet);
-        else
-            _server_connection.SendPacket(_socket, packet);
+        SendPacket(packet);
     }
 
     /**
@@ -172,11 +181,7 @@ namespace Exodia::Network {
         size_t offset = 0;
         offset = FillData(buffer, offset, &command_id, sizeof(uint64_t));
         packet.SetContent(buffer);
-        if (_connections.size() > 0)
-            for (auto &connection : _connections)
-                connection.second.SendPacket(_socket, packet);
-        else
-            _server_connection.SendPacket(_socket, packet);
+        SendPacket(packet);
     }
 
     void Network::SendAcceptConnect() {
@@ -184,11 +189,7 @@ namespace Exodia::Network {
         std::vector<char> buffer(0);
 
         packet.SetContent(buffer);
-        if (_connections.size() > 0)
-            for (auto &connection : _connections)
-                connection.second.SendPacket(_socket, packet);
-        else
-            _server_connection.SendPacket(_socket, packet);
+        SendPacket(packet);
     }
 
     /**
@@ -204,11 +205,7 @@ namespace Exodia::Network {
         offset = FillData(buffer, offset, &event, sizeof(uint32_t));
         offset = FillData(buffer, offset, &isPressed, sizeof(bool));
         packet.SetContent(buffer);
-        if (_connections.size() > 0) {
-            for (auto &connection : _connections)
-                connection.second.SendPacket(_socket, packet);
-        } else
-            _server_connection.SendPacket(_socket, packet);
+        SendPacket(packet);
     }
 
     void Network::SendRejectConnect()
@@ -217,11 +214,7 @@ namespace Exodia::Network {
         std::vector<char> buffer(0);
 
         packet.SetContent(buffer);
-        if (_connections.size() > 0)
-            for (auto &connection : _connections)
-                connection.second.SendPacket(_socket, packet);
-        else
-            _server_connection.SendPacket(_socket, packet);
+        SendPacket(packet);
     }
 
     void Network::SendSystemLoad()

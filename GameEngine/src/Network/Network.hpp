@@ -25,6 +25,8 @@ namespace Exodia {
     namespace Network {
 
         #define COMMAND_NETWORK(x) std::bind(&x, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4);
+        #define RECEIVE_ARG const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint, Exodia::Network::Header header
+
         class Network {
           public:
             //////////////////////////////
@@ -61,21 +63,16 @@ namespace Exodia {
             // Methods //
             /////////////
             void Loop();
-            void ReceivePacketInfo(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint,
-                                   Exodia::Network::Header header); // 0x00
-            void ReceiveAck(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint,
-                            Exodia::Network::Header header); // 0x01
-            void ReceiveConnectAccept(const std::vector<char> message, size_t size,
-                                      asio::ip::udp::endpoint senderEndpoint, Exodia::Network::Header header); // 0x02
-            void ReceiveComponentOf(const std::vector<char> message, size_t size,
-                                    asio::ip::udp::endpoint senderEndpoint, Exodia::Network::Header header); // 0x0c
-            void ReceiveDeleteEntity(const std::vector<char> message, size_t size,
-                                     asio::ip::udp::endpoint senderEndpoint, Exodia::Network::Header header); // 0x0e
-            void ReceiveConnect(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint,
-                                Exodia::Network::Header header); // 0x81
-            void ReceiveEvent(const std::vector<char> message, size_t size, asio::ip::udp::endpoint senderEndpoint,
-                              Exodia::Network::Header header); // 0x82
+            void ReceivePacketInfo(RECEIVE_ARG);    // 0x00
+            void ReceiveAck(RECEIVE_ARG);           // 0x01
+            void ReceiveConnectAccept(RECEIVE_ARG); // 0x02
+            void ReceiveComponentOf(RECEIVE_ARG);   // 0x0c
+            void ReceiveDeleteEntity(RECEIVE_ARG);  // 0x0e
+            void ReceiveConnect(RECEIVE_ARG);       // 0x81
+            void ReceiveEvent(RECEIVE_ARG);         // 0x82
 
+            void SendPacket(Exodia::Network::Packet packet);
+            void SendImportantPacket(Exodia::Network::Packet packet);
             void SendPacketInfo();                                                  // 0x00
             void SendAck(uint64_t command_id);                                      // 0x01
             void SendAcceptConnect();                                               // 0x02
