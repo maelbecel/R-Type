@@ -35,3 +35,9 @@ Entities:
         Coords: [0, 0]
         CellSize: [1, 1]
         SpriteSize: [512, 512]
+    FadeComponent:
+      Opacity: 0
+      FadeInSpeed: 0.4
+      FadeOutSpeed: 0.4
+      shouldFadeIn: true
+      shouldFadeOut: false

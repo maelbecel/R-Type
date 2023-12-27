@@ -26,6 +26,8 @@ set(SOURCES_GAME_ENGINE
         # -- System source files
 
         src/Systems/AnimationSystem.cpp
+        src/Systems/FadeSystem.cpp
+        src/Systems/ClockSystem.cpp
 
         # -- Script source files
 

@@ -723,6 +723,8 @@ namespace Exodia {
                 x += glyph.Width * 1.25 * fsScale + params.Kerning;
             else if (c == 'r')
                 x += glyph.Width * fsScale + params.Kerning;
+            else if (c == 'E')
+                x += glyph.Width * 0.75 * fsScale + params.Kerning;
 
             glm::vec2 texCoordMin(glyph.TextureCoord);
             glm::vec2 texCoordMax(glyph.TextureCoord + fsScale);
@@ -780,7 +782,7 @@ namespace Exodia {
                 } else if (c == 'i' || c == 'l') {
                     x -= glyph.Width / 2 * fsScale + params.Kerning;
                 } else
-                    x += glyph.Width * fsScale + params.Kerning;
+                    x += (glyph.Width + 1) * fsScale + params.Kerning;
             }
         }
     }

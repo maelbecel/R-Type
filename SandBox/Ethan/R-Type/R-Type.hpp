@@ -25,6 +25,8 @@
     // -- R-Type Components includes -------------------------------------------
 
     #include "Components/Animation.hpp"
+    #include "Components/Fade.hpp"
+    #include "Components/Clock.hpp"
 
     // -- R-Type Events includes -----------------------------------------------
 
@@ -33,6 +35,8 @@
     // -- R-Type Systems includes ----------------------------------------------
 
     #include "Systems/AnimationSystem.hpp"
+    #include "Systems/FadeSystem.hpp"
+    #include "Systems/ClockSystem.hpp"
 
     // -- R-Type Scripts includes ----------------------------------------------
 
@@ -48,6 +52,12 @@ namespace RType {
         // -- Register R-Type Components ---------------------------------------
         project->RegisterComponent("AnimationComponent", [](Exodia::Buffer data) -> Exodia::IComponentContainer * {
             return new Exodia::ComponentContainer<AnimationComponent>(data);
+        });
+        project->RegisterComponent("FadeComponent", [](Exodia::Buffer data) -> Exodia::IComponentContainer * {
+            return new Exodia::ComponentContainer<FadeComponent>(data);
+        });
+        project->RegisterComponent("ClockComponent", [](Exodia::Buffer data) -> Exodia::IComponentContainer * {
+            return new Exodia::ComponentContainer<ClockComponent>(data);
         });
 
         // -- Register R-Type Scripts ------------------------------------------

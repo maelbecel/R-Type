@@ -25,6 +25,7 @@ namespace RType {
 
             static const uint64_t LIFTIN  = 51584511521211;
             static const uint64_t LIFTOUT = 120584531521562;
+            static const uint64_t CLASSIC = 45121874124124;
 
             const float TimeBetweenAnimations = 5.0f;
 
@@ -55,6 +56,10 @@ namespace RType {
              * @param ts Delta time between two frames.
              */
             void OnUpdate(Exodia::Timestep ts) override;
+
+        private:
+
+            void PressStartFactory();
 
         ////////////////
         // Attributes //

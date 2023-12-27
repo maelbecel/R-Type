@@ -8,6 +8,13 @@ AssetRegistry:
   - Handle: 120584531521562
     Path: Textures/Intro/LiftOut.png
     Type: AssetType::Texture2D
+  - Handle: 45121874124124
+    Path: Font/R-Type/Classic.png
+    Type: AssetType::Font
+  - Handle: 4521854574125
+    Path: Font/R-Type/ClassicColored.png
+    Type: AssetType::Font
+
   - Handle: 15815285158415
     Path: Icons/ToolBar/PauseButton.png
     Type: AssetType::Texture2D

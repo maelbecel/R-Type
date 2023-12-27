@@ -58,13 +58,6 @@ namespace RType {
         //TODO: Load from a file the animation
         //TODO: Serialize the animation in a Buffer
         //TODO: Deserialize the animation from a Buffer
-
-        /*void DeserializeData(UNUSED(Exodia::Buffer data)) override {};
-
-        Exodia::Buffer SerializeData()
-        {
-            return Exodia::Buffer();
-        }*/
     };
 };
 

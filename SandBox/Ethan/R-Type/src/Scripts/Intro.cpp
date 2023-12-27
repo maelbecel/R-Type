@@ -5,7 +5,10 @@
 ** Intro
 */
 
+// R-Type includes
 #include "Intro.hpp"
+#include "Components/Clock.hpp"
+#include "Components/Fade.hpp"
 
 namespace RType {
     
@@ -68,6 +71,8 @@ namespace RType {
                 anim = HandleEntity->AddComponent<AnimationComponent>(_Animations[0]);
 
                 sprite.Get().Texture = anim.Get().Frames[0];
+
+                PressStartFactory();
             } else {
                 if (_IsLiftIn) {
                     _Animations[0].IsPlaying = false;
@@ -88,5 +93,32 @@ namespace RType {
                 }
             }
         }
+    }
+
+    void Intro::PressStartFactory()
+    {
+        World *world = HandleEntity->GetWorld();
+
+        if (!world)
+            return;
+        Entity *entity = world->CreateNewEntity("Press Start");
+
+        auto transform = entity->GetComponent<TransformComponent>();
+
+        if (!transform)
+            transform = entity->AddComponent<TransformComponent>();
+        
+        transform.Get().Translation = { -1.25f, 0.00f, 0.0f };
+        transform.Get().Scale       = {  0.25f, 0.25f, 1.0f };
+
+        entity->AddComponent<ClockComponent>(3.0f, true, true);
+
+        auto text = entity->AddComponent<TextRendererComponent>("PRESS START");
+
+        text.Get().Font = CLASSIC;
+
+        auto fade = entity->AddComponent<FadeComponent>(0.0f, 0.4f, 0.4f);
+
+        fade.Get().shouldFadeIn = true;
     }
 }
