@@ -28,6 +28,11 @@ namespace Exodia {
 
         Buffer(uint64_t size) { Allocate(size); }
 
+        Buffer(uint64_t size, uint8_t value) {
+            Allocate(size);
+            std::memset(Data, value, size);
+        }
+
         Buffer(const void *data, uint64_t size) : Data((uint8_t *)data), Size(size){};
 
         Buffer(const Buffer &other) = default;

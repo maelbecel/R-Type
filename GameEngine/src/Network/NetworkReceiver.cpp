@@ -205,26 +205,16 @@ namespace Exodia::Network {
     void Network::ReceiveConnect(RECEIVE_ARG) {
 
         asio::ip::udp::endpoint senderEndpoint = senderConnection.GetEndpoint();
-        uint64_t worldID = 0;
-        if (size == sizeof(uint64_t)) {
-            std::memcpy(&worldID, message.data(), sizeof(uint64_t));
-            std::cout << "Receive connect to server id : " << worldID << std::endl;
-        }
 
         // Check if already Connected
         if (_connections.find(STRING_FROM_ENDPOINT(senderEndpoint)) != _connections.end()) {
-            if (_connections[STRING_FROM_ENDPOINT(senderEndpoint)].GetWorldId() == worldID) {
-                EXODIA_CORE_WARN("Network::ReceiveConnect() - Already connected to " + STRING_FROM_ENDPOINT(senderEndpoint));
-                return;
-            }
-            EXODIA_CORE_WARN("Network::ReceiveConnect() - Already connected to " + STRING_FROM_ENDPOINT(senderEndpoint) + " so change world");
-            _connections[STRING_FROM_ENDPOINT(senderEndpoint)].SetWorldId(worldID);
+            EXODIA_CORE_WARN("Network::ReceiveConnect() - Already connected to " + STRING_FROM_ENDPOINT(senderEndpoint));
+            return;
         }
 
         // Adding id to the buffer
         Exodia::Buffer buffer(sizeof(uint64_t));
         uint64_t id = _connections.size() > 0 ? _connections.size() : 0;
-        std::cout << "Receive connect with id :" << id << " Connected to world id : " << worldID << std::endl;
 
         if (!buffer.Write(&id, sizeof(uint64_t)))
             return;
@@ -357,6 +347,8 @@ namespace Exodia::Network {
                 senderConnection = _server_connection;
             }
         }
+        senderConnection.AddReceivedPacket();
+
         std::cout << "Sender connection: " << senderConnection.GetEndpoint() << std::endl;
         std::cout << "Sender connection id: " << senderConnection.GetWorldId() << std::endl;
         std::cout << "Sender connection last id: " << senderConnection.GetLastId() << std::endl;

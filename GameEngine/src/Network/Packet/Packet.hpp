@@ -10,6 +10,7 @@
 
 #include "Network/Header/Header.hpp"
 #include "Utils/Memory.hpp"
+#include "Core/Buffer/Buffer.hpp"
 
 namespace Exodia {
     namespace Network {
@@ -36,6 +37,8 @@ namespace Exodia {
             }
 
             void SetContent(std::vector<char> content) { _content = content; }
+
+            void SetContent(Exodia::Buffer buffer) { _content = buffer.ToVector(); }
 
             void Set(Header header, std::vector<char> content) {
                 _header = CreateScope<Header>(header);

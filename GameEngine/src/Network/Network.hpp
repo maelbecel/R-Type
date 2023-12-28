@@ -158,17 +158,13 @@ namespace Exodia {
 
             World *GetWorld(Connection connection)
             {
-                if (_connections.size() > 0) {
-                    World *world = _gameInstances[connection.GetWorldId()];
-                    return world;
-                } else
-                    return _world;
+                (void) connection;
+                return _world;
             }
 
           private:
             uint64_t id = 0;
             World *_world;
-            std::unordered_map<uint64_t, World *> _gameInstances;
             UDPSocket _socket;
             std::map<std::string, Connection> _connections;
             Connection _server_connection;

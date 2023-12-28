@@ -79,7 +79,7 @@ namespace Exodia::Network {
     void Network::SendAskConnect(const std::string &ip, short port) {
         connect(ip, port);
         Packet packet(0x81);
-        std::vector<char> buffer(0);
+        Buffer buffer(0);
 
         packet.SetContent(buffer);
         _server_connection.SendPacket(_socket, packet);
@@ -92,18 +92,15 @@ namespace Exodia::Network {
      */
     void Network::SendPacketInfo() {
         Exodia::Network::Packet packet(0x00);
-        std::vector<char> buffer(2 * sizeof(int));
-
-        packet.SetContent(buffer);
+        Buffer buffer(2 * sizeof(int));
 
         if (_connections.size() > 0) {
             for (auto &connection : _connections) {
                 int32_t received = connection.second.GetReceivedPacket();
                 int32_t sent = connection.second.GetSendPacket();
 
-                size_t offset = 0;
-                offset = FillData(buffer, offset, &received, sizeof(int));
-                offset = FillData(buffer, offset, &sent, sizeof(int));
+                buffer.Write(&received, sizeof(int));
+                buffer.Write(&sent, sizeof(int));
                 packet.SetContent(buffer);
                 connection.second.SendPacket(_socket, packet);
             }
@@ -111,9 +108,8 @@ namespace Exodia::Network {
             int32_t received = _server_connection.GetReceivedPacket();
             int32_t sent = _server_connection.GetSendPacket();
 
-            size_t offset = 0;
-            offset = FillData(buffer, offset, &received, sizeof(int));
-            offset = FillData(buffer, offset, &sent, sizeof(int));
+            buffer.Write(&received, sizeof(int));
+            buffer.Write(&sent, sizeof(int));
             packet.SetContent(buffer);
             _server_connection.SendPacket(_socket, packet);
         }
@@ -129,7 +125,7 @@ namespace Exodia::Network {
      */
     void Network::SendComponentOf(Entity *entity, std::string component_name) {
         Exodia::Network::Packet packet(0x0c);
-        std::vector<char> buffer(1468, 0);
+        Buffer buffer(1468, 0);
 
         if (entity == nullptr) {
             EXODIA_CORE_ERROR("Network::SendComponentOf() - Entity is null !");
@@ -147,14 +143,13 @@ namespace Exodia::Network {
         unsigned long entity_id = (unsigned long)entity->GetEntityID();
 
         size_t size_of_data = data.Size;
-        size_t offset = 0;
 
-        offset = FillData(buffer, offset, &entity_id, sizeof(unsigned long));            // Set id of entity
-        offset = FillData(buffer, offset, &size_of_string, sizeof(unsigned int));        // Set size of name
-        offset = FillData(buffer, offset, component_name.data(), component_name.size()); // Set name
-        offset = FillData(buffer, offset, &size_of_data, sizeof(uint32_t));              // Set size of data
-        offset = FillData(buffer, offset, data.Data, size_of_data);                      // Set data
-        buffer.resize(offset);
+        buffer.Write(&entity_id, sizeof(unsigned long));            // Set id of entity
+        buffer.Write(&size_of_string, sizeof(unsigned int));        // Set size of name
+        buffer.Write(component_name.data(), component_name.size()); // Set name
+        buffer.Write(&size_of_data, sizeof(uint32_t));              // Set size of data
+        buffer.Write(data.Data, size_of_data);                      // Set data
+        buffer.Resize(buffer.Offset);
 
         packet.SetContent(buffer);
         SendImportantPacket(packet);
@@ -173,11 +168,10 @@ namespace Exodia::Network {
             return;
         }
         Exodia::Network::Packet packet(0x0e);
-        std::vector<char> buffer(sizeof(unsigned long));
+        Buffer buffer(sizeof(unsigned long));
         unsigned long entity_id = (unsigned long)entity->GetEntityID();
 
-        uint64_t offset = 0;
-        offset = FillData(buffer, offset, &entity_id, sizeof(unsigned long));
+        buffer.Write(&entity_id, sizeof(unsigned long));
         packet.SetContent(buffer);
         SendPacket(packet);
     }
@@ -189,17 +183,16 @@ namespace Exodia::Network {
      */
     void Network::SendAck(uint64_t command_id) {
         Exodia::Network::Packet packet(0x01);
-        std::vector<char> buffer(sizeof(uint64_t));
+        Buffer buffer(sizeof(uint64_t));
 
-        size_t offset = 0;
-        offset = FillData(buffer, offset, &command_id, sizeof(uint64_t));
+        buffer.Write(&command_id, sizeof(uint64_t));
         packet.SetContent(buffer);
         SendPacket(packet);
     }
 
     void Network::SendAcceptConnect() {
         Exodia::Network::Packet packet(0x02);
-        std::vector<char> buffer(0);
+        Buffer buffer(0);
 
         packet.SetContent(buffer);
         SendPacket(packet);
@@ -212,11 +205,10 @@ namespace Exodia::Network {
      */
     void Network::SendEvent(uint32_t event, bool isPressed) {
         Exodia::Network::Packet packet(0x8b);
-        std::vector<char> buffer(sizeof(uint32_t) + sizeof(bool));
-        size_t offset = 0;
+        Buffer buffer(sizeof(uint32_t) + sizeof(bool));
 
-        offset = FillData(buffer, offset, &event, sizeof(uint32_t));
-        offset = FillData(buffer, offset, &isPressed, sizeof(bool));
+        buffer.Write(&event, sizeof(uint32_t));
+        buffer.Write(&isPressed, sizeof(bool));
         packet.SetContent(buffer);
         SendPacket(packet);
     }
@@ -224,7 +216,7 @@ namespace Exodia::Network {
     void Network::SendRejectConnect()
     {
         Exodia::Network::Packet packet(0x03);
-        std::vector<char> buffer(0);
+        Buffer buffer(0);
 
         packet.SetContent(buffer);
         SendPacket(packet);
@@ -257,7 +249,7 @@ namespace Exodia::Network {
     void Network::SendDisconnect()
     {
         Exodia::Network::Packet packet(0x82);
-        std::vector<char> buffer(0);
+        Buffer buffer(0);
 
         packet.SetContent(buffer);
         SendPacket(packet);
