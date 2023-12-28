@@ -126,6 +126,8 @@ namespace Exodia {
         }
 
         virtual void DeserializeData(Buffer buffer) override {
+            if (!buffer || buffer.Size == 0)
+                return;
             try {
                 std::memcpy(&Type, buffer.Data, sizeof(BodyType));
                 std::memcpy(&Velocity, buffer.Data + sizeof(BodyType), sizeof(glm::vec2));

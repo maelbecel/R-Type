@@ -58,3 +58,59 @@ Entities:
       Scale: [1, 1, 1]
     ScriptComponent:
       Name: MenuHandler
+
+  - Entity: 8541258128055101
+    TagComponent:
+      Tag: Play Button
+    TransformComponent:
+      Translation: [-0.75, 0.75, 0.7]
+      Rotation: [0, 0, 0]
+      Scale: [0.25, 0.25, 1]
+    TextRendererComponent:
+      Text: PLAY
+      Color: [0.8, 0.9, 0.2, 1]
+      Font: 45121874124124
+      Kerning: 0
+      LineSpacing: 0
+
+  - Entity: 445131003253210310
+    TagComponent:
+      Tag: Settings Button
+    TransformComponent:
+      Translation: [-1.25, 0.25, 0.7]
+      Rotation: [0, 0, 0]
+      Scale: [0.25, 0.25, 1]
+    TextRendererComponent:
+      Text: SETTINGS
+      Color: [1, 1, 1, 1]
+      Font: 45121874124124
+      Kerning: 0
+      LineSpacing: 0
+
+  - Entity: 85235685231421
+    TagComponent:
+      Tag: How to play Button
+    TransformComponent:
+      Translation: [-1.80, -0.25, 0.7]
+      Rotation: [0, 0, 0]
+      Scale: [0.25, 0.25, 1]
+    TextRendererComponent:
+      Text: HOW TO PLAY
+      Color: [1, 1, 1, 1]
+      Font: 45121874124124
+      Kerning: 0
+      LineSpacing: 0
+
+  - Entity: 15201552165468521
+    TagComponent:
+      Tag: Quit Button
+    TransformComponent:
+      Translation: [-0.75, -0.75, 0.7]
+      Rotation: [0, 0, 0]
+      Scale: [0.25, 0.25, 1]
+    TextRendererComponent:
+      Text: QUIT
+      Color: [1, 1, 1, 1]
+      Font: 45121874124124
+      Kerning: 0
+      LineSpacing: 0

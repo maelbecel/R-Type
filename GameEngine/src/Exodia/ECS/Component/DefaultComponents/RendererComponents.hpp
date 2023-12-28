@@ -291,6 +291,9 @@ namespace Exodia {
         }
 
         virtual void DeserializeData(Buffer data) override {
+            if (!data || data.Size == 0)
+                return;
+
             try {
                 size_t offset = 0;
 
@@ -383,6 +386,9 @@ namespace Exodia {
 
         virtual void DeserializeData(Buffer data) override
         {
+            if (!data || data.Size == 0)
+                return;
+
             try {
                 size_t offset = 0;
                 bool hasText  = false;
