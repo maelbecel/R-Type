@@ -127,7 +127,7 @@ Details
 
 0x10 - Send deleted components on entities
     This command is used to send the deleted components on entities. It's
-    content is [Entity][Component][Content_of_a_component] the entity to delete
+    content is [Entity][Component] the entity to delete
     the component to delete and the content of the component to delete.
 
 0x11 - Send events

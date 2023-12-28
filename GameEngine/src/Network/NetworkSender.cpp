@@ -82,7 +82,6 @@ namespace Exodia::Network {
             for (auto &connection : _connections) {
                 int32_t received = connection.second.GetReceivedPacket();
                 int32_t sent = connection.second.GetSendPacket();
-                EXODIA_CORE_INFO("Send packet info to  received: " + std::to_string(received) + " sent: " + std::to_string(sent));
 
                 buffer.Write(&received, sizeof(int));
                 buffer.Write(&sent, sizeof(int));
@@ -94,7 +93,6 @@ namespace Exodia::Network {
         } else {
             int32_t received = _server_connection.GetReceivedPacket();
             int32_t sent = _server_connection.GetSendPacket();
-                EXODIA_CORE_INFO("Send packet info to  received: " + std::to_string(received) + " sent: " + std::to_string(sent));
 
             buffer.Write(&received, sizeof(int));
             buffer.Write(&sent, sizeof(int));
@@ -163,7 +161,7 @@ namespace Exodia::Network {
 
         buffer.Write(&entity_id, sizeof(unsigned long));
         packet.SetContent(buffer);
-        SendPacket(packet);
+        SendImportantPacket(packet);
     }
 
     /**
@@ -224,16 +222,42 @@ namespace Exodia::Network {
 
     void Network::SendDeleteComponent(Entity *entity, std::string component_name)
     {
-        (void)entity;
-        (void)component_name;
-        //TODO: Send delete component
+        Exodia::Network::Packet packet(0x0f);
+        Buffer buffer(1468, 0);
+
+        if (entity == nullptr) {
+            EXODIA_CORE_ERROR("Network::SendComponentOf() - Entity is null !");
+            return;
+        }
+        std::function<Exodia::IComponentContainer *(Exodia::Buffer)> func =
+            Project::GetActive()->GetComponentFactory(component_name);
+        if (!func) {
+            std::string error = "Network::ReceiveComponentOF() - component " + component_name + " not found !";
+            EXODIA_CORE_ERROR(error);
+            return;
+        }
+        unsigned long size_of_string = (unsigned long)component_name.size();
+        unsigned long entity_id = (unsigned long)entity->GetEntityID();
+
+
+        buffer.Write(&entity_id, sizeof(unsigned long));            // Set id of entity
+        buffer.Write(&size_of_string, sizeof(unsigned int));        // Set size of name
+        buffer.Write(component_name.data(), component_name.size()); // Set name
+        buffer.Resize(buffer.Offset);
+
+        packet.SetContent(buffer);
+        SendImportantPacket(packet);
     }
 
     void Network::SendImportantEvent(uint32_t event, bool isPressed)
     {
-        (void)event;
-        (void)isPressed;
-        //TODO: Send important event
+        Exodia::Network::Packet packet(0x8b);
+        Buffer buffer(sizeof(uint32_t) + sizeof(bool));
+
+        buffer.Write(&event, sizeof(uint32_t));
+        buffer.Write(&isPressed, sizeof(bool));
+        packet.SetContent(buffer);
+        SendImportantPacket(packet);
     }
 
     void Network::SendDisconnect()

@@ -170,14 +170,6 @@ namespace Exodia {
     };
 
     bool RTypeLayer::OnKeyReleasedEvent(KeyReleasedEvent &event) {
-
-        NetworkInfo networkInfo = _Network->GetNetworkInfo();
-
-        std::cout << "Packet sent loss: " << networkInfo.sendPacketLost << "% Packet received loss: " << networkInfo.receivePacketLost
-                  << "%" << std::endl;
-        std::cout << std::fixed << std::setprecision(5) << "Killobyte sent: " << networkInfo.kiloByteSent << " received: " << networkInfo.kiloByteReceived << std::endl;
-        std::cout << "Ping: " << std::setprecision(3) << networkInfo.ping  << "ms" << std::endl;
-
         int key = event.GetKeyCode();
 
         Scenes[CurrentScene]->GetWorld().LockMutex();

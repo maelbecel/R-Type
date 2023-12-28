@@ -129,7 +129,34 @@ namespace Exodia::Network {
         (void)header;
         (void)message;
         (void)size;
-        //TODO: Handle delete component of
+        unsigned long id = 0;
+        unsigned int size_of_string = 0;
+        std::string component_name;
+
+        std::memcpy(&id, message.data(), sizeof(unsigned long));
+        std::memcpy(&size_of_string, message.data() + sizeof(unsigned long), sizeof(unsigned int));
+        component_name.resize(size_of_string, 0);
+        std::memcpy(component_name.data(), message.data() + sizeof(unsigned long) + sizeof(unsigned int),
+                    size_of_string);
+
+        World *world = GetWorld(senderConnection);
+        world->LockMutex();
+        Entity *entity = world->GetEntityByID(id);
+        std::function<Exodia::IComponentContainer *(Exodia::Buffer)> func =
+            Project::GetActive()->GetComponentFactory(component_name);
+        if (entity->GetComponent(component_name) == nullptr) {
+            EXODIA_CORE_ERROR("Network::SendComponentOf() - Component " + component_name + " not found !");
+            return;
+        }
+        if (!func) {
+            world->UnlockMutex();
+            std::string error = "Network::ReceiveComponentOF() - component " + component_name + " not found !";
+            EXODIA_CORE_ERROR(error);
+            return;
+        }
+        IComponentContainer *container = entity->GetComponent(component_name);
+        entity->RemoveComponent(container);
+        SendAck(header.getId());
     }
 
     void Network::ReceiveImportantEvent(RECEIVE_ARG) {
