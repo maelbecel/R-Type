@@ -26,9 +26,9 @@ namespace RType {
 
     int RTypeLayer::GetPort() {
 
-        auto commandLine = Application::Get().GetSpecification().CommandLineArgs;
+        ApplicationCommandLineArgs commandLine = Application::Get().GetSpecification().CommandLineArgs;
 
-        // TODO: Temp port ./r-type_client -p {port}
+        // TODO: Temp port ./r-type_client {port}
         int port = 8083; // Default port
         if (commandLine.Count > 1) {
             port = std::stoi(commandLine[1]);
@@ -92,7 +92,7 @@ namespace RType {
         // Create the camera entity
         Entity *cameraEntity = Scenes[GAME]->CreateEntity("Camera");
 
-        auto &camera = cameraEntity->AddComponent<CameraComponent>().Get();
+        CameraComponent &camera = cameraEntity->AddComponent<CameraComponent>().Get();
         cameraEntity->GetComponent<TransformComponent>().Get().Translation = {0.0f, 0.0f, 15.0f};
         camera.Camera.SetProjectionType(SceneCamera::ProjectionType::Perspective);
         camera.Camera.SetViewportSize(Application::Get().GetWindow().GetWidth(),
@@ -160,17 +160,15 @@ namespace RType {
 
         Scenes[CurrentScene]->GetWorld().LockMutex();
         Scenes[CurrentScene]->GetWorld().ForEach<ScriptComponent, TagComponent>(
-            [&](Entity *entity, auto script, auto tag) {
-                auto &sc = script.Get();
-                auto &tc = tag.Get();
+            [&](UNUSED(Entity *entity), ComponentHandle<ScriptComponent> script, ComponentHandle<TagComponent> tag) {
+                ScriptComponent &sc = script.Get();
+                TagComponent &tc = tag.Get();
 
                 if ((tc.Tag.compare("Player_" + _Network->id) == 0) && sc.Instance != nullptr) {
                     sc.Instance->OnKeyPressed(key);
 
                     _Network->SendEvent(key, true);
                 }
-
-                (void)entity;
             });
         Scenes[CurrentScene]->GetWorld().UnlockMutex();
 
@@ -183,9 +181,9 @@ namespace RType {
 
         Scenes[CurrentScene]->GetWorld().LockMutex();
         Scenes[CurrentScene]->GetWorld().ForEach<ScriptComponent, TagComponent>(
-            [&](Entity *entity, auto script, auto tag) {
-                auto &sc = script.Get();
-                auto &tc = tag.Get();
+            [&](Entity *entity, ComponentHandle<ScriptComponent> script, ComponentHandle<TagComponent> tag) {
+                ScriptComponent &sc = script.Get();
+                TagComponent &tc = tag.Get();
 
                 if ((tc.Tag.compare("Player_" + _Network->id) == 0) && sc.Instance != nullptr) {
                     sc.Instance->OnKeyReleased(key);

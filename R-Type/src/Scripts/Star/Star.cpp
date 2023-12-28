@@ -60,19 +60,25 @@ namespace RType {
         auto circle = GetComponent<CircleRendererComponent>();
         World *world = HandleEntity->GetWorld();
 
-        if (!transform || !circle || !clock || !world)
+        if (!transform || !circle || !clock || !world) {
+            EXODIA_WARN("No transform, circle, clock or world");
             return;
+        }
 
-        auto cam = world->GetEntityByTag("Camera");
         auto &mytime = clock.Get().ElapsedTime;
+        auto cam = world->GetEntityByTag("Camera");
 
-        if (!cam || !mytime)
+        if (!cam) {
+            EXODIA_WARN("No camera");
             return;
+        }
 
         auto camera = cam->GetComponent<TransformComponent>();
 
-        if (!camera)
+        if (!camera) {
+            EXODIA_WARN("Camera has no TransformComponent");
             return;
+        }
 
         mytime += ts.GetMilliseconds();
 
