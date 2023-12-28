@@ -16,9 +16,11 @@
 
 // R-Type Scripts
 #include "Scripts/Intro.hpp"
+#include "Scripts/MenuHandler.hpp"
 
 // R-Type Settings
 #include "Settings/Config.hpp"
+#include "Settings/Settings.hpp"
 
 namespace RType {
 
@@ -31,12 +33,12 @@ namespace RType {
     GameLayer::GameLayer() : Layer("R-Type Layer"), _CurrentScene(LOADING)
     {
         RType::EntryPoint();
-
         RType::Config::Init();
 
         if (!Config::Read())
             Config::Write();
-        
+        if (!Settings::Read())
+            Settings::Write();
         InitGame();
     }
 
@@ -79,6 +81,9 @@ namespace RType {
         // -- Register Client scripts -- //
         project->RegisterScript("Intro", []() -> ScriptableEntity * {
             return new Intro();
+        });
+        project->RegisterScript("MenuHandler", []() -> ScriptableEntity * {
+            return new MenuHandler();
         });
     }
 

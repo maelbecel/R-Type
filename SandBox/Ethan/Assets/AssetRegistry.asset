@@ -23,9 +23,6 @@ AssetRegistry:
   - Handle: 9852108613234523
     Path: Textures/Menu/Logo.png
     Type: AssetType::Texture2D
-  - Handle: 84512028082323
-    Path: Textures/Button/Space_Button.png
-    Type: AssetType::Texture2D
   - Handle: 85648856213210235
     Path: Scene/Loading.exodia
     Type: AssetType::Scene

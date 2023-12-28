@@ -22,11 +22,12 @@ namespace RType {
 
     void MenuScene::OnCreate()
     {
+        // -- Creating the scene -- //
         _Scene = CreateRef<Scene>("Menu");
 
         SceneSerializer serializer(_Scene);
 
-        serializer.Deserialize("./Assets/Scene/Menu.exodia");
+        serializer.Deserialize("./Assets/Scene/Menu/Menu.exodia");
 
         // -- Scene System -- //
         _Scene->RegisterSystem(new AnimationSystem());
@@ -39,7 +40,10 @@ namespace RType {
         _Scene->OnRuntimeStart();
     }
 
-    void MenuScene::OnDestroy() {};
+    void MenuScene::OnDestroy()
+    {
+        _Scene->OnRuntimeStop();
+    }
 
     void MenuScene::OnUpdate(Timestep ts)
     {
@@ -55,10 +59,17 @@ namespace RType {
 
     bool MenuScene::OnKeyPressedEvent(KeyPressedEvent &event)
     {
-        int key = event.GetKeyCode();
+        Entity *menuHandler = _Scene->GetEntityByName("MenuHandler");
 
-        (void)key;
+        if (menuHandler) {
+            auto script = menuHandler->GetComponent<ScriptComponent>();
 
+            if (script && script.Get().Instance != nullptr) {
+                script.Get().Instance->OnKeyPressed(event.GetKeyCode());
+
+                return true;
+            }
+        }
         return false;
     }
 };

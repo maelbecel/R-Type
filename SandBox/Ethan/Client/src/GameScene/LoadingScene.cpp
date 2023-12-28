@@ -27,7 +27,7 @@ namespace RType {
 
         SceneSerializer serializer(_Scene);
 
-        serializer.Deserialize("./Assets/Scene/Loading.exodia");
+        serializer.Deserialize("./Assets/Scene/Loading/Loading.exodia");
 
         // -- Scene System -- //
         _Scene->RegisterSystem(new AnimationSystem());
@@ -71,10 +71,12 @@ namespace RType {
             if (background) {
                 auto script = background->GetComponent<ScriptComponent>();
 
-                if (script && script.Get().Instance != nullptr)
+                if (script && script.Get().Instance != nullptr) {
                     script.Get().Instance->OnKeyPressed(key);
+
+                    return true;
+                }
             }
-            return true;
         }
         return false;
     }

@@ -81,7 +81,7 @@ namespace RType {
 
             std::map<SceneType, Ref<GameScene>> _Scenes;
             SceneType _CurrentScene;
-        
+
         private:
             inline static Ref<GameLayer> _Instance;
     };

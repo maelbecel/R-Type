@@ -37,10 +37,12 @@ set(SOURCES
         # R-Type Scripts sources files
     
     src/Scripts/Intro.cpp
+    src/Scripts/MenuHandler.cpp
 
         # R-Type Diverses sources files
 
     src/Settings/Config.cpp
+    src/Settings/Settings.cpp
 )
 
 # Set include directories for the Exodia Game Engine Application

@@ -66,6 +66,7 @@ Entities:
       ShouldFadeIn: true
       ShouldFadeOut: false
       Repeat: false
+
   - Entity: 8451210482531
     TagComponent:
       Tag: Filter
@@ -76,3 +77,13 @@ Entities:
     SpriteRendererComponent:
       Color: [0, 0, 0, 0.2]
       TilingFactor: 1
+
+  - Entity: 585212025481203
+    TagComponent:
+      Tag: MenuHandler
+    TransformComponent:
+      Translation: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    ScriptComponent:
+      Name: MenuHandler

@@ -42,7 +42,7 @@ namespace RType {
             return false;
         }
 
-        auto window = config["Window"];
+        auto window = config["[Window Configuration]"];
 
         if (!window)
             return false;
@@ -84,7 +84,7 @@ namespace RType {
         YAML::Emitter out;
         {
             out << YAML::BeginMap;
-            out << YAML::Key << "Window" << YAML::Value;
+            out << YAML::Key << "[Window Configuration]" << YAML::Value;
             {
                 out << YAML::BeginMap;
                 out << YAML::Key << "Width" << YAML::Value << Exodia::Application::Get().GetWindow().GetWidth();
