@@ -143,3 +143,9 @@ AssetRegistry:
   - Handle: 18375012605620
     Path: Textures/Missile.png
     Type: AssetType::Texture2D
+  - Handle: 183750131800543235
+    Path: Textures/Simple_Explosion.png
+    Type: AssetType::Texture2D
+  - Handle: 1837501318005432356
+    Path: Textures/Explosion.png
+    Type: AssetType::Texture2D
