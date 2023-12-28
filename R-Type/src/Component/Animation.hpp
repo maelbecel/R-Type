@@ -2,68 +2,63 @@
 ** EPITECH PROJECT, 2023
 ** R-Type
 ** File description:
-** ComponentExample
+** Animation
 */
 
-#ifndef ANIMATIONCOMPONENT_HPP_
-#define ANIMATIONCOMPONENT_HPP_
+#ifndef ANIMATION_HPP_
+    #define ANIMATION_HPP_
 
-#include "Exodia.hpp"
+    // Exodia includes
+    #include "Exodia.hpp"
 
-namespace Exodia {
+    // External includes
+    #include <vector>
+
+namespace RType {
 
     /**
-     * @brief Animation component.
+     * @brief Animation Component.
      *
-     * @param CurrentFrame Current frame of the animation.
-     * @param MaxFrame Max frame of the animation.
-     * @param FrameTime Time between each frame.
+     * This component represents an animation in the game.
+     * It contains :
+     * - A list of frames (in SubTexture2D format)
+     * - A boolean indicating if the animation is playing
+     * - A boolean indicating if the animation should repeat
+     * - A float indicating the frame rate of the animation (in seconds) (FrameRate represents the time between each frame) (like Timestep)
+     * - A float indicating the time since the last frame change (in seconds)
+     * - An integer indicating the current frame of the animation
      */
-    struct Animation : public Component {
-        float CurrentFrame;
-        float MaxFrame;
-        float FrameTime;
-        float ElapsedTime = 0.0f;
+    struct AnimationComponent : public Exodia::Component {
+        std::vector<Ref<Exodia::SubTexture2D>> Frames; // !< List containing all the frames of the animation in SubTexture2D format
 
-        Animation(const Animation &) = default;
-        Animation(float CurrentFrame = 0.0f, float MaxFrame = 0.0f, float FrameTime = 0.0f)
-            : CurrentFrame(CurrentFrame), MaxFrame(MaxFrame), FrameTime(FrameTime){};
+        bool IsPlaying; // !< Boolean indicating if the animation is playing
+        bool Repeat; // !< Boolean indicating if the animation should repeat
 
-        virtual void Serialize(UNUSED(YAML::Emitter &out)) override{};
+        float FrameRate; // !< Float indicating the frame rate of the animation (in seconds) (FrameRate represents the time between each frame) (like Timestep)
+        float FrameTimer; // !< Float indicating the time since the last frame change (in seconds)
 
-        virtual Buffer SerializeData() {
-            try {
-                uint64_t size = sizeof(float) * 4;
-                Buffer buffer(size);
+        int CurrentFrameIndex; // !< Integer indicating the current frame of the animation
 
-                std::memcpy(buffer.Data, &CurrentFrame, sizeof(float));
-                std::memcpy(buffer.Data + sizeof(float), &MaxFrame, sizeof(float));
-                std::memcpy(buffer.Data + sizeof(float) * 2, &FrameTime, sizeof(float));
-                std::memcpy(buffer.Data + sizeof(float) * 3, &ElapsedTime, sizeof(float));
+        AnimationComponent(const AnimationComponent &other) : Frames(other.Frames), IsPlaying(other.IsPlaying), Repeat(other.Repeat), FrameRate(other.FrameRate), FrameTimer(other.FrameTimer), CurrentFrameIndex(other.CurrentFrameIndex) {};
+        AnimationComponent(const std::vector<Ref<Exodia::SubTexture2D>> &frames = {}) : Frames(frames), IsPlaying(false), Repeat(false), FrameRate(0.0f), FrameTimer(0.0f), CurrentFrameIndex(0) {};
 
-                return buffer;
+        AnimationComponent &operator=(const AnimationComponent &other)
+        {
+            Frames            = other.Frames;
+            IsPlaying         = other.IsPlaying;
+            Repeat            = other.Repeat;
+            FrameRate         = other.FrameRate;
+            FrameTimer        = other.FrameTimer;
+            CurrentFrameIndex = other.CurrentFrameIndex;
 
-            } catch (const std::exception &e) {
-                EXODIA_CORE_ERROR("Error while serializing Animation component: {0}", e.what());
-                return Buffer();
-            }
+            return *this;
         }
 
-        virtual void DeserializeData(Buffer buffer) {
-            try {
-                uint64_t size = 0;
-                Memcopy(&CurrentFrame, buffer.Data, sizeof(float));
-                size += sizeof(float);
-                Memcopy(&MaxFrame, buffer.Data + size, sizeof(float));
-                size += sizeof(float);
-                Memcopy(&FrameTime, buffer.Data + size, sizeof(float));
-                size += sizeof(float);
-                Memcopy(&ElapsedTime, buffer.Data + size, sizeof(float));
-            } catch (const std::exception &e) {
-                EXODIA_CORE_ERROR("Error while deserializing Animation component: {0}", e.what());
-            }
-        }
+        //TODO: Save in a file the animation
+        //TODO: Load from a file the animation
+        //TODO: Serialize the animation in a Buffer
+        //TODO: Deserialize the animation from a Buffer
     };
-}; // namespace Exodia
+};
 
-#endif /* !ANIMATIONCOMPONENT_HPP_ */
+#endif /* !ANIMATION_HPP_ */

@@ -38,7 +38,7 @@ namespace RType {
         bullet_tc.Translation.y = tc.Translation.y;
         bullet_tc.Scale = {0.5f, 0.5f, 0.0f};
 
-        HandleEntity->AddComponent<Animation>(8.0f, 12.0f, 0.0795f);
+        // HandleEntity->AddComponent<Animation>(8.0f, 12.0f, 0.0795f);
         HandleEntity->AddComponent<BoxCollider2DComponent>();
 
         // TODO: Ask to server the number of player connected, and do a rand() % nb_player

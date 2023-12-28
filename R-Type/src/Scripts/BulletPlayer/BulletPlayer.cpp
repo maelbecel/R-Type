@@ -36,7 +36,7 @@ namespace RType {
         bullet_tc.Translation.y = tc.Translation.y - 0.05f;
         bullet_tc.Scale = {0.5f, 0.5f, 0.0f};
 
-        HandleEntity->AddComponent<Animation>(0.0f, 2.0f, 1.0f);
+        // HandleEntity->AddComponent<Animation>(0.0f, 2.0f, 1.0f);
         HandleEntity->AddComponent<BoxCollider2DComponent>();
 
         ComponentHandle<RigidBody2DComponent> body = HandleEntity->AddComponent<RigidBody2DComponent>();
@@ -63,10 +63,10 @@ namespace RType {
 
     void BulletPlayer::OnUpdate(UNUSED(Timestep ts))  {
         ComponentHandle<TransformComponent> transform = GetComponent<TransformComponent>();
-        ComponentHandle<Animation> animation = GetComponent<Animation>();
+        // ComponentHandle<Animation> animation = GetComponent<Animation>();
         ComponentHandle<ParentComponent> parent = GetComponent<ParentComponent>();
         World *world = HandleEntity->GetWorld();
-        if (!transform || !animation || !parent || !world)
+        if (!transform || !parent || !world)
             return;
 
         Entity *entity = world->GetEntityByID(parent.Get().Parent);
@@ -83,11 +83,10 @@ namespace RType {
         if (!camera_transform || !velocity)
             return;
 
-        EXODIA_TRACE("{0} {1}", animation.Get().CurrentFrame, animation.Get().MaxFrame);
         // When the shoot animation is finished, the bullet is moving
-        if (animation.Get().CurrentFrame == animation.Get().MaxFrame) {
-            velocity.Get().Velocity.x = _Speed;
-        }
+        // if (animation.Get().CurrentFrame == animation.Get().MaxFrame) {
+        //     velocity.Get().Velocity.x = _Speed;
+        // }
 
         // Remove bullet if out of screen
         if (transform.Get().Translation.x > camera_transform.Get().Translation.x + 10.0f) {

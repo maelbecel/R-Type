@@ -26,6 +26,15 @@ namespace RType {
     class PataPata : public ScriptableEntity {
 
         /////////////
+        // Defines //
+        /////////////
+        private:
+            static const uint64_t PATAPATA = 90123456789012678;
+            static const uint64_t DEATH    = 183750131800543235;
+
+            const float TimeBetweenAnimations = 5.0f;
+
+        /////////////
         //  enum   //
         /////////////
         public:
@@ -46,13 +55,18 @@ namespace RType {
             void Shoot(ComponentHandle<TransformComponent> transform);
             void SinusoidalMovement(Timestep ts);
             void IsDead();
+            void CreateAnimations();
+            void UpdateAnimations();
 
         ////////////////
         // Attributes //
         ////////////////
         private:
-            State _State;
+            State _State = State::ALIVE;
+            State _PreviousState = State::DEAD;
             float _AttackTimer;
+            float _AttackCooldown = 5.0f;
+            std::vector<AnimationComponent> _Animations;
     };
 }; // namespace Exodia
 

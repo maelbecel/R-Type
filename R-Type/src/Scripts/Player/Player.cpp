@@ -11,10 +11,85 @@ using namespace Exodia;
 
 namespace RType {
 
+    void Player::CreateAnimations() {
+        AnimationComponent idle;
+        AnimationComponent moveUp;
+        AnimationComponent moveDown;
+        AnimationComponent upToIdle;
+        AnimationComponent downToIdle;
+        AnimationComponent dead;
+
+        std::vector<Ref<SubTexture2D>> framesIdle;
+        std::vector<Ref<SubTexture2D>> framesMoveUp;
+        std::vector<Ref<SubTexture2D>> framesMoveDown;
+        std::vector<Ref<SubTexture2D>> framesUpToIdle;
+        std::vector<Ref<SubTexture2D>> framesDownToIdle;
+        std::vector<Ref<SubTexture2D>> framesDead;
+
+        // _Animations[0]
+        framesIdle.push_back(SubTexture2D::CreateFromCoords(PLAYER, {2.0f, 4.0f}, {33.2f, 17.2f}, {1.0f, 1.0f}));
+
+        // _Animations[1]
+        for (uint32_t x = 3; x < 5; x++)
+            framesMoveUp.push_back(SubTexture2D::CreateFromCoords(PLAYER, {x, 4.0f}, {33.2f, 17.2f}, {1.0f, 1.0f}));
+
+        // _Animations[2]
+        for (int32_t x = 1; x > -1; x--)
+            framesMoveDown.push_back(SubTexture2D::CreateFromCoords(PLAYER, {x, 4.0f}, {33.2f, 17.2f}, {1.0f, 1.0f}));
+
+        // _Animations[3]
+        for (uint32_t x = 1; x < 3; x++)
+            framesDownToIdle.push_back(SubTexture2D::CreateFromCoords(PLAYER, {x, 4.0f}, {33.2f, 17.2f}, {1.0f, 1.0f}));
+
+        // _Animations[4]
+        for (int32_t x = 3; x > 1; x--)
+            framesUpToIdle.push_back(SubTexture2D::CreateFromCoords(PLAYER, {x, 4.0f}, {33.2f, 17.2f}, {1.0f, 1.0f}));
+
+        // _Animations[5]
+        for (uint32_t x = 0; x < 8; x++)
+            framesDead.push_back(SubTexture2D::CreateFromCoords(DEATH, { x, 0.0f }, { 33.2f, 32.0f }, { 1.0f, 1.0f }));
+
+        idle.Frames     = framesIdle;
+        idle.IsPlaying  = false;
+        idle.Repeat     = false;
+        idle.FrameRate  = 13.2f;
+
+        moveUp.Frames   = framesMoveUp;
+        moveUp.IsPlaying= false;
+        moveUp.Repeat   = false;
+        moveUp.FrameRate= 13.2f;
+
+        moveDown.Frames = framesMoveDown;
+        moveDown.IsPlaying = false;
+        moveDown.Repeat    = false;
+        moveDown.FrameRate = 13.2f;
+
+        upToIdle.Frames = framesUpToIdle;
+        upToIdle.IsPlaying = false;
+        upToIdle.Repeat    = false;
+        upToIdle.FrameRate = 13.2f;
+
+        downToIdle.Frames = framesDownToIdle;
+        downToIdle.IsPlaying = false;
+        downToIdle.Repeat    = false;
+        downToIdle.FrameRate = 13.2f;
+
+        dead.Frames = framesDead;
+        dead.IsPlaying = false;
+        dead.Repeat    = false;
+        dead.FrameRate = 13.2f;
+
+        _Animations.push_back(idle);
+        _Animations.push_back(moveUp);
+        _Animations.push_back(moveDown);
+        _Animations.push_back(upToIdle);
+        _Animations.push_back(downToIdle);
+        _Animations.push_back(dead);
+    }
+
     void Player::OnCreate() {
 
         HandleEntity->AddComponent<Health>(1);
-        HandleEntity->AddComponent<Animation>(1.0f, 2.0f, 0.1f);
         HandleEntity->AddComponent<BoxCollider2DComponent>();
 
         ComponentHandle<TransformComponent> transform = GetComponent<TransformComponent>();
@@ -25,11 +100,6 @@ namespace RType {
         TransformComponent &tc = transform.Get();
         tc.Scale.y = 0.5f;
         tc.Translation.y = 0.4f;
-
-        // auto sprite = HandleEntity->AddComponent<SpriteRendererComponent>(glm::vec4{0.1f, 0.3f, 0.2f, 1.0f});
-        // sprite.Get().Texture =
-        //     SubTexture2D::CreateFromCoords(12345678901234578, {2.0f, 4.0f}, {33.2f, 17.2f}, {1.0f, 1.0f});
-        HandleEntity->AddComponent<CircleRendererComponent>(glm::vec4{ 1.0f, 1.0f, 0.0f, 1.0f});
 
         // Set entity rigidbody
         ComponentHandle<RigidBody2DComponent> body = HandleEntity->AddComponent<RigidBody2DComponent>();
@@ -44,12 +114,8 @@ namespace RType {
         rb.Velocity = glm::vec2{0.0f, 0.0f};
         EXODIA_INFO("Player created");
 
-        // Set variables
-        _State = State::IDLE;
-        _AttackTimer = 0.0f;
-        _IsAttacking = false;
-        _IsCharging = false;
-        _IsShooting = false;
+        // Set entity animations
+        CreateAnimations();
     }
 
     void Player::Shoot(Timestep ts, TransformComponent &tc) {
@@ -72,6 +138,30 @@ namespace RType {
         _IsAttacking = true;
     }
 
+    void Player::UpdateAnimations() {
+        ComponentHandle<SpriteRendererComponent> sprite = GetComponent<SpriteRendererComponent>();
+        ComponentHandle<AnimationComponent> anim = GetComponent<AnimationComponent>();
+
+        if (!sprite)
+            sprite = HandleEntity->AddComponent<SpriteRendererComponent>();
+
+        if (!anim) {
+            _Animations[0].IsPlaying = true;
+
+            anim = HandleEntity->AddComponent<AnimationComponent>(_Animations[0]);
+
+            sprite.Get().Texture = anim.Get().Frames[0];
+        } else {
+            if (_State == State::IDLE && _PreviousState != State::IDLE) {
+                Idle(anim.Get(), sprite.Get());
+            } else if (_State == State::MOVE_UP && _PreviousState != State::MOVE_UP) {
+                MoveUp(anim.Get(), sprite.Get());
+            } else if (_State == State::MOVE_DOWN && _PreviousState != State::MOVE_DOWN) {
+                MoveDown(anim.Get(), sprite.Get());
+            }
+        }
+    }
+
     void Player::OnUpdate(Timestep ts) {
         ComponentHandle<TransformComponent> transform = GetComponent<TransformComponent>();
         ComponentHandle<Health> health = GetComponent<Health>();
@@ -88,6 +178,8 @@ namespace RType {
             Shoot(ts, GetComponent<TransformComponent>().Get());
             _IsShooting = false;
         }
+
+        UpdateAnimations();
 
         if (_State != State::DEAD && h.CurrentHealth <= 0) {
             EXODIA_INFO("Player is dead");
@@ -124,6 +216,7 @@ namespace RType {
             // animation.Get().FrameTime = 0.075f;
 
             // // Set entity sprite
+            // 3456789012345678901
             // // Ref<Texture2D> texture = TextureImporter::LoadTexture2D("Assets/Textures/HUD.png");
             // // sprite.Get().Texture = SubTexture2D::CreateFromCoords(texture->Handle, { 0.0f, 0.0f }, { 33.2f, 32.0f
             // }, { 1.0f, 1.0f });
@@ -157,7 +250,7 @@ namespace RType {
     };
 
     void Player::OnKeyPressed(int keycode) {
-        EXODIA_INFO("Player is pressing {0}", keycode);
+        EXODIA_TRACE("Player is pressing {0}", keycode);
         auto transform = GetComponent<TransformComponent>();
         auto velocity = GetComponent<RigidBody2DComponent>();
         auto camera_entity = HandleEntity->GetWorld()->GetEntityByTag("Camera");
@@ -195,21 +288,21 @@ namespace RType {
             if (!block) {
                 // Move player with keyboard
                 if (keycode == Key::A) { // Left
-                    EXODIA_INFO("Player is moving left");
-                    _State = State::IDLE;
+                    EXODIA_TRACE("Player is moving left");
+                    // _State = State::IDLE;
                     velocity.Get().Velocity.x = -5.0f;
                 } else if (keycode == Key::D) { // Right
-                    EXODIA_INFO("Player is moving right");
-                    _State = State::IDLE;
+                    EXODIA_TRACE("Player is moving right");
+                    // _State = State::IDLE;
                     velocity.Get().Velocity.x = 5.0f;
                 }
 
                 if (keycode == Key::W) { // Up
-                    EXODIA_INFO("Player is moving up");
+                    EXODIA_TRACE("Player is moving up");
                     _State = State::MOVE_UP;
                     velocity.Get().Velocity.y = 5.0f;
                 } else if (keycode == Key::S) { // Down
-                    EXODIA_INFO("Player is moving down");
+                    EXODIA_TRACE("Player is moving down");
                     _State = State::MOVE_DOWN;
                     velocity.Get().Velocity.y = -5.0f;
                 }
@@ -217,13 +310,13 @@ namespace RType {
 
             // Simple attack
             if (keycode == Key::SPACE && !_IsAttacking) {
-                EXODIA_INFO("Player is shooting");
+                EXODIA_TRACE("Player is shooting");
                 _IsShooting = true;
             }
 
             // Charge attack
             if (keycode == Key::Q && !_IsCharging) {
-                EXODIA_INFO("Player is charging");
+                EXODIA_TRACE("Player is charging");
                 _IsCharging = true;
             }
         }
@@ -234,7 +327,7 @@ namespace RType {
 
         if (velocity) {
             if (keycode == Key::A || keycode == Key::D) {
-                _State = State::IDLE;
+                // _State = State::IDLE;
                 velocity.Get().Velocity.x = 0.0f;
             }
             if (keycode == Key::W || keycode == Key::S) {
@@ -248,7 +341,7 @@ namespace RType {
             }
 
             if (keycode == Key::Q && _IsCharging) {
-                EXODIA_INFO("Player realease charge after {0} seconds", _AttackTimer);
+                EXODIA_TRACE("Player realease charge after {0} seconds", _AttackTimer);
                 _AttackTimer = 0.0f;
                 _IsCharging = false;
             }

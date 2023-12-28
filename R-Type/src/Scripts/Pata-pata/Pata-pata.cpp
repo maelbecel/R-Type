@@ -11,10 +11,37 @@ using namespace Exodia;
 
 namespace RType {
 
+    void PataPata::CreateAnimations() {
+        AnimationComponent anim;
+        AnimationComponent death;
+
+        std::vector<Ref<SubTexture2D>> framesIdle;
+        std::vector<Ref<SubTexture2D>> framesDeath;
+
+        for (int i = 0; i < 8; i++)
+            framesIdle.push_back(SubTexture2D::CreateFromCoords(PATAPATA, {i, 0.0f}, {33.3125f, 36.0f}, {1.0f, 1.0f}));
+
+        for (int i = 0; i < 7; i++) {
+            framesDeath.push_back(SubTexture2D::CreateFromCoords(DEATH, {i, 0.0f}, {32.0f, 34.0f}, {1.0f, 1.0f}));
+        }
+
+        anim.Frames = framesIdle;
+        anim.IsPlaying = false;
+        anim.Repeat = true;
+        anim.FrameRate  = 13.2f;
+
+        death.Frames = framesDeath;
+        death.IsPlaying = false;
+        death.Repeat = false;
+        death.FrameRate = 13.2f;
+
+        _Animations.push_back(anim);
+        _Animations.push_back(death);
+    }
+
     void PataPata::OnCreate() {
 
         HandleEntity->AddComponent<Health>(1);
-        HandleEntity->AddComponent<Animation>(1.0f, 8.0f, 0.1f);
         HandleEntity->AddComponent<Clock>();
         HandleEntity->AddComponent<BoxCollider2DComponent>();
 
@@ -29,12 +56,7 @@ namespace RType {
         rb.GravityScale = 0.0f;
         rb.Velocity.x = 0.0f;
 
-        // Set entity sprite
-        // auto sprite = HandleEntity->AddComponent<SpriteRendererComponent>(glm::vec4{0.8f, 0.2f, 0.3f, 1.0f});
-        // sprite.Get().Texture =
-        //     SubTexture2D::CreateFromCoords(90123456789012678, {0.0f, 0.0f}, {33.3125f, 36.0f}, {1.0f, 1.0f});
-        HandleEntity->AddComponent<CircleRendererComponent>(glm::vec4{ 1.0f, 1.0f, 0.0f, 1.0f});
-
+        CreateAnimations();
         ComponentHandle<TransformComponent> transform = GetComponent<TransformComponent>();
 
         if (!transform)
@@ -45,10 +67,38 @@ namespace RType {
         tc.Translation.x = 7.0f;
         tc.Translation.y = (float)(std::rand() % 10 - 5);
 
-        // Set variables
-        _State = State::ALIVE;
         EXODIA_INFO("PataPata created at pos {0}, {1}", tc.Translation.x,
                     tc.Translation.y);
+    }
+
+    void PataPata::UpdateAnimations() {
+        ComponentHandle<SpriteRendererComponent> sprite = GetComponent<SpriteRendererComponent>();
+        ComponentHandle<AnimationComponent> anim = GetComponent<AnimationComponent>();
+
+        if (!sprite)
+            sprite = HandleEntity->AddComponent<SpriteRendererComponent>();
+
+        if (!anim) {
+            _Animations[0].IsPlaying = true;
+
+            anim = HandleEntity->AddComponent<AnimationComponent>(_Animations[0]);
+
+            sprite.Get().Texture = anim.Get().Frames[0];
+        } else {
+            if (_State == State::ALIVE && _PreviousState != State::ALIVE) {
+                _Animations[0].IsPlaying = true;
+                _Animations[1].IsPlaying = false;
+
+                anim.Get() = _Animations[0];
+                sprite.Get().Texture = anim.Get().Frames[0];
+            } else if (_State == State::DEAD && _PreviousState != State::DEAD) {
+                _Animations[0].IsPlaying = false;
+                _Animations[1].IsPlaying = true;
+
+                anim.Get() = _Animations[1];
+                sprite.Get().Texture = anim.Get().Frames[0];
+            }
+        }
     }
 
     void PataPata::OnUpdate(Timestep ts) {
@@ -58,6 +108,7 @@ namespace RType {
             return;
 
         IsDead();
+        UpdateAnimations();
         SinusoidalMovement(ts);
         Shoot(transform);
     }
@@ -82,7 +133,7 @@ namespace RType {
 
         TransformComponent tc = transform.Get();
 
-        if (_AttackTimer > 1.0f) {
+        if (_AttackTimer > _AttackCooldown) {
             World *world = HandleEntity->GetWorld();
             if (!world)
                 return;
@@ -126,34 +177,20 @@ namespace RType {
     }
 
     void PataPata::IsDead() {
-        ComponentHandle<Animation> animation = GetComponent<Animation>();
         ComponentHandle<Health> health = GetComponent<Health>();
         ComponentHandle<RigidBody2DComponent> body = GetComponent<RigidBody2DComponent>();
 
-        if (!animation || !health || !body)
+        if (!health || !body)
             return;
 
-        Animation &ac = animation.Get();
-
         if (_State == State::ALIVE && health.Get().CurrentHealth <= 0) {
-            ac.CurrentFrame = 0;
-            ac.MaxFrame = 7;
-            ac.FrameTime = 0.095f;
-
-            // Set entity sprite to explosion
-            // auto sprite = GetComponent<SpriteRendererComponent>();
-            // if (!sprite)
-            //     return;
-            // Ref<Texture2D> texture = TextureImporter::LoadTexture2D("Assets/Textures/Simple_Explosion.png");
-            // sprite.Get().Texture = SubTexture2D::CreateFromCoords(texture->Handle, { 0.0f, 0.0f }, { 32.0f, 34.0f
-            // }, { 1.0f, 1.0f });
             _State = State::DEAD;
             body.Get().Velocity = { 0.0f, 0.0f };
         }
 
-        if (_State == State::DEAD && ac.CurrentFrame == ac.MaxFrame - 1) {
-            HandleEntity->GetWorld()->DestroyEntity(HandleEntity);
-        }
+        // if (_State == State::DEAD && ac.CurrentFrame == ac.MaxFrame - 1) {
+        //     HandleEntity->GetWorld()->DestroyEntity(HandleEntity);
+        // }
     }
 
 } // namespace Exodia

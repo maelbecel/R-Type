@@ -49,7 +49,7 @@ namespace RType {
         });
 
         project->RegisterComponent("Animation", [](Exodia::Buffer data) -> Exodia::IComponentContainer * {
-            return new Exodia::ComponentContainer<Exodia::Animation>(data);
+            return new Exodia::ComponentContainer<RType::AnimationComponent>(data);
         });
 
         project->RegisterComponent("Clock", [](Exodia::Buffer data) -> Exodia::IComponentContainer * {

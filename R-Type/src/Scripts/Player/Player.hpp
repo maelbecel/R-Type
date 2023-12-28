@@ -19,6 +19,16 @@ namespace RType {
 
     class Player : public ScriptableEntity {
 
+        /////////////
+        // Defines //
+        /////////////
+        private:
+
+            static const uint64_t PLAYER  = 12345678901234578;
+            static const uint64_t DEATH   = 3456789012345678901;
+
+            const float TimeBetweenAnimations = 5.0f;
+
         //////////////
         //  Enums   //
         //////////////
@@ -37,6 +47,13 @@ namespace RType {
 
       private:
         void Shoot(Timestep ts, TransformComponent &tc);
+        void CreateAnimations();
+        void UpdateAnimations();
+
+      private:
+        void Idle(AnimationComponent anim, SpriteRendererComponent sprite);
+        void MoveUp(AnimationComponent anim, SpriteRendererComponent sprite);
+        void MoveDown(AnimationComponent anim, SpriteRendererComponent sprite);
 
         ////////////////////////
         // Getters && Setters //
@@ -49,11 +66,14 @@ namespace RType {
         // Attributes //
         ////////////////
       private:
-        State _State;
-        float _AttackTimer;
-        bool _IsAttacking;
-        bool _IsCharging;
+
+        State _State = State::IDLE;
+        State _PreviousState = State::MOVE_DOWN;
+        float _AttackTimer = 0.0f;
+        bool _IsAttacking = false;
+        bool _IsCharging = false;
         bool _IsShooting = false;
+        std::vector<AnimationComponent> _Animations;
     };
 }; // namespace RType
 

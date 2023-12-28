@@ -6,35 +6,31 @@
 */
 
 #ifndef ANIMATIONSYSTEM_HPP_
-#define ANIMATIONSYSTEM_HPP_
+    #define ANIMATIONSYSTEM_HPP_
 
-#include "Exodia.hpp"
-#include "Component/Animation.hpp"
-#include "Scripts/Player/Player.hpp"
-#include "Scripts/Pata-pata/Pata-pata.hpp"
-
-using namespace Exodia;
+    // R-Type Events includes
+    #include "Event/AnimationEvent.hpp"
 
 namespace RType {
 
-    class AnimationSystem : public EntitySystem {
-      public:
-        // Constructor && Destructor
-        AnimationSystem(){};
+    class AnimationSystem : public Exodia::EntitySystem, public Exodia::EventSubscriber<Events::AnimationEndingEvent> {
 
-        virtual ~AnimationSystem(){};
+        //////////////////////////////
+        // Constructor & Destructor //
+        //////////////////////////////
+        public:
 
-      public:
-        // Methods
-        virtual void Update(World *world, Timestep ts) override;
+            AnimationSystem() = default;
+            ~AnimationSystem() = default;
 
-      private:
-        template <typename T, typename F>
-        void UpdateAnimation(Entity *entity, F &&func);
-        void UpdatePlayer(Entity *entity, Exodia::ComponentHandle<SpriteRendererComponent> &sprite, Exodia::ComponentHandle<Animation> &animation, Timestep ts);
-        void UpdatePataPata(Exodia::ComponentHandle<SpriteRendererComponent> &sprite, Exodia::ComponentHandle<Animation> &animation, Timestep ts);
-        void UpdateBullet(Exodia::ComponentHandle<SpriteRendererComponent> &sprite, Exodia::ComponentHandle<Animation> &animation, Timestep ts);
+        /////////////
+        // Methods //
+        /////////////
+        public:
+
+            void Update(Exodia::World *world, Exodia::Timestep ts) override;
+            void Receive(Exodia::World *world, const Events::AnimationEndingEvent &event) override;
     };
-}; // namespace Exodia
+};
 
 #endif /* !ANIMATIONSYSTEM_HPP_ */
