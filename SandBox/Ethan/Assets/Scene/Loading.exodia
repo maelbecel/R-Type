@@ -20,7 +20,7 @@ Entities:
       FixedAspectRatio: true
   - Entity: 458541471201584
     TagComponent:
-      Tag: Background
+      Tag: LoadingBackground
     TransformComponent:
       Translation: [0, 0, -0.5]
       Rotation: [0, 0, 0]
@@ -39,8 +39,9 @@ Entities:
       Opacity: 0
       FadeInSpeed: 0.4
       FadeOutSpeed: 0.4
-      shouldFadeIn: true
-      shouldFadeOut: false
+      ShouldFadeIn: true
+      ShouldFadeOut: false
+      Repeat: true
     MusicComponent:
       Handle: 124013371145915
       Volume: 0.5

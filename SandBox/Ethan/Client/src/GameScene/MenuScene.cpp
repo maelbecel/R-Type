@@ -29,6 +29,8 @@ namespace RType {
         serializer.Deserialize("./Assets/Scene/Menu.exodia");
 
         // -- Scene System -- //
+        _Scene->RegisterSystem(new AnimationSystem());
+        _Scene->RegisterSystem(new FadeSystem());
 
         // -- Resizing the viewport -- //
         _Scene->OnViewportResize(Application::Get().GetWindow().GetWidth(), Application::Get().GetWindow().GetHeight());

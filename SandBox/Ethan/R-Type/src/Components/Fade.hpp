@@ -19,11 +19,13 @@ namespace RType {
         float FadeInSpeed;
         float FadeOutSpeed;
 
-        bool shouldFadeIn;
-        bool shouldFadeOut;
+        bool ShouldFadeIn;
+        bool ShouldFadeOut;
+
+        bool Repeat;
 
         FadeComponent(const FadeComponent &other) = default;
-        FadeComponent(float opacity = 1.0f, float fadeInSpeed = 1.0f, float fadeOutSpeed = 1.0f) : Opacity(opacity), FadeInSpeed(fadeInSpeed), FadeOutSpeed(fadeOutSpeed), shouldFadeIn(false), shouldFadeOut(false) {};
+        FadeComponent(float opacity = 1.0f, float fadeInSpeed = 1.0f, float fadeOutSpeed = 1.0f) : Opacity(opacity), FadeInSpeed(fadeInSpeed), FadeOutSpeed(fadeOutSpeed), ShouldFadeIn(false), ShouldFadeOut(false), Repeat(false) {};
 
         void Serialize(YAML::Emitter &out) override
         {
@@ -33,8 +35,9 @@ namespace RType {
                 out << YAML::Key << "Opacity"               << YAML::Value << Opacity;
                 out << YAML::Key << "FadeInSpeed"           << YAML::Value << FadeInSpeed;
                 out << YAML::Key << "FadeOutSpeed"          << YAML::Value << FadeOutSpeed;
-                out << YAML::Key << "shouldFadeIn"          << YAML::Value << shouldFadeIn;
-                out << YAML::Key << "shouldFadeOut"         << YAML::Value << shouldFadeOut;
+                out << YAML::Key << "ShouldFadeIn"          << YAML::Value << ShouldFadeIn;
+                out << YAML::Key << "ShouldFadeOut"         << YAML::Value << ShouldFadeOut;
+                out << YAML::Key << "Repeat"                << YAML::Value << Repeat;
             }
             out << YAML::EndMap;
         }
@@ -47,8 +50,9 @@ namespace RType {
                 Opacity               = fade["Opacity"].as<float>();
                 FadeInSpeed           = fade["FadeInSpeed"].as<float>();
                 FadeOutSpeed          = fade["FadeOutSpeed"].as<float>();
-                shouldFadeIn          = fade["shouldFadeIn"].as<bool>();
-                shouldFadeOut         = fade["shouldFadeOut"].as<bool>();
+                ShouldFadeIn          = fade["ShouldFadeIn"].as<bool>();
+                ShouldFadeOut         = fade["ShouldFadeOut"].as<bool>();
+                Repeat                = fade["Repeat"].as<bool>();
             } catch (YAML::BadConversion &error) {
                 EXODIA_CORE_WARN("FadeComponent deserialization failed:\n\t{0}", error.what());
             }
@@ -70,10 +74,13 @@ namespace RType {
                 Memcopy(&FadeOutSpeed, data.Data + offset, sizeof(FadeOutSpeed));
                 offset += sizeof(FadeOutSpeed);
 
-                Memcopy(&shouldFadeIn, data.Data + offset, sizeof(shouldFadeIn));
-                offset += sizeof(shouldFadeIn);
+                Memcopy(&ShouldFadeIn, data.Data + offset, sizeof(ShouldFadeIn));
+                offset += sizeof(ShouldFadeIn);
 
-                Memcopy(&shouldFadeOut, data.Data + offset, sizeof(shouldFadeOut));
+                Memcopy(&ShouldFadeOut, data.Data + offset, sizeof(ShouldFadeOut));
+                offset += sizeof(ShouldFadeOut);
+
+                Memcopy(&Repeat, data.Data + offset, sizeof(Repeat));
             } catch (std::exception &e) {
                 EXODIA_CORE_WARN("FadeComponent deserialization failed:\n\t{0}", e.what());
             }
@@ -82,7 +89,7 @@ namespace RType {
         Exodia::Buffer SerializeData() override
         {
             try {
-                Exodia::Buffer buffer(sizeof(float) * 3 + sizeof(bool) * 2);
+                Exodia::Buffer buffer(sizeof(float) * 3 + sizeof(bool) * 3);
                 size_t offset = 0;
 
                 std::memcpy(buffer.Data, &Opacity, sizeof(Opacity));
@@ -94,10 +101,13 @@ namespace RType {
                 std::memcpy(buffer.Data + offset, &FadeOutSpeed, sizeof(FadeOutSpeed));
                 offset += sizeof(FadeOutSpeed);
 
-                std::memcpy(buffer.Data + offset, &shouldFadeIn, sizeof(shouldFadeIn));
-                offset += sizeof(shouldFadeIn);
+                std::memcpy(buffer.Data + offset, &ShouldFadeIn, sizeof(ShouldFadeIn));
+                offset += sizeof(ShouldFadeIn);
 
-                std::memcpy(buffer.Data + offset, &shouldFadeOut, sizeof(shouldFadeOut));
+                std::memcpy(buffer.Data + offset, &ShouldFadeOut, sizeof(ShouldFadeOut));
+                offset += sizeof(ShouldFadeOut);
+
+                std::memcpy(buffer.Data + offset, &Repeat, sizeof(Repeat));
 
                 return buffer;
             } catch (std::exception &e) {

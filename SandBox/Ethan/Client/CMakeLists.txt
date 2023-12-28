@@ -29,6 +29,10 @@ set(SOURCES
 
     src/GameScene/LoadingScene.cpp
     src/GameScene/MenuScene.cpp
+
+        # R-Type Events sources files
+    
+    src/Events/Transition.cpp
 )
 
 # Set include directories for the Exodia Game Engine Application

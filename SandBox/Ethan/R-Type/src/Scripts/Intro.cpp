@@ -58,7 +58,8 @@ namespace RType {
         _Time += ts;
 
         if (_Time >= TimeBetweenAnimations) {
-            _Time = 0.0f;
+            _Time   = 0.0f;
+            _IsLoad = true;
 
             auto anim   = GetComponent<AnimationComponent>();
             auto sprite = GetComponent<SpriteRendererComponent>();
@@ -95,6 +96,43 @@ namespace RType {
         }
     }
 
+    void Intro::OnKeyPressed(int keycode)
+    {
+        // Wait the first animation to be done before skipping it
+        if (!_IsLoad)
+            return;
+
+        // If start is pressed, we fade out the background and the text for doing a transition to the menu
+        if (keycode == Key::ENTER) {
+            auto fade = GetComponent<FadeComponent>();
+
+            if (!fade)
+                fade = HandleEntity->AddComponent<FadeComponent>(0.0f, 0.4f, 0.4f);
+
+            fade.Get().ShouldFadeIn  = false;
+            fade.Get().ShouldFadeOut = true;
+            fade.Get().Repeat        = false;
+
+            World *world = HandleEntity->GetWorld();
+
+            if (!world)
+                return;
+            Entity *entity = world->GetEntityByTag("Press Start");
+
+            if (!entity)
+                return;
+            
+            auto fadeText = entity->GetComponent<FadeComponent>();
+
+            if (!fadeText)
+                fadeText = entity->AddComponent<FadeComponent>(0.0f, 0.4f, 0.4f);
+            
+            fadeText.Get().ShouldFadeIn  = false;
+            fadeText.Get().ShouldFadeOut = true;
+            fadeText.Get().Repeat        = false;
+        }
+    }
+
     void Intro::PressStartFactory()
     {
         World *world = HandleEntity->GetWorld();
@@ -117,6 +155,7 @@ namespace RType {
 
         auto fade = entity->AddComponent<FadeComponent>(0.0f, 0.4f, 0.4f);
 
-        fade.Get().shouldFadeIn = true;
+        fade.Get().ShouldFadeIn = true;
+        fade.Get().Repeat       = true;
     }
 }

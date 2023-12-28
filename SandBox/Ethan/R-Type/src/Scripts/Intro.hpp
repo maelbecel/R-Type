@@ -34,7 +34,7 @@ namespace RType {
         //////////////////////////////
         public:
 
-            Intro() : _Time(0.0f), _IsLiftIn(true) {};
+            Intro() : _Time(0.0f), _IsLiftIn(true), _IsLoad(false) {};
 
         /////////////
         // Methods //
@@ -57,6 +57,8 @@ namespace RType {
              */
             void OnUpdate(Exodia::Timestep ts) override;
 
+            void OnKeyPressed(int keycode) override;
+
         private:
 
             void PressStartFactory();
@@ -68,6 +70,8 @@ namespace RType {
 
             float _Time;
             bool  _IsLiftIn;
+
+            bool _IsLoad;
 
             std::vector<AnimationComponent> _Animations;
     };

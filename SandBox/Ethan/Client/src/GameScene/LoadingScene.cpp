@@ -11,6 +11,7 @@
 // R-Type Games includes
 #include "R-Type.hpp"
 #include "Layer/GameLayer.hpp"
+#include "Events/Transition.hpp"
 
 namespace RType {
 
@@ -31,6 +32,9 @@ namespace RType {
         // -- Scene System -- //
         _Scene->RegisterSystem(new AnimationSystem());
         _Scene->RegisterSystem(new FadeSystem());
+
+        // -- Event Subscribe -- //
+        _Scene->Subscribe<Events::FadeOutEndEvent>(new Transition());
 
         // -- Resizing the viewport -- //
         _Scene->OnViewportResize(Application::Get().GetWindow().GetWidth(), Application::Get().GetWindow().GetHeight());
@@ -62,12 +66,14 @@ namespace RType {
         int key = event.GetKeyCode();
 
         if (key == Key::ENTER) {
-            Ref<GameLayer> game = GameLayer::GetInstance();
+            Entity *background = _Scene->GetEntityByName("LoadingBackground");
 
-            if (!game)
-                return false;
+            if (background) {
+                auto script = background->GetComponent<ScriptComponent>();
 
-            game->SetScene(SceneType::MENU, true);
+                if (script && script.Get().Instance != nullptr)
+                    script.Get().Instance->OnKeyPressed(key);
+            }
             return true;
         }
         return false;

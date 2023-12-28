@@ -21,28 +21,40 @@ namespace RType {
     // Methods //
     /////////////
 
-    void FadeSystem::Update(Exodia::World *world, Exodia::Timestep ts)
+    void FadeSystem::Update(World *world, Timestep ts)
     {
         world->ForEach<FadeComponent>([&](Entity *entity, ComponentHandle<FadeComponent> fade) {
-            FadeComponent  &fc = fade.Get();   // fc = Fade Component
+            FadeComponent  &fc = fade.Get(); // fc = Fade Component
 
-            if (fc.shouldFadeIn) {
+            if (fc.ShouldFadeIn) {
                 fc.Opacity += fc.FadeInSpeed * ts;
 
                 if (fc.Opacity >= 1.0f) {
                     fc.Opacity = 1.0f;
 
-                    fc.shouldFadeIn = false;
-                    fc.shouldFadeOut = true;
+                    if (!fc.Repeat) {
+                        fc.ShouldFadeIn = false;
+                        fc.ShouldFadeOut = false;
+                    } else {
+                        fc.ShouldFadeIn = false;
+                        fc.ShouldFadeOut = true;
+                    }
                 }
-            } else if (fc.shouldFadeOut) {
+            } else if (fc.ShouldFadeOut) {
                 fc.Opacity -= fc.FadeOutSpeed * ts;
 
                 if (fc.Opacity <= 0.0f) {
                     fc.Opacity = 0.0f;
 
-                    fc.shouldFadeOut = false;
-                    fc.shouldFadeIn = true;
+                    if (!fc.Repeat) {
+                        fc.ShouldFadeIn = false;
+                        fc.ShouldFadeOut = false;
+
+                        world->Emit<Events::FadeOutEndEvent>({ entity });
+                    } else {
+                        fc.ShouldFadeOut = false;
+                        fc.ShouldFadeIn = true;
+                    }
                 }
             }
 

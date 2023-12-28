@@ -2,11 +2,11 @@
 ** EPITECH PROJECT, 2023
 ** R-Type
 ** File description:
-** FadeSystem
+** Transition
 */
 
-#ifndef FADESYSTEM_HPP_
-    #define FADESYSTEM_HPP_
+#ifndef TRANSITION_HPP_
+    #define TRANSITION_HPP_
 
     // Exodia includes
     #include "Exodia.hpp"
@@ -16,23 +16,23 @@
 
 namespace RType {
 
-    class FadeSystem : public Exodia::EntitySystem {
+    class Transition : public Exodia::EventSubscriber<Events::FadeOutEndEvent> {
 
         //////////////////////////////
         // Constructor & Destructor //
         //////////////////////////////
         public:
 
-            FadeSystem() = default;
-            ~FadeSystem() = default;
+            Transition() = default;
+            ~Transition() = default;
 
         /////////////
         // Methods //
         /////////////
         public:
 
-            void Update(Exodia::World *world, Exodia::Timestep ts) override;
+            void Receive(Exodia::World *world, const Events::FadeOutEndEvent &event) override;
     };
 };
 
-#endif /* !FADESYSTEM_HPP_ */
+#endif /* !TRANSITION_HPP_ */
