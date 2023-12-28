@@ -146,19 +146,23 @@ namespace RType {
         ComponentHandle<ParentComponent> parent = GetComponent<ParentComponent>();
         World *world = HandleEntity->GetWorld();
 
-        if (!transform || !parent || !world)
+        if (!transform || !parent || !world) {
+            EXODIA_ERROR("BulletEnnemy: OnUpdate: transform or parent or world is null");
             return;
+        }
 
         Entity *camera = world->GetEntityByTag("Camera");
-        if (!camera)
+        if (!camera) {
+            EXODIA_ERROR("No camera found");
             return;
+        }
 
         ComponentHandle<TransformComponent> camera_transform = camera->GetComponent<TransformComponent>();
         if (!camera_transform)
             return;
 
         // Remove bullet if out of screen
-        if (transform.Get().Translation.x > camera_transform.Get().Translation.x + 20.0f) {
+        if (transform.Get().Translation.x < camera_transform.Get().Translation.x - 20.0f) {
             EXODIA_INFO("Bullet {0} destroyed", HandleEntity->GetComponent<TagComponent>().Get().Tag);
             world->DestroyEntity(HandleEntity);
         }
