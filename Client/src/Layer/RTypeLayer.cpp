@@ -118,7 +118,11 @@ namespace RType {
         patata->AddComponent<ScriptComponent>().Get().Bind("PataPata");
 
         // Create stars
-        CreateStars(Scenes);
+        // CreateStars(Scenes);
+        for (int i = 0; i < 60; i++) {
+            Entity *star = Scenes[GAME]->CreateEntity("Star" + std::to_string(i));
+            star->AddComponent<ScriptComponent>().Get().Bind("Star");
+        }
 
         // Create the camera
         Scenes[CurrentScene]->OnRuntimeStart();

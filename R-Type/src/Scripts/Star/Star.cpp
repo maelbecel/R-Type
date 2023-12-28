@@ -12,95 +12,101 @@ using namespace Exodia;
 namespace RType {
 
     void Star::OnCreate() {
-        std::mt19937 gen(std::random_device{}());
+        std::random_device rd;
+        std::mt19937 gen(rd());
         std::uniform_real_distribution<float> sizeDist(0.01f, 0.09f);
         std::uniform_int_distribution<int> intensityDist(1, 255);
         std::uniform_int_distribution<int> stateDist(0, 1);
+        std::uniform_real_distribution<float> colorDist(0.9f, 1.0f);
+        std::uniform_int_distribution<int> velocityDist(-8, -1);
 
         World *world = HandleEntity->GetWorld();
-
         if (!world)
             return;
 
-        Entity *cam = world->GetEntityByTag("Camera");
-
-        if (!cam)
-            return;
-
-        auto camera = cam->GetComponent<TransformComponent>();
-
+        Entity *camera = world->GetEntityByTag("Camera");
         if (!camera)
             return;
 
-        float max_height = 20.0f;
-        int height = 40;
+        ComponentHandle<TransformComponent> camera_tc = camera->GetComponent<TransformComponent>();
 
-        _size = sizeDist(gen);
-        _intensity = intensityDist(gen) / 255.0f;
+        if (!camera_tc)
+            return;
+
+        _Size = sizeDist(gen);
+        _Intensity = intensityDist(gen) / 255.0f;
         _State = stateDist(gen) ? State::GROWING : State::SHRINKING;
 
-        auto transform = GetComponent<TransformComponent>();
+        HandleEntity->AddComponent<CircleRendererComponent>(glm::vec4{0.9f, 0.9f, colorDist(gen), 0.9f});
+        HandleEntity->AddComponent<Clock>();
 
+        ComponentHandle<TransformComponent> transform = GetComponent<TransformComponent>();
         if (!transform)
             return;
 
-        auto &tc = transform.Get();
+        TransformComponent &tc = transform.Get();
+        float max_height = 20.0f;
+        int height = 40;
 
         tc.Translation.x =
-            (float)(10 + std::uniform_int_distribution<int>(0, 19)(gen)) + camera.Get().Translation.x;
+            (float)(10 + std::uniform_int_distribution<int>(0, 19)(gen)) + camera_tc.Get().Translation.x;
         tc.Translation.y = max_height - (float)(std::uniform_int_distribution<int>(0, height)(gen));
-        tc.Scale.x = _size;
-        tc.Scale.y = _size;
+        tc.Scale.x = _Size;
+        tc.Scale.y = _Size;
+
+        ComponentHandle<RigidBody2DComponent> body = HandleEntity->AddComponent<RigidBody2DComponent>();
+        if (!body)
+            return;
+
+        body.Get().Type = RigidBody2DComponent::BodyType::Dynamic;
+        body.Get().Mass = 0.0f;
+        body.Get().GravityScale = 0.0f;
+        body.Get().Velocity.x = (float)velocityDist(gen);
     }
 
     void Star::OnUpdate(Timestep ts)  {
-
-        auto clock = GetComponent<Clock>();
-        auto transform = GetComponent<TransformComponent>();
-        auto circle = GetComponent<CircleRendererComponent>();
+        ComponentHandle<Clock> clock = GetComponent<Clock>();
+        ComponentHandle<TransformComponent> transform = GetComponent<TransformComponent>();
+        ComponentHandle<CircleRendererComponent> circle = GetComponent<CircleRendererComponent>();
         World *world = HandleEntity->GetWorld();
-
         if (!transform || !circle || !clock || !world) {
             EXODIA_WARN("No transform, circle, clock or world");
             return;
         }
 
-        auto &mytime = clock.Get().ElapsedTime;
-        auto cam = world->GetEntityByTag("Camera");
-
-        if (!cam) {
+        float &mytime = clock.Get().ElapsedTime;
+        Entity *camera = world->GetEntityByTag("Camera");
+        if (!camera) {
             EXODIA_WARN("No camera");
             return;
         }
 
-        auto camera = cam->GetComponent<TransformComponent>();
-
-        if (!camera) {
+        ComponentHandle<TransformComponent> camera_tc = camera->GetComponent<TransformComponent>();
+        if (!camera_tc) {
             EXODIA_WARN("Camera has no TransformComponent");
             return;
         }
 
         mytime += ts.GetMilliseconds();
 
-        if (circle) {
-            auto &cc = circle.Get();
+        CircleRendererComponent &cc = circle.Get();
 
-            _intensity +=
-                (_State == State::GROWING) ? (float)(ts.GetSeconds() * 0.1) : (float)(ts.GetSeconds() * 0.1 * -1);
+        float seconds = ts.GetSeconds();
 
-            if (_intensity <= 0.01f)
-                _State = State::GROWING;
-            else if (_intensity >= 0.99f)
-                _State = State::SHRINKING;
-            cc.Color.a = _intensity;
-        }
+        _Intensity += (_State == State::GROWING) ? seconds * 0.1 : seconds * 0.1 * -1;
 
-        if (transform.Get().Translation.x < camera.Get().Translation.x - 12) {
+        if (_Intensity <= 0.01f)
+            _State = State::GROWING;
+        else if (_Intensity >= 0.99f)
+            _State = State::SHRINKING;
+        cc.Color.a = _Intensity;
+
+        if (transform.Get().Translation.x < camera_tc.Get().Translation.x - 12) {
             std::mt19937 gen(std::random_device{}());
             std::uniform_int_distribution<int> xDist(10, 19);
             std::uniform_int_distribution<int> yDist(-5, 5);
 
-            transform.Get().Translation.x = (float)(xDist(gen)) + camera.Get().Translation.x;
+            transform.Get().Translation.x = (float)(xDist(gen)) + camera_tc.Get().Translation.x;
             transform.Get().Translation.y = (float)(yDist(gen));
         }
     }

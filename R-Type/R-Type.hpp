@@ -24,13 +24,13 @@
 #include "src/Scripts/BulletEnnemy/BulletEnnemy.hpp"
 #include "src/Scripts/Player/Player.hpp"
 #include "src/Scripts/Pata-pata/Pata-pata.hpp"
+#include "src/Scripts/Star/Star.hpp"
 
 #include "src/System/AnimationSystem.hpp"
 
 #include "src/Event/EntityEventSubscriber.hpp"
 
 #include "src/Entity/CreateBackground.hpp"
-#include "src/Entity/CreateStars.hpp"
 
 namespace RType {
 

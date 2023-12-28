@@ -37,10 +37,10 @@ namespace RType {
         // Attributes //
         ////////////////
       private:
-        float _intensity;
+        float _Intensity;
         State _State;
-        float _size;
+        float _Size;
     };
-}; // namespace Exodia
+}; // namespace RType
 
 #endif /* !STAR_HPP_ */

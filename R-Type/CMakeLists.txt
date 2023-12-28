@@ -39,7 +39,6 @@ set(SOURCES_GAME_ENGINE
         # -- Entity source files
 
     src/Entity/CreateBackground.cpp
-    src/Entity/CreateStars.cpp
 
         # -- Component source files
 )
