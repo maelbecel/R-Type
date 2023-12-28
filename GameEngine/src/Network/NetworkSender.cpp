@@ -9,22 +9,6 @@
 #include "Utils/Memory.hpp"
 
 namespace Exodia::Network {
-
-    /**
-     * @brief Fill a buffer with data and return the offset after filling
-     *
-     * @param buffer (Type: std::vector<char> &) The buffer to fill
-     * @param offset (Type: size_t) The offset to start filling the buffer
-     * @param data (Type: void *) The data to put in the buffer
-     * @param size (Type: size_t) The size of the data
-     *
-     * @return size_t The offset after filling the buffer
-     */
-    size_t Network::FillData(std::vector<char> &buffer, size_t offset, void *data, size_t size) {
-        std::memcpy(buffer.data() + offset, data, size);
-        return offset + size;
-    }
-
     /**
      * @brief Send packet wheter we are the server or the client
      *
@@ -98,19 +82,25 @@ namespace Exodia::Network {
             for (auto &connection : _connections) {
                 int32_t received = connection.second.GetReceivedPacket();
                 int32_t sent = connection.second.GetSendPacket();
+                EXODIA_CORE_INFO("Send packet info to  received: " + std::to_string(received) + " sent: " + std::to_string(sent));
 
                 buffer.Write(&received, sizeof(int));
                 buffer.Write(&sent, sizeof(int));
                 packet.SetContent(buffer);
+                connection.second.SetReceivedPacket(0);
+                connection.second.SetSendPacket(0);
                 connection.second.SendPacket(_socket, packet);
             }
         } else {
             int32_t received = _server_connection.GetReceivedPacket();
             int32_t sent = _server_connection.GetSendPacket();
+                EXODIA_CORE_INFO("Send packet info to  received: " + std::to_string(received) + " sent: " + std::to_string(sent));
 
             buffer.Write(&received, sizeof(int));
             buffer.Write(&sent, sizeof(int));
             packet.SetContent(buffer);
+            _server_connection.SetReceivedPacket(0);
+            _server_connection.SetSendPacket(0);
             _server_connection.SendPacket(_socket, packet);
         }
     }

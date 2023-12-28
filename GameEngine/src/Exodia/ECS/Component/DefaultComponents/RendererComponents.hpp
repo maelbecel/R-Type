@@ -169,12 +169,6 @@ namespace Exodia {
                 offset += sizeof(spriteSize);
 
                 // Texture = SubTexture2D::CreateFromCoords(assetHandle, coords, cellSize, spriteSize);
-
-                EXODIA_CORE_TRACE("SpriteRendererComponent deserialization success !");
-                EXODIA_CORE_TRACE("\tAssetHandle : '{0}'", (uint64_t)assetHandle);
-                EXODIA_CORE_TRACE("\tCoords      : '{0}, {1}'", coords.x, coords.y);
-                EXODIA_CORE_TRACE("\tCellSize    : '{0}, {1}'", cellSize.x, cellSize.y);
-                EXODIA_CORE_TRACE("\tSpriteSize  : '{0}, {1}'", spriteSize.x, spriteSize.y);
             } catch (std::exception &e) {
                 EXODIA_CORE_WARN("SpriteRendererComponent deserialization failed: {0}", e.what());
             }

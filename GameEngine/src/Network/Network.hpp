@@ -25,7 +25,7 @@ namespace Exodia {
     namespace Network {
 
         #define COMMAND_NETWORK(x) std::bind(&x, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4);
-        #define RECEIVE_ARG const std::vector<char> message, size_t size, Connection senderConnection, Exodia::Network::Header header
+        #define RECEIVE_ARG const std::vector<char> message, size_t size, Connection &senderConnection, Exodia::Network::Header header
         #define STRING_FROM_ENDPOINT(x) x.address().to_string() + ":" + std::to_string(x.port())
 
         class Network {
@@ -121,6 +121,10 @@ namespace Exodia {
 
             UDPSocket &GetSocket() { return _socket; }
 
+            NetworkInfo GetNetworkInfo() {
+                return _server_connection.GetLastNetworkInfo();
+            }
+
           private:
             void ReceivePacketInfo(RECEIVE_ARG);        // 0x00
             void ReceiveAck(RECEIVE_ARG);               // 0x01
@@ -146,7 +150,6 @@ namespace Exodia {
             void connect(const std::string &ip, short port) {
                 _server_connection = Connection(asio::ip::udp::endpoint(asio::ip::address::from_string(ip), port));
             }
-            size_t FillData(std::vector<char> &buffer, size_t offset, void *data, size_t size);
 
             int64_t GetIndexPacketNeedAck(Connection connection) {
                 for (size_t i = 0; i < _packetNeedAck.size(); i++) {

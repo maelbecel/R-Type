@@ -153,46 +153,14 @@ namespace Exodia {
             Timestep timestep(time - _LastTime);
 
             _LastTime = time;
-            // EXODIA_CORE_ERROR("Count : {0}", count);
-            // for (uint32_t i = 0; i < (uint32_t)_Users.size(); i++) {
-            //  Entity *player = Scenes[GAME]->GetEntityByName("Player_" + std::to_string(i));
 
-            // if (player != nullptr) {
-            // }
-            //}
-
-            /*
-            if (CurrentScene == GAME) {
-                auto pata = Scenes[GAME]->GetEntityByName("Pata-pata");
-
-                if (pata == nullptr) {
-                    Entity *patata = Scenes[GAME]->CreateEntity("Pata-pata");
-
-                    patata->AddComponent<Health>(1);
-                    patata->AddComponent<ScriptComponent>().Get().Bind("PataPata");
-                    patata->AddComponent<Animation>(1.0f, 8.0f, 0.075f);
-                    patata->AddComponent<Clock>();
-                    patata->AddComponent<BoxCollider2DComponent>();
-
-                    auto body_patata = patata->AddComponent<RigidBody2DComponent>();
-
-                    body_patata.Get().Type = RigidBody2DComponent::BodyType::Dynamic;
-                    body_patata.Get().Mass = 0.0f;
-                    body_patata.Get().GravityScale = 0.0f;
-                    body_patata.Get().Velocity.x = -2.0f;
-                    patata->AddComponent<CircleRendererComponent>(glm::vec4{ 1.0f, 1.0f, 0.0f, 1.0f});
-                }
-                _Network.SendComponentOf(pata, "TransformComponent");
-                _Network.SendComponentOf(pata, "CircleRendererComponent");
-
-                auto *bullet = Scenes[GAME]->GetEntityByName("BE68");
-
-                if (bullet != nullptr) {
-                    _Network.SendComponentOf(bullet, "TransformComponent");
-                    _Network.SendComponentOf(bullet, "CircleRendererComponent");
-                }
+            my_Timer += timestep;
+            if (my_Timer > 1.0f) {
+                my_Timer = 0.0f;
+                _Network.SendPacketInfo();
             }
-        */
+
+
             std::vector<std::pair<std::pair<uint32_t, bool>, asio::ip::udp::endpoint>> events = _Network.GetEvents();
 
             while (!events.empty()) {
