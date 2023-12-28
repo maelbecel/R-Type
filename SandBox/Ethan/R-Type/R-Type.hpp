@@ -26,6 +26,8 @@
     // -- R-Type Events includes -----------------------------------------------
 
     #include "Events/AnimationEvent.hpp"
+    #include "Events/FadeEvent.hpp"
+    #include "Events/PlayerEvents.hpp"
 
     // -- R-Type Systems includes ----------------------------------------------
 
@@ -33,6 +35,8 @@
     #include "Systems/FadeSystem.hpp"
 
     // -- R-Type Scripts includes ----------------------------------------------
+
+    #include "Scripts/Mars.hpp"
 
 namespace RType {
 
@@ -50,6 +54,9 @@ namespace RType {
         });
 
         // -- Register R-Type Scripts ------------------------------------------
+        project->RegisterScript("Mars", []() -> Exodia::ScriptableEntity * {
+            return new Mars();
+        });
 
         // -- Register R-Type Systems ------------------------------------------
     }

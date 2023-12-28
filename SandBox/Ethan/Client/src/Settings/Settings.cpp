@@ -5,6 +5,9 @@
 ** Settings
 */
 
+// R-Type Game includes
+#include "R-Type.hpp"
+
 // R-Type Client includes
 #include "Settings.hpp"
 #include "Events/GameEvents.hpp"

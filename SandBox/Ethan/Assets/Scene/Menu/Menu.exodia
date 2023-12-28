@@ -22,33 +22,20 @@ Entities:
     TagComponent:
       Tag: Background
     TransformComponent:
-      Translation: [4, 0, -0.5]
+      Translation: [0, 0, 0]
       Rotation: [0, 0, 0]
-      Scale: [-6, 5, 1]
+      Scale: [1, 1, 1]
     MusicComponent:
       Handle: 124013371145915
       Volume: 0.5
       Play: true
-    FadeComponent:
-      Opacity: 0
-      FadeInSpeed: 0.4
-      FadeOutSpeed: 0.4
-      ShouldFadeIn: true
-      ShouldFadeOut: false
-      Repeat: false
-    SpriteRendererComponent:
-      Color: [1, 1, 1, 1]
-      TilingFactor: 1
-      Texture:
-        AssetHandle: 8452581520512152
-        Coords: [510, 33]
-        CellSize: [1, 1]
-        SpriteSize: [500, 440]
+    ScriptComponent:
+      Name: Mars
   - Entity: 9512348150210
     TagComponent:
       Tag: Title
     TransformComponent:
-      Translation: [0, 1.75, 0]
+      Translation: [0, 2, 0]
       Rotation: [0, 0, 0]
       Scale: [2.9, 1, 1]
     SpriteRendererComponent:

@@ -26,6 +26,8 @@ set(SOURCES_GAME_ENGINE
 
         # -- Script source files
 
+        src/Scripts/Mars.cpp
+
         # -- Events source files
 
         # -- Entity source files
