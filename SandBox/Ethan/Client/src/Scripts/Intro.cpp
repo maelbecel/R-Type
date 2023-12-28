@@ -7,8 +7,6 @@
 
 // R-Type includes
 #include "Intro.hpp"
-#include "Components/Clock.hpp"
-#include "Components/Fade.hpp"
 
 namespace RType {
     

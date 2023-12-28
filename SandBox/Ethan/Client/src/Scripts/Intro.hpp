@@ -12,7 +12,7 @@
     #include "Exodia.hpp"
 
     // R-Type Components includes
-    #include "Components/Animation.hpp"
+    #include "R-Type.hpp"
 
 namespace RType {
 

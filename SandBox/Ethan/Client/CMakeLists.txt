@@ -33,6 +33,14 @@ set(SOURCES
         # R-Type Events sources files
     
     src/Events/Transition.cpp
+
+        # R-Type Scripts sources files
+    
+    src/Scripts/Intro.cpp
+
+        # R-Type Diverses sources files
+
+    src/Settings/Config.cpp
 )
 
 # Set include directories for the Exodia Game Engine Application

@@ -19,19 +19,12 @@ set(SOURCES_GAME_ENGINE
 
     # Game source files
 
-        # -- Settings source files
-
-        src/Settings/Config.cpp
-
         # -- System source files
 
         src/Systems/AnimationSystem.cpp
         src/Systems/FadeSystem.cpp
-        src/Systems/ClockSystem.cpp
 
         # -- Script source files
-
-        src/Scripts/Intro.cpp
 
         # -- Events source files
 

@@ -8,7 +8,6 @@
 // R-Type includes
 #include "FadeSystem.hpp"
 #include "Components/Fade.hpp"
-#include "Components/Clock.hpp"
 
 // Exodia includes
 #include "Exodia.hpp"

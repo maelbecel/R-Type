@@ -6,9 +6,19 @@
 */
 
 #include "GameLayer.hpp"
+
+// R-Type
 #include "R-Type.hpp"
+
+// R-Type Scenes
 #include "GameScene/LoadingScene.hpp"
 #include "GameScene/MenuScene.hpp"
+
+// R-Type Scripts
+#include "Scripts/Intro.hpp"
+
+// R-Type Settings
+#include "Settings/Config.hpp"
 
 namespace RType {
 
@@ -22,10 +32,12 @@ namespace RType {
     {
         RType::EntryPoint();
 
-        Config::Init();
+        RType::Config::Init();
 
         if (!Config::Read())
             Config::Write();
+        
+        InitGame();
     }
 
     /////////////
@@ -53,6 +65,21 @@ namespace RType {
     void GameLayer::OnEvent(Event& event)
     {
         _Scenes[_CurrentScene]->OnEvent(event);
+    }
+
+    void GameLayer::InitGame()
+    {
+        Ref<Project> project = Project::GetActive();
+
+        if (!project) {
+            Application::Get().Close();
+            return;
+        }
+
+        // -- Register Client scripts -- //
+        project->RegisterScript("Intro", []() -> ScriptableEntity * {
+            return new Intro();
+        });
     }
 
     ///////////////////////

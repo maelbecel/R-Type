@@ -51,6 +51,10 @@ namespace RType {
             void OnAttach() override;
             void OnUpdate(Exodia::Timestep ts) override;
             void OnEvent(Exodia::Event &event) override;
+        
+        private:
+            
+            void InitGame();
 
         ///////////////////////
         // Getters & Setters //
