@@ -77,7 +77,7 @@ namespace RType {
         Scenes[GAME]->RegisterSystem(collisionSystem);
         // Scenes[GAME]->Subscribe<Events::OnEntityCreated>(subscribe);
         // Scenes[GAME]->Subscribe<Events::OnEntityDestroyed>(subscribe);
-        Scenes[GAME]->Subscribe<Events::OnCollisionEntered>(collisionSystem);
+        Scenes[GAME]->Subscribe<Exodia::Events::OnCollisionEntered>(collisionSystem);
         Scenes[GAME]->OnViewportResize(Application::Get().GetWindow().GetWidth(),
                                        Application::Get().GetWindow().GetHeight());
 
