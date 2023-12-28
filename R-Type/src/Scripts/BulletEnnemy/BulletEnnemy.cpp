@@ -11,6 +11,33 @@ using namespace Exodia;
 
 namespace RType {
 
+    void BulletEnnemy::CreateAnimations() {
+        AnimationComponent anim;
+        AnimationComponent destroy;
+
+        std::vector<Ref<SubTexture2D>> framesIdle;
+        std::vector<Ref<SubTexture2D>> framesDestroy;
+
+        for (int i = 0; i < 4; i++)
+            framesIdle.push_back(SubTexture2D::CreateFromCoords(BULLET, {8 + i, 9.0f}, { 16.6666666667f, 17.0f }, {1.0f, 1.0f}));
+
+        anim.Frames = framesIdle;
+        anim.IsPlaying = false;
+        anim.Repeat = true;
+        anim.FrameRate  = TimeBetweenAnimations;
+
+        for (int i = 0; i < 5; i++)
+            framesDestroy.push_back(SubTexture2D::CreateFromCoords(BULLET, {7 + i, 8.0f}, { 16.6666666667f, 17.0f }, {1.0f, 1.0f}));
+
+        destroy.Frames = framesDestroy;
+        destroy.IsPlaying = false;
+        destroy.Repeat = false;
+        destroy.FrameRate = TimeBetweenAnimations;
+
+        _Animations.push_back(anim);
+        _Animations.push_back(destroy);
+    }
+
     void BulletEnnemy::OnCreate() {
         EXODIA_INFO("BulletEnnemy created");
 
@@ -38,7 +65,6 @@ namespace RType {
         bullet_tc.Translation.y = tc.Translation.y;
         bullet_tc.Scale = {0.5f, 0.5f, 0.0f};
 
-        // HandleEntity->AddComponent<Animation>(8.0f, 12.0f, 0.0795f);
         HandleEntity->AddComponent<BoxCollider2DComponent>();
 
         // TODO: Ask to server the number of player connected, and do a rand() % nb_player
@@ -62,18 +88,57 @@ namespace RType {
         bullet_rb.Type = RigidBody2DComponent::BodyType::Dynamic;
         bullet_rb.Mass = 0.0f;
         bullet_rb.GravityScale = 0.0f;
-        bullet_rb.Velocity.x = player_tc.Translation.x - tc.Translation.x;
-        bullet_rb.Velocity.y = player_tc.Translation.y - tc.Translation.y;
 
-        // Ref<Texture2D> texture = TextureImporter::LoadTexture2D("Assets/Textures/Explosion.png");
-        // auto sprite = bullet->AddComponent<SpriteRendererComponent>();
-        // if (!texture || !sprite)
-        //     return;
-        // sprite.Get().Texture = SubTexture2D::CreateFromCoords(texture->Handle, { 8.0f, 4.0f },
-        // { 16.6666666667f, 17.0f }, { 1.0f, 1.0f });
-        HandleEntity->AddComponent<CircleRendererComponent>(glm::vec4{0.0f, 1.0f, 0.0f, 1.0f});
+        float delta_x = player_tc.Translation.x - tc.Translation.x;
+        float delta_y = player_tc.Translation.y - tc.Translation.y;
 
-        std::cout << "Bullet created" << std::endl;
+        // Calcul of the velocity magnitude
+        float velocity_magnitude = std::sqrt(delta_x * delta_x + delta_y * delta_y);
+
+        // Calcul of the velocity vector
+        if (velocity_magnitude > 0.0f) {
+            bullet_rb.Velocity.x = (delta_x / velocity_magnitude) * _Speed;
+            bullet_rb.Velocity.y = (delta_y / velocity_magnitude) * _Speed;
+        }
+
+        CreateAnimations();
+
+        EXODIA_INFO("BulletEnnemy created");
+    }
+
+    void BulletEnnemy::UpdateAnimations() {
+        ComponentHandle<SpriteRendererComponent> sprite = GetComponent<SpriteRendererComponent>();
+        ComponentHandle<AnimationComponent> anim = GetComponent<AnimationComponent>();
+
+        if (!sprite)
+            sprite = HandleEntity->AddComponent<SpriteRendererComponent>();
+
+        if (!anim) {
+            _Animations[0].IsPlaying = true;
+            _Animations[1].IsPlaying = false;
+
+            anim = HandleEntity->AddComponent<AnimationComponent>(_Animations[0]);
+
+            sprite.Get().Texture = anim.Get().Frames[0];
+        } else {
+            if (_IsColliding && _Animations[1].IsPlaying == false) {
+                ComponentHandle<RigidBody2DComponent> body = GetComponent<RigidBody2DComponent>();
+                if (!body)
+                    return;
+
+                body.Get().Velocity = {0.0f, 0.0f};
+                _Animations[0].IsPlaying = false;
+                _Animations[1].IsPlaying = true;
+
+                anim.Get() = _Animations[1];
+                sprite.Get().Texture = anim.Get().Frames[0];
+            }
+            if (_IsColliding && anim.Get().CurrentFrameIndex == anim.Get().Frames.size() - 1
+            && _Animations[1].IsPlaying == true) {
+                EXODIA_INFO("Bullet {0} destroyed", HandleEntity->GetComponent<TagComponent>().Get().Tag);
+                HandleEntity->GetWorld()->DestroyEntity(HandleEntity);
+            }
+        }
     }
 
     void BulletEnnemy::OnUpdate(UNUSED(Timestep ts))  {
@@ -97,5 +162,18 @@ namespace RType {
             EXODIA_INFO("Bullet {0} destroyed", HandleEntity->GetComponent<TagComponent>().Get().Tag);
             world->DestroyEntity(HandleEntity);
         }
+
+        UpdateAnimations();
+    }
+
+    void BulletEnnemy::OnCollisionEnter(Entity *entity) {
+        ComponentHandle<ParentComponent> parent = GetComponent<ParentComponent>();
+        ComponentHandle<IDComponent> entity_id = entity->GetComponent<IDComponent>();
+        if (!parent || !entity_id)
+            return;
+        if (parent.Get().Parent == entity_id.Get().ID)
+            return;
+
+        _IsColliding = true;
     }
 }; // namespace RType

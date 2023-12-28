@@ -250,7 +250,6 @@ namespace RType {
     };
 
     void Player::OnKeyPressed(int keycode) {
-        EXODIA_TRACE("Player is pressing {0}", keycode);
         auto transform = GetComponent<TransformComponent>();
         auto velocity = GetComponent<RigidBody2DComponent>();
         auto camera_entity = HandleEntity->GetWorld()->GetEntityByTag("Camera");
@@ -288,21 +287,15 @@ namespace RType {
             if (!block) {
                 // Move player with keyboard
                 if (keycode == Key::A) { // Left
-                    EXODIA_TRACE("Player is moving left");
-                    // _State = State::IDLE;
                     velocity.Get().Velocity.x = -5.0f;
                 } else if (keycode == Key::D) { // Right
-                    EXODIA_TRACE("Player is moving right");
-                    // _State = State::IDLE;
                     velocity.Get().Velocity.x = 5.0f;
                 }
 
                 if (keycode == Key::W) { // Up
-                    EXODIA_TRACE("Player is moving up");
                     _State = State::MOVE_UP;
                     velocity.Get().Velocity.y = 5.0f;
                 } else if (keycode == Key::S) { // Down
-                    EXODIA_TRACE("Player is moving down");
                     _State = State::MOVE_DOWN;
                     velocity.Get().Velocity.y = -5.0f;
                 }
@@ -310,13 +303,11 @@ namespace RType {
 
             // Simple attack
             if (keycode == Key::SPACE && !_IsAttacking) {
-                EXODIA_TRACE("Player is shooting");
                 _IsShooting = true;
             }
 
             // Charge attack
             if (keycode == Key::Q && !_IsCharging) {
-                EXODIA_TRACE("Player is charging");
                 _IsCharging = true;
             }
         }
@@ -327,7 +318,6 @@ namespace RType {
 
         if (velocity) {
             if (keycode == Key::A || keycode == Key::D) {
-                // _State = State::IDLE;
                 velocity.Get().Velocity.x = 0.0f;
             }
             if (keycode == Key::W || keycode == Key::S) {

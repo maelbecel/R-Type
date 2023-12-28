@@ -28,12 +28,12 @@ namespace RType {
         anim.Frames = framesIdle;
         anim.IsPlaying = false;
         anim.Repeat = true;
-        anim.FrameRate  = 13.2f;
+        anim.FrameRate  = TimeBetweenAnimations;
 
         death.Frames = framesDeath;
         death.IsPlaying = false;
         death.Repeat = false;
-        death.FrameRate = 13.2f;
+        death.FrameRate = TimeBetweenAnimations;
 
         _Animations.push_back(anim);
         _Animations.push_back(death);
@@ -199,9 +199,7 @@ namespace RType {
             return;
         }
 
-        EXODIA_TRACE("PataPata health is {0}", health.Get().CurrentHealth);
         if (_State == State::ALIVE && health.Get().CurrentHealth <= 0) {
-            EXODIA_TRACE("PataPata is dead");
             _State = State::DEAD;
             body.Get().Velocity = { 0.0f, 0.0f };
         }
