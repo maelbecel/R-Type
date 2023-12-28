@@ -38,6 +38,9 @@ namespace RType {
 
         // -- Start the scene -- //
         _Scene->OnRuntimeStart();
+
+        // -- Add Fade in transition to all entities -- //
+        GiveFadeEffect();
     }
 
     void MenuScene::OnDestroy()
@@ -55,6 +58,24 @@ namespace RType {
         EventDispatcher dispatcher(event);
 
         dispatcher.Dispatch<KeyPressedEvent>(BIND_EVENT_FN(MenuScene::OnKeyPressedEvent));
+    }
+
+    void MenuScene::GiveFadeEffect(bool in)
+    {
+        for (Entity *entity : _Scene->GetWorldPtr()->AllEntities()) {
+            auto fade = entity->GetComponent<FadeComponent>();
+
+            if (!fade)
+                fade = entity->AddComponent<FadeComponent>();
+            auto &fc = fade.Get(); // fc = Fade Component
+
+            fc.Opacity       = 0.0f;
+            fc.FadeInSpeed   = 0.4f;
+            fc.FadeOutSpeed  = 0.4f;
+            fc.ShouldFadeIn  = in;
+            fc.ShouldFadeOut = !in;
+            fc.Repeat        = false;
+        }
     }
 
     bool MenuScene::OnKeyPressedEvent(KeyPressedEvent &event)

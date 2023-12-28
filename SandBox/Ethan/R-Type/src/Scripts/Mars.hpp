@@ -16,11 +16,22 @@ namespace RType {
     class Mars : public Exodia::ScriptableEntity {
 
         /////////////
+        // Defines //
+        /////////////
+        private:
+
+            static const uint64_t MARS = 8452581520512152;
+
+        /////////////
         // Methods //
         /////////////
         public:
 
             void OnCreate() override;
+
+        private:
+
+            void GenerateDebris(Exodia::World *world);
     };
 };
 

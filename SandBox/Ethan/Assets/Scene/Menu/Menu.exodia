@@ -18,6 +18,7 @@ Entities:
         OrthographicFar: 1
       Primary: true
       FixedAspectRatio: true
+
   - Entity: 520111211385138
     TagComponent:
       Tag: Background
@@ -31,11 +32,12 @@ Entities:
       Play: true
     ScriptComponent:
       Name: Mars
+
   - Entity: 9512348150210
     TagComponent:
       Tag: Title
     TransformComponent:
-      Translation: [0, 2, 0]
+      Translation: [0, 1.75, 0.7]
       Rotation: [0, 0, 0]
       Scale: [2.9, 1, 1]
     SpriteRendererComponent:
@@ -46,26 +48,8 @@ Entities:
         Coords: [0, 0]
         CellSize: [1, 1]
         SpriteSize: [500, 146]
-    FadeComponent:
-      Opacity: 0
-      FadeInSpeed: 0.4
-      FadeOutSpeed: 0.4
-      ShouldFadeIn: true
-      ShouldFadeOut: false
-      Repeat: false
 
-  - Entity: 8451210482531
-    TagComponent:
-      Tag: Filter
-    TransformComponent:
-      Translation: [0, 0, -0.1]
-      Rotation: [0, 0, 0]
-      Scale: [13, 13, 1]
-    SpriteRendererComponent:
-      Color: [0, 0, 0, 0.2]
-      TilingFactor: 1
-
-  - Entity: 585212025481203
+  - Entity: 585212025481203146
     TagComponent:
       Tag: MenuHandler
     TransformComponent:

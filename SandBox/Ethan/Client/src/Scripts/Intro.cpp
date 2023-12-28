@@ -124,7 +124,7 @@ namespace RType {
 
             if (!fadeText)
                 fadeText = entity->AddComponent<FadeComponent>(0.0f, 0.4f, 0.4f);
-            
+
             fadeText.Get().ShouldFadeIn  = false;
             fadeText.Get().ShouldFadeOut = true;
             fadeText.Get().Repeat        = false;
