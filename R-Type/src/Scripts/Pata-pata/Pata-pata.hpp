@@ -32,7 +32,7 @@ namespace RType {
             static const uint64_t PATAPATA = 90123456789012678;
             static const uint64_t DEATH    = 183750131800543235;
 
-            const float TimeBetweenAnimations = 5.0f;
+            const float TimeBetweenAnimations = 13.2f;
 
         /////////////
         //  enum   //
@@ -52,7 +52,7 @@ namespace RType {
             State GetState() const { return _State; }
 
         private:
-            void Shoot(ComponentHandle<TransformComponent> transform);
+            void Shoot();
             void SinusoidalMovement(Timestep ts);
             void IsDead();
             void CreateAnimations();

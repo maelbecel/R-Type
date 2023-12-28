@@ -21,7 +21,7 @@ namespace RType {
         for (int i = 0; i < 8; i++)
             framesIdle.push_back(SubTexture2D::CreateFromCoords(PATAPATA, {i, 0.0f}, {33.3125f, 36.0f}, {1.0f, 1.0f}));
 
-        for (int i = 0; i < 7; i++) {
+        for (int i = 0; i < 6; i++) {
             framesDeath.push_back(SubTexture2D::CreateFromCoords(DEATH, {i, 0.0f}, {32.0f, 34.0f}, {1.0f, 1.0f}));
         }
 
@@ -65,7 +65,7 @@ namespace RType {
         TransformComponent &tc = transform.Get();
 
         tc.Translation.x = 7.0f;
-        tc.Translation.y = (float)(std::rand() % 10 - 5);
+        tc.Translation.y = (float)(std::rand() % 10);
 
         EXODIA_INFO("PataPata created at pos {0}, {1}", tc.Translation.x,
                     tc.Translation.y);
@@ -85,47 +85,61 @@ namespace RType {
 
             sprite.Get().Texture = anim.Get().Frames[0];
         } else {
+            SpriteRendererComponent &sr = sprite.Get();
+            AnimationComponent &ac = anim.Get();
+
             if (_State == State::ALIVE && _PreviousState != State::ALIVE) {
                 _Animations[0].IsPlaying = true;
                 _Animations[1].IsPlaying = false;
+                _PreviousState = State::ALIVE;
 
-                anim.Get() = _Animations[0];
-                sprite.Get().Texture = anim.Get().Frames[0];
+                ac = _Animations[0];
+                sr.Texture = ac.Frames[0];
             } else if (_State == State::DEAD && _PreviousState != State::DEAD) {
                 _Animations[0].IsPlaying = false;
                 _Animations[1].IsPlaying = true;
+                _PreviousState = State::DEAD;
 
-                anim.Get() = _Animations[1];
-                sprite.Get().Texture = anim.Get().Frames[0];
+                ac = _Animations[1];
+                sr.Texture = ac.Frames[0];
+            } else if (_State == State::DEAD && _PreviousState == State::DEAD) {
+                if (ac.CurrentFrameIndex == ac.Frames.size() - 1) {
+                    World *world = HandleEntity->GetWorld();
+                    if (!world)
+                        return;
+                    world->DestroyEntity(HandleEntity);
+                }
             }
         }
     }
 
     void PataPata::OnUpdate(Timestep ts) {
-        ComponentHandle<TransformComponent> transform = GetComponent<TransformComponent>();
-
-        if (!transform)
-            return;
-
         IsDead();
         UpdateAnimations();
         SinusoidalMovement(ts);
-        Shoot(transform);
+        Shoot();
     }
 
     void PataPata::OnCollisionEnter(Entity *entity) {
-        std::string entityTag = entity->GetComponent<TagComponent>().Get().Tag;
+        ComponentHandle<TagComponent> tag = entity->GetComponent<TagComponent>();
+        ComponentHandle<Health> health = GetComponent<Health>();
 
-        if (!entityTag.empty())
+        if (!tag || !health) {
+            EXODIA_WARN("PataPata: No tag or health component found");
             return;
+        }
+
+        std::string entityTag = tag.Get().Tag;
 
         if (entityTag.rfind("Bullet", 0) == 0) {
-            EXODIA_INFO("Bullet {0} hit", entity->GetComponent<TagComponent>().Get().Tag);
-            GetComponent<Health>().Get().CurrentHealth -= 1;
+            EXODIA_INFO("Bullet {0} hit", entityTag);
+            health.Get().CurrentHealth -= 1;
         }
     }
 
-    void PataPata::Shoot(ComponentHandle<TransformComponent> transform) {
+    void PataPata::Shoot() {
+        ComponentHandle<TransformComponent> transform = GetComponent<TransformComponent>();
+
         if (_State == State::DEAD)
             return;
         if (!transform)
@@ -180,17 +194,17 @@ namespace RType {
         ComponentHandle<Health> health = GetComponent<Health>();
         ComponentHandle<RigidBody2DComponent> body = GetComponent<RigidBody2DComponent>();
 
-        if (!health || !body)
+        if (!health || !body) {
+            EXODIA_WARN("PataPata has no health or body");
             return;
+        }
 
+        EXODIA_TRACE("PataPata health is {0}", health.Get().CurrentHealth);
         if (_State == State::ALIVE && health.Get().CurrentHealth <= 0) {
+            EXODIA_TRACE("PataPata is dead");
             _State = State::DEAD;
             body.Get().Velocity = { 0.0f, 0.0f };
         }
-
-        // if (_State == State::DEAD && ac.CurrentFrame == ac.MaxFrame - 1) {
-        //     HandleEntity->GetWorld()->DestroyEntity(HandleEntity);
-        // }
     }
 
 } // namespace Exodia

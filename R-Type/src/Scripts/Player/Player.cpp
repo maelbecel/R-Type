@@ -52,32 +52,32 @@ namespace RType {
         idle.Frames     = framesIdle;
         idle.IsPlaying  = false;
         idle.Repeat     = false;
-        idle.FrameRate  = 13.2f;
+        idle.FrameRate  = TimeBetweenAnimations;
 
         moveUp.Frames   = framesMoveUp;
         moveUp.IsPlaying= false;
         moveUp.Repeat   = false;
-        moveUp.FrameRate= 13.2f;
+        moveUp.FrameRate= TimeBetweenAnimations;
 
         moveDown.Frames = framesMoveDown;
         moveDown.IsPlaying = false;
         moveDown.Repeat    = false;
-        moveDown.FrameRate = 13.2f;
+        moveDown.FrameRate = TimeBetweenAnimations;
 
         upToIdle.Frames = framesUpToIdle;
         upToIdle.IsPlaying = false;
         upToIdle.Repeat    = false;
-        upToIdle.FrameRate = 13.2f;
+        upToIdle.FrameRate = TimeBetweenAnimations;
 
         downToIdle.Frames = framesDownToIdle;
         downToIdle.IsPlaying = false;
         downToIdle.Repeat    = false;
-        downToIdle.FrameRate = 13.2f;
+        downToIdle.FrameRate = TimeBetweenAnimations;
 
         dead.Frames = framesDead;
         dead.IsPlaying = false;
         dead.Repeat    = false;
-        dead.FrameRate = 13.2f;
+        dead.FrameRate = TimeBetweenAnimations;
 
         _Animations.push_back(idle);
         _Animations.push_back(moveUp);

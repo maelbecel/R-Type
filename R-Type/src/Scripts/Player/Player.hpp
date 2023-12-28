@@ -27,7 +27,7 @@ namespace RType {
             static const uint64_t PLAYER  = 12345678901234578;
             static const uint64_t DEATH   = 3456789012345678901;
 
-            const float TimeBetweenAnimations = 5.0f;
+            const float TimeBetweenAnimations = 13.2f;
 
         //////////////
         //  Enums   //
@@ -51,9 +51,9 @@ namespace RType {
         void UpdateAnimations();
 
       private:
-        void Idle(AnimationComponent anim, SpriteRendererComponent sprite);
-        void MoveUp(AnimationComponent anim, SpriteRendererComponent sprite);
-        void MoveDown(AnimationComponent anim, SpriteRendererComponent sprite);
+        void Idle(AnimationComponent &anim, SpriteRendererComponent &sprite);
+        void MoveUp(AnimationComponent &anim, SpriteRendererComponent &sprite);
+        void MoveDown(AnimationComponent &anim, SpriteRendererComponent &sprite);
 
         ////////////////////////
         // Getters && Setters //
