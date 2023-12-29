@@ -12,7 +12,7 @@
 #include "Exodia/Core/Time/Timestep.hpp"
 
 // Exodia Utils includes
-#include "Utils/CrossPlatform.hpp"
+#include "Utils/Memory.hpp"
 
 namespace Exodia {
 
@@ -29,14 +29,11 @@ namespace Exodia {
         // Methods //
         /////////////
       public:
-        virtual void Configure(World *world) { (void)world; }
+        virtual void Configure(UNUSED(World *world)) {};
 
-        virtual void Unconfigure(World *world) { (void)world; }
+        virtual void Unconfigure(UNUSED(World *world)) {};
 
-        virtual void Update(World *world, Timestep ts) {
-            (void)world;
-            (void)ts;
-        }
+        virtual void Update(UNUSED(World *world), UNUSED(Timestep ts)) {};
     };
 }; // namespace Exodia
 

@@ -70,6 +70,12 @@ namespace RType {
                                 []() -> Exodia::ScriptableEntity * { return new Exodia::BulletEnnemy(); });
 
         project->RegisterScript("Player", []() -> Exodia::ScriptableEntity * { return new Exodia::Player(); });
+
+        // -- Register R-Type systems ------------------------------------------
+
+        project->RegisterSystem("AnimationSystem", []() -> Exodia::EntitySystem * {
+            return new Exodia::AnimationSystem();
+        });
     }
 }; // namespace RType
 
