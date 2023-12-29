@@ -11,8 +11,7 @@ using namespace Exodia;
 
 namespace RType {
 
-    void Player::Idle(AnimationComponent &ac, SpriteRendererComponent &sc)
-    {
+    void Player::Idle(AnimationComponent &ac, SpriteRendererComponent &sc) {
         if (_PreviousState == State::MOVE_DOWN) {
             EXODIA_TRACE("Player idle from down");
             _PreviousState = State::IDLE;
@@ -40,8 +39,7 @@ namespace RType {
         }
     };
 
-    void Player::MoveUp(AnimationComponent &ac, SpriteRendererComponent &sc)
-    {
+    void Player::MoveUp(AnimationComponent &ac, SpriteRendererComponent &sc) {
         EXODIA_TRACE("Player move up");
         _PreviousState = State::MOVE_UP;
         _Animations[0].IsPlaying = false;
@@ -55,8 +53,7 @@ namespace RType {
         sc.Texture = ac.Frames[0];
     }
 
-    void Player::MoveDown(AnimationComponent &ac, SpriteRendererComponent &sc)
-    {
+    void Player::MoveDown(AnimationComponent &ac, SpriteRendererComponent &sc) {
         EXODIA_TRACE("Player move down");
         _PreviousState = State::MOVE_DOWN;
         _Animations[0].IsPlaying = false;

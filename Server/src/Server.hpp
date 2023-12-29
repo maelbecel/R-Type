@@ -13,7 +13,6 @@
 #include "User/User.hpp"
 #include <optional>
 
-
 namespace Exodia {
 
     class Server {
@@ -43,7 +42,6 @@ namespace Exodia {
         void HandleEvent(std::pair<std::pair<uint32_t, bool>, asio::ip::udp::endpoint> event);
         bool IsClientNew(std::pair<const std::string, Connection> connection);
         void SendComponents(SceneType scene);
-
 
         ////////////////
         // Attributes //

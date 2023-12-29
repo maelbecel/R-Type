@@ -6,16 +6,16 @@
 */
 
 #ifndef ANIMATIONEVENT_HPP_
-    #define ANIMATIONEVENT_HPP_
+#define ANIMATIONEVENT_HPP_
 
-    // Exodia includes
-    #include "Exodia.hpp"
+// Exodia includes
+#include "Exodia.hpp"
 
 namespace RType::Events {
 
     struct AnimationEndingEvent {
         Exodia::Entity *Entity;
     };
-};
+}; // namespace RType::Events
 
 #endif /* !ANIMATIONEVENT_HPP_ */

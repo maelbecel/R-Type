@@ -48,8 +48,7 @@ namespace RType {
         float max_height = 20.0f;
         int height = 40;
 
-        tc.Translation.x =
-            (float)(10 + std::uniform_int_distribution<int>(0, 19)(gen)) + camera_tc.Get().Translation.x;
+        tc.Translation.x = (float)(10 + std::uniform_int_distribution<int>(0, 19)(gen)) + camera_tc.Get().Translation.x;
         tc.Translation.y = max_height - (float)(std::uniform_int_distribution<int>(0, height)(gen));
         tc.Scale.x = _Size;
         tc.Scale.y = _Size;
@@ -64,7 +63,7 @@ namespace RType {
         body.Get().Velocity.x = (float)velocityDist(gen);
     }
 
-    void Star::OnUpdate(Timestep ts)  {
+    void Star::OnUpdate(Timestep ts) {
         ComponentHandle<Clock> clock = GetComponent<Clock>();
         ComponentHandle<TransformComponent> transform = GetComponent<TransformComponent>();
         ComponentHandle<CircleRendererComponent> circle = GetComponent<CircleRendererComponent>();

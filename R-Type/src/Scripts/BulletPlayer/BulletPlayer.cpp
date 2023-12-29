@@ -22,7 +22,7 @@ namespace RType {
         anim.Frames = framesIdle;
         anim.IsPlaying = false;
         anim.Repeat = false;
-        anim.FrameRate  = TimeBetweenAnimations;
+        anim.FrameRate = TimeBetweenAnimations;
 
         _Animations.push_back(anim);
     }
@@ -99,7 +99,7 @@ namespace RType {
         }
     }
 
-    void BulletPlayer::OnUpdate(UNUSED(Timestep ts))  {
+    void BulletPlayer::OnUpdate(UNUSED(Timestep ts)) {
         ComponentHandle<TransformComponent> transform = GetComponent<TransformComponent>();
         ComponentHandle<ParentComponent> parent = GetComponent<ParentComponent>();
         World *world = HandleEntity->GetWorld();

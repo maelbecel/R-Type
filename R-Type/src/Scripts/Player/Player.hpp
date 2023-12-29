@@ -22,12 +22,11 @@ namespace RType {
         /////////////
         // Defines //
         /////////////
-        private:
+      private:
+        static const uint64_t PLAYER = 12345678901234578;
+        static const uint64_t DEATH = 3456789012345678901;
 
-            static const uint64_t PLAYER  = 12345678901234578;
-            static const uint64_t DEATH   = 3456789012345678901;
-
-            const float TimeBetweenAnimations = 13.2f;
+        const float TimeBetweenAnimations = 13.2f;
 
         //////////////
         //  Enums   //
@@ -66,7 +65,6 @@ namespace RType {
         // Attributes //
         ////////////////
       private:
-
         State _State = State::IDLE;
         State _PreviousState = State::MOVE_DOWN;
         float _AttackTimer = 0.0f;
