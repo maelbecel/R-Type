@@ -28,7 +28,7 @@ namespace RType {
         anim.Frames = framesIdle;
         anim.IsPlaying = false;
         anim.Repeat = true;
-        anim.FrameRate  = TimeBetweenAnimations;
+        anim.FrameRate = TimeBetweenAnimations;
 
         death.Frames = framesDeath;
         death.IsPlaying = false;
@@ -67,8 +67,7 @@ namespace RType {
         tc.Translation.x = 7.0f;
         tc.Translation.y = (float)(std::rand() % 10);
 
-        EXODIA_INFO("PataPata created at pos {0}, {1}", tc.Translation.x,
-                    tc.Translation.y);
+        EXODIA_INFO("PataPata created at pos {0}, {1}", tc.Translation.x, tc.Translation.y);
     }
 
     void PataPata::UpdateAnimations() {
@@ -201,8 +200,8 @@ namespace RType {
 
         if (_State == State::ALIVE && health.Get().CurrentHealth <= 0) {
             _State = State::DEAD;
-            body.Get().Velocity = { 0.0f, 0.0f };
+            body.Get().Velocity = {0.0f, 0.0f};
         }
     }
 
-} // namespace Exodia
+} // namespace RType

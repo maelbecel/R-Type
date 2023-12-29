@@ -328,10 +328,10 @@ namespace Exodia {
     /**
      * The function checks if a client is new by comparing its connection with existing connections in
      * the server.
-     * 
+     *
      * @param connection A pair consisting of a constant string (representing the client's username)
      * and a Connection object (representing the client's connection information).
-     * 
+     *
      * @return a boolean value, which indicates whether the client is new or not.
      */
     bool Server::IsClientNew(std::pair<const std::string, Connection> connection) {
@@ -344,8 +344,7 @@ namespace Exodia {
         return newClient;
     }
 
-    void Server::SendComponents(SceneType scene)
-    {
+    void Server::SendComponents(SceneType scene) {
         Scenes[scene]->GetWorld().ForEach<TagComponent>([&](Entity *entity, ComponentHandle<TagComponent> tag) {
             if (tag.Get().Tag.rfind("Player_") != std::string::npos) {
                 _Network.SendComponentOf(entity, "TagComponent");
@@ -395,4 +394,4 @@ namespace Exodia {
             }
         }
     }
-};
+}; // namespace Exodia

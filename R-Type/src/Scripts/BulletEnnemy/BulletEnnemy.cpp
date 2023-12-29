@@ -19,15 +19,17 @@ namespace RType {
         std::vector<Ref<SubTexture2D>> framesDestroy;
 
         for (int i = 0; i < 4; i++)
-            framesIdle.push_back(SubTexture2D::CreateFromCoords(BULLET, {8 + i, 9.0f}, { 16.6666666667f, 17.0f }, {1.0f, 1.0f}));
+            framesIdle.push_back(
+                SubTexture2D::CreateFromCoords(BULLET, {8 + i, 9.0f}, {16.6666666667f, 17.0f}, {1.0f, 1.0f}));
 
         anim.Frames = framesIdle;
         anim.IsPlaying = false;
         anim.Repeat = true;
-        anim.FrameRate  = TimeBetweenAnimations;
+        anim.FrameRate = TimeBetweenAnimations;
 
         for (int i = 0; i < 5; i++)
-            framesDestroy.push_back(SubTexture2D::CreateFromCoords(BULLET, {7 + i, 8.0f}, { 16.6666666667f, 17.0f }, {1.0f, 1.0f}));
+            framesDestroy.push_back(
+                SubTexture2D::CreateFromCoords(BULLET, {7 + i, 8.0f}, {16.6666666667f, 17.0f}, {1.0f, 1.0f}));
 
         destroy.Frames = framesDestroy;
         destroy.IsPlaying = false;
@@ -133,15 +135,15 @@ namespace RType {
                 anim.Get() = _Animations[1];
                 sprite.Get().Texture = anim.Get().Frames[0];
             }
-            if (_IsColliding && anim.Get().CurrentFrameIndex == anim.Get().Frames.size() - 1
-            && _Animations[1].IsPlaying == true) {
+            if (_IsColliding && anim.Get().CurrentFrameIndex == anim.Get().Frames.size() - 1 &&
+                _Animations[1].IsPlaying == true) {
                 EXODIA_INFO("Bullet {0} destroyed", HandleEntity->GetComponent<TagComponent>().Get().Tag);
                 HandleEntity->GetWorld()->DestroyEntity(HandleEntity);
             }
         }
     }
 
-    void BulletEnnemy::OnUpdate(UNUSED(Timestep ts))  {
+    void BulletEnnemy::OnUpdate(UNUSED(Timestep ts)) {
         ComponentHandle<TransformComponent> transform = GetComponent<TransformComponent>();
         ComponentHandle<ParentComponent> parent = GetComponent<ParentComponent>();
         World *world = HandleEntity->GetWorld();

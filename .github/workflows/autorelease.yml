@@ -62,10 +62,17 @@ jobs:
       shell: sh
 
 
+    - name: Get commit message
+      id: get_commit_message
+      run: |
+        commit_message=$(curl --location --request GET 'https://api.github.com/repos/$GITHUB_REPOSITORY/commits/${{ github.sha }}' \
+        --header 'Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' | jq -r ".commit.message")
+        echo "::set-output name=commit_message::$commit_message"
+
     - name: Release pushed tag
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        tag: ${{ github.ref_name }}
+        tag: ${{ steps.get_commit_message.outputs.commit_message }}
       run: |
         gh release create "$tag" \
             --repo="$GITHUB_REPOSITORY" \

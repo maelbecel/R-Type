@@ -51,6 +51,6 @@ namespace RType {
         std::vector<AnimationComponent> _Animations;
         bool _IsColliding = false;
     };
-}; // namespace Exodia
+}; // namespace RType
 
 #endif /* !BULLETENNEMY_HPP_ */

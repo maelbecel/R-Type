@@ -57,6 +57,6 @@ namespace RType {
         Network::IOContextManager _IOContextManager;
         Scope<Network::Network> _Network;
     };
-}; // namespace Exodia
+}; // namespace RType
 
 #endif /* !RTYPELAYER_HPP_ */

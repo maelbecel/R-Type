@@ -47,36 +47,36 @@ namespace RType {
 
         // _Animations[5]
         for (uint32_t x = 0; x < 8; x++)
-            framesDead.push_back(SubTexture2D::CreateFromCoords(DEATH, { x, 0.0f }, { 33.2f, 32.0f }, { 1.0f, 1.0f }));
+            framesDead.push_back(SubTexture2D::CreateFromCoords(DEATH, {x, 0.0f}, {33.2f, 32.0f}, {1.0f, 1.0f}));
 
-        idle.Frames     = framesIdle;
-        idle.IsPlaying  = false;
-        idle.Repeat     = false;
-        idle.FrameRate  = TimeBetweenAnimations;
+        idle.Frames = framesIdle;
+        idle.IsPlaying = false;
+        idle.Repeat = false;
+        idle.FrameRate = TimeBetweenAnimations;
 
-        moveUp.Frames   = framesMoveUp;
-        moveUp.IsPlaying= false;
-        moveUp.Repeat   = false;
-        moveUp.FrameRate= TimeBetweenAnimations;
+        moveUp.Frames = framesMoveUp;
+        moveUp.IsPlaying = false;
+        moveUp.Repeat = false;
+        moveUp.FrameRate = TimeBetweenAnimations;
 
         moveDown.Frames = framesMoveDown;
         moveDown.IsPlaying = false;
-        moveDown.Repeat    = false;
+        moveDown.Repeat = false;
         moveDown.FrameRate = TimeBetweenAnimations;
 
         upToIdle.Frames = framesUpToIdle;
         upToIdle.IsPlaying = false;
-        upToIdle.Repeat    = false;
+        upToIdle.Repeat = false;
         upToIdle.FrameRate = TimeBetweenAnimations;
 
         downToIdle.Frames = framesDownToIdle;
         downToIdle.IsPlaying = false;
-        downToIdle.Repeat    = false;
+        downToIdle.Repeat = false;
         downToIdle.FrameRate = TimeBetweenAnimations;
 
         dead.Frames = framesDead;
         dead.IsPlaying = false;
-        dead.Repeat    = false;
+        dead.Repeat = false;
         dead.FrameRate = TimeBetweenAnimations;
 
         _Animations.push_back(idle);

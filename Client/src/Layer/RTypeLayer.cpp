@@ -112,7 +112,6 @@ namespace RType {
         Entity *entity = Scenes[GAME]->CreateEntity("Player_" + std::to_string(playerID));
         entity->AddComponent<ScriptComponent>().Get().Bind("Player");
 
-
         // Create pata-pata
         Entity *patata = Scenes[GAME]->CreateEntity("Pata-pata");
         patata->AddComponent<ScriptComponent>().Get().Bind("PataPata");
@@ -164,7 +163,7 @@ namespace RType {
 
         Scenes[CurrentScene]->GetWorld().LockMutex();
         Scenes[CurrentScene]->GetWorld().ForEach<ScriptComponent, TagComponent>(
-            [&](UNUSED(Entity *entity), ComponentHandle<ScriptComponent> script, ComponentHandle<TagComponent> tag) {
+            [&](UNUSED(Entity * entity), ComponentHandle<ScriptComponent> script, ComponentHandle<TagComponent> tag) {
                 ScriptComponent &sc = script.Get();
                 TagComponent &tc = tag.Get();
 
@@ -208,4 +207,4 @@ namespace RType {
 
         return true;
     }
-}; // namespace Exodia
+}; // namespace RType

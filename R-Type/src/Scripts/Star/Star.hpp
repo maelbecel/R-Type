@@ -15,7 +15,6 @@
 
 using namespace Exodia;
 
-
 namespace RType {
 
     class Star : public ScriptableEntity {
