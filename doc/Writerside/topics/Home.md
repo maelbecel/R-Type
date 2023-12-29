@@ -132,7 +132,7 @@ RType is divided into various modules, including:
 - **Rendering**: Manages graphics rendering and shaders.
 - **Physics**: Handles collision detection and rigid body dynamics.
 
-## Example
+## Examples
 
 There is a folder ```/Examples``` to check for example  
 
@@ -141,6 +141,8 @@ There is a folder ```/Examples``` to check for example
 3. [Default System](Default-System.md)
 4. [Entity Component System](Entity-Component-System.md)
 5. [ImGui](ImGui.md)
+6. [Network](example_network.md)
+7. [Script](example-script.md)
 
 Feel free to explore and learn more about each aspect of the RType game engine!
 
