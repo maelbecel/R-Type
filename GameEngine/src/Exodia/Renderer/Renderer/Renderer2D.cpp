@@ -656,17 +656,17 @@ namespace Exodia {
 
     // 8. Text
 
-    void Renderer2D::DrawText(const glm::mat4 &transform, const std::string &text, const TextRendererComponent &component, int entityID)
-    {
+    void Renderer2D::DrawText(const glm::mat4 &transform, const std::string &text,
+                              const TextRendererComponent &component, int entityID) {
         Ref<Font> font = AssetManager::GetAsset<Font>(component.Font);
 
         if (font == nullptr)
             return;
-        DrawText(transform, text, font, { component.Color, component.Kerning, component.LineSpacing }, entityID);
+        DrawText(transform, text, font, {component.Color, component.Kerning, component.LineSpacing}, entityID);
     }
 
-    void Renderer2D::DrawText(const glm::mat4 &transform, const std::string &text, Ref<Font> font, const TextData &params, int entityID)
-    {
+    void Renderer2D::DrawText(const glm::mat4 &transform, const std::string &text, Ref<Font> font,
+                              const TextData &params, int entityID) {
         constexpr float fontHeight = 16.0f;
 
         float x = 0.0f;
@@ -703,7 +703,7 @@ namespace Exodia {
             if (c == '\r')
                 continue;
             if (c == '\n') {
-                x  = 0.0f;
+                x = 0.0f;
                 y -= fsScale * fontHeight + params.LineSpacing;
 
                 continue;
@@ -740,7 +740,7 @@ namespace Exodia {
 
             _Data->QuadVertexBufferPtr->Position = transform * glm::vec4(quadMin.x, quadMax.y, 0.0f, 1.0f);
             _Data->QuadVertexBufferPtr->Color = params.Color;
-            _Data->QuadVertexBufferPtr->TexCoord = { texCoordMin.x, texCoordMax.y };
+            _Data->QuadVertexBufferPtr->TexCoord = {texCoordMin.x, texCoordMax.y};
             _Data->QuadVertexBufferPtr->TexIndex = textureIndex;
             _Data->QuadVertexBufferPtr->TilingFactor = 1.0f;
             _Data->QuadVertexBufferPtr->EntityID = entityID;
@@ -756,7 +756,7 @@ namespace Exodia {
 
             _Data->QuadVertexBufferPtr->Position = transform * glm::vec4(quadMax.x, quadMin.y, 0.0f, 1.0f);
             _Data->QuadVertexBufferPtr->Color = params.Color;
-            _Data->QuadVertexBufferPtr->TexCoord = { texCoordMax.x, texCoordMin.y };
+            _Data->QuadVertexBufferPtr->TexCoord = {texCoordMax.x, texCoordMin.y};
             _Data->QuadVertexBufferPtr->TexIndex = textureIndex;
             _Data->QuadVertexBufferPtr->TilingFactor = 1.0f;
             _Data->QuadVertexBufferPtr->EntityID = entityID;

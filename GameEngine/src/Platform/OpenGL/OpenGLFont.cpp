@@ -20,8 +20,7 @@ namespace Exodia {
     // Constructor & Destructor //
     //////////////////////////////
 
-    OpenGLFont::OpenGLFont(const std::string &path)
-    {
+    OpenGLFont::OpenGLFont(const std::string &path) {
         if (Renderer::GetAPI() == RendererAPI::API::None)
             return;
         if (!GenerateGlyphs(path))
@@ -32,8 +31,7 @@ namespace Exodia {
     // Methods //
     /////////////
 
-    bool OpenGLFont::GenerateGlyphs(const std::string &path)
-    {
+    bool OpenGLFont::GenerateGlyphs(const std::string &path) {
         _Texture = TextureImporter::LoadTexture2D(path);
 
         if (!_Texture)
@@ -44,8 +42,7 @@ namespace Exodia {
         return true;
     }
 
-    void OpenGLFont::GenerateOffsets()
-    {
+    void OpenGLFont::GenerateOffsets() {
         /*uint32_t width        = _Texture->GetWidth();
         uint32_t height       = _Texture->GetHeight();
         uint32_t widthOffset  = width  / 16;
@@ -80,7 +77,7 @@ namespace Exodia {
             }
         }*/
 
-        //TODO: Temp code that work for all R-Type fonts
+        // TODO: Temp code that work for all R-Type fonts
         _Data = CreateScope<FontData>();
 
         _Data->Glyphs[0].Width = 0;
@@ -341,8 +338,7 @@ namespace Exodia {
         _Data->Glyphs[255].Width = 16;
     }
 
-    void OpenGLFont::GenerateCoords()
-    {
+    void OpenGLFont::GenerateCoords() {
         float u = 0.0f;
         float v = 0.0f;
 
@@ -350,7 +346,7 @@ namespace Exodia {
             v = 0.0f;
 
             for (uint32_t y = 15; y > 0; y--) {
-                _Data->Glyphs[x + (y * 16)].TextureCoord = { u, v };
+                _Data->Glyphs[x + (y * 16)].TextureCoord = {u, v};
 
                 v += (1.0f / 16.0f);
             }
@@ -363,15 +359,11 @@ namespace Exodia {
     // Getters & Setters //
     ///////////////////////
 
-    const FontData &OpenGLFont::GetData() const
-    {
-        return *_Data;
-    }
+    const FontData &OpenGLFont::GetData() const { return *_Data; }
 
-    Ref<Texture2D> OpenGLFont::GetTexture() const
-    {
+    Ref<Texture2D> OpenGLFont::GetTexture() const {
         if (Renderer::GetAPI() == RendererAPI::API::None)
             return nullptr;
         return _Texture;
     }
-};
+}; // namespace Exodia

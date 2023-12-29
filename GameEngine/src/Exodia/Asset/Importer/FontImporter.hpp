@@ -6,16 +6,16 @@
 */
 
 #ifndef FONTIMPORTER_HPP_
-    #define FONTIMPORTER_HPP_
+#define FONTIMPORTER_HPP_
 
-    // Exodia Asset includes
-    #include "Asset/Utils/AssetType.hpp"
+// Exodia Asset includes
+#include "Asset/Utils/AssetType.hpp"
 
-    // Exodia Renderer includes
-    #include "Renderer/Font/Font.hpp"
+// Exodia Renderer includes
+#include "Renderer/Font/Font.hpp"
 
-    // External includes
-    #include <filesystem>
+// External includes
+#include <filesystem>
 
 namespace Exodia {
 
@@ -26,10 +26,10 @@ namespace Exodia {
         /////////////
         // Methods //
         /////////////
-        public:
-            static Ref<Font> ImportFont(AssetHandle handle, const AssetSpecification &spec);
-            static Ref<Font> LoadFont(const std::filesystem::path &path);
+      public:
+        static Ref<Font> ImportFont(AssetHandle handle, const AssetSpecification &spec);
+        static Ref<Font> LoadFont(const std::filesystem::path &path);
     };
-};
+}; // namespace Exodia
 
 #endif /* !FONTIMPORTER_HPP_ */
