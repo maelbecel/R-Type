@@ -36,7 +36,7 @@ namespace Exodia::Network {
         float ping = 0;
         ping = std::chrono::duration_cast<std::chrono::milliseconds>(
             std::chrono::system_clock::now().time_since_epoch()).count() - header.getTimestamp();
-        senderConnection.SetPing(ping);
+        senderConnection.SetPing((uint16_t)ping);
 
         std::memcpy(&packet_received, message.data(), sizeof(int));
         std::memcpy(&packet_sent, message.data() + sizeof(int), sizeof(int));
