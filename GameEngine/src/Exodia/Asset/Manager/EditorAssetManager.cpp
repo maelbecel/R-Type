@@ -170,6 +170,12 @@ namespace Exodia {
         if (IsAssetLoaded(handle)) {
             try {
                 asset = _LoadedAssets.at(handle);
+
+                if (asset == nullptr) {
+                    asset = AssetImporter::ImportAsset(handle, GetAssetSpecification(handle));
+
+                    _LoadedAssets[handle] = asset;
+                }
             } catch (const std::out_of_range &e) {
                 EXODIA_CORE_ERROR("Failed to get asset `{}`:\n\t{}", (uint64_t)handle, e.what());
             }
@@ -184,8 +190,7 @@ namespace Exodia {
                 return nullptr;
             }
 
-            // TODO: ASSET MANAGER BUG (don't load texture when server is running)
-            _LoadedAssets[handle] = asset;
+            _LoadedAssets[handle] = nullptr;
         }
 
         return asset;
