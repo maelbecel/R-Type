@@ -168,7 +168,7 @@ namespace Exodia {
                 Memcopy(&spriteSize, data.Data + offset, sizeof(spriteSize));
                 offset += sizeof(spriteSize);
 
-                // Texture = SubTexture2D::CreateFromCoords(assetHandle, coords, cellSize, spriteSize);
+                Texture = SubTexture2D::CreateFromCoords(assetHandle, coords, cellSize, spriteSize);
 
                 EXODIA_CORE_TRACE("SpriteRendererComponent deserialization success !");
                 EXODIA_CORE_TRACE("\tAssetHandle : '{0}'", (uint64_t)assetHandle);
