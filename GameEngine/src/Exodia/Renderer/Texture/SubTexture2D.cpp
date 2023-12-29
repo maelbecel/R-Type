@@ -28,18 +28,18 @@ namespace Exodia {
     /////////////////
 
     SubTexture2D::SubTexture2D(const AssetHandle &assetHandle)
-        : _AssetHandle(assetHandle), _Texture(nullptr), _Coords({0.0f, 0.0f}), _CellSize({1.0f, 1.0f}), _SpriteSize({1.0f, 1.0f}) {
+        : _AssetHandle(assetHandle), _Coords({0.0f, 0.0f}), _CellSize({1.0f, 1.0f}), _SpriteSize({1.0f, 1.0f}) {
         if (RendererAPI::GetAPI() == RendererAPI::API::None)
             return;
-        _Texture = AssetManager::GetAsset<Texture2D>(_AssetHandle);
+        Ref<Texture2D> texture = AssetManager::GetAsset<Texture2D>(_AssetHandle);
 
-        if (_Texture != nullptr)
-            _CellSize = glm::vec2(_Texture->GetWidth(), _Texture->GetHeight());
+        if (texture != nullptr)
+            _CellSize = glm::vec2(texture->GetWidth(), texture->GetHeight());
     }
 
     SubTexture2D::SubTexture2D(const AssetHandle &assetHandle, const glm::vec2 &coords, const glm::vec2 &cellSize,
                                const glm::vec2 &spriteSize)
-        : _AssetHandle(assetHandle), _Texture(nullptr), _Coords(coords), _CellSize(cellSize), _SpriteSize(spriteSize) {
+        : _AssetHandle(assetHandle), _Coords(coords), _CellSize(cellSize), _SpriteSize(spriteSize) {
         calculateTextureCoords();
     }
 
@@ -50,15 +50,15 @@ namespace Exodia {
     void SubTexture2D::calculateTextureCoords() {
         if (RendererAPI::GetAPI() == RendererAPI::API::None)
             return;
-        if (_Texture == nullptr)
-            _Texture = AssetManager::GetAsset<Texture2D>(_AssetHandle);
-        if (_Texture == nullptr)
+        Ref<Texture2D> texture = AssetManager::GetAsset<Texture2D>(_AssetHandle);
+
+        if (texture == nullptr)
             return;
 
-        glm::vec2 min = {(_Coords.x * _CellSize.x) / _Texture->GetWidth(),
-                         (_Coords.y * _CellSize.y) / _Texture->GetHeight()};
-        glm::vec2 max = {((_Coords.x + _SpriteSize.x) * _CellSize.x) / _Texture->GetWidth(),
-                         ((_Coords.y + _SpriteSize.y) * _CellSize.y) / _Texture->GetHeight()};
+        glm::vec2 min = {(_Coords.x * _CellSize.x) / texture->GetWidth(),
+                         (_Coords.y * _CellSize.y) / texture->GetHeight()};
+        glm::vec2 max = {((_Coords.x + _SpriteSize.x) * _CellSize.x) / texture->GetWidth(),
+                         ((_Coords.y + _SpriteSize.y) * _CellSize.y) / texture->GetHeight()};
 
         _TextureCoords[0] = {min.x, min.y};
         _TextureCoords[1] = {max.x, min.y};
@@ -73,11 +73,9 @@ namespace Exodia {
     Ref<Texture2D> SubTexture2D::GetTexture() {
         if (RendererAPI::GetAPI() == RendererAPI::API::None)
             return nullptr;
+        Ref<Texture2D> texture = AssetManager::GetAsset<Texture2D>(_AssetHandle);
 
-        //if (_Texture == nullptr)
-            _Texture = AssetManager::GetAsset<Texture2D>(_AssetHandle);
-
-        return _Texture;
+        return texture;
     }
 
     const glm::vec2 *SubTexture2D::GetTextureCoords() const { return _TextureCoords; }
@@ -117,10 +115,10 @@ namespace Exodia {
         _SpriteSize = {1, 1};
 
         if (RendererAPI::GetAPI() != RendererAPI::API::None) {
-            _Texture = AssetManager::GetAsset<Texture2D>(handle);
+            Ref<Texture2D> texture = AssetManager::GetAsset<Texture2D>(handle);
 
-            if (_Texture != nullptr)
-                _CellSize = glm::vec2(_Texture->GetWidth(), _Texture->GetHeight());
+            if (texture != nullptr)
+                _CellSize = glm::vec2(texture->GetWidth(), texture->GetHeight());
         }
 
         calculateTextureCoords();
