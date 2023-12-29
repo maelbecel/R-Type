@@ -25,19 +25,17 @@ namespace Exodia {
     // Methods //
     /////////////
 
-    Ref<Font> FontImporter::ImportFont(UNUSED(AssetHandle handle), const AssetSpecification &spec)
-    {
+    Ref<Font> FontImporter::ImportFont(UNUSED(AssetHandle handle), const AssetSpecification &spec) {
         EXODIA_PROFILE_FUNCTION();
 
         return LoadFont(Project::GetActiveAssetDirectory() / spec.Path);
     }
 
-    Ref<Font> FontImporter::LoadFont(const std::filesystem::path &path)
-    {
+    Ref<Font> FontImporter::LoadFont(const std::filesystem::path &path) {
         EXODIA_PROFILE_FUNCTION();
 
         Ref<Font> sound = Font::Create(path.string());
 
         return sound;
     }
-};
+}; // namespace Exodia

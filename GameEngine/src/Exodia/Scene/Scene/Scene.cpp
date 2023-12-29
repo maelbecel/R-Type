@@ -99,9 +99,9 @@ namespace Exodia {
         if (Renderer::GetAPI() == RendererAPI::API::None)
             return;
 
-        _World->ForEach<MusicComponent>([&](Entity *entity, auto music) {
-            auto &sc = music.Get();
-
+        _World->LockMutex();
+        _World->ForEach<MusicComponent>([&](Entity *entity, ComponentHandle<MusicComponent> music) {
+            MusicComponent &sc = music.Get();
             Ref<Sound2D> sound = AssetManager::GetAsset<Sound2D>(sc.Handle);
 
             if (sound == nullptr)
@@ -113,6 +113,7 @@ namespace Exodia {
                 Renderer2D::PlaySound(sc.Handle);
             }
         });
+        _World->UnlockMutex();
     }
 
     void Scene::OnRuntimeStop() {
@@ -244,13 +245,14 @@ namespace Exodia {
         _World->UnlockMutex();
 
         _World->LockMutex();
-        _World->ForEach<TransformComponent, TextRendererComponent, IDComponent>([&](Entity *entity, auto transform, auto text, auto id) {
-            auto &tc   = transform.Get();
-            auto &txtc = text.Get();
-            auto &ic   = id.Get();
+        _World->ForEach<TransformComponent, TextRendererComponent, IDComponent>(
+            [&](Entity *entity, auto transform, auto text, auto id) {
+                auto &tc = transform.Get();
+                auto &txtc = text.Get();
+                auto &ic = id.Get();
 
-            Renderer2D::DrawText(tc.GetTransform(), txtc.Text, txtc, (int)ic.ID);
-        });
+                Renderer2D::DrawText(tc.GetTransform(), txtc.Text, txtc, (int)ic.ID);
+            });
         _World->UnlockMutex();
 
         _World->LockMutex();

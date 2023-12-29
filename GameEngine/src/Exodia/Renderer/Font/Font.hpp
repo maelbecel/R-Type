@@ -6,17 +6,17 @@
 */
 
 #ifndef FONT_HPP_
-    #define FONT_HPP_
+#define FONT_HPP_
 
-    // Exodia Assets
-    #include "Asset/Utils/AssetType.hpp"
+// Exodia Assets
+#include "Asset/Utils/AssetType.hpp"
 
-    // Exodia Utils
-    #include "Utils/Memory.hpp"
+// Exodia Utils
+#include "Utils/Memory.hpp"
 
-    // External includes
-    #include <glm/glm.hpp>
-    #include <array>
+// External includes
+#include <glm/glm.hpp>
+#include <array>
 
 namespace Exodia {
 
@@ -36,29 +36,26 @@ namespace Exodia {
         /////////////
         // Factory //
         /////////////
-        public:
-
-            static Ref<Font> Create(const std::string &path);
+      public:
+        static Ref<Font> Create(const std::string &path);
 
         ///////////////////////////////
         // Constructors & Destructor //
         ///////////////////////////////
-        public:
-
-            virtual ~Font() = default;
+      public:
+        virtual ~Font() = default;
 
         ///////////////////////
         // Getters & Setters //
         ///////////////////////
-        public:
+      public:
+        virtual const FontData &GetData() const = 0;
 
-            virtual const FontData &GetData() const = 0;
+        virtual Ref<Texture2D> GetTexture() const = 0;
 
-            virtual Ref<Texture2D> GetTexture() const = 0;
-
-            static AssetType GetStaticType();
-            virtual AssetType GetType() const;
+        static AssetType GetStaticType();
+        virtual AssetType GetType() const;
     };
-};
+}; // namespace Exodia
 
 #endif /* !FONT_HPP_ */

@@ -96,10 +96,7 @@ namespace Exodia {
         _Data = Buffer::Copy(data);
     }
 
-    Buffer OpenGLTexture::GetData() const
-    {
-        return _Data;
-    }
+    Buffer OpenGLTexture::GetData() const { return _Data; }
 
     bool OpenGLTexture::IsLoaded() const { return _IsLoaded; }
 

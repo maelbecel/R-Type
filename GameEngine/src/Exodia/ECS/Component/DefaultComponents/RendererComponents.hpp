@@ -312,24 +312,22 @@ namespace Exodia {
 
     struct TextRendererComponent : public Component {
         std::string Text;
-        glm::vec4   Color;
+        glm::vec4 Color;
         AssetHandle Font;
-        float       Kerning;
-        float       LineSpacing;
+        float Kerning;
+        float LineSpacing;
 
         TextRendererComponent(const TextRendererComponent &) = default;
-        TextRendererComponent(const std::string &text = "", const glm::vec4 &color = glm::vec4(1.0f)) : Text(text), Color(color), Font(0), Kerning(0.0f), LineSpacing(0.0f) {};
+        TextRendererComponent(const std::string &text = "", const glm::vec4 &color = glm::vec4(1.0f))
+            : Text(text), Color(color), Font(0), Kerning(0.0f), LineSpacing(0.0f){};
 
-        virtual void Serialize(YAML::Emitter &out)
-        {
+        virtual void Serialize(YAML::Emitter &out) {
             out << YAML::Key << "TextRendererComponent";
             out << YAML::BeginMap;
             {
                 out << YAML::Key << "Text" << YAML::Value << Text;
                 out << YAML::Key << "Color" << YAML::Value << YAML::Flow;
-                {
-                    out << YAML::BeginSeq << Color.x << Color.y << Color.z << Color.w << YAML::EndSeq;
-                }
+                { out << YAML::BeginSeq << Color.x << Color.y << Color.z << Color.w << YAML::EndSeq; }
                 out << YAML::Key << "Font" << YAML::Value << (uint64_t)Font;
                 out << YAML::Key << "Kerning" << YAML::Value << Kerning;
                 out << YAML::Key << "LineSpacing" << YAML::Value << LineSpacing;
@@ -337,18 +335,18 @@ namespace Exodia {
             out << YAML::EndMap;
         }
 
-        virtual void Deserialize(const YAML::Node &node)
-        {
+        virtual void Deserialize(const YAML::Node &node) {
             try {
                 auto text = node["TextRendererComponent"];
 
                 Text = text["Text"].as<std::string>();
 
-                Color = glm::vec4(text["Color"][0].as<float>(), text["Color"][1].as<float>(), text["Color"][2].as<float>(), text["Color"][3].as<float>());
+                Color = glm::vec4(text["Color"][0].as<float>(), text["Color"][1].as<float>(),
+                                  text["Color"][2].as<float>(), text["Color"][3].as<float>());
 
                 Font = text["Font"].as<uint64_t>();
 
-                Kerning     = text["Kerning"].as<float>();
+                Kerning = text["Kerning"].as<float>();
                 LineSpacing = text["LineSpacing"].as<float>();
             } catch (YAML::BadConversion &error) {
                 EXODIA_CORE_WARN("TextRendererComponent deserialization failed:\n\t{0}", error.what());
@@ -357,10 +355,10 @@ namespace Exodia {
 
         // TODO: Implement TextRendererComponent::DrawComponent();
 
-        virtual Buffer SerializeData() override
-        {
+        virtual Buffer SerializeData() override {
             try {
-                Buffer buffer(sizeof(glm::mat4) + sizeof(Font) + (sizeof(float) * 2) + sizeof(bool) + (sizeof(char) * Text.size()));
+                Buffer buffer(sizeof(glm::mat4) + sizeof(Font) + (sizeof(float) * 2) + sizeof(bool) +
+                              (sizeof(char) * Text.size()));
                 size_t offset = 0;
 
                 std::memcpy(buffer.Data, &Color, sizeof(Color));
@@ -386,11 +384,10 @@ namespace Exodia {
             }
         }
 
-        virtual void DeserializeData(Buffer data) override
-        {
+        virtual void DeserializeData(Buffer data) override {
             try {
                 size_t offset = 0;
-                bool hasText  = false;
+                bool hasText = false;
 
                 Memcopy(&Color, data.Data + offset, sizeof(Color));
                 offset += sizeof(Color);
@@ -412,6 +409,6 @@ namespace Exodia {
             }
         }
     };
-};
+}; // namespace Exodia
 
 #endif /* !RENDERERCOMPONENTS_HPP_ */
