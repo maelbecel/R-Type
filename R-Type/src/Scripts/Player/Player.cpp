@@ -54,9 +54,10 @@ namespace Exodia {
             return;
 
         if (_State != State::DEAD && GetComponent<Health>().Get().CurrentHealth == 0) {
-            EXODIA_INFO("Player is dead");
-            auto velocity = GetComponent<RigidBody2DComponent>();
-            auto camera_entity = HandleEntity->GetWorld()->GetEntityByTag("Camera");
+            HandleEntity->GetWorld()->DestroyEntity(HandleEntity);
+            
+            //auto velocity = GetComponent<RigidBody2DComponent>();
+            //auto camera_entity = HandleEntity->GetWorld()->GetEntityByTag("Camera");
             // if (!velocity || !camera_entity)
             //     return;
             // velocity.Get().Velocity.x = camera_entity->GetComponent<RigidBody2DComponent>().Get().Velocity.x;

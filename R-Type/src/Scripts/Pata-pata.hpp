@@ -82,7 +82,7 @@ namespace Exodia {
 
         void OnUpdate(Timestep ts) override {
             auto transform = GetComponent<TransformComponent>();
-            auto &mytime = GetComponent<Clock>().Get().ElapsedTime;
+            auto time = GetComponent<Clock>();
             auto body = GetComponent<RigidBody2DComponent>();
             auto camera = HandleEntity->GetWorld()->GetEntityByTag("Camera")->GetComponent<TransformComponent>();
 
@@ -91,7 +91,8 @@ namespace Exodia {
             double frequency = 1.0f; // Fréquence de la sinusoïde en Hz
 
             _AttackTimer += ts.GetSeconds();
-            if (transform && _State == State::ALIVE && body) {
+            if (transform && _State == State::ALIVE && body && time) {
+                auto &mytime = time.Get().ElapsedTime;
                 // auto &tc = transform.Get();
                 // Mise à jour de la position en fonction du temps et du mouvement sinusoidal
                 mytime += ts.GetSeconds();
@@ -130,7 +131,10 @@ namespace Exodia {
         void OnCollisionEnter(Entity *entity) override {
             if (entity->GetComponent<TagComponent>().Get().Tag.rfind("Bullet", 0) == 0) {
                 EXODIA_INFO("Bullet {0} hit", entity->GetComponent<TagComponent>().Get().Tag);
-                GetComponent<Health>().Get().CurrentHealth -= 1;
+
+                entity->GetWorld()->DestroyEntity(entity);
+                HandleEntity->GetWorld()->DestroyEntity(HandleEntity);
+                //GetComponent<Health>().Get().CurrentHealth -= 1;
             }
         }
 

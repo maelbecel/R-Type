@@ -83,10 +83,10 @@ namespace Exodia {
         camera.Camera.SetViewportSize(Application::Get().GetWindow().GetWidth(),
                                       Application::Get().GetWindow().GetHeight());
 
-        RType::EntityEventSubscriber *subscribe = new RType::EntityEventSubscriber(*_Network);
+        /*RType::EntityEventSubscriber *subscribe = new RType::EntityEventSubscriber(*_Network);
 
         Scenes[GAME]->Subscribe<Events::OnEntityCreated>(subscribe);
-        Scenes[GAME]->Subscribe<Events::OnEntityDestroyed>(subscribe);
+        Scenes[GAME]->Subscribe<Events::OnEntityDestroyed>(subscribe);*/
 
         /* Removing rigid body for static camera
         auto body_camera = cameraEntity->AddComponent<RigidBody2DComponent>();
