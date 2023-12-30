@@ -17,6 +17,8 @@ namespace RType {
     /////////////
 
     void AnimationSystem::Update(World *world, Timestep ts) {
+
+        world->LockMutex();
         world->ForEach<AnimationComponent, SpriteRendererComponent>(
             [&](Entity *entity, ComponentHandle<AnimationComponent> animation,
                 ComponentHandle<SpriteRendererComponent> sprite) {
@@ -49,6 +51,7 @@ namespace RType {
                     }
                 }
             });
+        world->UnlockMutex();
     }
 
     void AnimationSystem::Receive(UNUSED(World *world), UNUSED(const Events::AnimationEndingEvent &event)) {
