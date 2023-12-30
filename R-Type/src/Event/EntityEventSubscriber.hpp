@@ -13,14 +13,13 @@
 
 namespace RType {
 
-    class EntityEventSubscriber : public Exodia::EventSubscriber<Exodia::Events::OnEntityCreated>,
-                                  public Exodia::EventSubscriber<Exodia::Events::OnEntityDestroyed> {
+    class EntityEventSubscriber : public Exodia::EventSubscriber<Exodia::Events::OnEntityCreated>, public Exodia::EventSubscriber<Exodia::Events::OnEntityDestroyed> {
 
         //////////////////////////////
         // Constructor & Destructor //
         //////////////////////////////
       public:
-        EntityEventSubscriber(const Exodia::Network::Network &network) : _Network(network){};
+        EntityEventSubscriber(Exodia::Network::Network &network) : _Network(network) {};
 
         virtual ~EntityEventSubscriber() override = default;
 
@@ -35,7 +34,7 @@ namespace RType {
         // Attributes //
         ////////////////
       private:
-        const Exodia::Network::Network &_Network;
+        Exodia::Network::Network &_Network;
     };
 }; // namespace RType
 
