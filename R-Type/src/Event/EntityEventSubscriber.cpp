@@ -17,7 +17,7 @@ namespace RType {
 
     void EntityEventSubscriber::Receive(UNUSED(World *world), const Events::OnEntityCreated &event) {
         for (auto *component : event.Entity->GetAllComponents()) {
-            std::string name      = component->GetTypeIndexOfComponent().name();
+            std::string name = component->GetTypeIndexOfComponent().name();
             std::string typeIndex = extractTypeName(name.c_str());
 
             _Network.SendComponentOf(event.Entity, typeIndex);

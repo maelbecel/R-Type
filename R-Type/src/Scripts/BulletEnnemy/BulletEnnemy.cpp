@@ -108,8 +108,7 @@ namespace RType {
         EXODIA_INFO("BulletEnnemy created");
     }
 
-    void BulletEnnemy::UpdateAnimations()
-    {
+    void BulletEnnemy::UpdateAnimations() {
         if (_Animations.size() == 0)
             return;
 

@@ -133,7 +133,7 @@ namespace RType {
         if (entityTag.rfind("Bullet", 0) == 0) {
             EXODIA_INFO("Bullet {0} hit", entityTag);
 
-            //HandleEntity->GetWorld()->Emit<Events::TakeDamage>({HandleEntity, 1});
+            // HandleEntity->GetWorld()->Emit<Events::TakeDamage>({HandleEntity, 1});
             health.Get().CurrentHealth -= 1;
         }
     }
