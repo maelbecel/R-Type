@@ -124,15 +124,12 @@ namespace Exodia {
     void Server::InitScenes() {
         CurrentScene = GAME;
 
-        std::vector<Exodia::EntitySystem *> systems = {
-            new AnimationSystem(),
-            new MovingSystem(1.5f)
-        };
+        std::vector<Exodia::EntitySystem *> systems = {new AnimationSystem(), new MovingSystem(1.5f)};
 
         InitScene(MENU, systems);
 
-        RType::EntityEventSubscriber *subscribe       = new RType::EntityEventSubscriber(_Network);
-        CollisionSystem              *collisionSystem = new CollisionSystem();
+        RType::EntityEventSubscriber *subscribe = new RType::EntityEventSubscriber(_Network);
+        CollisionSystem *collisionSystem = new CollisionSystem();
 
         systems.push_back(collisionSystem);
 
@@ -254,12 +251,14 @@ namespace Exodia {
                 _Network.SendComponentOf(entity, "RigidBody2DComponent");
             });
 
-        Scenes[CurrentScene]->GetWorld().ForEach<TagComponent, TransformComponent>([&](Entity *entity, ComponentHandle<TagComponent> tag, UNUSED(ComponentHandle<TransformComponent> transform)) {
-            if (tag.Get().Tag.rfind("Bullet") != std::string::npos) {
-                _Network.SendComponentOf(entity, "TagComponent");
-                _Network.SendComponentOf(entity, "SpriteRendererComponent");
-            }
-        });
+        Scenes[CurrentScene]->GetWorld().ForEach<TagComponent, TransformComponent>(
+            [&](Entity *entity, ComponentHandle<TagComponent> tag,
+                UNUSED(ComponentHandle<TransformComponent> transform)) {
+                if (tag.Get().Tag.rfind("Bullet") != std::string::npos) {
+                    _Network.SendComponentOf(entity, "TagComponent");
+                    _Network.SendComponentOf(entity, "SpriteRendererComponent");
+                }
+            });
     }
 
     /**

@@ -172,7 +172,7 @@ namespace Exodia {
                 // std::allocator_traits<EntityAllocator>::deallocate(_EntityAllocator, entity, 1);
             }
             entity->SetPendingDestroy(true);
-        
+
             Emit<Events::OnEntityDestroyed>({entity});
             return;
         }

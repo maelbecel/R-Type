@@ -20,8 +20,7 @@ namespace RType {
         EXODIA_INFO("Entity created !");
     }
 
-    void EntityEventSubscriber::Receive(UNUSED(Exodia::World *world), const Exodia::Events::OnEntityDestroyed &event)
-    {
+    void EntityEventSubscriber::Receive(UNUSED(Exodia::World *world), const Exodia::Events::OnEntityDestroyed &event) {
         EXODIA_INFO("Entity destroyed !");
 
         _Network.SendDeleteEntity(event.Entity);
