@@ -134,7 +134,7 @@ namespace RType {
             EXODIA_INFO("Bullet {0} hit", entityTag);
 
             HandleEntity->GetWorld()->Emit<Events::TakeDamage>({HandleEntity, 1});
-            //health.Get().CurrentHealth -= 1;
+            // health.Get().CurrentHealth -= 1;
         }
     }
 

@@ -31,8 +31,7 @@ namespace RType {
         sprite.Get().Texture = anim.Frames[0];
     }
 
-    void BulletPlayer::OnCreate()
-    {
+    void BulletPlayer::OnCreate() {
         ComponentHandle<TransformComponent> transform = GetComponent<TransformComponent>();
         ComponentHandle<ParentComponent> parent = GetComponent<ParentComponent>();
         World *world = HandleEntity->GetWorld();
