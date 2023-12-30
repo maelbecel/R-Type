@@ -281,7 +281,7 @@ namespace Exodia {
             if (my_Timer > 1.0f) {
                 my_Timer = 0.0f;
 
-                _Network.SendPacketInfo();
+                // _Network.SendPacketInfo();
             }
 
             std::vector<std::pair<std::pair<uint32_t, bool>, asio::ip::udp::endpoint>> events = _Network.GetEvents();
