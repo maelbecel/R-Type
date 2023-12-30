@@ -9,19 +9,30 @@
 
 namespace RType {
 
+    using namespace Exodia;
+
     /////////////
     // Methods //
     /////////////
 
-    void EntityEventSubscriber::Receive(UNUSED(Exodia::World *world),
-                                        UNUSED(const Exodia::Events::OnEntityCreated &event)) {
-        // TODO: Send the entity to the server
-        // TODO: Server must send the entity to all clients
-        EXODIA_INFO("Entity created !");
+    void EntityEventSubscriber::Receive(UNUSED(World *world), const Events::OnEntityCreated &event) {
+        for (auto *component : event.Entity->GetAllComponents()) {
+            std::string name      = component->GetTypeIndexOfComponent().name();
+            std::string typeIndex = extractTypeName(name.c_str());
+
+            _Network.SendComponentOf(event.Entity, typeIndex);
+        }
     }
 
-    void EntityEventSubscriber::Receive(UNUSED(Exodia::World *world), const Exodia::Events::OnEntityDestroyed &event) {
-        EXODIA_INFO("Entity destroyed !");
+    void EntityEventSubscriber::Receive(UNUSED(World *world), const Events::OnEntityDestroyed &event) {
+        auto tag = event.Entity->GetComponent<TagComponent>();
+
+        if (tag) {
+            auto &tagValue = tag.Get();
+
+            EXODIA_INFO("Entity destroyed '{0}'", tagValue.Tag);
+        } else
+            EXODIA_INFO("Entity destroyed");
 
         _Network.SendDeleteEntity(event.Entity);
     }

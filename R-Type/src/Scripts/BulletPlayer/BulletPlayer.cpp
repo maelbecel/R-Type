@@ -72,6 +72,9 @@ namespace RType {
     }
 
     void BulletPlayer::UpdateAnimations() {
+        if (_Animations.size() == 0)
+            return;
+
         ComponentHandle<SpriteRendererComponent> sprite = GetComponent<SpriteRendererComponent>();
         ComponentHandle<AnimationComponent> anim = GetComponent<AnimationComponent>();
 
@@ -119,7 +122,7 @@ namespace RType {
         if (!camera_transform)
             return;
 
-        if (_NeedUpdate)
+        if (_NeedUpdate && parent_entity)
             transform.Get().Translation.y = parent_entity->GetComponent<TransformComponent>().Get().Translation.y;
 
         UpdateAnimations();
