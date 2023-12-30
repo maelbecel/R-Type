@@ -25,8 +25,8 @@ namespace Exodia {
      * network connections.
      */
     Server::Server(short port)
-        : _WorldNetwork(World::CreateWorld()), _Network(_WorldNetwork, _IOContextManager, port), _LastTime(0.0f), my_Timer(0.0f),
-          _Running(true) {
+        : _WorldNetwork(World::CreateWorld()), _Network(_WorldNetwork, _IOContextManager, port), _LastTime(0.0f),
+          my_Timer(0.0f), _Running(true) {
         EXODIA_INFO("Server is starting...");
 
         _InputThread = std::thread([&] {
@@ -234,25 +234,27 @@ namespace Exodia {
     void Server::HandleEvent(std::pair<std::pair<uint32_t, bool>, asio::ip::udp::endpoint> event) {
         int32_t player_id = _Network.ConnectionPlace(event.second);
 
-        Scenes[CurrentScene]->GetWorld().ForEach<ScriptComponent, TagComponent, TransformComponent>([&](Entity *entity, ComponentHandle<ScriptComponent> script, ComponentHandle<TagComponent> tag, UNUSED(ComponentHandle<TransformComponent> transform)) {
-            ScriptComponent &sc = script.Get();
-            TagComponent &tc = tag.Get();
+        Scenes[CurrentScene]->GetWorld().ForEach<ScriptComponent, TagComponent, TransformComponent>(
+            [&](Entity *entity, ComponentHandle<ScriptComponent> script, ComponentHandle<TagComponent> tag,
+                UNUSED(ComponentHandle<TransformComponent> transform)) {
+                ScriptComponent &sc = script.Get();
+                TagComponent &tc = tag.Get();
 
-            if (tc.Tag == std::string("Player_" + std::to_string(player_id)) && sc.Instance != nullptr) {
-                if (event.first.second)
-                    sc.Instance->OnKeyPressed(event.first.first);
-                else
-                    sc.Instance->OnKeyReleased(event.first.first);
-            }
+                if (tc.Tag == std::string("Player_" + std::to_string(player_id)) && sc.Instance != nullptr) {
+                    if (event.first.second)
+                        sc.Instance->OnKeyPressed(event.first.first);
+                    else
+                        sc.Instance->OnKeyReleased(event.first.first);
+                }
 
-            if (count % 50 == 0)
-                _Network.SendComponentOf(entity, "TransformComponent");
-            _Network.SendComponentOf(entity, "RigidBody2DComponent");
-        });
+                if (count % 50 == 0)
+                    _Network.SendComponentOf(entity, "TransformComponent");
+                _Network.SendComponentOf(entity, "RigidBody2DComponent");
+            });
 
-        /*Scenes[CurrentScene]->GetWorld().ForEach<TagComponent, TransformComponent>([&](Entity *entity, ComponentHandle<TagComponent> tag, UNUSED(ComponentHandle<TransformComponent> transform)) {
-            if (tag.Get().Tag.rfind("Bullet") != std::string::npos) {
-                _Network.SendComponentOf(entity, "TagComponent");
+        /*Scenes[CurrentScene]->GetWorld().ForEach<TagComponent, TransformComponent>([&](Entity *entity,
+        ComponentHandle<TagComponent> tag, UNUSED(ComponentHandle<TransformComponent> transform)) { if
+        (tag.Get().Tag.rfind("Bullet") != std::string::npos) { _Network.SendComponentOf(entity, "TagComponent");
                 _Network.SendComponentOf(entity, "SpriteRendererComponent");
                 _Network.SendComponentOf(entity, "ParentComponent");
                 _Network.SendComponentOf(entity, "Animation");

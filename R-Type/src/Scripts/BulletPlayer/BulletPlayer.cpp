@@ -27,8 +27,7 @@ namespace RType {
         _Animations.push_back(anim);
     }
 
-    void BulletPlayer::OnCreate()
-    {
+    void BulletPlayer::OnCreate() {
         ComponentHandle<TransformComponent> transform = HandleEntity->GetComponent<TransformComponent>();
         ComponentHandle<ParentComponent> parent = HandleEntity->GetComponent<ParentComponent>();
         World *world = HandleEntity->GetWorld();
@@ -68,7 +67,7 @@ namespace RType {
 
         CreateAnimations();
 
-        HandleEntity->GetWorld()->Emit<Exodia::Events::OnEntityCreated>({ HandleEntity });
+        HandleEntity->GetWorld()->Emit<Exodia::Events::OnEntityCreated>({HandleEntity});
     }
 
     void BulletPlayer::UpdateAnimations() {
@@ -110,9 +109,9 @@ namespace RType {
             return;
 
         Entity *parent_entity = world->GetEntityByID(parent.Get().Parent);
-        //if (!parent_entity) {
-        //    EXODIA_WARN("BulletPlayer has no parent");
-        //}
+        // if (!parent_entity) {
+        //     EXODIA_WARN("BulletPlayer has no parent");
+        // }
 
         Entity *camera = world->GetEntityByTag("Camera");
         if (!camera)
