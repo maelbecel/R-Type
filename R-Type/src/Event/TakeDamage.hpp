@@ -6,13 +6,13 @@
 */
 
 #ifndef TAKEDAMAGE_HPP_
-    #define TAKEDAMAGE_HPP_
+#define TAKEDAMAGE_HPP_
 
-    // Exodia includes
-    #include "Exodia.hpp"
+// Exodia includes
+#include "Exodia.hpp"
 
-    // RType includes
-    #include "Component/Health.hpp"
+// RType includes
+#include "Component/Health.hpp"
 
 namespace RType {
 
@@ -23,25 +23,23 @@ namespace RType {
 
             int Damage;
         };
-    };
+    }; // namespace Events
 
     class TakeDamageSubscriber : public Exodia::EventSubscriber<Events::TakeDamage> {
-        public:
+      public:
+        void Receive(Exodia::World *world, const Events::TakeDamage &event) override {
+            auto health = event.Entity->GetComponent<Exodia::Health>();
 
-            void Receive(Exodia::World *world, const Events::TakeDamage &event) override
-            {
-                auto health = event.Entity->GetComponent<Exodia::Health>();
+            if (!health)
+                return;
+            auto &hc = health.Get();
 
-                if (!health)
-                    return;
-                auto &hc = health.Get();
+            hc.CurrentHealth -= event.Damage;
 
-                hc.CurrentHealth -= event.Damage;
-
-                if (hc.CurrentHealth <= 0)
-                    world->DestroyEntity(event.Entity);
-            }
+            if (hc.CurrentHealth <= 0)
+                world->DestroyEntity(event.Entity);
+        }
     };
-};
+}; // namespace RType
 
 #endif /* !TAKEDAMAGE_HPP_ */
