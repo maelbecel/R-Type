@@ -248,8 +248,8 @@ namespace Exodia::Network {
         entity->AddComponent(container);
         world->UnlockMutex();
         if (entity->GetComponent<TagComponent>()) {
-        EXODIA_CORE_INFO("Network::createEntity() - Component " + component_name + " added to entity " +
-                         std::to_string(id) + " with tag " + entity->GetComponent<TagComponent>().Get().Tag);
+            EXODIA_CORE_INFO("Network::createEntity() - Component " + component_name + " added to entity " +
+                             std::to_string(id) + " with tag " + entity->GetComponent<TagComponent>().Get().Tag);
         } else {
             EXODIA_CORE_INFO("Network::createEntity() - Component " + component_name + " added to entity " +
                              std::to_string(id));
