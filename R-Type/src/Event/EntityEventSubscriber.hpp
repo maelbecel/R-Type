@@ -13,13 +13,14 @@
 
 namespace RType {
 
-    class EntityEventSubscriber : public Exodia::EventSubscriber<Exodia::Events::OnEntityCreated>, public Exodia::EventSubscriber<Exodia::Events::OnEntityDestroyed> {
+    class EntityEventSubscriber : public Exodia::EventSubscriber<Exodia::Events::OnEntityCreated>,
+                                  public Exodia::EventSubscriber<Exodia::Events::OnEntityDestroyed> {
 
         //////////////////////////////
         // Constructor & Destructor //
         //////////////////////////////
       public:
-        EntityEventSubscriber(Exodia::Network::Network &network) : _Network(network) {};
+        EntityEventSubscriber(Exodia::Network::Network &network) : _Network(network){};
 
         virtual ~EntityEventSubscriber() override = default;
 

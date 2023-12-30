@@ -13,15 +13,15 @@ namespace RType {
     // Methods //
     /////////////
 
-    void EntityEventSubscriber::Receive(UNUSED(Exodia::World *world), UNUSED(const Exodia::Events::OnEntityCreated &event))
-    {
+    void EntityEventSubscriber::Receive(UNUSED(Exodia::World *world),
+                                        UNUSED(const Exodia::Events::OnEntityCreated &event)) {
         // TODO: Send the entity to the server
         // TODO: Server must send the entity to all clients
         EXODIA_INFO("Entity created !");
     }
 
-    void EntityEventSubscriber::Receive(UNUSED(Exodia::World *world), UNUSED(const Exodia::Events::OnEntityDestroyed &event))
-    {
+    void EntityEventSubscriber::Receive(UNUSED(Exodia::World *world),
+                                        UNUSED(const Exodia::Events::OnEntityDestroyed &event)) {
         // TODO: Send the entity to the server
         // TODO: Server must send the entity to all clients
         EXODIA_INFO("Entity destroyed !");

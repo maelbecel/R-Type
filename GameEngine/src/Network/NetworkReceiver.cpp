@@ -34,8 +34,10 @@ namespace Exodia::Network {
         int32_t packet_received = 0;
         int32_t packet_sent = 0;
         float ping = 0;
-        ping = std::chrono::duration_cast<std::chrono::milliseconds>(
-            std::chrono::system_clock::now().time_since_epoch()).count() - header.getTimestamp();
+        ping =
+            std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch())
+                .count() -
+            header.getTimestamp();
         senderConnection.SetPing((uint16_t)ping);
 
         std::memcpy(&packet_received, message.data(), sizeof(int));
@@ -105,7 +107,7 @@ namespace Exodia::Network {
         (void)header;
         (void)message;
         (void)size;
-        //TODO: Handle reject
+        // TODO: Handle reject
     }
 
     void Network::ReceiveSystemLoad(RECEIVE_ARG) {
@@ -113,7 +115,7 @@ namespace Exodia::Network {
         (void)header;
         (void)message;
         (void)size;
-        //TODO: Handle system load
+        // TODO: Handle system load
     }
 
     void Network::ReceiveGameEvent(RECEIVE_ARG) {
@@ -121,7 +123,7 @@ namespace Exodia::Network {
         (void)header;
         (void)message;
         (void)size;
-        //TODO: Handle game event
+        // TODO: Handle game event
     }
 
     void Network::ReceiveDeleteComponentOf(RECEIVE_ARG) {
@@ -164,7 +166,7 @@ namespace Exodia::Network {
         (void)header;
         (void)message;
         (void)size;
-        //TODO: Handle important event
+        // TODO: Handle important event
     }
 
     void Network::ReceiveDisconnect(RECEIVE_ARG) {
@@ -172,7 +174,7 @@ namespace Exodia::Network {
         (void)header;
         (void)message;
         (void)size;
-        //TODO: Handle disconnect
+        // TODO: Handle disconnect
     }
 
     /**
@@ -256,7 +258,8 @@ namespace Exodia::Network {
 
         // Check if already Connected
         if (_connections.find(STRING_FROM_ENDPOINT(senderEndpoint)) != _connections.end()) {
-            EXODIA_CORE_WARN("Network::ReceiveConnect() - Already connected to " + STRING_FROM_ENDPOINT(senderEndpoint));
+            EXODIA_CORE_WARN("Network::ReceiveConnect() - Already connected to " +
+                             STRING_FROM_ENDPOINT(senderEndpoint));
             return;
         }
 
@@ -270,19 +273,16 @@ namespace Exodia::Network {
         const std::string name = STRING_FROM_ENDPOINT(senderEndpoint);
         auto find = _connections.find(name);
         if (find == _connections.end())
-            _connections[STRING_FROM_ENDPOINT(senderEndpoint)] =
-                Connection(senderEndpoint);
+            _connections[STRING_FROM_ENDPOINT(senderEndpoint)] = Connection(senderEndpoint);
         std::string connect = "Connected to " + STRING_FROM_ENDPOINT(senderEndpoint);
         EXODIA_CORE_INFO(connect);
 
-        Connection connection =
-            _connections[STRING_FROM_ENDPOINT(senderEndpoint)];
+        Connection connection = _connections[STRING_FROM_ENDPOINT(senderEndpoint)];
         Packet packet(0x02);
         packet.SetContent(buffer.ToVector());
         std::cout << "Send accept connect" << std::endl;
         connection.SendPacket(_socket, packet);
     }
-
 
     /**
      * @brief Receive an event
@@ -338,7 +338,7 @@ namespace Exodia::Network {
 
         if (header.getSize() != content.size()) {
             EXODIA_CORE_WARN("Network::Splitter() - Packet size is not the one indicated got {0} instead of {1} !",
-                message.size(), header.getSize());
+                             message.size(), header.getSize());
             return;
         }
 
@@ -346,25 +346,24 @@ namespace Exodia::Network {
 
         std::unordered_map<unsigned char, std::function<void(RECEIVE_ARG)>> commands;
 
-        commands[0x00] = COMMAND_NETWORK(Network::ReceivePacketInfo);       // Packet info
-        commands[0x01] = COMMAND_NETWORK(Network::ReceiveAck);              // Packet Acknowledgement
-        commands[0x02] = COMMAND_NETWORK(Network::ReceiveConnectAccept);    // Accept client connection
-        commands[0x03] = COMMAND_NETWORK(Network::ReceiveConnectReject);    // Reject client connection
-        commands[0x0b] = COMMAND_NETWORK(Network::ReceiveSystemLoad);       // Send system load
-        commands[0x0c] = COMMAND_NETWORK(Network::ReceiveComponentOf);      // Send one component of an entity
-        commands[0x0d] = COMMAND_NETWORK(Network::ReceiveGameEvent);        // Send Game Event
-        commands[0x0e] = COMMAND_NETWORK(Network::ReceiveDeleteEntity);     // Send delete entity
-        commands[0x0f] = COMMAND_NETWORK(Network::ReceiveDeleteComponentOf);// Send delete component of an entity
-        commands[0x10] = COMMAND_NETWORK(Network::ReceiveImportantEvent);   // Send an important event
-        commands[0x81] = COMMAND_NETWORK(Network::ReceiveConnect);          // Ask for connection
-        commands[0x82] = COMMAND_NETWORK(Network::ReceiveDisconnect);       // Reject client connection
-        commands[0x8b] = COMMAND_NETWORK(Network::ReceiveEvent);            // Send an event
+        commands[0x00] = COMMAND_NETWORK(Network::ReceivePacketInfo);        // Packet info
+        commands[0x01] = COMMAND_NETWORK(Network::ReceiveAck);               // Packet Acknowledgement
+        commands[0x02] = COMMAND_NETWORK(Network::ReceiveConnectAccept);     // Accept client connection
+        commands[0x03] = COMMAND_NETWORK(Network::ReceiveConnectReject);     // Reject client connection
+        commands[0x0b] = COMMAND_NETWORK(Network::ReceiveSystemLoad);        // Send system load
+        commands[0x0c] = COMMAND_NETWORK(Network::ReceiveComponentOf);       // Send one component of an entity
+        commands[0x0d] = COMMAND_NETWORK(Network::ReceiveGameEvent);         // Send Game Event
+        commands[0x0e] = COMMAND_NETWORK(Network::ReceiveDeleteEntity);      // Send delete entity
+        commands[0x0f] = COMMAND_NETWORK(Network::ReceiveDeleteComponentOf); // Send delete component of an entity
+        commands[0x10] = COMMAND_NETWORK(Network::ReceiveImportantEvent);    // Send an important event
+        commands[0x81] = COMMAND_NETWORK(Network::ReceiveConnect);           // Ask for connection
+        commands[0x82] = COMMAND_NETWORK(Network::ReceiveDisconnect);        // Reject client connection
+        commands[0x8b] = COMMAND_NETWORK(Network::ReceiveEvent);             // Send an event
 
         Connection &senderConnection = _server_connection;
         if (header.getCommand() == 0x81) {
             senderConnection = Connection(senderEndpoint);
-        }
-        else {
+        } else {
             if (_connections.size() > 0) {
                 auto find = _connections.find(STRING_FROM_ENDPOINT(senderEndpoint));
                 if (find == _connections.end()) {

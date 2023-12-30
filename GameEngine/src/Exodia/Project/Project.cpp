@@ -94,21 +94,13 @@ namespace Exodia {
 
         // -- Registering the system factories -- //
 
-        RegisterSystem("CollisionSystem", []() -> EntitySystem * {
-            return new CollisionSystem();
-        });
+        RegisterSystem("CollisionSystem", []() -> EntitySystem * { return new CollisionSystem(); });
 
-        RegisterSystem("ScriptSystem", []() -> EntitySystem * {
-            return new ScriptSystem();
-        });
+        RegisterSystem("ScriptSystem", []() -> EntitySystem * { return new ScriptSystem(); });
 
-        RegisterSystem("GravitySystem", []() -> EntitySystem * {
-            return new GravitySystem();
-        });
+        RegisterSystem("GravitySystem", []() -> EntitySystem * { return new GravitySystem(); });
 
-        RegisterSystem("MovingSystem", []() -> EntitySystem * {
-            return new MovingSystem();
-        });
+        RegisterSystem("MovingSystem", []() -> EntitySystem * { return new MovingSystem(); });
     }
 
     /////////////

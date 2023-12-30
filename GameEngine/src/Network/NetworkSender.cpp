@@ -15,7 +15,7 @@ namespace Exodia::Network {
      * @param packet (Type: Packet) The packet to send
      *
      * @return void
-    */
+     */
     void Network::SendPacket(Packet packet) {
         if (_connections.size() > 0) {
             for (auto &connection : _connections)
@@ -30,7 +30,7 @@ namespace Exodia::Network {
      * @param packet (Type: Packet) The packet to send
      *
      * @return void
-    */
+     */
     void Network::SendImportantPacket(Packet packet) {
         if (_connections.size() > 0) { // If we are the server
             for (auto &connection : _connections) {
@@ -201,8 +201,7 @@ namespace Exodia::Network {
         SendPacket(packet);
     }
 
-    void Network::SendRejectConnect()
-    {
+    void Network::SendRejectConnect() {
         Exodia::Network::Packet packet(0x03);
         Buffer buffer(0);
 
@@ -210,18 +209,15 @@ namespace Exodia::Network {
         SendPacket(packet);
     }
 
-    void Network::SendSystemLoad()
-    {
-        //TODO: Send system load
+    void Network::SendSystemLoad() {
+        // TODO: Send system load
     }
 
-    void Network::SendGameEvent()
-    {
-        //TODO: Send game event
+    void Network::SendGameEvent() {
+        // TODO: Send game event
     }
 
-    void Network::SendDeleteComponent(Entity *entity, std::string component_name)
-    {
+    void Network::SendDeleteComponent(Entity *entity, std::string component_name) {
         Exodia::Network::Packet packet(0x0f);
         Buffer buffer(1468, 0);
 
@@ -239,7 +235,6 @@ namespace Exodia::Network {
         unsigned long size_of_string = (unsigned long)component_name.size();
         unsigned long entity_id = (unsigned long)entity->GetEntityID();
 
-
         buffer.Write(&entity_id, sizeof(unsigned long));            // Set id of entity
         buffer.Write(&size_of_string, sizeof(unsigned int));        // Set size of name
         buffer.Write(component_name.data(), component_name.size()); // Set name
@@ -249,8 +244,7 @@ namespace Exodia::Network {
         SendImportantPacket(packet);
     }
 
-    void Network::SendImportantEvent(uint32_t event, bool isPressed)
-    {
+    void Network::SendImportantEvent(uint32_t event, bool isPressed) {
         Exodia::Network::Packet packet(0x8b);
         Buffer buffer(sizeof(uint32_t) + sizeof(bool));
 
@@ -260,8 +254,7 @@ namespace Exodia::Network {
         SendImportantPacket(packet);
     }
 
-    void Network::SendDisconnect()
-    {
+    void Network::SendDisconnect() {
         Exodia::Network::Packet packet(0x82);
         Buffer buffer(0);
 

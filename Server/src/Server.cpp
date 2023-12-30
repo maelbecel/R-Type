@@ -272,7 +272,6 @@ namespace Exodia {
                 _Network.SendPacketInfo();
             }
 
-
             std::vector<std::pair<std::pair<uint32_t, bool>, asio::ip::udp::endpoint>> events = _Network.GetEvents();
 
             while (!events.empty()) {
