@@ -31,16 +31,10 @@ namespace RType {
         sprite.Get().Texture = anim.Frames[0];
     }
 
-<<<<<<< HEAD
     void BulletPlayer::OnCreate()
     {
         ComponentHandle<TransformComponent> transform = GetComponent<TransformComponent>();
         ComponentHandle<ParentComponent> parent = GetComponent<ParentComponent>();
-=======
-    void BulletPlayer::OnCreate() {
-        ComponentHandle<TransformComponent> transform = HandleEntity->GetComponent<TransformComponent>();
-        ComponentHandle<ParentComponent> parent = HandleEntity->GetComponent<ParentComponent>();
->>>>>>> refs/remotes/origin/feat/all-command
         World *world = HandleEntity->GetWorld();
 
         if (!transform || !parent || !world)
@@ -66,7 +60,7 @@ namespace RType {
 
         ComponentHandle<RigidBody2DComponent> body = HandleEntity->AddComponent<RigidBody2DComponent>();
 
-        if (!body) {
+        if (body) {
             RigidBody2DComponent &rbc = body.Get();
 
             rbc.Type = RigidBody2DComponent::BodyType::Dynamic;
