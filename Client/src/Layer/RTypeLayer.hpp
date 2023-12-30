@@ -11,7 +11,9 @@
 #include "Exodia.hpp"
 #include "R-Type.hpp"
 
-namespace Exodia {
+using namespace Exodia;
+
+namespace RType {
 
     class RTypeLayer : public Exodia::Layer {
 
@@ -37,6 +39,10 @@ namespace Exodia {
         bool OnKeyPressedEvent(KeyPressedEvent &event);
         bool OnWindowResizeEvent(WindowResizeEvent &event);
 
+      private:
+        int GetPort();
+        void ConnectToServer(int port);
+
         ////////////////
         // Attributes //
         ////////////////
@@ -51,6 +57,6 @@ namespace Exodia {
         Network::IOContextManager _IOContextManager;
         Scope<Network::Network> _Network;
     };
-}; // namespace Exodia
+}; // namespace RType
 
 #endif /* !RTYPELAYER_HPP_ */

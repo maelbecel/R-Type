@@ -20,18 +20,17 @@
 #include "src/Component/Clock.hpp"
 #include "src/Component/Health.hpp"
 
-#include "src/Scripts/BulletPlayer.hpp"
+#include "src/Scripts/BulletPlayer/BulletPlayer.hpp"
+#include "src/Scripts/BulletEnnemy/BulletEnnemy.hpp"
 #include "src/Scripts/Player/Player.hpp"
-#include "src/Scripts/Pata-pata.hpp"
+#include "src/Scripts/Pata-pata/Pata-pata.hpp"
+#include "src/Scripts/Star/Star.hpp"
 
 #include "src/System/AnimationSystem.hpp"
 
 #include "src/Event/EntityEventSubscriber.hpp"
 
-#include "src/Entity/CreatePataPata.hpp"
-#include "src/Entity/CreatePlayer.hpp"
 #include "src/Entity/CreateBackground.hpp"
-#include "src/Entity/CreateStars.hpp"
 
 namespace RType {
 
@@ -50,7 +49,7 @@ namespace RType {
         });
 
         project->RegisterComponent("Animation", [](Exodia::Buffer data) -> Exodia::IComponentContainer * {
-            return new Exodia::ComponentContainer<Exodia::Animation>(data);
+            return new Exodia::ComponentContainer<RType::AnimationComponent>(data);
         });
 
         project->RegisterComponent("Clock", [](Exodia::Buffer data) -> Exodia::IComponentContainer * {
@@ -59,23 +58,17 @@ namespace RType {
 
         // -- Register R-Type scripts ------------------------------------------
 
-        project->RegisterScript("Star", []() -> Exodia::ScriptableEntity * { return new Exodia::Star(); });
+        project->RegisterScript("Star", []() -> Exodia::ScriptableEntity * { return new RType::Star(); });
 
-        project->RegisterScript("PataPata", []() -> Exodia::ScriptableEntity * { return new Exodia::PataPata(); });
+        project->RegisterScript("PataPata", []() -> Exodia::ScriptableEntity * { return new PataPata(); });
 
         project->RegisterScript("BulletPlayer",
-                                []() -> Exodia::ScriptableEntity * { return new Exodia::BulletPlayer(); });
+                                []() -> Exodia::ScriptableEntity * { return new RType::BulletPlayer(); });
 
         project->RegisterScript("BulletEnnemy",
-                                []() -> Exodia::ScriptableEntity * { return new Exodia::BulletEnnemy(); });
+                                []() -> Exodia::ScriptableEntity * { return new RType::BulletEnnemy(); });
 
-        project->RegisterScript("Player", []() -> Exodia::ScriptableEntity * { return new Exodia::Player(); });
-
-        // -- Register R-Type systems ------------------------------------------
-
-        project->RegisterSystem("AnimationSystem", []() -> Exodia::EntitySystem * {
-            return new Exodia::AnimationSystem();
-        });
+        project->RegisterScript("Player", []() -> Exodia::ScriptableEntity * { return new RType::Player(); });
     }
 }; // namespace RType
 
