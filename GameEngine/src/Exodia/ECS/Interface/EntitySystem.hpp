@@ -29,11 +29,11 @@ namespace Exodia {
         // Methods //
         /////////////
       public:
-        virtual void Configure(UNUSED(World *world)) {};
+        virtual void Configure(UNUSED(World *world)){};
 
-        virtual void Unconfigure(UNUSED(World *world)) {};
+        virtual void Unconfigure(UNUSED(World *world)){};
 
-        virtual void Update(UNUSED(World *world), UNUSED(Timestep ts)) {};
+        virtual void Update(UNUSED(World *world), UNUSED(Timestep ts)){};
     };
 }; // namespace Exodia
 

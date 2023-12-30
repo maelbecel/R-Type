@@ -11,7 +11,9 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <sstream>
 
-namespace Exodia {
+using namespace Exodia;
+
+namespace RType {
 
     //////////////////////////////
     // Constructor & Destructor //
@@ -23,35 +25,49 @@ namespace Exodia {
     // Methods //
     /////////////
 
-    void RTypeLayer::OnAttach() {
-        EXODIA_PROFILE_FUNCTION();
+    int RTypeLayer::GetPort() {
 
-        auto commandLine = Application::Get().GetSpecification().CommandLineArgs;
+        ApplicationCommandLineArgs commandLine = Application::Get().GetSpecification().CommandLineArgs;
 
-        // TODO: Temp port ./r-type_client -p {port}
+        // TODO: Temp port ./r-type_client {port}
         int port = 8083; // Default port
         if (commandLine.Count > 1) {
             port = std::stoi(commandLine[1]);
 
             if (port < 1024 || port > 65535) {
                 Application::Get().Close();
-                return;
+                return -1;
             }
         }
+        return port;
+    }
 
+    void RTypeLayer::ConnectToServer(int port) {
         _Network = CreateScope<Network::Network>(_WorldNetwork, _IOContextManager, port);
 
         _Network->Loop();
-        _Network->SendAskConnect("127.0.0.1",
-                                 8082); // TODO: change ip and port when the server is on a different machine
+        _Network->SendAskConnect("127.0.0.1", 8082);
+        // TODO: change ip and port when the server is on a different machine
+    }
+
+    void RTypeLayer::OnAttach() {
+        EXODIA_PROFILE_FUNCTION();
+
+        int port = GetPort();
+
+        if (port == -1)
+            return;
+
+        ConnectToServer(port);
+
         // Create world
         CurrentScene = GAME;
 
-        Scenes[MENU] = CreateRef<Scene>();
-        Scenes[MENU]->RegisterSystem(new AnimationSystem());
-        Scenes[MENU]->RegisterSystem(new MovingSystem(1.5f));
-        Scenes[MENU]->OnViewportResize(Application::Get().GetWindow().GetWidth(),
-                                       Application::Get().GetWindow().GetHeight());
+        // Scenes[MENU] = CreateRef<Scene>();
+        // Scenes[MENU]->RegisterSystem(new AnimationSystem());
+        // Scenes[MENU]->RegisterSystem(new MovingSystem(1.5f));
+        // Scenes[MENU]->OnViewportResize(Application::Get().GetWindow().GetWidth(),
+        //                                Application::Get().GetWindow().GetHeight());
 
         // RType::EntityEventSubscriber *subscribe = new RType::EntityEventSubscriber(_Network);
         CollisionSystem *collisionSystem = new CollisionSystem();
@@ -62,7 +78,7 @@ namespace Exodia {
         Scenes[GAME]->RegisterSystem(collisionSystem);
         // Scenes[GAME]->Subscribe<Events::OnEntityCreated>(subscribe);
         // Scenes[GAME]->Subscribe<Events::OnEntityDestroyed>(subscribe);
-        Scenes[GAME]->Subscribe<Events::OnCollisionEntered>(collisionSystem);
+        Scenes[GAME]->Subscribe<Exodia::Events::OnCollisionEntered>(collisionSystem);
         Scenes[GAME]->OnViewportResize(Application::Get().GetWindow().GetWidth(),
                                        Application::Get().GetWindow().GetHeight());
 
@@ -77,7 +93,7 @@ namespace Exodia {
         // Create the camera entity
         Entity *cameraEntity = Scenes[GAME]->CreateEntity("Camera");
 
-        auto &camera = cameraEntity->AddComponent<CameraComponent>().Get();
+        CameraComponent &camera = cameraEntity->AddComponent<CameraComponent>().Get();
         cameraEntity->GetComponent<TransformComponent>().Get().Translation = {0.0f, 0.0f, 15.0f};
         camera.Camera.SetProjectionType(SceneCamera::ProjectionType::Perspective);
         camera.Camera.SetViewportSize(Application::Get().GetWindow().GetWidth(),
@@ -97,21 +113,21 @@ namespace Exodia {
         */
 
         // Create the entities
-        // CreatePlayer(Scenes, 0);
+        // TODO: Ask server for playerID
+        // int playerID = 0;
+        // Entity *entity = Scenes[GAME]->CreateEntity("Player_" + std::to_string(playerID));
+        // entity->AddComponent<ScriptComponent>().Get().Bind("Player");
 
         // Create pata-pata
-        // CreatePataPata(Scenes);
-
-        Entity *cameraMenu = Scenes[MENU]->CreateEntity("Camera");
-
-        auto &camera_ = cameraMenu->AddComponent<CameraComponent>().Get();
-        cameraMenu->GetComponent<TransformComponent>().Get().Translation = {0.0f, 0.0f, 15.0f};
-        camera_.Camera.SetProjectionType(SceneCamera::ProjectionType::Perspective);
-        camera_.Camera.SetViewportSize(1600, 900);
-        cameraMenu->AddComponent<RigidBody2DComponent>().Get().Type = RigidBody2DComponent::BodyType::Static;
+        // Entity *patata = Scenes[GAME]->CreateEntity("Pata-pata");
+        // patata->AddComponent<ScriptComponent>().Get().Bind("PataPata");
 
         // Create stars
         // CreateStars(Scenes);
+        for (int i = 0; i < 60; i++) {
+            Entity *star = Scenes[GAME]->CreateEntity("Star" + std::to_string(i));
+            star->AddComponent<ScriptComponent>().Get().Bind("Star");
+        }
 
         // Create the camera
         Scenes[CurrentScene]->OnRuntimeStart();
@@ -153,9 +169,9 @@ namespace Exodia {
 
         Scenes[CurrentScene]->GetWorld().LockMutex();
         Scenes[CurrentScene]->GetWorld().ForEach<ScriptComponent, TagComponent>(
-            [&](Entity *entity, auto script, auto tag) {
-                auto &sc = script.Get();
-                auto &tc = tag.Get();
+            [&](UNUSED(Entity * entity), ComponentHandle<ScriptComponent> script, ComponentHandle<TagComponent> tag) {
+                ScriptComponent &sc = script.Get();
+                TagComponent &tc = tag.Get();
 
                 std::ostringstream oss;
                 oss << _Network->GetId();
@@ -166,8 +182,6 @@ namespace Exodia {
 
                     _Network->SendEvent(key, true);
                 }
-
-                (void)entity;
             });
         Scenes[CurrentScene]->GetWorld().UnlockMutex();
 
@@ -179,9 +193,9 @@ namespace Exodia {
 
         Scenes[CurrentScene]->GetWorld().LockMutex();
         Scenes[CurrentScene]->GetWorld().ForEach<ScriptComponent, TagComponent>(
-            [&](Entity *entity, auto script, auto tag) {
-                auto &sc = script.Get();
-                auto &tc = tag.Get();
+            [&](Entity *entity, ComponentHandle<ScriptComponent> script, ComponentHandle<TagComponent> tag) {
+                ScriptComponent &sc = script.Get();
+                TagComponent &tc = tag.Get();
 
                 std::ostringstream oss;
                 oss << _Network->GetId();
@@ -205,4 +219,4 @@ namespace Exodia {
 
         return true;
     }
-}; // namespace Exodia
+}; // namespace RType
