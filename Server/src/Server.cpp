@@ -131,8 +131,9 @@ namespace Exodia {
 
         InitScene(MENU, systems);
 
-        RType::EntityEventSubscriber *subscribe       = new RType::EntityEventSubscriber(_Network);
-        CollisionSystem              *collisionSystem = new CollisionSystem();
+        RType::EntityEventSubscriber *subscribe = new RType::EntityEventSubscriber(_Network);
+        CollisionSystem  *collisionSystem = new CollisionSystem();
+        RType::TakeDamageSubscriber *takeDamage = new RType::TakeDamageSubscriber();
 
         systems.push_back(collisionSystem);
 
@@ -141,6 +142,7 @@ namespace Exodia {
         Scenes[GAME]->Subscribe<Events::OnEntityCreated>(subscribe);
         Scenes[GAME]->Subscribe<Events::OnEntityDestroyed>(subscribe);
         Scenes[GAME]->Subscribe<Events::OnCollisionEntered>(collisionSystem);
+        Scenes[GAME]->Subscribe<RType::Events::TakeDamage>(takeDamage);
     }
 
     /**

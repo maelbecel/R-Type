@@ -137,6 +137,12 @@ AssetRegistry:
   - Handle: 124013371145915
     Path: Sound/Music/BattleTheme.wav
     Type: AssetType::Sound2D
+  - Handle: 45121874124124
+    Path: Font/R-Type/Classic.png
+    Type: AssetType::Font
+  - Handle: 4521854574125
+    Path: Font/R-Type/ClassicColored.png
+    Type: AssetType::Font
   - Handle: 18375016605620543235
     Path: test.exodia
     Type: AssetType::Scene

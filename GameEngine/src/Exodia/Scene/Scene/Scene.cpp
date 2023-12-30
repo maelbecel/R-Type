@@ -248,7 +248,16 @@ namespace Exodia {
             });
         _World->UnlockMutex();
 
-        // TODO: When text rendering will be implemented (in Renderer2D);
+        _World->LockMutex();
+        _World->ForEach<TransformComponent, TextRendererComponent, IDComponent>(
+            [&](Entity *entity, auto transform, auto text, auto id) {
+                auto &tc = transform.Get();
+                auto &txtc = text.Get();
+                auto &ic = id.Get();
+
+                Renderer2D::DrawText(tc.GetTransform(), txtc.Text, txtc, (int)ic.ID);
+            });
+        _World->UnlockMutex();
 
         _World->LockMutex();
         _World->ForEach<SoundComponent>([&](Entity *entity, auto sound) {

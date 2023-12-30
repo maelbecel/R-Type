@@ -31,8 +31,7 @@ namespace Exodia {
          */
         enum class API {
             None,
-            OpenGL,
-            SFML
+            OpenGL
             // TODO: Implement other rendering APIs (DirectX, Vulkan, Metal, etc.)
         };
 

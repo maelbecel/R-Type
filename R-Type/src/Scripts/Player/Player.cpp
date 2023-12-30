@@ -6,6 +6,7 @@
 */
 
 #include "Player.hpp"
+#include "Event/TakeDamage.hpp"
 
 using namespace Exodia;
 
@@ -350,8 +351,8 @@ namespace RType {
 
         if (player_tag.Tag.rfind("BE", 0) == 0) {
             EXODIA_INFO("BE {0} hit", player_tag.Tag);
-            player_health.CurrentHealth -= 1;
-            EXODIA_INFO("Player health: {0}", player_health.CurrentHealth);
+
+            HandleEntity->GetWorld()->Emit<Events::TakeDamage>({ HandleEntity, 1 });
         }
     };
 } // namespace RType

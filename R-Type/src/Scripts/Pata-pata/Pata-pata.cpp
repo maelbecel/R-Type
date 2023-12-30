@@ -6,6 +6,7 @@
 */
 
 #include "Pata-pata.hpp"
+#include "Event/TakeDamage.hpp"
 
 using namespace Exodia;
 
@@ -131,7 +132,8 @@ namespace RType {
 
         if (entityTag.rfind("Bullet", 0) == 0) {
             EXODIA_INFO("Bullet {0} hit", entityTag);
-            health.Get().CurrentHealth -= 1;
+            
+            HandleEntity->GetWorld()->Emit<Events::TakeDamage>({ HandleEntity, 1 });
         }
     }
 

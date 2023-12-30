@@ -86,6 +86,20 @@ namespace RType {
 
         // music->AddComponent<MusicComponent>(124013371145915, 0.5f, true);
 
+        // Entity *text = Scenes[GAME]->CreateEntity("Text");
+
+        // auto txt = text->AddComponent<TextRendererComponent>("\"From   the dark regions of space they\n came...Waging
+        // war upon us.\n One saviour stood his ground while all\n others were crushed under the alien\n assaul t...\n\n
+        // The Prototype Markl .\"");
+
+        // txt.Get().Font = UUID(4521854574125);
+        // txt.Get().Font = UUID(45121874124124);
+
+        // auto transform = text->GetComponent<TransformComponent>();
+
+        // transform.Get().Translation = {-10.0f, 3.0f, 0.0f};
+        // transform.Get().Scale = {0.50f, 0.50f, 1.0f};
+
         _Network->SetWorld(Scenes[CurrentScene]->GetWorldPtr());
 
         // TODO: Temp code

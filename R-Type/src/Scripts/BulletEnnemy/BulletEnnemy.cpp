@@ -166,6 +166,7 @@ namespace RType {
         // Remove bullet if out of screen
         if (transform.Get().Translation.x < camera_transform.Get().Translation.x - 20.0f) {
             EXODIA_INFO("Bullet {0} destroyed", HandleEntity->GetComponent<TagComponent>().Get().Tag);
+
             world->DestroyEntity(HandleEntity);
         }
 
@@ -175,6 +176,7 @@ namespace RType {
     void BulletEnnemy::OnCollisionEnter(Entity *entity) {
         ComponentHandle<ParentComponent> parent = GetComponent<ParentComponent>();
         ComponentHandle<IDComponent> entity_id = entity->GetComponent<IDComponent>();
+
         if (!parent || !entity_id)
             return;
         if (parent.Get().Parent == entity_id.Get().ID)
