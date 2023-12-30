@@ -23,7 +23,7 @@ namespace RType {
                 SubTexture2D::CreateFromCoords(BULLET, {8 + i, 9.0f}, {16.6666666667f, 17.0f}, {1.0f, 1.0f}));
 
         anim.Frames = framesIdle;
-        anim.IsPlaying = false;
+        anim.IsPlaying = true;
         anim.Repeat = true;
         anim.FrameRate = TimeBetweenAnimations;
 
@@ -38,6 +38,10 @@ namespace RType {
 
         _Animations.push_back(anim);
         _Animations.push_back(destroy);
+
+        ComponentHandle<SpriteRendererComponent> sprite = HandleEntity->AddComponent<SpriteRendererComponent>();
+
+        sprite.Get().Texture = anim.Frames[0];
     }
 
     void BulletEnnemy::OnCreate() {
