@@ -106,7 +106,7 @@ namespace RType {
         CreateAnimations();
 
         EXODIA_INFO("BulletEnnemy created");
-        HandleEntity->GetWorld()->Emit<Events::OnEntityCreated>({ HandleEntity });
+        HandleEntity->GetWorld()->Emit<Events::OnEntityCreated>({HandleEntity});
     }
 
     void BulletEnnemy::UpdateAnimations() {
