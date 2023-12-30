@@ -20,6 +20,8 @@ namespace RType {
             std::string name      = component->GetTypeIndexOfComponent().name();
             std::string typeIndex = extractTypeName(name.c_str());
 
+            EXODIA_INFO("Entity created with component '{0}'", typeIndex);
+
             _Network.SendComponentOf(event.Entity, typeIndex);
         }
     }

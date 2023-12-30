@@ -45,7 +45,7 @@ namespace RType {
         void OnCollisionEnter(Entity *entity) override;
 
       private:
-        void Shoot(Timestep ts, TransformComponent &tc);
+        void Shoot(TransformComponent &tc);
         void CreateAnimations();
         void UpdateAnimations();
 
