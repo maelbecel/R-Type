@@ -25,12 +25,16 @@ namespace RType {
         anim.FrameRate = TimeBetweenAnimations;
 
         _Animations.push_back(anim);
+
+        ComponentHandle<SpriteRendererComponent> sprite = HandleEntity->AddComponent<SpriteRendererComponent>();
+
+        sprite.Get().Texture = anim.Frames[0];
     }
 
     void BulletPlayer::OnCreate()
     {
-        ComponentHandle<TransformComponent> transform = HandleEntity->GetComponent<TransformComponent>();
-        ComponentHandle<ParentComponent> parent = HandleEntity->GetComponent<ParentComponent>();
+        ComponentHandle<TransformComponent> transform = GetComponent<TransformComponent>();
+        ComponentHandle<ParentComponent> parent = GetComponent<ParentComponent>();
         World *world = HandleEntity->GetWorld();
 
         if (!transform || !parent || !world)
@@ -62,7 +66,7 @@ namespace RType {
             rbc.Type = RigidBody2DComponent::BodyType::Dynamic;
             rbc.Mass = 0.0f;
             rbc.GravityScale = 0.0f;
-            rbc.Velocity.x = 0.0f;
+            rbc.Velocity.x = _Speed;
             rbc.Velocity.y = 0.0f;
         }
 
@@ -93,6 +97,7 @@ namespace RType {
                 anim.Get() = _Animations[0];
 
                 ComponentHandle<RigidBody2DComponent> body = GetComponent<RigidBody2DComponent>();
+
                 if (!body)
                     return;
 
