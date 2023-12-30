@@ -32,8 +32,7 @@ namespace RType {
     }
 
 <<<<<<< HEAD
-    void BulletPlayer::OnCreate()
-    {
+    void BulletPlayer::OnCreate() {
         ComponentHandle<TransformComponent> transform = GetComponent<TransformComponent>();
         ComponentHandle<ParentComponent> parent = GetComponent<ParentComponent>();
 =======

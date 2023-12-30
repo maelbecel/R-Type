@@ -252,9 +252,9 @@ namespace Exodia {
                 _Network.SendComponentOf(entity, "RigidBody2DComponent");
             });
 
-        /*Scenes[CurrentScene]->GetWorld().ForEach<TagComponent, TransformComponent>([&](Entity *entity, ComponentHandle<TagComponent> tag, UNUSED(ComponentHandle<TransformComponent> transform)) {
-            if (tag.Get().Tag.rfind("Bullet") != std::string::npos) {
-                _Network.SendComponentOf(entity, "TagComponent");
+        /*Scenes[CurrentScene]->GetWorld().ForEach<TagComponent, TransformComponent>([&](Entity *entity,
+        ComponentHandle<TagComponent> tag, UNUSED(ComponentHandle<TransformComponent> transform)) { if
+        (tag.Get().Tag.rfind("Bullet") != std::string::npos) { _Network.SendComponentOf(entity, "TagComponent");
                 _Network.SendComponentOf(entity, "TransformComponent");
                 _Network.SendComponentOf(entity, "ParentComponent");
                 //_Network.SendComponentOf(entity, "RigidBody2DComponent");
