@@ -109,8 +109,7 @@ namespace RType {
         HandleEntity->GetWorld()->Emit<Events::OnEntityCreated>({ HandleEntity });
     }
 
-    void BulletEnnemy::UpdateAnimations()
-    {
+    void BulletEnnemy::UpdateAnimations() {
         if (_Animations.size() == 0)
             return;
 

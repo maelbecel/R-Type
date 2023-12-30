@@ -60,8 +60,7 @@ namespace RType {
             return *this;
         }
 
-        void DeserializeData(Exodia::Buffer data)
-        {
+        void DeserializeData(Exodia::Buffer data) {
             if (!data || data.Size == 0)
                 return;
             try {
@@ -106,7 +105,8 @@ namespace RType {
                     Memcopy(&spriteSize, data.Data + offset, sizeof(spriteSize));
                     offset += sizeof(spriteSize);
 
-                    Ref<Exodia::SubTexture2D> subTexture2D = Exodia::SubTexture2D::CreateFromCoords(assetHandle, coords, cellSize, spriteSize);
+                    Ref<Exodia::SubTexture2D> subTexture2D =
+                        Exodia::SubTexture2D::CreateFromCoords(assetHandle, coords, cellSize, spriteSize);
 
                     Frames.push_back(subTexture2D);
                 }
@@ -115,10 +115,10 @@ namespace RType {
             }
         }
 
-        Exodia::Buffer SerializeData()
-        {
+        Exodia::Buffer SerializeData() {
             try {
-                size_t size = sizeof(IsPlaying) + sizeof(Repeat) + sizeof(FrameRate) + sizeof(FrameTimer) + sizeof(CurrentFrameIndex) + sizeof(Frames.size());
+                size_t size = sizeof(IsPlaying) + sizeof(Repeat) + sizeof(FrameRate) + sizeof(FrameTimer) +
+                              sizeof(CurrentFrameIndex) + sizeof(Frames.size());
                 size_t offset = 0;
                 Exodia::Buffer buffer(size);
                 size_t frame = Frames.size();
@@ -144,20 +144,23 @@ namespace RType {
                 for (size_t i = 0; i < frame; i++) {
                     Ref<Exodia::SubTexture2D> Texture = Frames[i];
 
-                    buffer.Resize(buffer.Size + sizeof(Texture->GetAssetHandle()) + sizeof(Texture->GetCoords()) + sizeof(Texture->GetTextureCellSize()) + sizeof(Texture->GetTextureSpriteSize()));
+                    buffer.Resize(buffer.Size + sizeof(Texture->GetAssetHandle()) + sizeof(Texture->GetCoords()) +
+                                  sizeof(Texture->GetTextureCellSize()) + sizeof(Texture->GetTextureSpriteSize()));
 
                     Exodia::AssetHandle assetHandle = Texture->GetAssetHandle();
 
                     std::memcpy(buffer.Data + offset, &assetHandle, sizeof(Texture->GetAssetHandle()));
                     offset += sizeof(Texture->GetAssetHandle());
-                    
+
                     std::memcpy(buffer.Data + offset, &(Texture->GetCoords()), sizeof(Texture->GetCoords()));
                     offset += sizeof(Texture->GetCoords());
-                    
-                    std::memcpy(buffer.Data + offset, &Texture->GetTextureCellSize(), sizeof(Texture->GetTextureCellSize()));
+
+                    std::memcpy(buffer.Data + offset, &Texture->GetTextureCellSize(),
+                                sizeof(Texture->GetTextureCellSize()));
                     offset += sizeof(Texture->GetTextureCellSize());
-                    
-                    std::memcpy(buffer.Data + offset, &Texture->GetTextureSpriteSize(), sizeof(Texture->GetTextureSpriteSize()));
+
+                    std::memcpy(buffer.Data + offset, &Texture->GetTextureSpriteSize(),
+                                sizeof(Texture->GetTextureSpriteSize()));
                     offset += sizeof(Texture->GetTextureSpriteSize());
                 }
             } catch (const std::exception &e) {
