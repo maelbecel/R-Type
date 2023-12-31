@@ -194,7 +194,7 @@ namespace RType {
                 if ((tc.Tag.compare(player) == 0) && sc.Instance != nullptr) {
                     // sc.Instance->OnKeyPressed(key);
 
-                    _Network->SendEvent(key, true);
+                    _Network->SendEvent(false, key, true);
                 }
             });
         Scenes[CurrentScene]->GetWorld().UnlockMutex();
@@ -217,7 +217,7 @@ namespace RType {
 
                 if ((tc.Tag.compare(player) == 0) && sc.Instance != nullptr) {
                     sc.Instance->OnKeyReleased(key);
-                    _Network->SendEvent(key, false);
+                    _Network->SendEvent(false, key, false);
                 }
 
                 (void)entity;

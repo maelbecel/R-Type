@@ -16,7 +16,7 @@ namespace Exodia {
     namespace Network {
         class Packet {
           public:
-            Packet(uint8_t command) : _content(std::vector<char>()) { _header = std::make_unique<Header>(command); };
+            Packet(uint8_t command, bool isImportant = false) : _content(std::vector<char>()) { _header = std::make_unique<Header>(command, isImportant); };
 
             Packet() : _content(std::vector<char>()) { _header = CreateScope<Header>(0, 0, 0); };
 

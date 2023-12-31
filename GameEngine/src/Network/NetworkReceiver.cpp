@@ -161,14 +161,6 @@ namespace Exodia::Network {
         SendAck(header.getId());
     }
 
-    void Network::ReceiveImportantEvent(RECEIVE_ARG) {
-        (void)senderConnection;
-        (void)header;
-        (void)message;
-        (void)size;
-        // TODO: Handle important event
-    }
-
     void Network::ReceiveDisconnect(RECEIVE_ARG) {
         (void)senderConnection;
         (void)header;
@@ -359,7 +351,6 @@ namespace Exodia::Network {
         commands[0x0d] = COMMAND_NETWORK(Network::ReceiveGameEvent);         // Send Game Event
         commands[0x0e] = COMMAND_NETWORK(Network::ReceiveDeleteEntity);      // Send delete entity
         commands[0x0f] = COMMAND_NETWORK(Network::ReceiveDeleteComponentOf); // Send delete component of an entity
-        commands[0x10] = COMMAND_NETWORK(Network::ReceiveImportantEvent);    // Send an important event
         commands[0x81] = COMMAND_NETWORK(Network::ReceiveConnect);           // Ask for connection
         commands[0x82] = COMMAND_NETWORK(Network::ReceiveDisconnect);        // Reject client connection
         commands[0x8b] = COMMAND_NETWORK(Network::ReceiveEvent);             // Send an event

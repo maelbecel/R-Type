@@ -22,10 +22,10 @@ namespace RType {
 
             if (typeIndex == "SpriteRendererComponent")
                 continue;
-            _Network.SendComponentOf(event.Entity, typeIndex);
+            _Network.SendComponentOf(true, event.Entity, typeIndex);
         }
         if (event.Entity->GetComponent<SpriteRendererComponent>())
-            _Network.SendComponentOf(event.Entity, "SpriteRendererComponent");
+            _Network.SendComponentOf(true, event.Entity, "SpriteRendererComponent");
     }
 
     void EntityEventSubscriber::Receive(UNUSED(World *world), const Events::OnEntityDestroyed &event) {
@@ -38,6 +38,6 @@ namespace RType {
         } else
             EXODIA_INFO("Entity destroyed");
 
-        _Network.SendDeleteEntity(event.Entity);
+        _Network.SendDeleteEntity(true, event.Entity);
     }
 }; // namespace RType

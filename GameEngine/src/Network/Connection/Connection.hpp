@@ -39,6 +39,9 @@ class Connection {
         EXODIA_CORE_TRACE("Send packet id: {0}", _id);
         for (int i = 0; i < 2; i++)
             socket.Send(packet, _endpoint);
+        if (packet.GetHeader()->GetIsImportant()) {
+            _packetNeedAck[packet.GetHeader()->GetId()] = packet;
+        }
         _id++;
         _networkInfo.kiloByteSent += packet.GetBuffer().size() / 1024.0f;
         _networkInfo.sendPacket++;
@@ -114,6 +117,7 @@ class Connection {
     NetworkInfo _networkInfo;
     NetworkInfo _lastNetworkInfo;
     uint64_t _worldId = 0;
+    std::unordered_map<uint64_t, Exodia::Network::Packet> _packetNeedAck;
 };
 
 #endif /* !CONNECTION_HPP_ */

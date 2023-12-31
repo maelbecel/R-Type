@@ -248,7 +248,7 @@ namespace Exodia {
                 }
 
                 if (tc.Tag.rfind("Player_") != std::string::npos) {
-                    _Network.SendComponentOf(entity, "RigidBody2DComponent");
+                    _Network.SendComponentOf(false, entity, "RigidBody2DComponent");
                 }
             });
     }
@@ -277,11 +277,11 @@ namespace Exodia {
                 Scenes[CurrentScene]->GetWorld().ForEach<TransformComponent>(
                     [&](Entity *entity, ComponentHandle<TransformComponent> transform) {
                         (void)transform;
-                        _Network.SendComponentOf(entity, "TransformComponent");
+                        _Network.SendComponentOf(false, entity, "TransformComponent");
                     });
                 Scenes[CurrentScene]->GetWorld().ForEach<Clock>([&](Entity *entity, ComponentHandle<Clock> clock) {
                     (void)clock;
-                    _Network.SendComponentOf(entity, "Clock");
+                    _Network.SendComponentOf(false, entity, "Clock");
                 });
             }
 
@@ -323,24 +323,24 @@ namespace Exodia {
     void Server::SendComponents(SceneType scene) {
         Scenes[scene]->GetWorld().ForEach<TagComponent>([&](Entity *entity, ComponentHandle<TagComponent> tag) {
             if (tag.Get().Tag.rfind("Player_") != std::string::npos) {
-                _Network.SendComponentOf(entity, "TagComponent");
-                _Network.SendComponentOf(entity, "TransformComponent");
-                _Network.SendComponentOf(entity, "RigidBody2DComponent");
-                _Network.SendComponentOf(entity, "Animation");
-                _Network.SendComponentOf(entity, "Health");
-                _Network.SendComponentOf(entity, "ScriptComponent");
-                _Network.SendComponentOf(entity, "SpriteRendererComponent");
+                _Network.SendComponentOf(true, entity, "TagComponent");
+                _Network.SendComponentOf(true, entity, "TransformComponent");
+                _Network.SendComponentOf(true, entity, "RigidBody2DComponent");
+                _Network.SendComponentOf(true, entity, "Animation");
+                _Network.SendComponentOf(true, entity, "Health");
+                _Network.SendComponentOf(true, entity, "ScriptComponent");
+                _Network.SendComponentOf(true, entity, "SpriteRendererComponent");
             }
 
             if (tag.Get().Tag == "Pata-pata") {
-                _Network.SendComponentOf(entity, "TagComponent");
-                _Network.SendComponentOf(entity, "TransformComponent");
-                _Network.SendComponentOf(entity, "Animation");
-                _Network.SendComponentOf(entity, "Health");
-                _Network.SendComponentOf(entity, "RigidBody2DComponent");
-                _Network.SendComponentOf(entity, "ScriptComponent");
-                _Network.SendComponentOf(entity, "SpriteRendererComponent");
-                _Network.SendComponentOf(entity, "Clock");
+                _Network.SendComponentOf(true, entity, "TagComponent");
+                _Network.SendComponentOf(true, entity, "TransformComponent");
+                _Network.SendComponentOf(true, entity, "Animation");
+                _Network.SendComponentOf(true, entity, "Health");
+                _Network.SendComponentOf(true, entity, "RigidBody2DComponent");
+                _Network.SendComponentOf(true, entity, "ScriptComponent");
+                _Network.SendComponentOf(true, entity, "SpriteRendererComponent");
+                _Network.SendComponentOf(true, entity, "Clock");
             }
         });
     }
