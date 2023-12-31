@@ -20,7 +20,6 @@ namespace RType {
             std::string name = component->GetTypeIndexOfComponent().name();
             std::string typeIndex = extractTypeName(name.c_str());
 
-
             if (typeIndex == "SpriteRendererComponent")
                 continue;
             _Network.SendComponentOf(event.Entity, typeIndex);
