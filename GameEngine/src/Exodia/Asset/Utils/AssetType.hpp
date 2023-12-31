@@ -25,7 +25,8 @@ namespace Exodia {
         None = 0,
         Scene = 1,
         Texture2D = 2,
-        Sound2D = 3
+        Sound2D = 3,
+        Font = 4
         // TODO: Add more asset types
     };
 
@@ -48,6 +49,8 @@ namespace Exodia {
                 return "AssetType::Texture2D";
             case AssetType::Sound2D:
                 return "AssetType::Sound2D";
+            case AssetType::Font:
+                return "AssetType::Font";
             // TODO: Add more asset types
             default:
                 break;
@@ -66,6 +69,8 @@ namespace Exodia {
                 return AssetType::Texture2D;
             if (type == "AssetType::Sound2D")
                 return AssetType::Sound2D;
+            if (type == "AssetType::Font")
+                return AssetType::Font;
             // TODO: Add more asset types
 
             EXODIA_CORE_ASSERT(false, "Unknown asset type !");

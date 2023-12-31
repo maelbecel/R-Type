@@ -13,7 +13,6 @@ It contains the following values:
 
 - **None** : The None value of the API. It contains the classes that will be used to create none.
 - **OpenGL** : The OpenGL value of the API. It contains the classes that will be used to create OpenGL.
-- **SFML** : The SFML value of the API. It contains the classes that will be used to create SFML.
 
 It can be used like this:
 

@@ -30,6 +30,10 @@
 
 #include "Exodia/Renderer/Sound/Sound.hpp"
 
+// -- Font -----------------------------------------------------------------
+
+#include "Exodia/Renderer/Font/Font.hpp"
+
 // -- Camera ---------------------------------------------------------------
 
 #include "Exodia/Renderer/Camera/OrthographicCameraController.hpp"
