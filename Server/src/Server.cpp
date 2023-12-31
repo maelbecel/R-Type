@@ -209,8 +209,8 @@ namespace Exodia {
 
                     EXODIA_INFO("Entity '{0}': {1}", (uint64_t)id.Get().ID, tag.Get().Tag);
                 });
-                count += 1;
                 */
+                count += 1;
                 std::this_thread::sleep_for(std::chrono::milliseconds(16)); // Sleep for 32 milliseconds (30 FPS)
             }
         } catch (std::exception &error) {
@@ -249,20 +249,12 @@ namespace Exodia {
 
                 if (count % 50 == 0)
                     _Network.SendComponentOf(entity, "TransformComponent");
-                _Network.SendComponentOf(entity, "RigidBody2DComponent");
-            });
 
-        /*Scenes[CurrentScene]->GetWorld().ForEach<TagComponent, TransformComponent>([&](Entity *entity,
-        ComponentHandle<TagComponent> tag, UNUSED(ComponentHandle<TransformComponent> transform)) { if
-        (tag.Get().Tag.rfind("Bullet") != std::string::npos) { _Network.SendComponentOf(entity, "TagComponent");
-                _Network.SendComponentOf(entity, "TransformComponent");
-                _Network.SendComponentOf(entity, "ParentComponent");
-                //_Network.SendComponentOf(entity, "RigidBody2DComponent");
-                //_Network.SendComponentOf(entity, "Animation");
-                //_Network.SendComponentOf(entity, "Box2DColliderComponent");
-                _Network.SendComponentOf(entity, "ScriptComponent");
-            }
-        });*/
+                if (tc.Tag.rfind("Player_") != std::string::npos)
+                {
+                    _Network.SendComponentOf(entity, "RigidBody2DComponent");
+                }
+            });
     }
 
     /**
@@ -293,12 +285,6 @@ namespace Exodia {
             }
 
             // _Network.ResendNeedAck();
-            // Scenes[CurrentScene]->ForEach<TransformComponent>([&](Entity *entity, auto transform) {
-            //     (void)entity;
-            //     (void)transform;
-            //     _Network.SendComponentOf(entity, "TransformComponent");
-            // });
-
             Scenes[CurrentScene]->OnUpdateRuntime(timestep);
         } catch (std::exception &error) {
             EXODIA_ERROR("Unable to update the world :\n\t{0}", error.what());
