@@ -273,10 +273,11 @@ namespace Exodia {
             }
 
             if (count % 50 == 0) {
-                Scenes[CurrentScene]->GetWorld().ForEach<TransformComponent>([&](Entity *entity, ComponentHandle<TransformComponent> transform) {
-                    (void)transform;
-                    _Network.SendComponentOf(entity, "TransformComponent");
-                });
+                Scenes[CurrentScene]->GetWorld().ForEach<TransformComponent>(
+                    [&](Entity *entity, ComponentHandle<TransformComponent> transform) {
+                        (void)transform;
+                        _Network.SendComponentOf(entity, "TransformComponent");
+                    });
                 Scenes[CurrentScene]->GetWorld().ForEach<Clock>([&](Entity *entity, ComponentHandle<Clock> clock) {
                     (void)clock;
                     _Network.SendComponentOf(entity, "Clock");
