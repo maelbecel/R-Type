@@ -247,8 +247,7 @@ namespace Exodia {
                         sc.Instance->OnKeyReleased(event.first.first);
                 }
 
-                if (tc.Tag.rfind("Player_") != std::string::npos)
-                {
+                if (tc.Tag.rfind("Player_") != std::string::npos) {
                     _Network.SendComponentOf(entity, "RigidBody2DComponent");
                 }
             });
@@ -273,7 +272,6 @@ namespace Exodia {
                 // _Network.SendPacketInfo();
             }
 
-
             if (count % 50 == 0) {
                 Scenes[CurrentScene]->GetWorld().ForEach<TransformComponent>([&](Entity *entity, ComponentHandle<TransformComponent> transform) {
                     (void)transform;
@@ -284,7 +282,6 @@ namespace Exodia {
                     _Network.SendComponentOf(entity, "Clock");
                 });
             }
-
 
             std::vector<std::pair<std::pair<uint32_t, bool>, asio::ip::udp::endpoint>> events = _Network.GetEvents();
 
