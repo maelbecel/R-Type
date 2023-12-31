@@ -279,6 +279,10 @@ namespace Exodia {
                     (void)transform;
                     _Network.SendComponentOf(entity, "TransformComponent");
                 });
+                Scenes[CurrentScene]->GetWorld().ForEach<Clock>([&](Entity *entity, ComponentHandle<Clock> clock) {
+                    (void)clock;
+                    _Network.SendComponentOf(entity, "Clock");
+                });
             }
 
 
@@ -337,6 +341,7 @@ namespace Exodia {
                 _Network.SendComponentOf(entity, "RigidBody2DComponent");
                 _Network.SendComponentOf(entity, "ScriptComponent");
                 _Network.SendComponentOf(entity, "SpriteRendererComponent");
+                _Network.SendComponentOf(entity, "Clock");
             }
         });
     }
