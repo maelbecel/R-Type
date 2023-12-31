@@ -37,8 +37,8 @@ namespace Exodia::Network {
     //             connection.second.SendPacket(_socket, packet);
     //             int64_t find = GetIndexPacketNeedAck(connection.second);
     //             if (find == -1) {
-    //                 _packetNeedAck.push_back(std::make_pair(connection.second, std::unordered_map<uint64_t, Packet>()));
-    //                 find = _packetNeedAck.size() - 1; // Update the value of find to the new index
+    //                 _packetNeedAck.push_back(std::make_pair(connection.second, std::unordered_map<uint64_t,
+    //                 Packet>())); find = _packetNeedAck.size() - 1; // Update the value of find to the new index
     //             }
     //             _packetNeedAck[find].second[packet.GetHeader()->GetId()] = packet;
     //         }

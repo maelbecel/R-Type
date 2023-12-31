@@ -31,7 +31,8 @@ namespace Exodia {
     namespace Network {
         class Header {
           public:
-            Header(uint8_t command, bool isImportant) : _command(command), _timestamp(0), _id(0), _size(0), _isImportant(isImportant) {
+            Header(uint8_t command, bool isImportant)
+                : _command(command), _timestamp(0), _id(0), _size(0), _isImportant(isImportant) {
                 using MillisecondsType = std::chrono::milliseconds::rep;
 
                 MillisecondsType timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(
@@ -61,7 +62,8 @@ namespace Exodia {
             }
 
             Header(const Header &header)
-                : _command(header._command), _timestamp(header._timestamp), _id(header._id), _size(header._size), _isImportant(header._isImportant) {}
+                : _command(header._command), _timestamp(header._timestamp), _id(header._id), _size(header._size),
+                  _isImportant(header._isImportant) {}
 
             ~Header() = default;
 
@@ -85,7 +87,6 @@ namespace Exodia {
 
                 unsigned long swappedSize = swapEndianness(_size);
                 std::memcpy(buffer.data() + index, &swappedSize, sizeof(unsigned long));
-
             }
 
             // Static function to fill a Header from a buffer
@@ -117,7 +118,6 @@ namespace Exodia {
                 unsigned long swappedSize;
                 std::memcpy(&swappedSize, buffer.data() + index, sizeof(unsigned long));
                 unsigned long size = swapEndianness(swappedSize);
-
 
                 Header header(command, id, size);
                 header._timestamp = timestamp;
