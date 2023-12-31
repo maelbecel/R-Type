@@ -31,27 +31,6 @@ namespace Exodia::Network {
      *
      * @return void
      */
-    // void Network::SendImportantPacket(Packet packet) {
-    //     if (_connections.size() > 0) { // If we are the server
-    //         for (auto &connection : _connections) {
-    //             connection.second.SendPacket(_socket, packet);
-    //             int64_t find = GetIndexPacketNeedAck(connection.second);
-    //             if (find == -1) {
-    //                 _packetNeedAck.push_back(std::make_pair(connection.second, std::unordered_map<uint64_t, Packet>()));
-    //                 find = _packetNeedAck.size() - 1; // Update the value of find to the new index
-    //             }
-    //             _packetNeedAck[find].second[packet.GetHeader()->GetId()] = packet;
-    //         }
-    //     } else { // If we are the client
-    //         _server_connection.SendPacket(_socket, packet);
-    //         int64_t find = GetIndexPacketNeedAck(_server_connection);
-    //         if (find == -1) {
-    //             _packetNeedAck.push_back(std::make_pair(_server_connection, std::unordered_map<uint64_t, Packet>()));
-    //             find = _packetNeedAck.size() - 1; // Update the value of find to the new index
-    //         }
-    //         _packetNeedAck[find].second[packet.GetHeader()->GetId()] = packet;
-    //     }
-    // }
 
     /**
      * @brief send a packet to request connection to the server
@@ -259,11 +238,10 @@ namespace Exodia::Network {
     }
 
     void Network::ResendNeedAck() {
-        for (auto &connection : _packetNeedAck) {
-            for (auto &packet : connection.second) {
-                std::cout << "Resending packet " << std::endl;
-                connection.first.SendPacket(_socket, packet.second);
-            }
-        }
+        if (_connections.size() > 0) {
+            for (auto &connection : _connections)
+                connection.second.ResendNeedAck(_socket);
+        } else
+            _server_connection.ResendNeedAck(_socket);
     }
 }; // namespace Exodia::Network

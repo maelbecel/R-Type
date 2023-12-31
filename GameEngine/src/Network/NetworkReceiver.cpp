@@ -180,16 +180,11 @@ namespace Exodia::Network {
      */
     void Network::ReceiveAck(RECEIVE_ARG) {
         (void)size;
-        (void)senderConnection;
 
         uint64_t command_id = 0;
         std::memcpy(&command_id, message.data(), sizeof(uint64_t));
-        for (auto &connection : _packetNeedAck) {
-            auto find = connection.second.find(command_id);
-            if (find != connection.second.end()) {
-                connection.second.erase(find);
-                break;
-            }
+        if (senderConnection.GetPacketNeedAck().find(command_id) != senderConnection.GetPacketNeedAck().end()) {
+            senderConnection.RemovePacketNeedAck(command_id);
         }
     }
 

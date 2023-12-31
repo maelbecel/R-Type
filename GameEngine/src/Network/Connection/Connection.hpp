@@ -33,6 +33,16 @@ class Connection {
     Connection() = default;
     ~Connection() = default;
 
+    void ResendNeedAck(Exodia::Network::UDPSocket &socket) {
+        for (auto &packet : _packetNeedAck) {
+            SendPacket(socket, packet.second);
+        }
+    }
+
+    void RemovePacketNeedAck(uint64_t id) { _packetNeedAck.erase(id); }
+
+    std::unordered_map<uint64_t, Exodia::Network::Packet> &GetPacketNeedAck() { return _packetNeedAck; }
+
     void SendPacket(Exodia::Network::UDPSocket &socket, Exodia::Network::Packet &packet) {
         packet.GetHeader()->setSize((unsigned long)packet.GetContent().size());
         packet.GetHeader()->SetId(_id);
