@@ -36,7 +36,7 @@ class Connection {
     void SendPacket(Exodia::Network::UDPSocket &socket, Exodia::Network::Packet &packet) {
         packet.GetHeader()->setSize((unsigned long)packet.GetContent().size());
         packet.GetHeader()->SetId(_id);
-        std::cout << "Send packet id: " << _id << " to " << _endpoint << std::endl;
+        EXODIA_CORE_TRACE("Send packet id: {0}", _id);
         for (int i = 0; i < 2; i++)
             socket.Send(packet, _endpoint);
         _id++;

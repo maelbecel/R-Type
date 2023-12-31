@@ -117,11 +117,6 @@ namespace Exodia {
                 std::memcpy(buffer.Data + sizeof(BodyType), &Velocity, sizeof(glm::vec2));
                 std::memcpy(buffer.Data + sizeof(BodyType) + sizeof(glm::vec2), &GravityScale, sizeof(float));
                 std::memcpy(buffer.Data + sizeof(BodyType) + sizeof(glm::vec2) + sizeof(float), &Mass, sizeof(float));
-                EXODIA_CORE_INFO("RigidBody2DComponent deserialization success");
-                EXODIA_CORE_INFO("BodyType: {0}", BodyTypeToString(Type));
-                EXODIA_CORE_INFO("Velocity: {0}, {1}", Velocity.x, Velocity.y);
-                EXODIA_CORE_INFO("GravityScale: {0}", GravityScale);
-                EXODIA_CORE_INFO("Mass: {0}", Mass);
                 return buffer;
             } catch (const std::exception &e) {
                 EXODIA_CORE_WARN("RigidBody2DComponent serialization failed: {0}", e.what());
@@ -135,11 +130,6 @@ namespace Exodia {
                 std::memcpy(&Velocity, buffer.Data + sizeof(BodyType), sizeof(glm::vec2));
                 std::memcpy(&GravityScale, buffer.Data + sizeof(BodyType) + sizeof(glm::vec2), sizeof(float));
                 std::memcpy(&Mass, buffer.Data + sizeof(BodyType) + sizeof(glm::vec2) + sizeof(float), sizeof(float));
-                EXODIA_CORE_INFO("RigidBody2DComponent deserialization success");
-                EXODIA_CORE_INFO("BodyType: {0}", BodyTypeToString(Type));
-                EXODIA_CORE_INFO("Velocity: {0}, {1}", Velocity.x, Velocity.y);
-                EXODIA_CORE_INFO("GravityScale: {0}", GravityScale);
-                EXODIA_CORE_INFO("Mass: {0}", Mass);
             } catch (const std::exception &e) {
                 EXODIA_CORE_WARN("RigidBody2DComponent deserialization failed: {0}", e.what());
             }

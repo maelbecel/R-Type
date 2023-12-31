@@ -335,7 +335,6 @@ namespace Exodia::Network {
     void Network::Splitter(const std::vector<char> &message, size_t size, asio::ip::udp::endpoint senderEndpoint) {
         (void)size;
         Header header = Header::fillHeader(message);
-        EXODIA_CORE_INFO("Receive packet {0}", header.toString());
 
         std::vector<char> content;
         if (header.getSize() > 0)
@@ -383,12 +382,13 @@ namespace Exodia::Network {
         if (senderConnection.GetLastId() >= (int)header.getId()) {
             return;
         }
+        EXODIA_CORE_INFO("Receive packet {0}", header.toString());
+
         senderConnection.AddReceivedPacket();
         senderConnection.AddKyloByteReceived(packet);
         commands[header.getCommand()](content, header.getSize(), senderConnection, header);
         senderConnection.SetLastId(header.getId());
 
-        std::cout << "Sender connection received packet: " << senderConnection.GetReceivedPacket() << std::endl;
         if (_connections.size() > 0) {
             auto find = _connections.find(STRING_FROM_ENDPOINT(senderEndpoint));
             if (find == _connections.end()) {

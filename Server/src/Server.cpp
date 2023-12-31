@@ -273,6 +273,7 @@ namespace Exodia {
             }
 
             if (count % 50 == 0) {
+                EXODIA_CORE_WARN("Syncing components");
                 Scenes[CurrentScene]->GetWorld().ForEach<TransformComponent>([&](Entity *entity, ComponentHandle<TransformComponent> transform) {
                     (void)transform;
                     _Network.SendComponentOf(entity, "TransformComponent");

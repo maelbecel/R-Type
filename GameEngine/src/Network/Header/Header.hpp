@@ -163,9 +163,9 @@ namespace Exodia {
                 std::string str;
 
                 str += "Header: ";
-                str += "Command: '" + VerbaliseCommand() + "'";
+                str += "'" + VerbaliseCommand() + "'";
                 str += " ID: " + std::to_string(_id);
-                str += " Size: " + std::to_string(_size) + "\n";
+                str += " Size: " + std::to_string(_size);
 
                 return str;
             }

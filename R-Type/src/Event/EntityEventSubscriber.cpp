@@ -20,7 +20,6 @@ namespace RType {
             std::string name = component->GetTypeIndexOfComponent().name();
             std::string typeIndex = extractTypeName(name.c_str());
 
-            EXODIA_CORE_ERROR("Component created '{0}'", typeIndex);
 
             if (typeIndex == "SpriteRendererComponent")
                 continue;
