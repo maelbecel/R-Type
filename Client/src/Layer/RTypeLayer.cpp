@@ -192,7 +192,7 @@ namespace RType {
                 std::string player = "Player_" + oss.str();
 
                 if ((tc.Tag.compare(player) == 0) && sc.Instance != nullptr) {
-                    sc.Instance->OnKeyPressed(key);
+                    // sc.Instance->OnKeyPressed(key);
 
                     _Network->SendEvent(key, true);
                 }

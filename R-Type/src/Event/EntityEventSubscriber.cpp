@@ -16,16 +16,18 @@ namespace RType {
     /////////////
 
     void EntityEventSubscriber::Receive(UNUSED(World *world), const Events::OnEntityCreated &event) {
-        if (event.Entity->GetComponent<TagComponent>())
-            EXODIA_CORE_ERROR("Entity created '{0}'", event.Entity->GetComponent<TagComponent>().Get().Tag);
         for (auto *component : event.Entity->GetAllComponents()) {
             std::string name = component->GetTypeIndexOfComponent().name();
             std::string typeIndex = extractTypeName(name.c_str());
 
-            EXODIA_CORE_ERROR("Entity created with component '{0}'", typeIndex);
+            EXODIA_CORE_ERROR("Component created '{0}'", typeIndex);
 
+            if (typeIndex == "SpriteRendererComponent")
+                continue;
             _Network.SendComponentOf(event.Entity, typeIndex);
         }
+        if (event.Entity->GetComponent<SpriteRendererComponent>())
+            _Network.SendComponentOf(event.Entity, "SpriteRendererComponent");
     }
 
     void EntityEventSubscriber::Receive(UNUSED(World *world), const Events::OnEntityDestroyed &event) {

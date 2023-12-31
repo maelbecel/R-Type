@@ -247,9 +247,6 @@ namespace Exodia {
                         sc.Instance->OnKeyReleased(event.first.first);
                 }
 
-                if (count % 50 == 0)
-                    _Network.SendComponentOf(entity, "TransformComponent");
-
                 if (tc.Tag.rfind("Player_") != std::string::npos)
                 {
                     _Network.SendComponentOf(entity, "RigidBody2DComponent");
@@ -275,6 +272,15 @@ namespace Exodia {
 
                 // _Network.SendPacketInfo();
             }
+
+
+            if (count % 50 == 0) {
+                Scenes[CurrentScene]->GetWorld().ForEach<TransformComponent>([&](Entity *entity, ComponentHandle<TransformComponent> transform) {
+                    (void)transform;
+                    _Network.SendComponentOf(entity, "TransformComponent");
+                });
+            }
+
 
             std::vector<std::pair<std::pair<uint32_t, bool>, asio::ip::udp::endpoint>> events = _Network.GetEvents();
 
@@ -316,21 +322,21 @@ namespace Exodia {
             if (tag.Get().Tag.rfind("Player_") != std::string::npos) {
                 _Network.SendComponentOf(entity, "TagComponent");
                 _Network.SendComponentOf(entity, "TransformComponent");
-                _Network.SendComponentOf(entity, "SpriteRendererComponent");
                 _Network.SendComponentOf(entity, "RigidBody2DComponent");
                 _Network.SendComponentOf(entity, "Animation");
                 _Network.SendComponentOf(entity, "Health");
                 _Network.SendComponentOf(entity, "ScriptComponent");
+                _Network.SendComponentOf(entity, "SpriteRendererComponent");
             }
 
             if (tag.Get().Tag == "Pata-pata") {
                 _Network.SendComponentOf(entity, "TagComponent");
                 _Network.SendComponentOf(entity, "TransformComponent");
-                _Network.SendComponentOf(entity, "SpriteRendererComponent");
-                _Network.SendComponentOf(entity, "RigidBody2DComponent");
                 _Network.SendComponentOf(entity, "Animation");
                 _Network.SendComponentOf(entity, "Health");
+                _Network.SendComponentOf(entity, "RigidBody2DComponent");
                 _Network.SendComponentOf(entity, "ScriptComponent");
+                _Network.SendComponentOf(entity, "SpriteRendererComponent");
             }
         });
     }
