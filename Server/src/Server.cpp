@@ -250,8 +250,7 @@ namespace Exodia {
                 if (count % 50 == 0)
                     _Network.SendComponentOf(entity, "TransformComponent");
 
-                if (tc.Tag.rfind("Player_") != std::string::npos)
-                {
+                if (tc.Tag.rfind("Player_") != std::string::npos) {
                     _Network.SendComponentOf(entity, "RigidBody2DComponent");
                 }
             });
