@@ -91,6 +91,7 @@ namespace Exodia {
 
             // Static function to fill a Header from a buffer
             static Header fillHeader(const std::vector<char> buffer) {
+                std::cout << "Size: " << buffer.size() << std::endl;
                 size_t index = 0;
 
                 if (buffer.size() < GetSize())
@@ -119,7 +120,7 @@ namespace Exodia {
                 std::memcpy(&swappedSize, buffer.data() + index, sizeof(unsigned long));
                 unsigned long size = swapEndianness(swappedSize);
 
-                Header header(command, id, size);
+                Header header(command, id, size, isImportant);
                 header._timestamp = timestamp;
 
                 return header;
@@ -127,7 +128,7 @@ namespace Exodia {
 
             uint64_t GetId() const { return _id; }
 
-            static unsigned long GetSize() { return 30; }
+            static unsigned long GetSize() { return 22; }
 
             void setSize(unsigned long size) { _size = size; }
 
