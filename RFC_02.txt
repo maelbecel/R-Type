@@ -48,7 +48,7 @@ Timestamp - 32 bit (4 bytes) float representing the time in seconds.
 Event - 32 bit (4 bytes) unsigned integer representing the event type.
 Id - 64 bit (8 bytes) unsigned integer representing the id of the command
     use for implementing acknoledgement.
-GameEvents - - Null terminated string prefixed with a 32 bit (4 bytes) unsigned
+GameEvents - Null terminated string prefixed with a 32 bit (4 bytes) unsigned
     integer representing the length of the string.
 Size - 64 bit (8 bytes) unsigned integer representing the size of the content
     of the packet.
@@ -68,6 +68,7 @@ Special commands
         Content: [Id]
 ServerCommand
     0x02 - Accept client connection
+        Content: [Id]
     0x03 - Reject client connection
     0x0b - Send system to load MUST get an acknowledge
         Content: [System]
@@ -101,7 +102,8 @@ Details
     of the command to acknowledge.
 
 0x02 - Accept client connection
-    This command is used to accept a client connection. It's content is empty.
+    This command is used to accept a client connection.
+    It's content is [Id] the id of the client.
 
 0x03 - Reject client connection
     This command is used to reject a client connection. It's content is empty.
@@ -125,7 +127,7 @@ Details
 
 0x10 - Send deleted components on entities
     This command is used to send the deleted components on entities. It's
-    content is [Entity][Component][Content_of_a_component] the entity to delete
+    content is [Entity][Component] the entity to delete
     the component to delete and the content of the component to delete.
 
 0x11 - Send events

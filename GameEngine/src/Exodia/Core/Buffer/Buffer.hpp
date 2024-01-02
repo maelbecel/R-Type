@@ -11,20 +11,29 @@
 // Exodia Utils
 #include "Utils/Memory.hpp"
 
+#include "Debug/Logs.hpp"
+
 // External include
 #include <cstdint>
 #include <cstdlib>
 #include <cstring>
+#include "Debug/Logs.hpp"
 
 namespace Exodia {
 
     struct Buffer {
         uint8_t *Data = nullptr;
         uint64_t Size = 0;
+        uint64_t Offset = 0;
 
         Buffer() = default;
 
         Buffer(uint64_t size) { Allocate(size); }
+
+        Buffer(uint64_t size, uint8_t value) {
+            Allocate(size);
+            std::memset(Data, value, size);
+        }
 
         Buffer(const void *data, uint64_t size) : Data((uint8_t *)data), Size(size){};
 
@@ -34,7 +43,19 @@ namespace Exodia {
             Buffer buffer(other.Size);
 
             std::memcpy(buffer.Data, other.Data, other.Size);
+
             return buffer;
+        }
+
+        bool Write(const void *data, uint64_t size) {
+            if (Offset + size > Size)
+                Resize(Offset + size);
+
+            std::memcpy(Data + Offset, data, size);
+
+            Offset += size;
+
+            return true;
         }
 
         void Allocate(uint64_t size) {
@@ -50,11 +71,8 @@ namespace Exodia {
             uint8_t *newData = (uint8_t *)std::malloc(size);
 
             if (Data != nullptr) {
-#ifdef _WIN32
-                uint64_t minSize = size < Size ? static_cast<uint64_t>(size) : static_cast<uint64_t>(Size);
-#else
-                uint64_t minSize = std::min(size, Size);
-#endif
+                uint64_t minSize = size < Size ? size : Size;
+
                 std::memcpy(newData, Data, minSize);
                 std::free(Data);
             }
@@ -70,6 +88,13 @@ namespace Exodia {
             }
 
             Size = 0;
+        }
+
+        std::vector<char> ToVector() {
+            std::vector<char> vector(Size);
+
+            std::memcpy(vector.data(), Data, Size);
+            return vector;
         }
 
         template <typename T> T *As() { return (T *)Data; }

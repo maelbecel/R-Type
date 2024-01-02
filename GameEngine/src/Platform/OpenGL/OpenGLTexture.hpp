@@ -90,6 +90,8 @@ namespace Exodia {
 
         virtual void SetData(Buffer data) override;
 
+        virtual Buffer GetData() const override;
+
         virtual bool IsLoaded() const override;
 
         virtual const TextureSpecification &GetSpecification() const override;
@@ -105,6 +107,7 @@ namespace Exodia {
         GLenum _InternalFormat;              /*!< Internal format of the texture */
         GLenum _DataFormat;                  /*!< Data format of the texture */
         bool _IsLoaded;                      /*!< Whether the texture is loaded or not */
+        Buffer _Data;                        /*!< The data of the texture */
     };
 }; // namespace Exodia
 
