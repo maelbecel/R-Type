@@ -70,16 +70,20 @@ namespace Exodia {
 
         if (!project)
             return false;
-        if (!project["Name"] || !project["StartScene"] || !project["AssetsDirectory"] ||
-            !project["AssetRegistryPath"] || !project["ScriptsDirectory"])
+        if (!project["Name"] || !project["AssetsDirectory"] || !project["AssetRegistryPath"])
             return false;
 
         try {
             config.Name = project["Name"].as<std::string>();
-            config.StartScene = project["StartScene"].as<std::uint64_t>();
+
+            if (project["StartScene"])
+                config.StartScene = project["StartScene"].as<std::uint64_t>();
+
             config.AssetsDirectory = project["AssetsDirectory"].as<std::string>();
             config.AssetRegistryPath = project["AssetRegistryPath"].as<std::string>();
-            config.ScriptsDirectory = project["ScriptsDirectory"].as<std::string>();
+
+            if (project["ScriptsDirectory"])
+                config.ScriptsDirectory = project["ScriptsDirectory"].as<std::string>();
         } catch (const YAML::BadConversion &e) {
             EXODIA_CORE_ERROR("Failed to parse project file `{0}`:\n\t{1}", path.string(), e.what());
 

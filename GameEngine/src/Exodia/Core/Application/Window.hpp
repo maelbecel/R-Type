@@ -94,6 +94,8 @@ namespace Exodia {
          */
         virtual uint32_t GetHeight() const = 0;
 
+        virtual void Resize(uint32_t width, uint32_t height) = 0;
+
         /**
          * @brief Set the event callback function
          * Call this function to set the event callback function

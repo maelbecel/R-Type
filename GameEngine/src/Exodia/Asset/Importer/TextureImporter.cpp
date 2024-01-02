@@ -58,9 +58,13 @@ namespace Exodia {
             channels = 4;
         }
 
-        EXODIA_CORE_ASSERT(data.Data, "Failed to load image !");
-
         data.Size = width * height * channels;
+
+        if (!data.Data) {
+            EXODIA_CORE_ERROR("Failed to load image '{0}'", path.string());
+
+            return nullptr;
+        }
 
         TextureSpecification textureSpec;
 

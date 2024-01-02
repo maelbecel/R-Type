@@ -172,8 +172,10 @@ namespace Exodia {
             _Data->QuadVertexBuffer->SetData(_Data->QuadVertexBufferBase, dataSize);
 
             // Bind textures
-            for (uint32_t i = 0; i < _Data->TextureSlotIndex; i++)
-                _Data->TextureSlot[i]->Bind(i);
+            for (uint32_t i = 0; i < _Data->TextureSlotIndex; i++) {
+                if (_Data->TextureSlot[i] != nullptr)
+                    _Data->TextureSlot[i]->Bind(i);
+            }
             _Data->QuadShader->Bind();
 
             // Draw
@@ -650,6 +652,141 @@ namespace Exodia {
         if (sound == nullptr)
             return;
         sound->Play();
+    }
+
+    // 8. Text
+
+    void Renderer2D::DrawText(const glm::mat4 &transform, const std::string &text,
+                              const TextRendererComponent &component, int entityID) {
+        Ref<Font> font = AssetManager::GetAsset<Font>(component.Font);
+
+        if (font == nullptr)
+            return;
+        DrawText(transform, text, font, {component.Color, component.Kerning, component.LineSpacing}, entityID);
+    }
+
+    void Renderer2D::DrawText(const glm::mat4 &transform, const std::string &text, Ref<Font> font,
+                              const TextData &params, int entityID) {
+        constexpr float fontHeight = 16.0f;
+
+        float x = 0.0f;
+        float y = 0.0f;
+        float fsScale = 1.0f / fontHeight;
+
+        FontData fontData = font->GetData();
+
+        Ref<Texture2D> texture = font->GetTexture();
+        float textureIndex = 0.0f;
+
+        // Check if the texture is already in the texture slot
+        for (uint32_t i = 1; i < _Data->TextureSlotIndex; i++) {
+            if (*_Data->TextureSlot[i].get() == *texture.get()) {
+                textureIndex = (float)i;
+                break;
+            }
+        }
+
+        // If the texture is not in the texture slot, add it
+        if (textureIndex == 0.0f) {
+            // Check if we can add a new texture
+            if (_Data->TextureSlotIndex >= Renderer2DData::MaxTextureSlot)
+                FlushAndReset();
+
+            textureIndex = (float)_Data->TextureSlotIndex;
+            _Data->TextureSlot[_Data->TextureSlotIndex] = texture;
+            _Data->TextureSlotIndex++;
+        }
+
+        for (size_t i = 0; i < text.size(); i++) {
+            char c = text[i];
+
+            if (c == '\r')
+                continue;
+            if (c == '\n') {
+                x = 0.0f;
+                y -= fsScale * fontHeight + params.LineSpacing;
+
+                continue;
+            }
+            if (c == ' ') {
+                x += 10.0f * fsScale;
+
+                continue;
+            }
+            if (fontData.Glyphs[c].Width < 3)
+                continue;
+            Glyph glyph = fontData.Glyphs[c];
+
+            if (c == 'm')
+                x -= glyph.Width / 2 * fsScale + params.Kerning;
+            else if (c == 'i' || c == 'l' || c == 'I')
+                x += glyph.Width * 1.25f * fsScale + params.Kerning;
+            else if (c == 'r')
+                x += glyph.Width * fsScale + params.Kerning;
+            else if (c == 'E' || c == 'L')
+                x += glyph.Width * 0.75f * fsScale + params.Kerning;
+            else if (c == 'A')
+                x -= glyph.Width * 0.25f * fsScale + params.Kerning;
+
+            glm::vec2 texCoordMin(glyph.TextureCoord);
+            glm::vec2 texCoordMax(glyph.TextureCoord + fsScale);
+
+            glm::vec2 quadMin(x + glyph.Width * fsScale, y);
+            glm::vec2 quadMax(quadMin.x + glyph.Width * fsScale + (fontHeight * fsScale), y + (fontHeight * fsScale));
+
+            _Data->QuadVertexBufferPtr->Position = transform * glm::vec4(quadMin, 0.0f, 1.0f);
+            _Data->QuadVertexBufferPtr->Color = params.Color;
+            _Data->QuadVertexBufferPtr->TexCoord = texCoordMin;
+            _Data->QuadVertexBufferPtr->TexIndex = textureIndex;
+            _Data->QuadVertexBufferPtr->TilingFactor = 1.0f;
+            _Data->QuadVertexBufferPtr->EntityID = entityID;
+            _Data->QuadVertexBufferPtr++;
+
+            _Data->QuadVertexBufferPtr->Position = transform * glm::vec4(quadMin.x, quadMax.y, 0.0f, 1.0f);
+            _Data->QuadVertexBufferPtr->Color = params.Color;
+            _Data->QuadVertexBufferPtr->TexCoord = {texCoordMin.x, texCoordMax.y};
+            _Data->QuadVertexBufferPtr->TexIndex = textureIndex;
+            _Data->QuadVertexBufferPtr->TilingFactor = 1.0f;
+            _Data->QuadVertexBufferPtr->EntityID = entityID;
+            _Data->QuadVertexBufferPtr++;
+
+            _Data->QuadVertexBufferPtr->Position = transform * glm::vec4(quadMax, 0.0f, 1.0f);
+            _Data->QuadVertexBufferPtr->Color = params.Color;
+            _Data->QuadVertexBufferPtr->TexCoord = texCoordMax;
+            _Data->QuadVertexBufferPtr->TexIndex = textureIndex;
+            _Data->QuadVertexBufferPtr->TilingFactor = 1.0f;
+            _Data->QuadVertexBufferPtr->EntityID = entityID;
+            _Data->QuadVertexBufferPtr++;
+
+            _Data->QuadVertexBufferPtr->Position = transform * glm::vec4(quadMax.x, quadMin.y, 0.0f, 1.0f);
+            _Data->QuadVertexBufferPtr->Color = params.Color;
+            _Data->QuadVertexBufferPtr->TexCoord = {texCoordMax.x, texCoordMin.y};
+            _Data->QuadVertexBufferPtr->TexIndex = textureIndex;
+            _Data->QuadVertexBufferPtr->TilingFactor = 1.0f;
+            _Data->QuadVertexBufferPtr->EntityID = entityID;
+            _Data->QuadVertexBufferPtr++;
+
+            _Data->QuadIndexCount += 6;
+            _Data->Stats.QuadCount++;
+
+            if (i + 1 < text.size()) {
+                // TODO: Remove this temp methods.
+                if (c == 'w' || c == 'o') {
+                    Glyph nextGlyph = fontData.Glyphs[text[i + 1]];
+
+                    x += (glyph.Width + (nextGlyph.Width / 3)) * fsScale + params.Kerning;
+                } else if (c == 'W' || c == 'm' || c == 'M') {
+                    Glyph nextGlyph = fontData.Glyphs[text[i + 1]];
+
+                    x += (glyph.Width * 2) * fsScale + params.Kerning;
+                } else if (c == 'r' || c == 't') {
+                    x += glyph.Width / 2 * fsScale + params.Kerning;
+                } else if (c == 'i' || c == 'l') {
+                    x -= glyph.Width / 2 * fsScale + params.Kerning;
+                } else
+                    x += (glyph.Width + 1) * fsScale + params.Kerning;
+            }
+        }
     }
 
     /////////////

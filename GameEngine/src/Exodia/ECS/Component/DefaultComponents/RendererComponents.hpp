@@ -89,7 +89,7 @@ namespace Exodia {
 
                     AssetHandle assetHandle = texture["AssetHandle"].as<uint64_t>();
 
-                    Texture = CreateRef<SubTexture2D>(assetHandle, coords, cellSize, spriteSize);
+                    Texture = SubTexture2D::CreateFromCoords(assetHandle, coords, cellSize, spriteSize);
                 }
             } catch (YAML::BadConversion &error) {
                 EXODIA_CORE_WARN("SpriteRendererComponent has invalid data !\n\t{0}", error.what());
@@ -138,6 +138,9 @@ namespace Exodia {
 
         virtual void DeserializeData(Buffer data) override {
             try {
+                if (!data || data.Size == 0)
+                    return;
+
                 size_t offset = 0;
                 bool hasTexture = false;
 
@@ -168,13 +171,7 @@ namespace Exodia {
                 Memcopy(&spriteSize, data.Data + offset, sizeof(spriteSize));
                 offset += sizeof(spriteSize);
 
-                // Texture = SubTexture2D::CreateFromCoords(assetHandle, coords, cellSize, spriteSize);
-
-                EXODIA_CORE_TRACE("SpriteRendererComponent deserialization success !");
-                EXODIA_CORE_TRACE("\tAssetHandle : '{0}'", (uint64_t)assetHandle);
-                EXODIA_CORE_TRACE("\tCoords      : '{0}, {1}'", coords.x, coords.y);
-                EXODIA_CORE_TRACE("\tCellSize    : '{0}, {1}'", cellSize.x, cellSize.y);
-                EXODIA_CORE_TRACE("\tSpriteSize  : '{0}, {1}'", spriteSize.x, spriteSize.y);
+                Texture = SubTexture2D::CreateFromCoords(assetHandle, coords, cellSize, spriteSize);
             } catch (std::exception &e) {
                 EXODIA_CORE_WARN("SpriteRendererComponent deserialization failed: {0}", e.what());
             }
@@ -296,6 +293,9 @@ namespace Exodia {
         }
 
         virtual void DeserializeData(Buffer data) override {
+            if (!data || data.Size == 0)
+                return;
+
             try {
                 size_t offset = 0;
 
@@ -310,7 +310,108 @@ namespace Exodia {
         }
     };
 
-    // TODO: Implement Text Renderer Component when available
+    struct TextRendererComponent : public Component {
+        std::string Text;
+        glm::vec4 Color;
+        AssetHandle Font;
+        float Kerning;
+        float LineSpacing;
+
+        TextRendererComponent(const TextRendererComponent &) = default;
+        TextRendererComponent(const std::string &text = "", const glm::vec4 &color = glm::vec4(1.0f))
+            : Text(text), Color(color), Font(0), Kerning(0.0f), LineSpacing(0.0f){};
+
+        virtual void Serialize(YAML::Emitter &out) {
+            out << YAML::Key << "TextRendererComponent";
+            out << YAML::BeginMap;
+            {
+                out << YAML::Key << "Text" << YAML::Value << Text;
+                out << YAML::Key << "Color" << YAML::Value << YAML::Flow;
+                { out << YAML::BeginSeq << Color.x << Color.y << Color.z << Color.w << YAML::EndSeq; }
+                out << YAML::Key << "Font" << YAML::Value << (uint64_t)Font;
+                out << YAML::Key << "Kerning" << YAML::Value << Kerning;
+                out << YAML::Key << "LineSpacing" << YAML::Value << LineSpacing;
+            }
+            out << YAML::EndMap;
+        }
+
+        virtual void Deserialize(const YAML::Node &node) {
+            try {
+                auto text = node["TextRendererComponent"];
+
+                Text = text["Text"].as<std::string>();
+
+                Color = glm::vec4(text["Color"][0].as<float>(), text["Color"][1].as<float>(),
+                                  text["Color"][2].as<float>(), text["Color"][3].as<float>());
+
+                Font = text["Font"].as<uint64_t>();
+
+                Kerning = text["Kerning"].as<float>();
+                LineSpacing = text["LineSpacing"].as<float>();
+            } catch (YAML::BadConversion &error) {
+                EXODIA_CORE_WARN("TextRendererComponent deserialization failed:\n\t{0}", error.what());
+            }
+        }
+
+        // TODO: Implement TextRendererComponent::DrawComponent();
+
+        virtual Buffer SerializeData() override {
+            try {
+                Buffer buffer(sizeof(glm::mat4) + sizeof(Font) + (sizeof(float) * 2) + sizeof(bool) +
+                              (sizeof(char) * Text.size()));
+                size_t offset = 0;
+
+                std::memcpy(buffer.Data, &Color, sizeof(Color));
+                offset += sizeof(Color);
+                std::memcpy(buffer.Data + offset, &Font, sizeof(Font));
+                offset += sizeof(Font);
+                std::memcpy(buffer.Data + offset, &Kerning, sizeof(Kerning));
+                offset += sizeof(Kerning);
+                std::memcpy(buffer.Data + offset, &LineSpacing, sizeof(LineSpacing));
+                offset += sizeof(LineSpacing);
+
+                bool hasText = (Text.size() > 0);
+
+                std::memcpy(buffer.Data + offset, &hasText, sizeof(bool));
+
+                if (hasText)
+                    std::memcpy(buffer.Data + offset, Text.data(), sizeof(char) * Text.size());
+
+                return buffer;
+            } catch (std::exception &e) {
+                EXODIA_CORE_WARN("TextComponent serialization failed: {0}", e.what());
+                return Buffer();
+            }
+        }
+
+        virtual void DeserializeData(Buffer data) override {
+            if (!data || data.Size == 0)
+                return;
+
+            try {
+                size_t offset = 0;
+                bool hasText = false;
+
+                Memcopy(&Color, data.Data + offset, sizeof(Color));
+                offset += sizeof(Color);
+                Memcopy(&Font, data.Data + offset, sizeof(Font));
+                offset += sizeof(Font);
+                Memcopy(&Kerning, data.Data + offset, sizeof(Kerning));
+                offset += sizeof(Kerning);
+                Memcopy(&LineSpacing, data.Data + offset, sizeof(LineSpacing));
+                offset += sizeof(LineSpacing);
+                Memcopy(&hasText, data.Data + offset, sizeof(bool));
+                offset += sizeof(bool);
+
+                if (hasText) {
+                    for (uint32_t i = 0; i < (data.Size - offset); i++)
+                        Text.push_back((char)data.Data[i + offset]);
+                }
+            } catch (std::exception &e) {
+                EXODIA_CORE_WARN("TextRendererComponent deserialization failed: {0}", e.what());
+            }
+        }
+    };
 }; // namespace Exodia
 
 #endif /* !RENDERERCOMPONENTS_HPP_ */

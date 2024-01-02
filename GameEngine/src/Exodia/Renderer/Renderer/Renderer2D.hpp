@@ -100,6 +100,13 @@ namespace Exodia {
             glm::mat4 ViewProjection;
         };
 
+        struct TextData {
+            glm::vec4 Color;
+
+            float Kerning;
+            float LineSpacing;
+        };
+
         /**
          * @brief Renderer2DData structure holds data related to 2D rendering.
          */
@@ -342,6 +349,13 @@ namespace Exodia {
 
         static void PlaySound(AssetHandle sound);
         static void PlaySound(Ref<Sound2D> sound);
+
+        // 8. Text
+
+        static void DrawText(const glm::mat4 &transform, const std::string &text,
+                             const TextRendererComponent &component, int entityID = -1);
+        static void DrawText(const glm::mat4 &transform, const std::string &text, Ref<Font> font,
+                             const TextData &params, int entityID = -1);
 
       private:
         /**

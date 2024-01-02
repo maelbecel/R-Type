@@ -117,7 +117,6 @@ namespace Exodia {
                 std::memcpy(buffer.Data + sizeof(BodyType), &Velocity, sizeof(glm::vec2));
                 std::memcpy(buffer.Data + sizeof(BodyType) + sizeof(glm::vec2), &GravityScale, sizeof(float));
                 std::memcpy(buffer.Data + sizeof(BodyType) + sizeof(glm::vec2) + sizeof(float), &Mass, sizeof(float));
-
                 return buffer;
             } catch (const std::exception &e) {
                 EXODIA_CORE_WARN("RigidBody2DComponent serialization failed: {0}", e.what());
@@ -126,6 +125,8 @@ namespace Exodia {
         }
 
         virtual void DeserializeData(Buffer buffer) override {
+            if (!buffer || buffer.Size == 0)
+                return;
             try {
                 std::memcpy(&Type, buffer.Data, sizeof(BodyType));
                 std::memcpy(&Velocity, buffer.Data + sizeof(BodyType), sizeof(glm::vec2));
