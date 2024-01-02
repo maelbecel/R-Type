@@ -6,10 +6,10 @@
 */
 
 #ifndef CLOCKSYSTEM_HPP_
-    #define CLOCKSYSTEM_HPP_
+#define CLOCKSYSTEM_HPP_
 
-    // Exodia includes
-    #include "Exodia.hpp"
+// Exodia includes
+#include "Exodia.hpp"
 
 namespace RType {
 
@@ -18,18 +18,16 @@ namespace RType {
         //////////////////////////////
         // Constructor & Destructor //
         //////////////////////////////
-        public:
-
-            ClockSystem() = default;
-            ~ClockSystem() = default;
+      public:
+        ClockSystem() = default;
+        ~ClockSystem() = default;
 
         /////////////
         // Methods //
         /////////////
-        public:
-
-            void Update(Exodia::World *world, Exodia::Timestep ts) override;
+      public:
+        void Update(Exodia::World *world, Exodia::Timestep ts) override;
     };
-};
+}; // namespace RType
 
 #endif /* !CLOCKSYSTEM_HPP_ */

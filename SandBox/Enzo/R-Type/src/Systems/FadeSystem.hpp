@@ -6,10 +6,10 @@
 */
 
 #ifndef FADESYSTEM_HPP_
-    #define FADESYSTEM_HPP_
+#define FADESYSTEM_HPP_
 
-    // Exodia includes
-    #include "Exodia.hpp"
+// Exodia includes
+#include "Exodia.hpp"
 
 namespace RType {
 
@@ -18,18 +18,16 @@ namespace RType {
         //////////////////////////////
         // Constructor & Destructor //
         //////////////////////////////
-        public:
-
-            FadeSystem() = default;
-            ~FadeSystem() = default;
+      public:
+        FadeSystem() = default;
+        ~FadeSystem() = default;
 
         /////////////
         // Methods //
         /////////////
-        public:
-
-            void Update(Exodia::World *world, Exodia::Timestep ts) override;
+      public:
+        void Update(Exodia::World *world, Exodia::Timestep ts) override;
     };
-};
+}; // namespace RType
 
 #endif /* !FADESYSTEM_HPP_ */

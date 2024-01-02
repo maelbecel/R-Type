@@ -93,9 +93,8 @@ namespace Exodia {
         ///////////////
         // Operators //
         ///////////////
-        public:
-
-          SubTexture2D &operator=(const SubTexture2D &other);
+      public:
+        SubTexture2D &operator=(const SubTexture2D &other);
 
         ////////////////
         // Attributes //

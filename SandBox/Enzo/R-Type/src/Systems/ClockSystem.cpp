@@ -17,8 +17,7 @@ namespace RType {
     // Methods //
     /////////////
 
-    void ClockSystem::Update(Exodia::World *world, Exodia::Timestep ts)
-    {
+    void ClockSystem::Update(Exodia::World *world, Exodia::Timestep ts) {
         world->ForEach<ClockComponent>([&](Entity *entity, ComponentHandle<ClockComponent> clock) {
             ClockComponent &cc = clock.Get(); // cc = Clock Component
 
@@ -30,4 +29,4 @@ namespace RType {
             (void)entity;
         });
     }
-};
+}; // namespace RType

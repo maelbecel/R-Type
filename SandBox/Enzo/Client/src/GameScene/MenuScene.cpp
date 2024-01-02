@@ -20,28 +20,23 @@ namespace RType {
     // Methods //
     /////////////
 
-    void MenuScene::OnCreate() {};
+    void MenuScene::OnCreate(){};
 
-    void MenuScene::OnDestroy() {};
+    void MenuScene::OnDestroy(){};
 
-    void MenuScene::OnUpdate(UNUSED(Timestep ts))
-    {
-        EXODIA_INFO("MenuScene::OnUpdate");
-    }
+    void MenuScene::OnUpdate(UNUSED(Timestep ts)) { EXODIA_INFO("MenuScene::OnUpdate"); }
 
-    void MenuScene::OnEvent(Event &event)
-    {
+    void MenuScene::OnEvent(Event &event) {
         EventDispatcher dispatcher(event);
 
         dispatcher.Dispatch<KeyPressedEvent>(BIND_EVENT_FN(MenuScene::OnKeyPressedEvent));
     }
 
-    bool MenuScene::OnKeyPressedEvent(KeyPressedEvent &event)
-    {
+    bool MenuScene::OnKeyPressedEvent(KeyPressedEvent &event) {
         int key = event.GetKeyCode();
 
         (void)key;
 
         return false;
     }
-};
+}; // namespace RType

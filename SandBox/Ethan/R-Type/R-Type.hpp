@@ -6,42 +6,41 @@
 */
 
 #ifndef R_TYPE_HPP_
-    #define R_TYPE_HPP_
+#define R_TYPE_HPP_
 
-    ///////////////////////////////////////////////
-    // Main include file for R-Type              //
-    // Include this file to use the R-Type logic //
-    // And create your own R-Type game           //
-    ///////////////////////////////////////////////
+///////////////////////////////////////////////
+// Main include file for R-Type              //
+// Include this file to use the R-Type logic //
+// And create your own R-Type game           //
+///////////////////////////////////////////////
 
-    // -- Game Engine includes -------------------------------------------------
+// -- Game Engine includes -------------------------------------------------
 
-    #include "Exodia.hpp"
+#include "Exodia.hpp"
 
-    // -- R-Type Components includes -------------------------------------------
+// -- R-Type Components includes -------------------------------------------
 
-    #include "Components/Animation.hpp"
-    #include "Components/Fade.hpp"
+#include "Components/Animation.hpp"
+#include "Components/Fade.hpp"
 
-    // -- R-Type Events includes -----------------------------------------------
+// -- R-Type Events includes -----------------------------------------------
 
-    #include "Events/AnimationEvent.hpp"
-    #include "Events/FadeEvent.hpp"
-    #include "Events/PlayerEvents.hpp"
+#include "Events/AnimationEvent.hpp"
+#include "Events/FadeEvent.hpp"
+#include "Events/PlayerEvents.hpp"
 
-    // -- R-Type Systems includes ----------------------------------------------
+// -- R-Type Systems includes ----------------------------------------------
 
-    #include "Systems/AnimationSystem.hpp"
-    #include "Systems/FadeSystem.hpp"
+#include "Systems/AnimationSystem.hpp"
+#include "Systems/FadeSystem.hpp"
 
-    // -- R-Type Scripts includes ----------------------------------------------
+// -- R-Type Scripts includes ----------------------------------------------
 
-    #include "Scripts/Mars.hpp"
+#include "Scripts/Mars.hpp"
 
 namespace RType {
 
-    inline static void EntryPoint()
-    {
+    inline static void EntryPoint() {
         // -- Init the R-Type Project ------------------------------------------
         Ref<Exodia::Project> project = Exodia::Project::Load("Assets/R-Type.proj");
 
@@ -54,12 +53,10 @@ namespace RType {
         });
 
         // -- Register R-Type Scripts ------------------------------------------
-        project->RegisterScript("Mars", []() -> Exodia::ScriptableEntity * {
-            return new Mars();
-        });
+        project->RegisterScript("Mars", []() -> Exodia::ScriptableEntity * { return new Mars(); });
 
         // -- Register R-Type Systems ------------------------------------------
     }
-};
+}; // namespace RType
 
 #endif /* !R_TYPE_HPP_ */

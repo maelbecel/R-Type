@@ -6,51 +6,49 @@
 */
 
 #ifndef CLOCK_HPP_
-    #define CLOCK_HPP_
+#define CLOCK_HPP_
 
-    // Exodia includes
-    #include "Exodia.hpp"
+// Exodia includes
+#include "Exodia.hpp"
 
 namespace RType {
 
     struct ClockComponent : public Exodia::Component {
         float Time;
         float Duration;
-        bool  Infinite;
-        bool  Active;
+        bool Infinite;
+        bool Active;
 
         ClockComponent(const ClockComponent &other) = default;
-        ClockComponent(float duration = 60.0f, bool active = true, bool infinite = false) : Time(0.0f), Duration(duration), Infinite(infinite), Active(active) {};
+        ClockComponent(float duration = 60.0f, bool active = true, bool infinite = false)
+            : Time(0.0f), Duration(duration), Infinite(infinite), Active(active){};
 
-        void Serialize(YAML::Emitter &out) override
-        {
+        void Serialize(YAML::Emitter &out) override {
             out << YAML::Key << "ClockComponent";
             out << YAML::BeginMap;
             {
-                out << YAML::Key << "Time"     << YAML::Value << Time;
+                out << YAML::Key << "Time" << YAML::Value << Time;
                 out << YAML::Key << "Duration" << YAML::Value << Duration;
                 out << YAML::Key << "Infinite" << YAML::Value << Infinite;
-                out << YAML::Key << "Active"   << YAML::Value << Active;
+                out << YAML::Key << "Active" << YAML::Value << Active;
             }
             out << YAML::EndMap;
         }
 
-        void Deserialize(const YAML::Node &node)
-        {
+        void Deserialize(const YAML::Node &node) {
             try {
                 auto fade = node["ClockComponent"];
 
-                Time     = fade["Time"].as<float>();
+                Time = fade["Time"].as<float>();
                 Duration = fade["Duration"].as<float>();
                 Infinite = fade["Infinite"].as<bool>();
-                Active   = fade["Active"].as<bool>();
+                Active = fade["Active"].as<bool>();
             } catch (YAML::BadConversion &error) {
                 EXODIA_CORE_WARN("ClockComponent deserialization failed:\n\t{0}", error.what());
             }
         }
 
-        void DeserializeData(Exodia::Buffer data) override
-        {
+        void DeserializeData(Exodia::Buffer data) override {
             if (!data || data.Size == 0)
                 return;
             try {
@@ -71,8 +69,7 @@ namespace RType {
             }
         }
 
-        Exodia::Buffer SerializeData() override
-        {
+        Exodia::Buffer SerializeData() override {
             try {
                 Exodia::Buffer buffer(sizeof(float) * 2 + sizeof(bool));
                 size_t offset = 0;
@@ -96,6 +93,6 @@ namespace RType {
             }
         }
     };
-};
+}; // namespace RType
 
 #endif /* !CLOCK_HPP_ */

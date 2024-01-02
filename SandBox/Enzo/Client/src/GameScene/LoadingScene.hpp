@@ -6,10 +6,10 @@
 */
 
 #ifndef LOADINGSCENE_HPP_
-    #define LOADINGSCENE_HPP_
+#define LOADINGSCENE_HPP_
 
-    // R-Type includes
-    #include "GameScene/GameScene.hpp"
+// R-Type includes
+#include "GameScene/GameScene.hpp"
 
 namespace RType {
 
@@ -18,36 +18,32 @@ namespace RType {
         //////////////////////////////
         // Constructor & Destructor //
         //////////////////////////////
-        public:
-
-            LoadingScene() = default;
-            ~LoadingScene() override = default;
+      public:
+        LoadingScene() = default;
+        ~LoadingScene() override = default;
 
         /////////////
         // Methods //
         /////////////
-        public:
+      public:
+        void OnCreate() override;
+        void OnDestroy() override;
 
-            void OnCreate() override;
-            void OnDestroy() override;
-
-            void OnUpdate(Exodia::Timestep ts) override;
-            void OnEvent(Exodia::Event &event) override;
+        void OnUpdate(Exodia::Timestep ts) override;
+        void OnEvent(Exodia::Event &event) override;
 
         ////////////
         // Events //
         ////////////
-        private:
-
-            bool OnKeyPressedEvent(Exodia::KeyPressedEvent &event);
+      private:
+        bool OnKeyPressedEvent(Exodia::KeyPressedEvent &event);
 
         ////////////////
         // Attributes //
         ////////////////
-        private:
-
-            Ref<Exodia::Scene> _Scene;
+      private:
+        Ref<Exodia::Scene> _Scene;
     };
-};
+}; // namespace RType
 
 #endif /* !LOADINGSCENE_HPP_ */

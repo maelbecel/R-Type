@@ -6,10 +6,10 @@
 */
 
 #ifndef MARS_HPP_
-    #define MARS_HPP_
+#define MARS_HPP_
 
-    // Exodia includes
-    #include "Exodia.hpp"
+// Exodia includes
+#include "Exodia.hpp"
 
 namespace RType {
 
@@ -18,21 +18,18 @@ namespace RType {
         /////////////
         // Defines //
         /////////////
-        private:
-
-            static const uint64_t MARS = 8452581520512152;
+      private:
+        static const uint64_t MARS = 8452581520512152;
 
         /////////////
         // Methods //
         /////////////
-        public:
+      public:
+        void OnCreate() override;
 
-            void OnCreate() override;
-
-        private:
-
-            void GenerateDebris(Exodia::World *world);
+      private:
+        void GenerateDebris(Exodia::World *world);
     };
-};
+}; // namespace RType
 
 #endif /* !MARS_HPP_ */

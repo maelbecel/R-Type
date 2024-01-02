@@ -15,8 +15,7 @@ namespace RType {
     // Methods //
     /////////////
 
-    void MenuHandler::OnKeyPressed(int keycode)
-    {
+    void MenuHandler::OnKeyPressed(int keycode) {
         if (keycode == Key::UP) {
             //...
         } else if (keycode == Key::DOWN) {
@@ -34,4 +33,4 @@ namespace RType {
                 _CurrentPages = 0;
         }
     }
-};
+}; // namespace RType

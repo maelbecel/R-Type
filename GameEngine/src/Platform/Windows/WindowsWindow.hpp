@@ -112,8 +112,7 @@ namespace Exodia {
          */
         inline unsigned int GetHeight() const override { return _Data.Height; }
 
-        inline void Resize(unsigned int width, unsigned int height) override
-        {
+        inline void Resize(unsigned int width, unsigned int height) override {
             _Data.Width = width;
             _Data.Height = height;
 

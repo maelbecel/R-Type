@@ -16,25 +16,22 @@ namespace RType {
         //////////////////////////////
         // Constructor & Destructor //
         //////////////////////////////
-        public:
+      public:
+        RTypeApplication(const Exodia::ApplicationSpecification &spec) : Application(spec) {
+            Ref<Exodia::Layer> gameLayer = GameLayer::New();
 
-            RTypeApplication(const Exodia::ApplicationSpecification &spec) : Application(spec)
-            {
-                Ref<Exodia::Layer> gameLayer = GameLayer::New();
+            PushLayer(gameLayer.get());
+        }
 
-                PushLayer(gameLayer.get());
-            }
-
-            ~RTypeApplication() = default;
+        ~RTypeApplication() = default;
     };
-};
+}; // namespace RType
 
-    /////////////////
-    // Entry Point //
-    /////////////////
+/////////////////
+// Entry Point //
+/////////////////
 
-Exodia::Application *Exodia::CreateApplication(ApplicationCommandLineArgs args)
-{
+Exodia::Application *Exodia::CreateApplication(ApplicationCommandLineArgs args) {
     Exodia::ApplicationSpecification spec;
 
     spec.Name = "R-Type";

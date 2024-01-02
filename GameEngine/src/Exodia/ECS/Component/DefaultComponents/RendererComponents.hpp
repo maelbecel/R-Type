@@ -81,9 +81,11 @@ namespace Exodia {
                     return;
 
                 if (texture["AssetHandle"] && texture["Coords"] && texture["CellSize"] && texture["SpriteSize"]) {
-                    glm::vec2 coords     = glm::vec2(texture["Coords"][0].as<float>()    , texture["Coords"][1].as<float>());
-                    glm::vec2 cellSize   = glm::vec2(texture["CellSize"][0].as<float>()  , texture["CellSize"][1].as<float>());
-                    glm::vec2 spriteSize = glm::vec2(texture["SpriteSize"][0].as<float>(), texture["SpriteSize"][1].as<float>());
+                    glm::vec2 coords = glm::vec2(texture["Coords"][0].as<float>(), texture["Coords"][1].as<float>());
+                    glm::vec2 cellSize =
+                        glm::vec2(texture["CellSize"][0].as<float>(), texture["CellSize"][1].as<float>());
+                    glm::vec2 spriteSize =
+                        glm::vec2(texture["SpriteSize"][0].as<float>(), texture["SpriteSize"][1].as<float>());
 
                     AssetHandle assetHandle = texture["AssetHandle"].as<uint64_t>();
 
@@ -382,8 +384,7 @@ namespace Exodia {
             }
         }
 
-        virtual void DeserializeData(Buffer data) override
-        {
+        virtual void DeserializeData(Buffer data) override {
             if (!data || data.Size == 0)
                 return;
 

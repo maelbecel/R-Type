@@ -21,10 +21,9 @@ namespace RType {
     // Methods //
     /////////////
 
-    void FadeSystem::Update(Exodia::World *world, Exodia::Timestep ts)
-    {
+    void FadeSystem::Update(Exodia::World *world, Exodia::Timestep ts) {
         world->ForEach<FadeComponent>([&](Entity *entity, ComponentHandle<FadeComponent> fade) {
-            FadeComponent  &fc = fade.Get();   // fc = Fade Component
+            FadeComponent &fc = fade.Get(); // fc = Fade Component
 
             if (fc.shouldFadeIn) {
                 fc.Opacity += fc.FadeInSpeed * ts;
@@ -48,7 +47,7 @@ namespace RType {
 
             auto sprite = entity->GetComponent<SpriteRendererComponent>();
             auto circle = entity->GetComponent<CircleRendererComponent>();
-            auto text   = entity->GetComponent<TextRendererComponent>();
+            auto text = entity->GetComponent<TextRendererComponent>();
 
             if (sprite)
                 sprite.Get().Color.w = fc.Opacity;
@@ -58,4 +57,4 @@ namespace RType {
                 text.Get().Color.w = fc.Opacity;
         });
     }
-};
+}; // namespace RType

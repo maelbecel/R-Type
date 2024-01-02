@@ -46,7 +46,7 @@ namespace Exodia {
             ALsizei freq = pInfo->rate;
 
             long totalSize = 0;
-            int  bitStream = 0;
+            int bitStream = 0;
 
             while (true) {
                 char data[4096];
@@ -105,8 +105,7 @@ namespace Exodia {
     // Methods //
     /////////////
 
-    void OpenGLSound::Play()
-    {
+    void OpenGLSound::Play() {
         if (IsPlaying())
             return;
         alSourcePlay(_source);

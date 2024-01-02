@@ -30,8 +30,7 @@ namespace RType {
     // Constructor & Destructor //
     //////////////////////////////
 
-    GameLayer::GameLayer() : Layer("R-Type Layer"), _CurrentScene(LOADING)
-    {
+    GameLayer::GameLayer() : Layer("R-Type Layer"), _CurrentScene(LOADING) {
         RType::EntryPoint();
         RType::Config::Init();
 
@@ -46,8 +45,7 @@ namespace RType {
     // Methods //
     /////////////
 
-    void GameLayer::OnAttach()
-    {
+    void GameLayer::OnAttach() {
         // -- Init the different scenes -- //
         _Scenes.emplace(LOADING, CreateRef<LoadingScene>());
         _Scenes.emplace(MENU, CreateRef<MenuScene>());
@@ -56,21 +54,16 @@ namespace RType {
         _Scenes[LOADING]->OnCreate();
     }
 
-    void GameLayer::OnUpdate(Timestep ts)
-    {
-        RenderCommand::SetClearColor({ 0.0f, 0.0f, 0.0f, 1.0f });
+    void GameLayer::OnUpdate(Timestep ts) {
+        RenderCommand::SetClearColor({0.0f, 0.0f, 0.0f, 1.0f});
         RenderCommand::Clear();
 
         _Scenes[_CurrentScene]->OnUpdate(ts);
     }
 
-    void GameLayer::OnEvent(Event& event)
-    {
-        _Scenes[_CurrentScene]->OnEvent(event);
-    }
+    void GameLayer::OnEvent(Event &event) { _Scenes[_CurrentScene]->OnEvent(event); }
 
-    void GameLayer::InitGame()
-    {
+    void GameLayer::InitGame() {
         Ref<Project> project = Project::GetActive();
 
         if (!project) {
@@ -79,20 +72,15 @@ namespace RType {
         }
 
         // -- Register Client scripts -- //
-        project->RegisterScript("Intro", []() -> ScriptableEntity * {
-            return new Intro();
-        });
-        project->RegisterScript("MenuHandler", []() -> ScriptableEntity * {
-            return new MenuHandler();
-        });
+        project->RegisterScript("Intro", []() -> ScriptableEntity * { return new Intro(); });
+        project->RegisterScript("MenuHandler", []() -> ScriptableEntity * { return new MenuHandler(); });
     }
 
     ///////////////////////
     // Getters & Setters //
     ///////////////////////
 
-    void GameLayer::SetScene(SceneType scene, bool destroy)
-    {
+    void GameLayer::SetScene(SceneType scene, bool destroy) {
         if (destroy)
             _Scenes[_CurrentScene]->OnDestroy();
 
@@ -102,4 +90,4 @@ namespace RType {
             return;
         _Scenes[_CurrentScene]->OnCreate();
     }
-};
+}; // namespace RType

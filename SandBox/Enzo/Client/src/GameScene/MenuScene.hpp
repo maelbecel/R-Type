@@ -6,13 +6,13 @@
 */
 
 #ifndef MENUSCENE_HPP_
-    #define MENUSCENE_HPP_
+#define MENUSCENE_HPP_
 
-    // Exodia includes
-    #include "Exodia.hpp"
+// Exodia includes
+#include "Exodia.hpp"
 
-    // R-Type includes
-    #include "GameScene/GameScene.hpp"
+// R-Type includes
+#include "GameScene/GameScene.hpp"
 
 namespace RType {
 
@@ -21,36 +21,32 @@ namespace RType {
         //////////////////////////////
         // Constructor & Destructor //
         //////////////////////////////
-        public:
-
-            MenuScene() = default;
-            ~MenuScene() override = default;
+      public:
+        MenuScene() = default;
+        ~MenuScene() override = default;
 
         /////////////
         // Methods //
         /////////////
-        public:
+      public:
+        void OnCreate() override;
+        void OnDestroy() override;
 
-            void OnCreate() override;
-            void OnDestroy() override;
-
-            void OnUpdate(Exodia::Timestep ts) override;
-            void OnEvent(Exodia::Event &event) override;
+        void OnUpdate(Exodia::Timestep ts) override;
+        void OnEvent(Exodia::Event &event) override;
 
         ////////////
         // Events //
         ////////////
-        private:
-
-            bool OnKeyPressedEvent(Exodia::KeyPressedEvent &event);
+      private:
+        bool OnKeyPressedEvent(Exodia::KeyPressedEvent &event);
 
         ////////////////
         // Attributes //
         ////////////////
-        private:
-
-            Ref<Exodia::Scene> _Scene;
+      private:
+        Ref<Exodia::Scene> _Scene;
     };
-};
+}; // namespace RType
 
 #endif /* !MENUSCENE_HPP_ */

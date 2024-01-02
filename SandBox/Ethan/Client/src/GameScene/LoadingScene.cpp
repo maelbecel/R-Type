@@ -21,8 +21,7 @@ namespace RType {
     // Methods //
     /////////////
 
-    void LoadingScene::OnCreate()
-    {
+    void LoadingScene::OnCreate() {
         _Scene = CreateRef<Scene>("Intro");
 
         SceneSerializer serializer(_Scene);
@@ -43,26 +42,20 @@ namespace RType {
         _Scene->OnRuntimeStart();
     }
 
-    void LoadingScene::OnDestroy()
-    {
-        _Scene->OnRuntimeStop();
-    }
+    void LoadingScene::OnDestroy() { _Scene->OnRuntimeStop(); }
 
-    void LoadingScene::OnUpdate(Timestep ts)
-    {
+    void LoadingScene::OnUpdate(Timestep ts) {
         if (_Scene->IsRunning())
             _Scene->OnUpdateRuntime(ts);
     }
 
-    void LoadingScene::OnEvent(Event &event)
-    {
+    void LoadingScene::OnEvent(Event &event) {
         EventDispatcher dispatcher(event);
 
         dispatcher.Dispatch<KeyPressedEvent>(BIND_EVENT_FN(LoadingScene::OnKeyPressedEvent));
     }
 
-    bool LoadingScene::OnKeyPressedEvent(KeyPressedEvent &event)
-    {
+    bool LoadingScene::OnKeyPressedEvent(KeyPressedEvent &event) {
         int key = event.GetKeyCode();
 
         if (key == Key::ENTER) {
@@ -80,4 +73,4 @@ namespace RType {
         }
         return false;
     }
-};
+}; // namespace RType

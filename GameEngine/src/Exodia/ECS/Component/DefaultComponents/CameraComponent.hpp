@@ -130,15 +130,23 @@ namespace Exodia {
                 if (!buffer || buffer.Size == 0)
                     return;
 
-                std::memcpy(&projectionType        , buffer.Data, sizeof(SceneCamera::ProjectionType));
+                std::memcpy(&projectionType, buffer.Data, sizeof(SceneCamera::ProjectionType));
                 std::memcpy(&perspectiveVerticalFOV, buffer.Data + sizeof(SceneCamera::ProjectionType), sizeof(float));
-                std::memcpy(&perspectiveNearClip   , buffer.Data + sizeof(SceneCamera::ProjectionType) + sizeof(float), sizeof(float));
-                std::memcpy(&perspectiveFarClip    , buffer.Data + sizeof(SceneCamera::ProjectionType) + sizeof(float) * 2, sizeof(float));
-                std::memcpy(&orthographicSize      , buffer.Data + sizeof(SceneCamera::ProjectionType) + sizeof(float) * 3, sizeof(float));
-                std::memcpy(&orthographicNearClip  , buffer.Data + sizeof(SceneCamera::ProjectionType) + sizeof(float) * 4, sizeof(float));
-                std::memcpy(&orthographicFarClip   , buffer.Data + sizeof(SceneCamera::ProjectionType) + sizeof(float) * 5, sizeof(float));
-                std::memcpy(&Primary               , buffer.Data + sizeof(SceneCamera::ProjectionType) + sizeof(float) * 6, sizeof(bool));
-                std::memcpy(&FixedAspectRatio      , buffer.Data + sizeof(SceneCamera::ProjectionType) + sizeof(float) * 6 + sizeof(bool), sizeof(bool));
+                std::memcpy(&perspectiveNearClip, buffer.Data + sizeof(SceneCamera::ProjectionType) + sizeof(float),
+                            sizeof(float));
+                std::memcpy(&perspectiveFarClip, buffer.Data + sizeof(SceneCamera::ProjectionType) + sizeof(float) * 2,
+                            sizeof(float));
+                std::memcpy(&orthographicSize, buffer.Data + sizeof(SceneCamera::ProjectionType) + sizeof(float) * 3,
+                            sizeof(float));
+                std::memcpy(&orthographicNearClip,
+                            buffer.Data + sizeof(SceneCamera::ProjectionType) + sizeof(float) * 4, sizeof(float));
+                std::memcpy(&orthographicFarClip, buffer.Data + sizeof(SceneCamera::ProjectionType) + sizeof(float) * 5,
+                            sizeof(float));
+                std::memcpy(&Primary, buffer.Data + sizeof(SceneCamera::ProjectionType) + sizeof(float) * 6,
+                            sizeof(bool));
+                std::memcpy(&FixedAspectRatio,
+                            buffer.Data + sizeof(SceneCamera::ProjectionType) + sizeof(float) * 6 + sizeof(bool),
+                            sizeof(bool));
 
                 Camera.SetProjectionType(projectionType);
                 Camera.SetPerspectiveVerticalFOV(perspectiveVerticalFOV);

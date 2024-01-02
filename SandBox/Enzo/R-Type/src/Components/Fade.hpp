@@ -6,10 +6,10 @@
 */
 
 #ifndef FADE_HPP_
-    #define FADE_HPP_
+#define FADE_HPP_
 
-    // Exodia includes
-    #include "Exodia.hpp"
+// Exodia includes
+#include "Exodia.hpp"
 
 namespace RType {
 
@@ -23,39 +23,38 @@ namespace RType {
         bool shouldFadeOut;
 
         FadeComponent(const FadeComponent &other) = default;
-        FadeComponent(float opacity = 1.0f, float fadeInSpeed = 1.0f, float fadeOutSpeed = 1.0f) : Opacity(opacity), FadeInSpeed(fadeInSpeed), FadeOutSpeed(fadeOutSpeed), shouldFadeIn(false), shouldFadeOut(false) {};
+        FadeComponent(float opacity = 1.0f, float fadeInSpeed = 1.0f, float fadeOutSpeed = 1.0f)
+            : Opacity(opacity), FadeInSpeed(fadeInSpeed), FadeOutSpeed(fadeOutSpeed), shouldFadeIn(false),
+              shouldFadeOut(false){};
 
-        void Serialize(YAML::Emitter &out) override
-        {
+        void Serialize(YAML::Emitter &out) override {
             out << YAML::Key << "FadeComponent";
             out << YAML::BeginMap;
             {
-                out << YAML::Key << "Opacity"               << YAML::Value << Opacity;
-                out << YAML::Key << "FadeInSpeed"           << YAML::Value << FadeInSpeed;
-                out << YAML::Key << "FadeOutSpeed"          << YAML::Value << FadeOutSpeed;
-                out << YAML::Key << "shouldFadeIn"          << YAML::Value << shouldFadeIn;
-                out << YAML::Key << "shouldFadeOut"         << YAML::Value << shouldFadeOut;
+                out << YAML::Key << "Opacity" << YAML::Value << Opacity;
+                out << YAML::Key << "FadeInSpeed" << YAML::Value << FadeInSpeed;
+                out << YAML::Key << "FadeOutSpeed" << YAML::Value << FadeOutSpeed;
+                out << YAML::Key << "shouldFadeIn" << YAML::Value << shouldFadeIn;
+                out << YAML::Key << "shouldFadeOut" << YAML::Value << shouldFadeOut;
             }
             out << YAML::EndMap;
         }
 
-        void Deserialize(const YAML::Node &node)
-        {
+        void Deserialize(const YAML::Node &node) {
             try {
                 auto fade = node["FadeComponent"];
 
-                Opacity               = fade["Opacity"].as<float>();
-                FadeInSpeed           = fade["FadeInSpeed"].as<float>();
-                FadeOutSpeed          = fade["FadeOutSpeed"].as<float>();
-                shouldFadeIn          = fade["shouldFadeIn"].as<bool>();
-                shouldFadeOut         = fade["shouldFadeOut"].as<bool>();
+                Opacity = fade["Opacity"].as<float>();
+                FadeInSpeed = fade["FadeInSpeed"].as<float>();
+                FadeOutSpeed = fade["FadeOutSpeed"].as<float>();
+                shouldFadeIn = fade["shouldFadeIn"].as<bool>();
+                shouldFadeOut = fade["shouldFadeOut"].as<bool>();
             } catch (YAML::BadConversion &error) {
                 EXODIA_CORE_WARN("FadeComponent deserialization failed:\n\t{0}", error.what());
             }
         }
 
-        void DeserializeData(Exodia::Buffer data) override
-        {
+        void DeserializeData(Exodia::Buffer data) override {
             if (!data || data.Size == 0)
                 return;
             try {
@@ -79,8 +78,7 @@ namespace RType {
             }
         }
 
-        Exodia::Buffer SerializeData() override
-        {
+        Exodia::Buffer SerializeData() override {
             try {
                 Exodia::Buffer buffer(sizeof(float) * 3 + sizeof(bool) * 2);
                 size_t offset = 0;
@@ -107,6 +105,6 @@ namespace RType {
             }
         }
     };
-};
+}; // namespace RType
 
 #endif /* !FADE_HPP_ */

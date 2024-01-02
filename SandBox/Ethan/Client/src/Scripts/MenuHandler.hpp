@@ -6,10 +6,10 @@
 */
 
 #ifndef MENUHANDLER_HPP_
-    #define MENUHANDLER_HPP_
+#define MENUHANDLER_HPP_
 
-    // Exodia includes
-    #include "Exodia.hpp"
+// Exodia includes
+#include "Exodia.hpp"
 
 namespace RType {
 
@@ -18,27 +18,24 @@ namespace RType {
         //////////////////////////////
         // Constructor & Destructor //
         //////////////////////////////
-        public:
-
-            MenuHandler(): _CurrentPages(0), _CurrentIndexMainMenu(0), _CurrentIndexOtherMenu(0), _CurrentColomn(0) {};
+      public:
+        MenuHandler() : _CurrentPages(0), _CurrentIndexMainMenu(0), _CurrentIndexOtherMenu(0), _CurrentColomn(0){};
 
         /////////////
         // Methods //
         /////////////
-        public:
-
-            void OnKeyPressed(int keycode) override;
+      public:
+        void OnKeyPressed(int keycode) override;
 
         ////////////////
         // Attributes //
         ////////////////
-        private:
-
-            int _CurrentPages;
-            int _CurrentIndexMainMenu;
-            int _CurrentIndexOtherMenu;
-            int _CurrentColomn;
+      private:
+        int _CurrentPages;
+        int _CurrentIndexMainMenu;
+        int _CurrentIndexOtherMenu;
+        int _CurrentColomn;
     };
-};
+}; // namespace RType
 
 #endif /* !MENUHANDLER_HPP_ */

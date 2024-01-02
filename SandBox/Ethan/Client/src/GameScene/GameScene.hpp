@@ -6,10 +6,10 @@
 */
 
 #ifndef GAMESCENE_HPP_
-    #define GAMESCENE_HPP_
+#define GAMESCENE_HPP_
 
-    // Exodia includes
-    #include "Exodia.hpp"
+// Exodia includes
+#include "Exodia.hpp"
 
 namespace RType {
 
@@ -18,21 +18,19 @@ namespace RType {
         //////////////////////////////
         // Constructor & Destructor //
         //////////////////////////////
-        public:
-
-            virtual ~GameScene() = default;
+      public:
+        virtual ~GameScene() = default;
 
         /////////////
         // Methods //
         /////////////
-        public:
+      public:
+        virtual void OnCreate() = 0;
+        virtual void OnDestroy() = 0;
 
-            virtual void OnCreate() = 0;
-            virtual void OnDestroy() = 0;
-
-            virtual void OnUpdate(Exodia::Timestep ts) = 0;
-            virtual void OnEvent(Exodia::Event &event) = 0;
+        virtual void OnUpdate(Exodia::Timestep ts) = 0;
+        virtual void OnEvent(Exodia::Event &event) = 0;
     };
-};
+}; // namespace RType
 
 #endif /* !GAMESCENE_HPP_ */

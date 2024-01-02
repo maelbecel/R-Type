@@ -6,7 +6,7 @@
 */
 
 #ifndef SETTINGS_HPP_
-    #define SETTINGS_HPP_
+#define SETTINGS_HPP_
 
 namespace RType {
 
@@ -15,11 +15,10 @@ namespace RType {
         /////////////
         // Methods //
         /////////////
-        public:
-
-            static bool Read();
-            static bool Write();
+      public:
+        static bool Read();
+        static bool Write();
     };
-};
+}; // namespace RType
 
 #endif /* !SETTINGS_HPP_ */

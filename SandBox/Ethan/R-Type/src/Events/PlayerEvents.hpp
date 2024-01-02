@@ -6,46 +6,36 @@
 */
 
 #ifndef PLAYER_EVENTS_HPP
-    #define PLAYER_EVENTS_HPP
+#define PLAYER_EVENTS_HPP
 
-    // External includes
-    #include <string>
+// External includes
+#include <string>
 
 namespace RType {
 
-    enum PlayerEvent {
-        UP,
-        DOWN,
-        LEFT,
-        RIGHT,
-        ATTACK1,
-        ATTACK2,
-        UNKNOWN
-    };
+    enum PlayerEvent { UP, DOWN, LEFT, RIGHT, ATTACK1, ATTACK2, UNKNOWN };
 
-    inline static std::string PlayerEventToString(PlayerEvent event)
-    {
+    inline static std::string PlayerEventToString(PlayerEvent event) {
         switch (event) {
-            case UP:
-                return "UP";
-            case DOWN:
-                return "DOWN";
-            case LEFT:
-                return "LEFT";
-            case RIGHT:
-                return "RIGHT";
-            case ATTACK1:
-                return "ATTACK1";
-            case ATTACK2:
-                return "ATTACK2";
-            default:
-                break;
+        case UP:
+            return "UP";
+        case DOWN:
+            return "DOWN";
+        case LEFT:
+            return "LEFT";
+        case RIGHT:
+            return "RIGHT";
+        case ATTACK1:
+            return "ATTACK1";
+        case ATTACK2:
+            return "ATTACK2";
+        default:
+            break;
         }
         return "UNKNOWN";
     }
 
-    inline static PlayerEvent StringToPlayerEvent(const std::string &event)
-    {
+    inline static PlayerEvent StringToPlayerEvent(const std::string &event) {
         if (event == "UP")
             return UP;
         if (event == "DOWN")
@@ -60,6 +50,6 @@ namespace RType {
             return ATTACK2;
         return UNKNOWN;
     }
-};
+}; // namespace RType
 
 #endif /* !PLAYER_EVENTS_HPP */

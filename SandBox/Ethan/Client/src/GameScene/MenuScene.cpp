@@ -20,8 +20,7 @@ namespace RType {
     // Methods //
     /////////////
 
-    void MenuScene::OnCreate()
-    {
+    void MenuScene::OnCreate() {
         // -- Creating the scene -- //
         _Scene = CreateRef<Scene>("Menu");
 
@@ -43,25 +42,17 @@ namespace RType {
         GiveFadeEffect();
     }
 
-    void MenuScene::OnDestroy()
-    {
-        _Scene->OnRuntimeStop();
-    }
+    void MenuScene::OnDestroy() { _Scene->OnRuntimeStop(); }
 
-    void MenuScene::OnUpdate(Timestep ts)
-    {
-        _Scene->OnUpdateRuntime(ts);
-    }
+    void MenuScene::OnUpdate(Timestep ts) { _Scene->OnUpdateRuntime(ts); }
 
-    void MenuScene::OnEvent(Event &event)
-    {
+    void MenuScene::OnEvent(Event &event) {
         EventDispatcher dispatcher(event);
 
         dispatcher.Dispatch<KeyPressedEvent>(BIND_EVENT_FN(MenuScene::OnKeyPressedEvent));
     }
 
-    void MenuScene::GiveFadeEffect(bool in)
-    {
+    void MenuScene::GiveFadeEffect(bool in) {
         for (Entity *entity : _Scene->GetWorldPtr()->AllEntities()) {
             auto fade = entity->GetComponent<FadeComponent>();
 
@@ -69,17 +60,16 @@ namespace RType {
                 fade = entity->AddComponent<FadeComponent>();
             auto &fc = fade.Get(); // fc = Fade Component
 
-            fc.Opacity       = 0.0f;
-            fc.FadeInSpeed   = 0.4f;
-            fc.FadeOutSpeed  = 0.4f;
-            fc.ShouldFadeIn  = in;
+            fc.Opacity = 0.0f;
+            fc.FadeInSpeed = 0.4f;
+            fc.FadeOutSpeed = 0.4f;
+            fc.ShouldFadeIn = in;
             fc.ShouldFadeOut = !in;
-            fc.Repeat        = false;
+            fc.Repeat = false;
         }
     }
 
-    bool MenuScene::OnKeyPressedEvent(KeyPressedEvent &event)
-    {
+    bool MenuScene::OnKeyPressedEvent(KeyPressedEvent &event) {
         Entity *menuHandler = _Scene->GetEntityByName("MenuHandler");
 
         if (menuHandler) {
@@ -93,4 +83,4 @@ namespace RType {
         }
         return false;
     }
-};
+}; // namespace RType

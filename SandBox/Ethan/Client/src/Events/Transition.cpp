@@ -17,8 +17,7 @@ namespace RType {
     // Methods //
     /////////////
 
-    void Transition::Receive(UNUSED(World *world), UNUSED(const Events::FadeOutEndEvent &event))
-    {
+    void Transition::Receive(UNUSED(World *world), UNUSED(const Events::FadeOutEndEvent &event)) {
         auto tag = event.Entity->GetComponent<TagComponent>();
 
         if (!tag)
@@ -35,4 +34,4 @@ namespace RType {
             return;
         }
     }
-};
+}; // namespace RType
