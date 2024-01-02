@@ -67,7 +67,7 @@ namespace Exodia {
             /////////////
             void Loop();
 
-            void SendPacket(Exodia::Network::Packet packet);
+            void SendPacket(Exodia::Network::Packet &packet);
             void SendImportantPacket(Exodia::Network::Packet packet);
             void SendPacketInfo();                                                                  // 0x00
             void SendAck(uint64_t command_id);                                                      // 0x01

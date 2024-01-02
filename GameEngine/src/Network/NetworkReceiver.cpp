@@ -185,6 +185,7 @@ namespace Exodia::Network {
         std::memcpy(&command_id, message.data(), sizeof(uint64_t));
         if (senderConnection.GetPacketNeedAck().find(command_id) != senderConnection.GetPacketNeedAck().end()) {
             senderConnection.RemovePacketNeedAck(command_id);
+            std::cout << "Remove packet need ack " << command_id << std::endl;
         }
     }
 
@@ -365,9 +366,9 @@ namespace Exodia::Network {
                 senderConnection = _server_connection;
             }
         }
-        if (senderConnection.GetLastId() >= (int)header.getId()) {
-            return;
-        }
+        // if (senderConnection.GetLastId() >= (int)header.getId()) {
+        //     return;
+        // }
         EXODIA_CORE_INFO("Receive packet {0}", header.toString());
 
         if (header.GetIsImportant()) {

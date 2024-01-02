@@ -16,7 +16,7 @@ namespace Exodia::Network {
      *
      * @return void
      */
-    void Network::SendPacket(Packet packet) {
+    void Network::SendPacket(Packet &packet) {
         if (_connections.size() > 0) {
             for (auto &connection : _connections)
                 connection.second.SendPacket(_socket, packet);

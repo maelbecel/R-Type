@@ -34,13 +34,9 @@ class Connection {
     ~Connection() = default;
 
     void ResendNeedAck(Exodia::Network::UDPSocket &socket) {
-
+        (void)socket;
         for (auto &packet : _packetNeedAck) {
             SendPacket(socket, packet.second);
-        }
-
-        for (auto &packet : _packetNeedAck) {
-            _packetNeedAck.erase(packet.first);
         }
     }
 
@@ -52,11 +48,23 @@ class Connection {
         packet.GetHeader().setSize((unsigned long)packet.GetContent().size());
         packet.GetHeader().SetId(_id);
         EXODIA_CORE_TRACE("Send packet id: {0}", _id);
-        // for (int i = 0; i < 2; i++)
+        std::cout << "Send packet header: " << packet.GetHeader() << std::endl;
+        std::cout << packet.GetBuffer().size() << std::endl;
         socket.Send(packet, _endpoint);
         if (packet.GetHeader().GetIsImportant()) {
             _packetNeedAck[packet.GetHeader().GetId()] = packet;
         }
+        _id++;
+        _networkInfo.kiloByteSent += packet.GetBuffer().size() / 1024.0f;
+        _networkInfo.sendPacket++;
+    }
+
+    void Send(Exodia::Network::UDPSocket &socket, Exodia::Network::Packet &packet) {
+        packet.GetHeader().setSize((unsigned long)packet.GetContent().size());
+        EXODIA_CORE_TRACE("Send ack packet id: {0}", _id);
+        std::cout << "Send ack packet header: " << packet.GetHeader() << std::endl;
+
+        socket.Send(packet, _endpoint);
         _id++;
         _networkInfo.kiloByteSent += packet.GetBuffer().size() / 1024.0f;
         _networkInfo.sendPacket++;
