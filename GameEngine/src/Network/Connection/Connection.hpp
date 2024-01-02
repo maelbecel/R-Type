@@ -42,7 +42,6 @@ class Connection {
         for (auto &packet : _packetNeedAck) {
             _packetNeedAck.erase(packet.first);
         }
-
     }
 
     void RemovePacketNeedAck(uint64_t id) { _packetNeedAck.erase(id); }

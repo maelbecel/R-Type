@@ -20,7 +20,7 @@ namespace Exodia {
                 _header = Header(command, isImportant);
             };
 
-            Packet() : _content(std::vector<char>()) {};
+            Packet() : _content(std::vector<char>()){};
 
             Packet(Header header, std::vector<char> content) {
                 _header = header;
@@ -58,7 +58,7 @@ namespace Exodia {
                 return buffer;
             }
 
-            Header &GetHeader() { return _header;};
+            Header &GetHeader() { return _header; };
 
             size_t GetSize() { return Header::GetSize() + _content.size(); }
 
