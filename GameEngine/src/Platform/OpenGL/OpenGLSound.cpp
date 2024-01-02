@@ -9,6 +9,7 @@
 
 // OpenAL-Soft include
 #include <AL/alut.h>
+#include <vorbis/vorbisfile.h>
 
 namespace Exodia {
 
@@ -16,11 +17,68 @@ namespace Exodia {
     // Constructors & Destructor //
     ///////////////////////////////
 
-    OpenGLSound::OpenGLSound(const std::string &path) {
-        _buffer = alutCreateBufferFromFile(path.c_str());
+    OpenGLSound::OpenGLSound(const std::filesystem::path &path) {
+        if (path.extension() == ".wav")
+            _buffer = alutCreateBufferFromFile(path.string().c_str());
+        else if (path.extension() == ".ogg") {
+            FILE *oggFile = fopen(path.string().c_str(), "rb");
+
+            if (!oggFile) {
+                EXODIA_CORE_ERROR("Failed to load sound: {0}", path.string());
+
+                return;
+            }
+
+            OggVorbis_File oggStream;
+
+            if (ov_open(oggFile, &oggStream, NULL, 0) < 0) {
+                EXODIA_CORE_ERROR("Failed to load sound: {0}", path.string());
+
+                fclose(oggFile);
+
+                return;
+            }
+
+            vorbis_info *pInfo = ov_info(&oggStream, -1);
+
+            ALsizei dataSize = 0;
+            ALenum format = AL_FORMAT_MONO16;
+            ALsizei freq = pInfo->rate;
+
+            long totalSize = 0;
+            int  bitStream = 0;
+
+            while (true) {
+                char data[4096];
+                long bytesRead = ov_read(&oggStream, data, sizeof(data), 0, 2, 1, &bitStream);
+
+                if (bytesRead <= 0)
+                    break;
+                totalSize += bytesRead;
+            }
+
+            rewind(oggFile);
+
+            char *bufferData = new char[totalSize];
+            long bytesRead = 0;
+            while (true) {
+                long result = ov_read(&oggStream, bufferData + bytesRead, totalSize - bytesRead, 0, 2, 1, &bitStream);
+
+                if (result <= 0)
+                    break;
+                bytesRead += result;
+            }
+
+            fclose(oggFile);
+
+            alGenBuffers(1, &_buffer);
+            alBufferData(_buffer, format, bufferData, totalSize, freq);
+
+            delete[] bufferData;
+        }
 
         if (_buffer == AL_NONE) {
-            EXODIA_CORE_ERROR("Failed to load sound: {0}", path);
+            EXODIA_CORE_ERROR("Failed to load sound: {0}", path.string());
 
             return;
         }
@@ -47,7 +105,8 @@ namespace Exodia {
     // Methods //
     /////////////
 
-    void OpenGLSound::Play() {
+    void OpenGLSound::Play()
+    {
         if (IsPlaying())
             return;
         alSourcePlay(_source);

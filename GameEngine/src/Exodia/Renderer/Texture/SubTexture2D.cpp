@@ -55,10 +55,8 @@ namespace Exodia {
         if (texture == nullptr)
             return;
 
-        glm::vec2 min = {(_Coords.x * _CellSize.x) / texture->GetWidth(),
-                         (_Coords.y * _CellSize.y) / texture->GetHeight()};
-        glm::vec2 max = {((_Coords.x + _SpriteSize.x) * _CellSize.x) / texture->GetWidth(),
-                         ((_Coords.y + _SpriteSize.y) * _CellSize.y) / texture->GetHeight()};
+        glm::vec2 min = {(_Coords.x * _CellSize.x) / texture->GetWidth(), (_Coords.y * _CellSize.y) / texture->GetHeight()};
+        glm::vec2 max = {((_Coords.x + _SpriteSize.x) * _CellSize.x) / texture->GetWidth(), ((_Coords.y + _SpriteSize.y) * _CellSize.y) / texture->GetHeight()};
 
         _TextureCoords[0] = {min.x, min.y};
         _TextureCoords[1] = {max.x, min.y};
@@ -123,4 +121,20 @@ namespace Exodia {
 
         calculateTextureCoords();
     }
-}; // namespace Exodia
+
+    ///////////////
+    // Operators //
+    ///////////////
+
+    SubTexture2D &SubTexture2D::operator=(const SubTexture2D &other)
+    {
+        _AssetHandle = other._AssetHandle;
+        _Coords      = other._Coords;
+        _CellSize    = other._CellSize;
+        _SpriteSize  = other._SpriteSize;
+
+        calculateTextureCoords();
+
+        return *this;
+    }
+};

@@ -105,11 +105,9 @@ namespace Exodia {
             try {
                 size_t offset = 0;
 
-                if (data.Size != (sizeof(glm::vec3) * 3)) {
-                    EXODIA_CORE_WARN("TransformComponent deserialization failed: buffer size is not equal to "
-                                     "TransformComponent size");
+                if (data.Size == 0)
                     return;
-                }
+
                 memcpy(&Translation, data.Data + offset, sizeof(Translation));
                 offset += sizeof(Translation);
                 memcpy(&Rotation, data.Data + offset, sizeof(Rotation));

@@ -41,8 +41,7 @@ bin*
 ExodiaProfile-*.json
 
 # Binaries for programs and plugins
-r-type_client
-r-type_server
+r-type_*
 exodia
 
 # ImGui
@@ -55,6 +54,9 @@ vgcore.*
 .idea/
 .vscode/
 
-#Windows
+# Windows
 Release/
 Debug/Assets/
+
+# R-Type
+.rtype

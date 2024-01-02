@@ -8,6 +8,7 @@
         "stb",
         "openal-soft",
         "freealut",
+        "libvorbis",
         "spdlog",
         "catch2",
         "sol2",
