@@ -165,7 +165,6 @@ namespace RType {
             ComponentHandle<SpriteRendererComponent> sprite = bullet->AddComponent<SpriteRendererComponent>();
             if (!sprite)
                 return;
-            
 
             ComponentHandle<ParentComponent> parent = bullet->AddComponent<ParentComponent>();
             ComponentHandle<IDComponent> ID = HandleEntity->GetComponent<IDComponent>();
