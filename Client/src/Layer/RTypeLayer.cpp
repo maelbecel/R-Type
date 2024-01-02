@@ -29,7 +29,7 @@ namespace RType {
 
         ApplicationCommandLineArgs commandLine = Application::Get().GetSpecification().CommandLineArgs;
 
-        // TODO: Temp port ./r-type_client {port}
+        // TODO: Temp port ./r-type_client {port} {ip} {port}
         int port = 8083; // Default port
         if (commandLine.Count > 1) {
             port = std::stoi(commandLine[1]);
@@ -42,11 +42,39 @@ namespace RType {
         return port;
     }
 
-    void RTypeLayer::ConnectToServer(int port) {
+    std::string RTypeLayer::GetIp() {
+
+        ApplicationCommandLineArgs commandLine = Application::Get().GetSpecification().CommandLineArgs;
+
+        // TODO: Temp ip ./r-type_client {port} {ip} {port}
+        std::string ip = "127.0.0.1"; // Default ip
+        if (commandLine.Count > 2) {
+            ip = commandLine[2];
+        }
+        return ip;
+    }
+
+    int RTypeLayer::GetServerPort() {
+        ApplicationCommandLineArgs commandLine = Application::Get().GetSpecification().CommandLineArgs;
+
+        // TODO: Temp port ./r-type_client {port} {ip} {port}
+        int port = 8083; // Default port
+        if (commandLine.Count > 3) {
+            port = std::stoi(commandLine[3]);
+
+            if (port < 1024 || port > 65535) {
+                Application::Get().Close();
+                return -1;
+            }
+        }
+        return port;
+    }
+
+    void RTypeLayer::ConnectToServer(int port, std::string ip, int serverPort) {
         _Network = CreateScope<Network::Network>(_WorldNetwork, _IOContextManager, port);
 
         _Network->Loop();
-        _Network->SendAskConnect("127.0.0.1", 8082);
+        _Network->SendAskConnect(ip, (short)serverPort);
         // TODO: change ip and port when the server is on a different machine
     }
 
@@ -54,11 +82,13 @@ namespace RType {
         EXODIA_PROFILE_FUNCTION();
 
         int port = GetPort();
+        std::string ip = GetIp();
+        int serverPort = GetServerPort();
 
         if (port == -1)
             return;
 
-        ConnectToServer(port);
+        ConnectToServer(port, ip, serverPort);
 
         // Create world
         CurrentScene = GAME;
