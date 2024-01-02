@@ -158,7 +158,7 @@ namespace Exodia::Network {
         }
         IComponentContainer *container = entity->GetComponent(component_name);
         entity->RemoveComponent(container);
-        SendAck(header.getId());
+        // SendAck(header.getId());
     }
 
     void Network::ReceiveDisconnect(RECEIVE_ARG) {
@@ -241,7 +241,7 @@ namespace Exodia::Network {
             EXODIA_CORE_INFO("Network::createEntity() - Component " + component_name + " added to entity " +
                              std::to_string(id));
         }
-        SendAck(header.getId());
+        // SendAck(header.getId());
     }
 
     void Network::ReceiveConnect(RECEIVE_ARG) {
@@ -370,6 +370,15 @@ namespace Exodia::Network {
         }
         EXODIA_CORE_INFO("Receive packet {0}", header.toString());
 
+        if (header.GetIsImportant()) {
+            Packet ack(0x01);
+            Buffer buffer(sizeof(uint64_t));
+            uint64_t id = header.getId();
+
+            buffer.Write(&id, sizeof(uint64_t));
+            ack.SetContent(buffer.ToVector());
+            senderConnection.SendPacket(_socket, ack);
+        }
         senderConnection.AddReceivedPacket();
         senderConnection.AddKyloByteReceived(packet);
         commands[header.getCommand()](content, header.getSize(), senderConnection, header);

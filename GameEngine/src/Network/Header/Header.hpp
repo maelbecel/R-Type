@@ -128,6 +128,8 @@ namespace Exodia {
 
             uint64_t GetId() const { return _id; }
 
+            uint64_t GetRealId() { return _id; }
+
             static unsigned long GetSize() { return 22; }
 
             void setSize(unsigned long size) { _size = size; }
