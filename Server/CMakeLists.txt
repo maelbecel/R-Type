@@ -64,6 +64,7 @@ target_link_libraries(r-type_server PRIVATE
     yaml-cpp::yaml-cpp
     imguizmo::imguizmo
     FreeALUT::alut
+    Vorbis::vorbisfile
 )
 
 target_include_directories(r-type_server PRIVATE ${Stb_INCLUDE_DIR})

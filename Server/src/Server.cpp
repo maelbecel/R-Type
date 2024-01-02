@@ -294,7 +294,6 @@ namespace Exodia {
                 events.pop_back();
             }
 
-            _Network.ResendNeedAck();
             Scenes[CurrentScene]->OnUpdateRuntime(timestep);
         } catch (std::exception &error) {
             EXODIA_ERROR("Unable to update the world :\n\t{0}", error.what());

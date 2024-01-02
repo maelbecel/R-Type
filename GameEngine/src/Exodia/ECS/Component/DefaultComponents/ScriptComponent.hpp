@@ -97,6 +97,8 @@ namespace Exodia {
         }
 
         virtual void DeserializeData(Buffer data) override {
+            if (!data || data.Size == 0)
+                return;
             try {
                 for (uint32_t i = 0; i < data.Size; i++)
                     Name.push_back((char)data.Data[i]);

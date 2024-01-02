@@ -75,6 +75,9 @@ namespace Exodia {
         }
 
         void DeserializeData(Buffer data) override {
+            if (!data || data.Size == 0)
+                return;
+
             try {
                 for (uint32_t i = 0; i < (data.Size / sizeof(uint64_t)); i++) {
                     uint64_t child = 0;
