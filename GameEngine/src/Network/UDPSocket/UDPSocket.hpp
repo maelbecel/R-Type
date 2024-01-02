@@ -55,7 +55,8 @@ namespace Exodia {
              *
              * @param callback (Type: void (*)(const std::string&)) The callback to call when a message is received
              */
-            void Receive(const std::function<void(const std::vector<char> &, size_t, asio::ip::udp::endpoint)> &callback);
+            void
+            Receive(const std::function<void(const std::vector<char> &, size_t, asio::ip::udp::endpoint)> &callback);
 
             /**
              * @brief Get the Sender Endpoint object
