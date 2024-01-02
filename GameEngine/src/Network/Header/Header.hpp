@@ -50,7 +50,7 @@ namespace Exodia {
              * @param size (Type: unsigned long) The size of the packet
              * @param isImportant (Type: bool) If the packet is important or not
              */
-            Header(unsigned char command, unsigned long id, unsigned long size, bool isImportant = false)
+            Header(unsigned char command, unsigned long id, unsigned long size, bool isImportant)
                 : _command(command), _id(id), _size(size), _isImportant(isImportant) {
                 using MillisecondsType = std::chrono::milliseconds::rep;
 
@@ -95,7 +95,7 @@ namespace Exodia {
                 size_t index = 0;
 
                 if (buffer.size() < GetSize())
-                    return Header(0, 0, 0);
+                    return Header(0, 0, 0, 0);
 
                 char swappedCommand;
                 std::memcpy(&swappedCommand, buffer.data(), sizeof(char));
@@ -203,15 +203,16 @@ namespace Exodia {
                 _timestamp = header._timestamp;
                 _id = header._id;
                 _size = header._size;
+                _isImportant = header._isImportant;
                 return *this;
             }
 
           private:
-            unsigned char _command;
+            unsigned char _command = 0x01;
             float _timestamp;
             unsigned long _id;
             unsigned long _size;
-            bool _isImportant;
+            bool _isImportant = false;
         };
     }; // namespace Network
 };     // namespace Exodia
