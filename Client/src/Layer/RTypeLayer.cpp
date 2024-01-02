@@ -183,7 +183,7 @@ namespace RType {
 
         Scenes[CurrentScene]->GetWorld().LockMutex();
         Scenes[CurrentScene]->GetWorld().ForEach<ScriptComponent, TagComponent>(
-            [&](UNUSED(Entity * entity), ComponentHandle<ScriptComponent> script, ComponentHandle<TagComponent> tag) {
+            [&](Entity *entity, ComponentHandle<ScriptComponent> script, ComponentHandle<TagComponent> tag) {
                 ScriptComponent &sc = script.Get();
                 TagComponent &tc = tag.Get();
 
@@ -194,8 +194,9 @@ namespace RType {
                 if ((tc.Tag.compare(player) == 0) && sc.Instance != nullptr) {
                     // sc.Instance->OnKeyPressed(key);
 
-                    _Network->SendEvent(key, true);
+                    _Network->SendEvent(false, key, true);
                 }
+                (void)entity;
             });
         Scenes[CurrentScene]->GetWorld().UnlockMutex();
 
@@ -217,7 +218,7 @@ namespace RType {
 
                 if ((tc.Tag.compare(player) == 0) && sc.Instance != nullptr) {
                     sc.Instance->OnKeyReleased(key);
-                    _Network->SendEvent(key, false);
+                    _Network->SendEvent(false, key, false);
                 }
 
                 (void)entity;

@@ -236,7 +236,8 @@ namespace Exodia {
 
         Scenes[CurrentScene]->GetWorld().ForEach<ScriptComponent, TagComponent, TransformComponent>(
             [&](Entity *entity, ComponentHandle<ScriptComponent> script, ComponentHandle<TagComponent> tag,
-                UNUSED(ComponentHandle<TransformComponent> transform)) {
+                ComponentHandle<TransformComponent> transform) {
+                (void)transform;
                 ScriptComponent &sc = script.Get();
                 TagComponent &tc = tag.Get();
 
@@ -248,7 +249,7 @@ namespace Exodia {
                 }
 
                 if (tc.Tag.rfind("Player_") != std::string::npos) {
-                    _Network.SendComponentOf(entity, "RigidBody2DComponent");
+                    _Network.SendComponentOf(false, entity, "RigidBody2DComponent");
                 }
             });
     }
@@ -274,13 +275,14 @@ namespace Exodia {
 
             if (count % 50 == 0) {
                 EXODIA_CORE_WARN("Syncing components");
-                Scenes[CurrentScene]->GetWorld().ForEach<TransformComponent>([&](Entity *entity, ComponentHandle<TransformComponent> transform) {
-                    (void)transform;
-                    _Network.SendComponentOf(entity, "TransformComponent");
-                });
+                Scenes[CurrentScene]->GetWorld().ForEach<TransformComponent>(
+                    [&](Entity *entity, ComponentHandle<TransformComponent> transform) {
+                        (void)transform;
+                        _Network.SendComponentOf(false, entity, "TransformComponent");
+                    });
                 Scenes[CurrentScene]->GetWorld().ForEach<Clock>([&](Entity *entity, ComponentHandle<Clock> clock) {
                     (void)clock;
-                    _Network.SendComponentOf(entity, "Clock");
+                    _Network.SendComponentOf(false, entity, "Clock");
                 });
             }
 
@@ -292,7 +294,7 @@ namespace Exodia {
                 events.pop_back();
             }
 
-            // _Network.ResendNeedAck();
+            _Network.ResendNeedAck();
             Scenes[CurrentScene]->OnUpdateRuntime(timestep);
         } catch (std::exception &error) {
             EXODIA_ERROR("Unable to update the world :\n\t{0}", error.what());
@@ -322,24 +324,24 @@ namespace Exodia {
     void Server::SendComponents(SceneType scene) {
         Scenes[scene]->GetWorld().ForEach<TagComponent>([&](Entity *entity, ComponentHandle<TagComponent> tag) {
             if (tag.Get().Tag.rfind("Player_") != std::string::npos) {
-                _Network.SendComponentOf(entity, "TagComponent");
-                _Network.SendComponentOf(entity, "TransformComponent");
-                _Network.SendComponentOf(entity, "RigidBody2DComponent");
-                _Network.SendComponentOf(entity, "Animation");
-                _Network.SendComponentOf(entity, "Health");
-                _Network.SendComponentOf(entity, "ScriptComponent");
-                _Network.SendComponentOf(entity, "SpriteRendererComponent");
+                _Network.SendComponentOf(true, entity, "TagComponent");
+                _Network.SendComponentOf(true, entity, "TransformComponent");
+                _Network.SendComponentOf(true, entity, "RigidBody2DComponent");
+                _Network.SendComponentOf(true, entity, "Animation");
+                _Network.SendComponentOf(true, entity, "Health");
+                _Network.SendComponentOf(true, entity, "ScriptComponent");
+                _Network.SendComponentOf(true, entity, "SpriteRendererComponent");
             }
 
             if (tag.Get().Tag == "Pata-pata") {
-                _Network.SendComponentOf(entity, "TagComponent");
-                _Network.SendComponentOf(entity, "TransformComponent");
-                _Network.SendComponentOf(entity, "Animation");
-                _Network.SendComponentOf(entity, "Health");
-                _Network.SendComponentOf(entity, "RigidBody2DComponent");
-                _Network.SendComponentOf(entity, "ScriptComponent");
-                _Network.SendComponentOf(entity, "SpriteRendererComponent");
-                _Network.SendComponentOf(entity, "Clock");
+                _Network.SendComponentOf(true, entity, "TagComponent");
+                _Network.SendComponentOf(true, entity, "TransformComponent");
+                _Network.SendComponentOf(true, entity, "Animation");
+                _Network.SendComponentOf(true, entity, "Health");
+                _Network.SendComponentOf(true, entity, "RigidBody2DComponent");
+                _Network.SendComponentOf(true, entity, "ScriptComponent");
+                _Network.SendComponentOf(true, entity, "SpriteRendererComponent");
+                _Network.SendComponentOf(true, entity, "Clock");
             }
         });
     }
@@ -358,7 +360,7 @@ namespace Exodia {
             return;
         for (std::pair<const std::string, Connection> connection : connections) {
             if (IsClientNew(connection)) {
-                uint32_t userID = _Users.size();
+                uint32_t userID = (uint32_t)_Users.size();
                 Entity *entity = Scenes[GAME]->CreateEntity("Player_" + std::to_string(userID));
 
                 entity->AddComponent<ScriptComponent>().Get().Bind("Player");

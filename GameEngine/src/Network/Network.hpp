@@ -69,19 +69,18 @@ namespace Exodia {
 
             void SendPacket(Exodia::Network::Packet packet);
             void SendImportantPacket(Exodia::Network::Packet packet);
-            void SendPacketInfo();                                                // 0x00
-            void SendAck(uint64_t command_id);                                    // 0x01
-            void SendAcceptConnect();                                             // 0x02
-            void SendRejectConnect();                                             // 0x03
-            void SendSystemLoad();                                                // 0x0b
-            void SendComponentOf(Entity *entity, std::string component_name);     // 0x0c
-            void SendGameEvent();                                                 // 0x0d
-            void SendDeleteEntity(Entity *entity);                                // 0x0e
-            void SendDeleteComponent(Entity *entity, std::string component_name); // 0x0f
-            void SendImportantEvent(uint32_t event, bool isPressed);              // 0x10
-            void SendAskConnect(const std::string &ip, short port);               // 0x81
-            void SendDisconnect();                                                // 0x82
-            void SendEvent(uint32_t event, bool isPressed);                       // 0x8b
+            void SendPacketInfo();                                                                  // 0x00
+            void SendAck(uint64_t command_id);                                                      // 0x01
+            void SendAcceptConnect();                                                               // 0x02
+            void SendRejectConnect();                                                               // 0x03
+            void SendSystemLoad(bool isImportant);                                                  // 0x0b
+            void SendComponentOf(bool isImportant, Entity *entity, std::string component_name);     // 0x0c
+            void SendGameEvent(bool isImportant);                                                   // 0x0d
+            void SendDeleteEntity(bool isImportant, Entity *entity);                                // 0x0e
+            void SendDeleteComponent(bool isImportant, Entity *entity, std::string component_name); // 0x0f
+            void SendAskConnect(const std::string &ip, short port);                                 // 0x81
+            void SendDisconnect();                                                                  // 0x82
+            void SendEvent(bool isImportant, uint32_t event, bool isPressed);                       // 0x8b
             void Splitter(const std::vector<char> &message, size_t size, asio::ip::udp::endpoint senderEndpoint);
 
             void ResendNeedAck();
@@ -135,7 +134,6 @@ namespace Exodia {
             void ReceiveGameEvent(RECEIVE_ARG);         // 0x0d
             void ReceiveDeleteEntity(RECEIVE_ARG);      // 0x0e
             void ReceiveDeleteComponentOf(RECEIVE_ARG); // 0x0f
-            void ReceiveImportantEvent(RECEIVE_ARG);    // 0x10
             void ReceiveConnect(RECEIVE_ARG);           // 0x81
             void ReceiveDisconnect(RECEIVE_ARG);        // 0x82
             void ReceiveEvent(RECEIVE_ARG);             // 0x8b

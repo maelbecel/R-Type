@@ -31,7 +31,8 @@ namespace Exodia {
     namespace Network {
         class Header {
           public:
-            Header(uint8_t command) : _command(command), _timestamp(0), _id(0), _size(0) {
+            Header(uint8_t command, bool isImportant)
+                : _command(command), _timestamp(0), _id(0), _size(0), _isImportant(isImportant) {
                 using MillisecondsType = std::chrono::milliseconds::rep;
 
                 MillisecondsType timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(
@@ -47,9 +48,10 @@ namespace Exodia {
              * @param command (Type: char ) The command of the header
              * @param id (Type: unsigned long) The id of the header
              * @param size (Type: unsigned long) The size of the packet
+             * @param isImportant (Type: bool) If the packet is important or not
              */
-            Header(unsigned char command, unsigned long id, unsigned long size)
-                : _command(command), _id(id), _size(size) {
+            Header(unsigned char command, unsigned long id, unsigned long size, bool isImportant = false)
+                : _command(command), _id(id), _size(size), _isImportant(isImportant) {
                 using MillisecondsType = std::chrono::milliseconds::rep;
 
                 MillisecondsType timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(
@@ -60,7 +62,8 @@ namespace Exodia {
             }
 
             Header(const Header &header)
-                : _command(header._command), _timestamp(header._timestamp), _id(header._id), _size(header._size){};
+                : _command(header._command), _timestamp(header._timestamp), _id(header._id), _size(header._size),
+                  _isImportant(header._isImportant) {}
 
             ~Header() = default;
 
@@ -79,15 +82,19 @@ namespace Exodia {
                 std::memcpy(buffer.data() + index, &swappedId, sizeof(unsigned long));
                 index += sizeof(unsigned long);
 
+                std::memcpy(buffer.data() + index, &_isImportant, sizeof(bool));
+                index += sizeof(bool);
+
                 unsigned long swappedSize = swapEndianness(_size);
                 std::memcpy(buffer.data() + index, &swappedSize, sizeof(unsigned long));
             }
 
             // Static function to fill a Header from a buffer
             static Header fillHeader(const std::vector<char> buffer) {
+                std::cout << "Size: " << buffer.size() << std::endl;
                 size_t index = 0;
 
-                if (buffer.size() < 22)
+                if (buffer.size() < GetSize())
                     return Header(0, 0, 0);
 
                 char swappedCommand;
@@ -105,11 +112,15 @@ namespace Exodia {
                 index += sizeof(unsigned long);
                 unsigned long id = swapEndianness(swappedId);
 
+                bool isImportant;
+                std::memcpy(&isImportant, buffer.data() + index, sizeof(bool));
+                index += sizeof(bool);
+
                 unsigned long swappedSize;
                 std::memcpy(&swappedSize, buffer.data() + index, sizeof(unsigned long));
                 unsigned long size = swapEndianness(swappedSize);
 
-                Header header(command, id, size);
+                Header header(command, id, size, isImportant);
                 header._timestamp = timestamp;
 
                 return header;
@@ -117,11 +128,17 @@ namespace Exodia {
 
             uint64_t GetId() const { return _id; }
 
+            uint64_t GetRealId() { return _id; }
+
             static unsigned long GetSize() { return 22; }
 
             void setSize(unsigned long size) { _size = size; }
 
             void SetId(unsigned long id) { _id = id; }
+
+            void SetIsImportant(bool isImportant) { _isImportant = isImportant; }
+
+            bool GetIsImportant() const { return _isImportant; }
 
             unsigned char getCommand() const { return _command; };
             float getTimestamp() const { return _timestamp; };
@@ -166,6 +183,7 @@ namespace Exodia {
                 str += "'" + VerbaliseCommand() + "'";
                 str += " ID: " + std::to_string(_id);
                 str += " Size: " + std::to_string(_size);
+                str += " Is important: " + std::to_string(_isImportant);
 
                 return str;
             }
@@ -174,7 +192,8 @@ namespace Exodia {
                 os << "Header: ";
                 os << "Command: '" << header.VerbaliseCommand() << "'";
                 os << " ID: " << header._id;
-                os << " Size: " << header._size << std::endl;
+                os << " Size: " << header._size;
+                os << " Is important: " << header._isImportant;
 
                 return os;
             }
@@ -192,6 +211,7 @@ namespace Exodia {
             float _timestamp;
             unsigned long _id;
             unsigned long _size;
+            bool _isImportant;
         };
     }; // namespace Network
 };     // namespace Exodia

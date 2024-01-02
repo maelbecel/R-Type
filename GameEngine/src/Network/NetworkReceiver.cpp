@@ -158,15 +158,7 @@ namespace Exodia::Network {
         }
         IComponentContainer *container = entity->GetComponent(component_name);
         entity->RemoveComponent(container);
-        SendAck(header.getId());
-    }
-
-    void Network::ReceiveImportantEvent(RECEIVE_ARG) {
-        (void)senderConnection;
-        (void)header;
-        (void)message;
-        (void)size;
-        // TODO: Handle important event
+        // SendAck(header.getId());
     }
 
     void Network::ReceiveDisconnect(RECEIVE_ARG) {
@@ -188,16 +180,11 @@ namespace Exodia::Network {
      */
     void Network::ReceiveAck(RECEIVE_ARG) {
         (void)size;
-        (void)senderConnection;
 
         uint64_t command_id = 0;
         std::memcpy(&command_id, message.data(), sizeof(uint64_t));
-        for (auto &connection : _packetNeedAck) {
-            auto find = connection.second.find(command_id);
-            if (find != connection.second.end()) {
-                connection.second.erase(find);
-                break;
-            }
+        if (senderConnection.GetPacketNeedAck().find(command_id) != senderConnection.GetPacketNeedAck().end()) {
+            senderConnection.RemovePacketNeedAck(command_id);
         }
     }
 
@@ -254,7 +241,7 @@ namespace Exodia::Network {
             EXODIA_CORE_INFO("Network::createEntity() - Component " + component_name + " added to entity " +
                              std::to_string(id));
         }
-        SendAck(header.getId());
+        // SendAck(header.getId());
     }
 
     void Network::ReceiveConnect(RECEIVE_ARG) {
@@ -359,7 +346,6 @@ namespace Exodia::Network {
         commands[0x0d] = COMMAND_NETWORK(Network::ReceiveGameEvent);         // Send Game Event
         commands[0x0e] = COMMAND_NETWORK(Network::ReceiveDeleteEntity);      // Send delete entity
         commands[0x0f] = COMMAND_NETWORK(Network::ReceiveDeleteComponentOf); // Send delete component of an entity
-        commands[0x10] = COMMAND_NETWORK(Network::ReceiveImportantEvent);    // Send an important event
         commands[0x81] = COMMAND_NETWORK(Network::ReceiveConnect);           // Ask for connection
         commands[0x82] = COMMAND_NETWORK(Network::ReceiveDisconnect);        // Reject client connection
         commands[0x8b] = COMMAND_NETWORK(Network::ReceiveEvent);             // Send an event
@@ -384,6 +370,15 @@ namespace Exodia::Network {
         }
         EXODIA_CORE_INFO("Receive packet {0}", header.toString());
 
+        if (header.GetIsImportant()) {
+            Packet ack(0x01);
+            Buffer buffer(sizeof(uint64_t));
+            uint64_t id = header.getId();
+
+            buffer.Write(&id, sizeof(uint64_t));
+            ack.SetContent(buffer.ToVector());
+            senderConnection.SendPacket(_socket, ack);
+        }
         senderConnection.AddReceivedPacket();
         senderConnection.AddKyloByteReceived(packet);
         commands[header.getCommand()](content, header.getSize(), senderConnection, header);

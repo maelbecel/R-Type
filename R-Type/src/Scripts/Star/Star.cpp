@@ -92,7 +92,7 @@ namespace RType {
 
         float seconds = ts.GetSeconds();
 
-        _Intensity += (_State == State::GROWING) ? seconds * 0.1 : seconds * 0.1 * -1;
+        _Intensity += (_State == State::GROWING) ? seconds * 0.1f : seconds * 0.1f * -1.0f;
 
         if (_Intensity <= 0.01f)
             _State = State::GROWING;
