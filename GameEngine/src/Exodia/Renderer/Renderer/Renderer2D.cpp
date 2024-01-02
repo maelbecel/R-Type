@@ -718,9 +718,9 @@ namespace Exodia {
             Glyph glyph = fontData.Glyphs[c];
 
             if (c == 'm')
-                x -= glyph.Width / 2 * fsScale + params.Kerning;
+                x -= glyph.Width / 2.0f * fsScale + params.Kerning;
             else if (c == 'i' || c == 'l')
-                x += glyph.Width * 1.25 * fsScale + params.Kerning;
+                x += glyph.Width * 1.25f * fsScale + params.Kerning;
             else if (c == 'r')
                 x += glyph.Width * fsScale + params.Kerning;
 
