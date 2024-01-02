@@ -37,7 +37,7 @@ namespace RType {
         void OnCollisionEnter(Entity *entity) override;
 
       public:
-        void SetSpeed(int speed) { _Speed = speed; }
+        void SetSpeed(float speed) { _Speed = speed; }
 
       private:
         void CreateAnimations();
@@ -47,7 +47,7 @@ namespace RType {
         // Attributes //
         ////////////////
       private:
-        int _Speed = 10.0f;
+        float _Speed = 10.0f;
         std::vector<AnimationComponent> _Animations;
         bool _IsColliding = false;
     };

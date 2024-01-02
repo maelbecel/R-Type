@@ -183,7 +183,7 @@ namespace RType {
 
         Scenes[CurrentScene]->GetWorld().LockMutex();
         Scenes[CurrentScene]->GetWorld().ForEach<ScriptComponent, TagComponent>(
-            [&](UNUSED(Entity * entity), ComponentHandle<ScriptComponent> script, ComponentHandle<TagComponent> tag) {
+            [&](Entity *entity, ComponentHandle<ScriptComponent> script, ComponentHandle<TagComponent> tag) {
                 ScriptComponent &sc = script.Get();
                 TagComponent &tc = tag.Get();
 
@@ -196,6 +196,7 @@ namespace RType {
 
                     _Network->SendEvent(false, key, true);
                 }
+                (void)entity;
             });
         Scenes[CurrentScene]->GetWorld().UnlockMutex();
 

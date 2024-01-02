@@ -236,7 +236,8 @@ namespace Exodia {
 
         Scenes[CurrentScene]->GetWorld().ForEach<ScriptComponent, TagComponent, TransformComponent>(
             [&](Entity *entity, ComponentHandle<ScriptComponent> script, ComponentHandle<TagComponent> tag,
-                UNUSED(ComponentHandle<TransformComponent> transform)) {
+                ComponentHandle<TransformComponent> transform) {
+                (void)transform;
                 ScriptComponent &sc = script.Get();
                 TagComponent &tc = tag.Get();
 
@@ -359,7 +360,7 @@ namespace Exodia {
             return;
         for (std::pair<const std::string, Connection> connection : connections) {
             if (IsClientNew(connection)) {
-                uint32_t userID = _Users.size();
+                uint32_t userID = (uint32_t)_Users.size();
                 Entity *entity = Scenes[GAME]->CreateEntity("Player_" + std::to_string(userID));
 
                 entity->AddComponent<ScriptComponent>().Get().Bind("Player");
