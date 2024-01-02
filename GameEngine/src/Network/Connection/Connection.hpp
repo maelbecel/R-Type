@@ -52,7 +52,7 @@ class Connection {
         packet.GetHeader().setSize((unsigned long)packet.GetContent().size());
         packet.GetHeader().SetId(_id);
         EXODIA_CORE_TRACE("Send packet id: {0}", _id);
-        for (int i = 0; i < 2; i++)
+        //for (int i = 0; i < 2; i++)
             socket.Send(packet, _endpoint);
         if (packet.GetHeader().GetIsImportant()) {
             _packetNeedAck[packet.GetHeader().GetId()] = packet;

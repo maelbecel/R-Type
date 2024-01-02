@@ -55,8 +55,7 @@ namespace Exodia {
              *
              * @param callback (Type: void (*)(const std::string&)) The callback to call when a message is received
              */
-            void
-            Receive(const std::function<void(const std::vector<char> &, size_t, asio::ip::udp::endpoint)> &callback);
+            void Receive(const std::function<void(const std::vector<char> &, size_t, asio::ip::udp::endpoint)> &callback);
 
             /**
              * @brief Get the Sender Endpoint object
@@ -75,11 +74,11 @@ namespace Exodia {
             asio::ip::udp::socket &getSocket() { return _socket; }
 
           protected:
-            std::mutex _receive_mutex;
             asio::ip::udp::socket _socket;           /*!< The UDP socket */
             asio::ip::udp::endpoint _senderEndpoint; /*!< The sender endpoint */
             std::size_t _packets_received = 0;       /*!< The number of packets received */
             std::array<char, MTU> _receiveBuffer;    /*!< The receive buffer */
+            asio::io_context::strand _receiveStrand;
 
           private:
         };

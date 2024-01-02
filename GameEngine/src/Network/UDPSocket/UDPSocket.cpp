@@ -12,7 +12,7 @@ namespace Exodia {
     namespace Network {
 
         UDPSocket::UDPSocket(IOContextManager &ioContextManager, const asio::ip::udp::endpoint &endpoint)
-            : _socket(ioContextManager.getIOContext()), _senderEndpoint() {
+            : _receiveStrand(ioContextManager.getIOContext()), _socket(ioContextManager.getIOContext()), _senderEndpoint() {
             // Construct the UDP socket using the provided IOContextManager
             asio::error_code error;
             if (_socket.is_open())
@@ -79,23 +79,21 @@ namespace Exodia {
                                   });
         }
 
-        void UDPSocket::Receive(
-            const std::function<void(const std::vector<char> &, size_t, asio::ip::udp::endpoint)> &callback) {
-            _socket.async_receive_from(asio::buffer(_receiveBuffer), _senderEndpoint,
-                                       [this, callback](const asio::error_code &error, std::size_t bytes_received) {
-                                           std::vector<char> receivedMessage(_receiveBuffer.begin(),
-                                                                             _receiveBuffer.begin() + bytes_received);
-                                           if (!error) {
-
-                                               // Call the callback with the received data
-                                               callback(receivedMessage, receivedMessage.size(), _senderEndpoint);
-
-                                               // Call receive again to listen for more messages
-                                               Receive(callback);
-                                           } else {
-                                               EXODIA_CORE_ERROR("Error receiving message: ", error.message());
-                                           }
-                                       });
+        void UDPSocket::Receive(const std::function<void(const std::vector<char> &, size_t, asio::ip::udp::endpoint)> &callback) {
+            _receiveStrand.post([this, callback]() {
+                _socket.async_receive_from(asio::buffer(_receiveBuffer), _senderEndpoint,
+                    [this, callback](const asio::error_code &error, std::size_t bytes_received) {
+                        if (!error) {
+                            std::vector<char> receivedMessage(_receiveBuffer.begin(), _receiveBuffer.begin() + bytes_received);
+                            callback(receivedMessage, receivedMessage.size(), _senderEndpoint);
+                        } else {
+                            EXODIA_CORE_ERROR("Error receiving message: ", error.message());
+                        }
+                        
+                        Receive(callback); // Initiating the next receive operation
+                    });
+            });
         }
+
     } // namespace Network
 } // namespace Exodia
