@@ -43,7 +43,7 @@ namespace RType {
     }
 
     std::string RTypeLayer::GetIp() {
-        
+
         ApplicationCommandLineArgs commandLine = Application::Get().GetSpecification().CommandLineArgs;
 
         // TODO: Temp ip ./r-type_client {port} {ip} {port}
@@ -53,7 +53,6 @@ namespace RType {
         }
         return ip;
     }
-
 
     int RTypeLayer::GetServerPort() {
         ApplicationCommandLineArgs commandLine = Application::Get().GetSpecification().CommandLineArgs;
@@ -70,7 +69,6 @@ namespace RType {
         }
         return port;
     }
-
 
     void RTypeLayer::ConnectToServer(int port, std::string ip, int serverPort) {
         _Network = CreateScope<Network::Network>(_WorldNetwork, _IOContextManager, port);
