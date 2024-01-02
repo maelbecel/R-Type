@@ -128,6 +128,8 @@ namespace Exodia {
         }
 
         void DeserializeData(Buffer data) override {
+            if (!data || data.Size == 0)
+                return;
             try {
                 uint64_t parent = 0;
 

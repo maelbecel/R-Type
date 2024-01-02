@@ -26,6 +26,7 @@ namespace Exodia {
     //////////////////////////////
 
     Project::Project() {
+        // -- Registering the component factories -- //
         RegisterComponent("IDComponent", [](Buffer data) -> IComponentContainer * {
             return new ComponentContainer<IDComponent>(data);
         });
@@ -85,6 +86,20 @@ namespace Exodia {
         RegisterComponent("MusicComponent", [](Buffer data) -> IComponentContainer * {
             return new ComponentContainer<MusicComponent>(data);
         });
+
+        // -- Registering the script factories -- //
+
+        // ...
+
+        // -- Registering the system factories -- //
+
+        RegisterSystem("CollisionSystem", []() -> EntitySystem * { return new CollisionSystem(); });
+
+        RegisterSystem("ScriptSystem", []() -> EntitySystem * { return new ScriptSystem(); });
+
+        RegisterSystem("GravitySystem", []() -> EntitySystem * { return new GravitySystem(); });
+
+        RegisterSystem("MovingSystem", []() -> EntitySystem * { return new MovingSystem(); });
     }
 
     /////////////
@@ -229,6 +244,24 @@ namespace Exodia {
         auto it = _ScriptFactory.find(script);
 
         if (it == _ScriptFactory.end())
+            return nullptr;
+        return it->second;
+    }
+
+    void Project::RegisterSystem(std::string system, std::function<EntitySystem *()> factory) {
+        if (_SystemFactory.find(system) != _SystemFactory.end()) {
+            EXODIA_CORE_WARN("Project::RegisterSystem() - System factory already exists !");
+
+            return;
+        }
+
+        _SystemFactory[system] = factory;
+    }
+
+    std::function<EntitySystem *()> Project::GetSystemFactory(std::string system) {
+        auto it = _SystemFactory.find(system);
+
+        if (it == _SystemFactory.end())
             return nullptr;
         return it->second;
     }

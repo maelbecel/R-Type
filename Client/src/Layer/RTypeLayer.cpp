@@ -9,6 +9,7 @@
 #include <imgui.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <sstream>
 
 using namespace Exodia;
 
@@ -112,6 +113,11 @@ namespace RType {
         camera.Camera.SetViewportSize(Application::Get().GetWindow().GetWidth(),
                                       Application::Get().GetWindow().GetHeight());
 
+        /*RType::EntityEventSubscriber *subscribe = new RType::EntityEventSubscriber(*_Network);
+
+        Scenes[GAME]->Subscribe<Events::OnEntityCreated>(subscribe);
+        Scenes[GAME]->Subscribe<Events::OnEntityDestroyed>(subscribe);*/
+
         /* Removing rigid body for static camera
         auto body_camera = cameraEntity->AddComponent<RigidBody2DComponent>();
         body_camera.Get().Type = RigidBody2DComponent::BodyType::Dynamic;
@@ -121,14 +127,14 @@ namespace RType {
         */
 
         // Create the entities
-        int playerID = 0;
         // TODO: Ask server for playerID
-        Entity *entity = Scenes[GAME]->CreateEntity("Player_" + std::to_string(playerID));
-        entity->AddComponent<ScriptComponent>().Get().Bind("Player");
+        // int playerID = 0;
+        // Entity *entity = Scenes[GAME]->CreateEntity("Player_" + std::to_string(playerID));
+        // entity->AddComponent<ScriptComponent>().Get().Bind("Player");
 
         // Create pata-pata
-        Entity *patata = Scenes[GAME]->CreateEntity("Pata-pata");
-        patata->AddComponent<ScriptComponent>().Get().Bind("PataPata");
+        // Entity *patata = Scenes[GAME]->CreateEntity("Pata-pata");
+        // patata->AddComponent<ScriptComponent>().Get().Bind("PataPata");
 
         // Create stars
         // CreateStars(Scenes);
@@ -177,15 +183,20 @@ namespace RType {
 
         Scenes[CurrentScene]->GetWorld().LockMutex();
         Scenes[CurrentScene]->GetWorld().ForEach<ScriptComponent, TagComponent>(
-            [&](UNUSED(Entity * entity), ComponentHandle<ScriptComponent> script, ComponentHandle<TagComponent> tag) {
+            [&](Entity *entity, ComponentHandle<ScriptComponent> script, ComponentHandle<TagComponent> tag) {
                 ScriptComponent &sc = script.Get();
                 TagComponent &tc = tag.Get();
 
-                if ((tc.Tag.compare("Player_" + _Network->id) == 0) && sc.Instance != nullptr) {
-                    sc.Instance->OnKeyPressed(key);
+                std::ostringstream oss;
+                oss << _Network->GetId();
+                std::string player = "Player_" + oss.str();
 
-                    _Network->SendEvent(key, true);
+                if ((tc.Tag.compare(player) == 0) && sc.Instance != nullptr) {
+                    // sc.Instance->OnKeyPressed(key);
+
+                    _Network->SendEvent(false, key, true);
                 }
+                (void)entity;
             });
         Scenes[CurrentScene]->GetWorld().UnlockMutex();
 
@@ -193,7 +204,6 @@ namespace RType {
     };
 
     bool RTypeLayer::OnKeyReleasedEvent(KeyReleasedEvent &event) {
-
         int key = event.GetKeyCode();
 
         Scenes[CurrentScene]->GetWorld().LockMutex();
@@ -202,10 +212,13 @@ namespace RType {
                 ScriptComponent &sc = script.Get();
                 TagComponent &tc = tag.Get();
 
-                if ((tc.Tag.compare("Player_" + _Network->id) == 0) && sc.Instance != nullptr) {
-                    sc.Instance->OnKeyReleased(key);
+                std::ostringstream oss;
+                oss << _Network->GetId();
+                std::string player = "Player_" + oss.str();
 
-                    _Network->SendEvent(key, false);
+                if ((tc.Tag.compare(player) == 0) && sc.Instance != nullptr) {
+                    sc.Instance->OnKeyReleased(key);
+                    _Network->SendEvent(false, key, false);
                 }
 
                 (void)entity;

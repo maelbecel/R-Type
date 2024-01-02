@@ -6,6 +6,7 @@
 */
 
 #include "Pata-pata.hpp"
+#include "Event/TakeDamage.hpp"
 
 using namespace Exodia;
 
@@ -20,10 +21,8 @@ namespace RType {
 
         for (int i = 0; i < 8; i++)
             framesIdle.push_back(SubTexture2D::CreateFromCoords(PATAPATA, {i, 0.0f}, {33.3125f, 36.0f}, {1.0f, 1.0f}));
-
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 6; i++)
             framesDeath.push_back(SubTexture2D::CreateFromCoords(DEATH, {i, 0.0f}, {32.0f, 34.0f}, {1.0f, 1.0f}));
-        }
 
         anim.Frames = framesIdle;
         anim.IsPlaying = false;
@@ -65,7 +64,8 @@ namespace RType {
         TransformComponent &tc = transform.Get();
 
         tc.Translation.x = 7.0f;
-        tc.Translation.y = (float)(std::rand() % 10);
+        // tc.Translation.y = (float)(std::rand() % 10 - 5);
+        tc.Translation.y = 0.0f;
 
         EXODIA_INFO("PataPata created at pos {0}, {1}", tc.Translation.x, tc.Translation.y);
     }
@@ -132,7 +132,9 @@ namespace RType {
 
         if (entityTag.rfind("Bullet", 0) == 0) {
             EXODIA_INFO("Bullet {0} hit", entityTag);
-            health.Get().CurrentHealth -= 1;
+
+            HandleEntity->GetWorld()->Emit<Events::TakeDamage>({HandleEntity, 1});
+            // health.Get().CurrentHealth -= 1;
         }
     }
 
@@ -171,17 +173,17 @@ namespace RType {
 
     void PataPata::SinusoidalMovement(Timestep ts) {
         ComponentHandle<RigidBody2DComponent> body = GetComponent<RigidBody2DComponent>();
-        ComponentHandle<Clock> time = GetComponent<Clock>();
+        ComponentHandle<Clock> clock = GetComponent<Clock>();
 
         _AttackTimer += ts.GetSeconds();
 
-        if (!time || !body)
+        if (!clock || !body)
             return;
 
         // Parameters of the sinusoidal movement
         double amplitude = 5.0f; // Amplitude of the sinusoidal movement
         double frequency = 1.0f; // Frequency of the sinusoidal movement
-        float &mytime = time.Get().ElapsedTime;
+        float &mytime = clock.Get().ElapsedTime;
 
         if (_State == State::ALIVE) {
             mytime += ts.GetSeconds();

@@ -6,6 +6,7 @@
 */
 
 #include "Player.hpp"
+#include "Event/TakeDamage.hpp"
 
 using namespace Exodia;
 
@@ -118,7 +119,7 @@ namespace RType {
         CreateAnimations();
     }
 
-    void Player::Shoot(Timestep ts, TransformComponent &tc) {
+    void Player::Shoot(TransformComponent &tc) {
         EXODIA_INFO("Player attack");
 
         World *world = HandleEntity->GetWorld();
@@ -131,10 +132,9 @@ namespace RType {
         if (!bullet)
             return;
 
-        bullet->AddComponent<ScriptComponent>().Get().Bind("BulletPlayer");
         bullet->AddComponent<ParentComponent>().Get().Parent = GetComponent<IDComponent>().Get().ID;
+        bullet->AddComponent<ScriptComponent>().Get().Bind("BulletPlayer");
 
-        _AttackTimer += ts.GetSeconds();
         _IsAttacking = true;
     }
 
@@ -175,7 +175,8 @@ namespace RType {
         if (_IsCharging) {
             _AttackTimer += ts.GetSeconds();
         } else if (_IsShooting) {
-            Shoot(ts, GetComponent<TransformComponent>().Get());
+            _AttackTimer += ts.GetSeconds();
+
             _IsShooting = false;
         }
 
@@ -303,7 +304,7 @@ namespace RType {
 
             // Simple attack
             if (keycode == Key::SPACE && !_IsAttacking) {
-                _IsShooting = true;
+                Shoot(GetComponent<TransformComponent>().Get());
             }
 
             // Charge attack
@@ -350,8 +351,8 @@ namespace RType {
 
         if (player_tag.Tag.rfind("BE", 0) == 0) {
             EXODIA_INFO("BE {0} hit", player_tag.Tag);
-            player_health.CurrentHealth -= 1;
-            EXODIA_INFO("Player health: {0}", player_health.CurrentHealth);
+
+            HandleEntity->GetWorld()->Emit<Events::TakeDamage>({HandleEntity, 1});
         }
     };
 } // namespace RType

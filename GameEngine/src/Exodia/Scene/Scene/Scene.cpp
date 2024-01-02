@@ -76,13 +76,16 @@ namespace Exodia {
         for (auto &system : _Systems)
             _World->RegisterSystem(system);
 
+        _World->LockMutex();
         _World->ForEach<CameraComponent>([&](Entity *entity, auto camera) {
             auto &cc = camera.Get();
 
             if (_ViewportWidth > 0 && _ViewportHeight > 0)
                 cc.Camera.SetViewportSize(_ViewportWidth, _ViewportHeight);
         });
+        _World->UnlockMutex();
 
+        _World->LockMutex();
         _World->ForEach<ScriptComponent>([&](Entity *entity, auto script) {
             auto &sc = script.Get();
 
@@ -95,6 +98,7 @@ namespace Exodia {
                 }
             }
         });
+        _World->UnlockMutex();
 
         if (Renderer::GetAPI() == RendererAPI::API::None)
             return;

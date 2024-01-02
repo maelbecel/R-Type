@@ -23,7 +23,7 @@ namespace RType {
                 SubTexture2D::CreateFromCoords(BULLET, {8 + i, 9.0f}, {16.6666666667f, 17.0f}, {1.0f, 1.0f}));
 
         anim.Frames = framesIdle;
-        anim.IsPlaying = false;
+        anim.IsPlaying = true;
         anim.Repeat = true;
         anim.FrameRate = TimeBetweenAnimations;
 
@@ -38,6 +38,10 @@ namespace RType {
 
         _Animations.push_back(anim);
         _Animations.push_back(destroy);
+
+        ComponentHandle<SpriteRendererComponent> sprite = HandleEntity->AddComponent<SpriteRendererComponent>();
+
+        sprite.Get().Texture = anim.Frames[0];
     }
 
     void BulletEnnemy::OnCreate() {
@@ -106,9 +110,13 @@ namespace RType {
         CreateAnimations();
 
         EXODIA_INFO("BulletEnnemy created");
+        HandleEntity->GetWorld()->Emit<Events::OnEntityCreated>({HandleEntity});
     }
 
     void BulletEnnemy::UpdateAnimations() {
+        if (_Animations.size() == 0)
+            return;
+
         ComponentHandle<SpriteRendererComponent> sprite = GetComponent<SpriteRendererComponent>();
         ComponentHandle<AnimationComponent> anim = GetComponent<AnimationComponent>();
 
@@ -166,6 +174,7 @@ namespace RType {
         // Remove bullet if out of screen
         if (transform.Get().Translation.x < camera_transform.Get().Translation.x - 20.0f) {
             EXODIA_INFO("Bullet {0} destroyed", HandleEntity->GetComponent<TagComponent>().Get().Tag);
+
             world->DestroyEntity(HandleEntity);
         }
 
@@ -175,6 +184,7 @@ namespace RType {
     void BulletEnnemy::OnCollisionEnter(Entity *entity) {
         ComponentHandle<ParentComponent> parent = GetComponent<ParentComponent>();
         ComponentHandle<IDComponent> entity_id = entity->GetComponent<IDComponent>();
+
         if (!parent || !entity_id)
             return;
         if (parent.Get().Parent == entity_id.Get().ID)

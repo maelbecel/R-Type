@@ -62,6 +62,7 @@ namespace Exodia {
         // Timestep is used to manage the time
         Timer _Timer;
         float _LastTime;
+        float my_Timer;
 
         bool _Running;
 

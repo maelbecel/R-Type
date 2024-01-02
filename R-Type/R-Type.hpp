@@ -29,6 +29,7 @@
 #include "src/System/AnimationSystem.hpp"
 
 #include "src/Event/EntityEventSubscriber.hpp"
+#include "src/Event/TakeDamage.hpp"
 
 #include "src/Entity/CreateBackground.hpp"
 
