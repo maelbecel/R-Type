@@ -97,7 +97,7 @@ namespace Exodia {
      * optional and may or may not have
      */
     void Server::InitScene(SceneType scene, std::optional<std::vector<Exodia::EntitySystem *>> systems) {
-        Scenes[scene] = CreateRef<Scene>();
+        // Scenes[scene] = CreateRef<Scene>();
 
         if (systems.has_value()) {
             for (EntitySystem *system : systems.value()) {
@@ -125,7 +125,7 @@ namespace Exodia {
         CurrentScene = GAME;
 
         std::vector<Exodia::EntitySystem *> systems = {new AnimationSystem(), new MovingSystem(1.5f)};
-
+        Scenes[MENU] = CreateRef<Scene>();
         InitScene(MENU, systems);
 
         RType::EntityEventSubscriber *subscribe = new RType::EntityEventSubscriber(_Network);
@@ -134,6 +134,14 @@ namespace Exodia {
 
         systems.push_back(collisionSystem);
 
+
+        Ref<Scene> scene = CreateRef<Scene>("Stage 1");
+
+        SceneSerializer serializer(scene);
+
+        serializer.Deserialize("./Assets/Scene/Stage_1.exodia");
+
+        Scenes[GAME] = scene;
         InitScene(GAME, systems);
 
         Scenes[GAME]->Subscribe<Events::OnEntityCreated>(subscribe);

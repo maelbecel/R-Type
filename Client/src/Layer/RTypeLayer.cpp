@@ -81,6 +81,8 @@ namespace RType {
     void RTypeLayer::OnAttach() {
         EXODIA_PROFILE_FUNCTION();
 
+        Renderer2D::SetLineWidth(4.0f);
+
         int port = GetPort();
         std::string ip = GetIp();
         int serverPort = GetServerPort();
@@ -102,7 +104,13 @@ namespace RType {
         // RType::EntityEventSubscriber *subscribe = new RType::EntityEventSubscriber(_Network);
         CollisionSystem *collisionSystem = new CollisionSystem();
 
-        Scenes[GAME] = CreateRef<Scene>();
+        Ref<Scene> scene = CreateRef<Scene>("Stage 1");
+
+        SceneSerializer serializer(scene);
+
+        serializer.Deserialize("./Assets/Scene/Stage_1.exodia");
+
+        Scenes[GAME] = scene;
         Scenes[GAME]->RegisterSystem(new AnimationSystem());
         Scenes[GAME]->RegisterSystem(new MovingSystem(1.5f));
         Scenes[GAME]->RegisterSystem(collisionSystem);
@@ -167,7 +175,6 @@ namespace RType {
         // patata->AddComponent<ScriptComponent>().Get().Bind("PataPata");
 
         // Create stars
-        // CreateStars(Scenes);
         for (int i = 0; i < 60; i++) {
             Entity *star = Scenes[GAME]->CreateEntity("Star" + std::to_string(i));
             star->AddComponent<ScriptComponent>().Get().Bind("Star");
@@ -192,6 +199,13 @@ namespace RType {
         // Update
         if (CurrentScene == GAME) {
             World *world = Scenes[CurrentScene]->GetWorldPtr();
+            Entity *camera = Scenes[CurrentScene]->GetPrimaryCamera();
+
+            if (!camera)
+                return;
+
+            Renderer2D::BeginScene(camera->GetComponent<CameraComponent>().Get().Camera, camera->GetComponent<TransformComponent>().Get().GetTransform());
+
             world->LockMutex();
             world->ForEach<TransformComponent, BoxCollider2DComponent>([&](Entity *entity, auto transform, auto box) {
                 (void)entity;
@@ -209,6 +223,7 @@ namespace RType {
                     Renderer2D::DrawRect(transformMatrix, glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
             });
             world->UnlockMutex();
+            Renderer2D::EndScene();
         };
 
         // Update the world
