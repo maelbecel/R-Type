@@ -9,8 +9,7 @@
 #define PACKET_HPP_
 
 #include "Network/Header/Header.hpp"
-#include "Utils/Memory.hpp"
-#include "Core/Buffer/Buffer.hpp"
+#include "Exodia-Utils.hpp"
 
 namespace Exodia {
     namespace Network {

@@ -9,7 +9,7 @@
 #define RIGIDBODY2DCOMPONENT_HPP_
 
 // External includes
-#include "Utils/Assert.hpp"
+#include "Exodia-Debug.hpp"
 
 // Exodia ECS includes
 #include "ECS/Interface/Component.hpp"

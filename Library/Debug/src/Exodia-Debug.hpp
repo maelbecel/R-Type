@@ -22,6 +22,10 @@
 
     #include "Logger/Log.hpp"
 
+    // -- Exodia Debug Assert --------------------------------------------------
+
+    #include "Assert/Assert.hpp"
+
     // -------------------------------------------------------------------------
 
 #if defined(__GNUC__) || (defined(__MWERKS__) && (__MWERKS__ >= 0x3000)) || (defined(__ICC) && (__ICC >= 600)) || defined(__ghs__) // If the compiler is GCC, or a GCC-compatible compiler

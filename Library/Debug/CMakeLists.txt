@@ -21,6 +21,10 @@ set(SOURCES_GAME_ENGINE
 # Create the Game Engine Static Library
 add_library(Exodia-Debug STATIC ${SOURCES_GAME_ENGINE})
 
-target_link_libraries(Exodia-Debug PRIVATE spdlog::spdlog)
+target_link_libraries(Exodia-Debug PRIVATE
+    spdlog::spdlog
+    Exodia-Tools
+)
 
 target_include_directories(Exodia-Debug PRIVATE src)
+target_include_directories(Exodia-Debug PRIVATE ${CMAKE_BINARY_DIR}/../Library/Tools/src/)

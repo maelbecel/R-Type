@@ -13,7 +13,7 @@
 #include <spdlog/fmt/ostr.h>
 
 // External includes
-#include <memory>
+#include "Exodia-Utils.hpp"
 
 namespace Exodia {
 
@@ -40,24 +40,24 @@ namespace Exodia {
          * @brief Get the Core Logger object
          * Call this function for get the core logger
          *
-         * @return (Type: std::shared_ptr<spdlog::logger> &) The core logger
+         * @return (Type: Ref<spdlog::logger> &) The core logger
          */
-        inline static std::shared_ptr<spdlog::logger> &GetCoreLogger() { return _CoreLogger; }
+        inline static Ref<spdlog::logger> &GetCoreLogger() { return _CoreLogger; }
 
         /**
          * @brief Get the Client Logger object
          * Call this function for get the client logger
          *
-         * @return (Type: std::shared_ptr<spdlog::logger> &) The client logger
+         * @return (Type: Ref<spdlog::logger> &) The client logger
          */
-        inline static std::shared_ptr<spdlog::logger> &GetClientLogger() { return _ClientLogger; }
+        inline static Ref<spdlog::logger> &GetClientLogger() { return _ClientLogger; }
 
         ////////////////
         // Attributes //
         ////////////////
       private:
-        static std::shared_ptr<spdlog::logger> _CoreLogger;   /*!< The logger for the core */
-        static std::shared_ptr<spdlog::logger> _ClientLogger; /*!< The logger for the client */
+        static Ref<spdlog::logger> _CoreLogger;   /*!< The logger for the core */
+        static Ref<spdlog::logger> _ClientLogger; /*!< The logger for the client */
     };
 }; // namespace Exodia
 

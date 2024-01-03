@@ -15,7 +15,7 @@
 #include "Renderer/Renderer/RenderCommand.hpp"
 
 // Exodia Core include
-#include "Core/Buffer/Buffer.hpp"
+#include "Exodia-Utils.hpp"
 
 // Exodia Debug
 #include "Exodia-Debug.hpp"

@@ -11,14 +11,11 @@
 // Exodia Renderer includes
 #include "Renderer/Renderer/RendererAPI.hpp"
 
-// Exodia Buffer includes
-#include "Core/Buffer/Buffer.hpp"
+// Exodia Utils includes
+#include "Exodia-Utils.hpp"
 
 // Exodia Project includes
 #include "Project/Project.hpp"
-
-// Exodia Utils
-#include "Utils/Assert.hpp"
 
 // Exodia Debug includes
 #include "Exodia-Debug.hpp"

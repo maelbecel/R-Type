@@ -8,9 +8,6 @@
 #ifndef TIMESTEP_HPP_
 #define TIMESTEP_HPP_
 
-// Exodia Utils includes
-#include "Utils/CrossPlatform.hpp"
-
 namespace Exodia {
 
     /**

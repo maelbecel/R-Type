@@ -12,7 +12,7 @@
 #include "Asset/Utils/AssetType.hpp"
 
 // Exodia includes
-#include "Utils/Memory.hpp"
+#include "Exodia-Utils.hpp"
 
 // External includes
 #include <string>

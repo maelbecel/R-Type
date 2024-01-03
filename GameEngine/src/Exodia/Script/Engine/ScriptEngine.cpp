@@ -12,7 +12,7 @@
 #include "Project/Project.hpp"
 
 // Exodia Utils
-#include "Utils/LibrairyLoader.hpp"
+#include "Exodia-Utils.hpp"
 
 namespace Exodia {
 

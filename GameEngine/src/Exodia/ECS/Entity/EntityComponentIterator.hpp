@@ -8,9 +8,6 @@
 #ifndef ENTITYCOMPONENTITERATOR_HPP_
 #define ENTITYCOMPONENTITERATOR_HPP_
 
-// Exodia Utils includes
-#include "Utils/CrossPlatform.hpp"
-
 namespace Exodia {
 
     class World;

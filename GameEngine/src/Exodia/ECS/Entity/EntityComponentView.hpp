@@ -8,9 +8,6 @@
 #ifndef ENTITYCOMPONENTVIEW_HPP_
 #define ENTITYCOMPONENTVIEW_HPP_
 
-// Exodia Utils includes
-#include "Utils/CrossPlatform.hpp"
-
 namespace Exodia {
 
     template <typename... Components> class EntityComponentIterator;

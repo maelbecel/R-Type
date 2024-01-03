@@ -8,9 +8,6 @@
 #ifndef ENTITYITERATOR_HPP_
 #define ENTITYITERATOR_HPP_
 
-// Exodia Utils includes
-#include "Utils/CrossPlatform.hpp"
-
 // External includes
 #include <cstddef>
 

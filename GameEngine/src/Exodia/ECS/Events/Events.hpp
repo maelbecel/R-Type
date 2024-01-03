@@ -9,7 +9,6 @@
 #define EVENTS_HPP_
 
 // Exodia Utils includes
-#include "Utils/CrossPlatform.hpp"
 #include "Utils/TypeIndex.hpp"
 
 // External includes

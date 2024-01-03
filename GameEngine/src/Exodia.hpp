@@ -69,10 +69,7 @@
 
 // -- Exodia Utils ---------------------------------------------------------
 
-#include "Utils/CrossPlatform.hpp"
+#include "Exodia-Utils.hpp"
 #include "Utils/PlatformUtils.hpp"
-#include "Utils/LibrairyLoader.hpp"
-#include "Utils/Memory.hpp"
-#include "Utils/Assert.hpp"
 
 #endif /* !EXODIA_HPP_ */

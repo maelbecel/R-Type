@@ -11,7 +11,7 @@
 #include "Renderer/Renderer/RendererAPI.hpp"
 
 // Exodia Utils
-#include "Utils/Assert.hpp"
+#include "Exodia-Debug.hpp"
 
 // Entry Point
 #include "OpenGL/OpenGLShader.hpp"

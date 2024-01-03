@@ -11,9 +11,6 @@
 // Exodia ECS Entity includes
 #include "Entity/EntityIterator.hpp"
 
-// Exodia Utils includes
-#include "Utils/CrossPlatform.hpp"
-
 namespace Exodia {
 
     class EntityView {

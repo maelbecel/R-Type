@@ -21,8 +21,7 @@
 #include "Utils/TypeIndex.hpp"
 
 // Exodia Utils includes
-#include "Utils/CrossPlatform.hpp"
-#include "Utils/Memory.hpp"
+#include "Exodia-Utils.hpp"
 
 // External includes
 #include <unordered_map>

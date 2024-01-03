@@ -21,9 +21,6 @@
 #include "Interface/IEventSubscriber.hpp"
 #include "Interface/EventSubscriber.hpp"
 
-// Exodia Utils includes
-#include "Utils/CrossPlatform.hpp"
-
 // Exodia Debug includes
 #include "Exodia-Debug.hpp"
 

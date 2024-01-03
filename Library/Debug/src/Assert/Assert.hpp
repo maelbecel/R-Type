@@ -6,24 +6,24 @@
 */
 
 #ifndef ASSERT_HPP_
-#define ASSERT_HPP_
+    #define ASSERT_HPP_
 
-#include "Exodia-Debug.hpp"
+    #include "Logger/Log.hpp"
 
 #if defined(_MSC_VER)
-#define EXODIA_DEBUGBREAK() __debugbreak()
+    #define EXODIA_DEBUGBREAK() __debugbreak()
 #elif defined(__GNUC__) || defined(__clang__)
-#define EXODIA_DEBUGBREAK() __builtin_trap()
+    #define EXODIA_DEBUGBREAK() __builtin_trap()
 #else
-#error "Unsupported compiler"
+    #error "Unsupported Compiler"
 #endif
 
 #ifndef EXODIA_DEBUG
-#define EXODIA_ENABLE_ASSERTS
+    #define EXODIA_ENABLE_ASSERTS
 #endif
 
 #ifndef EXODIA_ENABLE_ASSERTS
-#define EXODIA_ASSERT(x, ...)                                                                                          \
+    #define EXODIA_ASSERT(x, ...)                                                                                      \
     {                                                                                                                  \
         if (!(x)) {                                                                                                    \
             EXODIA_ERROR("Assertion Failed: {0}", __VA_ARGS__);                                                        \
@@ -31,7 +31,7 @@
         }                                                                                                              \
     }
 
-#define EXODIA_CORE_ASSERT(x, ...)                                                                                     \
+    #define EXODIA_CORE_ASSERT(x, ...)                                                                                     \
     {                                                                                                                  \
         if (!(x)) {                                                                                                    \
             EXODIA_CORE_ERROR("Assertion Failed: {0}", __VA_ARGS__);                                                   \
@@ -39,8 +39,8 @@
         }                                                                                                              \
     }
 #else
-#define EXODIA_ASSERT(x, ...)
-#define EXODIA_CORE_ASSERT(x, ...)
+    #define EXODIA_ASSERT(x, ...)
+    #define EXODIA_CORE_ASSERT(x, ...)
 #endif
 
 #endif /* !ASSERT_HPP_ */

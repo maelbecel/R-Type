@@ -11,9 +11,6 @@
 // Exodia ECS Interface includes
 #include "Interface/IEventSubscriber.hpp"
 
-// Exodia Utils includes
-#include "Utils/CrossPlatform.hpp"
-
 namespace Exodia {
 
     class World;

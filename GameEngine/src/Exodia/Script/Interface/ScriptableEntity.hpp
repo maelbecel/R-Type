@@ -11,9 +11,7 @@
 // Exodia ECS includes
 #include "ECS.hpp"
 
-// Exodia Utils
-#include "Utils/CrossPlatform.hpp"
-#include "Utils/Memory.hpp"
+#include "Exodia-Utils.hpp"
 
 namespace Exodia {
 

@@ -12,7 +12,7 @@
 #include "Scene/Scene/Scene.hpp"
 
 // Exodia Utils includes
-#include "Utils/Memory.hpp"
+#include "Exodia-Utils.hpp"
 
 // External includes
 #include <filesystem>

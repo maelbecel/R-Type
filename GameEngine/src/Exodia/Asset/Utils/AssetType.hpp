@@ -12,7 +12,7 @@
 #include "Core/ID/UUID.hpp"
 
 // Exodia Utils
-#include "Utils/Assert.hpp"
+#include "Exodia-Debug.hpp"
 
 // External includes
 #include <filesystem>

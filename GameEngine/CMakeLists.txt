@@ -141,7 +141,9 @@ set(INCLUDE_DIRS_GAME_ENGINE
 add_library(GameEngine STATIC ${SOURCES_GAME_ENGINE})
 
 target_link_libraries(GameEngine PRIVATE
+    Exodia-Tools
     Exodia-Debug
+
     asio::asio
     glm::glm
     glfw
@@ -158,11 +160,13 @@ target_link_libraries(GameEngine PRIVATE
     Vorbis::vorbisfile
 )
 
-set(INCLUDE_DEBUG_DIRS
-    ${CMAKE_BINARY_DIR}/../Library/Debug/src/
+set(EXODIA_LIB_DIR ${CMAKE_BINARY_DIR}/../Library)
+
+target_include_directories(GameEngine PRIVATE
+    ${EXODIA_LIB_DIR}/Tools/src
+    ${EXODIA_LIB_DIR}/Debug/src
 )
 
-target_include_directories(GameEngine PRIVATE ${INCLUDE_DEBUG_DIRS})
 target_include_directories(GameEngine PRIVATE ${INCLUDE_DIRS_GAME_ENGINE})
 target_include_directories(GameEngine PRIVATE ${Stb_INCLUDE_DIR})
 target_include_directories(GameEngine PRIVATE ${CMAKE_BINARY_DIR}/_deps/imgui-src)

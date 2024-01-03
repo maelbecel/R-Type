@@ -14,7 +14,7 @@
 #include "Project/Project.hpp"
 
 // Exodia Utils includes
-#include "Utils/Assert.hpp"
+#include "Exodia-Debug.hpp"
 
 // Exodia Debug includes
 #include "Exodia-Debug.hpp"

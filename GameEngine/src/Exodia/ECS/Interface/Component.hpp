@@ -8,11 +8,8 @@
 #ifndef COMPONENT_HPP_
 #define COMPONENT_HPP_
 
-// Exodia Core includes
-#include "Core/Buffer/Buffer.hpp"
-
 // Exodia Utils includes
-#include "Utils/Memory.hpp"
+#include "Exodia-Utils.hpp"
 
 // External includes
 #include <yaml-cpp/yaml.h>

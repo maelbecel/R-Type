@@ -24,8 +24,8 @@
 #include "ImGui/ImGuiLayer.hpp"
 
 // Exodia Utils
-#include "Utils/Memory.hpp"
-#include "Utils/Assert.hpp"
+#include "Exodia-Utils.hpp"
+#include "Exodia-Debug.hpp"
 
 namespace Exodia {
 

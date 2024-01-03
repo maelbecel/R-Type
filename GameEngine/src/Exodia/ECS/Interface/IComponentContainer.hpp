@@ -8,12 +8,8 @@
 #ifndef ICOMPONENTCONTAINER_HPP_
 #define ICOMPONENTCONTAINER_HPP_
 
-// Exodia Core includes
-#include "Core/Buffer/Buffer.hpp"
-
 // Exodia Utils includes
-#include "Utils/CrossPlatform.hpp"
-#include "Utils/Memory.hpp"
+#include "Exodia-Utils.hpp"
 #include "Utils/TypeIndex.hpp"
 
 // External includes

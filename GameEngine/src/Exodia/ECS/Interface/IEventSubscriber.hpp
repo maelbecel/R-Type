@@ -8,9 +8,6 @@
 #ifndef IEVENTSUBSCRIBER_HPP_
 #define IEVENTSUBSCRIBER_HPP_
 
-// Exodia Utils includes
-#include "Utils/CrossPlatform.hpp"
-
 namespace Exodia {
 
     class IEventSubscriber {

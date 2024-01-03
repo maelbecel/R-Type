@@ -8,9 +8,6 @@
 #ifndef COMPONENTHANDLE_HPP_
 #define COMPONENTHANDLE_HPP_
 
-// Exodia Utils includes
-#include "Utils/CrossPlatform.hpp"
-
 namespace Exodia {
 
     template <typename Component> class ComponentHandle {

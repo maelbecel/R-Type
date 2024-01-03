@@ -15,11 +15,8 @@
 #include "ECS/Interface/IComponentContainer.hpp"
 #include "ECS/Interface/EntitySystem.hpp"
 
-// Exodia Core includes
-#include "Core/Buffer/Buffer.hpp"
-
 // Exodia Utils includes
-#include "Utils/Memory.hpp"
+#include "Exodia-Utils.hpp"
 
 // External includes
 #include <unordered_map>

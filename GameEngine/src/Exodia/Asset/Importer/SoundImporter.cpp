@@ -9,7 +9,7 @@
 #include "SoundImporter.hpp"
 
 // Exodia Utils
-#include "Utils/Memory.hpp"
+#include "Exodia-Utils.hpp"
 
 // Exodia Project
 #include "Project/Project.hpp"

@@ -13,7 +13,7 @@
 #include <AL/alut.h>
 
 // Exodia Utils
-#include "Utils/Assert.hpp"
+#include "Exodia-Debug.hpp"
 
 // Exodia Debug
 #include "Exodia-Debug.hpp"
