@@ -6,21 +6,21 @@
 */
 
 #ifndef EXODIA_UTILS_HPP_
-    #define EXODIA_UTILS_HPP_
+#define EXODIA_UTILS_HPP_
 
-    ////////////////////////////////////////////
-    // Include this file for use Exodia Tools //
-    ////////////////////////////////////////////
+////////////////////////////////////////////
+// Include this file for use Exodia Tools //
+////////////////////////////////////////////
 
-    // -- Exodia Tools Memory --------------------------------------------------
+// -- Exodia Tools Memory --------------------------------------------------
 
-    #include "Memory/Buffer.hpp"
-    #include "Memory/Memory.hpp"
+#include "Memory/Buffer.hpp"
+#include "Memory/Memory.hpp"
 
-    // -- Exodia Tools LibLoarder ----------------------------------------------
+// -- Exodia Tools LibLoarder ----------------------------------------------
 
-    #include "Lib/LibLoader.hpp"
+#include "Lib/LibLoader.hpp"
 
-    // -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 
 #endif /*  EXODIA_UTILS_HPP_ */
