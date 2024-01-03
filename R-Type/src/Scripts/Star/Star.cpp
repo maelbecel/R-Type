@@ -45,11 +45,12 @@ namespace RType {
             return;
 
         TransformComponent &tc = transform.Get();
-        float max_height = 20.0f;
-        int height = 40;
+        float max_height = 25.0f;
+        int height = 60;
 
         tc.Translation.x = (float)(10 + std::uniform_int_distribution<int>(0, 19)(gen)) + camera_tc.Get().Translation.x;
         tc.Translation.y = max_height - (float)(std::uniform_int_distribution<int>(0, height)(gen));
+        tc.Translation.z = -1.0f;
         tc.Scale.x = _Size;
         tc.Scale.y = _Size;
 
