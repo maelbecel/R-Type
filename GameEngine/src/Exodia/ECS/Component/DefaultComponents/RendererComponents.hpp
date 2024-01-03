@@ -108,7 +108,7 @@ namespace Exodia {
 
                 bool hasTexture = (Texture != nullptr);
 
-                std::memcpy(buffer.Data, &hasTexture, sizeof(bool));
+                std::memcpy(buffer.Data + offset, &hasTexture, sizeof(bool));
                 offset += sizeof(bool);
 
                 if (Texture) {

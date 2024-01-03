@@ -53,11 +53,6 @@ namespace Exodia {
             std::vector<char> GetBuffer() {
                 std::cout << "Size of content " << _content.size() << std::endl;
                 std::vector<char> buffer(Header::GetSize() + _content.size());
-                if (_content.size() == 92)
-                    {
-                        for (int i = 0; i < 92; i++)
-                            std::cout << (char)_content[i] << " ";
-                    }
                 _header.fillBuffer(buffer);
                 std::memcpy(buffer.data() + Header::GetSize(), _content.data(), _content.size());
                 return buffer;

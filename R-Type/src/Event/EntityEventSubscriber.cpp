@@ -24,8 +24,9 @@ namespace RType {
                 continue;
             _Network.SendComponentOf(false, event.Entity, typeIndex);
         }
-        if (event.Entity->GetComponent<SpriteRendererComponent>())
+        if (event.Entity->GetComponent<SpriteRendererComponent>()) {
             _Network.SendComponentOf(false, event.Entity, "SpriteRendererComponent");
+        }
     }
 
     void EntityEventSubscriber::Receive(UNUSED(World *world), const Events::OnEntityDestroyed &event) {
