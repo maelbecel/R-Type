@@ -47,18 +47,18 @@
 #endif
 
 // -- *Core* Logger Macros -----------------------------------------------------
-    #define EXODIA_CORE_TRACE(...) ::Exodia::Log::GetCoreLogger()->trace(__VA_ARGS__)
-    #define EXODIA_CORE_INFO(...) ::Exodia::Log::GetCoreLogger()->info(__VA_ARGS__)
-    #define EXODIA_CORE_WARN(...) ::Exodia::Log::GetCoreLogger()->warn(__VA_ARGS__)
-    #define EXODIA_CORE_ERROR(...) ::Exodia::Log::GetCoreLogger()->error(__VA_ARGS__)
-    #define EXODIA_CORE_FATAL(...) ::Exodia::Log::GetCoreLogger()->fatal(__VA_ARGS__)
+#define EXODIA_CORE_TRACE(...) ::Exodia::Log::GetCoreLogger()->trace(__VA_ARGS__)
+#define EXODIA_CORE_INFO(...) ::Exodia::Log::GetCoreLogger()->info(__VA_ARGS__)
+#define EXODIA_CORE_WARN(...) ::Exodia::Log::GetCoreLogger()->warn(__VA_ARGS__)
+#define EXODIA_CORE_ERROR(...) ::Exodia::Log::GetCoreLogger()->error(__VA_ARGS__)
+#define EXODIA_CORE_FATAL(...) ::Exodia::Log::GetCoreLogger()->fatal(__VA_ARGS__)
 
 // -- *Client* Logger Macros ---------------------------------------------------
-    #define EXODIA_TRACE(...) ::Exodia::Log::GetClientLogger()->trace(__VA_ARGS__)
-    #define EXODIA_INFO(...) ::Exodia::Log::GetClientLogger()->info(__VA_ARGS__)
-    #define EXODIA_WARN(...) ::Exodia::Log::GetClientLogger()->warn(__VA_ARGS__)
-    #define EXODIA_ERROR(...) ::Exodia::Log::GetClientLogger()->error(__VA_ARGS__)
-    #define EXODIA_FATAL(...) ::Exodia::Log::GetClientLogger()->fatal(__VA_ARGS__)
+#define EXODIA_TRACE(...) ::Exodia::Log::GetClientLogger()->trace(__VA_ARGS__)
+#define EXODIA_INFO(...) ::Exodia::Log::GetClientLogger()->info(__VA_ARGS__)
+#define EXODIA_WARN(...) ::Exodia::Log::GetClientLogger()->warn(__VA_ARGS__)
+#define EXODIA_ERROR(...) ::Exodia::Log::GetClientLogger()->error(__VA_ARGS__)
+#define EXODIA_FATAL(...) ::Exodia::Log::GetClientLogger()->fatal(__VA_ARGS__)
 
 // -- Profiling Macros ---------------------------------------------------------
 #if EXODIA_DEBUG
@@ -67,10 +67,10 @@
     #define EXODIA_PROFILE_SCOPE(name) ::Exodia::InstrumentationTimer timer##__LINE__(name)
     #define EXODIA_PROFILE_FUNCTION() EXODIA_PROFILE_SCOPE(EXODIA_FUNC_SIG)
 #else
-    #define EXODIA_PROFILE_BEGIN_SESSION(name, filepath);
-    #define EXODIA_PROFILE_END_SESSION();
-    #define EXODIA_PROFILE_SCOPE(name);
-    #define EXODIA_PROFILE_FUNCTION();
+    #define EXODIA_PROFILE_BEGIN_SESSION(name, filepath) ;
+    #define EXODIA_PROFILE_END_SESSION() ;
+    #define EXODIA_PROFILE_SCOPE(name) ;
+    #define EXODIA_PROFILE_FUNCTION() ;
 #endif
 
 #endif /*  EXODIA_DEBUG_HPP_ */
