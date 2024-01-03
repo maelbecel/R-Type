@@ -71,7 +71,12 @@ namespace RType {
         bullet_tc.Translation.y = tc.Translation.y;
         bullet_tc.Scale = {0.5f, 0.5f, 0.0f};
 
-        HandleEntity->AddComponent<BoxCollider2DComponent>();
+        ComponentHandle<BoxCollider2DComponent> bc = HandleEntity->AddComponent<BoxCollider2DComponent>();
+
+        if (!bc)
+            return;
+
+        bc.Get().ColliderMask = 0b11110;
 
         // TODO: Ask to server the number of player connected, and do a rand() % nb_player
         Entity *player = world->GetEntityByTag("Player_0");

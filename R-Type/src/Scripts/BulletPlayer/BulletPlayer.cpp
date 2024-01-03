@@ -55,7 +55,11 @@ namespace RType {
 
         bullet_tc.Scale = {0.5f, 0.5f, 0.0f};
 
-        HandleEntity->AddComponent<BoxCollider2DComponent>();
+        ComponentHandle<BoxCollider2DComponent> bc = HandleEntity->AddComponent<BoxCollider2DComponent>();
+
+        if (!bc)
+            return;
+        bc.Get().ColliderMask = 0b11101;
 
         ComponentHandle<RigidBody2DComponent> body = HandleEntity->AddComponent<RigidBody2DComponent>();
 

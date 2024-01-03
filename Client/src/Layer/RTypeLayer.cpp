@@ -191,6 +191,24 @@ namespace RType {
 
         // Update
         if (CurrentScene == GAME) {
+            World *world = Scenes[CurrentScene]->GetWorldPtr();
+            world->LockMutex();
+            world->ForEach<TransformComponent, BoxCollider2DComponent>([&](Entity *entity, auto transform, auto box) {
+                (void)entity;
+                auto &tc = transform.Get();
+                auto &bc = box.Get();
+
+                glm::vec3 translation = tc.Translation + glm::vec3(bc.Offset, 0.001f);
+                glm::vec3 scale       = tc.Scale       * glm::vec3(bc.Size * 2.0f, 1.0f);
+
+                glm::mat4 transformMatrix = glm::translate(glm::mat4(1.0f), translation) * glm::rotate(glm::mat4(1.0f), tc.Rotation.z , glm::vec3(0.0f, 0.0f, 1.0f)) * glm::scale(glm::mat4(1.0f), scale);
+
+                if (bc.ColliderMask & 000001)
+                    Renderer2D::DrawRect(transformMatrix, glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+                if (bc.ColliderMask & 000010)
+                    Renderer2D::DrawRect(transformMatrix, glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
+            });
+            world->UnlockMutex();
         };
 
         // Update the world

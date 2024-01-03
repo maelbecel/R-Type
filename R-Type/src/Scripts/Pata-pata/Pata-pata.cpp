@@ -42,7 +42,11 @@ namespace RType {
 
         HandleEntity->AddComponent<Health>(1);
         HandleEntity->AddComponent<Clock>();
-        HandleEntity->AddComponent<BoxCollider2DComponent>();
+        ComponentHandle<BoxCollider2DComponent> bc = HandleEntity->AddComponent<BoxCollider2DComponent>();
+
+        if (!bc)
+            return;
+        bc.Get().ColliderMask = 0b11100;
 
         ComponentHandle<RigidBody2DComponent> body = HandleEntity->AddComponent<RigidBody2DComponent>();
 

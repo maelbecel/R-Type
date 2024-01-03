@@ -91,7 +91,12 @@ namespace RType {
     void Player::OnCreate() {
 
         HandleEntity->AddComponent<Health>(1);
-        HandleEntity->AddComponent<BoxCollider2DComponent>();
+        ComponentHandle<BoxCollider2DComponent> bc = HandleEntity->AddComponent<BoxCollider2DComponent>();
+
+        if (!bc)
+            return;
+
+        bc.Get().ColliderMask = 0b11111;
 
         ComponentHandle<TransformComponent> transform = GetComponent<TransformComponent>();
 
