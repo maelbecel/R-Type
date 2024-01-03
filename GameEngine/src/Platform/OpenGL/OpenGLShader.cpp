@@ -12,8 +12,8 @@
 #include "Utils/Assert.hpp"
 
 // Exodia Debug includes
-#include "Debug/Logs.hpp"
-#include "Debug/Profiling.hpp"
+#include "Exodia-Debug.hpp"
+#include "Exodia-Debug.hpp"
 
 // External includes
 #include <glm/gtc/type_ptr.hpp>

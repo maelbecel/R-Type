@@ -15,7 +15,7 @@
 #include "ECS/Interface/Component.hpp"
 
 // Exodia Debug includes
-#include "Debug/Logs.hpp"
+#include "Exodia-Debug.hpp"
 
 // External includes
 #include <glm/glm.hpp>

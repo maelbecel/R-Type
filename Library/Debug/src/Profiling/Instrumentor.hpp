@@ -9,10 +9,7 @@
 #define INSTRUMENTOR_HPP_
 
 // Exodia Debug Profiling includes
-#include "Debug/Profiling/InstrumentorTools.hpp"
-
-// Exodia Tools
-#include "Utils/CrossPlatform.hpp"
+#include "Profiling/InstrumentorTools.hpp"
 
 // External includes
 #include <algorithm>

@@ -18,7 +18,7 @@
 #include "Renderer/Sound/Sound.hpp"
 
 // Exodia Debug
-#include "Debug/Profiling.hpp"
+#include "Exodia-Debug.hpp"
 
 namespace Exodia {
 

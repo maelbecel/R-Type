@@ -11,6 +11,9 @@
 // Exodia Asset includes
 #include "Asset/Utils/AssetType.hpp"
 
+// Exodia includes
+#include "Utils/Memory.hpp"
+
 // External includes
 #include <string>
 

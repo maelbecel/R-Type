@@ -6,7 +6,6 @@
 */
 
 #include "ECS.hpp"
-#include "Exodia/Debug/Logs.hpp"
 
 namespace Exodia {
 

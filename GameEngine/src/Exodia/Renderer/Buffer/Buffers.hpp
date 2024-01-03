@@ -10,6 +10,7 @@
 
 // Exodia Utils
 #include "Utils/Assert.hpp"
+#include "Utils/Memory.hpp"
 
 // External includes
 #include <cstdint>

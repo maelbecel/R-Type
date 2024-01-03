@@ -7,7 +7,7 @@
 
 // Exodia Debug Profiling
 #include "InstrumentorTimer.hpp"
-#include "Debug/Profiling/Instrumentor.hpp"
+#include "Profiling/Instrumentor.hpp"
 
 // External includes
 #include <thread>

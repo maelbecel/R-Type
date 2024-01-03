@@ -8,9 +8,6 @@
 #ifndef INSTRUMENTORTIMER_HPP_
 #define INSTRUMENTORTIMER_HPP_
 
-// Exodia Utils
-#include "Utils/CrossPlatform.hpp"
-
 // External includes
 #include <chrono>
 

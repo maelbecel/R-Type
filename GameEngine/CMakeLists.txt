@@ -47,12 +47,6 @@ set(SOURCES_GAME_ENGINE
     src/Exodia/Renderer/Sound/Sound.cpp
     src/Exodia/Renderer/Font/Font.cpp
 
-        # -- Debug source files
-
-    src/Exodia/Debug/Profiling/InstrumentorTimer.cpp
-    src/Exodia/Debug/Profiling/Instrumentor.cpp
-    src/Exodia/Debug/Logger/Log.cpp
-
         # -- Entity Component System (ECS) source files
 
     src/Exodia/ECS/Entity/EntityIterator.cpp
@@ -147,6 +141,7 @@ set(INCLUDE_DIRS_GAME_ENGINE
 add_library(GameEngine STATIC ${SOURCES_GAME_ENGINE})
 
 target_link_libraries(GameEngine PRIVATE
+    Exodia-Debug
     asio::asio
     glm::glm
     glfw
@@ -163,10 +158,11 @@ target_link_libraries(GameEngine PRIVATE
     Vorbis::vorbisfile
 )
 
+set(INCLUDE_DEBUG_DIRS
+    ${CMAKE_BINARY_DIR}/../Library/Debug/src/
+)
+
+target_include_directories(GameEngine PRIVATE ${INCLUDE_DEBUG_DIRS})
 target_include_directories(GameEngine PRIVATE ${INCLUDE_DIRS_GAME_ENGINE})
 target_include_directories(GameEngine PRIVATE ${Stb_INCLUDE_DIR})
 target_include_directories(GameEngine PRIVATE ${CMAKE_BINARY_DIR}/_deps/imgui-src)
-
-set_target_properties(GameEngine PROPERTIES
-    ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../lib
-)

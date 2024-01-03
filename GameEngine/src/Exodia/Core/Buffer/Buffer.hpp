@@ -11,13 +11,13 @@
 // Exodia Utils
 #include "Utils/Memory.hpp"
 
-#include "Debug/Logs.hpp"
+#include "Exodia-Debug.hpp"
 
 // External include
 #include <cstdint>
 #include <cstdlib>
 #include <cstring>
-#include "Debug/Logs.hpp"
+#include "Exodia-Debug.hpp"
 
 namespace Exodia {
 

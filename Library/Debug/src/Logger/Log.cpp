@@ -21,8 +21,8 @@ namespace Exodia {
     // Attributes //
     ////////////////
 
-    Ref<spdlog::logger> Log::_CoreLogger;   /*!< The logger for the core */
-    Ref<spdlog::logger> Log::_ClientLogger; /*!< The logger for the client */
+    std::shared_ptr<spdlog::logger> Log::_CoreLogger;   /*!< The logger for the core */
+    std::shared_ptr<spdlog::logger> Log::_ClientLogger; /*!< The logger for the client */
 
     /////////////
     // Methods //
@@ -39,7 +39,7 @@ namespace Exodia {
         logSinks[1]->set_pattern("[%T] [%l] %n: %v");
 
         // -- Init the core logger ---------------------------------------------
-        _CoreLogger = CreateRef<spdlog::logger>("EXODIA", begin(logSinks), end(logSinks));
+        _CoreLogger = std::make_shared<spdlog::logger>("EXODIA", begin(logSinks), end(logSinks));
 
         _CoreLogger->set_level(spdlog::level::trace);
         _CoreLogger->flush_on(spdlog::level::trace);
@@ -47,7 +47,7 @@ namespace Exodia {
         spdlog::register_logger(_CoreLogger);
 
         // -- Init the client logger -------------------------------------------
-        _ClientLogger = CreateRef<spdlog::logger>(appName, begin(logSinks), end(logSinks));
+        _ClientLogger = std::make_shared<spdlog::logger>(appName, begin(logSinks), end(logSinks));
 
         _ClientLogger->set_level(spdlog::level::trace);
         _ClientLogger->flush_on(spdlog::level::trace);

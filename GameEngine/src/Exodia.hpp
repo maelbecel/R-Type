@@ -57,8 +57,7 @@
 
 // -- Exodia Debug ---------------------------------------------------------
 
-#include "Exodia/Debug/Profiling.hpp"
-#include "Exodia/Debug/Logs.hpp"
+#include "Exodia-Debug.hpp"
 
 // -- Exodia Math ----------------------------------------------------------
 

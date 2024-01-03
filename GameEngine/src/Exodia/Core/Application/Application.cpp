@@ -9,7 +9,7 @@
 #include "Core/Application/Application.hpp"
 
 // Exodia Debug includes
-#include "Debug/Profiling.hpp"
+#include "Exodia-Debug.hpp"
 
 // Exodia Utils includes
 #include "Utils/PlatformUtils.hpp"

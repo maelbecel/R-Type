@@ -16,7 +16,7 @@
 #include "Utils/Assert.hpp"
 
 // Exodia Debug
-#include "Debug/Profiling.hpp"
+#include "Exodia-Debug.hpp"
 
 // GLFW
 #include <GLFW/glfw3.h>

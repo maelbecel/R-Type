@@ -17,7 +17,7 @@
 #include "Utils/Assert.hpp"
 
 // Exodia Debug includes
-#include "Debug/Logs.hpp"
+#include "Exodia-Debug.hpp"
 
 // External includes
 #include <map>

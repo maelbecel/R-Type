@@ -9,8 +9,8 @@
 #include "ScriptSystem.hpp"
 
 // Exodia Debug includes
-#include "Debug/Profiling.hpp"
-#include "Debug/Logs.hpp"
+#include "Exodia-Debug.hpp"
+#include "Exodia-Debug.hpp"
 
 namespace Exodia {
 

@@ -12,7 +12,7 @@
 #include "Core/ID/UUID.hpp"
 
 // Exodia Debug includes
-#include "Debug/Logs.hpp"
+#include "Exodia-Debug.hpp"
 
 // Exodia ECS includes
 #include "ECS/Interface/Component.hpp"

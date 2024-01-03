@@ -18,7 +18,7 @@
 #include "Core/Time/Timer.hpp"
 
 // Exodia Debug
-#include "Debug/Logs.hpp"
+#include "Exodia-Debug.hpp"
 
 // Exodia ImGUI
 #include "ImGui/ImGuiLayer.hpp"

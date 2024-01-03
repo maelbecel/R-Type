@@ -8,7 +8,7 @@
 #ifndef ASSERT_HPP_
 #define ASSERT_HPP_
 
-#include "Debug/Logs.hpp"
+#include "Exodia-Debug.hpp"
 
 #if defined(_MSC_VER)
 #define EXODIA_DEBUGBREAK() __debugbreak()

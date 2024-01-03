@@ -21,7 +21,7 @@
 #include "Utils/Assert.hpp"
 
 // Exodia Debug includes
-#include "Debug/Profiling.hpp"
+#include "Exodia-Debug.hpp"
 
 // Stb includes
 #define STB_IMAGE_IMPLEMENTATION

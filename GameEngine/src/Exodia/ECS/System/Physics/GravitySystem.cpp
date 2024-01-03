@@ -9,7 +9,7 @@
 #include "GravitySystem.hpp"
 
 // Exodia Debug includes
-#include "Debug/Profiling.hpp"
+#include "Exodia-Debug.hpp"
 
 namespace Exodia {
 

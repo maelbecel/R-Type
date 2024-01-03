@@ -18,7 +18,7 @@
 #include "Core/Buffer/Buffer.hpp"
 
 // Exodia Debug
-#include "Debug/Profiling.hpp"
+#include "Exodia-Debug.hpp"
 
 // External include
 #include <cstring>

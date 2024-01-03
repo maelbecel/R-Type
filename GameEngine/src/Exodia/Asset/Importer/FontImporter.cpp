@@ -17,7 +17,7 @@
 #include "Renderer/Font/Font.hpp"
 
 // Exodia Debug
-#include "Debug/Profiling.hpp"
+#include "Exodia-Debug.hpp"
 
 namespace Exodia {
 

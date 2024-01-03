@@ -12,7 +12,7 @@
 #include "Events/Events.hpp"
 
 // Exodia Debug includes
-#include "Debug/Profiling.hpp"
+#include "Exodia-Debug.hpp"
 
 // Exodia GLM includes
 #include <glm/glm.hpp>

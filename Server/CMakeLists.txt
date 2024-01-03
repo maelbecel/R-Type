@@ -49,6 +49,7 @@ include_directories(${INCLUDE_DIRS})
 add_executable(r-type_server ${SOURCES})
 
 target_link_libraries(r-type_server PRIVATE
+    Exodia-Debug
     GameEngine
     R-Type
     glad::glad
@@ -67,6 +68,9 @@ target_link_libraries(r-type_server PRIVATE
     Vorbis::vorbisfile
 )
 
+set(INCLUDE_DEBUG_DIRS ${CMAKE_BINARY_DIR}/../Library/Debug/src/)
+
+target_include_directories(r-type_server PRIVATE ${INCLUDE_DEBUG_DIRS})
 target_include_directories(r-type_server PRIVATE ${Stb_INCLUDE_DIR})
 target_include_directories(r-type_server PRIVATE ${CMAKE_BINARY_DIR}/_deps/imgui-src)
 
