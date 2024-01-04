@@ -34,7 +34,6 @@ namespace Cinematic {
         EXODIA_INFO("Add Train");
     }
 
-
     void CinematicLayer::OnUpdate(Timestep ts) {
         {
             EXODIA_PROFILE_SCOPE("Renderer Prep");
@@ -45,15 +44,12 @@ namespace Cinematic {
 
         // Update the world
         _World->Update(ts);
-
     }
 
-    void CinematicLayer::OnDetach() {EXODIA_PROFILE_FUNCTION();}
+    void CinematicLayer::OnDetach() { EXODIA_PROFILE_FUNCTION(); }
 
-    void CinematicLayer::OnImGUIRender() {EXODIA_PROFILE_FUNCTION();}
+    void CinematicLayer::OnImGUIRender() { EXODIA_PROFILE_FUNCTION(); }
 
-    void CinematicLayer::OnEvent(UNUSED(Event &event)) {EXODIA_PROFILE_FUNCTION();}
+    void CinematicLayer::OnEvent(UNUSED(Event &event)) { EXODIA_PROFILE_FUNCTION(); }
 
-
-
-}
+} // namespace Cinematic

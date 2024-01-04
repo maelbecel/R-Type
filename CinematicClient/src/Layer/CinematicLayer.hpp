@@ -40,6 +40,6 @@ namespace Cinematic {
         // TODO: WARNING: This is a temporary solution
         World *_World;
     };
-}; // namespace RType
+}; // namespace Cinematic
 
 #endif /* !RTYPELAYER_HPP_ */
