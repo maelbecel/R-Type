@@ -139,10 +139,11 @@ namespace RType {
 
         CameraComponent &camera = cameraEntity.AddComponent<CameraComponent>();
 
-        cameraEntity.GetComponent<TransformComponent>().Translation = { 0.0f, 0.0f, 15.0f };
+        cameraEntity.GetComponent<TransformComponent>().Translation = {0.0f, 0.0f, 15.0f};
 
         camera.Camera.SetProjectionType(SceneCamera::ProjectionType::Perspective);
-        camera.Camera.SetViewportSize(Application::Get().GetWindow().GetWidth(), Application::Get().GetWindow().GetHeight());
+        camera.Camera.SetViewportSize(Application::Get().GetWindow().GetWidth(),
+                                      Application::Get().GetWindow().GetHeight());
 
         /*RType::EntityEventSubscriber *subscribe = new RType::EntityEventSubscriber(*_Network);
 

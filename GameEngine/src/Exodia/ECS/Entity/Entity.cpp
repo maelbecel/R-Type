@@ -87,8 +87,7 @@ namespace Exodia {
         return components;
     }
 
-    void Entity::SetComponent(const std::string &index, IComponentContainer *component)
-    {
+    void Entity::SetComponent(const std::string &index, IComponentContainer *component) {
         auto found = _Components.find(index);
 
         if (found != _Components.end()) {

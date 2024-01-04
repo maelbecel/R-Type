@@ -23,15 +23,12 @@ namespace Exodia {
     // Constructor & Destructor //
     //////////////////////////////
 
-    Scene::Scene(const std::string &name) : _Name(name), _ViewportWidth(0), _ViewportHeight(0), _IsRunning(false), _IsPaused(false)
-    {
+    Scene::Scene(const std::string &name)
+        : _Name(name), _ViewportWidth(0), _ViewportHeight(0), _IsRunning(false), _IsPaused(false) {
         _World = World::CreateWorld();
     }
 
-    Scene::~Scene()
-    {
-        _World->DestroyWorld();
-    }
+    Scene::~Scene() { _World->DestroyWorld(); }
 
     /////////////
     // Methods //
@@ -49,7 +46,7 @@ namespace Exodia {
         auto &dstWorld = copyScene->GetWorld();
 
         srcWorld.ForEach<IDComponent, TagComponent>([&](Entity *entity, auto id, auto tag) {
-            const UUID        &uuid = id.Get().ID;
+            const UUID &uuid = id.Get().ID;
             const std::string &name = tag.Get().Tag;
 
             Entity *newEntity = entity->Duplicate(&dstWorld, uuid, name);
@@ -60,13 +57,9 @@ namespace Exodia {
         return copyScene;
     }
 
-    GameObject Scene::CreateEntity(const std::string &name)
-    {
-        return CreateEntityWithUUID(UUID(), name);
-    }
+    GameObject Scene::CreateEntity(const std::string &name) { return CreateEntityWithUUID(UUID(), name); }
 
-    GameObject Scene::CreateEntityWithUUID(UUID uuid, const std::string &name)
-    {
+    GameObject Scene::CreateEntityWithUUID(UUID uuid, const std::string &name) {
         Entity *entity = _World->CreateEntity(uuid, name);
 
         entity->AddComponent<IDComponent>(uuid);
@@ -81,13 +74,9 @@ namespace Exodia {
         return GameObject(entity, this);
     }
 
-    GameObject Scene::CreateNewEntity(const std::string &name)
-    {
-        return CreateNewEntityWithUUID(UUID(), name);
-    }
+    GameObject Scene::CreateNewEntity(const std::string &name) { return CreateNewEntityWithUUID(UUID(), name); }
 
-    GameObject Scene::CreateNewEntityWithUUID(UUID uuid, const std::string &name)
-    {
+    GameObject Scene::CreateNewEntityWithUUID(UUID uuid, const std::string &name) {
         Entity *entity = _World->CreateNewEntity(uuid, name);
 
         entity->AddComponent<IDComponent>(uuid);
@@ -102,14 +91,13 @@ namespace Exodia {
         return GameObject(entity, this);
     }
 
-    GameObject Scene::DuplicateEntity(GameObject gameObject)
-    {
+    GameObject Scene::DuplicateEntity(GameObject gameObject) {
         GameObject newGameObject = CreateEntity(gameObject.GetName());
-        Entity *entity    = gameObject.GetEntity();
+        Entity *entity = gameObject.GetEntity();
         Entity *newEntity = newGameObject.GetEntity();
 
         for (IComponentContainer *component : entity->GetAllComponents()) {
-            std::string name      = component->GetTypeIndexOfComponent().name();
+            std::string name = component->GetTypeIndexOfComponent().name();
             std::string typeIndex = extractTypeName(name.c_str());
 
             newEntity->SetComponent(typeIndex, component);
@@ -118,8 +106,7 @@ namespace Exodia {
         return newGameObject;
     }
 
-    void Scene::DestroyEntity(GameObject gameObject)
-    {
+    void Scene::DestroyEntity(GameObject gameObject) {
         Entity *entity = gameObject.GetEntity();
 
         _World->DestroyEntity(entity);
