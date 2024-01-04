@@ -9,7 +9,7 @@
 #include "SceneSerializer.hpp"
 
 // Exodia ECS includes
-#include "ECS/Component/Components.hpp"
+#include "Scene/Components/Components.hpp"
 
 // External includes
 #include <yaml-cpp/yaml.h>

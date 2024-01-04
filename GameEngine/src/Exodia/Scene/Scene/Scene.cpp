@@ -9,7 +9,7 @@
 #include "Scene.hpp"
 
 // Exodia ECS includes
-#include "ECS/Component/Components.hpp"
+#include "Scene/Components/Components.hpp"
 
 // Exodia Renderer includes
 #include "Renderer/Renderer/Renderer2D.hpp"

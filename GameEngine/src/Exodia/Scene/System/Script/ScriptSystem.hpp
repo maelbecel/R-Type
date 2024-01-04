@@ -12,7 +12,7 @@
 #include "Interface/EntitySystem.hpp"
 
 // Exodia ECS Components includes
-#include "Component/Components.hpp"
+#include "Scene/Components/Components.hpp"
 #include "Component/ComponentHandle.hpp"
 
 namespace Exodia {

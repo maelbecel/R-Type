@@ -16,7 +16,7 @@
 #include "Exodia-Debug.hpp"
 
 // Exodia ECS includes
-#include "ECS/Interface/Component.hpp"
+#include "Scene/Components/Component.hpp"
 
 // Exodia Project includes
 #include "Project/Project.hpp"

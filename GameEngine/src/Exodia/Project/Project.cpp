@@ -10,7 +10,7 @@
 #include "Project/ProjectSerializer.hpp"
 
 // Exodia ECS includes
-#include "ECS/Component/Components.hpp"
+#include "Scene/SceneHeaders.hpp"
 #include "ECS/Component/ComponentContainer.hpp"
 
 // Exodia Script includes

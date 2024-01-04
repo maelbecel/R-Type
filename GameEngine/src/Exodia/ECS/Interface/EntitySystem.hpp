@@ -8,9 +8,6 @@
 #ifndef ENTITYSYSTEM_HPP_
 #define ENTITYSYSTEM_HPP_
 
-// Exodia Core includes
-#include "Exodia/Core/Time/Timestep.hpp"
-
 // Exodia Utils includes
 #include "Exodia-Utils.hpp"
 

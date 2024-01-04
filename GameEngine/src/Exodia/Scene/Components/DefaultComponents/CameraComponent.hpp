@@ -15,7 +15,7 @@
 #include "Exodia-Debug.hpp"
 
 // Exodia ECS includes
-#include "ECS/Interface/Component.hpp"
+#include "Scene/Components/Component.hpp"
 
 // ImGui includes
 #include <imgui.h>

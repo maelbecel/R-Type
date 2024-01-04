@@ -9,10 +9,10 @@
 #define IDCOMPONENT_HPP_
 
 // Exodia UUID includes
-#include "Core/ID/UUID.hpp"
+#include "Exodia-Utils.hpp"
 
 // Exodia ECS includes
-#include "ECS/Interface/Component.hpp"
+#include "Scene/Components/Component.hpp"
 
 namespace Exodia {
 

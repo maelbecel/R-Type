@@ -12,7 +12,11 @@ else()
 endif()
 
 # Set the source files for the Game Engine Tools Library
-set(SOURCES_GAME_ENGINE src/Memory/Buffer.cpp)
+set(SOURCES_GAME_ENGINE
+    src/Memory/Buffer.cpp
+    src/ID/UUID.cpp
+    src/Time/Timestep.cpp
+)
 
 # Create the Game Engine Static Library
 add_library(Exodia-Tools STATIC ${SOURCES_GAME_ENGINE})

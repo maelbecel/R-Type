@@ -21,6 +21,15 @@
 
     #include "Lib/LibLoader.hpp"
 
+    // -- Exodia UUID ----------------------------------------------------------
+
+    #include "ID/UUID.hpp"
+
+    // -- Exodia Time ----------------------------------------------------------
+
+    #include "Time/Timer.hpp"
+    #include "Time/Timestep.hpp"
+
     // -------------------------------------------------------------------------
 
 #endif /*  EXODIA_UTILS_HPP_ */

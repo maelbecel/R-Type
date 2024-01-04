@@ -8,9 +8,6 @@
 #ifndef ENTITY_HPP_
 #define ENTITY_HPP_
 
-// Exodia Core includes
-#include "Core/ID/UUID.hpp"
-
 // Exodia ECS Component includes
 #include "Component/ComponentHandle.hpp"
 

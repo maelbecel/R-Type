@@ -23,8 +23,6 @@ set(SOURCES_GAME_ENGINE
     src/Exodia/Core/Application/Application.cpp
     src/Exodia/Core/Layer/LayerStack.cpp
     src/Exodia/Core/Layer/Layer.cpp
-    src/Exodia/Core/Time/Timestep.cpp
-    src/Exodia/Core/ID/UUID.cpp
 
         # -- Renderer source files
 
@@ -53,17 +51,17 @@ set(SOURCES_GAME_ENGINE
     src/Exodia/ECS/Entity/EntityView.cpp
     src/Exodia/ECS/Entity/Entity.cpp
     src/Exodia/ECS/World/World.cpp
-    src/Exodia/ECS/System/Collision/CollisionSystem.cpp
-    src/Exodia/ECS/System/Script/ScriptSystem.cpp
-    src/Exodia/ECS/System/Physics/GravitySystem.cpp
-    src/Exodia/ECS/System/Physics/MovingSystem.cpp
-    src/Exodia/ECS/EventSubscriber/EventHover.cpp
 
         # -- Scene source files
 
     src/Exodia/Scene/Camera/SceneCamera.cpp
     src/Exodia/Scene/Serializer/SceneSerializer.cpp
     src/Exodia/Scene/Scene/Scene.cpp
+    src/Exodia/Scene/System/Collision/CollisionSystem.cpp
+    src/Exodia/Scene/System/Script/ScriptSystem.cpp
+    src/Exodia/Scene/System/Physics/GravitySystem.cpp
+    src/Exodia/Scene/System/Physics/MovingSystem.cpp
+    src/Exodia/Scene/EventSubscriber/EventHover.cpp
 
         # -- Script source files
     

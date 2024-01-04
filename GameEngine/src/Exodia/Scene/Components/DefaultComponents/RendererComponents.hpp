@@ -12,7 +12,7 @@
 #include "Renderer/Texture/SubTexture2D.hpp"
 
 // Exodia ECS includes
-#include "ECS/Interface/Component.hpp"
+#include "Scene/Components/Component.hpp"
 
 // Exodia Debug includes
 #include "Exodia-Debug.hpp"

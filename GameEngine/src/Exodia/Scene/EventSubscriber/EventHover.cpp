@@ -6,7 +6,7 @@
 */
 
 #include "EventHover.hpp"
-#include "ECS/Component/Components.hpp"
+#include "Scene/Components/Components.hpp"
 
 namespace Exodia {
 

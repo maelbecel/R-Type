@@ -18,6 +18,22 @@
 
 #include "Exodia/Scene/Camera/SceneCamera.hpp"
 
+// -- Components -----------------------------------------------------------
+
+#include "Exodia/Scene/Components/Component.hpp"
+#include "Exodia/Scene/Components/Components.hpp"
+
+// -- Systems --------------------------------------------------------------
+
+#include "Scene/System/Collision/CollisionSystem.hpp"
+#include "Scene/System/Script/ScriptSystem.hpp"
+#include "Scene/System/Physics/GravitySystem.hpp"
+#include "Scene/System/Physics/MovingSystem.hpp"
+
+// -- Event Subscribers ----------------------------------------------------
+
+#include "Exodia/Scene/EventSubscriber/EventHover.hpp"
+
 // -- Scene ----------------------------------------------------------------
 
 #include "Exodia/Scene/Scene/Scene.hpp"

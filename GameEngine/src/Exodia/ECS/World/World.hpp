@@ -9,7 +9,7 @@
 #define WORLD_HPP_
 
 // Exodia Core includes
-#include "Exodia/Core/Time/Timestep.hpp"
+#include "Exodia-Utils.hpp"
 
 // Exodia ECS Entity includes
 #include "Entity/Entity.hpp"

@@ -9,7 +9,7 @@
 #define SOUNDCOMPONENT_HPP_
 
 // Exodia ECS includes
-#include "ECS/Interface/Component.hpp"
+#include "Scene/Components/Component.hpp"
 
 // Exodia Asset includes
 #include "Asset/Utils/AssetType.hpp"

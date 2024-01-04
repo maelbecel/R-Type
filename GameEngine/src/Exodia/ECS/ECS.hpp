@@ -12,7 +12,6 @@
 
 #include "Component/ComponentHandle.hpp"
 #include "Component/ComponentContainer.hpp"
-#include "Component/Components.hpp"
 
 // -- Exodia ECS Entity ----------------------------------------------------
 
@@ -29,17 +28,6 @@
 // -- Exodia ECS Events ----------------------------------------------------
 
 #include "Events/Events.hpp"
-
-// -- Exodia ECS EventSubscriber -------------------------------------------
-
-#include "EventSubscriber/EventHover.hpp"
-
-// -- Exodia ECS System ----------------------------------------------------
-
-#include "System/Collision/CollisionSystem.hpp"
-#include "System/Script/ScriptSystem.hpp"
-#include "System/Physics/GravitySystem.hpp"
-#include "System/Physics/MovingSystem.hpp"
 
 // -- Exodia ECS Interface -------------------------------------------------
 

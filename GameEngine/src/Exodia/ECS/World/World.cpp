@@ -6,6 +6,7 @@
 */
 
 #include "ECS.hpp"
+#include "Scene/SceneHeaders.hpp"
 
 namespace Exodia {
 
