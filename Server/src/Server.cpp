@@ -157,8 +157,8 @@ namespace Exodia {
 
         CameraComponent &camera = cameraEntity.AddComponent<CameraComponent>();
 
-        cameraEntity.GetComponent<TransformComponent>().Translation = { 0.0f, 0.0f, 15.0f };
-        cameraEntity.GetComponent<TransformComponent>().Rotation    = { 0.0f, 0.0f, 45.0f };
+        cameraEntity.GetComponent<TransformComponent>().Translation = {0.0f, 0.0f, 15.0f};
+        cameraEntity.GetComponent<TransformComponent>().Rotation = {0.0f, 0.0f, 45.0f};
 
         camera.Camera.SetProjectionType(SceneCamera::ProjectionType::Perspective);
     }

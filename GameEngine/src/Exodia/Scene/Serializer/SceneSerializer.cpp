@@ -38,9 +38,7 @@ namespace Exodia {
             _Scene->GetWorld().ForEach<IDComponent>([&](Entity *entity, auto id) {
                 out << YAML::BeginMap;
                 out << YAML::Key << "Entity" << YAML::Value << id.Get().ID;
-                {
-                    SerializeEntity(out, entity);
-                }
+                { SerializeEntity(out, entity); }
                 out << YAML::EndMap;
             });
         }
@@ -102,8 +100,8 @@ namespace Exodia {
         }
     }
 
-    void SceneSerializer::DeserializeComponent(const std::string &componentType, const YAML::Node &componentNode, GameObject gameObject)
-    {
+    void SceneSerializer::DeserializeComponent(const std::string &componentType, const YAML::Node &componentNode,
+                                               GameObject gameObject) {
         try {
             std::function<IComponentContainer *(Buffer)> func =
                 Project::GetActive()->GetComponentFactory(componentType);
