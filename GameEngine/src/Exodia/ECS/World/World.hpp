@@ -66,10 +66,7 @@ namespace Exodia {
 
         void DestroyWorld();
 
-        Entity *CreateEntity(const std::string &name = std::string());
         Entity *CreateEntity(const UUID &uuid, const std::string &name = std::string());
-
-        Entity *CreateNewEntity(const std::string &name = std::string());
         Entity *CreateNewEntity(const UUID &uuid, const std::string &name = std::string());
 
         void DestroyEntity(Entity *entity, bool immediate = false);
@@ -162,7 +159,6 @@ namespace Exodia {
 
         Entity *GetEntityByIndex(uint64_t index);
         Entity *GetEntityByID(uint64_t id) const;
-        Entity *GetEntityByTag(const std::string &tag) const;
 
         EntityAllocator &GetPrimaryAllocator();
 

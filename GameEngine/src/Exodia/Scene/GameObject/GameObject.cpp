@@ -38,6 +38,11 @@ namespace Exodia {
         return _EntityHandle;
     }
 
+    Scene *GameObject::GetScene() const
+    {
+        return _Scene;
+    }
+
     ///////////////
     // Operators //
     ///////////////

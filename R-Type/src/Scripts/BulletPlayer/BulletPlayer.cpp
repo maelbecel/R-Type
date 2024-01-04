@@ -139,13 +139,15 @@ namespace RType {
     }
 
     void BulletPlayer::OnCollisionEnter(Entity *entity) {
-        ComponentHandle<ParentComponent> parent = GetComponent<ParentComponent>();
+        ParentComponent &parent = GetComponent<ParentComponent>();
         ComponentHandle<IDComponent> entity_id = entity->GetComponent<IDComponent>();
-        if (!parent || !entity_id)
+
+        if (!entity_id)
             return;
-        if (parent.Get().Parent == entity_id.Get().ID)
+        if (parent.Parent == entity_id.Get().ID)
             return;
 
-        HandleEntity->GetWorld()->DestroyEntity(HandleEntity);
+        if (HandleEntity.GetScene())
+            HandleEntity.GetScene()->DestroyEntity(HandleEntity);
     }
 }; // namespace RType

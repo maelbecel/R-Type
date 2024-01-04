@@ -151,7 +151,7 @@ namespace Exodia {
                 sc.Instance = sc.InstantiateScript(sc.Name);
 
                 if (sc.Instance != nullptr) {
-                    sc.Instance->HandleEntity = entity;
+                    sc.Instance->HandleEntity = GameObject(entity, this);
                     sc.Instance->OnCreate();
                 }
             }
