@@ -46,8 +46,6 @@ namespace Exodia {
         std::string name = component->GetTypeIndexOfComponent().name();
         std::string typeIndex = extractTypeName(name.c_str());
 
-        auto found = _Components.find(typeIndex);
-
         _Components[typeIndex] = component;
 
         _World->Emit<Events::OnComponentAddedNoTemplate>({this, typeIndex});
@@ -87,6 +85,18 @@ namespace Exodia {
         for (auto pair : _Components)
             components.push_back(pair.second);
         return components;
+    }
+
+    void Entity::SetComponent(const std::string &index, IComponentContainer *component)
+    {
+        auto found = _Components.find(index);
+
+        if (found != _Components.end()) {
+            found->second->Removed(this);
+            found->second->Destroy(_World);
+        }
+
+        _Components[index] = component;
     }
 
     IComponentContainer *Entity::GetComponent(const std::string &index) {

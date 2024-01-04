@@ -13,13 +13,15 @@
 
 namespace Exodia {
 
+    class Scene;
+
     class GameObject {
         //////////////////////////////
         // Constructor & Destructor //
         //////////////////////////////
         public:
 
-            GameObject(Entity handle = Entity(), Scene *scene = nullptr);
+            GameObject(Entity *handle = nullptr, Scene *scene = nullptr);
             GameObject(const GameObject &other) = default;
 
         ///////////////////////
@@ -36,8 +38,10 @@ namespace Exodia {
                     return GetComponent<T>();
                 }
 
-                return _EntityHandle.AddComponent<T>(std::forward<Args>(args)...).Get();
+                return _EntityHandle->AddComponent<T>(std::forward<Args>(args)...).Get();
             }
+
+            void AddComponent(IComponentContainer *component);
 
             template<typename T, typename... Args>
             T &AddOrReplaceComponent(Args &&...args)
@@ -50,14 +54,14 @@ namespace Exodia {
             template<typename T>
             void RemoveComponent()
             {
-                if (!(_EntityHandle.RemoveComponent<T>()))
+                if (!(_EntityHandle->RemoveComponent<T>()))
                     EXODIA_CORE_WARN("Entity does not have component !");
             }
 
             template<typename T>
             T &GetComponent()
             {
-                ComponentHandle<T> component = _EntityHandle.GetComponent<T>();
+                ComponentHandle<T> component = _EntityHandle->GetComponent<T>();
 
                 if (!component)
                     return AddComponent<T>();
@@ -67,12 +71,14 @@ namespace Exodia {
             template<typename T>
             bool HasComponent()
             {
-                return _EntityHandle.HasComponent<T>();
+                return _EntityHandle->HasComponent<T>();
             }
 
             UUID GetUUID();
 
             const std::string &GetName();
+
+            Entity *GetEntity() const;
 
         ///////////////
         // Operators //
@@ -81,7 +87,6 @@ namespace Exodia {
 
             operator bool() const;
             operator uint32_t() const;
-            operator Entity() const;
 
             bool operator==(const GameObject &other) const;
             bool operator!=(const GameObject &other) const;
@@ -90,8 +95,8 @@ namespace Exodia {
         // Attributes //
         ////////////////
         private:
-            Entity _EntityHandle; /* !< The entity handle */
-            Scene *_Scene;        /* !< The scene where the entity is (it's a 12 bytes memory address) */
+            Entity *_EntityHandle; /* !< The entity handle */
+            Scene  *_Scene;        /* !< The scene where the entity is (it's a 12 bytes memory address) */
     };
 };
 

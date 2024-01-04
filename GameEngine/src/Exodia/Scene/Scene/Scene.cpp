@@ -10,6 +10,7 @@
 
 // Exodia ECS includes
 #include "Scene/Components/Components.hpp"
+#include "ECS/Interface/IComponentContainer.hpp"
 
 // Exodia Renderer includes
 #include "Renderer/Renderer/Renderer2D.hpp"
@@ -22,12 +23,15 @@ namespace Exodia {
     // Constructor & Destructor //
     //////////////////////////////
 
-    Scene::Scene(const std::string &name)
-        : _Name(name), _ViewportWidth(0), _ViewportHeight(0), _IsRunning(false), _IsPaused(false) {
+    Scene::Scene(const std::string &name) : _Name(name), _ViewportWidth(0), _ViewportHeight(0), _IsRunning(false), _IsPaused(false)
+    {
         _World = World::CreateWorld();
     }
 
-    Scene::~Scene() { _World->DestroyWorld(); }
+    Scene::~Scene()
+    {
+        _World->DestroyWorld();
+    }
 
     /////////////
     // Methods //
@@ -36,7 +40,6 @@ namespace Exodia {
     Ref<Scene> Scene::Copy(Ref<Scene> other) {
         if (other == nullptr)
             return nullptr;
-
         Ref<Scene> copyScene = CreateRef<Scene>(other->GetName());
 
         copyScene->_ViewportWidth = other->_ViewportWidth;
@@ -46,32 +49,81 @@ namespace Exodia {
         auto &dstWorld = copyScene->GetWorld();
 
         srcWorld.ForEach<IDComponent, TagComponent>([&](Entity *entity, auto id, auto tag) {
-            UUID uuid = id.Get().ID;
+            const UUID        &uuid = id.Get().ID;
             const std::string &name = tag.Get().Tag;
 
-            entity->Duplicate(&dstWorld, uuid, name);
+            Entity *newEntity = entity->Duplicate(&dstWorld, uuid, name);
+
+            copyScene->_EntityMap[uuid] = newEntity;
         });
 
         return copyScene;
     }
 
-    Entity *Scene::CreateEntity(const std::string &name)
+    GameObject Scene::CreateEntity(const std::string &name)
     {
         return CreateEntityWithUUID(UUID(), name);
     }
 
-    Entity *Scene::CreateEntityWithUUID(UUID uuid, const std::string &name)
+    GameObject Scene::CreateEntityWithUUID(UUID uuid, const std::string &name)
     {
-        return _World->CreateEntity(uuid, name);
+        Entity *entity = _World->CreateEntity(uuid, name);
+
+        entity->AddComponent<IDComponent>(uuid);
+        entity->AddComponent<TransformComponent>();
+
+        auto &tag = entity->AddComponent<TagComponent>().Get();
+
+        tag.Tag = name.empty() ? "Entity" : name;
+
+        _EntityMap[uuid] = entity;
+
+        return GameObject(entity, this);
     }
 
-    Entity *Scene::DuplicateEntity(Entity *entity) {
-        std::string name = entity->GetComponent<TagComponent>().Get().Tag;
-
-        return entity->Duplicate(_World, UUID(), name);
+    GameObject Scene::CreateNewEntity(const std::string &name)
+    {
+        return CreateNewEntityWithUUID(UUID(), name);
     }
 
-    void Scene::DestroyEntity(Entity *entity) { _World->DestroyEntity(entity); }
+    GameObject Scene::CreateNewEntityWithUUID(UUID uuid, const std::string &name)
+    {
+        Entity *entity = _World->CreateNewEntity(uuid, name);
+
+        entity->AddComponent<IDComponent>(uuid);
+        entity->AddComponent<TransformComponent>();
+
+        auto &tag = entity->AddComponent<TagComponent>().Get();
+
+        tag.Tag = name.empty() ? "Entity" : name;
+
+        _EntityMap[uuid] = entity;
+
+        return GameObject(entity, this);
+    }
+
+    GameObject Scene::DuplicateEntity(GameObject gameObject)
+    {
+        GameObject newGameObject = CreateEntity(gameObject.GetName());
+        Entity *entity    = gameObject.GetEntity();
+        Entity *newEntity = newGameObject.GetEntity();
+
+        for (IComponentContainer *component : entity->GetAllComponents()) {
+            std::string name      = component->GetTypeIndexOfComponent().name();
+            std::string typeIndex = extractTypeName(name.c_str());
+
+            newEntity->SetComponent(typeIndex, component);
+        }
+
+        return newGameObject;
+    }
+
+    void Scene::DestroyEntity(GameObject gameObject)
+    {
+        Entity *entity = gameObject.GetEntity();
+
+        _World->DestroyEntity(entity);
+    }
 
     void Scene::OnRuntimeStart() {
         if (_IsRunning)

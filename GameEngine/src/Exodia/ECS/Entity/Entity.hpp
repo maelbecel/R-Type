@@ -107,6 +107,8 @@ namespace Exodia {
 
         std::vector<IComponentContainer *> GetAllComponents();
 
+        void SetComponent(const std::string &index, IComponentContainer *component);
+
         uint64_t GetEntityID() const;
 
         bool IsPendingDestroy() const;

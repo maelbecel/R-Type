@@ -14,7 +14,16 @@ namespace Exodia {
     // Constructor & Destructor //
     //////////////////////////////
 
-    GameObject::GameObject(Entity handle, Scene *scene) : _EntityHandle(handle), _Scene(scene) {};
+    GameObject::GameObject(Entity *handle, Scene *scene) : _EntityHandle(handle), _Scene(scene) {};
+
+    /////////////
+    // Methods //
+    /////////////
+
+    void GameObject::AddComponent(IComponentContainer *component)
+    {
+        _EntityHandle->AddComponent(component);
+    }
 
     ///////////////////////
     // Getters & Setters //
@@ -30,23 +39,23 @@ namespace Exodia {
         return GetComponent<TagComponent>().Tag;
     }
 
+    Entity *GameObject::GetEntity() const
+    {
+        return _EntityHandle;
+    }
+
     ///////////////
     // Operators //
     ///////////////
 
     GameObject::operator bool() const
     {
-        return _EntityHandle != Entity::InvalidEntityID;
+        return (bool)_EntityHandle;
     }
 
     GameObject::operator uint32_t() const
     {
-        return (uint32_t)_EntityHandle;
-    }
-
-    GameObject::operator Entity() const
-    {
-        return _EntityHandle;
+        return (uint32_t)_EntityHandle->GetEntityID();
     }
 
     bool GameObject::operator==(const GameObject &other) const

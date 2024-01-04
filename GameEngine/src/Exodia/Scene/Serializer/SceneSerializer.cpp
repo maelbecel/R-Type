@@ -38,7 +38,9 @@ namespace Exodia {
             _Scene->GetWorld().ForEach<IDComponent>([&](Entity *entity, auto id) {
                 out << YAML::BeginMap;
                 out << YAML::Key << "Entity" << YAML::Value << id.Get().ID;
-                { SerializeEntity(out, entity); }
+                {
+                    SerializeEntity(out, entity);
+                }
                 out << YAML::EndMap;
             });
         }
@@ -74,10 +76,7 @@ namespace Exodia {
 
             if (entities) {
                 for (YAML::detail::iterator_value entity : entities) {
-                    Entity *newEntity = _Scene->CreateEntityWithUUID(entity["Entity"].as<uint64_t>());
-
-                    if (!newEntity)
-                        return;
+                    GameObject newGameObject = _Scene->CreateEntityWithUUID(entity["Entity"].as<uint64_t>());
 
                     for (YAML::detail::iterator_value component : entity) {
                         std::string componentType = component.first.as<std::string>();
@@ -85,7 +84,7 @@ namespace Exodia {
                         if (componentType == "Entity" || componentType == "IDComponent")
                             continue;
 
-                        DeserializeComponent(componentType, entity, newEntity);
+                        DeserializeComponent(componentType, entity, newGameObject);
                     }
                 }
             }
@@ -103,8 +102,8 @@ namespace Exodia {
         }
     }
 
-    void SceneSerializer::DeserializeComponent(const std::string &componentType, const YAML::Node &componentNode,
-                                               Entity *entity) {
+    void SceneSerializer::DeserializeComponent(const std::string &componentType, const YAML::Node &componentNode, GameObject gameObject)
+    {
         try {
             std::function<IComponentContainer *(Buffer)> func =
                 Project::GetActive()->GetComponentFactory(componentType);
@@ -118,7 +117,7 @@ namespace Exodia {
             IComponentContainer *container = func(Buffer());
 
             container->Deserialize(componentNode);
-            entity->AddComponent(container);
+            gameObject.AddComponent(container);
         } catch (const YAML::BadConversion &e) {
             EXODIA_CORE_ERROR("Error deserializing component '{0}': {1}", componentType, e.what());
         }

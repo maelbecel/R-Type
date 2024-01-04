@@ -148,17 +148,18 @@ namespace Exodia {
      */
     void Server::InitEntities() {
         // Create pata-pata
-        Entity *patata = Scenes[GAME]->CreateEntity("Pata-pata");
+        GameObject patata = Scenes[GAME]->CreateEntity("Pata-pata");
 
-        patata->AddComponent<ScriptComponent>().Get().Bind("PataPata");
+        patata.AddComponent<ScriptComponent>().Bind("PataPata");
 
         // Camera creation
-        Entity *cameraEntity = Scenes[GAME]->CreateEntity("Camera");
+        GameObject cameraEntity = Scenes[GAME]->CreateEntity("Camera");
 
-        CameraComponent &camera = cameraEntity->AddComponent<CameraComponent>().Get();
+        CameraComponent &camera = cameraEntity.AddComponent<CameraComponent>();
 
-        cameraEntity->GetComponent<TransformComponent>().Get().Translation = {0.0f, 0.0f, 15.0f};
-        cameraEntity->GetComponent<TransformComponent>().Get().Rotation = {0.0f, 0.0f, 45.0f};
+        cameraEntity.GetComponent<TransformComponent>().Translation = { 0.0f, 0.0f, 15.0f };
+        cameraEntity.GetComponent<TransformComponent>().Rotation    = { 0.0f, 0.0f, 45.0f };
+
         camera.Camera.SetProjectionType(SceneCamera::ProjectionType::Perspective);
     }
 
@@ -360,12 +361,17 @@ namespace Exodia {
         for (std::pair<const std::string, Connection> connection : connections) {
             if (IsClientNew(connection)) {
                 uint32_t userID = (uint32_t)_Users.size();
-                Entity *entity = Scenes[GAME]->CreateEntity("Player_" + std::to_string(userID));
 
-                entity->AddComponent<ScriptComponent>().Get().Bind("Player");
+                GameObject entity = Scenes[GAME]->CreateEntity("Player_" + std::to_string(userID));
+
+                entity.AddComponent<ScriptComponent>().Bind("Player");
+
                 player = Scenes[GAME]->GetEntityByName("Player_" + std::to_string(userID));
+
                 _Users.push_back(User(connection.second, player));
+
                 SendComponents(GAME);
+
                 EXODIA_INFO("New client connected");
             }
         }
