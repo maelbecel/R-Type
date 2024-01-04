@@ -12,6 +12,7 @@ include(Dependencies)
 # Project
 include(BuildEngine)
 include(BuildBinaries)
+include(CinematicBinaries)
 
 # Compilation Flags
 include(CompileFlags)
