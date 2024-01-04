@@ -55,15 +55,9 @@ namespace Exodia {
         return copyScene;
     }
 
-    Entity *Scene::CreateEntity(const std::string &name)
-    {
-        return CreateEntityWithUUID(UUID(), name);
-    }
+    Entity *Scene::CreateEntity(const std::string &name) { return CreateEntityWithUUID(UUID(), name); }
 
-    Entity *Scene::CreateEntityWithUUID(UUID uuid, const std::string &name)
-    {
-        return _World->CreateEntity(uuid, name);
-    }
+    Entity *Scene::CreateEntityWithUUID(UUID uuid, const std::string &name) { return _World->CreateEntity(uuid, name); }
 
     Entity *Scene::DuplicateEntity(Entity *entity) {
         std::string name = entity->GetComponent<TagComponent>().Get().Tag;
