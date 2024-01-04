@@ -16,6 +16,8 @@ namespace Cinematic {
     void CinematicLayer::OnAttach() {
         EXODIA_PROFILE_FUNCTION();
 
+        EXODIA_INFO("Layer::OnAttach");
+
         _World->RegisterSystem(new MovingSystem(1.5f));
 
         Entity *cameraEntity = _World->CreateEntity("Camera");
@@ -28,6 +30,8 @@ namespace Cinematic {
 
         Entity *train = _World->CreateEntity("Train");
         train->AddComponent<ScriptComponent>().Get().Bind("Train");
+
+        EXODIA_INFO("Add Train");
     }
 
 
@@ -38,8 +42,6 @@ namespace Cinematic {
             Exodia::RenderCommand::SetClearColor({0.1f, 0.1f, 0.3f, 1});
             Exodia::RenderCommand::Clear();
         }
-
-        EXODIA_INFO("CinematicLayer::OnUpdate");
 
         // Update the world
         _World->Update(ts);

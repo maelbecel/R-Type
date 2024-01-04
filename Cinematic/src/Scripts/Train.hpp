@@ -22,6 +22,7 @@ namespace Cinematic {
         /////////////
       public:
         void OnCreate() {
+            EXODIA_INFO("Train OnCreate");
             HandleEntity->AddComponent<SpriteRendererComponent>();
             HandleEntity->AddComponent<CircleCollider2DComponent>();
             auto &transform = HandleEntity->AddComponent<TransformComponent>().Get();
@@ -30,7 +31,6 @@ namespace Cinematic {
             circle.Color = {1, 0, 0, 1};
 
             transform.Scale = {0.5f, 0.5f, 0.5f};
-
 
             _Pos = {0, 0};
         }
