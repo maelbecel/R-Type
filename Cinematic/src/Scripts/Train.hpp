@@ -31,7 +31,6 @@ namespace Cinematic {
 
             transform.Scale = {0.5f, 0.5f, 0.5f};
 
-
             _Pos = {0, 0};
         }
 
@@ -43,10 +42,9 @@ namespace Cinematic {
             transform.Translation.y = _Pos.y;
         }
 
-        private:
-            glm::vec2 _Pos;
-
+      private:
+        glm::vec2 _Pos;
     };
-};
+}; // namespace Cinematic
 
 #endif /* !Train_HPP_ */

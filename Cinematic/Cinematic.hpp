@@ -22,7 +22,6 @@ namespace Cinematic {
 #endif
 
         project->RegisterScript("Train", []() -> Exodia::ScriptableEntity * { return new Cinematic::Train(); });
-
     }
 }; // namespace Cinematic
 

@@ -17,7 +17,9 @@ namespace Exodia {
         // Constructor & Destructor //
         //////////////////////////////
       public:
-        CinematicClient(const ApplicationSpecification &spec) : Application(spec) { PushLayer(new Cinematic::CinematicLayer()); }
+        CinematicClient(const ApplicationSpecification &spec) : Application(spec) {
+            PushLayer(new Cinematic::CinematicLayer());
+        }
 
         ~CinematicClient() = default;
     };
