@@ -66,7 +66,7 @@ namespace Exodia {
 
         Entity *GetEntity() const;
 
-            Scene *GetScene() const;
+        Scene *GetScene() const;
 
         ///////////////
         // Operators //

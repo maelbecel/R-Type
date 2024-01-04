@@ -32,10 +32,7 @@ namespace Exodia {
 
     Entity *GameObject::GetEntity() const { return _EntityHandle; }
 
-    Scene *GameObject::GetScene() const
-    {
-        return _Scene;
-    }
+    Scene *GameObject::GetScene() const { return _Scene; }
 
     ///////////////
     // Operators //

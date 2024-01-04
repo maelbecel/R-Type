@@ -63,8 +63,7 @@ namespace Exodia {
         std::allocator_traits<WorldAllocator>::deallocate(allocator, this, 1);
     }
 
-    Entity *World::CreateNewEntity(const UUID &uuid, const std::string &name)
-    {
+    Entity *World::CreateNewEntity(const UUID &uuid, const std::string &name) {
         Entity *entity = std::allocator_traits<EntityAllocator>::allocate(_EntityAllocator, 1);
 
         std::allocator_traits<EntityAllocator>::construct(_EntityAllocator, entity, this, uuid);
@@ -78,8 +77,7 @@ namespace Exodia {
         return entity;
     }
 
-    Entity *World::CreateEntity(const UUID &uuid, const std::string &name)
-    {
+    Entity *World::CreateEntity(const UUID &uuid, const std::string &name) {
         Entity *entity = std::allocator_traits<EntityAllocator>::allocate(_EntityAllocator, 1);
 
         std::allocator_traits<EntityAllocator>::construct(_EntityAllocator, entity, this, uuid);
