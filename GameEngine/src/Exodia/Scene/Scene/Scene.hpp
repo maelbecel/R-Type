@@ -109,6 +109,8 @@ namespace Exodia {
         bool _IsPaused;
 
         std::vector<EntitySystem *> _Systems;
+
+        friend class GameObject;
     };
 }; // namespace Exodia
 

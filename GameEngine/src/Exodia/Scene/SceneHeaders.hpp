@@ -38,6 +38,10 @@
 
 #include "Exodia/Scene/Scene/Scene.hpp"
 
+// -- GameObject -----------------------------------------------------------
+
+#include "Scene/GameObject/GameObject.hpp"
+
 // -- Serializer -----------------------------------------------------------
 
 #include "Exodia/Scene/Serializer/SceneSerializer.hpp"

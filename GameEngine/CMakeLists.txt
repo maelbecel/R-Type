@@ -62,6 +62,7 @@ set(SOURCES_GAME_ENGINE
     src/Exodia/Scene/System/Physics/GravitySystem.cpp
     src/Exodia/Scene/System/Physics/MovingSystem.cpp
     src/Exodia/Scene/EventSubscriber/EventHover.cpp
+    src/Exodia/Scene/GameObject/GameObject.cpp
 
         # -- Script source files
     
