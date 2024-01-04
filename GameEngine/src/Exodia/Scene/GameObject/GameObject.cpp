@@ -29,15 +29,9 @@ namespace Exodia {
     // Getters & Setters //
     ///////////////////////
 
-    UUID GameObject::GetUUID()
-    {
-        return GetComponent<IDComponent>().ID;
-    }
+    UUID GameObject::GetUUID() { return GetComponent<IDComponent>().ID; }
 
-    const std::string &GameObject::GetName()
-    {
-        return GetComponent<TagComponent>().Tag;
-    }
+    const std::string &GameObject::GetName() { return GetComponent<TagComponent>().Tag; }
 
     Entity *GameObject::GetEntity() const
     {
@@ -58,13 +52,9 @@ namespace Exodia {
         return (uint32_t)_EntityHandle->GetEntityID();
     }
 
-    bool GameObject::operator==(const GameObject &other) const
-    {
+    bool GameObject::operator==(const GameObject &other) const {
         return _EntityHandle == other._EntityHandle && _Scene == other._Scene;
     }
 
-    bool GameObject::operator!=(const GameObject &other) const
-    {
-        return !(*this == other);
-    }
-};
+    bool GameObject::operator!=(const GameObject &other) const { return !(*this == other); }
+}; // namespace Exodia

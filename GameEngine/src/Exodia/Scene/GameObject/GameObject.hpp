@@ -6,10 +6,10 @@
 */
 
 #ifndef GAMEOBJECT_HPP_
-    #define GAMEOBJECT_HPP_
+#define GAMEOBJECT_HPP_
 
-    #include "ECS/ECS.hpp"
-    #include "Scene/Scene/Scene.hpp"
+#include "ECS/ECS.hpp"
+#include "Scene/Scene/Scene.hpp"
 
 namespace Exodia {
 
@@ -64,8 +64,8 @@ namespace Exodia {
                 ComponentHandle<T> component = _EntityHandle->GetComponent<T>();
 
                 if (!component)
-                    return AddComponent<T>();
-                return component.Get();
+                    AddComponent<T>();
+                return _EntityHandle->GetComponent<T>().Get();
             }
 
             template<typename T>
@@ -98,6 +98,6 @@ namespace Exodia {
             Entity *_EntityHandle; /* !< The entity handle */
             Scene  *_Scene;        /* !< The scene where the entity is (it's a 12 bytes memory address) */
     };
-};
+}; // namespace Exodia
 
 #endif /* !GAMEOBJECT_HPP_ */
