@@ -46,7 +46,7 @@ namespace RType {
 
     void BulletEnnemy::OnCreate() {
         TransformComponent &bullet_tc = GetComponent<TransformComponent>();
-        ParentComponent    &parent    = GetComponent<ParentComponent>();
+        ParentComponent &parent = GetComponent<ParentComponent>();
         Scene *scene = HandleEntity.GetScene();
 
         if (!scene)
@@ -57,7 +57,7 @@ namespace RType {
 
         bullet_tc.Translation.x = tc.Translation.x;
         bullet_tc.Translation.y = tc.Translation.y;
-        bullet_tc.Scale         = { 0.5f, 0.5f, 0.0f };
+        bullet_tc.Scale = {0.5f, 0.5f, 0.0f};
 
         HandleEntity.AddComponent<BoxCollider2DComponent>();
 
@@ -66,7 +66,7 @@ namespace RType {
 
         if (!player.GetEntity())
             return;
-        TransformComponent   &player_tc = player.GetComponent<TransformComponent>();
+        TransformComponent &player_tc = player.GetComponent<TransformComponent>();
         RigidBody2DComponent &bullet_rb = HandleEntity.AddComponent<RigidBody2DComponent>();
 
         bullet_rb.Type = RigidBody2DComponent::BodyType::Dynamic;
@@ -87,11 +87,10 @@ namespace RType {
 
         CreateAnimations();
 
-        HandleEntity.GetScene()->GetWorldPtr()->Emit<Events::OnEntityCreated>({ HandleEntity.GetEntity() });
+        HandleEntity.GetScene()->GetWorldPtr()->Emit<Events::OnEntityCreated>({HandleEntity.GetEntity()});
     }
 
-    void BulletEnnemy::UpdateAnimations()
-    {
+    void BulletEnnemy::UpdateAnimations() {
         if (_Animations.size() == 0)
             return;
         SpriteRendererComponent &sprite = GetComponent<SpriteRendererComponent>();
@@ -117,15 +116,15 @@ namespace RType {
                 sprite.Texture = anim.Get().Frames[0];
             }
 
-            if (_IsColliding && anim.Get().CurrentFrameIndex == anim.Get().Frames.size() - 1 && _Animations[1].IsPlaying == true)
+            if (_IsColliding && anim.Get().CurrentFrameIndex == anim.Get().Frames.size() - 1 &&
+                _Animations[1].IsPlaying == true)
                 HandleEntity.GetScene()->DestroyEntity(HandleEntity);
         }
     }
 
-    void BulletEnnemy::OnUpdate(UNUSED(Timestep ts))
-    {
+    void BulletEnnemy::OnUpdate(UNUSED(Timestep ts)) {
         TransformComponent &transform = GetComponent<TransformComponent>();
-        ParentComponent    &parent    = GetComponent<ParentComponent>();
+        ParentComponent &parent = GetComponent<ParentComponent>();
 
         Scene *scene = HandleEntity.GetScene();
 
@@ -148,8 +147,7 @@ namespace RType {
         UpdateAnimations();
     }
 
-    void BulletEnnemy::OnCollisionEnter(Entity *entity)
-    {
+    void BulletEnnemy::OnCollisionEnter(Entity *entity) {
         ParentComponent &parent = GetComponent<ParentComponent>();
         ComponentHandle<IDComponent> entity_id = entity->GetComponent<IDComponent>();
 

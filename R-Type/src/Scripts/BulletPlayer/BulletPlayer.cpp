@@ -31,10 +31,9 @@ namespace RType {
         sprite.Texture = anim.Frames[0];
     }
 
-    void BulletPlayer::OnCreate()
-    {
+    void BulletPlayer::OnCreate() {
         TransformComponent &bullet_tc = GetComponent<TransformComponent>();
-        ParentComponent    &parent    = GetComponent<ParentComponent>();
+        ParentComponent &parent = GetComponent<ParentComponent>();
         Scene *scene = HandleEntity.GetScene();
 
         if (!scene)
@@ -49,7 +48,7 @@ namespace RType {
             bullet_tc.Translation.y = tc.Translation.y - 0.05f;
         }
 
-        bullet_tc.Scale = { 0.5f, 0.5f, 0.0f };
+        bullet_tc.Scale = {0.5f, 0.5f, 0.0f};
 
         HandleEntity.AddComponent<BoxCollider2DComponent>();
 
@@ -63,11 +62,10 @@ namespace RType {
 
         CreateAnimations();
 
-        HandleEntity.GetScene()->GetWorldPtr()->Emit<Exodia::Events::OnEntityCreated>({ HandleEntity.GetEntity() });
+        HandleEntity.GetScene()->GetWorldPtr()->Emit<Exodia::Events::OnEntityCreated>({HandleEntity.GetEntity()});
     }
 
-    void BulletPlayer::UpdateAnimations()
-    {
+    void BulletPlayer::UpdateAnimations() {
         if (_Animations.size() == 0)
             return;
 
@@ -93,17 +91,16 @@ namespace RType {
         }
     }
 
-    void BulletPlayer::OnUpdate(UNUSED(Timestep ts))
-    {
+    void BulletPlayer::OnUpdate(UNUSED(Timestep ts)) {
         TransformComponent &transform = GetComponent<TransformComponent>();
-        ParentComponent    &parent    = GetComponent<ParentComponent>();
+        ParentComponent &parent = GetComponent<ParentComponent>();
         Scene *scene = HandleEntity.GetScene();
 
         if (!scene)
             return;
-        
+
         GameObject parent_entity = scene->GetEntityByUUID(parent.Parent);
-        GameObject camera        = scene->GetPrimaryCamera();
+        GameObject camera = scene->GetPrimaryCamera();
 
         if (!camera.GetEntity())
             return;
@@ -119,8 +116,7 @@ namespace RType {
             scene->DestroyEntity(HandleEntity);
     }
 
-    void BulletPlayer::OnCollisionEnter(Entity *entity)
-    {
+    void BulletPlayer::OnCollisionEnter(Entity *entity) {
         ParentComponent &parent = GetComponent<ParentComponent>();
         ComponentHandle<IDComponent> entity_id = entity->GetComponent<IDComponent>();
 
@@ -132,4 +128,4 @@ namespace RType {
         if (HandleEntity.GetScene())
             HandleEntity.GetScene()->DestroyEntity(HandleEntity);
     }
-};
+}; // namespace RType

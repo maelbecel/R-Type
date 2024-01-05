@@ -38,8 +38,7 @@ namespace RType {
         _Animations.push_back(death);
     }
 
-    void PataPata::OnCreate()
-    {
+    void PataPata::OnCreate() {
         HandleEntity.AddComponent<Health>(1);
         HandleEntity.AddComponent<Clock>();
         HandleEntity.AddComponent<BoxCollider2DComponent>();
@@ -60,8 +59,7 @@ namespace RType {
         tc.Translation.y = 0.0f;
     }
 
-    void PataPata::UpdateAnimations()
-    {
+    void PataPata::UpdateAnimations() {
         SpriteRendererComponent &sr = GetComponent<SpriteRendererComponent>();
         ComponentHandle<AnimationComponent> anim = HandleEntity.GetEntity()->GetComponent<AnimationComponent>();
 
@@ -100,8 +98,7 @@ namespace RType {
         }
     }
 
-    void PataPata::OnUpdate(Timestep ts)
-    {
+    void PataPata::OnUpdate(Timestep ts) {
         IsDead();
         UpdateAnimations();
         SinusoidalMovement(ts);
@@ -122,12 +119,11 @@ namespace RType {
         if (entityTag.rfind("Bullet", 0) == 0) {
             EXODIA_INFO("Bullet {0} hit", entityTag);
 
-            HandleEntity.GetScene()->GetWorldPtr()->Emit<Events::TakeDamage>({ HandleEntity.GetEntity(), 1 });
+            HandleEntity.GetScene()->GetWorldPtr()->Emit<Events::TakeDamage>({HandleEntity.GetEntity(), 1});
         }
     }
 
-    void PataPata::Shoot()
-    {
+    void PataPata::Shoot() {
         TransformComponent &tc = GetComponent<TransformComponent>();
 
         if (_State == State::DEAD)
@@ -147,24 +143,23 @@ namespace RType {
             script.Bind("BulletEnnemy");
 
             ParentComponent &parent = bullet.AddComponent<ParentComponent>();
-            IDComponent     &ID     = GetComponent<IDComponent>();
+            IDComponent &ID = GetComponent<IDComponent>();
 
             parent.Parent = ID.ID;
             _AttackTimer = 0.0f;
         }
     }
 
-    void PataPata::SinusoidalMovement(Timestep ts)
-    {
-        RigidBody2DComponent &body  = GetComponent<RigidBody2DComponent>();
-        Clock                &clock = GetComponent<Clock>();
+    void PataPata::SinusoidalMovement(Timestep ts) {
+        RigidBody2DComponent &body = GetComponent<RigidBody2DComponent>();
+        Clock &clock = GetComponent<Clock>();
 
         _AttackTimer += ts.GetSeconds();
 
         // Parameters of the sinusoidal movement
         double amplitude = 5.0f; // Amplitude of the sinusoidal movement
         double frequency = 1.0f; // Frequency of the sinusoidal movement
-        float &mytime    = clock.ElapsedTime;
+        float &mytime = clock.ElapsedTime;
 
         if (_State == State::ALIVE) {
             mytime += ts.GetSeconds();
@@ -173,14 +168,13 @@ namespace RType {
         }
     }
 
-    void PataPata::IsDead()
-    {
-        Health               &health = GetComponent<Health>();
-        RigidBody2DComponent &body   = GetComponent<RigidBody2DComponent>();
+    void PataPata::IsDead() {
+        Health &health = GetComponent<Health>();
+        RigidBody2DComponent &body = GetComponent<RigidBody2DComponent>();
 
         if (_State == State::ALIVE && health.CurrentHealth <= 0) {
             _State = State::DEAD;
             body.Velocity = {0.0f, 0.0f};
         }
     }
-};
+}; // namespace RType

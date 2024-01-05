@@ -322,7 +322,7 @@ namespace RType {
         if (player_tag.Tag.rfind("BE", 0) == 0) {
             EXODIA_INFO("BE {0} hit", player_tag.Tag);
 
-            HandleEntity.GetScene()->GetWorldPtr()->Emit<Events::TakeDamage>({ HandleEntity.GetEntity(), 1 });
+            HandleEntity.GetScene()->GetWorldPtr()->Emit<Events::TakeDamage>({HandleEntity.GetEntity(), 1});
         }
     };
 }; // namespace RType

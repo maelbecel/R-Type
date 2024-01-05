@@ -149,4 +149,4 @@ namespace RType {
         fade.ShouldFadeIn = true;
         fade.Repeat = true;
     }
-};
+}; // namespace RType
