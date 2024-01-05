@@ -33,7 +33,8 @@ namespace Cinematic {
 
             Ref<Texture2D> texture = TextureImporter::LoadTexture2D("Assets/Textures/Shell.png");
 
-            sprite->Texture = SubTexture2D::CreateFromCoords(texture->Handle, {0.0f, 2.0f}, {33.0f, 33.0f}, {1.0f, 1.0f});
+            sprite->Texture =
+                SubTexture2D::CreateFromCoords(texture->Handle, {0.0f, 2.0f}, {33.0f, 33.0f}, {1.0f, 1.0f});
 
             transform.Scale = {0.5f, 0.5f, 0.5f};
 
