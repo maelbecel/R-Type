@@ -11,16 +11,16 @@ using namespace Exodia;
 
 namespace Cinematic {
 
-    CinematicLayer::CinematicLayer() : Layer("Cinematic"), _World(Exodia::World::CreateWorld()) {}
+    CinematicLayer::CinematicLayer() : Layer("Cinematic"), _scene(new Scene()) {}
 
     void CinematicLayer::OnAttach() {
         EXODIA_PROFILE_FUNCTION();
 
         EXODIA_INFO("Layer::OnAttach");
 
-        _World->RegisterSystem(new MovingSystem(1.5f));
+        _scene->RegisterSystem(new MovingSystem(1.5f));
 
-        Entity *cameraEntity = _World->CreateEntity("Camera");
+        Entity *cameraEntity = _scene->CreateEntity("Camera");
 
         CameraComponent &camera = cameraEntity->AddComponent<CameraComponent>().Get();
         cameraEntity->GetComponent<TransformComponent>().Get().Translation = {0.0f, 0.0f, 15.0f};
@@ -28,8 +28,10 @@ namespace Cinematic {
         camera.Camera.SetViewportSize(Application::Get().GetWindow().GetWidth(),
                                       Application::Get().GetWindow().GetHeight());
 
-        Entity *train = _World->CreateEntity("Train");
+        Entity *train = _scene->CreateEntity("Train");
         train->AddComponent<ScriptComponent>().Get().Bind("Train");
+
+        _scene->OnRuntimeStart();
 
         EXODIA_INFO("Add Train");
     }
@@ -43,7 +45,7 @@ namespace Cinematic {
         }
 
         // Update the world
-        _World->Update(ts);
+        _scene->OnUpdateRuntime(ts);
     }
 
     void CinematicLayer::OnDetach() { EXODIA_PROFILE_FUNCTION(); }

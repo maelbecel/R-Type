@@ -24,11 +24,16 @@ namespace Cinematic {
         void OnCreate() {
             EXODIA_INFO("Train OnCreate");
             HandleEntity->AddComponent<SpriteRendererComponent>();
-            HandleEntity->AddComponent<CircleCollider2DComponent>();
+            HandleEntity->AddComponent<BoxCollider2DComponent>();
             auto &transform = HandleEntity->AddComponent<TransformComponent>().Get();
-            auto &circle = HandleEntity->AddComponent<CircleRendererComponent>().Get();
 
-            circle.Color = {1, 0, 0, 1};
+            HandleEntity->AddComponent<SpriteRendererComponent>();
+
+            auto sprite = HandleEntity->GetComponent<SpriteRendererComponent>();
+
+            Ref<Texture2D> texture = TextureImporter::LoadTexture2D("Assets/Textures/Shell.png");
+
+            sprite->Texture = SubTexture2D::CreateFromCoords(texture->Handle, {0.0f, 2.0f}, {33.0f, 33.0f}, {1.0f, 1.0f});
 
             transform.Scale = {0.5f, 0.5f, 0.5f};
 
@@ -36,15 +41,20 @@ namespace Cinematic {
         }
 
         void OnUpdate(UNUSED(Timestep ts)) {
-            EXODIA_INFO("Train OnUpdate");
             auto &transform = HandleEntity->GetComponent<TransformComponent>().Get();
+            clock += ts;
 
-            transform.Translation.x = _Pos.x;
-            transform.Translation.y = _Pos.y;
+            if (clock > 0.01f) {
+                _Pos.x += 0.01f;
+                clock = 0;
+                transform.Translation.x = _Pos.x;
+                transform.Translation.y = _Pos.y;
+            }
         }
 
       private:
         glm::vec2 _Pos;
+        float clock;
     };
 }; // namespace Cinematic
 

@@ -38,7 +38,7 @@ namespace Cinematic {
         ////////////////
       private:
         // TODO: WARNING: This is a temporary solution
-        World *_World;
+        Scene *_scene;
     };
 }; // namespace Cinematic
 
