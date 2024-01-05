@@ -15,8 +15,7 @@
 #include "Core/Application/Window.hpp"
 
 // Exodia Utils
-#include "Utils/Assert.hpp"
-#include "Utils/CrossPlatform.hpp"
+#include "Exodia-Debug.hpp"
 
 // External includes
 #include <glad/glad.h>
@@ -111,6 +110,13 @@ namespace Exodia {
          * @return (Type: unsigned int): The height of the window in pixels.
          */
         inline unsigned int GetHeight() const override { return _Data.Height; }
+
+        inline void Resize(unsigned int width, unsigned int height) override {
+            _Data.Width = width;
+            _Data.Height = height;
+
+            glfwSetWindowSize(_Window, width, height);
+        }
 
         /**
          * @brief Set the event callback function.

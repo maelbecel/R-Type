@@ -9,15 +9,10 @@
 #define SCRIPTABLEENTITY_HPP_
 
 // Exodia ECS includes
-#include "ECS.hpp"
-
-// Exodia Utils
-#include "Utils/CrossPlatform.hpp"
-#include "Utils/Memory.hpp"
+#include "Scene/GameObject/GameObject.hpp"
+#include "Exodia-Utils.hpp"
 
 namespace Exodia {
-
-    class Entity;
 
     class ScriptableEntity {
 
@@ -69,15 +64,13 @@ namespace Exodia {
         // Getters & Setters //
         ///////////////////////
       public:
-        template <typename Component> ComponentHandle<Component> GetComponent() {
-            return HandleEntity->GetComponent<Component>();
-        }
+        template <typename Component> Component &GetComponent() { return HandleEntity.GetComponent<Component>(); }
 
         ////////////////
         // Attributes //
         ////////////////
       public:
-        Entity *HandleEntity; /* !< The entity that owns the scriptable entity. */
+        GameObject HandleEntity; /* !< The entity that owns the scriptable entity. */
     };
 }; // namespace Exodia
 

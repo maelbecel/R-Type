@@ -6,6 +6,7 @@
 */
 
 #include "Pata-pata.hpp"
+#include "Event/TakeDamage.hpp"
 
 using namespace Exodia;
 
@@ -20,10 +21,8 @@ namespace RType {
 
         for (int i = 0; i < 8; i++)
             framesIdle.push_back(SubTexture2D::CreateFromCoords(PATAPATA, {i, 0.0f}, {33.3125f, 36.0f}, {1.0f, 1.0f}));
-
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 6; i++)
             framesDeath.push_back(SubTexture2D::CreateFromCoords(DEATH, {i, 0.0f}, {32.0f, 34.0f}, {1.0f, 1.0f}));
-        }
 
         anim.Frames = framesIdle;
         anim.IsPlaying = false;
@@ -40,51 +39,37 @@ namespace RType {
     }
 
     void PataPata::OnCreate() {
+        HandleEntity.AddComponent<Health>(1);
+        HandleEntity.AddComponent<Clock>();
+        HandleEntity.AddComponent<BoxCollider2DComponent>();
 
-        HandleEntity->AddComponent<Health>(1);
-        HandleEntity->AddComponent<Clock>();
-        HandleEntity->AddComponent<BoxCollider2DComponent>();
+        RigidBody2DComponent &rb = HandleEntity.AddComponent<RigidBody2DComponent>();
 
-        ComponentHandle<RigidBody2DComponent> body = HandleEntity->AddComponent<RigidBody2DComponent>();
-
-        if (!body)
-            return;
-
-        RigidBody2DComponent &rb = body.Get();
         rb.Type = RigidBody2DComponent::BodyType::Dynamic;
         rb.Mass = 0.0f;
         rb.GravityScale = 0.0f;
         rb.Velocity.x = 0.0f;
 
         CreateAnimations();
-        ComponentHandle<TransformComponent> transform = GetComponent<TransformComponent>();
 
-        if (!transform)
-            return;
-
-        TransformComponent &tc = transform.Get();
+        TransformComponent &tc = GetComponent<TransformComponent>();
 
         tc.Translation.x = 7.0f;
-        tc.Translation.y = (float)(std::rand() % 10);
-
-        EXODIA_INFO("PataPata created at pos {0}, {1}", tc.Translation.x, tc.Translation.y);
+        // tc.Translation.y = (float)(std::rand() % 10 - 5);
+        tc.Translation.y = 0.0f;
     }
 
     void PataPata::UpdateAnimations() {
-        ComponentHandle<SpriteRendererComponent> sprite = GetComponent<SpriteRendererComponent>();
-        ComponentHandle<AnimationComponent> anim = GetComponent<AnimationComponent>();
-
-        if (!sprite)
-            sprite = HandleEntity->AddComponent<SpriteRendererComponent>();
+        SpriteRendererComponent &sr = GetComponent<SpriteRendererComponent>();
+        ComponentHandle<AnimationComponent> anim = HandleEntity.GetEntity()->GetComponent<AnimationComponent>();
 
         if (!anim) {
             _Animations[0].IsPlaying = true;
 
-            anim = HandleEntity->AddComponent<AnimationComponent>(_Animations[0]);
+            anim = HandleEntity.GetEntity()->AddComponent<AnimationComponent>(_Animations[0]);
 
-            sprite.Get().Texture = anim.Get().Frames[0];
+            sr.Texture = anim.Get().Frames[0];
         } else {
-            SpriteRendererComponent &sr = sprite.Get();
             AnimationComponent &ac = anim.Get();
 
             if (_State == State::ALIVE && _PreviousState != State::ALIVE) {
@@ -103,10 +88,11 @@ namespace RType {
                 sr.Texture = ac.Frames[0];
             } else if (_State == State::DEAD && _PreviousState == State::DEAD) {
                 if (ac.CurrentFrameIndex == ac.Frames.size() - 1) {
-                    World *world = HandleEntity->GetWorld();
-                    if (!world)
+                    Scene *scene = HandleEntity.GetScene();
+
+                    if (!scene)
                         return;
-                    world->DestroyEntity(HandleEntity);
+                    scene->DestroyEntity(HandleEntity);
                 }
             }
         }
@@ -121,87 +107,74 @@ namespace RType {
 
     void PataPata::OnCollisionEnter(Entity *entity) {
         ComponentHandle<TagComponent> tag = entity->GetComponent<TagComponent>();
-        ComponentHandle<Health> health = GetComponent<Health>();
+        Health &health = GetComponent<Health>();
 
-        if (!tag || !health) {
-            EXODIA_WARN("PataPata: No tag or health component found");
+        if (!tag) {
+            EXODIA_WARN("PataPata: has no tag component found");
+
             return;
         }
-
         std::string entityTag = tag.Get().Tag;
 
         if (entityTag.rfind("Bullet", 0) == 0) {
             EXODIA_INFO("Bullet {0} hit", entityTag);
-            health.Get().CurrentHealth -= 1;
+
+            HandleEntity.GetScene()->GetWorldPtr()->Emit<Events::TakeDamage>({HandleEntity.GetEntity(), 1});
         }
     }
 
     void PataPata::Shoot() {
-        ComponentHandle<TransformComponent> transform = GetComponent<TransformComponent>();
+        TransformComponent &tc = GetComponent<TransformComponent>();
 
         if (_State == State::DEAD)
             return;
-        if (!transform)
-            return;
-
-        TransformComponent tc = transform.Get();
-
         if (_AttackTimer > _AttackCooldown) {
-            World *world = HandleEntity->GetWorld();
-            if (!world)
+            Scene *scene = HandleEntity.GetScene();
+
+            if (!scene)
+                return;
+            GameObject bullet = scene->CreateNewEntity("BE" + std::to_string(scene->GetWorldPtr()->GetCount()));
+
+            if (!bullet.GetEntity())
                 return;
 
-            Entity *bullet = world->CreateNewEntity("BE" + std::to_string(world->GetCount()));
-            if (!bullet)
-                return;
+            ScriptComponent &script = bullet.AddComponent<ScriptComponent>();
 
-            ComponentHandle<ScriptComponent> script = bullet->AddComponent<ScriptComponent>();
-            if (!script)
-                return;
-            script.Get().Bind("BulletEnnemy");
+            script.Bind("BulletEnnemy");
 
-            ComponentHandle<ParentComponent> parent = bullet->AddComponent<ParentComponent>();
-            ComponentHandle<IDComponent> ID = HandleEntity->GetComponent<IDComponent>();
-            if (!parent || !ID)
-                return;
-            parent.Get().Parent = ID.Get().ID;
+            ParentComponent &parent = bullet.AddComponent<ParentComponent>();
+            IDComponent &ID = GetComponent<IDComponent>();
+
+            parent.Parent = ID.ID;
             _AttackTimer = 0.0f;
         }
     }
 
     void PataPata::SinusoidalMovement(Timestep ts) {
-        ComponentHandle<RigidBody2DComponent> body = GetComponent<RigidBody2DComponent>();
-        ComponentHandle<Clock> time = GetComponent<Clock>();
+        RigidBody2DComponent &body = GetComponent<RigidBody2DComponent>();
+        Clock &clock = GetComponent<Clock>();
 
         _AttackTimer += ts.GetSeconds();
-
-        if (!time || !body)
-            return;
 
         // Parameters of the sinusoidal movement
         double amplitude = 5.0f; // Amplitude of the sinusoidal movement
         double frequency = 1.0f; // Frequency of the sinusoidal movement
-        float &mytime = time.Get().ElapsedTime;
+        float &mytime = clock.ElapsedTime;
 
         if (_State == State::ALIVE) {
             mytime += ts.GetSeconds();
-            body.Get().Velocity.y = (float)(amplitude * sin(frequency * mytime * PI));
+
+            body.Velocity.y = (float)(amplitude * sin(frequency * mytime * PI));
         }
     }
 
     void PataPata::IsDead() {
-        ComponentHandle<Health> health = GetComponent<Health>();
-        ComponentHandle<RigidBody2DComponent> body = GetComponent<RigidBody2DComponent>();
+        Health &health = GetComponent<Health>();
+        RigidBody2DComponent &body = GetComponent<RigidBody2DComponent>();
 
-        if (!health || !body) {
-            EXODIA_WARN("PataPata has no health or body");
-            return;
-        }
-
-        if (_State == State::ALIVE && health.Get().CurrentHealth <= 0) {
+        if (_State == State::ALIVE && health.CurrentHealth <= 0) {
             _State = State::DEAD;
-            body.Get().Velocity = {0.0f, 0.0f};
+            body.Velocity = {0.0f, 0.0f};
         }
     }
-
-} // namespace RType
+}; // namespace RType

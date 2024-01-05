@@ -8,9 +8,6 @@
 #ifndef WINDOW_HPP_
 #define WINDOW_HPP_
 
-// Exodia Utils
-#include "Utils/CrossPlatform.hpp"
-
 // Exodia Events
 #include "Events/Event.hpp"
 
@@ -93,6 +90,8 @@ namespace Exodia {
          * @return (Type: uint32_t) The height of the window
          */
         virtual uint32_t GetHeight() const = 0;
+
+        virtual void Resize(uint32_t width, uint32_t height) = 0;
 
         /**
          * @brief Set the event callback function

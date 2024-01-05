@@ -26,7 +26,7 @@ namespace Exodia {
      */
     Server::Server(short port)
         : _WorldNetwork(World::CreateWorld()), _Network(_WorldNetwork, _IOContextManager, port), _LastTime(0.0f),
-          _Running(true) {
+          my_Timer(0.0f), _Running(true) {
         EXODIA_INFO("Server is starting...");
 
         _InputThread = std::thread([&] {
@@ -125,16 +125,21 @@ namespace Exodia {
         CurrentScene = GAME;
 
         std::vector<Exodia::EntitySystem *> systems = {new AnimationSystem(), new MovingSystem(1.5f)};
+
         InitScene(MENU, systems);
 
         RType::EntityEventSubscriber *subscribe = new RType::EntityEventSubscriber(_Network);
         CollisionSystem *collisionSystem = new CollisionSystem();
+        RType::TakeDamageSubscriber *takeDamage = new RType::TakeDamageSubscriber();
+
         systems.push_back(collisionSystem);
+
         InitScene(GAME, systems);
 
         Scenes[GAME]->Subscribe<Events::OnEntityCreated>(subscribe);
         Scenes[GAME]->Subscribe<Events::OnEntityDestroyed>(subscribe);
         Scenes[GAME]->Subscribe<Events::OnCollisionEntered>(collisionSystem);
+        Scenes[GAME]->Subscribe<RType::Events::TakeDamage>(takeDamage);
     }
 
     /**
@@ -143,16 +148,18 @@ namespace Exodia {
      */
     void Server::InitEntities() {
         // Create pata-pata
-        Entity *patata = Scenes[GAME]->CreateEntity("Pata-pata");
-        patata->AddComponent<ScriptComponent>().Get().Bind("PataPata");
+        GameObject patata = Scenes[GAME]->CreateEntity("Pata-pata");
+
+        patata.AddComponent<ScriptComponent>().Bind("PataPata");
 
         // Camera creation
-        Entity *cameraEntity = Scenes[GAME]->CreateEntity("Camera");
+        GameObject cameraEntity = Scenes[GAME]->CreateEntity("Camera");
 
-        CameraComponent &camera = cameraEntity->AddComponent<CameraComponent>().Get();
+        CameraComponent &camera = cameraEntity.AddComponent<CameraComponent>();
 
-        cameraEntity->GetComponent<TransformComponent>().Get().Translation = {0.0f, 0.0f, 15.0f};
-        cameraEntity->GetComponent<TransformComponent>().Get().Rotation = {0.0f, 0.0f, 45.0f};
+        cameraEntity.GetComponent<TransformComponent>().Translation = {0.0f, 0.0f, 15.0f};
+        cameraEntity.GetComponent<TransformComponent>().Rotation = {0.0f, 0.0f, 45.0f};
+
         camera.Camera.SetProjectionType(SceneCamera::ProjectionType::Perspective);
     }
 
@@ -163,6 +170,7 @@ namespace Exodia {
     void Server::Init() {
 
         WaitForClient();
+
         EXODIA_INFO("Server initialisation...");
 
         try {
@@ -194,6 +202,7 @@ namespace Exodia {
         try {
             while (_Running) {
                 CheckForNewClients();
+
                 this->Update();
                 /*
                 Scenes[CurrentScene]->GetWorld().ForEach<IDComponent, TagComponent>([&](Entity *entity, auto id, auto
@@ -201,8 +210,8 @@ namespace Exodia {
 
                     EXODIA_INFO("Entity '{0}': {1}", (uint64_t)id.Get().ID, tag.Get().Tag);
                 });
-                count += 1;
                 */
+                count += 1;
                 std::this_thread::sleep_for(std::chrono::milliseconds(16)); // Sleep for 32 milliseconds (30 FPS)
             }
         } catch (std::exception &error) {
@@ -228,29 +237,20 @@ namespace Exodia {
 
         Scenes[CurrentScene]->GetWorld().ForEach<ScriptComponent, TagComponent, TransformComponent>(
             [&](Entity *entity, ComponentHandle<ScriptComponent> script, ComponentHandle<TagComponent> tag,
-                UNUSED(ComponentHandle<TransformComponent> transform)) {
+                ComponentHandle<TransformComponent> transform) {
+                (void)transform;
                 ScriptComponent &sc = script.Get();
                 TagComponent &tc = tag.Get();
 
                 if (tc.Tag == std::string("Player_" + std::to_string(player_id)) && sc.Instance != nullptr) {
-                    if (event.first.second) {
+                    if (event.first.second)
                         sc.Instance->OnKeyPressed(event.first.first);
-                    } else {
+                    else
                         sc.Instance->OnKeyReleased(event.first.first);
-                    }
                 }
-                if (count % 50 == 0) {
-                    _Network.SendComponentOf(entity, "TransformComponent");
-                }
-                _Network.SendComponentOf(entity, "RigidBody2DComponent");
-            });
 
-        Scenes[CurrentScene]->GetWorld().ForEach<TagComponent, TransformComponent>(
-            [&](Entity *entity, ComponentHandle<TagComponent> tag,
-                UNUSED(ComponentHandle<TransformComponent> transform)) {
-                if (tag.Get().Tag.rfind("Bullet") != std::string::npos) {
-                    _Network.SendComponentOf(entity, "TagComponent");
-                    _Network.SendComponentOf(entity, "SpriteRendererComponent");
+                if (tc.Tag.rfind("Player_") != std::string::npos) {
+                    _Network.SendComponentOf(false, entity, "RigidBody2DComponent");
                 }
             });
     }
@@ -265,59 +265,35 @@ namespace Exodia {
             Timestep timestep(time - _LastTime);
 
             _LastTime = time;
-            // EXODIA_CORE_ERROR("Count : {0}", count);
-            // for (uint32_t i = 0; i < (uint32_t)_Users.size(); i++) {
-            //  Entity *player = Scenes[GAME]->GetEntityByName("Player_" + std::to_string(i));
 
-            // if (player != nullptr) {
-            // }
-            //}
+            my_Timer += timestep;
 
-            /*
-            if (CurrentScene == GAME) {
-                auto pata = Scenes[GAME]->GetEntityByName("Pata-pata");
+            if (my_Timer > 1.0f) {
+                my_Timer = 0.0f;
 
-                if (pata == nullptr) {
-                    Entity *patata = Scenes[GAME]->CreateEntity("Pata-pata");
-
-                    patata->AddComponent<Health>(1);
-                    patata->AddComponent<ScriptComponent>().Get().Bind("PataPata");
-                    patata->AddComponent<Animation>(1.0f, 8.0f, 0.075f);
-                    patata->AddComponent<Clock>();
-                    patata->AddComponent<BoxCollider2DComponent>();
-
-                    auto body_patata = patata->AddComponent<RigidBody2DComponent>();
-
-                    body_patata.Get().Type = RigidBody2DComponent::BodyType::Dynamic;
-                    body_patata.Get().Mass = 0.0f;
-                    body_patata.Get().GravityScale = 0.0f;
-                    body_patata.Get().Velocity.x = -2.0f;
-                    patata->AddComponent<CircleRendererComponent>(glm::vec4{ 1.0f, 1.0f, 0.0f, 1.0f});
-                }
-                _Network.SendComponentOf(pata, "TransformComponent");
-                _Network.SendComponentOf(pata, "CircleRendererComponent");
-
-                auto *bullet = Scenes[GAME]->GetEntityByName("BE68");
-
-                if (bullet != nullptr) {
-                    _Network.SendComponentOf(bullet, "TransformComponent");
-                    _Network.SendComponentOf(bullet, "CircleRendererComponent");
-                }
+                // _Network.SendPacketInfo();
             }
-        */
+
+            if (count % 50 == 0) {
+                EXODIA_CORE_WARN("Syncing components");
+                Scenes[CurrentScene]->GetWorld().ForEach<TransformComponent>(
+                    [&](Entity *entity, ComponentHandle<TransformComponent> transform) {
+                        (void)transform;
+                        _Network.SendComponentOf(false, entity, "TransformComponent");
+                    });
+                Scenes[CurrentScene]->GetWorld().ForEach<Clock>([&](Entity *entity, ComponentHandle<Clock> clock) {
+                    (void)clock;
+                    _Network.SendComponentOf(false, entity, "Clock");
+                });
+            }
+
             std::vector<std::pair<std::pair<uint32_t, bool>, asio::ip::udp::endpoint>> events = _Network.GetEvents();
 
             while (!events.empty()) {
                 HandleEvent(events[events.size() - 1]);
+
                 events.pop_back();
             }
-
-            // _Network.ResendNeedAck();
-            // Scenes[CurrentScene]->ForEach<TransformComponent>([&](Entity *entity, auto transform) {
-            //     (void)entity;
-            //     (void)transform;
-            //     _Network.SendComponentOf(entity, "TransformComponent");
-            // });
 
             Scenes[CurrentScene]->OnUpdateRuntime(timestep);
         } catch (std::exception &error) {
@@ -336,6 +312,7 @@ namespace Exodia {
      */
     bool Server::IsClientNew(std::pair<const std::string, Connection> connection) {
         bool newClient = true;
+
         for (User user : _Users) {
             if (user.GetConnection() == connection.second) {
                 newClient = false;
@@ -347,23 +324,24 @@ namespace Exodia {
     void Server::SendComponents(SceneType scene) {
         Scenes[scene]->GetWorld().ForEach<TagComponent>([&](Entity *entity, ComponentHandle<TagComponent> tag) {
             if (tag.Get().Tag.rfind("Player_") != std::string::npos) {
-                _Network.SendComponentOf(entity, "TagComponent");
-                _Network.SendComponentOf(entity, "TransformComponent");
-                _Network.SendComponentOf(entity, "SpriteRendererComponent");
-                _Network.SendComponentOf(entity, "RigidBody2DComponent");
-                _Network.SendComponentOf(entity, "Animation");
-                _Network.SendComponentOf(entity, "Health");
-                _Network.SendComponentOf(entity, "ScriptComponent");
+                _Network.SendComponentOf(true, entity, "TagComponent");
+                _Network.SendComponentOf(true, entity, "TransformComponent");
+                _Network.SendComponentOf(true, entity, "RigidBody2DComponent");
+                _Network.SendComponentOf(true, entity, "Animation");
+                _Network.SendComponentOf(true, entity, "Health");
+                _Network.SendComponentOf(true, entity, "ScriptComponent");
+                _Network.SendComponentOf(true, entity, "SpriteRendererComponent");
             }
 
             if (tag.Get().Tag == "Pata-pata") {
-                _Network.SendComponentOf(entity, "TagComponent");
-                _Network.SendComponentOf(entity, "TransformComponent");
-                _Network.SendComponentOf(entity, "SpriteRendererComponent");
-                _Network.SendComponentOf(entity, "RigidBody2DComponent");
-                _Network.SendComponentOf(entity, "Animation");
-                _Network.SendComponentOf(entity, "Health");
-                _Network.SendComponentOf(entity, "ScriptComponent");
+                _Network.SendComponentOf(true, entity, "TagComponent");
+                _Network.SendComponentOf(true, entity, "TransformComponent");
+                _Network.SendComponentOf(true, entity, "Animation");
+                _Network.SendComponentOf(true, entity, "Health");
+                _Network.SendComponentOf(true, entity, "RigidBody2DComponent");
+                _Network.SendComponentOf(true, entity, "ScriptComponent");
+                _Network.SendComponentOf(true, entity, "SpriteRendererComponent");
+                _Network.SendComponentOf(true, entity, "Clock");
             }
         });
     }
@@ -375,21 +353,25 @@ namespace Exodia {
      * explicitly.
      */
     void Server::CheckForNewClients() {
-        Entity *player = nullptr;
+        GameObject player;
         std::map<std::string, Connection> connections = _Network.GetConnections();
 
-        if (connections.empty()) {
+        if (connections.empty())
             return;
-        }
         for (std::pair<const std::string, Connection> connection : connections) {
             if (IsClientNew(connection)) {
-                uint32_t userID = _Users.size();
-                Entity *entity = Scenes[GAME]->CreateEntity("Player_" + std::to_string(userID));
+                uint32_t userID = (uint32_t)_Users.size();
 
-                entity->AddComponent<ScriptComponent>().Get().Bind("Player");
+                GameObject entity = Scenes[GAME]->CreateEntity("Player_" + std::to_string(userID));
+
+                entity.AddComponent<ScriptComponent>().Bind("Player");
+
                 player = Scenes[GAME]->GetEntityByName("Player_" + std::to_string(userID));
+
                 _Users.push_back(User(connection.second, player));
+
                 SendComponents(GAME);
+
                 EXODIA_INFO("New client connected");
             }
         }

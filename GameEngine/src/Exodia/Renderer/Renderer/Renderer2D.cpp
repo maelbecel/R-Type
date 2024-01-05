@@ -15,10 +15,10 @@
 #include "Renderer/Renderer/RenderCommand.hpp"
 
 // Exodia Core include
-#include "Core/Buffer/Buffer.hpp"
+#include "Exodia-Utils.hpp"
 
 // Exodia Debug
-#include "Debug/Profiling.hpp"
+#include "Exodia-Debug.hpp"
 
 // External include
 #include <cstring>
@@ -719,10 +719,14 @@ namespace Exodia {
 
             if (c == 'm')
                 x -= glyph.Width / 2 * fsScale + params.Kerning;
-            else if (c == 'i' || c == 'l')
-                x += glyph.Width * 1.25 * fsScale + params.Kerning;
+            else if (c == 'i' || c == 'l' || c == 'I')
+                x += glyph.Width * 1.25f * fsScale + params.Kerning;
             else if (c == 'r')
                 x += glyph.Width * fsScale + params.Kerning;
+            else if (c == 'E' || c == 'L')
+                x += glyph.Width * 0.75f * fsScale + params.Kerning;
+            else if (c == 'A')
+                x -= glyph.Width * 0.25f * fsScale + params.Kerning;
 
             glm::vec2 texCoordMin(glyph.TextureCoord);
             glm::vec2 texCoordMax(glyph.TextureCoord + fsScale);
@@ -774,13 +778,13 @@ namespace Exodia {
                 } else if (c == 'W' || c == 'm' || c == 'M') {
                     Glyph nextGlyph = fontData.Glyphs[text[i + 1]];
 
-                    x += (glyph.Width + (nextGlyph.Width / 2)) * fsScale + params.Kerning;
+                    x += (glyph.Width * 2) * fsScale + params.Kerning;
                 } else if (c == 'r' || c == 't') {
                     x += glyph.Width / 2 * fsScale + params.Kerning;
                 } else if (c == 'i' || c == 'l') {
                     x -= glyph.Width / 2 * fsScale + params.Kerning;
                 } else
-                    x += glyph.Width * fsScale + params.Kerning;
+                    x += (glyph.Width + 1) * fsScale + params.Kerning;
             }
         }
     }

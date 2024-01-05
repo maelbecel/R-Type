@@ -51,6 +51,10 @@ include_directories(${INCLUDE_DIRS})
 add_executable(r-type_client ${SOURCES})
 
 target_link_libraries(r-type_client PRIVATE
+    Exodia-Tools
+    Exodia-Debug
+    Exodia-ECS
+
     GameEngine
     R-Type
     glad::glad
@@ -66,6 +70,13 @@ target_link_libraries(r-type_client PRIVATE
     yaml-cpp::yaml-cpp
     imguizmo::imguizmo
     FreeALUT::alut
+    Vorbis::vorbisfile
+)
+
+target_include_directories(r-type_client PRIVATE
+    ${CMAKE_BINARY_DIR}/../Library/Tools/src/
+    ${CMAKE_BINARY_DIR}/../Library/Debug/src/
+    ${CMAKE_BINARY_DIR}/../Library/Entity-Component-System/src
 )
 
 target_include_directories(r-type_client PRIVATE ${Stb_INCLUDE_DIR})

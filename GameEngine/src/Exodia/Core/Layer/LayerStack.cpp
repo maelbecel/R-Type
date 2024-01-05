@@ -21,10 +21,11 @@ namespace Exodia {
     LayerStack::LayerStack() : _LayerInsertIndex(0){};
 
     LayerStack::~LayerStack() {
-        for (Layer *layer : _Layers) {
+        // TODO: Put every layer in a smart pointer
+        /*for (Layer *layer : _Layers) {
             if (layer)
                 delete layer;
-        }
+        }*/
     }
 
     /////////////

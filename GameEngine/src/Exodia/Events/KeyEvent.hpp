@@ -8,9 +8,6 @@
 #ifndef KEYEVENT_HPP_
 #define KEYEVENT_HPP_
 
-// Exodia Utils
-#include "Utils/CrossPlatform.hpp"
-
 // Exodia Events
 #include "Events/Event.hpp"
 

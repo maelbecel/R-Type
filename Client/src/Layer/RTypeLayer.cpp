@@ -9,6 +9,7 @@
 #include <imgui.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <sstream>
 
 using namespace Exodia;
 
@@ -28,7 +29,7 @@ namespace RType {
 
         ApplicationCommandLineArgs commandLine = Application::Get().GetSpecification().CommandLineArgs;
 
-        // TODO: Temp port ./r-type_client {port}
+        // TODO: Temp port ./r-type_client {port} {ip} {port}
         int port = 8083; // Default port
         if (commandLine.Count > 1) {
             port = std::stoi(commandLine[1]);
@@ -41,11 +42,39 @@ namespace RType {
         return port;
     }
 
-    void RTypeLayer::ConnectToServer(int port) {
+    std::string RTypeLayer::GetIp() {
+
+        ApplicationCommandLineArgs commandLine = Application::Get().GetSpecification().CommandLineArgs;
+
+        // TODO: Temp ip ./r-type_client {port} {ip} {port}
+        std::string ip = "127.0.0.1"; // Default ip
+        if (commandLine.Count > 2) {
+            ip = commandLine[2];
+        }
+        return ip;
+    }
+
+    int RTypeLayer::GetServerPort() {
+        ApplicationCommandLineArgs commandLine = Application::Get().GetSpecification().CommandLineArgs;
+
+        // TODO: Temp port ./r-type_client {port} {ip} {port}
+        int port = 8083; // Default port
+        if (commandLine.Count > 3) {
+            port = std::stoi(commandLine[3]);
+
+            if (port < 1024 || port > 65535) {
+                Application::Get().Close();
+                return -1;
+            }
+        }
+        return port;
+    }
+
+    void RTypeLayer::ConnectToServer(int port, std::string ip, int serverPort) {
         _Network = CreateScope<Network::Network>(_WorldNetwork, _IOContextManager, port);
 
         _Network->Loop();
-        _Network->SendAskConnect("127.0.0.1", 8082);
+        _Network->SendAskConnect(ip, (short)serverPort);
         // TODO: change ip and port when the server is on a different machine
     }
 
@@ -53,11 +82,13 @@ namespace RType {
         EXODIA_PROFILE_FUNCTION();
 
         int port = GetPort();
+        std::string ip = GetIp();
+        int serverPort = GetServerPort();
 
         if (port == -1)
             return;
 
-        ConnectToServer(port);
+        ConnectToServer(port, ip, serverPort);
 
         // Create world
         CurrentScene = GAME;
@@ -104,13 +135,20 @@ namespace RType {
         // TODO: Temp code
 
         // Create the camera entity
-        Entity *cameraEntity = Scenes[GAME]->CreateEntity("Camera");
+        GameObject cameraEntity = Scenes[GAME]->CreateEntity("Camera");
 
-        CameraComponent &camera = cameraEntity->AddComponent<CameraComponent>().Get();
-        cameraEntity->GetComponent<TransformComponent>().Get().Translation = {0.0f, 0.0f, 15.0f};
+        CameraComponent &camera = cameraEntity.AddComponent<CameraComponent>();
+
+        cameraEntity.GetComponent<TransformComponent>().Translation = {0.0f, 0.0f, 15.0f};
+
         camera.Camera.SetProjectionType(SceneCamera::ProjectionType::Perspective);
         camera.Camera.SetViewportSize(Application::Get().GetWindow().GetWidth(),
                                       Application::Get().GetWindow().GetHeight());
+
+        /*RType::EntityEventSubscriber *subscribe = new RType::EntityEventSubscriber(*_Network);
+
+        Scenes[GAME]->Subscribe<Events::OnEntityCreated>(subscribe);
+        Scenes[GAME]->Subscribe<Events::OnEntityDestroyed>(subscribe);*/
 
         /* Removing rigid body for static camera
         auto body_camera = cameraEntity->AddComponent<RigidBody2DComponent>();
@@ -121,20 +159,21 @@ namespace RType {
         */
 
         // Create the entities
-        int playerID = 0;
         // TODO: Ask server for playerID
-        Entity *entity = Scenes[GAME]->CreateEntity("Player_" + std::to_string(playerID));
-        entity->AddComponent<ScriptComponent>().Get().Bind("Player");
+        // int playerID = 0;
+        // Entity *entity = Scenes[GAME]->CreateEntity("Player_" + std::to_string(playerID));
+        // entity->AddComponent<ScriptComponent>().Get().Bind("Player");
 
         // Create pata-pata
-        Entity *patata = Scenes[GAME]->CreateEntity("Pata-pata");
-        patata->AddComponent<ScriptComponent>().Get().Bind("PataPata");
+        // Entity *patata = Scenes[GAME]->CreateEntity("Pata-pata");
+        // patata->AddComponent<ScriptComponent>().Get().Bind("PataPata");
 
         // Create stars
         // CreateStars(Scenes);
         for (int i = 0; i < 60; i++) {
-            Entity *star = Scenes[GAME]->CreateEntity("Star" + std::to_string(i));
-            star->AddComponent<ScriptComponent>().Get().Bind("Star");
+            GameObject star = Scenes[GAME]->CreateEntity("Star" + std::to_string(i));
+
+            star.AddComponent<ScriptComponent>().Bind("Star");
         }
 
         // Create the camera
@@ -177,15 +216,20 @@ namespace RType {
 
         Scenes[CurrentScene]->GetWorld().LockMutex();
         Scenes[CurrentScene]->GetWorld().ForEach<ScriptComponent, TagComponent>(
-            [&](UNUSED(Entity * entity), ComponentHandle<ScriptComponent> script, ComponentHandle<TagComponent> tag) {
+            [&](Entity *entity, ComponentHandle<ScriptComponent> script, ComponentHandle<TagComponent> tag) {
                 ScriptComponent &sc = script.Get();
                 TagComponent &tc = tag.Get();
 
-                if ((tc.Tag.compare("Player_" + _Network->id) == 0) && sc.Instance != nullptr) {
-                    sc.Instance->OnKeyPressed(key);
+                std::ostringstream oss;
+                oss << _Network->GetId();
+                std::string player = "Player_" + oss.str();
 
-                    _Network->SendEvent(key, true);
+                if ((tc.Tag.compare(player) == 0) && sc.Instance != nullptr) {
+                    // sc.Instance->OnKeyPressed(key);
+
+                    _Network->SendEvent(false, key, true);
                 }
+                (void)entity;
             });
         Scenes[CurrentScene]->GetWorld().UnlockMutex();
 
@@ -193,7 +237,6 @@ namespace RType {
     };
 
     bool RTypeLayer::OnKeyReleasedEvent(KeyReleasedEvent &event) {
-
         int key = event.GetKeyCode();
 
         Scenes[CurrentScene]->GetWorld().LockMutex();
@@ -202,10 +245,13 @@ namespace RType {
                 ScriptComponent &sc = script.Get();
                 TagComponent &tc = tag.Get();
 
-                if ((tc.Tag.compare("Player_" + _Network->id) == 0) && sc.Instance != nullptr) {
-                    sc.Instance->OnKeyReleased(key);
+                std::ostringstream oss;
+                oss << _Network->GetId();
+                std::string player = "Player_" + oss.str();
 
-                    _Network->SendEvent(key, false);
+                if ((tc.Tag.compare(player) == 0) && sc.Instance != nullptr) {
+                    sc.Instance->OnKeyReleased(key);
+                    _Network->SendEvent(false, key, false);
                 }
 
                 (void)entity;

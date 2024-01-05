@@ -9,10 +9,10 @@
 #define ASSETTYPE_HPP_
 
 // Exodia Core ID includes
-#include "Core/ID/UUID.hpp"
+#include "Exodia-Utils.hpp"
 
 // Exodia Utils
-#include "Utils/Assert.hpp"
+#include "Exodia-Debug.hpp"
 
 // External includes
 #include <filesystem>

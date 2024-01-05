@@ -9,7 +9,7 @@
 #include "SceneImporter.hpp"
 
 // Exodia Debug includes
-#include "Debug/Profiling.hpp"
+#include "Exodia-Debug.hpp"
 
 // Exodia Project includes
 #include "Project/Project.hpp"

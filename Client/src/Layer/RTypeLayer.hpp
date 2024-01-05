@@ -41,7 +41,9 @@ namespace RType {
 
       private:
         int GetPort();
-        void ConnectToServer(int port);
+        std::string GetIp();
+        int GetServerPort();
+        void ConnectToServer(int port, std::string ip, int serverPort);
 
         ////////////////
         // Attributes //

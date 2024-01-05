@@ -9,7 +9,7 @@
 #define FRAMEBUFFER_HPP_
 
 // Exodia Utils
-#include "Utils/Memory.hpp"
+#include "Exodia-Utils.hpp"
 
 // External includes
 #include <vector>

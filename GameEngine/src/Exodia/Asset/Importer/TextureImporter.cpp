@@ -11,17 +11,14 @@
 // Exodia Renderer includes
 #include "Renderer/Renderer/RendererAPI.hpp"
 
-// Exodia Buffer includes
-#include "Core/Buffer/Buffer.hpp"
+// Exodia Utils includes
+#include "Exodia-Utils.hpp"
 
 // Exodia Project includes
 #include "Project/Project.hpp"
 
-// Exodia Utils
-#include "Utils/Assert.hpp"
-
 // Exodia Debug includes
-#include "Debug/Profiling.hpp"
+#include "Exodia-Debug.hpp"
 
 // Stb includes
 #define STB_IMAGE_IMPLEMENTATION

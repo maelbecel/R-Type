@@ -9,13 +9,15 @@
 #define PACKET_HPP_
 
 #include "Network/Header/Header.hpp"
-#include "Utils/Memory.hpp"
+#include "Exodia-Utils.hpp"
 
 namespace Exodia {
     namespace Network {
         class Packet {
           public:
-            Packet(uint8_t command) : _content(std::vector<char>()) { _header = std::make_unique<Header>(command); };
+            Packet(uint8_t command, bool isImportant = false) : _content(std::vector<char>()) {
+                _header = std::make_unique<Header>(command, isImportant);
+            };
 
             Packet() : _content(std::vector<char>()) { _header = CreateScope<Header>(0, 0, 0); };
 
@@ -36,6 +38,8 @@ namespace Exodia {
             }
 
             void SetContent(std::vector<char> content) { _content = content; }
+
+            void SetContent(Exodia::Buffer buffer) { _content = buffer.ToVector(); }
 
             void Set(Header header, std::vector<char> content) {
                 _header = CreateScope<Header>(header);

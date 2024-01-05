@@ -9,7 +9,7 @@
 #include "OrthographicCamera.hpp"
 
 // Exodia Debug
-#include "Debug/Profiling.hpp"
+#include "Exodia-Debug.hpp"
 
 // Extern includes
 #include <glm/gtc/matrix_transform.hpp>

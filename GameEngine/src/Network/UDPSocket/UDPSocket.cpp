@@ -85,7 +85,6 @@ namespace Exodia {
                                        [this, callback](const asio::error_code &error, std::size_t bytes_received) {
                                            std::vector<char> receivedMessage(_receiveBuffer.begin(),
                                                                              _receiveBuffer.begin() + bytes_received);
-                                           std::cout << std::endl;
                                            if (!error) {
 
                                                // Call the callback with the received data

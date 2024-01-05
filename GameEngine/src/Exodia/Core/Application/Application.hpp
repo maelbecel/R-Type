@@ -13,19 +13,16 @@
 
 // Exodia Core
 #include "Core/Layer/LayerStack.hpp"
-#include "Core/Time/Timestep.hpp"
 #include "Core/Application/Window.hpp"
-#include "Core/Time/Timer.hpp"
 
 // Exodia Debug
-#include "Debug/Logs.hpp"
+#include "Exodia-Debug.hpp"
 
 // Exodia ImGUI
 #include "ImGui/ImGuiLayer.hpp"
 
 // Exodia Utils
-#include "Utils/Memory.hpp"
-#include "Utils/Assert.hpp"
+#include "Exodia-Utils.hpp"
 
 namespace Exodia {
 
