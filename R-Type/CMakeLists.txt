@@ -83,7 +83,6 @@ target_include_directories(R-Type PRIVATE
     ${CMAKE_BINARY_DIR}/../Library/Tools/src/
 )
 
-target_include_directories(R-Type PRIVATE ${INCLUDE_DEBUG_DIRS})
 target_include_directories(R-Type PRIVATE ${INCLUDE_DIRS_GAME_ENGINE})
 target_include_directories(R-Type PRIVATE ${Stb_INCLUDE_DIR})
 target_include_directories(R-Type PRIVATE ${CMAKE_BINARY_DIR}/_deps/imgui-src)

@@ -29,6 +29,18 @@ namespace RType {
             : Opacity(opacity), FadeInSpeed(fadeInSpeed), FadeOutSpeed(fadeOutSpeed), ShouldFadeIn(false),
               ShouldFadeOut(false), Repeat(false){};
 
+        FadeComponent &operator=(const FadeComponent &other)
+        {
+            Opacity = other.Opacity;
+            FadeInSpeed = other.FadeInSpeed;
+            FadeOutSpeed = other.FadeOutSpeed;
+            ShouldFadeIn = other.ShouldFadeIn;
+            ShouldFadeOut = other.ShouldFadeOut;
+            Repeat = other.Repeat;
+
+            return *this;
+        }
+
         void Serialize(YAML::Emitter &out) override {
             out << YAML::Key << "FadeComponent";
             out << YAML::BeginMap;

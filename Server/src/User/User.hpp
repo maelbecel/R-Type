@@ -11,24 +11,26 @@
 #include "Exodia.hpp"
 
 namespace Exodia {
+
     class User {
-      public:
-        User(Connection &connection);
-        User(Connection &connection, Entity *pawn);
-        ~User();
+    
+        public:
 
-        Connection GetConnection() const { return _Connection; }
+            User(Connection &connection, GameObject pawn = GameObject());
+            ~User() = default;
 
-        void SetConnection(Connection connection) { _Connection = connection; }
+            Connection GetConnection() const { return _Connection; }
 
-        Entity *GetPawn() const { return _Pawn; }
+            void SetConnection(Connection connection) { _Connection = connection; }
 
-        void SetPawn(Entity *pawn) { _Pawn = pawn; }
+            GameObject GetPawn() const { return _Pawn; }
 
-      protected:
-      private:
-        Connection _Connection;
-        Entity *_Pawn;
+            void SetPawn(GameObject pawn) { _Pawn = pawn; }
+
+        private:
+            Connection _Connection;
+            GameObject _Pawn;
     };
-};     // namespace Exodia
+};
+
 #endif /* !USER_HPP_ */

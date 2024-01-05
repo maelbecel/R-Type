@@ -97,9 +97,9 @@ namespace Exodia {
 
         World *GetWorldPtr();
 
-        Entity *GetPrimaryCamera();
-        Entity *GetEntityByName(const std::string &name);
-        Entity *GetEntityByUUID(UUID uuid);
+        GameObject GetPrimaryCamera();
+        GameObject GetEntityByName(const std::string &name);
+        GameObject GetEntityByUUID(UUID uuid);
 
         bool IsRunning() const;
         bool IsPaused() const;

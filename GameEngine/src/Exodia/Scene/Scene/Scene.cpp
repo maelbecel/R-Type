@@ -348,37 +348,33 @@ namespace Exodia {
 
     World *Scene::GetWorldPtr() { return _World; }
 
-    Entity *Scene::GetPrimaryCamera() {
+    GameObject Scene::GetPrimaryCamera() {
         Entity *primaryCamera = nullptr;
 
         _World->ForEach<CameraComponent>([&](Entity *entity, auto camera) {
             auto &cc = camera.Get();
 
-            if (cc.Primary) {
+            if (cc.Primary)
                 primaryCamera = entity;
-                return;
-            }
         });
 
-        return primaryCamera;
+        return GameObject(primaryCamera, this);
     }
 
-    Entity *Scene::GetEntityByName(const std::string &name) {
+    GameObject Scene::GetEntityByName(const std::string &name) {
         Entity *entity = nullptr;
 
         _World->ForEach<TagComponent>([&](Entity *entt, auto tag) {
             auto &tc = tag.Get();
 
-            if (tc.Tag == name) {
+            if (tc.Tag == name)
                 entity = entt;
-                return;
-            }
         });
 
-        return entity;
+        return GameObject(entity, this);
     }
 
-    Entity *Scene::GetEntityByUUID(UUID uuid) {
+    GameObject Scene::GetEntityByUUID(UUID uuid) {
         Entity *entity = nullptr;
 
         _World->ForEach<IDComponent>([&](Entity *entt, auto id) {
@@ -390,7 +386,7 @@ namespace Exodia {
             }
         });
 
-        return entity;
+        return GameObject(entity, this);
     }
 
     bool Scene::IsRunning() const { return _IsRunning; }

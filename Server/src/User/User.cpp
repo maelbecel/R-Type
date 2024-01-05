@@ -9,15 +9,5 @@
 
 namespace Exodia {
 
-    User::User(Connection &connection) {
-        _Connection = connection;
-        _Pawn = nullptr;
-    }
-
-    User::User(Connection &connection, Entity *pawn) {
-        _Connection = connection;
-        _Pawn = pawn;
-    }
-
-    User::~User() {}
-} // namespace Exodia
+    User::User(Connection &connection, GameObject pawn) : _Connection(connection), _Pawn(pawn) {};
+};

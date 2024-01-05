@@ -353,7 +353,7 @@ namespace Exodia {
      * explicitly.
      */
     void Server::CheckForNewClients() {
-        Entity *player = nullptr;
+        GameObject player;
         std::map<std::string, Connection> connections = _Network.GetConnections();
 
         if (connections.empty())

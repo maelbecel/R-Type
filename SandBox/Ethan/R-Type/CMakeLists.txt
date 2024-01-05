@@ -50,6 +50,9 @@ set(INCLUDE_DIRS_GAME_ENGINE
 add_library(Game STATIC ${SOURCES_GAME_ENGINE})
 
 target_link_libraries(Game PRIVATE
+    Exodia-Tools
+    Exodia-Debug
+
     GameEngine
     asio::asio
     glm::glm
@@ -65,6 +68,10 @@ target_link_libraries(Game PRIVATE
     imguizmo::imguizmo
 )
 
+target_include_directories(Game PRIVATE
+    ${CMAKE_BINARY_DIR}/../Library/Debug/src/
+    ${CMAKE_BINARY_DIR}/../Library/Tools/src/
+)
 target_include_directories(Game PRIVATE ${INCLUDE_DIRS_GAME_ENGINE})
 target_include_directories(Game PRIVATE ${Stb_INCLUDE_DIR})
 target_include_directories(Game PRIVATE ${CMAKE_BINARY_DIR}/_deps/imgui-src)

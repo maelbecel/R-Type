@@ -39,58 +39,36 @@ namespace RType {
         _Animations.push_back(anim);
         _Animations.push_back(destroy);
 
-        ComponentHandle<SpriteRendererComponent> sprite = HandleEntity->AddComponent<SpriteRendererComponent>();
+        SpriteRendererComponent &sprite = HandleEntity.AddComponent<SpriteRendererComponent>();
 
-        sprite.Get().Texture = anim.Frames[0];
+        sprite.Texture = anim.Frames[0];
     }
 
     void BulletEnnemy::OnCreate() {
-        EXODIA_INFO("BulletEnnemy created");
+        TransformComponent &bullet_tc = GetComponent<TransformComponent>();
+        ParentComponent    &parent    = GetComponent<ParentComponent>();
+        Scene *scene = HandleEntity.GetScene();
 
-        ComponentHandle<TransformComponent> transform = HandleEntity->GetComponent<TransformComponent>();
-        ComponentHandle<ParentComponent> parent = HandleEntity->GetComponent<ParentComponent>();
-        World *world = HandleEntity->GetWorld();
-
-        if (!transform || !parent || !world)
+        if (!scene)
             return;
+        GameObject parent_entity = scene->GetEntityByUUID(parent.Parent);
 
-        Entity *parent_entity = world->GetEntityByID(parent.Get().Parent);
-
-        if (!parent_entity)
-            return;
-
-        ComponentHandle<TransformComponent> parent_transform = parent_entity->GetComponent<TransformComponent>();
-
-        if (!parent_transform)
-            return;
-
-        TransformComponent &tc = parent_transform.Get();
-        TransformComponent &bullet_tc = transform.Get();
+        TransformComponent &tc = parent_entity.GetComponent<TransformComponent>();
 
         bullet_tc.Translation.x = tc.Translation.x;
         bullet_tc.Translation.y = tc.Translation.y;
-        bullet_tc.Scale = {0.5f, 0.5f, 0.0f};
+        bullet_tc.Scale         = { 0.5f, 0.5f, 0.0f };
 
-        HandleEntity->AddComponent<BoxCollider2DComponent>();
+        HandleEntity.AddComponent<BoxCollider2DComponent>();
 
         // TODO: Ask to server the number of player connected, and do a rand() % nb_player
-        Entity *player = world->GetEntityByTag("Player_0");
+        GameObject player = scene->GetEntityByName("Player_0");
 
-        if (!player)
+        if (!player.GetEntity())
             return;
+        TransformComponent   &player_tc = player.GetComponent<TransformComponent>();
+        RigidBody2DComponent &bullet_rb = HandleEntity.AddComponent<RigidBody2DComponent>();
 
-        ComponentHandle<TransformComponent> player_transform = player->GetComponent<TransformComponent>();
-
-        if (!player_transform)
-            return;
-
-        TransformComponent &player_tc = player_transform.Get();
-        ComponentHandle<RigidBody2DComponent> body_bullet = HandleEntity->AddComponent<RigidBody2DComponent>();
-
-        if (!body_bullet)
-            return;
-
-        RigidBody2DComponent &bullet_rb = body_bullet.Get();
         bullet_rb.Type = RigidBody2DComponent::BodyType::Dynamic;
         bullet_rb.Mass = 0.0f;
         bullet_rb.GravityScale = 0.0f;
@@ -109,87 +87,76 @@ namespace RType {
 
         CreateAnimations();
 
-        EXODIA_INFO("BulletEnnemy created");
-        HandleEntity->GetWorld()->Emit<Events::OnEntityCreated>({HandleEntity});
+        HandleEntity.GetScene()->GetWorldPtr()->Emit<Events::OnEntityCreated>({ HandleEntity.GetEntity() });
     }
 
-    void BulletEnnemy::UpdateAnimations() {
+    void BulletEnnemy::UpdateAnimations()
+    {
         if (_Animations.size() == 0)
             return;
-
-        ComponentHandle<SpriteRendererComponent> sprite = GetComponent<SpriteRendererComponent>();
-        ComponentHandle<AnimationComponent> anim = GetComponent<AnimationComponent>();
-
-        if (!sprite)
-            sprite = HandleEntity->AddComponent<SpriteRendererComponent>();
+        SpriteRendererComponent &sprite = GetComponent<SpriteRendererComponent>();
+        ComponentHandle<AnimationComponent> anim = HandleEntity.GetEntity()->GetComponent<AnimationComponent>();
 
         if (!anim) {
             _Animations[0].IsPlaying = true;
             _Animations[1].IsPlaying = false;
 
-            anim = HandleEntity->AddComponent<AnimationComponent>(_Animations[0]);
+            anim = HandleEntity.GetEntity()->AddComponent<AnimationComponent>(_Animations[0]);
 
-            sprite.Get().Texture = anim.Get().Frames[0];
+            sprite.Texture = anim.Get().Frames[0];
         } else {
             if (_IsColliding && _Animations[1].IsPlaying == false) {
-                ComponentHandle<RigidBody2DComponent> body = GetComponent<RigidBody2DComponent>();
-                if (!body)
-                    return;
+                RigidBody2DComponent &body = GetComponent<RigidBody2DComponent>();
 
-                body.Get().Velocity = {0.0f, 0.0f};
+                body.Velocity = {0.0f, 0.0f};
+
                 _Animations[0].IsPlaying = false;
                 _Animations[1].IsPlaying = true;
 
                 anim.Get() = _Animations[1];
-                sprite.Get().Texture = anim.Get().Frames[0];
+                sprite.Texture = anim.Get().Frames[0];
             }
-            if (_IsColliding && anim.Get().CurrentFrameIndex == anim.Get().Frames.size() - 1 &&
-                _Animations[1].IsPlaying == true) {
-                EXODIA_INFO("Bullet {0} destroyed", HandleEntity->GetComponent<TagComponent>().Get().Tag);
-                HandleEntity->GetWorld()->DestroyEntity(HandleEntity);
-            }
+
+            if (_IsColliding && anim.Get().CurrentFrameIndex == anim.Get().Frames.size() - 1 && _Animations[1].IsPlaying == true)
+                HandleEntity.GetScene()->DestroyEntity(HandleEntity);
         }
     }
 
-    void BulletEnnemy::OnUpdate(UNUSED(Timestep ts)) {
-        ComponentHandle<TransformComponent> transform = GetComponent<TransformComponent>();
-        ComponentHandle<ParentComponent> parent = GetComponent<ParentComponent>();
-        World *world = HandleEntity->GetWorld();
+    void BulletEnnemy::OnUpdate(UNUSED(Timestep ts))
+    {
+        TransformComponent &transform = GetComponent<TransformComponent>();
+        ParentComponent    &parent    = GetComponent<ParentComponent>();
 
-        if (!transform || !parent || !world) {
-            EXODIA_ERROR("BulletEnnemy: OnUpdate: transform or parent or world is null");
+        Scene *scene = HandleEntity.GetScene();
+
+        if (!scene)
             return;
-        }
 
-        Entity *camera = world->GetEntityByTag("Camera");
-        if (!camera) {
+        GameObject camera = scene->GetEntityByName("Camera");
+
+        if (!camera.GetEntity()) {
             EXODIA_ERROR("No camera found");
+
             return;
         }
 
-        ComponentHandle<TransformComponent> camera_transform = camera->GetComponent<TransformComponent>();
-        if (!camera_transform)
-            return;
+        TransformComponent &camera_transform = camera.GetComponent<TransformComponent>();
 
         // Remove bullet if out of screen
-        if (transform.Get().Translation.x < camera_transform.Get().Translation.x - 20.0f) {
-            EXODIA_INFO("Bullet {0} destroyed", HandleEntity->GetComponent<TagComponent>().Get().Tag);
-
-            world->DestroyEntity(HandleEntity);
-        }
-
+        if (transform.Translation.x < camera_transform.Translation.x - 20.0f)
+            scene->DestroyEntity(HandleEntity);
         UpdateAnimations();
     }
 
-    void BulletEnnemy::OnCollisionEnter(Entity *entity) {
-        ComponentHandle<ParentComponent> parent = GetComponent<ParentComponent>();
+    void BulletEnnemy::OnCollisionEnter(Entity *entity)
+    {
+        ParentComponent &parent = GetComponent<ParentComponent>();
         ComponentHandle<IDComponent> entity_id = entity->GetComponent<IDComponent>();
 
-        if (!parent || !entity_id)
+        if (!entity_id)
             return;
-        if (parent.Get().Parent == entity_id.Get().ID)
+        if (parent.Parent == entity_id.Get().ID)
             return;
-
         _IsColliding = true;
     }
 }; // namespace RType

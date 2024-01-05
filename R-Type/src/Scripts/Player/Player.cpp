@@ -130,21 +130,21 @@ namespace RType {
     void Player::UpdateAnimations()
     {
         SpriteRendererComponent &sprite = GetComponent<SpriteRendererComponent>();
-        ComponentHandle<AnimationComponent> anim = GetComponent<AnimationComponent>();
+        ComponentHandle<AnimationComponent> anim = HandleEntity.GetEntity()->GetComponent<AnimationComponent>();
 
         if (!anim) {
             _Animations[0].IsPlaying = true;
 
-            anim = HandleEntity.AddComponent<AnimationComponent>(_Animations[0]);
+            anim = HandleEntity.GetEntity()->AddComponent<AnimationComponent>(_Animations[0]);
 
-            sprite.Texture = anim.Frames[0];
+            sprite.Texture = anim.Get().Frames[0];
         } else {
             if (_State == State::IDLE && _PreviousState != State::IDLE) {
-                Idle(anim, sprite);
+                Idle(anim.Get(), sprite);
             } else if (_State == State::MOVE_UP && _PreviousState != State::MOVE_UP) {
-                MoveUp(anim, sprite);
+                MoveUp(anim.Get(), sprite);
             } else if (_State == State::MOVE_DOWN && _PreviousState != State::MOVE_DOWN) {
-                MoveDown(anim, sprite);
+                MoveDown(anim.Get(), sprite);
             }
         }
     }
@@ -229,15 +229,15 @@ namespace RType {
         auto &transform = GetComponent<TransformComponent>();
         auto &velocity  = GetComponent<RigidBody2DComponent>();
 
-        auto *camera_entity = HandleEntity.GetScene()->GetEntityByName("Camera");
+        GameObject camera_entity = HandleEntity.GetScene()->GetEntityByName("Camera");
 
         bool block = false;
 
-        if (!camera_entity)
+        if (!camera_entity.GetEntity())
             return;
 
         if (_State != State::DEAD) {
-            TransformComponent &camera = camera_entity->GetComponent<TransformComponent>().Get();
+            TransformComponent &camera = camera_entity.GetComponent<TransformComponent>();
 
             /*
             if (transform.Get().Translation.x < camera.Translation.x - 9.5f) {
@@ -329,7 +329,7 @@ namespace RType {
         if (player_tag.Tag.rfind("BE", 0) == 0) {
             EXODIA_INFO("BE {0} hit", player_tag.Tag);
 
-            HandleEntity.GetScene()->GetWorldPtr()->Emit<Events::TakeDamage>({HandleEntity, 1});
+            HandleEntity.GetScene()->GetWorldPtr()->Emit<Events::TakeDamage>({ HandleEntity.GetEntity(), 1 });
         }
     };
 }; // namespace RType
