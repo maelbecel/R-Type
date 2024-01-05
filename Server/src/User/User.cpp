@@ -9,5 +9,5 @@
 
 namespace Exodia {
 
-    User::User(Connection &connection, GameObject pawn) : _Connection(connection), _Pawn(pawn) {};
+    User::User(Connection &connection, GameObject pawn) : _Connection(connection), _Pawn(pawn){};
 };

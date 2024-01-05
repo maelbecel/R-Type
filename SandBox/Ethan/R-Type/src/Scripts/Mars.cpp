@@ -42,8 +42,7 @@ namespace RType {
         // TODO: Add RigidBody component to all the system for the real game.
     }
 
-    void Mars::GenerateDebris(Scene *scene)
-    {
+    void Mars::GenerateDebris(Scene *scene) {
         std::random_device rd;
         std::mt19937 gen(rd());
 
@@ -57,8 +56,8 @@ namespace RType {
         if (ariane1.GetEntity()) {
             auto &tc = ariane1.GetComponent<TransformComponent>(); // tc = Transform component
 
-            tc.Translation = { dis(gen), dis2(gen), 0.2f };
-            tc.Scale       = { 1.5f, 1.6f, 1.0f };
+            tc.Translation = {dis(gen), dis2(gen), 0.2f};
+            tc.Scale = {1.5f, 1.6f, 1.0f};
 
             auto &sc = ariane1.AddComponent<SpriteRendererComponent>(); // sc = SpriteRenderer component
 
@@ -71,8 +70,8 @@ namespace RType {
         if (ariane2.GetEntity()) {
             auto &tc = ariane2.GetComponent<TransformComponent>(); // tc = Transform component
 
-            tc.Translation = { dis(gen), dis2(gen), 0.4f };
-            tc.Scale       = { 1.5f, 1.0f, 1.0f };
+            tc.Translation = {dis(gen), dis2(gen), 0.4f};
+            tc.Scale = {1.5f, 1.0f, 1.0f};
 
             auto &sc = ariane2.AddComponent<SpriteRendererComponent>(); // sc = SpriteRenderer component
 
@@ -86,9 +85,9 @@ namespace RType {
             if (ariane3.GetEntity()) {
                 auto &tc = ariane3.GetComponent<TransformComponent>(); // tc = Transform component
 
-                tc.Translation = { dis(gen), dis2(gen), 0.3f };
-                tc.Rotation.z  = dis(gen) * 360.0f;
-                tc.Scale.x     = 2.0f;
+                tc.Translation = {dis(gen), dis2(gen), 0.3f};
+                tc.Rotation.z = dis(gen) * 360.0f;
+                tc.Scale.x = 2.0f;
 
                 auto &sc = ariane3.AddComponent<SpriteRendererComponent>(); // sc = SpriteRenderer component
 
@@ -106,14 +105,13 @@ namespace RType {
                 auto &tc = ariane.GetComponent<TransformComponent>(); // tc = Transform component
 
                 tc.Translation = {dis(gen), dis2(gen), dis3(gen) == 0 ? 0.6f : 0.4f};
-                tc.Rotation.z  = dis(gen) * 360.0f;
-                tc.Scale       = {0.4f, 0.4f, 1.0f};
+                tc.Rotation.z = dis(gen) * 360.0f;
+                tc.Scale = {0.4f, 0.4f, 1.0f};
 
                 auto &sc = ariane.AddComponent<SpriteRendererComponent>(); // sc = SpriteRenderer component
 
                 if (dis3(gen) == 0)
-                    sc.Texture =
-                        SubTexture2D::CreateFromCoords(MARS, {151.0f, 245.0f}, {1.0f, 1.0f}, {62.0f, 59.0f});
+                    sc.Texture = SubTexture2D::CreateFromCoords(MARS, {151.0f, 245.0f}, {1.0f, 1.0f}, {62.0f, 59.0f});
                 else
                     sc.Texture = SubTexture2D::CreateFromCoords(MARS, {380.0f, 4.0f}, {1.0f, 1.0f}, {56.0f, 52.0f});
 
@@ -122,4 +120,4 @@ namespace RType {
             }
         }
     }
-};
+}; // namespace RType

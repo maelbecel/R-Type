@@ -29,8 +29,7 @@ namespace RType {
             : Opacity(opacity), FadeInSpeed(fadeInSpeed), FadeOutSpeed(fadeOutSpeed), ShouldFadeIn(false),
               ShouldFadeOut(false), Repeat(false){};
 
-        FadeComponent &operator=(const FadeComponent &other)
-        {
+        FadeComponent &operator=(const FadeComponent &other) {
             Opacity = other.Opacity;
             FadeInSpeed = other.FadeInSpeed;
             FadeOutSpeed = other.FadeOutSpeed;
