@@ -11,8 +11,7 @@ using namespace Exodia;
 
 namespace RType {
 
-    void Star::OnCreate()
-    {
+    void Star::OnCreate() {
         std::random_device rd;
         std::mt19937 gen(rd());
         std::uniform_real_distribution<float> sizeDist(0.01f, 0.09f);
@@ -29,9 +28,9 @@ namespace RType {
         GameObject camera = scene->GetEntityByName("Camera");
         TransformComponent &cameraTc = camera.GetComponent<TransformComponent>();
 
-        _Size      = sizeDist(gen);
+        _Size = sizeDist(gen);
         _Intensity = intensityDist(gen) / 255.0f;
-        _State     = stateDist(gen) ? State::GROWING : State::SHRINKING;
+        _State = stateDist(gen) ? State::GROWING : State::SHRINKING;
 
         HandleEntity.AddComponent<CircleRendererComponent>(glm::vec4{0.9f, 0.9f, colorDist(gen), 0.9f});
         HandleEntity.AddComponent<Clock>();
@@ -39,12 +38,12 @@ namespace RType {
         TransformComponent &tc = GetComponent<TransformComponent>();
 
         float max_height = 20.0f;
-        int height       = 40;
+        int height = 40;
 
         tc.Translation.x = (float)(10 + std::uniform_int_distribution<int>(0, 19)(gen)) + cameraTc.Translation.x;
         tc.Translation.y = max_height - (float)(std::uniform_int_distribution<int>(0, height)(gen));
-        tc.Scale.x       = _Size;
-        tc.Scale.y       = _Size;
+        tc.Scale.x = _Size;
+        tc.Scale.y = _Size;
 
         RigidBody2DComponent &body = HandleEntity.AddComponent<RigidBody2DComponent>();
 
@@ -54,11 +53,10 @@ namespace RType {
         body.Velocity.x = (float)velocityDist(gen);
     }
 
-    void Star::OnUpdate(Timestep ts)
-    {
-        Clock                   &clock     = GetComponent<Clock>();
-        TransformComponent      &transform = GetComponent<TransformComponent>();
-        CircleRendererComponent &cc        = GetComponent<CircleRendererComponent>();
+    void Star::OnUpdate(Timestep ts) {
+        Clock &clock = GetComponent<Clock>();
+        TransformComponent &transform = GetComponent<TransformComponent>();
+        CircleRendererComponent &cc = GetComponent<CircleRendererComponent>();
 
         Scene *scene = HandleEntity.GetScene();
 

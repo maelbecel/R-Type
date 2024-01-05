@@ -12,8 +12,7 @@ using namespace Exodia;
 
 namespace RType {
 
-    void Player::CreateAnimations()
-    {
+    void Player::CreateAnimations() {
         AnimationComponent idle;
         AnimationComponent moveUp;
         AnimationComponent moveDown;
@@ -89,8 +88,7 @@ namespace RType {
         _Animations.push_back(dead);
     }
 
-    void Player::OnCreate()
-    {
+    void Player::OnCreate() {
         HandleEntity.AddComponent<Health>(1);
         HandleEntity.AddComponent<BoxCollider2DComponent>();
 
@@ -102,17 +100,16 @@ namespace RType {
         // Set entity rigidbody
         RigidBody2DComponent &rb = HandleEntity.AddComponent<RigidBody2DComponent>();
 
-        rb.Type         = RigidBody2DComponent::BodyType::Dynamic;
-        rb.Mass         = 0.0f;
+        rb.Type = RigidBody2DComponent::BodyType::Dynamic;
+        rb.Mass = 0.0f;
         rb.GravityScale = 0.0f;
-        rb.Velocity     = glm::vec2{0.0f, 0.0f};
+        rb.Velocity = glm::vec2{0.0f, 0.0f};
 
         // Set entity animations
         CreateAnimations();
     }
 
-    void Player::Shoot(TransformComponent &tc)
-    {
+    void Player::Shoot(TransformComponent &tc) {
         EXODIA_INFO("Player attack");
 
         Scene *scene = HandleEntity.GetScene();
@@ -127,8 +124,7 @@ namespace RType {
         _IsAttacking = true;
     }
 
-    void Player::UpdateAnimations()
-    {
+    void Player::UpdateAnimations() {
         SpriteRendererComponent &sprite = GetComponent<SpriteRendererComponent>();
         ComponentHandle<AnimationComponent> anim = HandleEntity.GetEntity()->GetComponent<AnimationComponent>();
 
@@ -149,10 +145,9 @@ namespace RType {
         }
     }
 
-    void Player::OnUpdate(Timestep ts)
-    {
+    void Player::OnUpdate(Timestep ts) {
         TransformComponent &tc = GetComponent<TransformComponent>();
-        Health             &h  = GetComponent<Health>();
+        Health &h = GetComponent<Health>();
 
         if (_IsCharging) {
             _AttackTimer += ts.GetSeconds();
@@ -173,7 +168,7 @@ namespace RType {
             if (!scene)
                 return;
 
-            GameObject camera_entity         = scene->GetEntityByName("Camera");
+            GameObject camera_entity = scene->GetEntityByName("Camera");
             RigidBody2DComponent &camera_rbc = camera_entity.GetComponent<RigidBody2DComponent>();
 
             rbc.Velocity.x = camera_rbc.Velocity.x;
@@ -227,7 +222,7 @@ namespace RType {
 
     void Player::OnKeyPressed(int keycode) {
         auto &transform = GetComponent<TransformComponent>();
-        auto &velocity  = GetComponent<RigidBody2DComponent>();
+        auto &velocity = GetComponent<RigidBody2DComponent>();
 
         GameObject camera_entity = HandleEntity.GetScene()->GetEntityByName("Camera");
 
@@ -291,8 +286,7 @@ namespace RType {
         }
     };
 
-    void Player::OnKeyReleased(int keycode)
-    {
+    void Player::OnKeyReleased(int keycode) {
         auto &velocity = GetComponent<RigidBody2DComponent>();
 
         if (keycode == Key::A || keycode == Key::D) {
@@ -316,8 +310,7 @@ namespace RType {
         }
     }
 
-    void Player::OnCollisionEnter(Entity *entity)
-    {
+    void Player::OnCollisionEnter(Entity *entity) {
         Health &player_health = GetComponent<Health>();
         ComponentHandle<TagComponent> tag = entity->GetComponent<TagComponent>();
 
