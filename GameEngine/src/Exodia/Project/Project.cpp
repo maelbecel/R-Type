@@ -11,7 +11,7 @@
 
 // Exodia ECS includes
 #include "Scene/SceneHeaders.hpp"
-#include "ECS/Component/ComponentContainer.hpp"
+#include "Exodia-ECS.hpp"
 
 // Exodia Script includes
 #include "Script/Interface/ScriptableEntity.hpp"

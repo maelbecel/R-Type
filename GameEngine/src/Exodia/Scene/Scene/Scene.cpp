@@ -10,7 +10,6 @@
 
 // Exodia ECS includes
 #include "Scene/Components/Components.hpp"
-#include "ECS/Interface/IComponentContainer.hpp"
 
 // Exodia Renderer includes
 #include "Renderer/Renderer/Renderer2D.hpp"

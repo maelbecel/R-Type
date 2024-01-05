@@ -5,8 +5,8 @@
 ** ECS
 */
 
-#ifndef ECS_HPP_
-#define ECS_HPP_
+#ifndef EXODIA_ECS_HPP_
+#define EXODIA_ECS_HPP_
 
 // -- Exodia ECS Component -------------------------------------------------
 
@@ -136,4 +136,4 @@ namespace Exodia {
     }
 }; // namespace Exodia
 
-#endif /* !ECS_HPP_ */
+#endif /* !EXODIA_ECS_HPP_ */

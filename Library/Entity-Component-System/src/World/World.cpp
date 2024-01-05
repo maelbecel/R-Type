@@ -5,8 +5,7 @@
 ** World
 */
 
-#include "ECS.hpp"
-#include "Scene/SceneHeaders.hpp"
+#include "Exodia-ECS.hpp"
 
 namespace Exodia {
 
@@ -94,13 +93,6 @@ namespace Exodia {
     void World::DestroyEntity(Entity *entity, bool immediate) {
         if (entity == nullptr)
             return;
-
-        if (entity->HasComponent<ChildrenComponent>()) {
-            auto &children = entity->GetComponent<ChildrenComponent>().Get();
-
-            for (auto child : children.Children)
-                DestroyEntity(GetEntityByID(child), immediate);
-        }
 
         if (entity->IsPendingDestroy() == false) {
             if (immediate) {

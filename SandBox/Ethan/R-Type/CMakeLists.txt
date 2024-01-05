@@ -52,6 +52,7 @@ add_library(Game STATIC ${SOURCES_GAME_ENGINE})
 target_link_libraries(Game PRIVATE
     Exodia-Tools
     Exodia-Debug
+    Exodia-ECS
 
     GameEngine
     asio::asio
@@ -71,6 +72,7 @@ target_link_libraries(Game PRIVATE
 target_include_directories(Game PRIVATE
     ${CMAKE_BINARY_DIR}/../Library/Debug/src/
     ${CMAKE_BINARY_DIR}/../Library/Tools/src/
+    ${CMAKE_BINARY_DIR}/../Library/Entity-Component-System/src
 )
 target_include_directories(Game PRIVATE ${INCLUDE_DIRS_GAME_ENGINE})
 target_include_directories(Game PRIVATE ${Stb_INCLUDE_DIR})

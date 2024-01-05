@@ -12,7 +12,7 @@
 #include "Asset/Asset.hpp"
 
 // Exodia ECS includes
-#include "ECS/World/World.hpp"
+#include "Exodia-ECS.hpp"
 
 // Exodia Renderer includes
 #include "Renderer/Camera/EditorCamera.hpp"

@@ -7,7 +7,7 @@
 
 #include "Entity.hpp"
 #include "World/World.hpp"
-#include "ECS/Events/Events.hpp"
+#include "Events/Events.hpp"
 
 namespace Exodia {
 

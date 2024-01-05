@@ -9,7 +9,7 @@
 #define IMGUITOOLSUI_HPP_
 
 // Exodia ECS includes
-#include "ECS/Entity/Entity.hpp"
+#include "Exodia-ECS.hpp"
 
 // ImGui includes
 #include <imgui.h>

@@ -13,7 +13,7 @@
 #include "Header/Header.hpp"
 #include "Connection/Connection.hpp"
 #include "Packet/Packet.hpp"
-#include "ECS/ECS.hpp"
+#include "Exodia-ECS.hpp"
 #include "Scene/SceneHeaders.hpp"
 #include <vector>
 #include <chrono>

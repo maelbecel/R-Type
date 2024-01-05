@@ -8,7 +8,7 @@
 #ifndef GAMEOBJECT_HPP_
 #define GAMEOBJECT_HPP_
 
-#include "ECS/ECS.hpp"
+#include "Exodia-ECS.hpp"
 #include "Scene/Scene/Scene.hpp"
 
 namespace Exodia {

@@ -9,8 +9,7 @@
 #define EVENTHOVER_HPP_
 
 // Exodia ECS includes
-#include "ECS/Events/Events.hpp"
-#include "ECS/Interface/EventSubscriber.hpp"
+#include "Exodia-ECS.hpp"
 
 namespace Exodia {
 

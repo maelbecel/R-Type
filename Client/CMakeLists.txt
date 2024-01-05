@@ -53,6 +53,7 @@ add_executable(r-type_client ${SOURCES})
 target_link_libraries(r-type_client PRIVATE
     Exodia-Tools
     Exodia-Debug
+    Exodia-ECS
 
     GameEngine
     R-Type
@@ -75,6 +76,7 @@ target_link_libraries(r-type_client PRIVATE
 target_include_directories(r-type_client PRIVATE
     ${CMAKE_BINARY_DIR}/../Library/Tools/src/
     ${CMAKE_BINARY_DIR}/../Library/Debug/src/
+    ${CMAKE_BINARY_DIR}/../Library/Entity-Component-System/src
 )
 
 target_include_directories(r-type_client PRIVATE ${Stb_INCLUDE_DIR})

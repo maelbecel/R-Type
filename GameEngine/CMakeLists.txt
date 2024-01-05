@@ -45,13 +45,6 @@ set(SOURCES_GAME_ENGINE
     src/Exodia/Renderer/Sound/Sound.cpp
     src/Exodia/Renderer/Font/Font.cpp
 
-        # -- Entity Component System (ECS) source files
-
-    src/Exodia/ECS/Entity/EntityIterator.cpp
-    src/Exodia/ECS/Entity/EntityView.cpp
-    src/Exodia/ECS/Entity/Entity.cpp
-    src/Exodia/ECS/World/World.cpp
-
         # -- Scene source files
 
     src/Exodia/Scene/Camera/SceneCamera.cpp
@@ -142,6 +135,7 @@ add_library(GameEngine STATIC ${SOURCES_GAME_ENGINE})
 target_link_libraries(GameEngine PRIVATE
     Exodia-Tools
     Exodia-Debug
+    Exodia-ECS
 
     asio::asio
     glm::glm
@@ -164,6 +158,7 @@ set(EXODIA_LIB_DIR ${CMAKE_BINARY_DIR}/../Library)
 target_include_directories(GameEngine PRIVATE
     ${EXODIA_LIB_DIR}/Tools/src
     ${EXODIA_LIB_DIR}/Debug/src
+    ${CMAKE_BINARY_DIR}/../Library/Entity-Component-System/src
 )
 
 target_include_directories(GameEngine PRIVATE ${INCLUDE_DIRS_GAME_ENGINE})

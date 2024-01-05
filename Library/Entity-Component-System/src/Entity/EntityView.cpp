@@ -6,7 +6,7 @@
 */
 
 #include "Entity/EntityView.hpp"
-#include "ECS.hpp"
+#include "Exodia-ECS.hpp"
 
 namespace Exodia {
 

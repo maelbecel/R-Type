@@ -12,8 +12,7 @@
 #include "Asset/Manager/EditorAssetManager.hpp"
 
 // Exodia ECS includes
-#include "ECS/Interface/IComponentContainer.hpp"
-#include "ECS/Interface/EntitySystem.hpp"
+#include "Exodia-ECS.hpp"
 
 // Exodia Utils includes
 #include "Exodia-Utils.hpp"

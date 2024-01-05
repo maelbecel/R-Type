@@ -20,7 +20,7 @@
 
 // -- Entity Component System ----------------------------------------------
 
-#include "Exodia/ECS/ECS.hpp"
+#include "Exodia-ECS.hpp"
 
 // -- Exodia Events --------------------------------------------------------
 
