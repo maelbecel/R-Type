@@ -18,7 +18,7 @@ namespace FlappyBird {
 
         std::vector<Ref<SubTexture2D>> frames;
 
-        frames.push_back(Exodia::SubTexture2D::CreateFromCoords(PLAYER, {0, 0}, {10, 13}));
+        frames.push_back(Exodia::SubTexture2D::CreateFromCoords(PLAYER, {0, 0}, {10, 13}, {1, 1}));
 
         anim.Frames = frames;
         anim.IsPlaying = false;
@@ -110,12 +110,8 @@ namespace FlappyBird {
     }
 
     void Player::OnKeyPressed(int keycode) {
-        auto &transform = GetComponent<TransformComponent>();
-        auto &velocity = GetComponent<RigidBody2DComponent>();
-
         GameObject camera_entity = HandleEntity.GetScene()->GetEntityByName("Camera");
 
-        bool block = false;
 
         if (!camera_entity.GetEntity())
             return;
@@ -128,6 +124,14 @@ namespace FlappyBird {
                 rb.Velocity.y += _EnginePower * 2.0f;
         }
     }
+
+    void Player::OnKeyReleased(int keycode) {
+        if (keycode == Key::SPACE) {
+            RigidBody2DComponent &rb = GetComponent<RigidBody2DComponent>();
+
+            rb.Velocity.y -= _Gravity;
+        }
+    };
 
     const glm::vec3 &Player::GetPosition() {
         TransformComponent &tc = GetComponent<TransformComponent>();
@@ -146,5 +150,12 @@ namespace FlappyBird {
 
         return (uint32_t)(tc.Translation.x + 10.0f) / 10.0f;
     }
+
+    void Player::OnCollisionEnter(Entity *entity) {
+        ComponentHandle<TagComponent> tag = entity->GetComponent<TagComponent>();
+
+        if (!tag)
+            return;
+    };
 
 } // namespace FlappyBird

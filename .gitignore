@@ -43,6 +43,7 @@ ExodiaProfile-*.json
 # Binaries for programs and plugins
 r-type_*
 exodia
+SandBoxGames
 
 # ImGui
 imgui.ini

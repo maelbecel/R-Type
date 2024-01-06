@@ -30,7 +30,7 @@ namespace Exodia {
     Application *CreateApplication(ApplicationCommandLineArgs args) {
         EXODIA_PROFILE_FUNCTION();
 
-        RType::InitRType();
+        // FlappyBird::InitFlappyBird();
 
         ApplicationSpecification spec;
 

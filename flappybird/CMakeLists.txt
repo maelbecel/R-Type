@@ -24,12 +24,6 @@ set(SOURCES
     src/Layer/GameLayer.cpp
 
     src/ECS/Entity/Player.cpp
-
-    src/Particles/Particles.cpp
-
-    src/Level/Level.cpp
-
-    src/Tools/Random.cpp
 )
 
 # Set include directories for the SandBoxGames

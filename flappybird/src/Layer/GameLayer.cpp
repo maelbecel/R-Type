@@ -120,13 +120,14 @@ namespace FlappyBird {
     bool GameLayer::OnKeyPressedEvent(KeyPressedEvent &event) {
 
         int key = event.GetKeyCode();
+        (void)key;
 
         return true;
     };
 
     bool GameLayer::OnKeyReleasedEvent(KeyReleasedEvent &event) {
         int key = event.GetKeyCode();
-
+        (void)key;
         return false;
     };
 
