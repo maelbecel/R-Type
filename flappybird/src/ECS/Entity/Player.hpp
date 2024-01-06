@@ -9,10 +9,10 @@
 #define PLAYER_HPP_
 
 #include "Exodia.hpp"
-#include "Particles/Particles.hpp"
+// #include "Particles/Particles.hpp"
 
-#include "Animation.hpp"
-#include "Clock.hpp"
+#include "../Component/Animation.hpp"
+#include "../Component/Clock.hpp"
 
 using namespace Exodia;
 
@@ -54,10 +54,10 @@ namespace FlappyBird {
         float _SmokeEmitInterval;
         float _SmokeNextEmitTime;
 
-        ParticleProps _SmokeParticle;
-        ParticleProps _EngineParticle;
+        // ParticleProps _SmokeParticle;
+        // ParticleProps _EngineParticle;
 
-        ParticlesSystem _ParticleSystem;
+        // ParticlesSystem _ParticleSystem;
 
         std::vector<AnimationComponent> _Animations;
     };

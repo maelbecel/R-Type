@@ -9,7 +9,6 @@
 #define RTYPELAYER_HPP_
 
 #include "Exodia.hpp"
-#include "R-Type.hpp"
 
 using namespace Exodia;
 

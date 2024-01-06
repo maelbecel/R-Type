@@ -77,7 +77,7 @@ target_link_libraries(SandBoxGames PRIVATE
     Vorbis::vorbisfile
 )
 
-target_include_directories(r-type_client PRIVATE
+target_include_directories(SandBoxGames PRIVATE
     ${CMAKE_BINARY_DIR}/../Library/Tools/src/
     ${CMAKE_BINARY_DIR}/../Library/Debug/src/
     ${CMAKE_BINARY_DIR}/../Library/Entity-Component-System/src
