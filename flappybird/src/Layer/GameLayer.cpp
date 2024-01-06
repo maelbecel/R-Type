@@ -1,8 +1,8 @@
 /*
-** EXODIA PROJECT, 2023
-** TryAGame
+** EPITECH PROJECT, 2023
+** ExodiaGameEngine
 ** File description:
-** GameLayer
+** ExodiaEngine
 */
 
 #include "GameLayer.hpp"
@@ -19,107 +19,121 @@ namespace FlappyBird {
     // Constructor & Destructor //
     //////////////////////////////
 
-    GameLayer::GameLayer() : Layer("GameLayer"), _State(GameState::Menu), _Time(0.0f), _Blink(false) {}
+    GameLayer::GameLayer() : Layer("R-Type") {};
 
-    GameLayer::~GameLayer() {}
+    /////////////
+    // Methods //
+    /////////////
 
     void GameLayer::OnAttach() {
         EXODIA_PROFILE_FUNCTION();
-        _Level.Init();
 
-        _Scene = CreateRef<Scene>();
-        _Scene->RegisterSystem(new AnimationSystem());
+        // Create world
+        CurrentScene = GameState::Menu;
 
-        GameObject cameraEntity = Scenes->CreateEntity("Camera");
+        CollisionSystem *collisionSystem = new CollisionSystem();
+
+        Scenes[GameState::Menu] = CreateRef<Scene>();
+        // Scenes[GameState::Menu]->RegisterSystem(new AnimationSystem());
+        Scenes[GameState::Menu]->RegisterSystem(new MovingSystem(1.5f));
+        Scenes[GameState::Menu]->RegisterSystem(collisionSystem);
+        Scenes[GameState::Menu]->Subscribe<Exodia::Events::OnCollisionEntered>(collisionSystem);
+        Scenes[GameState::Menu]->OnViewportResize(Application::Get().GetWindow().GetWidth(),
+                                       Application::Get().GetWindow().GetHeight());
+
+        // Create the camera entity
+        GameObject cameraEntity = Scenes[GameState::Menu]->CreateEntity("Camera");
+
+        CameraComponent &camera = cameraEntity.AddComponent<CameraComponent>();
+
         cameraEntity.GetComponent<TransformComponent>().Translation = {0.0f, 0.0f, 15.0f};
 
         camera.Camera.SetProjectionType(SceneCamera::ProjectionType::Perspective);
         camera.Camera.SetViewportSize(Application::Get().GetWindow().GetWidth(),
                                       Application::Get().GetWindow().GetHeight());
 
-        _Scenes->OnRuntimeStartup();
+        /*RType::EntityEventSubscriber *subscribe = new RType::EntityEventSubscriber(*_Network);
+
+        Scenes[GAME]->Subscribe<Events::OnEntityCreated>(subscribe);
+        Scenes[GAME]->Subscribe<Events::OnEntityDestroyed>(subscribe);*/
+
+        /* Removing rigid body for static camera
+        auto body_camera = cameraEntity->AddComponent<RigidBody2DComponent>();
+        body_camera.Get().Type = RigidBody2DComponent::BodyType::Dynamic;
+        body_camera.Get().Mass = 0.0f;
+        body_camera.Get().GravityScale = 0.0f;
+        body_camera.Get().Velocity = glm::vec2{ 1.5f, 0.0f };
+        */
+
+        // Create the entities
+        // TODO: Ask server for playerID
+        // int playerID = 0;
+        // Entity *entity = Scenes[GAME]->CreateEntity("Player_" + std::to_string(playerID));
+        // entity->AddComponent<ScriptComponent>().Get().Bind("Player");
+
+        // Create pata-pata
+        // Entity *patata = Scenes[GAME]->CreateEntity("Pata-pata");
+        // patata->AddComponent<ScriptComponent>().Get().Bind("PataPata");
+
+        // Create stars
+        // CreateStars(Scenes);
+        for (int i = 0; i < 60; i++) {
+            GameObject star = Scenes[GameState::Menu]->CreateEntity("Star" + std::to_string(i));
+
+            star.AddComponent<ScriptComponent>().Bind("Star");
+        }
+
+        // Create the camera
+        Scenes[CurrentScene]->OnRuntimeStart();
     }
 
-    void GameLayer::OnDetach() { EXODIA_PROFILE_FUNCTION(); };
+    void GameLayer::OnDetach() { EXODIA_PROFILE_FUNCTION(); }
 
     void GameLayer::OnUpdate(Exodia::Timestep ts) {
-        // Update
         EXODIA_PROFILE_FUNCTION();
+        // Renderer Prep
         {
             EXODIA_PROFILE_SCOPE("Renderer Prep");
 
             Exodia::RenderCommand::SetClearColor({0.1f, 0.1f, 0.1f, 1});
             Exodia::RenderCommand::Clear();
         }
-        _Time += ts;
-        if ((int)(_Time * 10.0f) % 8 > 4)
-            _Blink = !_Blink;
-        if (_Level.IsGameOver())
-            _State = GameState::GameOver;
 
-        if (_State == GameState::Play) {
-            _Level.OnUpdate(ts);
-        }
+        // Update
+        if (CurrentScene == GameState::Menu) {
+        };
 
-        _Scenes->OnUpdateRuntime(ts);
+        // Update the world
+        Scenes[CurrentScene]->OnUpdateRuntime(ts);
     }
 
-    void GameLayer::OnImGUIRender() {
-        switch (_State) {
-        case GameState::Play: {
-            std::string score = std::string("Score : ") + std::to_string(_Level.GetPlayer().GetScore());
-            ImGui::GetForegroundDrawList()->AddText(_Font, 48.0f, ImGui::GetWindowPos(), 0xffffffff, score.c_str());
-            break;
-        }
-        case GameState::Menu: {
-            ImVec2 pos = ImGui::GetWindowPos();
-
-            unsigned int width = Exodia::Application::Get().GetWindow().GetWidth();
-
-            pos.x += width / 2.0f - 300.0f;
-            pos.y += 50.0f;
-
-            if (_Blink)
-                ImGui::GetForegroundDrawList()->AddText(_Font, 120.0f, pos, 0xffffffff, "Click to play !");
-            break;
-        }
-        case GameState::GameOver: {
-            ImVec2 pos = ImGui::GetWindowPos();
-
-            unsigned int width = Exodia::Application::Get().GetWindow().GetWidth();
-
-            pos.x += width / 2.0f - 300.0f;
-            pos.y += 50.0f;
-
-            if (_Blink)
-                ImGui::GetForegroundDrawList()->AddText(_Font, 120.0f, pos, 0xffffffff, "Click to play !");
-
-            pos.x += 200.0f;
-            pos.y += 150.0f;
-
-            std::string score = std::string("Score : ") + std::to_string(_Level.GetPlayer().GetScore());
-            ImGui::GetForegroundDrawList()->AddText(_Font, 120.0f, pos, 0xffffffff, score.c_str());
-            break;
-        }
-        }
-    }
+    void GameLayer::OnImGUIRender() { EXODIA_PROFILE_FUNCTION(); }
 
     void GameLayer::OnEvent(Exodia::Event &event) {
-        Exodia::EventDispatcher dispatcher(event);
+        EventDispatcher dispatcher(event);
 
-        dispatcher.Dispatch<Exodia::MouseButtonPressedEvent>(BIND_EVENT_FN(GameLayer::OnMouseButtonPressed));
-        dispatcher.Dispatch<Exodia::WindowResizeEvent>(BIND_EVENT_FN(GameLayer::OnWindowResize));
+        dispatcher.Dispatch<KeyPressedEvent>(BIND_EVENT_FN(GameLayer::OnKeyPressedEvent));
+        dispatcher.Dispatch<KeyReleasedEvent>(BIND_EVENT_FN(GameLayer::OnKeyReleasedEvent));
+        dispatcher.Dispatch<WindowResizeEvent>(BIND_EVENT_FN(GameLayer::OnWindowResizeEvent));
     }
 
-    bool GameLayer::OnMouseButtonPressed(Exodia::MouseButtonPressedEvent &event) {
-        (void)event;
+    bool GameLayer::OnKeyPressedEvent(KeyPressedEvent &event) {
 
-        if (_State == GameState::GameOver)
-            _Level.Reset();
+        int key = event.GetKeyCode();
 
-        _State = GameState::Play;
+        return true;
+    };
+
+    bool GameLayer::OnKeyReleasedEvent(KeyReleasedEvent &event) {
+        int key = event.GetKeyCode();
+
         return false;
-    }
+    };
 
-    bool GameLayer::OnWindowResize(Exodia::WindowResizeEvent &event) {}
-} // namespace FlappyBird
+    bool GameLayer::OnWindowResizeEvent(WindowResizeEvent &event) {
+        if (Scenes[CurrentScene] != nullptr)
+            Scenes[CurrentScene]->OnViewportResize(event.GetWidth(), event.GetHeight());
+
+        return true;
+    }
+}; // namespace RType

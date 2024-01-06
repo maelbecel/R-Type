@@ -1,15 +1,15 @@
 /*
-** EXODIA PROJECT, 2023
-** TryAGame
+** EPITECH PROJECT, 2023
+** ExodiaGameEngine
 ** File description:
 ** GameLayer
 */
 
-#ifndef GAMELAYER_HPP_
-#define GAMELAYER_HPP_
+#ifndef RTYPELAYER_HPP_
+#define RTYPELAYER_HPP_
 
 #include "Exodia.hpp"
-#include "imgui.h"
+#include "R-Type.hpp"
 
 using namespace Exodia;
 
@@ -19,12 +19,16 @@ namespace FlappyBird {
 
     class GameLayer : public Exodia::Layer {
 
-        // Constructor & Destructor
+        //////////////////////////////
+        // Constructor & Destructor //
+        //////////////////////////////
       public:
         GameLayer();
-        ~GameLayer();
+        ~GameLayer() = default;
 
-        // Methods overrided from Exodia::Layer
+        /////////////
+        // Methods //
+        /////////////
       public:
         void OnAttach() override;
         void OnDetach() override;
@@ -32,21 +36,18 @@ namespace FlappyBird {
         void OnImGUIRender() override;
         void OnEvent(Event &event) override;
 
-        // Methods
       private:
-        bool OnMouseButtonPressed(KeyReleasedEvent &event);
-        bool OnWindowResize(KeyReleasedEvent &event);
+        bool OnKeyReleasedEvent(KeyReleasedEvent &event);
+        bool OnKeyPressedEvent(KeyPressedEvent &event);
+        bool OnWindowResizeEvent(WindowResizeEvent &event);
 
+        ////////////////
+        // Attributes //
+        ////////////////
       public:
-      private:
-        Ref<Scene> _Scenes;
-        Level _Level;
-        GameState _State;
-        float _Time;
-        bool _Blink;
-
-        ImFont *_Font;
+        inline static std::map<GameState, Ref<Scene>> Scenes;
+        inline static GameState CurrentScene;
     };
-} // namespace FlappyBird
+}; // namespace RType
 
-#endif /* !GAMELAYER_HPP_ */
+#endif /* !RTYPELAYER_HPP_ */
