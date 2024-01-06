@@ -22,7 +22,7 @@ void Level::Init()
     std::vector<Ref<SubTexture2D>> frames;
 
     frames.push_back(SubTexture2D::CreateFromCoords(PLAYER, { 0.0f, 0.0f }, { 32.0f, 32.0f }, { 1.0f, 1.0f }));
-    
+
     _Player.LoadAssets();
 
     _Obstacles.resize(5);

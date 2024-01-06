@@ -45,6 +45,7 @@ class Level {
   public:
     bool IsGameOver();
     Player &GetPlayer();
+    static const uint64_t PLAYER = 14815285158415;
 
     // Attributes
   private:

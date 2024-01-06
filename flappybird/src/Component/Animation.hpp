@@ -14,7 +14,7 @@
 // External includes
 #include <vector>
 
-namespace RType {
+namespace FlappyBird {
 
     /**
      * @brief Animation Component.
@@ -169,6 +169,6 @@ namespace RType {
             return Exodia::Buffer();
         }
     };
-}; // namespace RType
+}; // namespace FlappyBird
 
 #endif /* !ANIMATION_HPP_ */
