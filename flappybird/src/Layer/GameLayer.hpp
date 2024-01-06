@@ -36,11 +36,8 @@ namespace FlappyBird {
       private:
         bool OnMouseButtonPressed(KeyReleasedEvent &event);
         bool OnWindowResize(KeyReleasedEvent &event);
-        
-
 
       public:
-
       private:
         Ref<Scene> _Scenes;
         Level _Level;

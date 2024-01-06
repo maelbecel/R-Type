@@ -31,7 +31,7 @@ namespace FlappyBird {
         _Scene->RegisterSystem(new AnimationSystem());
 
         GameObject cameraEntity = Scenes->CreateEntity("Camera");
-                cameraEntity.GetComponent<TransformComponent>().Translation = {0.0f, 0.0f, 15.0f};
+        cameraEntity.GetComponent<TransformComponent>().Translation = {0.0f, 0.0f, 15.0f};
 
         camera.Camera.SetProjectionType(SceneCamera::ProjectionType::Perspective);
         camera.Camera.SetViewportSize(Application::Get().GetWindow().GetWidth(),
@@ -121,5 +121,5 @@ namespace FlappyBird {
         return false;
     }
 
-    bool GameLayer::OnWindowResize(Exodia::WindowResizeEvent &event) {    }
+    bool GameLayer::OnWindowResize(Exodia::WindowResizeEvent &event) {}
 } // namespace FlappyBird
