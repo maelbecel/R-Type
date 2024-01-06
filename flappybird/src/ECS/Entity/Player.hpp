@@ -31,18 +31,18 @@ namespace FlappyBird {
         Player();
         ~Player() = default;
 
-            /////////////
-            // Methods //
-            /////////////
-          public:
-            void OnCreate() override;
-            void OnUpdate(Timestep ts) override;
-            void OnKeyPressed(int keycode) override;
-            void OnKeyReleased(int keycode) override;
-            void OnCollisionEnter(Entity *entity) override;
+        /////////////
+        // Methods //
+        /////////////
+      public:
+        void OnCreate() override;
+        void OnUpdate(Timestep ts) override;
+        void OnKeyPressed(int keycode) override;
+        void OnKeyReleased(int keycode) override;
+        void OnCollisionEnter(Entity *entity) override;
 
-          public:
-            void CreateAnimations();
+      public:
+        void CreateAnimations();
 
         // Getter
       public:
@@ -66,6 +66,6 @@ namespace FlappyBird {
         std::vector<AnimationComponent> _Animations;
     };
 
-  };  // namespace FlappyBird
+}; // namespace FlappyBird
 
 #endif /* !PLAYER_HPP_ */
