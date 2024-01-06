@@ -15,13 +15,12 @@
 
 Level::Level() : _GameOver(false), _ObstacleTarget(30.0f), _ObstacleIndex(0), _ObstacleHSV({0.0f, 0.8f, 0.8f}){};
 
-void Level::Init()
-{
+void Level::Init() {
     AnimationComponent anim;
 
     std::vector<Ref<SubTexture2D>> frames;
 
-    frames.push_back(SubTexture2D::CreateFromCoords(PLAYER, { 0.0f, 0.0f }, { 32.0f, 32.0f }, { 1.0f, 1.0f }));
+    frames.push_back(SubTexture2D::CreateFromCoords(PLAYER, {0.0f, 0.0f}, {32.0f, 32.0f}, {1.0f, 1.0f}));
 
     _Player.LoadAssets();
 
