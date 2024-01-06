@@ -9,6 +9,9 @@ include($ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake)
 # Dependencies (find_package (vcpkg))
 include(Dependencies)
 
+# Libraries
+include(Libraries)
+
 # Project
 include(BuildEngine)
 include(BuildBinaries)

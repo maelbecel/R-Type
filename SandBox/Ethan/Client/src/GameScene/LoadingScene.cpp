@@ -59,13 +59,13 @@ namespace RType {
         int key = event.GetKeyCode();
 
         if (key == Key::ENTER) {
-            Entity *background = _Scene->GetEntityByName("LoadingBackground");
+            GameObject background = _Scene->GetEntityByName("LoadingBackground");
 
-            if (background) {
-                auto script = background->GetComponent<ScriptComponent>();
+            if (background.GetEntity()) {
+                auto &script = background.GetComponent<ScriptComponent>();
 
-                if (script && script.Get().Instance != nullptr) {
-                    script.Get().Instance->OnKeyPressed(key);
+                if (script.Instance != nullptr) {
+                    script.Instance->OnKeyPressed(key);
 
                     return true;
                 }

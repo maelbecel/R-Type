@@ -12,7 +12,7 @@
 #include "Renderer/Camera/Camera.hpp"
 
 // Exodia Core includes
-#include "Core/Time/Timestep.hpp"
+#include "Exodia-Utils.hpp"
 
 // Exodia Events includes
 #include "Events/Event.hpp"

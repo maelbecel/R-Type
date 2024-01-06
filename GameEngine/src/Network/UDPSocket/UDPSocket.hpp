@@ -13,7 +13,7 @@
 #include "Network/IOContextManager/IOContextManager.hpp"
 #include "Network/Header/Header.hpp"
 #include "Network/Packet/Packet.hpp"
-#include "Debug/Logs.hpp"
+#include "Exodia-Debug.hpp"
 #include <thread>
 #include <mutex>
 #include <queue>

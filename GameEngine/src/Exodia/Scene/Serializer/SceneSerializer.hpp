@@ -12,7 +12,7 @@
 #include "Scene/Scene/Scene.hpp"
 
 // Exodia Utils includes
-#include "Utils/Memory.hpp"
+#include "Exodia-Utils.hpp"
 
 // External includes
 #include <filesystem>
@@ -38,7 +38,8 @@ namespace Exodia {
 
       private:
         void SerializeEntity(YAML::Emitter &out, Entity *entity);
-        void DeserializeComponent(const std::string &componentType, const YAML::Node &componentNode, Entity *entity);
+        void DeserializeComponent(const std::string &componentType, const YAML::Node &componentNode,
+                                  GameObject gameobject);
 
         ////////////////
         // Attributes //

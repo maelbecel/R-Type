@@ -15,8 +15,7 @@
 #include "Core/Application/Window.hpp"
 
 // Exodia Utils
-#include "Utils/Assert.hpp"
-#include "Utils/CrossPlatform.hpp"
+#include "Exodia-Debug.hpp"
 
 // External includes
 #include <glad/glad.h>

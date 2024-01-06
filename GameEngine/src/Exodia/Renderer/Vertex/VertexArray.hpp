@@ -12,7 +12,7 @@
 #include "Renderer/Buffer/Buffers.hpp"
 
 // Exodia Utils
-#include "Utils/Memory.hpp"
+#include "Exodia-Utils.hpp"
 
 namespace Exodia {
 

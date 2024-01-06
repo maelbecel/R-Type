@@ -13,7 +13,7 @@
 #include <glad/glad.h>
 
 // Exodia Utils
-#include "Utils/Assert.hpp"
+#include "Exodia-Debug.hpp"
 
 namespace Exodia {
 

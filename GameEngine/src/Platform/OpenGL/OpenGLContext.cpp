@@ -13,10 +13,10 @@
 #include <AL/alut.h>
 
 // Exodia Utils
-#include "Utils/Assert.hpp"
+#include "Exodia-Debug.hpp"
 
 // Exodia Debug
-#include "Debug/Profiling.hpp"
+#include "Exodia-Debug.hpp"
 
 // GLFW
 #include <GLFW/glfw3.h>

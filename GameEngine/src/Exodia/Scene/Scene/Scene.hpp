@@ -12,12 +12,20 @@
 #include "Asset/Asset.hpp"
 
 // Exodia ECS includes
-#include "ECS/World/World.hpp"
+#include "Exodia-ECS.hpp"
 
 // Exodia Renderer includes
 #include "Renderer/Camera/EditorCamera.hpp"
 
+// Exodia Scene includes
+#include "Scene/GameObject/GameObject.hpp"
+
+// External includes
+#include <unordered_map>
+
 namespace Exodia {
+
+    class GameObject;
 
     class Scene : public Asset {
 
@@ -36,10 +44,14 @@ namespace Exodia {
 
         // -- Entity -------------------------------------------------------
 
-        Entity *CreateEntity(const std::string &name = std::string());
-        Entity *CreateEntityWithUUID(UUID uuid, const std::string &name = std::string());
-        Entity *DuplicateEntity(Entity *entity);
-        void DestroyEntity(Entity *entity);
+        GameObject CreateEntity(const std::string &name = std::string());
+        GameObject CreateEntityWithUUID(UUID uuid, const std::string &name = std::string());
+        GameObject CreateNewEntity(const std::string &name = std::string());
+        GameObject CreateNewEntityWithUUID(UUID uuid, const std::string &name = std::string());
+
+        GameObject DuplicateEntity(GameObject gameObject);
+
+        void DestroyEntity(GameObject gameObject);
 
         // -- Runtime ------------------------------------------------------
 
@@ -85,9 +97,9 @@ namespace Exodia {
 
         World *GetWorldPtr();
 
-        Entity *GetPrimaryCamera();
-        Entity *GetEntityByName(const std::string &name);
-        Entity *GetEntityByUUID(UUID uuid);
+        GameObject GetPrimaryCamera();
+        GameObject GetEntityByName(const std::string &name);
+        GameObject GetEntityByUUID(UUID uuid);
 
         bool IsRunning() const;
         bool IsPaused() const;
@@ -109,6 +121,11 @@ namespace Exodia {
         bool _IsPaused;
 
         std::vector<EntitySystem *> _Systems;
+
+        std::unordered_map<UUID, Entity *> _EntityMap;
+
+        friend class GameObject;
+        friend class SceneSerializer;
     };
 }; // namespace Exodia
 

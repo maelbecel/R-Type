@@ -15,10 +15,10 @@
 #include "Renderer/Renderer/RenderCommand.hpp"
 
 // Exodia Core include
-#include "Core/Buffer/Buffer.hpp"
+#include "Exodia-Utils.hpp"
 
 // Exodia Debug
-#include "Debug/Profiling.hpp"
+#include "Exodia-Debug.hpp"
 
 // External include
 #include <cstring>
