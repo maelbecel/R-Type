@@ -19,7 +19,7 @@ namespace FlappyBird {
     // Constructor & Destructor //
     //////////////////////////////
 
-    GameLayer::GameLayer() : Layer("R-Type") {};
+    GameLayer::GameLayer() : Layer("R-Type"){};
 
     /////////////
     // Methods //
@@ -39,7 +39,7 @@ namespace FlappyBird {
         Scenes[GameState::Menu]->RegisterSystem(collisionSystem);
         Scenes[GameState::Menu]->Subscribe<Exodia::Events::OnCollisionEntered>(collisionSystem);
         Scenes[GameState::Menu]->OnViewportResize(Application::Get().GetWindow().GetWidth(),
-                                       Application::Get().GetWindow().GetHeight());
+                                                  Application::Get().GetWindow().GetHeight());
 
         // Create the camera entity
         GameObject cameraEntity = Scenes[GameState::Menu]->CreateEntity("Camera");
@@ -136,4 +136,4 @@ namespace FlappyBird {
 
         return true;
     }
-}; // namespace RType
+}; // namespace FlappyBird
