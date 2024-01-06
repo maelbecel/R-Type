@@ -11,8 +11,6 @@
 #include "Exodia.hpp"
 #include "imgui.h"
 
-#include "Level/Level.hpp"
-
 using namespace Exodia;
 
 namespace FlappyBird {
@@ -36,14 +34,15 @@ namespace FlappyBird {
 
         // Methods
       private:
-        bool OnKeyReleasedEvent(KeyReleasedEvent &event);
-        bool OnKeyPressedEvent(KeyPressedEvent &event);
-        bool OnWindowResizeEvent(WindowResizeEvent &event);
+        bool OnMouseButtonPressed(KeyReleasedEvent &event);
+        bool OnWindowResize(KeyReleasedEvent &event);
+        
+
 
       public:
-        inline static std::map<GameState, Ref<Scene>> Scenes;
 
       private:
+        Ref<Scene> _Scenes;
         Level _Level;
         GameState _State;
         float _Time;

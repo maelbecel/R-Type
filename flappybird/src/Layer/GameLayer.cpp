@@ -6,8 +6,10 @@
 */
 
 #include "GameLayer.hpp"
-
-#include "Tools/Random.hpp"
+#include <imgui.h>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <sstream>
 
 using namespace Exodia;
 
@@ -24,41 +26,42 @@ namespace FlappyBird {
     void GameLayer::OnAttach() {
         EXODIA_PROFILE_FUNCTION();
         _Level.Init();
+
+        _Scene = CreateRef<Scene>();
+        _Scene->RegisterSystem(new AnimationSystem());
+
+        GameObject cameraEntity = Scenes->CreateEntity("Camera");
+                cameraEntity.GetComponent<TransformComponent>().Translation = {0.0f, 0.0f, 15.0f};
+
+        camera.Camera.SetProjectionType(SceneCamera::ProjectionType::Perspective);
+        camera.Camera.SetViewportSize(Application::Get().GetWindow().GetWidth(),
+                                      Application::Get().GetWindow().GetHeight());
+
+        _Scenes->OnRuntimeStartup();
     }
 
-    void GameLayer::OnDetach(){};
+    void GameLayer::OnDetach() { EXODIA_PROFILE_FUNCTION(); };
 
     void GameLayer::OnUpdate(Exodia::Timestep ts) {
         // Update
-        _Time += ts;
+        EXODIA_PROFILE_FUNCTION();
+        {
+            EXODIA_PROFILE_SCOPE("Renderer Prep");
 
+            Exodia::RenderCommand::SetClearColor({0.1f, 0.1f, 0.1f, 1});
+            Exodia::RenderCommand::Clear();
+        }
+        _Time += ts;
         if ((int)(_Time * 10.0f) % 8 > 4)
             _Blink = !_Blink;
         if (_Level.IsGameOver())
             _State = GameState::GameOver;
 
-        const glm::vec2 &playerPos = _Level.GetPlayer().GetPosition();
-
-        _Camera->SetPosition({playerPos.x, playerPos.y, 0.0f});
-
-        switch (_State) {
-        case GameState::Play:
+        if (_State == GameState::Play) {
             _Level.OnUpdate(ts);
-            break;
-        default:
-            break;
         }
 
-        // Render Prep
-        Exodia::RenderCommand::SetClearColor({0.0f, 0.0f, 0.0f, 1});
-        Exodia::RenderCommand::Clear();
-
-        // Render Draw
-        Exodia::Renderer2D::BeginScene(*_Camera);
-
-        _Level.OnRender();
-
-        Exodia::Renderer2D::EndScene();
+        _Scenes->OnUpdateRuntime(ts);
     }
 
     void GameLayer::OnImGUIRender() {
@@ -118,22 +121,5 @@ namespace FlappyBird {
         return false;
     }
 
-    bool GameLayer::OnWindowResize(Exodia::WindowResizeEvent &event) {
-        CreateCamera(event.GetWidth(), event.GetHeight());
-
-        return false;
-    }
-
-    void GameLayer::CreateCamera(uint32_t width, uint32_t height) {
-        float aspectRatio = (float)width / (float)height;
-
-        float cameraWidth = 8.0f;
-
-        float bottom = -cameraWidth;
-        float top = cameraWidth;
-        float left = bottom * aspectRatio;
-        float right = top * aspectRatio;
-
-        _Camera = CreateScope<Exodia::OrthographicCamera>(left, right, bottom, top);
-    }
+    bool GameLayer::OnWindowResize(Exodia::WindowResizeEvent &event) {    }
 } // namespace FlappyBird
