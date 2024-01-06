@@ -32,7 +32,6 @@ namespace Cinematic {
                                       Application::Get().GetWindow().GetHeight());
         cameraEntity->AddComponent<ScriptComponent>().Get().Bind("FollowingCamera");
 
-
         /// Create a Train
 
         GameObject train = _scene->CreateEntity("Train");

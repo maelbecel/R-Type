@@ -169,6 +169,6 @@ namespace Cinematic {
             return Exodia::Buffer();
         }
     };
-}; // namespace RType
+}; // namespace Cinematic
 
 #endif /* !ANIMATION_HPP_ */

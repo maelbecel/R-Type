@@ -29,7 +29,8 @@ namespace Cinematic {
         });
 
         project->RegisterScript("Train", []() -> Exodia::ScriptableEntity * { return new Cinematic::Train(); });
-        project->RegisterScript("FollowingCamera", []() -> Exodia::ScriptableEntity * { return new Cinematic::FollowingCamera(); });
+        project->RegisterScript("FollowingCamera",
+                                []() -> Exodia::ScriptableEntity * { return new Cinematic::FollowingCamera(); });
     }
 }; // namespace Cinematic
 
