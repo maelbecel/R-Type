@@ -24,7 +24,6 @@ namespace FlappyBird {
     void GameLayer::OnAttach() {
         EXODIA_PROFILE_FUNCTION();
         _Level.Init();
-        
     }
 
     void GameLayer::OnDetach(){};
