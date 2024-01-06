@@ -16,6 +16,6 @@ namespace Exodia::Events {
     struct AnimationEndingEvent {
         Exodia::Entity *Entity;
     };
-}; // namespace RType::Events
+}; // namespace Exodia::Events
 
 #endif /* !ANIMATIONEVENT_HPP_ */

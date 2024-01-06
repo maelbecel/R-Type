@@ -57,4 +57,4 @@ namespace FlappyBird {
     void AnimationSystem::Receive(UNUSED(World *world), UNUSED(const Events::AnimationEndingEvent &event)) {
         // If the animation need to call a specific event when it ends, it will be here
     }
-}; // namespace RType
+}; // namespace FlappyBird

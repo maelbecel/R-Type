@@ -31,6 +31,6 @@ namespace FlappyBird {
         void Update(Exodia::World *world, Exodia::Timestep ts) override;
         void Receive(Exodia::World *world, const Events::AnimationEndingEvent &event) override;
     };
-}; // namespace RType
+}; // namespace FlappyBird
 
 #endif /* !ANIMATIONSYSTEM_HPP_ */
