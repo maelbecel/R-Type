@@ -11,6 +11,9 @@
 #include "Exodia.hpp"
 #include "Particles/Particles.hpp"
 
+#include "Animation.hpp"
+#include "Clock.hpp"
+
 using namespace Exodia;
 
 namespace FlappyBird {
@@ -43,14 +46,12 @@ namespace FlappyBird {
 
         // Getter
       public:
-        const glm::vec2 &GetPosition();
+        const glm::vec3 &GetPosition();
         float GetRotation();
         uint32_t GetScore();
 
         // Attributes
       private:
-        glm::vec2 _Velocity;
-
         float _EnginePower;
         float _Gravity;
 

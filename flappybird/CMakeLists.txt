@@ -23,7 +23,7 @@ set(SOURCES
 
     src/Layer/GameLayer.cpp
 
-    src/Entity/Player.cpp
+    src/ECS/Entity/Player.cpp
 
     src/Particles/Particles.cpp
 

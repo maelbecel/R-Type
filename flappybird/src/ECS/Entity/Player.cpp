@@ -6,9 +6,6 @@
 */
 
 #include "Player.hpp"
-#include "imgui.h"
-#include "Animation.hpp"
-#include "Clock.hpp"
 
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -36,12 +33,16 @@ namespace FlappyBird {
         HandleEntity.AddComponent<Clock>();
         // Set Coords
         TransformComponent &tc = GetComponent<TransformComponent>();
-        if (!tc)
-            return;
         tc.Translation.x = -10.0f;
         tc.Translation.y = 0.0f;
 
-        _Velocity = {5.0f, 0.0f};
+        RigidBody2DComponent &rb = HandleEntity.AddComponent<RigidBody2DComponent>();
+
+        rb.Type = RigidBody2DComponent::BodyType::Dynamic;
+        rb.Mass = 0.0f;
+        rb.GravityScale = 0.0f;
+        rb.Velocity.x = 5.0f;
+
         _EnginePower = 0.5f;
         _Gravity = 0.5f;
         _SmokeEmitInterval = 0.4f;
@@ -71,66 +72,59 @@ namespace FlappyBird {
         CreateAnimations();
     }
 
-void Player::Reset() {
-    _Position = {-10.0f, 0.0f};
-    _Velocity = {5.0f, 0.0f};
-}
+    void Player::OnUpdate(Exodia::Timestep ts) {
+        Clock &clock = GetComponent<Clock>();
+        clock.ElapsedTime += ts;
 
-void Player::OnUpdate(Exodia::Timestep ts) {
-    _Time += ts;
+        // if (Exodia::Input::IsKeyPressed(EXODIA_KEY_SPACE)) {
+        //     _Velocity.y += _EnginePower;
 
-    if (Exodia::Input::IsKeyPressed(EXODIA_KEY_SPACE)) {
-        _Velocity.y += _EnginePower;
+        //     if (_Velocity.y > 0.0f)
+        //         _Velocity.y += _EnginePower * 2.0f;
 
-        if (_Velocity.y > 0.0f)
-            _Velocity.y += _EnginePower * 2.0f;
+        //     // Engine Particles
+        //     glm::vec2 emissionPoint = {0.0f, -0.6f};
+        //     float rotation = glm::radians(GetRotation());
+        //     glm::vec2 rotated =
+        //         glm::rotate(glm::mat4(1.0f), rotation, {0.0f, 0.0f, 1.0f}) * glm::vec4(emissionPoint, 0.0f, 1.0f);
 
-        // Engine Particles
-        glm::vec2 emissionPoint = {0.0f, -0.6f};
-        float rotation = glm::radians(GetRotation());
-        glm::vec2 rotated =
-            glm::rotate(glm::mat4(1.0f), rotation, {0.0f, 0.0f, 1.0f}) * glm::vec4(emissionPoint, 0.0f, 1.0f);
+        //     _EngineParticle.Position = _Position + glm::vec2(rotated.x, rotated.y);
+        //     _EngineParticle.Velocity.y = -_Velocity.y * 0.2f - 0.2f;
+        //     _ParticleSystem.Emit(_EngineParticle);
+        // } else {
+        //     _Velocity.y -= _Gravity;
+        // }
 
-        _EngineParticle.Position = _Position + glm::vec2(rotated.x, rotated.y);
-        _EngineParticle.Velocity.y = -_Velocity.y * 0.2f - 0.2f;
-        _ParticleSystem.Emit(_EngineParticle);
-    } else {
-        _Velocity.y -= _Gravity;
+        // _Velocity.y = glm::clamp(_Velocity.y, -20.0f, 20.0f);
+        // _Position += _Velocity * (float)ts;
+
+        // // Smoke Particles
+        // if (_Time > _SmokeNextEmitTime) {
+        //     _SmokeParticle.Position = _Position;
+
+        //     _ParticleSystem.Emit(_SmokeParticle);
+
+        //     _SmokeNextEmitTime += _SmokeEmitInterval;
+        // }
+        // _ParticleSystem.OnUpdate(ts);
     }
 
-    _Velocity.y = glm::clamp(_Velocity.y, -20.0f, 20.0f);
-    _Position += _Velocity * (float)ts;
+    const glm::vec3 &Player::GetPosition() {
+        TransformComponent &tc = GetComponent<TransformComponent>();
 
-    // Smoke Particles
-    if (_Time > _SmokeNextEmitTime) {
-        _SmokeParticle.Position = _Position;
-
-        _ParticleSystem.Emit(_SmokeParticle);
-
-        _SmokeNextEmitTime += _SmokeEmitInterval;
+        return tc.Translation;
     }
-    _ParticleSystem.OnUpdate(ts);
-}
 
-void Player::OnRender() {
-    _ParticleSystem.OnRender();
+    float Player::GetRotation() {
+        RigidBody2DComponent &rb = GetComponent<RigidBody2DComponent>();
 
-    Exodia::Renderer2D::DrawRotatedQuad({_Position.x, _Position.y, 0.5f}, // Position
-                                        {1.0f, 1.3f},                     // Size
-                                        glm::radians(GetRotation()),      // Rotation
-                                        _Texture                          // Texture
-    );
-}
+        return rb.Velocity.y * 4.0f - 90.0f;
+    }
 
-void Player::OnImGuiRender() {
-    ImGui::DragFloat("Engine Power", &_EnginePower, 0.1f);
-    ImGui::DragFloat("Gravity", &_Gravity, 0.1f);
-}
+    uint32_t Player::GetScore() {
+        TransformComponent &tc = GetComponent<TransformComponent>();
 
-const glm::vec2 &Player::GetPosition() { return _Position; }
-
-float Player::GetRotation() { return _Velocity.y * 4.0f - 90.0f; }
-
-uint32_t Player::GetScore() { return (uint32_t)(_Position.x + 10.0f) / 10.0f; }
+        return (uint32_t)(tc.Translation.x + 10.0f) / 10.0f;
+    }
 
 } // namespace FlappyBird
