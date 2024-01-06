@@ -31,6 +31,7 @@ set(SOURCES_GAME_ENGINE
     src/Scripts/BulletPlayer/BulletPlayer.cpp
     src/Scripts/BulletEnnemy/BulletEnnemy.cpp
     src/Scripts/Star/Star.cpp
+    src/Scripts/Tabrok/Tabrok.cpp
 
         # -- Events source files
 

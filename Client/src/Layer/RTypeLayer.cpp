@@ -113,6 +113,7 @@ namespace RType {
         Scenes[GAME] = scene;
         Scenes[GAME]->RegisterSystem(new AnimationSystem());
         Scenes[GAME]->RegisterSystem(new MovingSystem(1.5f));
+        Scenes[GAME]->RegisterSystem(new GravitySystem());
         Scenes[GAME]->RegisterSystem(collisionSystem);
         // Scenes[GAME]->Subscribe<Events::OnEntityCreated>(subscribe);
         // Scenes[GAME]->Subscribe<Events::OnEntityDestroyed>(subscribe);
@@ -173,6 +174,10 @@ namespace RType {
         // Create pata-pata
         // Entity *patata = Scenes[GAME]->CreateEntity("Pata-pata");
         // patata->AddComponent<ScriptComponent>().Get().Bind("PataPata");
+
+        // Create tabrok
+        Entity *tabrok = Scenes[GAME]->CreateEntity("Tabrok");
+        tabrok->AddComponent<ScriptComponent>().Get().Bind("Tabrok");
 
         // Create stars
         for (int i = 0; i < 60; i++) {

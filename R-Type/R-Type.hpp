@@ -25,6 +25,7 @@
 #include "src/Scripts/Player/Player.hpp"
 #include "src/Scripts/Pata-pata/Pata-pata.hpp"
 #include "src/Scripts/Star/Star.hpp"
+#include "src/Scripts/Tabrok/Tabrok.hpp"
 
 #include "src/System/AnimationSystem.hpp"
 
@@ -70,6 +71,9 @@ namespace RType {
                                 []() -> Exodia::ScriptableEntity * { return new RType::BulletEnnemy(); });
 
         project->RegisterScript("Player", []() -> Exodia::ScriptableEntity * { return new RType::Player(); });
+
+        project->RegisterScript("Tabrok",
+                                []() -> Exodia::ScriptableEntity * { return new RType::Tabrok(); });
     }
 }; // namespace RType
 

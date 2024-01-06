@@ -10,6 +10,7 @@
 
 #include "Exodia.hpp"
 #include "R-Type.hpp"
+#include "SceneType.hpp"
 
 using namespace Exodia;
 
