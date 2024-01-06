@@ -48,6 +48,6 @@ namespace FlappyBird {
         inline static std::map<GameState, Ref<Scene>> Scenes;
         inline static GameState CurrentScene;
     };
-}; // namespace RType
+}; // namespace FlappyBird
 
 #endif /* !RTYPELAYER_HPP_ */
