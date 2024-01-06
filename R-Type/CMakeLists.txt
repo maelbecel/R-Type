@@ -60,6 +60,10 @@ set(INCLUDE_DIRS_GAME_ENGINE
 add_library(R-Type STATIC ${SOURCES_GAME_ENGINE})
 
 target_link_libraries(R-Type PRIVATE
+    Exodia-Tools
+    Exodia-Debug
+    Exodia-ECS
+
     GameEngine
     asio::asio
     glm::glm
@@ -73,6 +77,12 @@ target_link_libraries(R-Type PRIVATE
     unofficial::nativefiledialog::nfd
     yaml-cpp::yaml-cpp
     imguizmo::imguizmo
+)
+
+target_include_directories(R-Type PRIVATE
+    ${CMAKE_BINARY_DIR}/../Library/Debug/src/
+    ${CMAKE_BINARY_DIR}/../Library/Tools/src/
+    ${CMAKE_BINARY_DIR}/../Library/Entity-Component-System/src/
 )
 
 target_include_directories(R-Type PRIVATE ${INCLUDE_DIRS_GAME_ENGINE})

@@ -20,7 +20,7 @@
 
 // -- Entity Component System ----------------------------------------------
 
-#include "Exodia/ECS/ECS.hpp"
+#include "Exodia-ECS.hpp"
 
 // -- Exodia Events --------------------------------------------------------
 
@@ -57,8 +57,7 @@
 
 // -- Exodia Debug ---------------------------------------------------------
 
-#include "Exodia/Debug/Profiling.hpp"
-#include "Exodia/Debug/Logs.hpp"
+#include "Exodia-Debug.hpp"
 
 // -- Exodia Math ----------------------------------------------------------
 
@@ -70,10 +69,7 @@
 
 // -- Exodia Utils ---------------------------------------------------------
 
-#include "Utils/CrossPlatform.hpp"
+#include "Exodia-Utils.hpp"
 #include "Utils/PlatformUtils.hpp"
-#include "Utils/LibrairyLoader.hpp"
-#include "Utils/Memory.hpp"
-#include "Utils/Assert.hpp"
 
 #endif /* !EXODIA_HPP_ */

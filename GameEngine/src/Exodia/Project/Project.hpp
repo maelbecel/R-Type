@@ -12,14 +12,10 @@
 #include "Asset/Manager/EditorAssetManager.hpp"
 
 // Exodia ECS includes
-#include "ECS/Interface/IComponentContainer.hpp"
-#include "ECS/Interface/EntitySystem.hpp"
-
-// Exodia Core includes
-#include "Core/Buffer/Buffer.hpp"
+#include "Exodia-ECS.hpp"
 
 // Exodia Utils includes
-#include "Utils/Memory.hpp"
+#include "Exodia-Utils.hpp"
 
 // External includes
 #include <unordered_map>

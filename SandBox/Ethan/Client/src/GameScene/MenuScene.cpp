@@ -70,13 +70,13 @@ namespace RType {
     }
 
     bool MenuScene::OnKeyPressedEvent(KeyPressedEvent &event) {
-        Entity *menuHandler = _Scene->GetEntityByName("MenuHandler");
+        GameObject menuHandler = _Scene->GetEntityByName("MenuHandler");
 
-        if (menuHandler) {
-            auto script = menuHandler->GetComponent<ScriptComponent>();
+        if (menuHandler.GetEntity()) {
+            auto &script = menuHandler.GetComponent<ScriptComponent>();
 
-            if (script && script.Get().Instance != nullptr) {
-                script.Get().Instance->OnKeyPressed(event.GetKeyCode());
+            if (script.Instance != nullptr) {
+                script.Instance->OnKeyPressed(event.GetKeyCode());
 
                 return true;
             }

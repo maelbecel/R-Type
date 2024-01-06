@@ -13,8 +13,8 @@
 #include "Asset/Importer/SoundImporter.hpp"
 
 // Exodia Utils
-#include "Utils/Assert.hpp"
-#include "Utils/Memory.hpp"
+#include "Exodia-Debug.hpp"
+#include "Exodia-Utils.hpp"
 
 // External includes
 #include <map>

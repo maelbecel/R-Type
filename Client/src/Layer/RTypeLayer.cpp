@@ -135,10 +135,12 @@ namespace RType {
         // TODO: Temp code
 
         // Create the camera entity
-        Entity *cameraEntity = Scenes[GAME]->CreateEntity("Camera");
+        GameObject cameraEntity = Scenes[GAME]->CreateEntity("Camera");
 
-        CameraComponent &camera = cameraEntity->AddComponent<CameraComponent>().Get();
-        cameraEntity->GetComponent<TransformComponent>().Get().Translation = {0.0f, 0.0f, 15.0f};
+        CameraComponent &camera = cameraEntity.AddComponent<CameraComponent>();
+
+        cameraEntity.GetComponent<TransformComponent>().Translation = {0.0f, 0.0f, 15.0f};
+
         camera.Camera.SetProjectionType(SceneCamera::ProjectionType::Perspective);
         camera.Camera.SetViewportSize(Application::Get().GetWindow().GetWidth(),
                                       Application::Get().GetWindow().GetHeight());
@@ -169,8 +171,9 @@ namespace RType {
         // Create stars
         // CreateStars(Scenes);
         for (int i = 0; i < 60; i++) {
-            Entity *star = Scenes[GAME]->CreateEntity("Star" + std::to_string(i));
-            star->AddComponent<ScriptComponent>().Get().Bind("Star");
+            GameObject star = Scenes[GAME]->CreateEntity("Star" + std::to_string(i));
+
+            star.AddComponent<ScriptComponent>().Bind("Star");
         }
 
         // Create the camera

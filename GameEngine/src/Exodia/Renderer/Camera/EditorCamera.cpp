@@ -21,7 +21,7 @@
 #include "Core/Application/Application.hpp"
 
 // Exodia Utils includes
-#include "Utils/Memory.hpp"
+#include "Exodia-Utils.hpp"
 
 namespace Exodia {
 

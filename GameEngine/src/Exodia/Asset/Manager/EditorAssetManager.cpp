@@ -14,10 +14,10 @@
 #include "Project/Project.hpp"
 
 // Exodia Utils includes
-#include "Utils/Assert.hpp"
+#include "Exodia-Debug.hpp"
 
 // Exodia Debug includes
-#include "Debug/Logs.hpp"
+#include "Exodia-Debug.hpp"
 
 // External includes
 #include <map>

@@ -18,7 +18,7 @@
 #include "Renderer/Buffer/UniformBuffer.hpp"
 
 // Exodia Scene includes
-#include "Component/Components.hpp"
+#include "Scene/Components/Components.hpp"
 
 // External includes
 #include <array>

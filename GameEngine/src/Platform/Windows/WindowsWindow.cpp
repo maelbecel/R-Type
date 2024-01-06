@@ -15,7 +15,7 @@
 #include "Events/KeyEvent.hpp"
 
 // Exodia Debug
-#include "Debug/Profiling.hpp"
+#include "Exodia-Debug.hpp"
 
 // External includes
 #include <vector>

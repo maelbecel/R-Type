@@ -9,7 +9,7 @@
 #define GRAPHICSCONTEXT_HPP_
 
 // Exodia Tools
-#include "Utils/Memory.hpp"
+#include "Exodia-Utils.hpp"
 
 namespace Exodia {
 

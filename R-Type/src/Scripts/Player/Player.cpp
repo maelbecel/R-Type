@@ -89,31 +89,21 @@ namespace RType {
     }
 
     void Player::OnCreate() {
+        HandleEntity.AddComponent<Health>(1);
+        HandleEntity.AddComponent<BoxCollider2DComponent>();
 
-        HandleEntity->AddComponent<Health>(1);
-        HandleEntity->AddComponent<BoxCollider2DComponent>();
+        TransformComponent &tc = GetComponent<TransformComponent>();
 
-        ComponentHandle<TransformComponent> transform = GetComponent<TransformComponent>();
-
-        if (!transform)
-            return;
-
-        TransformComponent &tc = transform.Get();
         tc.Scale.y = 0.5f;
         tc.Translation.y = 0.4f;
 
         // Set entity rigidbody
-        ComponentHandle<RigidBody2DComponent> body = HandleEntity->AddComponent<RigidBody2DComponent>();
+        RigidBody2DComponent &rb = HandleEntity.AddComponent<RigidBody2DComponent>();
 
-        if (!body)
-            return;
-
-        RigidBody2DComponent &rb = body.Get();
         rb.Type = RigidBody2DComponent::BodyType::Dynamic;
         rb.Mass = 0.0f;
         rb.GravityScale = 0.0f;
         rb.Velocity = glm::vec2{0.0f, 0.0f};
-        EXODIA_INFO("Player created");
 
         // Set entity animations
         CreateAnimations();
@@ -122,55 +112,42 @@ namespace RType {
     void Player::Shoot(TransformComponent &tc) {
         EXODIA_INFO("Player attack");
 
-        World *world = HandleEntity->GetWorld();
+        Scene *scene = HandleEntity.GetScene();
 
-        if (!world)
+        if (!scene)
             return;
+        GameObject bullet = scene->CreateNewEntity("Bullet" + std::to_string(scene->GetWorldPtr()->GetCount()));
 
-        Entity *bullet = world->CreateNewEntity("Bullet" + std::to_string(world->GetCount()));
-
-        if (!bullet)
-            return;
-
-        bullet->AddComponent<ParentComponent>().Get().Parent = GetComponent<IDComponent>().Get().ID;
-        bullet->AddComponent<ScriptComponent>().Get().Bind("BulletPlayer");
+        bullet.AddComponent<ParentComponent>().Parent = GetComponent<IDComponent>().ID;
+        bullet.AddComponent<ScriptComponent>().Bind("BulletPlayer");
 
         _IsAttacking = true;
     }
 
     void Player::UpdateAnimations() {
-        ComponentHandle<SpriteRendererComponent> sprite = GetComponent<SpriteRendererComponent>();
-        ComponentHandle<AnimationComponent> anim = GetComponent<AnimationComponent>();
-
-        if (!sprite)
-            sprite = HandleEntity->AddComponent<SpriteRendererComponent>();
+        SpriteRendererComponent &sprite = GetComponent<SpriteRendererComponent>();
+        ComponentHandle<AnimationComponent> anim = HandleEntity.GetEntity()->GetComponent<AnimationComponent>();
 
         if (!anim) {
             _Animations[0].IsPlaying = true;
 
-            anim = HandleEntity->AddComponent<AnimationComponent>(_Animations[0]);
+            anim = HandleEntity.GetEntity()->AddComponent<AnimationComponent>(_Animations[0]);
 
-            sprite.Get().Texture = anim.Get().Frames[0];
+            sprite.Texture = anim.Get().Frames[0];
         } else {
             if (_State == State::IDLE && _PreviousState != State::IDLE) {
-                Idle(anim.Get(), sprite.Get());
+                Idle(anim.Get(), sprite);
             } else if (_State == State::MOVE_UP && _PreviousState != State::MOVE_UP) {
-                MoveUp(anim.Get(), sprite.Get());
+                MoveUp(anim.Get(), sprite);
             } else if (_State == State::MOVE_DOWN && _PreviousState != State::MOVE_DOWN) {
-                MoveDown(anim.Get(), sprite.Get());
+                MoveDown(anim.Get(), sprite);
             }
         }
     }
 
     void Player::OnUpdate(Timestep ts) {
-        ComponentHandle<TransformComponent> transform = GetComponent<TransformComponent>();
-        ComponentHandle<Health> health = GetComponent<Health>();
-
-        if (!transform || !health)
-            return;
-
-        TransformComponent &tc = transform.Get();
-        Health &h = health.Get();
+        TransformComponent &tc = GetComponent<TransformComponent>();
+        Health &h = GetComponent<Health>();
 
         if (_IsCharging) {
             _AttackTimer += ts.GetSeconds();
@@ -185,21 +162,14 @@ namespace RType {
         if (_State != State::DEAD && h.CurrentHealth <= 0) {
             EXODIA_INFO("Player is dead");
 
-            ComponentHandle<RigidBody2DComponent> body = GetComponent<RigidBody2DComponent>();
-            World *world = HandleEntity->GetWorld();
-            if (!body || !world)
+            RigidBody2DComponent &rbc = GetComponent<RigidBody2DComponent>();
+            Scene *scene = HandleEntity.GetScene();
+
+            if (!scene)
                 return;
 
-            Entity *camera_entity = world->GetEntityByTag("Camera");
-            if (!camera_entity)
-                return;
-
-            ComponentHandle<RigidBody2DComponent> camera_body = camera_entity->GetComponent<RigidBody2DComponent>();
-            if (!camera_body)
-                return;
-
-            RigidBody2DComponent &rbc = body.Get();
-            RigidBody2DComponent &camera_rbc = camera_body.Get();
+            GameObject camera_entity = scene->GetEntityByName("Camera");
+            RigidBody2DComponent &camera_rbc = camera_entity.GetComponent<RigidBody2DComponent>();
 
             rbc.Velocity.x = camera_rbc.Velocity.x;
             rbc.Velocity.y = camera_rbc.Velocity.y;
@@ -251,16 +221,18 @@ namespace RType {
     };
 
     void Player::OnKeyPressed(int keycode) {
-        auto transform = GetComponent<TransformComponent>();
-        auto velocity = GetComponent<RigidBody2DComponent>();
-        auto camera_entity = HandleEntity->GetWorld()->GetEntityByTag("Camera");
+        auto &transform = GetComponent<TransformComponent>();
+        auto &velocity = GetComponent<RigidBody2DComponent>();
+
+        GameObject camera_entity = HandleEntity.GetScene()->GetEntityByName("Camera");
+
         bool block = false;
 
-        if (!transform || !velocity || !camera_entity)
+        if (!camera_entity.GetEntity())
             return;
 
         if (_State != State::DEAD) {
-            TransformComponent &camera = camera_entity->GetComponent<TransformComponent>().Get();
+            TransformComponent &camera = camera_entity.GetComponent<TransformComponent>();
 
             /*
             if (transform.Get().Translation.x < camera.Translation.x - 9.5f) {
@@ -288,23 +260,23 @@ namespace RType {
             if (!block) {
                 // Move player with keyboard
                 if (keycode == Key::A) { // Left
-                    velocity.Get().Velocity.x = -5.0f;
+                    velocity.Velocity.x = -5.0f;
                 } else if (keycode == Key::D) { // Right
-                    velocity.Get().Velocity.x = 5.0f;
+                    velocity.Velocity.x = 5.0f;
                 }
 
                 if (keycode == Key::W) { // Up
                     _State = State::MOVE_UP;
-                    velocity.Get().Velocity.y = 5.0f;
+                    velocity.Velocity.y = 5.0f;
                 } else if (keycode == Key::S) { // Down
                     _State = State::MOVE_DOWN;
-                    velocity.Get().Velocity.y = -5.0f;
+                    velocity.Velocity.y = -5.0f;
                 }
             }
 
             // Simple attack
             if (keycode == Key::SPACE && !_IsAttacking) {
-                Shoot(GetComponent<TransformComponent>().Get());
+                Shoot(GetComponent<TransformComponent>());
             }
 
             // Charge attack
@@ -315,44 +287,42 @@ namespace RType {
     };
 
     void Player::OnKeyReleased(int keycode) {
-        auto velocity = GetComponent<RigidBody2DComponent>();
+        auto &velocity = GetComponent<RigidBody2DComponent>();
 
-        if (velocity) {
-            if (keycode == Key::A || keycode == Key::D) {
-                velocity.Get().Velocity.x = 0.0f;
-            }
-            if (keycode == Key::W || keycode == Key::S) {
-                _State = State::IDLE;
-                velocity.Get().Velocity.y = 0.0f;
-            }
+        if (keycode == Key::A || keycode == Key::D) {
+            velocity.Velocity.x = 0.0f;
+        }
+        if (keycode == Key::W || keycode == Key::S) {
+            _State = State::IDLE;
+            velocity.Velocity.y = 0.0f;
+        }
 
-            if (keycode == Key::SPACE && _IsAttacking) {
-                _AttackTimer = 0.0f;
-                _IsAttacking = false;
-            }
+        if (keycode == Key::SPACE && _IsAttacking) {
+            _AttackTimer = 0.0f;
+            _IsAttacking = false;
+        }
 
-            if (keycode == Key::Q && _IsCharging) {
-                EXODIA_TRACE("Player realease charge after {0} seconds", _AttackTimer);
-                _AttackTimer = 0.0f;
-                _IsCharging = false;
-            }
+        if (keycode == Key::Q && _IsCharging) {
+            EXODIA_TRACE("Player realease charge after {0} seconds", _AttackTimer);
+
+            _AttackTimer = 0.0f;
+            _IsCharging = false;
         }
     }
 
     void Player::OnCollisionEnter(Entity *entity) {
-        ComponentHandle<Health> health = GetComponent<Health>();
+        Health &player_health = GetComponent<Health>();
         ComponentHandle<TagComponent> tag = entity->GetComponent<TagComponent>();
 
-        if (!health || !tag)
+        if (!tag)
             return;
 
-        TagComponent &player_tag = GetComponent<TagComponent>().Get();
-        Health &player_health = health.Get();
+        TagComponent &player_tag = GetComponent<TagComponent>();
 
         if (player_tag.Tag.rfind("BE", 0) == 0) {
             EXODIA_INFO("BE {0} hit", player_tag.Tag);
 
-            HandleEntity->GetWorld()->Emit<Events::TakeDamage>({HandleEntity, 1});
+            HandleEntity.GetScene()->GetWorldPtr()->Emit<Events::TakeDamage>({HandleEntity.GetEntity(), 1});
         }
     };
-} // namespace RType
+}; // namespace RType

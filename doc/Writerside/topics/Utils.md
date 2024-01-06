@@ -114,7 +114,7 @@ void *func = LibraryLoader::GetFunction(handle, "my_function");
 LibraryLoader::Close(handle);
 ```
 
-## [Memory](https://github.com/maelbecel/R-Type/blob/main/GameEngine/src/Utils/Memory.hpp)
+## [Memory](https://github.com/maelbecel/R-Type/blob/main/GameEngine/src/Exodia-Utils.hpp)
 
 ### Explanation {id="explanation_memory"}
 
