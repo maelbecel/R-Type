@@ -15,7 +15,6 @@
 
 using namespace Exodia;
 
-
 namespace FlappyBird {
 
     enum class GameState { Play, Menu, GameOver };

@@ -11,13 +11,9 @@
 
 #include <glm/gtx/compatibility.hpp>
 
-ParticlesSystem::ParticlesSystem() : _ParticleListIndex(999)
-{
-    _ParticleList.resize(1000);
-}
+ParticlesSystem::ParticlesSystem() : _ParticleListIndex(999) { _ParticleList.resize(1000); }
 
-void ParticlesSystem::Emit(const ParticleProps &props)
-{
+void ParticlesSystem::Emit(const ParticleProps &props) {
     Particle &particle = _ParticleList[_ParticleListIndex];
 
     // Active
@@ -50,8 +46,7 @@ void ParticlesSystem::Emit(const ParticleProps &props)
     _ParticleListIndex = _ParticleListIndex % _ParticleList.size();
 }
 
-void ParticlesSystem::OnUpdate(Exodia::Timestep ts)
-{
+void ParticlesSystem::OnUpdate(Exodia::Timestep ts) {
     for (Particle &particle : _ParticleList) {
         if (!particle.Active)
             continue;
@@ -67,8 +62,7 @@ void ParticlesSystem::OnUpdate(Exodia::Timestep ts)
     }
 }
 
-void ParticlesSystem::OnRender()
-{
+void ParticlesSystem::OnRender() {
     for (Particle &particle : _ParticleList) {
         if (!particle.Active)
             continue;
@@ -81,11 +75,10 @@ void ParticlesSystem::OnRender()
 
         float size = glm::lerp(particle.SizeEnd, particle.SizeBegin, life);
 
-        Exodia::Renderer2D::DrawRotatedQuad(
-            particle.Position, // Position
-            { size, size },    // Size
-            particle.Rotation, // Rotation
-            color              // Color
+        Exodia::Renderer2D::DrawRotatedQuad(particle.Position, // Position
+                                            {size, size},      // Size
+                                            particle.Rotation, // Rotation
+                                            color              // Color
         );
     }
 }
