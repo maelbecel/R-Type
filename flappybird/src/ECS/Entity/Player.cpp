@@ -71,66 +71,66 @@ namespace FlappyBird {
         CreateAnimations();
     }
 
-void Player::Reset() {
-    _Position = {-10.0f, 0.0f};
-    _Velocity = {5.0f, 0.0f};
-}
-
-void Player::OnUpdate(Exodia::Timestep ts) {
-    _Time += ts;
-
-    if (Exodia::Input::IsKeyPressed(EXODIA_KEY_SPACE)) {
-        _Velocity.y += _EnginePower;
-
-        if (_Velocity.y > 0.0f)
-            _Velocity.y += _EnginePower * 2.0f;
-
-        // Engine Particles
-        glm::vec2 emissionPoint = {0.0f, -0.6f};
-        float rotation = glm::radians(GetRotation());
-        glm::vec2 rotated =
-            glm::rotate(glm::mat4(1.0f), rotation, {0.0f, 0.0f, 1.0f}) * glm::vec4(emissionPoint, 0.0f, 1.0f);
-
-        _EngineParticle.Position = _Position + glm::vec2(rotated.x, rotated.y);
-        _EngineParticle.Velocity.y = -_Velocity.y * 0.2f - 0.2f;
-        _ParticleSystem.Emit(_EngineParticle);
-    } else {
-        _Velocity.y -= _Gravity;
+    void Player::Reset() {
+        _Position = {-10.0f, 0.0f};
+        _Velocity = {5.0f, 0.0f};
     }
 
-    _Velocity.y = glm::clamp(_Velocity.y, -20.0f, 20.0f);
-    _Position += _Velocity * (float)ts;
+    void Player::OnUpdate(Exodia::Timestep ts) {
+        _Time += ts;
 
-    // Smoke Particles
-    if (_Time > _SmokeNextEmitTime) {
-        _SmokeParticle.Position = _Position;
+        if (Exodia::Input::IsKeyPressed(EXODIA_KEY_SPACE)) {
+            _Velocity.y += _EnginePower;
 
-        _ParticleSystem.Emit(_SmokeParticle);
+            if (_Velocity.y > 0.0f)
+                _Velocity.y += _EnginePower * 2.0f;
 
-        _SmokeNextEmitTime += _SmokeEmitInterval;
+            // Engine Particles
+            glm::vec2 emissionPoint = {0.0f, -0.6f};
+            float rotation = glm::radians(GetRotation());
+            glm::vec2 rotated =
+                glm::rotate(glm::mat4(1.0f), rotation, {0.0f, 0.0f, 1.0f}) * glm::vec4(emissionPoint, 0.0f, 1.0f);
+
+            _EngineParticle.Position = _Position + glm::vec2(rotated.x, rotated.y);
+            _EngineParticle.Velocity.y = -_Velocity.y * 0.2f - 0.2f;
+            _ParticleSystem.Emit(_EngineParticle);
+        } else {
+            _Velocity.y -= _Gravity;
+        }
+
+        _Velocity.y = glm::clamp(_Velocity.y, -20.0f, 20.0f);
+        _Position += _Velocity * (float)ts;
+
+        // Smoke Particles
+        if (_Time > _SmokeNextEmitTime) {
+            _SmokeParticle.Position = _Position;
+
+            _ParticleSystem.Emit(_SmokeParticle);
+
+            _SmokeNextEmitTime += _SmokeEmitInterval;
+        }
+        _ParticleSystem.OnUpdate(ts);
     }
-    _ParticleSystem.OnUpdate(ts);
-}
 
-void Player::OnRender() {
-    _ParticleSystem.OnRender();
+    void Player::OnRender() {
+        _ParticleSystem.OnRender();
 
-    Exodia::Renderer2D::DrawRotatedQuad({_Position.x, _Position.y, 0.5f}, // Position
-                                        {1.0f, 1.3f},                     // Size
-                                        glm::radians(GetRotation()),      // Rotation
-                                        _Texture                          // Texture
-    );
-}
+        Exodia::Renderer2D::DrawRotatedQuad({_Position.x, _Position.y, 0.5f}, // Position
+                                            {1.0f, 1.3f},                     // Size
+                                            glm::radians(GetRotation()),      // Rotation
+                                            _Texture                          // Texture
+        );
+    }
 
-void Player::OnImGuiRender() {
-    ImGui::DragFloat("Engine Power", &_EnginePower, 0.1f);
-    ImGui::DragFloat("Gravity", &_Gravity, 0.1f);
-}
+    void Player::OnImGuiRender() {
+        ImGui::DragFloat("Engine Power", &_EnginePower, 0.1f);
+        ImGui::DragFloat("Gravity", &_Gravity, 0.1f);
+    }
 
-const glm::vec2 &Player::GetPosition() { return _Position; }
+    const glm::vec2 &Player::GetPosition() { return _Position; }
 
-float Player::GetRotation() { return _Velocity.y * 4.0f - 90.0f; }
+    float Player::GetRotation() { return _Velocity.y * 4.0f - 90.0f; }
 
-uint32_t Player::GetScore() { return (uint32_t)(_Position.x + 10.0f) / 10.0f; }
+    uint32_t Player::GetScore() { return (uint32_t)(_Position.x + 10.0f) / 10.0f; }
 
 } // namespace FlappyBird
