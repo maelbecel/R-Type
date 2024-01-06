@@ -41,14 +41,11 @@ namespace FlappyBird {
         bool OnKeyPressedEvent(KeyPressedEvent &event);
         bool OnWindowResizeEvent(WindowResizeEvent &event);
 
-      private:
-        void CreateCamera(uint32_t width, uint32_t height);
+      public:
+        inline static std::map<GameState, Ref<Scene>> Scenes;
 
-        // Attributes
       private:
-        Scope<Exodia::OrthographicCamera> _Camera;
         Level _Level;
-
         GameState _State;
         float _Time;
         bool _Blink;

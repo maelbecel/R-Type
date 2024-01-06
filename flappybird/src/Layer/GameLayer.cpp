@@ -13,23 +13,18 @@ using namespace Exodia;
 
 namespace FlappyBird {
 
-    GameLayer::GameLayer() : Layer("GameLayer"), _State(GameState::Menu), _Time(0.0f), _Blink(false) {
-        Exodia::Window &window = Exodia::Application::Get().GetWindow();
+    //////////////////////////////
+    // Constructor & Destructor //
+    //////////////////////////////
 
-        CreateCamera(window.GetWidth(), window.GetHeight());
-
-        Random::Init();
-    }
+    GameLayer::GameLayer() : Layer("GameLayer"), _State(GameState::Menu), _Time(0.0f), _Blink(false) {}
 
     GameLayer::~GameLayer() {}
 
     void GameLayer::OnAttach() {
         EXODIA_PROFILE_FUNCTION();
         _Level.Init();
-
-        ImGuiIO &io = ImGui::GetIO();
-
-        _Font = io.Fonts->AddFontFromFileTTF("Assets/Font/OpenSans-Regular.ttf", 120.0f);
+        
     }
 
     void GameLayer::OnDetach(){};
