@@ -134,7 +134,6 @@ namespace Exodia {
 
         systems.push_back(collisionSystem);
 
-
         Ref<Scene> scene = CreateRef<Scene>("Stage 1");
 
         SceneSerializer serializer(scene);

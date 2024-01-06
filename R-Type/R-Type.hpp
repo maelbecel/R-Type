@@ -72,8 +72,7 @@ namespace RType {
 
         project->RegisterScript("Player", []() -> Exodia::ScriptableEntity * { return new RType::Player(); });
 
-        project->RegisterScript("Tabrok",
-                                []() -> Exodia::ScriptableEntity * { return new RType::Tabrok(); });
+        project->RegisterScript("Tabrok", []() -> Exodia::ScriptableEntity * { return new RType::Tabrok(); });
     }
 }; // namespace RType
 
