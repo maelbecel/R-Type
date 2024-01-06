@@ -6,9 +6,9 @@
 */
 
 #ifndef PARTICLES_HPP_
-    #define PARTICLES_HPP_
+#define PARTICLES_HPP_
 
-    #include "Exodia.hpp"
+#include "Exodia.hpp"
 
 struct ParticleProps {
     glm::vec2 Position;
@@ -38,20 +38,20 @@ struct Particle {
 class ParticlesSystem {
 
     // Constructor & Destructor (default)
-    public:
-        ParticlesSystem();
-        ~ParticlesSystem() = default;
+  public:
+    ParticlesSystem();
+    ~ParticlesSystem() = default;
 
     // Methods
-    public:
-        void Emit(const ParticleProps &props);
-        void OnUpdate(Exodia::Timestep ts);
-        void OnRender();
-    
+  public:
+    void Emit(const ParticleProps &props);
+    void OnUpdate(Exodia::Timestep ts);
+    void OnRender();
+
     // Attributes
-    private:
-        std::vector<Particle> _ParticleList;
-        uint32_t _ParticleListIndex;
+  private:
+    std::vector<Particle> _ParticleList;
+    uint32_t _ParticleListIndex;
 };
 
 #endif /* !PARTICLES_HPP_ */

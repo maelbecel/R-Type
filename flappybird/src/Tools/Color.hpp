@@ -6,17 +6,16 @@
 */
 
 #ifndef COLOR_HPP_
-    #define COLOR_HPP_
+#define COLOR_HPP_
 
-    #include <glm/glm.hpp>
+#include <glm/glm.hpp>
 
 namespace Color {
 
-    static glm::vec4 Black = { 0.0f, 0.0f, 0.0f, 1.0f };
-    static glm::vec4 White = { 1.0f, 1.0f, 1.0f, 1.0f };
+    static glm::vec4 Black = {0.0f, 0.0f, 0.0f, 1.0f};
+    static glm::vec4 White = {1.0f, 1.0f, 1.0f, 1.0f};
 
-    static glm::vec4 HSVtoRGB(const glm::vec3 &hsv)
-    {
+    static glm::vec4 HSVtoRGB(const glm::vec3 &hsv) {
         int H = (int)(hsv.x * 360.0f);
 
         double S = hsv.y;
@@ -54,9 +53,9 @@ namespace Color {
             Bs = X;
         }
 
-        return { (Rs + m), (Gs + m), (Bs + m), 1.0f };
+        return {(Rs + m), (Gs + m), (Bs + m), 1.0f};
     }
 
-};
+}; // namespace Color
 
 #endif /* !COLOR_HPP_ */

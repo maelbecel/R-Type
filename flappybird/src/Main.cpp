@@ -16,7 +16,9 @@ namespace Exodia {
         // Constructor & Destructor //
         //////////////////////////////
       public:
-        FlappyBirdClient(const ApplicationSpecification &spec) : Application(spec) { PushLayer(new FlappyBird::GameLayer()); }
+        FlappyBirdClient(const ApplicationSpecification &spec) : Application(spec) {
+            PushLayer(new FlappyBird::GameLayer());
+        }
 
         ~FlappyBirdClient() = default;
     };
