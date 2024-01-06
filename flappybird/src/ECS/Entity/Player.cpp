@@ -7,36 +7,69 @@
 
 #include "Player.hpp"
 #include "imgui.h"
+#include "Animation.hpp"
+#include "Clock.hpp"
 
 #include <glm/gtc/matrix_transform.hpp>
 
-Player::Player()
-    : _Position({-10.0f, 0.0f}), _Velocity({5.0f, 0.0f}), _Time(0.0f), _EnginePower(0.5f), _Gravity(0.4f),
-      _SmokeEmitInterval(0.4f), _SmokeNextEmitTime(0.4f) {
-    // Smoke Particles
-    _SmokeParticle.Position = {0.0f, 0.0f};
-    _SmokeParticle.Velocity = {-2.0f, 0.0f};
-    _SmokeParticle.VelocityVariation = {4.0f, 2.0f};
-    _SmokeParticle.SizeBegin = 0.35f;
-    _SmokeParticle.SizeEnd = 0.0f;
-    _SmokeParticle.SizeVariation = 0.15f;
-    _SmokeParticle.ColorBegin = {0.8f, 0.8f, 0.8f, 1.0f};
-    _SmokeParticle.ColorEnd = {0.6f, 0.6f, 0.6f, 1.0f};
-    _SmokeParticle.LifeTime = 4.0f;
+using namespace Exodia;
 
-    // Engine Particles
-    _EngineParticle.Position = {0.0f, 0.0f};
-    _EngineParticle.Velocity = {-2.0f, 0.0f};
-    _EngineParticle.VelocityVariation = {3.0f, 1.0f};
-    _EngineParticle.SizeBegin = 0.5f;
-    _EngineParticle.SizeEnd = 0.0f;
-    _EngineParticle.SizeVariation = 0.3f;
-    _EngineParticle.ColorBegin = {254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 1.0f};
-    _EngineParticle.ColorEnd = {254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f};
-    _EngineParticle.LifeTime = 1.0f;
-}
+namespace FlappyBird {
 
-void Player::LoadAssets() { _Texture = Exodia::Texture2D::Create("./Assets/Texture/Characters/SpaceShip.png"); }
+    void Player::CreateAnimations() {
+        AnimationComponent anim;
+
+        std::vector<Ref<SubTexture2D>> frames;
+
+        frames.push_back(Exodia::SubTexture2D::CreateFromCoords(PLAYER, {0, 0}, {10, 13}));
+
+        anim.Frames = frames;
+        anim.IsPlaying = false;
+        anim.Repeat = false;
+        anim.FrameRate = 0.0f;
+
+        _Animations.push_back(anim);
+    }
+
+    void Player::OnCreate() {
+        HandleEntity.AddComponent<BoxCollider2DComponent>();
+        HandleEntity.AddComponent<Clock>();
+        // Set Coords
+        TransformComponent &tc = GetComponent<TransformComponent>();
+        if (!tc)
+            return;
+        tc.Translation.x = -10.0f;
+        tc.Translation.y = 0.0f;
+
+        _Velocity = {5.0f, 0.0f};
+        _EnginePower = 0.5f;
+        _Gravity = 0.5f;
+        _SmokeEmitInterval = 0.4f;
+        _SmokeNextEmitTime = 0.0f;
+        // Smoke Particles
+        _SmokeParticle.Position = {0.0f, 0.0f};
+        _SmokeParticle.Velocity = {-2.0f, 0.0f};
+        _SmokeParticle.VelocityVariation = {4.0f, 2.0f};
+        _SmokeParticle.SizeBegin = 0.35f;
+        _SmokeParticle.SizeEnd = 0.0f;
+        _SmokeParticle.SizeVariation = 0.15f;
+        _SmokeParticle.ColorBegin = {0.8f, 0.8f, 0.8f, 1.0f};
+        _SmokeParticle.ColorEnd = {0.6f, 0.6f, 0.6f, 1.0f};
+        _SmokeParticle.LifeTime = 4.0f;
+
+        // Engine Particles
+        _EngineParticle.Position = {0.0f, 0.0f};
+        _EngineParticle.Velocity = {-2.0f, 0.0f};
+        _EngineParticle.VelocityVariation = {3.0f, 1.0f};
+        _EngineParticle.SizeBegin = 0.5f;
+        _EngineParticle.SizeEnd = 0.0f;
+        _EngineParticle.SizeVariation = 0.3f;
+        _EngineParticle.ColorBegin = {254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 1.0f};
+        _EngineParticle.ColorEnd = {254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f};
+        _EngineParticle.LifeTime = 1.0f;
+
+        CreateAnimations();
+    }
 
 void Player::Reset() {
     _Position = {-10.0f, 0.0f};
@@ -99,3 +132,5 @@ const glm::vec2 &Player::GetPosition() { return _Position; }
 float Player::GetRotation() { return _Velocity.y * 4.0f - 90.0f; }
 
 uint32_t Player::GetScore() { return (uint32_t)(_Position.x + 10.0f) / 10.0f; }
+
+} // namespace FlappyBird
