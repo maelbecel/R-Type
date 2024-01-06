@@ -109,6 +109,26 @@ namespace FlappyBird {
         // _ParticleSystem.OnUpdate(ts);
     }
 
+    void Player::OnKeyPressed(int keycode) {
+        auto &transform = GetComponent<TransformComponent>();
+        auto &velocity = GetComponent<RigidBody2DComponent>();
+
+        GameObject camera_entity = HandleEntity.GetScene()->GetEntityByName("Camera");
+
+        bool block = false;
+
+        if (!camera_entity.GetEntity())
+            return;
+        if (keycode == Key::SPACE) {
+            RigidBody2DComponent &rb = GetComponent<RigidBody2DComponent>();
+
+            rb.Velocity.y += _EnginePower;
+
+            if (rb.Velocity.y > 0.0f)
+                rb.Velocity.y += _EnginePower * 2.0f;
+        }
+    }
+
     const glm::vec3 &Player::GetPosition() {
         TransformComponent &tc = GetComponent<TransformComponent>();
 

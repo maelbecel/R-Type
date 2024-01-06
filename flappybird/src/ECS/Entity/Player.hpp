@@ -26,14 +26,10 @@ namespace FlappyBird {
       private:
         static const uint64_t PLAYER = 14815285158415;
 
-        // Constructor / Destructor (default)
-      public:
-        Player();
-        ~Player() = default;
-
         /////////////
         // Methods //
         /////////////
+
       public:
         void OnCreate() override;
         void OnUpdate(Timestep ts) override;
