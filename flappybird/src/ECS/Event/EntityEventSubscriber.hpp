@@ -37,6 +37,6 @@ namespace FlappyBird {
       private:
         Exodia::Network::Network &_Network;
     };
-}; // namespace RType
+}; // namespace FlappyBird
 
 #endif /* !ENTITYEVENTSUBSCRIBER_HPP_ */

@@ -40,4 +40,4 @@ namespace FlappyBird {
 
         _Network.SendDeleteEntity(true, event.Entity);
     }
-}; // namespace RType
+}; // namespace FlappyBird
