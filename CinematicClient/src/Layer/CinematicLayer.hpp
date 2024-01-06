@@ -9,6 +9,7 @@
 #define CINEMATICLAYER_HPP_
 
 #include "Exodia.hpp"
+#include "Cinematic.hpp"
 
 using namespace Exodia;
 

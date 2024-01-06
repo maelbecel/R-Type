@@ -19,17 +19,24 @@ namespace Cinematic {
         EXODIA_INFO("Layer::OnAttach");
 
         _scene->RegisterSystem(new MovingSystem(1.5f));
+        _scene->RegisterSystem(new AnimationSystem());
 
-        Entity *cameraEntity = _scene->CreateEntity("Camera");
+        /// Create a Camera
 
-        CameraComponent &camera = cameraEntity->AddComponent<CameraComponent>().Get();
+        GameObject cameraEntity = _scene->CreateEntity("Camera");
+
+        CameraComponent &camera = cameraEntity.AddComponent<CameraComponent>();
         cameraEntity->GetComponent<TransformComponent>().Get().Translation = {0.0f, 0.0f, 15.0f};
         camera.Camera.SetProjectionType(SceneCamera::ProjectionType::Perspective);
         camera.Camera.SetViewportSize(Application::Get().GetWindow().GetWidth(),
                                       Application::Get().GetWindow().GetHeight());
+        cameraEntity->AddComponent<ScriptComponent>().Get().Bind("FollowingCamera");
 
-        Entity *train = _scene->CreateEntity("Train");
-        train->AddComponent<ScriptComponent>().Get().Bind("Train");
+
+        /// Create a Train
+
+        GameObject train = _scene->CreateEntity("Train");
+        train.AddComponent<ScriptComponent>().Bind("Train");
 
         _scene->OnRuntimeStart();
 

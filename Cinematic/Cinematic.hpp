@@ -10,6 +10,9 @@
 
 #include "Exodia.hpp"
 #include "Scripts/Train.hpp"
+#include "Scripts/FollowingCamera.hpp"
+#include "Components/Animation.hpp"
+#include "System/AnimationSystem.hpp"
 
 namespace Cinematic {
 
@@ -21,7 +24,12 @@ namespace Cinematic {
         Ref<Exodia::Project> project = Exodia::Project::Load("./CinematicClient/Cinematic.proj");
 #endif
 
+        project->RegisterComponent("Animation", [](Exodia::Buffer data) -> Exodia::IComponentContainer * {
+            return new Exodia::ComponentContainer<Cinematic::AnimationComponent>(data);
+        });
+
         project->RegisterScript("Train", []() -> Exodia::ScriptableEntity * { return new Cinematic::Train(); });
+        project->RegisterScript("FollowingCamera", []() -> Exodia::ScriptableEntity * { return new Cinematic::FollowingCamera(); });
     }
 }; // namespace Cinematic
 

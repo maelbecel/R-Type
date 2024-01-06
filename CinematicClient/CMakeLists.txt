@@ -51,6 +51,11 @@ include_directories(${INCLUDE_DIRS})
 add_executable(cinematic-client ${SOURCES})
 
 target_link_libraries(cinematic-client PRIVATE
+
+    Exodia-Tools
+    Exodia-Debug
+    Exodia-ECS
+
     GameEngine
     Cinematic
     glad::glad
@@ -67,6 +72,12 @@ target_link_libraries(cinematic-client PRIVATE
     imguizmo::imguizmo
     FreeALUT::alut
     Vorbis::vorbisfile
+)
+
+target_include_directories(cinematic-client PRIVATE
+    ${CMAKE_BINARY_DIR}/../Library/Debug/src/
+    ${CMAKE_BINARY_DIR}/../Library/Tools/src/
+    ${CMAKE_BINARY_DIR}/../Library/Entity-Component-System/src
 )
 
 target_include_directories(cinematic-client PRIVATE ${Stb_INCLUDE_DIR})

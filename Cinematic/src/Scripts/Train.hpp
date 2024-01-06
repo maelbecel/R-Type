@@ -9,6 +9,7 @@
 #define TRAIN_HPP_
 
 // Exodia includes
+#include "Components/Animation.hpp"
 #include "Exodia.hpp"
 
 using namespace Exodia;
@@ -23,39 +24,61 @@ namespace Cinematic {
       public:
         void OnCreate() {
             EXODIA_INFO("Train OnCreate");
-            HandleEntity->AddComponent<SpriteRendererComponent>();
-            HandleEntity->AddComponent<BoxCollider2DComponent>();
-            auto &transform = HandleEntity->AddComponent<TransformComponent>().Get();
 
-            HandleEntity->AddComponent<SpriteRendererComponent>();
+            // Init Component
+            HandleEntity.AddComponent<BoxCollider2DComponent>();
+            HandleEntity.AddComponent<IDComponent>();
+            HandleEntity.AddComponent<TransformComponent>(glm::vec3(0.0f, 0.0f, 0.0f));
+            HandleEntity.AddComponent<SpriteRendererComponent>();
+            HandleEntity.AddComponent<RigidBody2DComponent>();
 
-            auto sprite = HandleEntity->GetComponent<SpriteRendererComponent>();
+            // Init Animation
+            AnimationComponent anim;
+            std::vector<Ref<SubTexture2D>> framesIdle;
 
-            Ref<Texture2D> texture = TextureImporter::LoadTexture2D("Assets/Textures/Shell.png");
+            for (int i = 0; i < 8; i++)
+                framesIdle.push_back(
+                    SubTexture2D::CreateFromCoords(PATAPATA, {i, 0.0f}, {33.3125f, 36.0f}, {1.0f, 1.0f}));
 
-            sprite->Texture =
-                SubTexture2D::CreateFromCoords(texture->Handle, {0.0f, 2.0f}, {33.0f, 33.0f}, {1.0f, 1.0f});
+            anim.Frames = framesIdle;
+            anim.IsPlaying = false;
+            anim.Repeat = true;
+            anim.FrameRate = 13.2f;
+            _Animations.push_back(anim);
 
-            transform.Scale = {0.5f, 0.5f, 0.5f};
+            // Init Body
+            auto &body = HandleEntity.AddComponent<RigidBody2DComponent>();
 
-            _Pos = {0, 0};
+            body.Type = RigidBody2DComponent::BodyType::Dynamic;
+            body.Mass = 0.0f;
+            body.GravityScale = 0.0f;
+            body.Velocity.x = 1.0f;
+
+            // Init transform
+
+            auto &transform = GetComponent<TransformComponent>();
+
+            transform.Translation.x = 0.0f;
+            // tc.Translation.y = (float)(std::rand() % 10 - 5);
+            transform.Translation.y = 0.0f;
         }
 
         void OnUpdate(UNUSED(Timestep ts)) {
-            auto &transform = HandleEntity->GetComponent<TransformComponent>().Get();
-            clock += ts;
+            auto &sprite = GetComponent<SpriteRendererComponent>();
+            auto &anim = GetComponent<AnimationComponent>();
 
-            if (clock > 0.01f) {
-                _Pos.x += 0.01f;
-                clock = 0;
-                transform.Translation.x = _Pos.x;
-                transform.Translation.y = _Pos.y;
+            if (!_Animations[0].IsPlaying) {
+                _Animations[0].IsPlaying = true;
+                anim = _Animations[0];
+                sprite.Texture = anim.Frames[0];
             }
         }
 
       private:
+        static const uint64_t PATAPATA = 90123456789012678;
         glm::vec2 _Pos;
         float clock;
+        std::vector<AnimationComponent> _Animations;
     };
 }; // namespace Cinematic
 

@@ -19,7 +19,8 @@ set(SOURCES_GAME_ENGINE
 
     ## Entity
 
-    src/Entity/CreateBackground.cpp
+    src/Event/EntityEventSubscriber.cpp
+    src/System/AnimationSystem.cpp
 )
 
 # Set the include directories for the Game Engine Library
@@ -39,6 +40,11 @@ set(INCLUDE_DIRS_GAME_ENGINE
 add_library(Cinematic STATIC ${SOURCES_GAME_ENGINE})
 
 target_link_libraries(Cinematic PRIVATE
+
+    Exodia-Tools
+    Exodia-Debug
+    Exodia-ECS
+
     GameEngine
     asio::asio
     glm::glm
@@ -52,6 +58,12 @@ target_link_libraries(Cinematic PRIVATE
     unofficial::nativefiledialog::nfd
     yaml-cpp::yaml-cpp
     imguizmo::imguizmo
+)
+
+target_include_directories(Cinematic PRIVATE
+    ${CMAKE_BINARY_DIR}/../Library/Debug/src/
+    ${CMAKE_BINARY_DIR}/../Library/Tools/src/
+    ${CMAKE_BINARY_DIR}/../Library/Entity-Component-System/src
 )
 
 target_include_directories(Cinematic PRIVATE ${INCLUDE_DIRS_GAME_ENGINE})
