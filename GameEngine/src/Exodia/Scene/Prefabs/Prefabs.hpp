@@ -41,7 +41,7 @@ namespace Exodia {
         void Save(const std::string &path);
         void Load(const std::string &path, Ref<Scene> scene = nullptr);
         void Serialize(YAML::Emitter &out);
-        void Deserialize(YAML::Node &data, Ref<Scene> scene = nullptr);
+        void Deserialize(YAML::Node &data, Ref<Scene> scene = nullptr, bool newEntity = true);
 
         void AddEntity(GameObject gameObject);
         bool RemoveEntity(GameObject gameObject);

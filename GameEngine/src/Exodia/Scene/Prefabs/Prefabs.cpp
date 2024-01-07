@@ -98,7 +98,7 @@ namespace Exodia {
         out << YAML::EndMap;
     }
 
-    void Prefabs::Deserialize(YAML::Node &data, Ref<Scene> scene)
+    void Prefabs::Deserialize(YAML::Node &data, Ref<Scene> scene, bool newEntity)
     {
         try {
             _Tag.Tag = data["Prefab"].as<std::string>();
@@ -114,7 +114,12 @@ namespace Exodia {
                 auto entities = data["Entities"];
 
                 for (YAML::detail::iterator_value entity : entities) {
-                    GameObject newGameObject = scene->CreateEntityWithUUID(UUID());
+                    GameObject newGameObject;
+
+                    if (!newEntity)
+                        newGameObject = scene->CreateEntityWithUUID(entity["Entity"].as<uint64_t>());
+                    else
+                        newGameObject = scene->CreateEntityWithUUID(UUID());
 
                     for (YAML::detail::iterator_value component : entity) {
                         std::string componentType = component.first.as<std::string>();
