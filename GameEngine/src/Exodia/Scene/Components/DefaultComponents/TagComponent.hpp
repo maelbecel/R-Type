@@ -19,8 +19,15 @@ namespace Exodia {
     struct TagComponent : public Component {
         std::string Tag;
 
-        TagComponent(const TagComponent &) = default;
+        TagComponent(const TagComponent &other) : Tag(other.Tag) {};
         TagComponent(const std::string &tag = std::string()) : Tag(tag){};
+
+        TagComponent &operator=(const TagComponent &other)
+        {
+            Tag = other.Tag;
+
+            return *this;
+        }
 
         virtual void Serialize(YAML::Emitter &out) {
             out << YAML::Key << "TagComponent";
