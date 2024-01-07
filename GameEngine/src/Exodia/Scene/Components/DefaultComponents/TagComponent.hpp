@@ -19,11 +19,10 @@ namespace Exodia {
     struct TagComponent : public Component {
         std::string Tag;
 
-        TagComponent(const TagComponent &other) : Tag(other.Tag) {};
+        TagComponent(const TagComponent &other) : Tag(other.Tag){};
         TagComponent(const std::string &tag = std::string()) : Tag(tag){};
 
-        TagComponent &operator=(const TagComponent &other)
-        {
+        TagComponent &operator=(const TagComponent &other) {
             Tag = other.Tag;
 
             return *this;

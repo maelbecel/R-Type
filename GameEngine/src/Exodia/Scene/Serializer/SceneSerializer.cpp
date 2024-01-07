@@ -91,16 +91,15 @@ namespace Exodia {
         }
     }
 
-    void SceneSerializer::SerializeEntity(YAML::Emitter &out, Entity *entity)
-    {
+    void SceneSerializer::SerializeEntity(YAML::Emitter &out, Entity *entity) {
         for (auto &component : entity->GetAllComponents()) {
             if (component)
                 component->Serialize(out);
         }
     }
 
-    void SceneSerializer::DeserializeComponent(const std::string &componentType, const YAML::Node &componentNode, GameObject gameObject)
-    {
+    void SceneSerializer::DeserializeComponent(const std::string &componentType, const YAML::Node &componentNode,
+                                               GameObject gameObject) {
         try {
             std::function<IComponentContainer *(Buffer)> func = Project::GetActive()->GetComponentFactory(componentType);
 

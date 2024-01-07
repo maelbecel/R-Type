@@ -16,16 +16,15 @@ namespace Exodia {
     // Constructor & Destructor //
     //////////////////////////////
 
-    Prefabs::Prefabs(const std::string &name) : _Tag(name) {};
+    Prefabs::Prefabs(const std::string &name) : _Tag(name){};
 
-    Prefabs::~Prefabs() {};
+    Prefabs::~Prefabs(){};
 
     /////////////
     // Methods //
     /////////////
 
-    Ref<Prefabs> Prefabs::Copy(Ref<Prefabs> other)
-    {
+    Ref<Prefabs> Prefabs::Copy(Ref<Prefabs> other) {
         if (!other)
             return nullptr;
         Ref<Prefabs> copy = CreateRef<Prefabs>(other->GetName());
@@ -34,15 +33,14 @@ namespace Exodia {
             copy->AddPrefab(Prefabs::Copy(prefab));
         for (auto &entity : other->_Entities)
             copy->AddEntity(entity.Duplicate());
-        
+
         copy->SetName(other->GetName());
         copy->SetTransform(other->GetTransform());
 
         return copy;
     }
 
-    void Prefabs::Save(const std::string &path)
-    {
+    void Prefabs::Save(const std::string &path) {
         YAML::Emitter out;
 
         Serialize(out);
@@ -74,7 +72,7 @@ namespace Exodia {
     void Prefabs::Serialize(YAML::Emitter &out)
     {
         out << YAML::BeginMap;
-        out << YAML::Key << "Prefab"  << YAML::Value  << _Tag.Tag;
+        out << YAML::Key << "Prefab" << YAML::Value << _Tag.Tag;
 
         _Transform.Serialize(out);
 
@@ -83,9 +81,7 @@ namespace Exodia {
             for (auto &entity : _Entities) {
                 out << YAML::BeginMap;
                 out << YAML::Key << "Entity" << YAML::Value << entity.GetComponent<IDComponent>().ID;
-                {
-                    SceneSerializer::SerializeEntity(out, entity.GetEntity());
-                }
+                { SceneSerializer::SerializeEntity(out, entity.GetEntity()); }
                 out << YAML::EndMap;
             }
         }
@@ -156,8 +152,7 @@ namespace Exodia {
         return prefab;
     }
 
-    bool Prefabs::RemovePrefab(const std::string &name)
-    {
+    bool Prefabs::RemovePrefab(const std::string &name) {
         for (auto it = _Prefabs.begin(); it != _Prefabs.end(); it++) {
             if ((*it)->_Tag.Tag == name) {
                 _Prefabs.erase(it);
@@ -169,13 +164,9 @@ namespace Exodia {
         return false;
     }
 
-    void Prefabs::AddEntity(GameObject gameObject)
-    {
-        _Entities.push_back(gameObject);
-    }
+    void Prefabs::AddEntity(GameObject gameObject) { _Entities.push_back(gameObject); }
 
-    bool Prefabs::RemoveEntity(GameObject gameObject)
-    {
+    bool Prefabs::RemoveEntity(GameObject gameObject) {
         for (auto it = _Entities.begin(); it != _Entities.end(); it++) {
             if ((*it) == gameObject) {
                 _Entities.erase(it);
@@ -183,20 +174,19 @@ namespace Exodia {
                 return true;
             }
         }
-        
+
         return false;
     }
 
-    void Prefabs::OnRuntimeStart()
-    {
+    void Prefabs::OnRuntimeStart() {
         for (auto &entity : _Entities) {
             if (!entity.GetEntity())
                 continue;
             auto &transform = entity.GetComponent<TransformComponent>();
 
             transform.Translation += _Transform.Translation;
-            transform.Rotation    += _Transform.Rotation;
-            transform.Scale       *= _Transform.Scale;
+            transform.Rotation += _Transform.Rotation;
+            transform.Scale *= _Transform.Scale;
         }
 
         for (auto &prefab : _Prefabs) {
@@ -205,23 +195,22 @@ namespace Exodia {
             auto &transform = prefab->GetTransform();
 
             transform.Translation += _Transform.Translation;
-            transform.Rotation    += _Transform.Rotation;
-            transform.Scale       *= _Transform.Scale;
+            transform.Rotation += _Transform.Rotation;
+            transform.Scale *= _Transform.Scale;
 
             prefab->OnRuntimeStart();
         }
     }
 
-    void Prefabs::OnRuntimeStop()
-    {
+    void Prefabs::OnRuntimeStop() {
         for (auto &entity : _Entities) {
             if (!entity.GetEntity())
                 continue;
             auto &transform = entity.GetComponent<TransformComponent>();
 
             transform.Translation -= _Transform.Translation;
-            transform.Rotation    -= _Transform.Rotation;
-            transform.Scale       /= _Transform.Scale;
+            transform.Rotation -= _Transform.Rotation;
+            transform.Scale /= _Transform.Scale;
         }
 
         for (auto &prefab : _Prefabs) {
@@ -230,8 +219,8 @@ namespace Exodia {
             auto &transform = prefab->GetTransform();
 
             transform.Translation -= _Transform.Translation;
-            transform.Rotation    -= _Transform.Rotation;
-            transform.Scale       /= _Transform.Scale;
+            transform.Rotation -= _Transform.Rotation;
+            transform.Scale /= _Transform.Scale;
 
             prefab->OnRuntimeStop();
         }
@@ -241,28 +230,13 @@ namespace Exodia {
     // Getters & Setters //
     ///////////////////////
 
-    TransformComponent &Prefabs::GetTransform()
-    {
-        return _Transform;
-    }
+    TransformComponent &Prefabs::GetTransform() { return _Transform; }
 
-    const std::string &Prefabs::GetName() const
-    {
-        return _Tag.Tag;
-    }
+    const std::string &Prefabs::GetName() const { return _Tag.Tag; }
 
-    void Prefabs::SetName(const std::string &name)
-    {
-        _Tag.Tag = name;
-    }
+    void Prefabs::SetName(const std::string &name) { _Tag.Tag = name; }
 
-    void Prefabs::SetTransform(const TransformComponent &transform)
-    {
-        _Transform = transform;
-    }
+    void Prefabs::SetTransform(const TransformComponent &transform) { _Transform = transform; }
 
-    AssetType Prefabs::GetType() const
-    {
-        return AssetType::Prefabs;
-    }
-};
+    AssetType Prefabs::GetType() const { return AssetType::Prefabs; }
+}; // namespace Exodia

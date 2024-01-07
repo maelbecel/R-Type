@@ -6,17 +6,17 @@
 */
 
 #ifndef PREFABS_HPP_
-    #define PREFABS_HPP_
+#define PREFABS_HPP_
 
-    // Exodia Asset includes
-    #include "Asset/Asset.hpp"
+// Exodia Asset includes
+#include "Asset/Asset.hpp"
 
-    #include "Scene/Components/DefaultComponents/TagComponent.hpp"
-    #include "Scene/Components/DefaultComponents/TransformComponent.hpp"
+#include "Scene/Components/DefaultComponents/TagComponent.hpp"
+#include "Scene/Components/DefaultComponents/TransformComponent.hpp"
 
-    // External includes
-    #include <vector>
-    #include <yaml-cpp/yaml.h>
+// External includes
+#include <vector>
+#include <yaml-cpp/yaml.h>
 
 namespace Exodia {
 
@@ -28,57 +28,53 @@ namespace Exodia {
         //////////////////////////////
         // Constructor & Destructor //
         //////////////////////////////
-        public:
-
-            Prefabs(const std::string &name = "Untitled Prefabs");
-            ~Prefabs();
+      public:
+        Prefabs(const std::string &name = "Untitled Prefabs");
+        ~Prefabs();
 
         /////////////
         // Methods //
         /////////////
-        public:
+      public:
+        static Ref<Prefabs> Copy(Ref<Prefabs> other);
 
-            static Ref<Prefabs> Copy(Ref<Prefabs> other);
+        void Save(const std::string &path);
+        void Load(const std::string &path, Ref<Scene> scene = nullptr);
+        void Serialize(YAML::Emitter &out);
+        void Deserialize(YAML::Node &data, Ref<Scene> scene = nullptr);
 
-            void Save(const std::string &path);
-            void Load(const std::string &path, Ref<Scene> scene = nullptr);
-            void Serialize(YAML::Emitter &out);
-            void Deserialize(YAML::Node &data, Ref<Scene> scene = nullptr);
+        void AddEntity(GameObject gameObject);
+        bool RemoveEntity(GameObject gameObject);
 
-            Ref<Prefabs> AddPrefab(Ref<Prefabs> prefab);
-            bool RemovePrefab(const std::string &name);
+        Ref<Prefabs> AddPrefab(Ref<Prefabs> prefab);
+        bool RemovePrefab(const std::string &name);
 
-            void AddEntity(GameObject gameObject);
-            bool RemoveEntity(GameObject gameObject);
-
-            // -- Update -------------------------------------------------------
-            void OnRuntimeStart();
-            void OnRuntimeStop();
+        // -- Update -------------------------------------------------------
+        void OnRuntimeStart();
+        void OnRuntimeStop();
 
         ///////////////////////
         // Getters & Setters //
         ///////////////////////
-        public:
+      public:
+        TransformComponent &GetTransform();
+        const std::string &GetName() const;
 
-            TransformComponent &GetTransform();
-            const std::string &GetName() const;
+        void SetName(const std::string &name);
+        void SetTransform(const TransformComponent &transform);
 
-            void SetName(const std::string &name);
-            void SetTransform(const TransformComponent &transform);
-
-            virtual AssetType GetType() const override;
+        virtual AssetType GetType() const override;
 
         ////////////////
         // Attributes //
         ////////////////
-        private:
+      private:
+        TagComponent _Tag;
+        TransformComponent _Transform;
 
-            TagComponent              _Tag;
-            TransformComponent        _Transform;
-
-            std::vector<GameObject>   _Entities;
-            std::vector<Ref<Prefabs>> _Prefabs;
+        std::vector<GameObject> _Entities;
+        std::vector<Ref<Prefabs>> _Prefabs;
     };
-};
+}; // namespace Exodia
 
 #endif /* !PREFABS_HPP_ */

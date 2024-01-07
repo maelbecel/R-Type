@@ -31,14 +31,15 @@ namespace Exodia {
         glm::vec3 Rotation;
         glm::vec3 Scale;
 
-        TransformComponent(const TransformComponent &other) : Translation(other.Translation), Rotation(other.Rotation), Scale(other.Scale) {};
-        TransformComponent(const glm::vec3 &translation = glm::vec3(0.0f)) : Translation(translation), Rotation(glm::vec3(0.0f)), Scale(glm::vec3(1.0f)) {};
+        TransformComponent(const TransformComponent &other)
+            : Translation(other.Translation), Rotation(other.Rotation), Scale(other.Scale){};
+        TransformComponent(const glm::vec3 &translation = glm::vec3(0.0f))
+            : Translation(translation), Rotation(glm::vec3(0.0f)), Scale(glm::vec3(1.0f)){};
 
-        TransformComponent &operator=(const TransformComponent &other)
-        {
+        TransformComponent &operator=(const TransformComponent &other) {
             Translation = other.Translation;
-            Rotation    = other.Rotation;
-            Scale       = other.Scale;
+            Rotation = other.Rotation;
+            Scale = other.Scale;
 
             return *this;
         }
