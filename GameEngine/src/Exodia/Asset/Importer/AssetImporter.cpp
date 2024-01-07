@@ -31,8 +31,7 @@ namespace Exodia {
         {AssetType::Texture2D, TextureImporter::ImportTexture2D},
         {AssetType::Sound2D, SoundImporter::ImportSound2D},
         {AssetType::Font, FontImporter::ImportFont},
-        {AssetType::Prefabs, PrefabsImporter::ImportPrefabs}
-    };
+        {AssetType::Prefabs, PrefabsImporter::ImportPrefabs}};
 
     /////////////
     // Methods //

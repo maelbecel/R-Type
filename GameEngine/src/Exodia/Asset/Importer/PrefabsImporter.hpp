@@ -6,15 +6,15 @@
 */
 
 #ifndef PREFABSIMPORTER_HPP_
-    #define PREFABSIMPORTER_HPP_
+#define PREFABSIMPORTER_HPP_
 
-    // Exodia Asset includes
-    #include "Asset/Utils/AssetType.hpp"
+// Exodia Asset includes
+#include "Asset/Utils/AssetType.hpp"
 
-    #include "Scene/Prefabs/Prefabs.hpp"
+#include "Scene/Prefabs/Prefabs.hpp"
 
-    // External includes
-    #include <filesystem>
+// External includes
+#include <filesystem>
 
 namespace Exodia {
 
@@ -26,13 +26,12 @@ namespace Exodia {
         /////////////
         // Methods //
         /////////////
-        public:
+      public:
+        static Ref<Prefabs> ImportPrefabs(AssetHandle handle, const AssetSpecification &spec);
+        static Ref<Prefabs> LoadPrefabs(const std::filesystem::path &path, Ref<Scene> scene = nullptr);
 
-            static Ref<Prefabs> ImportPrefabs(AssetHandle handle, const AssetSpecification &spec);
-            static Ref<Prefabs> LoadPrefabs(const std::filesystem::path &path, Ref<Scene> scene = nullptr);
-
-            static void SavePrefabs(Ref<Prefabs> prefabs, const std::filesystem::path &path);
+        static void SavePrefabs(Ref<Prefabs> prefabs, const std::filesystem::path &path);
     };
-};
+}; // namespace Exodia
 
 #endif /* !PREFABSIMPORTER_HPP_ */

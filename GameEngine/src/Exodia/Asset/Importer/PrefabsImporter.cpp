@@ -23,15 +23,13 @@ namespace Exodia {
     // Methods //
     /////////////
 
-    Ref<Prefabs> PrefabsImporter::ImportPrefabs(UNUSED(AssetHandle handle), const AssetSpecification &spec)
-    {
+    Ref<Prefabs> PrefabsImporter::ImportPrefabs(UNUSED(AssetHandle handle), const AssetSpecification &spec) {
         EXODIA_PROFILE_FUNCTION();
 
         return LoadPrefabs(Project::GetActiveAssetDirectory() / spec.Path);
     }
 
-    Ref<Prefabs> PrefabsImporter::LoadPrefabs(const std::filesystem::path &path, Ref<Scene> scene)
-    {
+    Ref<Prefabs> PrefabsImporter::LoadPrefabs(const std::filesystem::path &path, Ref<Scene> scene) {
         EXODIA_PROFILE_FUNCTION();
 
         Ref<Prefabs> prefabs = CreateRef<Prefabs>();
@@ -41,10 +39,9 @@ namespace Exodia {
         return prefabs;
     }
 
-    void PrefabsImporter::SavePrefabs(Ref<Prefabs> prefabs, const std::filesystem::path &path)
-    {
+    void PrefabsImporter::SavePrefabs(Ref<Prefabs> prefabs, const std::filesystem::path &path) {
         EXODIA_PROFILE_FUNCTION();
 
         prefabs->Save((Project::GetActiveAssetDirectory() / path).string());
     }
-};
+}; // namespace Exodia

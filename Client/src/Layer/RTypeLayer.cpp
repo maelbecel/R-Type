@@ -176,7 +176,7 @@ namespace RType {
             star.AddComponent<ScriptComponent>().Bind("Star");
         }
 
-        //PrefabsImporter::LoadPrefabs("Assets/Prefabs/Player.prefab", Scenes[CurrentScene]);
+        // PrefabsImporter::LoadPrefabs("Assets/Prefabs/Player.prefab", Scenes[CurrentScene]);
 
         Scenes[CurrentScene]->OnRuntimeStart();
     }
