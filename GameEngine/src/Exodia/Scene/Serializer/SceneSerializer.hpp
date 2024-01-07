@@ -37,7 +37,8 @@ namespace Exodia {
         void Deserialize(const std::filesystem::path &path);
 
         static void SerializeEntity(YAML::Emitter &out, Entity *entity);
-        void DeserializeComponent(const std::string &componentType, const YAML::Node &componentNode, GameObject gameobject);
+        void DeserializeComponent(const std::string &componentType, const YAML::Node &componentNode,
+                                  GameObject gameobject);
 
         ////////////////
         // Attributes //
