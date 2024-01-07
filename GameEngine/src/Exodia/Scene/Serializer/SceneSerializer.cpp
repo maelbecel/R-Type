@@ -43,6 +43,13 @@ namespace Exodia {
             });
         }
         out << YAML::EndSeq;
+
+        out << YAML::Key << "Prefabs" << YAML::Value << YAML::BeginSeq;
+        {
+            for (auto &prefab : _Scene->_Prefabs)
+                prefab->Serialize(out);
+        }
+
         out << YAML::EndMap;
 
         std::ofstream fout(path);
@@ -67,12 +74,9 @@ namespace Exodia {
 
             _Scene->SetName(sceneName);
 
-            if (!data["Entities"])
-                return;
+            if (data["Entities"]) {
+                auto entities = data["Entities"];
 
-            auto entities = data["Entities"];
-
-            if (entities) {
                 for (YAML::detail::iterator_value entity : entities) {
                     GameObject newGameObject = _Scene->CreateEntityWithUUID(entity["Entity"].as<uint64_t>());
 
@@ -82,8 +86,20 @@ namespace Exodia {
                         if (componentType == "Entity" || componentType == "IDComponent")
                             continue;
 
-                        DeserializeComponent(componentType, entity, newGameObject);
+                        SceneSerializer::DeserializeComponent(componentType, entity, newGameObject);
                     }
+                }
+            }
+
+            if (data["Prefabs"]) {
+                auto prefabs = data["Prefabs"];
+
+                for (YAML::detail::iterator_value prefab : prefabs) {
+                    Ref<Prefabs> newPrefab = CreateRef<Prefabs>();
+
+                    newPrefab->Deserialize(prefab, _Scene, false);
+
+                    _Scene->AddPrefab(newPrefab);
                 }
             }
         } catch (const YAML::BadConversion &e) {

@@ -56,6 +56,7 @@ set(SOURCES_GAME_ENGINE
     src/Exodia/Scene/System/Physics/MovingSystem.cpp
     src/Exodia/Scene/EventSubscriber/EventHover.cpp
     src/Exodia/Scene/GameObject/GameObject.cpp
+    src/Exodia/Scene/Prefabs/Prefabs.cpp
 
         # -- Script source files
     
@@ -77,6 +78,7 @@ set(SOURCES_GAME_ENGINE
     src/Exodia/Asset/Importer/SceneImporter.cpp
     src/Exodia/Asset/Importer/SoundImporter.cpp
     src/Exodia/Asset/Importer/FontImporter.cpp
+    src/Exodia/Asset/Importer/PrefabsImporter.cpp
     src/Exodia/Asset/Manager/EditorAssetManager.cpp
 
         # -- Exodia Math source files

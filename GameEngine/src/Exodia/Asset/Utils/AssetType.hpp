@@ -24,9 +24,10 @@ namespace Exodia {
     enum class AssetType : uint16_t {
         None = 0,
         Scene = 1,
-        Texture2D = 2,
-        Sound2D = 3,
-        Font = 4
+        Prefabs = 2,
+        Texture2D = 3,
+        Sound2D = 4,
+        Font = 5
         // TODO: Add more asset types
     };
 
@@ -51,6 +52,8 @@ namespace Exodia {
                 return "AssetType::Sound2D";
             case AssetType::Font:
                 return "AssetType::Font";
+            case AssetType::Prefabs:
+                return "AssetType::Prefabs";
             // TODO: Add more asset types
             default:
                 break;
@@ -71,6 +74,8 @@ namespace Exodia {
                 return AssetType::Sound2D;
             if (type == "AssetType::Font")
                 return AssetType::Font;
+            if (type == "AssetType::Prefabs")
+                return AssetType::Prefabs;
             // TODO: Add more asset types
 
             EXODIA_CORE_ASSERT(false, "Unknown asset type !");
