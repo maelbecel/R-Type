@@ -7,6 +7,8 @@
 
 #include "Prefabs.hpp"
 #include "Scene/Serializer/SceneSerializer.hpp"
+#include "Scene/GameObject/GameObject.hpp"
+#include "Scene/Components/Components.hpp"
 
 namespace Exodia {
 
@@ -50,6 +52,25 @@ namespace Exodia {
         fout << out.c_str();
     }
 
+    void Prefabs::Load(const std::string &path, Ref<Scene> scene)
+    {
+        try {
+            YAML::Node data = YAML::LoadFile(path);
+
+            if (!data["Prefab"]) {
+                EXODIA_CORE_ERROR("Prefab file '{0}' is invalid !", path);
+
+                return;
+            }
+
+            Deserialize(data, scene);
+        } catch (const YAML::BadConversion &e) {
+            EXODIA_CORE_ERROR("Failed to deserialize scene file '{0}':\n\t{1}", path, e.what());
+        } catch (const YAML::Exception &e) {
+            EXODIA_CORE_ERROR("Failed to deserialize scene file '{0}':\n\t{1}", path, e.what());
+        }
+    }
+
     void Prefabs::Serialize(YAML::Emitter &out)
     {
         out << YAML::BeginMap;
@@ -67,12 +88,65 @@ namespace Exodia {
                 }
                 out << YAML::EndMap;
             }
-
-            for (auto &prefab : _Prefabs)
-                prefab->Serialize(out);
         }
         out << YAML::EndSeq;
+
+        out << YAML::Key << "Prefabs" << YAML::Value << YAML::BeginSeq;
+        {
+            for (auto &prefab : _Prefabs) {
+                prefab->Serialize(out);
+            }
+        }
+
+        out << YAML::EndSeq;
         out << YAML::EndMap;
+    }
+
+    void Prefabs::Deserialize(YAML::Node &data, Ref<Scene> scene)
+    {
+        try {
+            _Tag.Tag = data["Prefab"].as<std::string>();
+
+            if (!scene)
+                return;
+
+            EXODIA_CORE_INFO("Deserializing prefab '{0}'...", _Tag.Tag);
+
+            _Transform.Deserialize(data);
+
+            if (data["Entities"]) {
+                auto entities = data["Entities"];
+
+                for (YAML::detail::iterator_value entity : entities) {
+                    GameObject newGameObject = scene->CreateEntityWithUUID(UUID());
+
+                    for (YAML::detail::iterator_value component : entity) {
+                        std::string componentType = component.first.as<std::string>();
+
+                        if (componentType == "Entity" || componentType == "IDComponent")
+                            continue;
+
+                        SceneSerializer::DeserializeComponent(componentType, entity, newGameObject);
+                    }
+                }
+            }
+
+            if (data["Prefabs"]) {
+                auto prefabs = data["Prefabs"];
+
+                for (YAML::detail::iterator_value prefab : prefabs) {
+                    Ref<Prefabs> newPrefab = CreateRef<Prefabs>();
+
+                    newPrefab->Deserialize(prefab, scene);
+
+                    AddPrefab(newPrefab);
+                }
+            }
+        } catch (const YAML::BadConversion &e) {
+            EXODIA_CORE_ERROR("Failed to deserialize prefab file '{0}':\n\t{1}", _Tag.Tag, e.what());
+        } catch (const YAML::Exception &e) {
+            EXODIA_CORE_ERROR("Failed to deserialize prefab file '{0}':\n\t{1}", _Tag.Tag, e.what());
+        }
     }
 
     Ref<Prefabs> Prefabs::AddPrefab(Ref<Prefabs> prefab)

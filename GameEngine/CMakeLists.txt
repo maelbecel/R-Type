@@ -78,6 +78,7 @@ set(SOURCES_GAME_ENGINE
     src/Exodia/Asset/Importer/SceneImporter.cpp
     src/Exodia/Asset/Importer/SoundImporter.cpp
     src/Exodia/Asset/Importer/FontImporter.cpp
+    src/Exodia/Asset/Importer/PrefabsImporter.cpp
     src/Exodia/Asset/Manager/EditorAssetManager.cpp
 
         # -- Exodia Math source files

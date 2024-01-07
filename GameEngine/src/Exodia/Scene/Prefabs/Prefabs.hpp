@@ -11,15 +11,17 @@
     // Exodia Asset includes
     #include "Asset/Asset.hpp"
 
-    // Exodia ECS includes
-    #include "Scene/GameObject/GameObject.hpp"
-    #include "Scene/Components/Components.hpp"
+    #include "Scene/Components/DefaultComponents/TagComponent.hpp"
+    #include "Scene/Components/DefaultComponents/TransformComponent.hpp"
 
     // External includes
     #include <vector>
     #include <yaml-cpp/yaml.h>
 
 namespace Exodia {
+
+    class Scene;
+    class GameObject;
 
     class Prefabs : public Asset {
 
@@ -39,7 +41,9 @@ namespace Exodia {
             static Ref<Prefabs> Copy(Ref<Prefabs> other);
 
             void Save(const std::string &path);
+            void Load(const std::string &path, Ref<Scene> scene = nullptr);
             void Serialize(YAML::Emitter &out);
+            void Deserialize(YAML::Node &data, Ref<Scene> scene = nullptr);
 
             Ref<Prefabs> AddPrefab(Ref<Prefabs> prefab);
             bool RemovePrefab(const std::string &name);

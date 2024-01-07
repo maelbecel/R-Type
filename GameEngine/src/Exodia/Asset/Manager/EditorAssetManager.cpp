@@ -43,7 +43,8 @@ namespace Exodia {
                                                                            {".png", AssetType::Texture2D},
                                                                            {".jpg", AssetType::Texture2D},
                                                                            {".jpeg", AssetType::Texture2D},
-                                                                           {".wav", AssetType::Sound2D}};
+                                                                           {".wav", AssetType::Sound2D},
+                                                                           {".prefab", AssetType::Prefabs}};
 
     static AssetType GetAssetTypeFromFileExtension(const std::filesystem::path &extension) {
         auto it = AssetExtensionMap.find(extension);

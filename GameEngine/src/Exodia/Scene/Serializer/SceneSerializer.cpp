@@ -72,18 +72,16 @@ namespace Exodia {
 
             auto entities = data["Entities"];
 
-            if (entities) {
-                for (YAML::detail::iterator_value entity : entities) {
-                    GameObject newGameObject = _Scene->CreateEntityWithUUID(entity["Entity"].as<uint64_t>());
+            for (YAML::detail::iterator_value entity : entities) {
+                GameObject newGameObject = _Scene->CreateEntityWithUUID(entity["Entity"].as<uint64_t>());
 
-                    for (YAML::detail::iterator_value component : entity) {
-                        std::string componentType = component.first.as<std::string>();
+                for (YAML::detail::iterator_value component : entity) {
+                    std::string componentType = component.first.as<std::string>();
 
-                        if (componentType == "Entity" || componentType == "IDComponent")
-                            continue;
+                    if (componentType == "Entity" || componentType == "IDComponent")
+                        continue;
 
-                        DeserializeComponent(componentType, entity, newGameObject);
-                    }
+                    SceneSerializer::DeserializeComponent(componentType, entity, newGameObject);
                 }
             }
         } catch (const YAML::BadConversion &e) {
@@ -104,8 +102,7 @@ namespace Exodia {
     void SceneSerializer::DeserializeComponent(const std::string &componentType, const YAML::Node &componentNode, GameObject gameObject)
     {
         try {
-            std::function<IComponentContainer *(Buffer)> func =
-                Project::GetActive()->GetComponentFactory(componentType);
+            std::function<IComponentContainer *(Buffer)> func = Project::GetActive()->GetComponentFactory(componentType);
 
             if (!func) {
                 EXODIA_CORE_WARN("Component '{0}' is not registered !", componentType);

@@ -177,6 +177,8 @@ namespace RType {
         }
 
         // Create the camera
+        PrefabsImporter::LoadPrefabs("Assets/Prefabs/Player.prefab", Scenes[CurrentScene]);
+
         Scenes[CurrentScene]->OnRuntimeStart();
     }
 
