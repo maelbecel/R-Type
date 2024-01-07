@@ -96,8 +96,7 @@ namespace Exodia {
         out << YAML::EndMap;
     }
 
-    void Prefabs::Deserialize(YAML::Node &data, Ref<Scene> scene, bool newEntity)
-    {
+    void Prefabs::Deserialize(YAML::Node &data, Ref<Scene> scene, bool newEntity) {
         try {
             _Tag.Tag = data["Prefab"].as<std::string>();
 
