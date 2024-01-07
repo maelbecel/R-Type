@@ -50,8 +50,7 @@ namespace Exodia {
         fout << out.c_str();
     }
 
-    void Prefabs::Load(const std::string &path, Ref<Scene> scene)
-    {
+    void Prefabs::Load(const std::string &path, Ref<Scene> scene) {
         try {
             YAML::Node data = YAML::LoadFile(path);
 
@@ -69,8 +68,7 @@ namespace Exodia {
         }
     }
 
-    void Prefabs::Serialize(YAML::Emitter &out)
-    {
+    void Prefabs::Serialize(YAML::Emitter &out) {
         out << YAML::BeginMap;
         out << YAML::Key << "Prefab" << YAML::Value << _Tag.Tag;
 
@@ -98,8 +96,7 @@ namespace Exodia {
         out << YAML::EndMap;
     }
 
-    void Prefabs::Deserialize(YAML::Node &data, Ref<Scene> scene)
-    {
+    void Prefabs::Deserialize(YAML::Node &data, Ref<Scene> scene) {
         try {
             _Tag.Tag = data["Prefab"].as<std::string>();
 
@@ -145,8 +142,7 @@ namespace Exodia {
         }
     }
 
-    Ref<Prefabs> Prefabs::AddPrefab(Ref<Prefabs> prefab)
-    {
+    Ref<Prefabs> Prefabs::AddPrefab(Ref<Prefabs> prefab) {
         _Prefabs.push_back(prefab);
 
         return prefab;

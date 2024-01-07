@@ -101,7 +101,8 @@ namespace Exodia {
     void SceneSerializer::DeserializeComponent(const std::string &componentType, const YAML::Node &componentNode,
                                                GameObject gameObject) {
         try {
-            std::function<IComponentContainer *(Buffer)> func = Project::GetActive()->GetComponentFactory(componentType);
+            std::function<IComponentContainer *(Buffer)> func =
+                Project::GetActive()->GetComponentFactory(componentType);
 
             if (!func) {
                 EXODIA_CORE_WARN("Component '{0}' is not registered !", componentType);
