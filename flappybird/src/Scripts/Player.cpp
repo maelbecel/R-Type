@@ -32,7 +32,7 @@ namespace FlappyBird {
         _SmokeParticle.ColorBegin = { 0.8f, 0.8f, 0.8f, 1.0f };
         _SmokeParticle.ColorEnd = { 0.6f, 0.6f, 0.6f, 1.0f };
         _SmokeParticle.LifeTime = 1.0f;
-        _SmokeParticle.NumberOfParticles = 10;
+        _SmokeParticle.NumberOfParticles = 5;
 
         // Engine Particles
         _EngineParticle.Position = {0.0f, 0.0f};
@@ -44,7 +44,7 @@ namespace FlappyBird {
         _EngineParticle.ColorBegin = {254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 1.0f};
         _EngineParticle.ColorEnd = {254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f};
         _EngineParticle.LifeTime = 1.0f;
-        _EngineParticle.NumberOfParticles = 50;
+        _EngineParticle.NumberOfParticles = 25;
     }
 
     void Player::OnUpdate(Timestep ts) {
