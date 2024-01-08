@@ -358,8 +358,7 @@ namespace Exodia {
         return false;
     }
 
-    void Scene::OnKeyPressedEvent(int keyCode)
-    {
+    void Scene::OnKeyPressedEvent(int keyCode) {
         _World->ForEach<ScriptComponent>([&](Entity *entity, auto script) {
             auto &sc = script.Get();
 
@@ -368,8 +367,7 @@ namespace Exodia {
         });
     }
 
-    void Scene::OnKeyReleasedEvent(int keyCode)
-    {
+    void Scene::OnKeyReleasedEvent(int keyCode) {
         _World->ForEach<ScriptComponent>([&](Entity *entity, auto script) {
             auto &sc = script.Get();
 

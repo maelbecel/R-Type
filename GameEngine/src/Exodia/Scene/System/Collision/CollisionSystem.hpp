@@ -31,6 +31,7 @@ namespace Exodia {
 
     struct BoxCollider2DComponent;
     struct CircleCollider2DComponent;
+    struct TriangleCollider2DComponent;
     struct TransformComponent;
     struct ScriptComponent;
 
@@ -72,6 +73,19 @@ namespace Exodia {
         bool CheckCollision(ComponentHandle<CircleCollider2DComponent> collider1,
                             ComponentHandle<TransformComponent> transform1,
                             ComponentHandle<CircleCollider2DComponent> collider2,
+                            ComponentHandle<TransformComponent> transform2);
+
+        bool CheckCollision(ComponentHandle<CircleCollider2DComponent> collider1,
+                            ComponentHandle<TransformComponent> transform1,
+                            ComponentHandle<TriangleCollider2DComponent> collider2,
+                            ComponentHandle<TransformComponent> transform2);
+        bool CheckCollision(ComponentHandle<TriangleCollider2DComponent> collider1,
+                            ComponentHandle<TransformComponent> transform1,
+                            ComponentHandle<TriangleCollider2DComponent> collider2,
+                            ComponentHandle<TransformComponent> transform2);
+        bool CheckCollision(ComponentHandle<BoxCollider2DComponent> collider1,
+                            ComponentHandle<TransformComponent> transform1,
+                            ComponentHandle<TriangleCollider2DComponent> collider2,
                             ComponentHandle<TransformComponent> transform2);
 
         BoundingBox CalculateTransformedBoundingBox(const BoxCollider2DComponent &collider,

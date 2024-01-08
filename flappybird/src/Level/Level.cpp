@@ -21,29 +21,26 @@ namespace FlappyBird {
     // Constructor & Destructor //
     //////////////////////////////
 
-    Level::Level() : _Scene(nullptr), _GameOver(false), _EditorCamera(30.0f, 1.778f, 0.1f, 1000.0f) {};
+    Level::Level() : _Scene(nullptr), _GameOver(false), _EditorCamera(30.0f, 1.778f, 0.1f, 1000.0f){};
 
     /////////////
     // Methods //
     /////////////
 
-    void Level::OnUpdate(Timestep ts)
-    {
+    void Level::OnUpdate(Timestep ts) {
         if (_Scene == nullptr)
             return;
         _Scene->OnUpdateRuntime(ts);
     }
 
-    void Level::OnRender(Timestep ts)
-    {
+    void Level::OnRender(Timestep ts) {
         if (_Scene == nullptr)
             return;
         _EditorCamera.OnUpdate(ts);
-        _Scene->OnUpdateEditor(ts, _EditorCamera);        
+        _Scene->OnUpdateEditor(ts, _EditorCamera);
     }
 
-    void Level::Reset()
-    {
+    void Level::Reset() {
         _GameOver = false;
 
         if (_Scene != nullptr) {
@@ -52,8 +49,7 @@ namespace FlappyBird {
         }
     }
 
-    void Level::Init()
-    {
+    void Level::Init() {
         _Scene = CreateRef<Scene>();
 
         PrefabsImporter::LoadPrefabs("Assets/Prefabs/FlappyBird.prefab", _Scene);
@@ -61,21 +57,19 @@ namespace FlappyBird {
         _Scene->OnViewportResize(Application::Get().GetWindow().GetWidth(), Application::Get().GetWindow().GetHeight());
     }
 
-    void Level::Play()
-    {
+    void Level::Play() {
         if (_Scene == nullptr)
             return;
         _Scene->RegisterSystem(new ParticleSystem());
         _Scene->RegisterSystem(new GravitySystem());
         _Scene->RegisterSystem(new MovingSystem());
 
-        //TODO: Flappy Collision System
+        // TODO: Flappy Collision System
 
         _Scene->OnRuntimeStart();
     }
 
-    void Level::OnKeyPressed(int keyCode)
-    {
+    void Level::OnKeyPressed(int keyCode) {
         if (_Scene == nullptr)
             return;
         _Scene->OnKeyPressedEvent(keyCode);
@@ -85,12 +79,9 @@ namespace FlappyBird {
     // Getters & Setters //
     ///////////////////////
 
-    bool Level::IsGameOver()
-    {
-        return _GameOver;
-    }
+    bool Level::IsGameOver() { return _GameOver; }
 
-    //Level::Level() : _GameOver(false), _ObstacleTarget(30.0f), _ObstacleIndex(0), _ObstacleHSV({0.0f, 0.8f, 0.8f}){};
+    // Level::Level() : _GameOver(false), _ObstacleTarget(30.0f), _ObstacleIndex(0), _ObstacleHSV({0.0f, 0.8f, 0.8f}){};
 
     /*void Level::Init() {
         AnimationComponent anim;

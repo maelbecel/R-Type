@@ -23,6 +23,97 @@
 
 namespace Exodia {
 
+    struct TriangleCollider2DComponent : public Component {
+        glm::vec2 Offset;
+        glm::vec2 Size;
+        uint32_t ColliderMask;
+        std::array<glm::vec2, 3> vertices;
+        std::array<glm::vec2, 3> edges;
+
+        TriangleCollider2DComponent(const TriangleCollider2DComponent &) = default;
+        TriangleCollider2DComponent() : Offset(glm::vec2(0.0f)), Size(glm::vec2(0.5f)), ColliderMask(0xFFFFFFFF) {
+            // Initialize vertices and edges to zero
+            for (int i = 0; i < 3; i++) {
+                vertices[i] = glm::vec2(0, 0);
+                edges[i] = glm::vec2(0, 0);
+            }
+        };
+
+        void CalculateEdges() {
+            // Calculate the edges
+            for (int i = 0; i < 3; i++) {
+                edges[i] = vertices[(i + 1) % 3] - vertices[i];
+            }
+        }
+        virtual void Serialize(YAML::Emitter &out) {
+            out << YAML::Key << "TriangleCollider2DComponent";
+            out << YAML::BeginMap;
+            {
+                out << YAML::Key << "Offset" << YAML::Value << YAML::Flow;
+                { out << YAML::BeginSeq << Offset.x << Offset.y << YAML::EndSeq; }
+                out << YAML::Key << "Size" << YAML::Value << YAML::Flow;
+                { out << YAML::BeginSeq << Size.x << Size.y << YAML::EndSeq; }
+                out << YAML::Key << "Mask" << YAML::Value << ColliderMask;
+                out << YAML::Key << "Vertices" << YAML::Value << YAML::Flow;
+                {
+                    out << YAML::BeginSeq;
+                    for (const auto &vertex : vertices) {
+                        out << YAML::BeginSeq << vertex.x << vertex.y << YAML::EndSeq;
+                    }
+                    out << YAML::EndSeq;
+                }
+                out << YAML::Key << "Edges" << YAML::Value << YAML::Flow;
+                {
+                    out << YAML::BeginSeq;
+                    for (const auto &edge : edges) {
+                        out << YAML::BeginSeq << edge.x << edge.y << YAML::EndSeq;
+                    }
+                    out << YAML::EndSeq;
+                }
+            }
+            out << YAML::EndMap;
+        }
+
+        virtual void Deserialize(const YAML::Node &node) {
+            try {
+                auto triangle = node["TriangleCollider2DComponent"];
+
+                Offset = glm::vec2(triangle["Offset"][0].as<float>(), triangle["Offset"][1].as<float>());
+                Size = glm::vec2(triangle["Size"][0].as<float>(), triangle["Size"][1].as<float>());
+
+                ColliderMask = triangle["Mask"].as<uint32_t>();
+                for (int i = 0; i < 3; i++) {
+                    vertices[i] =
+                        glm::vec2(triangle["Vertices"][i][0].as<float>(), triangle["Vertices"][i][1].as<float>());
+                    edges[i] = glm::vec2(triangle["Edges"][i][0].as<float>(), triangle["Edges"][i][1].as<float>());
+                }
+            } catch (YAML::BadConversion &e) {
+                EXODIA_CORE_WARN("TriangleCollider2DComponent deserialization failed: {0}", e.what());
+            }
+        }
+
+        Buffer SerializeData() override {
+            try {
+                uint32_t size = sizeof(glm::vec2) * 2 + sizeof(uint32_t) + sizeof(glm::vec2) * 3 * 2;
+                Buffer data(size);
+
+                std::memcpy(data.Data, &Offset, sizeof(glm::vec2));
+                std::memcpy(data.Data + sizeof(glm::vec2), &Size, sizeof(glm::vec2));
+                std::memcpy(data.Data + sizeof(glm::vec2) * 2, &ColliderMask, sizeof(uint32_t));
+                std::memcpy(data.Data + sizeof(glm::vec2) * 2 + sizeof(uint32_t), vertices.data(),
+                            sizeof(glm::vec2) * 3);
+                std::memcpy(data.Data + sizeof(glm::vec2) * 2 + sizeof(uint32_t) + sizeof(glm::vec2) * 3, edges.data(),
+                            sizeof(glm::vec2) * 3);
+
+                return data;
+            } catch (const std::exception &error) {
+                EXODIA_CORE_WARN("TriangleCollider2DComponent serialization failed:\n\t{0}", error.what());
+            }
+
+            return Buffer();
+        }
+    };
+
     struct BoxCollider2DComponent : public Component {
         glm::vec2 Offset;
         glm::vec2 Size;
