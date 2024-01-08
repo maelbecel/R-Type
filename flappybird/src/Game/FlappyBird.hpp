@@ -16,6 +16,8 @@
 
 #include "Exodia.hpp"
 
+#include "Scripts/Player.hpp"
+
 namespace FlappyBird {
 
     inline static void Init() {
@@ -25,6 +27,9 @@ namespace FlappyBird {
         // -- Register FlappyBird components ---------------------------------------
 
         // -- Register FlappyBird scripts ------------------------------------------
+        project->RegisterScript("Player", []() -> Exodia::ScriptableEntity * {
+            return new FlappyBird::Player;
+        });
 
         // -- Register FlappyBird systems ------------------------------------------
     }

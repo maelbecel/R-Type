@@ -8,9 +8,11 @@ Entities:
     TagComponent:
       Tag: SpaceShip
     TransformComponent:
-      Translation: [-3, 0, 0]
+      Translation: [-5, 0, 0]
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
+    ScriptComponent:
+      Name: Player
     BoxCollider2DComponent:
       Offset: [0, 0]
       Size: [0.5, 0.5]
@@ -46,3 +48,8 @@ Entities:
         OrthographicFar: 1
       Primary: true
       FixedAspectRatio: true
+    RigidBody2DComponent:
+      BodyType: Dynamic
+      Velocity: [5, 0]
+      GravityScale: 0
+      Mass: 0

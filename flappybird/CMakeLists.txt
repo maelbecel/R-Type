@@ -25,11 +25,8 @@ set(SOURCES
 
     src/Level/Level.cpp
 
-    src/Particles/Particles.cpp
+    src/Scripts/Player.cpp
 
-    src/ECS/Scripts/Player.cpp
-
-    src/ECS/System/AnimationSystem.cpp
     src/Tools/Random.cpp
 )
 
