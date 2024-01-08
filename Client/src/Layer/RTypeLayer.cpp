@@ -47,12 +47,13 @@ namespace RType {
 
         _Network->Loop();
         _Network->SendAskConnect("127.0.0.1", 8082);
+        _Network->SetNetworkType(Network::NetworkType::CLIENT);
         // TODO: change ip and port when the server is on a different machine
     }
 
     void RTypeLayer::OnAttach() {
         EXODIA_PROFILE_FUNCTION();
-
+  
         int port = GetPort();
 
         if (port == -1)

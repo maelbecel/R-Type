@@ -17,7 +17,7 @@ namespace Exodia::Network {
      * @return void
      */
     void Network::SendPacket(Packet &packet) {
-        if (_connections.size() > 0) {
+        if (_networkType == NetworkType::SERVER) {
             for (auto &connection : _connections)
                 connection.second.SendPacket(_socket, packet);
         } else {
@@ -239,7 +239,7 @@ namespace Exodia::Network {
     }
 
     void Network::ResendNeedAck() {
-        if (_connections.size() > 0) {
+        if (_networkType == NetworkType::SERVER) {
             for (auto &connection : _connections)
                 connection.second.ResendNeedAck(_socket);
         } else

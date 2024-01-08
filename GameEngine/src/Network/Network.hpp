@@ -30,6 +30,13 @@ namespace Exodia {
     const std::vector<char> message, size_t size, Connection &senderConnection, Exodia::Network::Header header
 #define STRING_FROM_ENDPOINT(x) x.address().to_string() + ":" + std::to_string(x.port())
 
+        enum class NetworkType {
+            NONE,
+            CLIENT,
+            SERVER,
+            SINGLEPLAYER
+        };
+
         class Network {
           public:
             //////////////////////////////
@@ -84,6 +91,8 @@ namespace Exodia {
             void Splitter(const std::vector<char> &message, size_t size, asio::ip::udp::endpoint senderEndpoint);
 
             void ResendNeedAck();
+
+            void SetNetworkType(NetworkType networkType) { _networkType = networkType; }
 
             /**
              * @brief Return an unordered map of pair of string and Connection
@@ -182,6 +191,7 @@ namespace Exodia {
             UDPSocket _socket;
             std::map<std::string, Connection> _connections;
             Connection _server_connection;
+            NetworkType _networkType = NetworkType::NONE;
             IOContextManager &_ioContextManager;
             std::vector<std::pair<std::pair<uint32_t, bool>, asio::ip::udp::endpoint>> _events;
             std::vector<std::pair<Connection, std::unordered_map<uint64_t, Packet>>> _packetNeedAck;

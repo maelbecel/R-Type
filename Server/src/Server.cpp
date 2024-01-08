@@ -29,6 +29,7 @@ namespace Exodia {
           my_Timer(0.0f), _Running(true) {
         EXODIA_INFO("Server is starting...");
 
+        _Network.SetNetworkType(Network::NetworkType::SERVER);
         _InputThread = std::thread([&] {
             while (_Running) {
                 if (std::cin.peek() != EOF) {
