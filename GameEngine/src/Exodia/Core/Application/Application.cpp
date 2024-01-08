@@ -20,6 +20,14 @@
 // External includes
 #include <filesystem>
 #include <imgui.h>
+#include <iostream>
+#include <fstream>
+#include <string>
+
+#ifdef WIN32
+    #include <windows.h>
+    #include <psapi.h>
+#endif
 
 namespace Exodia {
 
@@ -158,8 +166,11 @@ namespace Exodia {
     }
 
     void Application::UpdateStatistics(Timestep ts) {
+        static float timer = 10.0f;
+
         _Frames++;
         _FPSTimer += ts;
+        timer += ts;
 
         if (_FPSTimer >= 1.0f) {
             _Statistics.FPS = _Frames / _FPSTimer;
@@ -167,6 +178,12 @@ namespace Exodia {
 
             _FPSTimer = 0.0f;
             _Frames = 0;
+        }
+
+        if (timer >= 10.0f) {
+            _Statistics.MemoryUsage = GetMemoryUsage();
+
+            timer = 0.0f;
         }
     }
 
@@ -179,4 +196,36 @@ namespace Exodia {
     ApplicationSpecification Application::GetSpecification() const { return _Specification; }
 
     ApplicationStatistics Application::GetStatistics() const { return _Statistics; }
+
+    uint64_t Application::GetMemoryUsage()
+    {
+    #ifdef WIN32
+        PROCESS_MEMORY_COUNTERS_EX pmc;
+
+        GetProcessMemoryInfo(GetCurrentProcess(), (PROCESS_MEMORY_COUNTERS *)&pmc, sizeof(pmc));
+
+        return pmc.PrivateUsage;
+    #else
+        std::ifstream file("/proc/self/status");
+        std::string line;
+        uint64_t memoryUsage = 0;
+
+        if (!file.is_open())
+            return 0;
+
+        while (std::getline(file, line)) {
+            if (line.find("VmRSS") != std::string::npos) {
+                std::istringstream iss(line);
+                std::string label;
+                uint64_t value;
+
+                iss >> label >> value;
+                memoryUsage = value; // Value in KB
+                break;
+            }
+        }
+
+        return memoryUsage;
+    #endif
+    }
 }; // namespace Exodia

@@ -50,6 +50,8 @@ namespace Exodia {
     struct ApplicationStatistics {
         float FPS = 0.0f;
         float FrameTime = 0.0f;
+
+        uint64_t MemoryUsage = 0;
     };
 
 ////////////
@@ -171,6 +173,10 @@ namespace Exodia {
          * @return (Type: Window &) The window of the application
          */
         inline Window &GetWindow() { return *_Window; }
+      
+      private:
+
+        uint64_t GetMemoryUsage();
 
         ////////////////
         // Attributes //
