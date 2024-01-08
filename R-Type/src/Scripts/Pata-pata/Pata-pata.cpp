@@ -83,7 +83,9 @@ namespace RType {
             anim = HandleEntity->AddComponent<AnimationComponent>(_Animations[0]);
 
             sprite.Get().Texture = anim.Get().Frames[0];
-        } else {
+        }
+
+        if (anim && sprite) {
             SpriteRendererComponent &sr = sprite.Get();
             AnimationComponent &ac = anim.Get();
 

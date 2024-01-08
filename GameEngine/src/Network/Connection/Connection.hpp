@@ -39,13 +39,13 @@ class Connection {
         (void)socket;
         for (auto &packet : _packetNeedAck) {
             (void)packet;
-            SendPacketAck(socket, packet.second);
+            SendPacketAck(socket, *packet.second);
         }
     }
 
     void RemovePacketNeedAck(uint64_t id) { _packetNeedAck.erase(id); }
 
-    std::unordered_map<uint64_t, Exodia::Network::Packet> &GetPacketNeedAck() { return _packetNeedAck; }
+    std::unordered_map<uint64_t, std::shared_ptr<Exodia::Network::Packet>> &GetPacketNeedAck() { return _packetNeedAck; }
 
     void SendPacket(Exodia::Network::UDPSocket &socket, Exodia::Network::Packet &packet) {
         packet.GetHeader().setSize((unsigned long)packet.GetContent().size());
@@ -55,7 +55,7 @@ class Connection {
         std::cout << packet.GetBuffer().size() << std::endl;
         socket.Send(packet, _endpoint);
         if (packet.GetHeader().GetIsImportant()) {
-            _packetNeedAck[packet.GetHeader().GetId()] = packet;
+            _packetNeedAck[packet.GetHeader().GetId()] = std::make_shared<Exodia::Network::Packet>(packet);
         }
         _id++;
         _networkInfo.kiloByteSent += packet.GetBuffer().size() / 1024.0f;
@@ -156,7 +156,7 @@ class Connection {
     NetworkInfo _networkInfo;
     NetworkInfo _lastNetworkInfo;
     uint64_t _worldId = 0;
-    std::unordered_map<uint64_t, Exodia::Network::Packet> _packetNeedAck;
+    std::unordered_map<uint64_t, std::shared_ptr<Exodia::Network::Packet>> _packetNeedAck;
 };
 
 #endif /* !CONNECTION_HPP_ */

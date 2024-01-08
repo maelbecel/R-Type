@@ -132,9 +132,8 @@ namespace Exodia::Network {
      * @return void
      */
     void Network::SendDeleteEntity(bool isImportant, Entity *entity) {
-        (void)isImportant;
         if (entity == nullptr) {
-            EXODIA_CORE_ERROR("Network::SendDeleteEntity() - Entity is null !");
+            EXODIA_CORE_ERROR("Network::() - Entity is null !");
             return;
         }
         Exodia::Network::Packet packet(DELETE_ENTITY, isImportant);

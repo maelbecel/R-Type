@@ -169,13 +169,13 @@ namespace Exodia {
      */
     void Server::Init() {
 
-        WaitForClient();
 
         EXODIA_INFO("Server initialisation...");
 
         try {
             InitScenes();
             InitEntities();
+            WaitForClient();
             /* Removing rigid body for static camera
             auto body_camera = cameraEntity->AddComponent<RigidBody2DComponent>();
             body_camera.Get().Type = RigidBody2DComponent::BodyType::Dynamic;
