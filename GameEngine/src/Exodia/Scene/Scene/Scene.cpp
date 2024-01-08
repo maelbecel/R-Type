@@ -340,13 +340,12 @@ namespace Exodia {
         });
         _World->UnlockMutex();
 
-    #ifdef EXODIA_DEBUG
+#ifdef EXODIA_DEBUG
         RenderDebugScene();
-    #endif
+#endif
     }
 
-    void Scene::RenderDebugScene()
-    {
+    void Scene::RenderDebugScene() {
         _World->LockMutex();
         _World->ForEach<TransformComponent, BoxCollider2DComponent>([&](Entity *entity, auto transform, auto collider) {
             auto &tc = transform.Get();
@@ -359,14 +358,15 @@ namespace Exodia {
         _World->UnlockMutex();
 
         _World->LockMutex();
-        _World->ForEach<TransformComponent, CircleCollider2DComponent>([&](Entity *entity, auto transform, auto collider) {
-            auto &tc = transform.Get();
+        _World->ForEach<TransformComponent, CircleCollider2DComponent>(
+            [&](Entity *entity, auto transform, auto collider) {
+                auto &tc = transform.Get();
 
-            Renderer2D::DrawCircle(tc.GetTransform(), glm::vec4(1.0f, 0.5f, 0.0f, 1.0f), 0.1f, 0.005f);
+                Renderer2D::DrawCircle(tc.GetTransform(), glm::vec4(1.0f, 0.5f, 0.0f, 1.0f), 0.1f, 0.005f);
 
-            (void)entity;
-            (void)collider;
-        });
+                (void)entity;
+                (void)collider;
+            });
         _World->UnlockMutex();
     }
 
