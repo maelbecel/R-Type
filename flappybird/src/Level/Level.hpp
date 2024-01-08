@@ -46,7 +46,9 @@ namespace FlappyBird {
         ////////////////
       private:
         Ref<Exodia::Scene> _Scene;
+        Ref<Exodia::Prefabs> _PrefabObstacle;
         bool _GameOver;
+        float _mytime = 0.0f;
 
         Exodia::EditorCamera _EditorCamera;
 

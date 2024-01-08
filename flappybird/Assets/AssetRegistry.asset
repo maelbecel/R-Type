@@ -5,3 +5,6 @@ AssetRegistry:
   - Handle: 45120015123131
     Path: Texture/Tiles/Obstacle.png
     Type: AssetType::Texture2D
+  - Handle: 45120015123142
+    Path: Texture/Tiles/Obstacle_rev.png
+    Type: AssetType::Texture2D
