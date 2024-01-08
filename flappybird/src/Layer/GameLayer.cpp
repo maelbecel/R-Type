@@ -33,16 +33,16 @@ namespace FlappyBird {
 
         CollisionSystem *collisionSystem = new CollisionSystem();
 
-        Scenes[GameState::Menu] = CreateRef<Scene>();
-        // Scenes[GameState::Menu]->RegisterSystem(new AnimationSystem());
-        Scenes[GameState::Menu]->RegisterSystem(new MovingSystem(1.5f));
-        Scenes[GameState::Menu]->RegisterSystem(collisionSystem);
-        Scenes[GameState::Menu]->Subscribe<Exodia::Events::OnCollisionEntered>(collisionSystem);
-        Scenes[GameState::Menu]->OnViewportResize(Application::Get().GetWindow().GetWidth(),
+        Scenes[CurrentScene] = CreateRef<Scene>();
+        // Scenes[CurrentScene]->RegisterSystem(new AnimationSystem());
+        Scenes[CurrentScene]->RegisterSystem(new MovingSystem(1.5f));
+        Scenes[CurrentScene]->RegisterSystem(collisionSystem);
+        Scenes[CurrentScene]->Subscribe<Exodia::Events::OnCollisionEntered>(collisionSystem);
+        Scenes[CurrentScene]->OnViewportResize(Application::Get().GetWindow().GetWidth(),
                                                   Application::Get().GetWindow().GetHeight());
 
         // Create the camera entity
-        GameObject cameraEntity = Scenes[GameState::Menu]->CreateEntity("Camera");
+        GameObject cameraEntity = Scenes[CurrentScene]->CreateEntity("Camera");
 
         CameraComponent &camera = cameraEntity.AddComponent<CameraComponent>();
 
@@ -67,9 +67,9 @@ namespace FlappyBird {
 
         // Create the entities
         // TODO: Ask server for playerID
-        // int playerID = 0;
-        // Entity *entity = Scenes[GAME]->CreateEntity("Player_" + std::to_string(playerID));
-        // entity->AddComponent<ScriptComponent>().Get().Bind("Player");
+        int playerID = 0;
+        GameObject entity = Scenes[CurrentScene]->CreateEntity("Player_" + std::to_string(playerID));
+        entity.AddComponent<ScriptComponent>().Bind("Player");
 
         // Create pata-pata
         // Entity *patata = Scenes[GAME]->CreateEntity("Pata-pata");
@@ -77,11 +77,11 @@ namespace FlappyBird {
 
         // Create stars
         // CreateStars(Scenes);
-        for (int i = 0; i < 60; i++) {
-            GameObject star = Scenes[GameState::Menu]->CreateEntity("Star" + std::to_string(i));
+        // for (int i = 0; i < 60; i++) {
+        //     GameObject star = Scenes[CurrentScene]->CreateEntity("Star" + std::to_string(i));
 
-            star.AddComponent<ScriptComponent>().Bind("Star");
-        }
+        //     star.AddComponent<ScriptComponent>().Bind("Star");
+        // }
 
         // Create the camera
         Scenes[CurrentScene]->OnRuntimeStart();
