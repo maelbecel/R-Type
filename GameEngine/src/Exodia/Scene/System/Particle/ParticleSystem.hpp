@@ -6,13 +6,13 @@
 */
 
 #ifndef PARTICLESYSTEM_HPP_
-    #define PARTICLESYSTEM_HPP_
+#define PARTICLESYSTEM_HPP_
 
-    // Exodia ECS Interface includes
-    #include "Exodia-ECS.hpp"
+// Exodia ECS Interface includes
+#include "Exodia-ECS.hpp"
 
-    // Exodia Scene includes
-    #include "Scene/Components/Components.hpp"
+// Exodia Scene includes
+#include "Scene/Components/Components.hpp"
 
 namespace Exodia {
 
@@ -21,10 +21,9 @@ namespace Exodia {
         /////////////
         // Methods //
         /////////////
-        public:
-
-            virtual void Update(World *world, Timestep ts) override;
+      public:
+        virtual void Update(World *world, Timestep ts) override;
     };
-};
+}; // namespace Exodia
 
 #endif /* !PARTICLESYSTEM_HPP_ */

@@ -90,7 +90,7 @@ namespace RType {
 
             if (sc.Instance != nullptr)
                 sc.Instance->OnKeyPressed(event.GetKeyCode());
-            
+
             (void)entity;
         });
 
