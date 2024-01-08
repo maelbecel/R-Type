@@ -39,7 +39,7 @@ namespace FlappyBird {
         Scenes[CurrentScene]->RegisterSystem(collisionSystem);
         Scenes[CurrentScene]->Subscribe<Exodia::Events::OnCollisionEntered>(collisionSystem);
         Scenes[CurrentScene]->OnViewportResize(Application::Get().GetWindow().GetWidth(),
-                                                  Application::Get().GetWindow().GetHeight());
+                                               Application::Get().GetWindow().GetHeight());
 
         // Create the camera entity
         GameObject cameraEntity = Scenes[CurrentScene]->CreateEntity("Camera");
