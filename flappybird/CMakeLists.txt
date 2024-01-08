@@ -29,6 +29,7 @@ set(SOURCES
 # Set include directories for the SandBoxGames
 set(INCLUDE_DIRS
     # SandBox include directories
+    ${CMAKE_SOURCE_DIR}
     ${CMAKE_SOURCE_DIR}/src
 
     # GameEngine include directories

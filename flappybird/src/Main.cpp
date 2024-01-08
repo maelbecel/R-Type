@@ -7,6 +7,7 @@
 
 #include "Exodia/EntryPoint.hpp"
 #include "Layer/GameLayer.hpp"
+#include "FlappyBird.hpp"
 
 namespace Exodia {
 
@@ -30,7 +31,7 @@ namespace Exodia {
     Application *CreateApplication(ApplicationCommandLineArgs args) {
         EXODIA_PROFILE_FUNCTION();
 
-        // FlappyBird::InitFlappyBird();
+        FlappyBird::InitFlappyBird();
 
         ApplicationSpecification spec;
 
