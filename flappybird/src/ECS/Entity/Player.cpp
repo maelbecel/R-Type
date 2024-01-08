@@ -112,7 +112,6 @@ namespace FlappyBird {
     void Player::OnKeyPressed(int keycode) {
         GameObject camera_entity = HandleEntity.GetScene()->GetEntityByName("Camera");
 
-
         if (!camera_entity.GetEntity())
             return;
         if (keycode == Key::SPACE) {
