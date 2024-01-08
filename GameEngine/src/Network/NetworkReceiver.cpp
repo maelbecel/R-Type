@@ -338,18 +338,19 @@ namespace Exodia::Network {
 
         std::unordered_map<unsigned char, std::function<void(RECEIVE_ARG)>> commands;
 
-        commands[PACKET_INFO] = COMMAND_NETWORK(Network::ReceivePacketInfo);        // Packet info
-        commands[ACK] = COMMAND_NETWORK(Network::ReceiveAck);               // Packet Acknowledgement
-        commands[CONNECT_ACCEPT] = COMMAND_NETWORK(Network::ReceiveConnectAccept);     // Accept client connection
-        commands[CONNECT_REJECT] = COMMAND_NETWORK(Network::ReceiveConnectReject);     // Reject client connection
-        commands[SYSTEM_LOAD] = COMMAND_NETWORK(Network::ReceiveSystemLoad);        // Send system load
-        commands[COMPONENT_OF] = COMMAND_NETWORK(Network::ReceiveComponentOf);       // Send one component of an entity
+        commands[PACKET_INFO] = COMMAND_NETWORK(Network::ReceivePacketInfo);       // Packet info
+        commands[ACK] = COMMAND_NETWORK(Network::ReceiveAck);                      // Packet Acknowledgement
+        commands[CONNECT_ACCEPT] = COMMAND_NETWORK(Network::ReceiveConnectAccept); // Accept client connection
+        commands[CONNECT_REJECT] = COMMAND_NETWORK(Network::ReceiveConnectReject); // Reject client connection
+        commands[SYSTEM_LOAD] = COMMAND_NETWORK(Network::ReceiveSystemLoad);       // Send system load
+        commands[COMPONENT_OF] = COMMAND_NETWORK(Network::ReceiveComponentOf);     // Send one component of an entity
         commands[GAME_EVENT] = COMMAND_NETWORK(Network::ReceiveGameEvent);         // Send Game Event
-        commands[DELETE_ENTITY] = COMMAND_NETWORK(Network::ReceiveDeleteEntity);      // Send delete entity
-        commands[DELETE_COMPONENT] = COMMAND_NETWORK(Network::ReceiveDeleteComponentOf); // Send delete component of an entity
-        commands[CONNECT] = COMMAND_NETWORK(Network::ReceiveConnect);           // Ask for connection
-        commands[DISCONNECT] = COMMAND_NETWORK(Network::ReceiveDisconnect);        // Reject client connection
-        commands[EVENT] = COMMAND_NETWORK(Network::ReceiveEvent);             // Send an event
+        commands[DELETE_ENTITY] = COMMAND_NETWORK(Network::ReceiveDeleteEntity);   // Send delete entity
+        commands[DELETE_COMPONENT] =
+            COMMAND_NETWORK(Network::ReceiveDeleteComponentOf);             // Send delete component of an entity
+        commands[CONNECT] = COMMAND_NETWORK(Network::ReceiveConnect);       // Ask for connection
+        commands[DISCONNECT] = COMMAND_NETWORK(Network::ReceiveDisconnect); // Reject client connection
+        commands[EVENT] = COMMAND_NETWORK(Network::ReceiveEvent);           // Send an event
 
         Connection &senderConnection = _server_connection;
         if (header.getCommand() == CONNECT) {
