@@ -169,7 +169,6 @@ namespace Exodia {
      */
     void Server::Init() {
 
-
         EXODIA_INFO("Server initialisation...");
 
         try {
