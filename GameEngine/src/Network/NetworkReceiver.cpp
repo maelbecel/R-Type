@@ -33,7 +33,7 @@ namespace Exodia::Network {
         }
         int32_t packet_received = 0;
         int32_t packet_sent = 0;
-        float ping = 0;
+        double ping = 0;
         ping =
             std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch())
                 .count() -
@@ -338,21 +338,22 @@ namespace Exodia::Network {
 
         std::unordered_map<unsigned char, std::function<void(RECEIVE_ARG)>> commands;
 
-        commands[0x00] = COMMAND_NETWORK(Network::ReceivePacketInfo);        // Packet info
-        commands[0x01] = COMMAND_NETWORK(Network::ReceiveAck);               // Packet Acknowledgement
-        commands[0x02] = COMMAND_NETWORK(Network::ReceiveConnectAccept);     // Accept client connection
-        commands[0x03] = COMMAND_NETWORK(Network::ReceiveConnectReject);     // Reject client connection
-        commands[0x0b] = COMMAND_NETWORK(Network::ReceiveSystemLoad);        // Send system load
-        commands[0x0c] = COMMAND_NETWORK(Network::ReceiveComponentOf);       // Send one component of an entity
-        commands[0x0d] = COMMAND_NETWORK(Network::ReceiveGameEvent);         // Send Game Event
-        commands[0x0e] = COMMAND_NETWORK(Network::ReceiveDeleteEntity);      // Send delete entity
-        commands[0x0f] = COMMAND_NETWORK(Network::ReceiveDeleteComponentOf); // Send delete component of an entity
-        commands[0x81] = COMMAND_NETWORK(Network::ReceiveConnect);           // Ask for connection
-        commands[0x82] = COMMAND_NETWORK(Network::ReceiveDisconnect);        // Reject client connection
-        commands[0x8b] = COMMAND_NETWORK(Network::ReceiveEvent);             // Send an event
+        commands[PACKET_INFO] = COMMAND_NETWORK(Network::ReceivePacketInfo);       // Packet info
+        commands[ACK] = COMMAND_NETWORK(Network::ReceiveAck);                      // Packet Acknowledgement
+        commands[CONNECT_ACCEPT] = COMMAND_NETWORK(Network::ReceiveConnectAccept); // Accept client connection
+        commands[CONNECT_REJECT] = COMMAND_NETWORK(Network::ReceiveConnectReject); // Reject client connection
+        commands[SYSTEM_LOAD] = COMMAND_NETWORK(Network::ReceiveSystemLoad);       // Send system load
+        commands[COMPONENT_OF] = COMMAND_NETWORK(Network::ReceiveComponentOf);     // Send one component of an entity
+        commands[GAME_EVENT] = COMMAND_NETWORK(Network::ReceiveGameEvent);         // Send Game Event
+        commands[DELETE_ENTITY] = COMMAND_NETWORK(Network::ReceiveDeleteEntity);   // Send delete entity
+        commands[DELETE_COMPONENT] =
+            COMMAND_NETWORK(Network::ReceiveDeleteComponentOf);             // Send delete component of an entity
+        commands[CONNECT] = COMMAND_NETWORK(Network::ReceiveConnect);       // Ask for connection
+        commands[DISCONNECT] = COMMAND_NETWORK(Network::ReceiveDisconnect); // Reject client connection
+        commands[EVENT] = COMMAND_NETWORK(Network::ReceiveEvent);           // Send an event
 
         Connection &senderConnection = _server_connection;
-        if (header.getCommand() == 0x81) {
+        if (header.getCommand() == CONNECT) {
             senderConnection = Connection(senderEndpoint);
         } else {
             if (_connections.size() > 0) {
