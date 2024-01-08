@@ -384,6 +384,7 @@ namespace Exodia::Network {
 
         senderConnection.AddReceivedPacket();
         senderConnection.AddKyloByteReceived(packet);
+        senderConnection.SetLastPacketReceived(packet);
         commands[header.getCommand()](content, header.getSize(), senderConnection, header);
         senderConnection.SetLastId(header.getId());
 

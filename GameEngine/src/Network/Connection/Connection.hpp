@@ -19,6 +19,8 @@ struct NetworkInfo {
     uint16_t ping = 0;
     float kiloByteSent = 0;
     float kiloByteReceived = 0;
+    Exodia::Network::Packet lastPacketSent = Exodia::Network::Packet();
+    Exodia::Network::Packet lastPacketReceived = Exodia::Network::Packet();
 };
 
 class Connection {
@@ -58,6 +60,7 @@ class Connection {
         _id++;
         _networkInfo.kiloByteSent += packet.GetBuffer().size() / 1024.0f;
         _networkInfo.sendPacket++;
+        _networkInfo.lastPacketSent = packet;
     }
 
     void SendPacketAck(Exodia::Network::UDPSocket &socket, Exodia::Network::Packet &packet) {
@@ -70,6 +73,7 @@ class Connection {
         _id++;
         _networkInfo.kiloByteSent += packet.GetBuffer().size() / 1024.0f;
         _networkInfo.sendPacket++;
+        _networkInfo.lastPacketSent = packet;
         RemovePacketNeedAck(_id);
     }
 
@@ -90,6 +94,10 @@ class Connection {
         _networkInfo.receivedPacket = packet;
     }
 
+    void SetLastPacketSent(Exodia::Network::Packet packet) { _networkInfo.lastPacketSent = packet; }
+
+    void SetLastPacketReceived(Exodia::Network::Packet packet) { _networkInfo.lastPacketReceived = packet; }
+
     void SetWorldId(uint64_t worldId) { _worldId = worldId; }
 
     void SetPacketLoss(uint32_t receivedPacketLost, uint32_t sendPacketLost) {
@@ -102,6 +110,10 @@ class Connection {
     int GetSendPacket() { return _networkInfo.sendPacket; }
 
     int GetReceivedPacket() { return _networkInfo.receivedPacket; }
+
+    Exodia::Network::Packet GetLastPacketReceived() { return _networkInfo.lastPacketReceived; }
+
+    Exodia::Network::Packet GetLastPacketSent() { return _networkInfo.lastPacketSent; }
 
     float GetKiloByteSent() { return _networkInfo.kiloByteSent; }
 
@@ -121,6 +133,7 @@ class Connection {
         _lastNetworkInfo.ping = _networkInfo.ping;
         _networkInfo.ping = ping;
     }
+
     NetworkInfo GetNetworkInfo() { return _networkInfo; }
 
     int GetLastId() const { return _lastId; }

@@ -69,6 +69,7 @@ namespace Exodia {
         std::thread _InputThread;
 
         void CheckForNewClients();
+        void CheckConnectedClients();
         std::vector<Exodia::User> _Users;
     };
 }; // namespace Exodia
