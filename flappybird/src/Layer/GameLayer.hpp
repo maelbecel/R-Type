@@ -9,10 +9,11 @@
     #define GAMELAYER_HPP_
 
     #include "Game/FlappyBird.hpp"
-
-    using namespace Exodia;
+    #include "Level/Level.hpp"
 
 namespace FlappyBird {
+
+    using namespace Exodia;
 
     enum class GameState {
         Play,
@@ -36,25 +37,26 @@ namespace FlappyBird {
         public:
 
             void OnAttach() override;
-            void OnDetach() override;
             void OnUpdate(Timestep ts) override;
             void OnImGUIRender() override;
             void OnEvent(Event &event) override;
 
         private:
 
-            bool OnKeyReleasedEvent(KeyReleasedEvent &event);
             bool OnKeyPressedEvent(KeyPressedEvent &event);
-            bool OnWindowResizeEvent(WindowResizeEvent &event);
+            bool OnMouseButtonPressedEvent(MouseButtonPressedEvent &event);
 
         ////////////////
         // Attributes //
         ////////////////
-        public:
+        private:
 
-        inline static std::map<GameState, Ref<Scene>> Scenes;
-        inline static GameState CurrentScene;
+            GameState _State;
+            bool _Blink;
+            float _Time;
+
+            Level _Level;
     };
-}; // namespace FlappyBird
+};
 
 #endif /* !GAMELAYER_HPP_ */

@@ -24,9 +24,7 @@ namespace FlappyBird {
 
             FlappyBirdClient(const ApplicationSpecification &spec) : Application(spec)
             {
-                Ref<Layer> gameLayer = CreateRef<GameLayer>();
-
-                PushLayer(gameLayer.get());
+                PushLayer(new GameLayer());
             }
 
             ~FlappyBirdClient() = default;

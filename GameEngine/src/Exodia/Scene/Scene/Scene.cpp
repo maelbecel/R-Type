@@ -358,6 +358,26 @@ namespace Exodia {
         return false;
     }
 
+    void Scene::OnKeyPressedEvent(int keyCode)
+    {
+        _World->ForEach<ScriptComponent>([&](Entity *entity, auto script) {
+            auto &sc = script.Get();
+
+            if (sc.Instance)
+                sc.Instance->OnKeyPressed(keyCode);
+        });
+    }
+
+    void Scene::OnKeyReleasedEvent(int keyCode)
+    {
+        _World->ForEach<ScriptComponent>([&](Entity *entity, auto script) {
+            auto &sc = script.Get();
+
+            if (sc.Instance)
+                sc.Instance->OnKeyReleased(keyCode);
+        });
+    }
+
     ///////////////////////
     // Getters & Setters //
     ///////////////////////

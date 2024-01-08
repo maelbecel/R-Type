@@ -7,17 +7,92 @@
 
 #include "Level.hpp"
 
-#include "Tools/Color.hpp"
+/*#include "Tools/Color.hpp"
 #include "Tools/Random.hpp"
 #include "Tools/Collider.hpp"
 
-#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/matrix_transform.hpp>*/
+
+using namespace Exodia;
 
 namespace FlappyBird {
 
-    Level::Level() : _GameOver(false), _ObstacleTarget(30.0f), _ObstacleIndex(0), _ObstacleHSV({0.0f, 0.8f, 0.8f}){};
+    //////////////////////////////
+    // Constructor & Destructor //
+    //////////////////////////////
 
-    void Level::Init() {
+    Level::Level() : _Scene(nullptr), _GameOver(false), _EditorCamera(30.0f, 1.778f, 0.1f, 1000.0f) {};
+
+    /////////////
+    // Methods //
+    /////////////
+
+    void Level::OnUpdate(Timestep ts)
+    {
+        if (_Scene == nullptr)
+            return;
+        _Scene->OnUpdateRuntime(ts);
+    }
+
+    void Level::OnRender(Timestep ts)
+    {
+        if (_Scene == nullptr)
+            return;
+        _EditorCamera.OnUpdate(ts);
+        _Scene->OnUpdateEditor(ts, _EditorCamera);        
+    }
+
+    void Level::Reset()
+    {
+        _GameOver = false;
+
+        if (_Scene != nullptr) {
+            _Scene->OnRuntimeStop();
+            _Scene->OnRuntimeStart();
+        }
+    }
+
+    void Level::Init()
+    {
+        _Scene = CreateRef<Scene>();
+
+        PrefabsImporter::LoadPrefabs("Assets/Prefabs/FlappyBird.prefab", _Scene);
+
+        _Scene->OnViewportResize(Application::Get().GetWindow().GetWidth(), Application::Get().GetWindow().GetHeight());
+    }
+
+    void Level::Play()
+    {
+        if (_Scene == nullptr)
+            return;
+        _Scene->RegisterSystem(new ParticleSystem());
+        _Scene->RegisterSystem(new GravitySystem());
+        _Scene->RegisterSystem(new MovingSystem());
+
+        //TODO: Flappy Collision System
+
+        _Scene->OnRuntimeStart();
+    }
+
+    void Level::OnKeyPressed(int keyCode)
+    {
+        if (_Scene == nullptr)
+            return;
+        _Scene->OnKeyPressedEvent(keyCode);
+    }
+
+    ///////////////////////
+    // Getters & Setters //
+    ///////////////////////
+
+    bool Level::IsGameOver()
+    {
+        return _GameOver;
+    }
+
+    //Level::Level() : _GameOver(false), _ObstacleTarget(30.0f), _ObstacleIndex(0), _ObstacleHSV({0.0f, 0.8f, 0.8f}){};
+
+    /*void Level::Init() {
         AnimationComponent anim;
 
         std::vector<Ref<SubTexture2D>> frames;
@@ -181,6 +256,6 @@ namespace FlappyBird {
 
     bool Level::IsGameOver() { return _GameOver; }
 
-    Player &Level::GetPlayer() { return _Player; }
+    Player &Level::GetPlayer() { return _Player; }*/
 
 } // namespace FlappyBird

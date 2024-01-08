@@ -1,0 +1,48 @@
+Prefab: Player
+TransformComponent:
+    Translation: [0, 0, 0]
+    Rotation: [0, 0, 0]
+    Scale: [1, 1, 1]
+Entities:
+  - Entity: 87451251541121
+    TagComponent:
+      Tag: SpaceShip
+    TransformComponent:
+      Translation: [-3, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    BoxCollider2DComponent:
+      Offset: [0, 0]
+      Size: [0.5, 0.5]
+      Mask: 0xFFFFFFFF
+    RigidBody2DComponent:
+      BodyType: Dynamic
+      Velocity: [5, 0]
+      GravityScale: 1
+      Mass: 1
+    SpriteRendererComponent:
+      Color: [1, 1, 1, 1]
+      TilingFactor: 1
+      Texture:
+        AssetHandle: 14815285158415
+        Coords: [0, 0]
+        CellSize: [1, 1]
+        SpriteSize: [10, 13]
+  - Entity: 85202154120512
+    TagComponent:
+      Tag: PlayerCamera
+    TransformComponent:
+      Translation: [0, 0, 15]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    CameraComponent:
+      Camera:
+        ProjectionType: 0
+        PerspectiveFOV: 45
+        PerspectiveNear: 0.01
+        PerspectiveFar: 1000
+        OrthographicSize: 10
+        OrthographicNear: -1
+        OrthographicFar: 1
+      Primary: true
+      FixedAspectRatio: true

@@ -22,6 +22,9 @@ set(SOURCES
     src/FlappyBird.cpp
 
     src/Layer/GameLayer.cpp
+
+    src/Level/Level.cpp
+
     src/Particles/Particles.cpp
 
     src/ECS/Scripts/Player.cpp
