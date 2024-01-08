@@ -31,7 +31,7 @@ namespace Exodia {
         std::array<glm::vec2, 3> edges;
 
         TriangleCollider2DComponent(const TriangleCollider2DComponent &) = default;
-        TriangleCollider2DComponent() : Offset(glm::vec2(0.0f)), Size(glm::vec2(0.5f)), ColliderMask(0xFFFFFFFF){
+        TriangleCollider2DComponent() : Offset(glm::vec2(0.0f)), Size(glm::vec2(0.5f)), ColliderMask(0xFFFFFFFF) {
             // Initialize vertices and edges to zero
             for (int i = 0; i < 3; i++) {
                 vertices[i] = glm::vec2(0, 0);
@@ -83,7 +83,8 @@ namespace Exodia {
 
                 ColliderMask = triangle["Mask"].as<uint32_t>();
                 for (int i = 0; i < 3; i++) {
-                    vertices[i] = glm::vec2(triangle["Vertices"][i][0].as<float>(), triangle["Vertices"][i][1].as<float>());
+                    vertices[i] =
+                        glm::vec2(triangle["Vertices"][i][0].as<float>(), triangle["Vertices"][i][1].as<float>());
                     edges[i] = glm::vec2(triangle["Edges"][i][0].as<float>(), triangle["Edges"][i][1].as<float>());
                 }
             } catch (YAML::BadConversion &e) {
@@ -99,8 +100,10 @@ namespace Exodia {
                 std::memcpy(data.Data, &Offset, sizeof(glm::vec2));
                 std::memcpy(data.Data + sizeof(glm::vec2), &Size, sizeof(glm::vec2));
                 std::memcpy(data.Data + sizeof(glm::vec2) * 2, &ColliderMask, sizeof(uint32_t));
-                std::memcpy(data.Data + sizeof(glm::vec2) * 2 + sizeof(uint32_t), vertices.data(), sizeof(glm::vec2) * 3);
-                std::memcpy(data.Data + sizeof(glm::vec2) * 2 + sizeof(uint32_t) + sizeof(glm::vec2) * 3, edges.data(), sizeof(glm::vec2) * 3);
+                std::memcpy(data.Data + sizeof(glm::vec2) * 2 + sizeof(uint32_t), vertices.data(),
+                            sizeof(glm::vec2) * 3);
+                std::memcpy(data.Data + sizeof(glm::vec2) * 2 + sizeof(uint32_t) + sizeof(glm::vec2) * 3, edges.data(),
+                            sizeof(glm::vec2) * 3);
 
                 return data;
             } catch (const std::exception &error) {
@@ -110,7 +113,6 @@ namespace Exodia {
             return Buffer();
         }
     };
-
 
     struct BoxCollider2DComponent : public Component {
         glm::vec2 Offset;

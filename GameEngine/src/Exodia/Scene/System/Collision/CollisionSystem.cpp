@@ -309,7 +309,9 @@ namespace Exodia {
             // Apply transformation to the first triangle vertices
             std::array<glm::vec2, 3> transformedVertices1;
             for (int i = 0; i < 3; i++) {
-                transformedVertices1[i] = (glm::vec2){trianglePos1.Scale.x, trianglePos1.Scale.y} * triangle1.vertices[i] + (glm::vec2){trianglePos1.Translation.x, trianglePos1.Translation.y};
+                transformedVertices1[i] =
+                    (glm::vec2){trianglePos1.Scale.x, trianglePos1.Scale.y} * triangle1.vertices[i] +
+                    (glm::vec2){trianglePos1.Translation.x, trianglePos1.Translation.y};
             }
 
             // Project the transformed vertices of the first triangle onto the normal
@@ -324,7 +326,9 @@ namespace Exodia {
             // Apply transformation to the second triangle vertices
             std::array<glm::vec2, 3> transformedVertices2;
             for (int i = 0; i < 3; i++) {
-                transformedVertices2[i] = (glm::vec2){trianglePos2.Scale.x, trianglePos2.Scale.y} * triangle2.vertices[i] + (glm::vec2){trianglePos2.Translation.x, trianglePos2.Translation.y};
+                transformedVertices2[i] =
+                    (glm::vec2){trianglePos2.Scale.x, trianglePos2.Scale.y} * triangle2.vertices[i] +
+                    (glm::vec2){trianglePos2.Translation.x, trianglePos2.Translation.y};
             }
 
             // Project the transformed vertices of the second triangle onto the normal
@@ -366,11 +370,14 @@ namespace Exodia {
 
         // Calculate the vertices of the box
         std::array<glm::vec2, 4> boxVertices;
-        boxVertices[0] = glm::vec2(boxPos.Translation.x - boxPos.Scale.x / 2, boxPos.Translation.y - boxPos.Scale.y / 2); // Bottom-left
-        boxVertices[1] = glm::vec2(boxPos.Translation.x + boxPos.Scale.x / 2, boxPos.Translation.y - boxPos.Scale.y / 2); // Bottom-right
-        boxVertices[2] = glm::vec2(boxPos.Translation.x + boxPos.Scale.x / 2, boxPos.Translation.y + boxPos.Scale.y / 2); // Top-right
-        boxVertices[3] = glm::vec2(boxPos.Translation.x - boxPos.Scale.x / 2, boxPos.Translation.y + boxPos.Scale.y / 2); // Top-left
-
+        boxVertices[0] = glm::vec2(boxPos.Translation.x - boxPos.Scale.x / 2,
+                                   boxPos.Translation.y - boxPos.Scale.y / 2); // Bottom-left
+        boxVertices[1] = glm::vec2(boxPos.Translation.x + boxPos.Scale.x / 2,
+                                   boxPos.Translation.y - boxPos.Scale.y / 2); // Bottom-right
+        boxVertices[2] = glm::vec2(boxPos.Translation.x + boxPos.Scale.x / 2,
+                                   boxPos.Translation.y + boxPos.Scale.y / 2); // Top-right
+        boxVertices[3] =
+            glm::vec2(boxPos.Translation.x - boxPos.Scale.x / 2, boxPos.Translation.y + boxPos.Scale.y / 2); // Top-left
 
         // Check for collision using Separating Axis Theorem (SAT)
         // This is a simplified version and assumes that the box and triangle are defined in a 2D space
@@ -390,7 +397,8 @@ namespace Exodia {
 
             std::array<glm::vec2, 3> transformedVertices;
             for (int i = 0; i < 3; i++) {
-                transformedVertices[i] = (glm::vec2){trianglePos.Scale.x, trianglePos.Scale.y} * triangle.vertices[i] + (glm::vec2){trianglePos.Translation.x, trianglePos.Translation.y};
+                transformedVertices[i] = (glm::vec2){trianglePos.Scale.x, trianglePos.Scale.y} * triangle.vertices[i] +
+                                         (glm::vec2){trianglePos.Translation.x, trianglePos.Translation.y};
             }
 
             // Project the vertices of the triangle onto the normal
