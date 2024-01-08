@@ -368,20 +368,21 @@ namespace Exodia {
 
     /**
      * The function checks for connected clients.
-     * 
+     *
      * @details The function checks for connected clients by iterating through the server's users and
      * checking if the user's last ping is greater than 10 seconds. If the user's
      * last ping is greater than 10 seconds, the user is disconnected from the server.
-     * 
+     *
      * @return void
      *
-    */
+     */
     void Server::CheckConnectedClients() {
         int16_t i = 0;
         for (auto connection : _Network.GetConnections()) {
             for (auto user : _Users) {
                 if (user.GetConnection() == connection.second) {
-                    if (connection.second.GetNetworkInfo().lastPacketReceived.GetHeader().getTimestamp() < connection.second.GetNetworkInfo().lastPacketSent.GetHeader().getTimestamp() - 10000) {
+                    if (connection.second.GetNetworkInfo().lastPacketReceived.GetHeader().getTimestamp() <
+                        connection.second.GetNetworkInfo().lastPacketSent.GetHeader().getTimestamp() - 10000) {
                         EXODIA_CORE_INFO("Client disconnected");
                         _Network.SendDisconnect();
                         _Network.Disconnect(connection.second);
