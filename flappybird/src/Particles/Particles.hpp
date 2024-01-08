@@ -10,48 +10,51 @@
 
 #include "Exodia.hpp"
 
-struct ParticleProps {
-    glm::vec2 Position;
-    glm::vec2 Velocity;
-    glm::vec2 VelocityVariation;
-    glm::vec4 ColorBegin;
-    glm::vec4 ColorEnd;
-    float SizeBegin;
-    float SizeEnd;
-    float SizeVariation;
-    float LifeTime = 1.0f;
-};
+namespace FlappyBird {
 
-struct Particle {
-    glm::vec2 Position;
-    glm::vec2 Velocity;
-    glm::vec4 ColorBegin;
-    glm::vec4 ColorEnd;
-    float Rotation = 0.0f;
-    float SizeBegin;
-    float SizeEnd;
-    float LifeTime = 1.0f;
-    float LifeRemaining = 0.0f;
-    bool Active = false;
-};
+    struct ParticleProps {
+        glm::vec2 Position;
+        glm::vec2 Velocity;
+        glm::vec2 VelocityVariation;
+        glm::vec4 ColorBegin;
+        glm::vec4 ColorEnd;
+        float SizeBegin;
+        float SizeEnd;
+        float SizeVariation;
+        float LifeTime = 1.0f;
+    };
 
-class ParticlesSystem {
+    struct Particle {
+        glm::vec2 Position;
+        glm::vec2 Velocity;
+        glm::vec4 ColorBegin;
+        glm::vec4 ColorEnd;
+        float Rotation = 0.0f;
+        float SizeBegin;
+        float SizeEnd;
+        float LifeTime = 1.0f;
+        float LifeRemaining = 0.0f;
+        bool Active = false;
+    };
 
-    // Constructor & Destructor (default)
-  public:
-    ParticlesSystem();
-    ~ParticlesSystem() = default;
+    class ParticlesSystem {
 
-    // Methods
-  public:
-    void Emit(const ParticleProps &props);
-    void OnUpdate(Exodia::Timestep ts);
-    void OnRender();
+        // Constructor & Destructor (default)
+      public:
+        ParticlesSystem();
+        ~ParticlesSystem() = default;
 
-    // Attributes
-  private:
-    std::vector<Particle> _ParticleList;
-    uint32_t _ParticleListIndex;
-};
+        // Methods
+      public:
+        void Emit(const ParticleProps &props);
+        void OnUpdate(Exodia::Timestep ts);
+        void OnRender();
+
+        // Attributes
+      private:
+        std::vector<Particle> _ParticleList;
+        uint32_t _ParticleListIndex;
+    };
+} // namespace FlappyBird
 
 #endif /* !PARTICLES_HPP_ */
