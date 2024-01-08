@@ -377,7 +377,7 @@ namespace Exodia::Network {
             uint64_t id = header.getId();
 
             buffer.Write(&id, sizeof(uint64_t));
-            std::vector<char> buffer_vector = buffer.ToVector();
+            std::vector<char> buffer_vector(buffer.ToVector());
             ack.SetContent(buffer_vector);
             senderConnection.SendPacket(_socket, ack);
         }

@@ -28,10 +28,7 @@ namespace Exodia {
                 _header.setSize((unsigned long)_content.size());
             };
 
-            Packet(const Packet &packet) {
-                _header = packet._header;
-                _content = packet._content;
-            };
+            Packet(const Packet &packet) : _header(packet._header), _content(packet._content){};
 
             ~Packet() = default;
 
@@ -51,7 +48,6 @@ namespace Exodia {
             }
 
             std::vector<char> GetBuffer() {
-                std::cout << "Size of content " << _content.size() << std::endl;
                 std::vector<char> buffer(Header::GetSize() + _content.size());
                 _header.fillBuffer(buffer);
                 std::memcpy(buffer.data() + Header::GetSize(), _content.data(), _content.size());
