@@ -20,7 +20,7 @@ namespace FlappyBird {
         //////////////////////////////
         // Constructor & Destructor //
         //////////////////////////////
-        public:
+      public:
 
             FlappyBirdClient(const ApplicationSpecification &spec) : Application(spec)
             {
@@ -29,15 +29,14 @@ namespace FlappyBird {
 
             ~FlappyBirdClient() = default;
     };
-};
+}; // namespace FlappyBird
 
 /////////////////
 // Entry Point //
 /////////////////
 
 namespace Exodia {
-    Application *CreateApplication(ApplicationCommandLineArgs args)
-    {
+    Application *CreateApplication(ApplicationCommandLineArgs args) {
         EXODIA_PROFILE_FUNCTION();
 
         ApplicationSpecification spec;
@@ -47,4 +46,4 @@ namespace Exodia {
 
         return new FlappyBird::FlappyBirdClient(spec);
     }
-};
+}; // namespace Exodia

@@ -6,7 +6,7 @@
 */
 
 #ifndef GAMELAYER_HPP_
-    #define GAMELAYER_HPP_
+#define GAMELAYER_HPP_
 
     #include "Game/FlappyBird.hpp"
     #include "Level/Level.hpp"
@@ -26,15 +26,14 @@ namespace FlappyBird {
         //////////////////////////////
         // Constructor & Destructor //
         //////////////////////////////
-        public:
-
-            GameLayer();
-            ~GameLayer() = default;
+      public:
+        GameLayer();
+        ~GameLayer() = default;
 
         /////////////
         // Methods //
         /////////////
-        public:
+      public:
 
             void OnAttach() override;
             void OnUpdate(Timestep ts) override;
