@@ -131,18 +131,20 @@ namespace Exodia {
     bool World::CleanUp() {
         uint64_t count = 0;
 
-        _Entities.erase(std::remove_if(_Entities.begin(), _Entities.end(), [&, this](Entity *entity) {
-            if (entity->IsPendingDestroy()) {
-                std::allocator_traits<EntityAllocator>::destroy(_EntityAllocator, entity);
-                std::allocator_traits<EntityAllocator>::deallocate(_EntityAllocator, entity, 1);
+        _Entities.erase(
+            std::remove_if(_Entities.begin(), _Entities.end(),
+                           [&, this](Entity *entity) {
+                               if (entity->IsPendingDestroy()) {
+                                   std::allocator_traits<EntityAllocator>::destroy(_EntityAllocator, entity);
+                                   std::allocator_traits<EntityAllocator>::deallocate(_EntityAllocator, entity, 1);
 
-                count++;
+                                   count++;
 
-                return true;
-            }
-            return false;
-        }),
-        _Entities.end());
+                                   return true;
+                               }
+                               return false;
+                           }),
+            _Entities.end());
 
         return count > 0;
     }
@@ -226,8 +228,7 @@ namespace Exodia {
             system->Update(this, ts);
     }
 
-    void World::DestroyPendingEntities()
-    {
+    void World::DestroyPendingEntities() {
         for (auto *entity : AllEntities(true)) {
             if (!entity)
                 continue;

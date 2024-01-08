@@ -29,8 +29,8 @@ namespace FlappyBird {
         _SmokeParticle.SizeBegin = 0.35f;
         _SmokeParticle.SizeEnd = 0.0f;
         _SmokeParticle.SizeVariation = 0.15f;
-        _SmokeParticle.ColorBegin = { 0.8f, 0.8f, 0.8f, 1.0f };
-        _SmokeParticle.ColorEnd = { 0.6f, 0.6f, 0.6f, 1.0f };
+        _SmokeParticle.ColorBegin = {0.8f, 0.8f, 0.8f, 1.0f};
+        _SmokeParticle.ColorEnd = {0.6f, 0.6f, 0.6f, 1.0f};
         _SmokeParticle.LifeTime = 1.0f;
         _SmokeParticle.NumberOfParticles = 10;
 
@@ -60,7 +60,7 @@ namespace FlappyBird {
             _SmokeNextEmitTime += _SmokeEmitInterval;
         }
 
-        TransformComponent   &tc  = GetComponent<TransformComponent>();
+        TransformComponent &tc = GetComponent<TransformComponent>();
         RigidBody2DComponent &rbc = GetComponent<RigidBody2DComponent>();
 
         tc.Rotation.z = rbc.Velocity.y * 0.1f;
