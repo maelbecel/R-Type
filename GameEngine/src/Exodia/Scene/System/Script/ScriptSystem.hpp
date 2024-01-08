@@ -9,7 +9,7 @@
 #define SCRIPTSYSTEM_HPP_
 
 // Exodia ECS Interface includes
-#include "Interface/EntitySystem.hpp"
+#include "Exodia-ECS.hpp"
 
 // Exodia ECS Components includes
 #include "Scene/Components/Components.hpp"

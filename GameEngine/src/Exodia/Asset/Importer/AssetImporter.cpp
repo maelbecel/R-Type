@@ -11,6 +11,7 @@
 #include "Asset/Importer/TextureImporter.hpp"
 #include "Asset/Importer/SceneImporter.hpp"
 #include "Asset/Importer/SoundImporter.hpp"
+#include "Asset/Importer/PrefabsImporter.hpp"
 
 // Exodia Utils
 #include "Exodia-Debug.hpp"
@@ -29,7 +30,8 @@ namespace Exodia {
         {AssetType::Scene, SceneImporter::ImportScene},
         {AssetType::Texture2D, TextureImporter::ImportTexture2D},
         {AssetType::Sound2D, SoundImporter::ImportSound2D},
-        {AssetType::Font, FontImporter::ImportFont}};
+        {AssetType::Font, FontImporter::ImportFont},
+        {AssetType::Prefabs, PrefabsImporter::ImportPrefabs}};
 
     /////////////
     // Methods //

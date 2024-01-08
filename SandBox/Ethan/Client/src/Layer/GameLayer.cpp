@@ -17,6 +17,7 @@
 // R-Type Scripts
 #include "Scripts/Intro.hpp"
 #include "Scripts/MenuHandler.hpp"
+#include "Scripts/Particle.hpp"
 
 // R-Type Settings
 #include "Settings/Config.hpp"
@@ -74,6 +75,7 @@ namespace RType {
         // -- Register Client scripts -- //
         project->RegisterScript("Intro", []() -> ScriptableEntity * { return new Intro(); });
         project->RegisterScript("MenuHandler", []() -> ScriptableEntity * { return new MenuHandler(); });
+        project->RegisterScript("ParticleController", []() -> ScriptableEntity * { return new ParticleController(); });
     }
 
     ///////////////////////

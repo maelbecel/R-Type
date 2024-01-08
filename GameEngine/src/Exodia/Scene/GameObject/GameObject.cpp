@@ -22,6 +22,16 @@ namespace Exodia {
 
     void GameObject::AddComponent(IComponentContainer *component) { _EntityHandle->AddComponent(component); }
 
+    GameObject GameObject::Duplicate() {
+        World *world = _EntityHandle->GetWorld();
+        UUID uuid = GetComponent<IDComponent>().ID;
+        std::string name = GetComponent<TagComponent>().Tag;
+
+        Entity *duplicatedEntity = _EntityHandle->Duplicate(world, uuid, name);
+
+        return GameObject(duplicatedEntity, _Scene);
+    }
+
     ///////////////////////
     // Getters & Setters //
     ///////////////////////

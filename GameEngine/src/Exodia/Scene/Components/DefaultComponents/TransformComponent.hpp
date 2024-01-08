@@ -31,9 +31,18 @@ namespace Exodia {
         glm::vec3 Rotation;
         glm::vec3 Scale;
 
-        TransformComponent(const TransformComponent &) = default;
+        TransformComponent(const TransformComponent &other)
+            : Translation(other.Translation), Rotation(other.Rotation), Scale(other.Scale){};
         TransformComponent(const glm::vec3 &translation = glm::vec3(0.0f))
             : Translation(translation), Rotation(glm::vec3(0.0f)), Scale(glm::vec3(1.0f)){};
+
+        TransformComponent &operator=(const TransformComponent &other) {
+            Translation = other.Translation;
+            Rotation = other.Rotation;
+            Scale = other.Scale;
+
+            return *this;
+        }
 
         glm::mat4 GetTransform() const {
             glm::mat4 translation = glm::translate(glm::mat4(1.0f), Translation);

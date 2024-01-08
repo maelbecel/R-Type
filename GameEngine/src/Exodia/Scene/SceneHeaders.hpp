@@ -25,14 +25,19 @@
 
 // -- Systems --------------------------------------------------------------
 
-#include "Scene/System/Collision/CollisionSystem.hpp"
-#include "Scene/System/Script/ScriptSystem.hpp"
-#include "Scene/System/Physics/GravitySystem.hpp"
-#include "Scene/System/Physics/MovingSystem.hpp"
+#include "Exodia/Scene/System/Collision/CollisionSystem.hpp"
+#include "Exodia/Scene/System/Script/ScriptSystem.hpp"
+#include "Exodia/Scene/System/Physics/GravitySystem.hpp"
+#include "Exodia/Scene/System/Physics/MovingSystem.hpp"
+#include "Exodia/Scene/System/Particle/ParticleSystem.hpp"
 
 // -- Event Subscribers ----------------------------------------------------
 
 #include "Exodia/Scene/EventSubscriber/EventHover.hpp"
+
+// -- Prefabs --------------------------------------------------------------
+
+#include "Exodia/Scene/Prefabs/Prefabs.hpp"
 
 // -- Scene ----------------------------------------------------------------
 
@@ -40,7 +45,7 @@
 
 // -- GameObject -----------------------------------------------------------
 
-#include "Scene/GameObject/GameObject.hpp"
+#include "Exodia/Scene/GameObject/GameObject.hpp"
 
 // -- Serializer -----------------------------------------------------------
 

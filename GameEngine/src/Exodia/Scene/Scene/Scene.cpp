@@ -120,6 +120,9 @@ namespace Exodia {
         for (auto &system : _Systems)
             _World->RegisterSystem(system);
 
+        for (auto &prefab : _Prefabs)
+            prefab->OnRuntimeStart();
+
         _World->LockMutex();
         _World->ForEach<CameraComponent>([&](Entity *entity, auto camera) {
             auto &cc = camera.Get();
@@ -172,6 +175,9 @@ namespace Exodia {
 
         for (auto &system : _Systems)
             _World->UnregisterSystem(system);
+
+        for (auto &prefab : _Prefabs)
+            prefab->OnRuntimeStop();
 
         _World->ForEach<ScriptComponent>([&](Entity *entity, auto script) {
             auto &sc = script.Get();
@@ -333,6 +339,23 @@ namespace Exodia {
             }
         });
         _World->UnlockMutex();
+    }
+
+    void Scene::AddPrefab(Ref<Prefabs> prefab) {
+        if (prefab == nullptr)
+            return;
+        _Prefabs.push_back(prefab);
+    }
+
+    bool Scene::RemovePrefab(const std::string &name) {
+        for (auto it = _Prefabs.begin(); it != _Prefabs.end(); ++it) {
+            if ((*it)->GetName() == name) {
+                _Prefabs.erase(it);
+
+                return true;
+            }
+        }
+        return false;
     }
 
     ///////////////////////
