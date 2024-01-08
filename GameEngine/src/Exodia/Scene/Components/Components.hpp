@@ -19,5 +19,6 @@
 #include "Scene/Components/DefaultComponents/PrefabComponent.hpp"
 #include "Scene/Components/DefaultComponents/RigidBody2DComponent.hpp"
 #include "Scene/Components/DefaultComponents/SoundComponent.hpp"
+#include "Scene/Components/DefaultComponents/ParticleComponent.hpp"
 
 #endif /* !COMPONENTS_HPP_ */

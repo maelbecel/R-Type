@@ -29,6 +29,7 @@
 #include "Exodia/Scene/System/Script/ScriptSystem.hpp"
 #include "Exodia/Scene/System/Physics/GravitySystem.hpp"
 #include "Exodia/Scene/System/Physics/MovingSystem.hpp"
+#include "Exodia/Scene/System/Particle/ParticleSystem.hpp"
 
 // -- Event Subscribers ----------------------------------------------------
 
