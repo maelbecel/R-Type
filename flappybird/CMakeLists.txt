@@ -23,7 +23,7 @@ set(SOURCES
 
     src/Layer/GameLayer.cpp
 
-    src/ECS/Entity/Player.cpp
+    src/ECS/Scripts/Player.cpp
 )
 
 # Set include directories for the SandBoxGames
