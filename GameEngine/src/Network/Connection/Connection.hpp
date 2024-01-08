@@ -43,9 +43,7 @@ class Connection {
 
     void RemovePacketNeedAck(uint64_t id) { _packetNeedAck.erase(id); }
 
-    std::unordered_map<uint64_t, Exodia::Network::Packet> &GetPacketNeedAck() {
-        return _packetNeedAck;
-    }
+    std::unordered_map<uint64_t, Exodia::Network::Packet> &GetPacketNeedAck() { return _packetNeedAck; }
 
     void SendPacket(Exodia::Network::UDPSocket &socket, Exodia::Network::Packet &packet) {
         packet.GetHeader().setSize((unsigned long)packet.GetContent().size());
@@ -67,13 +65,12 @@ class Connection {
         EXODIA_CORE_TRACE("Send ack packet id: {0}", _id);
         std::cout << "Send ack packet header: " << packet.GetHeader() << std::endl;
 
-        std::vector <char> buffer = packet.GetBuffer();
+        std::vector<char> buffer = packet.GetBuffer();
         socket.Send(buffer, buffer.size(), _endpoint);
         _id++;
         _networkInfo.kiloByteSent += packet.GetBuffer().size() / 1024.0f;
         _networkInfo.sendPacket++;
         RemovePacketNeedAck(_id);
-
     }
 
     NetworkInfo GetLastNetworkInfo() { return _lastNetworkInfo; }
