@@ -19,8 +19,7 @@ namespace FlappyBird {
     // Constructor & Destructor //
     //////////////////////////////
 
-    GameLayer::GameLayer() : Layer("Flappy Bird"), _State(GameState::Menu), _Blink(false), _Time(0.0f)
-    {
+    GameLayer::GameLayer() : Layer("Flappy Bird"), _State(GameState::Menu), _Blink(false), _Time(0.0f) {
         FlappyBird::Init();
         Random::Init();
     }
@@ -29,15 +28,13 @@ namespace FlappyBird {
     // Methods //
     /////////////
 
-    void GameLayer::OnAttach()
-    {
+    void GameLayer::OnAttach() {
         EXODIA_PROFILE_FUNCTION();
 
         _Level.Init();
     }
 
-    void GameLayer::OnUpdate(Timestep ts)
-    {
+    void GameLayer::OnUpdate(Timestep ts) {
         EXODIA_PROFILE_FUNCTION();
 
         // Renderer Prep
@@ -66,67 +63,66 @@ namespace FlappyBird {
             EXODIA_PROFILE_SCOPE("Scene Update");
 
             switch (_State) {
-                case GameState::Play:
-                    _Level.OnUpdate(ts);
-                    break;
-                default:
-                    _Level.OnRender(ts);
-                    break;
+            case GameState::Play:
+                _Level.OnUpdate(ts);
+                break;
+            default:
+                _Level.OnRender(ts);
+                break;
             }
         }
     }
 
-    void GameLayer::OnImGUIRender()
-    {
+    void GameLayer::OnImGUIRender() {
         // -- ImGui Render -----------------------------------------------------
 
         switch (_State) {
-            case GameState::Play:
-            {
-                std::string score = std::string("Score : ");// + std::to_string(_Level.GetPlayer().GetScore());
+        case GameState::Play: {
+            std::string score = std::string("Score : "); // + std::to_string(_Level.GetPlayer().GetScore());
 
-                ImGui::GetForegroundDrawList()->AddText(ImGui::GetFont(), 48.0f, ImGui::GetWindowPos(), IM_COL32_WHITE, score.c_str());
+            ImGui::GetForegroundDrawList()->AddText(ImGui::GetFont(), 48.0f, ImGui::GetWindowPos(), IM_COL32_WHITE,
+                                                    score.c_str());
 
-                break;
-            }
-            case GameState::Menu:
-            {
-                ImVec2 pos = ImGui::GetWindowPos();
+            break;
+        }
+        case GameState::Menu: {
+            ImVec2 pos = ImGui::GetWindowPos();
 
-                uint32_t width = Exodia::Application::Get().GetWindow().GetWidth();
+            uint32_t width = Exodia::Application::Get().GetWindow().GetWidth();
 
-                pos.x += width / 2.0f - 300.0f;
-                pos.y += 50.0f;
+            pos.x += width / 2.0f - 300.0f;
+            pos.y += 50.0f;
 
-                if (_Blink)
-                    ImGui::GetForegroundDrawList()->AddText(ImGui::GetFont(), 120.0f, pos, IM_COL32_WHITE, "Click to play !");
-                break;
-            }
-            case GameState::GameOver:
-            {
-                ImVec2 pos = ImGui::GetWindowPos();
+            if (_Blink)
+                ImGui::GetForegroundDrawList()->AddText(ImGui::GetFont(), 120.0f, pos, IM_COL32_WHITE,
+                                                        "Click to play !");
+            break;
+        }
+        case GameState::GameOver: {
+            ImVec2 pos = ImGui::GetWindowPos();
 
-                uint32_t width = Exodia::Application::Get().GetWindow().GetWidth();
+            uint32_t width = Exodia::Application::Get().GetWindow().GetWidth();
 
-                pos.x += width / 2.0f - 300.0f;
-                pos.y += 50.0f;
+            pos.x += width / 2.0f - 300.0f;
+            pos.y += 50.0f;
 
-                if (_Blink)
-                    ImGui::GetForegroundDrawList()->AddText(ImGui::GetFont(), 120.0f, pos, IM_COL32_WHITE, "Click to play !");
+            if (_Blink)
+                ImGui::GetForegroundDrawList()->AddText(ImGui::GetFont(), 120.0f, pos, IM_COL32_WHITE,
+                                                        "Click to play !");
 
-                pos.x += 200.0f;
-                pos.y += 150.0f;
+            pos.x += 200.0f;
+            pos.y += 150.0f;
 
-                std::string score = std::string("Score : ");// + std::to_string(_Level.GetPlayer().GetScore());
+            std::string score = std::string("Score : "); // + std::to_string(_Level.GetPlayer().GetScore());
 
-                ImGui::GetForegroundDrawList()->AddText(ImGui::GetFont(), 120.0f, pos, IM_COL32_WHITE, score.c_str());
-                break;
-            }
+            ImGui::GetForegroundDrawList()->AddText(ImGui::GetFont(), 120.0f, pos, IM_COL32_WHITE, score.c_str());
+            break;
+        }
         }
 
         // -- Debug Stats ------------------------------------------------------
 
-    #ifdef EXODIA_DEBUG
+#ifdef EXODIA_DEBUG
         ImGui::Begin("R-Type Statistics");
         ImGui::Text("FPS: %.1f", Application::Get().GetStatistics().FPS);
         ImGui::Text("Frame Time: %.3f ms", Application::Get().GetStatistics().FrameTime);
@@ -139,25 +135,22 @@ namespace FlappyBird {
         ImGui::Text("Index Count: %d", Renderer2D::GetStats().GetTotalIndexCount());
         ImGui::Separator();
         ImGui::End();
-    #endif
+#endif
     }
 
-    void GameLayer::OnEvent(Event &event)
-    {
+    void GameLayer::OnEvent(Event &event) {
         EventDispatcher dispatcher(event);
 
         dispatcher.Dispatch<KeyPressedEvent>(BIND_EVENT_FN(GameLayer::OnKeyPressedEvent));
         dispatcher.Dispatch<MouseButtonPressedEvent>(BIND_EVENT_FN(GameLayer::OnMouseButtonPressedEvent));
     }
 
-    bool GameLayer::OnKeyPressedEvent(KeyPressedEvent &event)
-    {
+    bool GameLayer::OnKeyPressedEvent(KeyPressedEvent &event) {
         _Level.OnKeyPressed(event.GetKeyCode());
         return true;
     }
 
-    bool GameLayer::OnMouseButtonPressedEvent(UNUSED(MouseButtonPressedEvent &event))
-    {
+    bool GameLayer::OnMouseButtonPressedEvent(UNUSED(MouseButtonPressedEvent &event)) {
         if (_State == GameState::GameOver)
             _Level.Reset();
 
@@ -165,4 +158,4 @@ namespace FlappyBird {
         _Level.Play();
         return true;
     }
-};
+}; // namespace FlappyBird

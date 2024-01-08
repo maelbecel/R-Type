@@ -21,13 +21,9 @@ namespace FlappyBird {
         // Constructor & Destructor //
         //////////////////////////////
       public:
+        FlappyBirdClient(const ApplicationSpecification &spec) : Application(spec) { PushLayer(new GameLayer()); }
 
-            FlappyBirdClient(const ApplicationSpecification &spec) : Application(spec)
-            {
-                PushLayer(new GameLayer());
-            }
-
-            ~FlappyBirdClient() = default;
+        ~FlappyBirdClient() = default;
     };
 }; // namespace FlappyBird
 
