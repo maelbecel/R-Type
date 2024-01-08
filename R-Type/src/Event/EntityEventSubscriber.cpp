@@ -25,7 +25,7 @@ namespace RType {
             _Network.SendComponentOf(false, event.Entity, typeIndex);
         }
         if (event.Entity->GetComponent<SpriteRendererComponent>()) {
-            _Network.SendComponentOf(false, event.Entity, "SpriteRendererComponent");
+            _Network.SendComponentOf(true, event.Entity, "SpriteRendererComponent");
         }
     }
 

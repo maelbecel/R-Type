@@ -36,7 +36,10 @@ namespace Exodia {
 
             Packet(const Packet &packet) : _header(packet._header), _content(packet._content){};
 
-            ~Packet() = default;
+            ~Packet()
+            {
+                std::cout << "Packet destructor" << std::endl;
+            }
 
             void SetHeader(Header header) {
                 _header = header;

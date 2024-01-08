@@ -99,36 +99,31 @@ namespace Exodia {
         virtual Buffer SerializeData() override {
             try {
                 Buffer buffer(sizeof(Color) + sizeof(TilingFactor) + sizeof(bool));
-                size_t offset = 0;
 
-                std::memcpy(buffer.Data, &Color, sizeof(Color));
-                offset += sizeof(Color);
-                std::memcpy(buffer.Data + offset, &TilingFactor, sizeof(TilingFactor));
-                offset += sizeof(TilingFactor);
-
+                buffer.Write(&Color, sizeof(Color));
+                buffer.Write(&TilingFactor, sizeof(TilingFactor));
                 bool hasTexture = (Texture != nullptr);
+                buffer.Write(&hasTexture, sizeof(bool));
 
-                std::memcpy(buffer.Data + offset, &hasTexture, sizeof(bool));
-                offset += sizeof(bool);
+
 
                 if (Texture) {
+                    EXODIA_CORE_ERROR("Has texture {0}", hasTexture);
                     buffer.Resize(buffer.Size + sizeof(Texture->GetAssetHandle()) + sizeof(Texture->GetCoords()) +
                                   sizeof(Texture->GetTextureCellSize()) + sizeof(Texture->GetTextureSpriteSize()));
 
                     Exodia::AssetHandle assetHandle = Texture->GetAssetHandle();
 
-                    std::memcpy(buffer.Data + offset, &assetHandle, sizeof(Texture->GetAssetHandle()));
-                    offset += sizeof(Texture->GetAssetHandle());
-                    std::memcpy(buffer.Data + offset, &(Texture->GetCoords()), sizeof(Texture->GetCoords()));
-                    offset += sizeof(Texture->GetCoords());
-                    std::memcpy(buffer.Data + offset, &Texture->GetTextureCellSize(),
-                                sizeof(Texture->GetTextureCellSize()));
-                    offset += sizeof(Texture->GetTextureCellSize());
-                    std::memcpy(buffer.Data + offset, &Texture->GetTextureSpriteSize(),
-                                sizeof(Texture->GetTextureSpriteSize()));
-                    offset += sizeof(Texture->GetTextureSpriteSize());
+                    buffer.Write(&assetHandle, sizeof(assetHandle));
+                    buffer.Write(&Texture->GetCoords(), sizeof(Texture->GetCoords()));
+                    buffer.Write(&Texture->GetTextureCellSize(), sizeof(Texture->GetTextureCellSize()));
+                    buffer.Write(&Texture->GetTextureSpriteSize(), sizeof(Texture->GetTextureSpriteSize()));
                 }
-
+                for (size_t i = 0; i < buffer.Size; i++)
+                {
+                    std::cout << (int)buffer.Data[i] << " ";
+                }
+                std::cout << std::endl;
                 return buffer;
             } catch (std::exception &e) {
                 EXODIA_CORE_WARN("SpriteRendererComponent serialization failed: {0}", e.what());
@@ -146,11 +141,22 @@ namespace Exodia {
                 Memcopy(&TilingFactor, data.Data + offset, sizeof(TilingFactor));
                 offset += sizeof(TilingFactor);
 
-                std::memcpy(&hasTexture, data.Data, sizeof(bool));
+                for (size_t i = offset; i < offset + sizeof(bool); i++)
+                {
+                    std::cout << (int)data.Data[i] << " ";
+                }
+                std::cout << std::endl;
+                if (data.Data[offset] == 1)
+                    hasTexture = true;
+                else
+                    hasTexture = false;
                 offset += sizeof(bool);
+                std::cout << "Has texture " << hasTexture << std::endl;
 
-                if (!hasTexture)
+                if (!hasTexture) {
+                    EXODIA_CORE_ERROR("Hasnt texture");
                     return;
+                }
                 Exodia::AssetHandle assetHandle;
                 glm::vec2 coords;
                 glm::vec2 cellSize;
@@ -169,6 +175,7 @@ namespace Exodia {
                 offset += sizeof(spriteSize);
 
                 Texture = SubTexture2D::CreateFromCoords(assetHandle, coords, cellSize, spriteSize);
+
             } catch (std::exception &e) {
                 EXODIA_CORE_WARN("SpriteRendererComponent deserialization failed: {0}", e.what());
             }

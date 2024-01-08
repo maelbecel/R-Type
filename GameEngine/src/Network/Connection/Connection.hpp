@@ -65,7 +65,7 @@ class Connection {
 
     void SendPacketAck(Exodia::Network::UDPSocket &socket, std::shared_ptr<Exodia::Network::Packet> packet) {
         packet->GetHeader().setSize((unsigned long)packet->GetContent().size());
-        EXODIA_CORE_TRACE("Send ack packet id: {0}", _id);
+        EXODIA_CORE_TRACE("ReSend packet id: {0}", _id);
         std::cout << "Send ack packet header: " << packet->GetHeader() << std::endl;
 
         std::vector<char> buffer = packet->GetBuffer();
