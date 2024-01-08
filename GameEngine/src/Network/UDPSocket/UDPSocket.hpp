@@ -48,7 +48,7 @@ namespace Exodia {
              */
             void Send(const std::vector<char> message, size_t size, const asio::ip::udp::endpoint &endpoint);
 
-            void Send(Exodia::Network::Packet &packet, const asio::ip::udp::endpoint &endpoint);
+            void Send(std::shared_ptr<Exodia::Network::Packet> packet, const asio::ip::udp::endpoint &endpoint);
 
             /**
              * @brief Receive data asynchronously

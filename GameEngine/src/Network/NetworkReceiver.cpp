@@ -271,8 +271,8 @@ namespace Exodia::Network {
         EXODIA_CORE_INFO(connect);
 
         Connection connection = _connections[STRING_FROM_ENDPOINT(senderEndpoint)];
-        Packet packet(0x02);
-        packet.SetContent(buffer.ToVector());
+        std::shared_ptr<Exodia::Network::Packet> packet = std::make_shared<Exodia::Network::Packet>(CONNECT_ACCEPT);
+        packet->SetContent(buffer.ToVector());
         std::cout << "Send accept connect" << std::endl;
         connection.SendPacket(_socket, packet);
     }
@@ -334,7 +334,7 @@ namespace Exodia::Network {
             return;
         }
 
-        Exodia::Network::Packet packet(header, content);
+        std::shared_ptr<Packet> packet = std::make_shared<Packet>(header, content);
 
         std::unordered_map<unsigned char, std::function<void(RECEIVE_ARG)>> commands;
 
@@ -373,13 +373,13 @@ namespace Exodia::Network {
         EXODIA_CORE_INFO("Receive packet {0}", header.toString());
 
         if (header.GetIsImportant()) {
-            Packet ack(0x01);
+            std::shared_ptr<Packet> ack = std::make_shared<Packet>(ACK, false);
             Buffer buffer(sizeof(uint64_t));
             uint64_t id = header.getId();
 
             buffer.Write(&id, sizeof(uint64_t));
             std::vector<char> buffer_vector(buffer.ToVector());
-            ack.SetContent(buffer_vector);
+            ack->SetContent(buffer_vector);
             senderConnection.SendPacket(_socket, ack);
         }
 

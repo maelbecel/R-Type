@@ -65,9 +65,9 @@ namespace Exodia {
          *
          * @return void
          */
-        void UDPSocket::Send(Exodia::Network::Packet &packet, const asio::ip::udp::endpoint &endpoint) {
+        void UDPSocket::Send(std::shared_ptr<Exodia::Network::Packet> packet, const asio::ip::udp::endpoint &endpoint) {
             _senderEndpoint = endpoint;
-            std::vector<char> message = packet.GetBuffer();
+            std::vector<char> message = packet->GetBuffer();
             size_t size = message.size();
 
             _socket.async_send_to(asio::buffer(message, size), endpoint,

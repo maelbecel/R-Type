@@ -28,6 +28,12 @@ namespace Exodia {
                 _header.setSize((unsigned long)_content.size());
             };
 
+            Packet(const std::shared_ptr<Exodia::Network::Packet> packet) {
+                _header = packet->GetHeader();
+                _content = packet->GetContent();
+                _header.setSize((unsigned long)_content.size());
+            }
+
             Packet(const Packet &packet) : _header(packet._header), _content(packet._content){};
 
             ~Packet() = default;
@@ -63,6 +69,12 @@ namespace Exodia {
             Packet &operator=(const Packet &packet) {
                 _header = packet._header;
                 _content = packet._content;
+                return *this;
+            }
+
+            Packet &operator=(const std::shared_ptr<Packet> packet) {
+                _header = packet->GetHeader();
+                _content = packet->GetContent();
                 return *this;
             }
 

@@ -16,7 +16,7 @@ namespace Exodia::Network {
      *
      * @return void
      */
-    void Network::SendPacket(Packet &packet) {
+    void Network::SendPacket(std::shared_ptr<Packet> packet) {
         if (_networkType == NetworkType::SERVER) {
             for (auto &connection : _connections)
                 connection.second.SendPacket(_socket, packet);
@@ -42,10 +42,10 @@ namespace Exodia::Network {
      */
     void Network::SendAskConnect(const std::string &ip, short port) {
         connect(ip, port);
-        Packet packet(CONNECT, true);
+        std::shared_ptr<Exodia::Network::Packet> packet = std::make_shared<Exodia::Network::Packet>(CONNECT, true);
         Buffer buffer(0);
 
-        packet.SetContent(buffer);
+        packet->SetContent(buffer);
         _server_connection.SendPacket(_socket, packet);
     }
 
@@ -55,17 +55,17 @@ namespace Exodia::Network {
      * @return void
      */
     void Network::SendPacketInfo() {
-        Exodia::Network::Packet packet(PACKET_INFO, false);
+        std::shared_ptr<Exodia::Network::Packet> packet = std::make_shared<Exodia::Network::Packet>(PACKET_INFO, false);
         Buffer buffer(2 * sizeof(int));
 
-        if (_connections.size() > 0) {
+        if (_networkType == NetworkType::SERVER) {
             for (auto &connection : _connections) {
                 int32_t received = connection.second.GetReceivedPacket();
                 int32_t sent = connection.second.GetSendPacket();
 
                 buffer.Write(&received, sizeof(int));
                 buffer.Write(&sent, sizeof(int));
-                packet.SetContent(buffer);
+                packet->SetContent(buffer);
                 connection.second.SetReceivedPacket(0);
                 connection.second.SetSendPacket(0);
                 connection.second.SendPacket(_socket, packet);
@@ -76,7 +76,7 @@ namespace Exodia::Network {
 
             buffer.Write(&received, sizeof(int));
             buffer.Write(&sent, sizeof(int));
-            packet.SetContent(buffer);
+            packet->SetContent(buffer);
             _server_connection.SetReceivedPacket(0);
             _server_connection.SetSendPacket(0);
             _server_connection.SendPacket(_socket, packet);
@@ -92,8 +92,7 @@ namespace Exodia::Network {
      * @return void
      */
     void Network::SendComponentOf(bool isImportant, Entity *entity, std::string component_name) {
-        (void)isImportant;
-        Exodia::Network::Packet packet(COMPONENT_OF, isImportant);
+        std::shared_ptr<Exodia::Network::Packet> packet = std::make_shared<Exodia::Network::Packet>(COMPONENT_OF, isImportant);
         Buffer buffer(1468, 0);
 
         if (entity == nullptr) {
@@ -120,7 +119,7 @@ namespace Exodia::Network {
         buffer.Write(data.Data, size_of_data);                      // Set data
         buffer.Resize(buffer.Offset);
 
-        packet.SetContent(buffer);
+        packet->SetContent(buffer);
         SendPacket(packet);
     }
 
@@ -136,12 +135,12 @@ namespace Exodia::Network {
             EXODIA_CORE_ERROR("Network::() - Entity is null !");
             return;
         }
-        Exodia::Network::Packet packet(DELETE_ENTITY, isImportant);
+        std::shared_ptr<Exodia::Network::Packet> packet = std::make_shared<Exodia::Network::Packet>(DELETE_ENTITY, isImportant);
         Buffer buffer(sizeof(unsigned long));
         unsigned long entity_id = (unsigned long)entity->GetEntityID();
 
         buffer.Write(&entity_id, sizeof(unsigned long));
-        packet.SetContent(buffer);
+        packet->SetContent(buffer);
         SendPacket(packet);
     }
 
@@ -151,19 +150,19 @@ namespace Exodia::Network {
      * @return void
      */
     void Network::SendAck(uint64_t command_id) {
-        Exodia::Network::Packet packet(ACK);
+        std::shared_ptr<Exodia::Network::Packet> packet = std::make_shared<Exodia::Network::Packet>(ACK);
         Buffer buffer(sizeof(uint64_t));
 
         buffer.Write(&command_id, sizeof(uint64_t));
-        packet.SetContent(buffer);
+        packet->SetContent(buffer);
         SendPacket(packet);
     }
 
     void Network::SendAcceptConnect() {
-        Exodia::Network::Packet packet(CONNECT_ACCEPT);
+        std::shared_ptr<Exodia::Network::Packet> packet = std::make_shared<Exodia::Network::Packet>(CONNECT_ACCEPT);
         Buffer buffer(0);
 
-        packet.SetContent(buffer);
+        packet->SetContent(buffer);
         SendPacket(packet);
     }
 
@@ -173,21 +172,20 @@ namespace Exodia::Network {
      * @param event (Type: uint32_t) The event to send
      */
     void Network::SendEvent(bool isImportant, uint32_t event, bool isPressed) {
-        (void)isImportant;
-        Exodia::Network::Packet packet(EVENT, isImportant);
+        std::shared_ptr<Exodia::Network::Packet> packet = std::make_shared<Exodia::Network::Packet>(EVENT, isImportant);
         Buffer buffer(sizeof(uint32_t) + sizeof(bool));
 
         buffer.Write(&event, sizeof(uint32_t));
         buffer.Write(&isPressed, sizeof(bool));
-        packet.SetContent(buffer);
+        packet->SetContent(buffer);
         SendPacket(packet);
     }
 
     void Network::SendRejectConnect() {
-        Exodia::Network::Packet packet(CONNECT_REJECT);
+        std::shared_ptr<Exodia::Network::Packet> packet = std::make_shared<Exodia::Network::Packet>(CONNECT_REJECT);
         Buffer buffer(0);
 
-        packet.SetContent(buffer);
+        packet->SetContent(buffer);
         SendPacket(packet);
     }
 
@@ -202,8 +200,7 @@ namespace Exodia::Network {
     }
 
     void Network::SendDeleteComponent(bool isImportant, Entity *entity, std::string component_name) {
-        (void)isImportant;
-        Exodia::Network::Packet packet(DELETE_COMPONENT, isImportant);
+        std::shared_ptr<Exodia::Network::Packet> packet = std::make_shared<Exodia::Network::Packet>(DELETE_COMPONENT, isImportant);
         Buffer buffer(1468, 0);
 
         if (entity == nullptr) {
@@ -225,15 +222,15 @@ namespace Exodia::Network {
         buffer.Write(component_name.data(), component_name.size()); // Set name
         buffer.Resize(buffer.Offset);
 
-        packet.SetContent(buffer);
+        packet->SetContent(buffer);
         SendPacket(packet);
     }
 
     void Network::SendDisconnect() {
-        Exodia::Network::Packet packet(DISCONNECT);
+        std::shared_ptr<Exodia::Network::Packet> packet = std::make_shared<Exodia::Network::Packet>(DISCONNECT);
         Buffer buffer(0);
 
-        packet.SetContent(buffer);
+        packet->SetContent(buffer);
         SendPacket(packet);
     }
 
