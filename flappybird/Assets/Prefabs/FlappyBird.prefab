@@ -20,8 +20,8 @@ Entities:
     RigidBody2DComponent:
       BodyType: Dynamic
       Velocity: [5, 0]
-      GravityScale: 1
-      Mass: 1
+      GravityScale: 0.4
+      Mass: 0.4
     SpriteRendererComponent:
       Color: [1, 1, 1, 1]
       TilingFactor: 1

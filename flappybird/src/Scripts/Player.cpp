@@ -19,7 +19,7 @@ namespace FlappyBird {
     void Player::OnCreate()
     {
         _Time = 0.0f;
-        _EnginePower = 0.5f;
+        _EnginePower = 1.0f;
         _SmokeEmitInterval = 0.4f;
         _SmokeNextEmitTime = 0.4f;
 
@@ -32,7 +32,7 @@ namespace FlappyBird {
         _SmokeParticle.SizeVariation = 0.15f;
         _SmokeParticle.ColorBegin = { 0.8f, 0.8f, 0.8f, 1.0f };
         _SmokeParticle.ColorEnd = { 0.6f, 0.6f, 0.6f, 1.0f };
-        _SmokeParticle.LifeTime = 4.0f;
+        _SmokeParticle.LifeTime = 1.0f;
         _SmokeParticle.NumberOfParticles = 10;
 
         // Engine Particles
@@ -45,7 +45,7 @@ namespace FlappyBird {
         _EngineParticle.ColorBegin = { 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 1.0f };
         _EngineParticle.ColorEnd = { 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
         _EngineParticle.LifeTime = 1.0f;
-        _EngineParticle.NumberOfParticles = 100;
+        _EngineParticle.NumberOfParticles = 50;
     }
 
     void Player::OnUpdate(Timestep ts)
@@ -60,6 +60,11 @@ namespace FlappyBird {
 
             _SmokeNextEmitTime += _SmokeEmitInterval;
         }
+
+        TransformComponent   &tc  = GetComponent<TransformComponent>();
+        RigidBody2DComponent &rbc = GetComponent<RigidBody2DComponent>();
+
+        tc.Rotation.z = rbc.Velocity.y * 0.1f;
     }
 
     void Player::OnKeyPressed(int keyCode)
