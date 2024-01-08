@@ -41,7 +41,7 @@ namespace Exodia::Network {
      */
     void Network::SendAskConnect(const std::string &ip, short port) {
         connect(ip, port);
-        Packet packet(0x81, true);
+        Packet packet(CONNECT, true);
         Buffer buffer(0);
 
         packet.SetContent(buffer);
@@ -54,7 +54,7 @@ namespace Exodia::Network {
      * @return void
      */
     void Network::SendPacketInfo() {
-        Exodia::Network::Packet packet(0x00, false);
+        Exodia::Network::Packet packet(PACKET_INFO, false);
         Buffer buffer(2 * sizeof(int));
 
         if (_connections.size() > 0) {
@@ -92,7 +92,7 @@ namespace Exodia::Network {
      */
     void Network::SendComponentOf(bool isImportant, Entity *entity, std::string component_name) {
         (void)isImportant;
-        Exodia::Network::Packet packet(0x0c, isImportant);
+        Exodia::Network::Packet packet(COMPONENT_OF, isImportant);
         Buffer buffer(1468, 0);
 
         if (entity == nullptr) {
@@ -136,7 +136,7 @@ namespace Exodia::Network {
             EXODIA_CORE_ERROR("Network::SendDeleteEntity() - Entity is null !");
             return;
         }
-        Exodia::Network::Packet packet(0x0e, isImportant);
+        Exodia::Network::Packet packet(DELETE_ENTITY, isImportant);
         Buffer buffer(sizeof(unsigned long));
         unsigned long entity_id = (unsigned long)entity->GetEntityID();
 
@@ -151,7 +151,7 @@ namespace Exodia::Network {
      * @return void
      */
     void Network::SendAck(uint64_t command_id) {
-        Exodia::Network::Packet packet(0x01);
+        Exodia::Network::Packet packet(ACK);
         Buffer buffer(sizeof(uint64_t));
 
         buffer.Write(&command_id, sizeof(uint64_t));
@@ -160,7 +160,7 @@ namespace Exodia::Network {
     }
 
     void Network::SendAcceptConnect() {
-        Exodia::Network::Packet packet(0x02);
+        Exodia::Network::Packet packet(CONNECT_ACCEPT);
         Buffer buffer(0);
 
         packet.SetContent(buffer);
@@ -174,7 +174,7 @@ namespace Exodia::Network {
      */
     void Network::SendEvent(bool isImportant, uint32_t event, bool isPressed) {
         (void)isImportant;
-        Exodia::Network::Packet packet(0x8b, isImportant);
+        Exodia::Network::Packet packet(EVENT, isImportant);
         Buffer buffer(sizeof(uint32_t) + sizeof(bool));
 
         buffer.Write(&event, sizeof(uint32_t));
@@ -184,7 +184,7 @@ namespace Exodia::Network {
     }
 
     void Network::SendRejectConnect() {
-        Exodia::Network::Packet packet(0x03);
+        Exodia::Network::Packet packet(CONNECT_REJECT);
         Buffer buffer(0);
 
         packet.SetContent(buffer);
@@ -203,7 +203,7 @@ namespace Exodia::Network {
 
     void Network::SendDeleteComponent(bool isImportant, Entity *entity, std::string component_name) {
         (void)isImportant;
-        Exodia::Network::Packet packet(0x0f, isImportant);
+        Exodia::Network::Packet packet(DELETE_COMPONENT, isImportant);
         Buffer buffer(1468, 0);
 
         if (entity == nullptr) {
@@ -230,7 +230,7 @@ namespace Exodia::Network {
     }
 
     void Network::SendDisconnect() {
-        Exodia::Network::Packet packet(0x82);
+        Exodia::Network::Packet packet(DISCONNECT);
         Buffer buffer(0);
 
         packet.SetContent(buffer);

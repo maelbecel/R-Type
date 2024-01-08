@@ -154,20 +154,20 @@ namespace Exodia {
                 std::unordered_map<unsigned char, std::string> commands;
                 std::string command;
 
-                commands[0x00] = "Packet info";
-                commands[0x01] = "Acknowledgement";
-                commands[0x02] = "Accept client connection";
-                commands[0x03] = "Reject client connection";
-                commands[0x0b] = "System load";
-                commands[0x0c] = "Create component";
-                commands[0x0d] = "Game event";
-                commands[0x0e] = "Delete entity";
-                commands[0x0f] = "Delete component";
-                commands[0x10] = "Important event";
+                commands[PACKET_INFO] = "Packet info";
+                commands[ACK] = "Acknowledgement";
+                commands[CONNECT_ACCEPT] = "Accept client connection";
+                commands[CONNECT_REJECT] = "Reject client connection";
+                commands[SYSTEM_LOAD] = "System load";
+                commands[COMPONENT_OF] = "Create component";
+                commands[GAME_EVENT] = "Game event";
+                commands[DELETE_ENTITY] = "Delete entity";
+                commands[DELETE_COMPONENT] = "Delete component";
+                commands[IMPORTANT_EVENT] = "Important event";
 
-                commands[0x81] = "Ask for connection";
-                commands[0x82] = "Disconnect";
-                commands[0x8b] = "Event";
+                commands[CONNECT] = "Ask for connection";
+                commands[DISCONNECT] = "Disconnect";
+                commands[EVENT] = "Event";
                 command = commands[getCommand()];
 
                 if (command.empty())
