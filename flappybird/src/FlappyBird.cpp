@@ -20,26 +20,23 @@ namespace FlappyBird {
         //////////////////////////////
         // Constructor & Destructor //
         //////////////////////////////
-        public:
+      public:
+        FlappyBirdClient(const ApplicationSpecification &spec) : Application(spec) {
+            Ref<Layer> gameLayer = CreateRef<GameLayer>();
 
-            FlappyBirdClient(const ApplicationSpecification &spec) : Application(spec)
-            {
-                Ref<Layer> gameLayer = CreateRef<GameLayer>();
+            PushLayer(gameLayer.get());
+        }
 
-                PushLayer(gameLayer.get());
-            }
-
-            ~FlappyBirdClient() = default;
+        ~FlappyBirdClient() = default;
     };
-};
+}; // namespace FlappyBird
 
 /////////////////
 // Entry Point //
 /////////////////
 
 namespace Exodia {
-    Application *CreateApplication(ApplicationCommandLineArgs args)
-    {
+    Application *CreateApplication(ApplicationCommandLineArgs args) {
         EXODIA_PROFILE_FUNCTION();
 
         ApplicationSpecification spec;
@@ -49,4 +46,4 @@ namespace Exodia {
 
         return new FlappyBird::FlappyBirdClient(spec);
     }
-};
+}; // namespace Exodia

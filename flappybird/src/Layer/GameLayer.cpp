@@ -19,10 +19,7 @@ namespace FlappyBird {
     // Constructor & Destructor //
     //////////////////////////////
 
-    GameLayer::GameLayer() : Layer("R-Type")
-    {
-        FlappyBird::Init();
-    };
+    GameLayer::GameLayer() : Layer("R-Type") { FlappyBird::Init(); };
 
     /////////////
     // Methods //
@@ -34,7 +31,7 @@ namespace FlappyBird {
         // Create world
         CurrentScene = GameState::Menu;
 
-        //CollisionSystem *collisionSystem = new CollisionSystem();
+        // CollisionSystem *collisionSystem = new CollisionSystem();
 
         /*Scenes[CurrentScene] = CreateRef<Scene>();
         Scenes[CurrentScene]->RegisterSystem(new AnimationSystem());
