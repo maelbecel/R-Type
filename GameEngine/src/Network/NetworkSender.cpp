@@ -20,8 +20,9 @@ namespace Exodia::Network {
         if (_connections.size() > 0) {
             for (auto &connection : _connections)
                 connection.second.SendPacket(_socket, packet);
-        } else
+        } else {
             _server_connection.SendPacket(_socket, packet);
+        }
     }
 
     /**

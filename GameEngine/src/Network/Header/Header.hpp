@@ -29,6 +29,21 @@ template <typename T> T swapEndianness(T value) {
 
 namespace Exodia {
     namespace Network {
+        typedef enum {
+            PACKET_INFO = 0x00,
+            ACK = 0x01,
+            CONNECT_ACCEPT = 0x02,
+            CONNECT_REJECT = 0x03,
+            SYSTEM_LOAD = 0x0b,
+            COMPONENT_OF = 0x0c,
+            GAME_EVENT = 0x0d,
+            DELETE_ENTITY = 0x0e,
+            DELETE_COMPONENT = 0x0f,
+            IMPORTANT_EVENT = 0x10,
+            CONNECT = 0x81,
+            DISCONNECT = 0x82,
+            EVENT = 0x8b
+        } Command;
         class Header {
           public:
             Header(uint8_t command, bool isImportant)
