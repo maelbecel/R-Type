@@ -38,8 +38,8 @@ namespace Exodia {
                 MillisecondsType timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(
                                                  std::chrono::system_clock::now().time_since_epoch())
                                                  .count();
-
-                _timestamp = static_cast<float>(timestamp);
+                std::cout << "SIIIIIIZE: " << sizeof(timestamp) << std::endl;
+                _timestamp = static_cast<double>(timestamp);
             };
             /**
              * @brief Construct a new Header object
@@ -58,7 +58,7 @@ namespace Exodia {
                                                  std::chrono::system_clock::now().time_since_epoch())
                                                  .count();
 
-                _timestamp = static_cast<float>(timestamp);
+                _timestamp = static_cast<double>(timestamp);
             }
 
             Header(const Header &header)
@@ -74,9 +74,9 @@ namespace Exodia {
                 std::memcpy(buffer.data(), &swappedCommand, sizeof(char));
                 index += sizeof(char);
 
-                float swappedTimestamp = swapEndianness(_timestamp);
-                std::memcpy(buffer.data() + index, &swappedTimestamp, sizeof(float));
-                index += sizeof(float);
+                double swappedTimestamp = swapEndianness(_timestamp);
+                std::memcpy(buffer.data() + index, &swappedTimestamp, sizeof(double));
+                index += sizeof(double);
 
                 unsigned long swappedId = swapEndianness(_id);
                 std::memcpy(buffer.data() + index, &swappedId, sizeof(unsigned long));
@@ -102,10 +102,10 @@ namespace Exodia {
                 index += sizeof(char);
                 char command = swapEndianness(swappedCommand);
 
-                float swappedTimestamp;
-                std::memcpy(&swappedTimestamp, buffer.data() + index, sizeof(float));
-                index += sizeof(float);
-                float timestamp = swapEndianness(swappedTimestamp);
+                double swappedTimestamp;
+                std::memcpy(&swappedTimestamp, buffer.data() + index, sizeof(double));
+                index += sizeof(double);
+                double timestamp = swapEndianness(swappedTimestamp);
 
                 unsigned long swappedId;
                 std::memcpy(&swappedId, buffer.data() + index, sizeof(unsigned long));
@@ -130,7 +130,7 @@ namespace Exodia {
 
             uint64_t GetRealId() { return _id; }
 
-            static unsigned long GetSize() { return 22; }
+            static unsigned long GetSize() { return 26; }
 
             void setSize(unsigned long size) { _size = size; }
 
@@ -141,7 +141,7 @@ namespace Exodia {
             bool GetIsImportant() const { return _isImportant; }
 
             unsigned char getCommand() const { return _command; };
-            float getTimestamp() const { return _timestamp; };
+            double getTimestamp() const { return _timestamp; };
             unsigned long getId() const { return _id; };
             unsigned long getSize() const { return _size; };
 
@@ -184,6 +184,7 @@ namespace Exodia {
                 str += " ID: " + std::to_string(_id);
                 str += " Size: " + std::to_string(_size);
                 str += " Is important: " + std::to_string(_isImportant);
+                str += " Timestamp: " + std::to_string(_timestamp);
 
                 return str;
             }
@@ -209,7 +210,7 @@ namespace Exodia {
 
           private:
             unsigned char _command = 0x01;
-            float _timestamp;
+            double _timestamp;
             unsigned long _id;
             unsigned long _size;
             bool _isImportant = false;
