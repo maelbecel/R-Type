@@ -30,12 +30,7 @@ namespace Exodia {
     const std::vector<char> message, size_t size, Connection &senderConnection, Exodia::Network::Header header
 #define STRING_FROM_ENDPOINT(x) x.address().to_string() + ":" + std::to_string(x.port())
 
-        enum class NetworkType {
-            NONE,
-            CLIENT,
-            SERVER,
-            SINGLEPLAYER
-        };
+        enum class NetworkType { NONE, CLIENT, SERVER, SINGLEPLAYER };
 
         class Network {
           public:
