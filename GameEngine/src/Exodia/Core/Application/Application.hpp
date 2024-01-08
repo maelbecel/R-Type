@@ -47,6 +47,11 @@ namespace Exodia {
         ApplicationCommandLineArgs CommandLineArgs;
     };
 
+    struct ApplicationStatistics {
+        float FPS = 0.0f;
+        float FrameTime = 0.0f;
+    };
+
 ////////////
 // Macros //
 ////////////
@@ -133,6 +138,8 @@ namespace Exodia {
          */
         bool OnWindowResize(WindowResizeEvent &event);
 
+        void UpdateStatistics(Timestep ts);
+
         ///////////////////////
         // Getters & Setters //
         ///////////////////////
@@ -146,6 +153,8 @@ namespace Exodia {
         ImGuiLayer *GetImGuiLayer();
 
         ApplicationSpecification GetSpecification() const;
+
+        ApplicationStatistics GetStatistics() const;
 
         /**
          * @brief Get the Application object
@@ -175,6 +184,9 @@ namespace Exodia {
         LayerStack _LayerStack;                  /*!< The layer stack of the application */
         float _LastTime;                         /*!< The last time of the last frame of the application */
         Timer _Timer;                            /*!< The timer of the application */
+        int   _Frames;
+        float _FPSTimer;
+        ApplicationStatistics _Statistics;
 
       private:
         static Application *_Instance; /*!< The instance of the application */

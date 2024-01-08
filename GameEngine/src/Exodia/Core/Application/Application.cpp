@@ -30,10 +30,10 @@ namespace Exodia {
     //////////////////////////////
 
     Application::Application(const ApplicationSpecification &spec)
-        : _Specification(spec), _Running(true), _Minimized(false), _LastTime(0.0f) {
+        : _Specification(spec), _Running(true), _Minimized(false), _LastTime(0.0f), _Frames(0), _FPSTimer(0.0f) {
         EXODIA_PROFILE_FUNCTION();
 
-        EXODIA_CORE_ASSERT(!_Instance, "Application already exists!");
+        EXODIA_CORE_ASSERT(!_Instance, "Application already exists !");
 
         _Instance = this;
 
@@ -96,6 +96,8 @@ namespace Exodia {
             }
 
             _Window->OnUpdate();
+
+            UpdateStatistics(timestep);
         }
 
         {
@@ -155,6 +157,20 @@ namespace Exodia {
         return false;
     }
 
+    void Application::UpdateStatistics(Timestep ts)
+    {
+        _Frames++;
+        _FPSTimer += ts;
+
+        if (_FPSTimer >= 1.0f) {
+            _Statistics.FPS = _Frames / _FPSTimer;
+            _Statistics.FrameTime = 1000.0f / _Statistics.FPS;
+
+            _FPSTimer = 0.0f;
+            _Frames = 0;
+        }
+    }
+
     ///////////////////////
     // Getters & Setters //
     ///////////////////////
@@ -162,4 +178,6 @@ namespace Exodia {
     ImGuiLayer *Application::GetImGuiLayer() { return _ImGuiLayer; }
 
     ApplicationSpecification Application::GetSpecification() const { return _Specification; }
+
+    ApplicationStatistics Application::GetStatistics() const { return _Statistics; }
 }; // namespace Exodia

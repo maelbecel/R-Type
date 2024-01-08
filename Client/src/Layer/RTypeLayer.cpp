@@ -201,7 +201,17 @@ namespace RType {
         Scenes[CurrentScene]->OnUpdateRuntime(ts);
     }
 
-    void RTypeLayer::OnImGUIRender() { EXODIA_PROFILE_FUNCTION(); }
+    void RTypeLayer::OnImGUIRender()
+    {
+        EXODIA_PROFILE_FUNCTION();
+
+        #ifdef EXODIA_DEBUG
+            ImGui::Begin("R-Type Statistics");
+            ImGui::Text("FPS: %.1f", Application::Get().GetStatistics().FPS);
+            ImGui::Text("Frame Time: %.3f ms", Application::Get().GetStatistics().FrameTime);
+            ImGui::End();
+        #endif
+    }
 
     void RTypeLayer::OnEvent(Exodia::Event &event) {
         EventDispatcher dispatcher(event);
