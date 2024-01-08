@@ -53,7 +53,7 @@ namespace RType {
 
     void RTypeLayer::OnAttach() {
         EXODIA_PROFILE_FUNCTION();
-  
+
         int port = GetPort();
 
         if (port == -1)
