@@ -12,13 +12,17 @@
 
 class Random {
 
-    // Methods
+    /////////////
+    // Methods //
+    /////////////
   public:
     static void Init() { _Engine.seed(std::random_device()()); }
 
     static float Float() { return (float)_Distribution(_Engine); }
 
-    // Attributes
+    ////////////////
+    // Attributes //
+    ////////////////
   private:
     static std::mt19937 _Engine;
     static std::uniform_real_distribution<float> _Distribution;

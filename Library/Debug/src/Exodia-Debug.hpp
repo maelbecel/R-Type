@@ -66,7 +66,15 @@
 #if EXODIA_DEBUG
 #define EXODIA_PROFILE_BEGIN_SESSION(name, filepath) ::Exodia::Instrumentor::Get().BeginSession(name, filepath)
 #define EXODIA_PROFILE_END_SESSION() ::Exodia::Instrumentor::Get().EndSession()
+
+#ifdef WIN32
+#define CONCAT(a, b) a##b
+#define EXPAND_CONCAT(a, b) CONCAT(a, b)
+#define EXODIA_PROFILE_SCOPE(name) ::Exodia::InstrumentationTimer EXPAND_CONCAT(timer, __LINE__)(name)
+#else
 #define EXODIA_PROFILE_SCOPE(name) ::Exodia::InstrumentationTimer timer##__LINE__(name)
+#endif
+
 #define EXODIA_PROFILE_FUNCTION() EXODIA_PROFILE_SCOPE(EXODIA_FUNC_SIG)
 #else
 #define EXODIA_PROFILE_BEGIN_SESSION(name, filepath) ;

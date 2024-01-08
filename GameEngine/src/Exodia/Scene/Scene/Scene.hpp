@@ -19,6 +19,7 @@
 
 // Exodia Scene includes
 #include "Scene/GameObject/GameObject.hpp"
+#include "Scene/Prefabs/Prefabs.hpp"
 
 // External includes
 #include <unordered_map>
@@ -26,6 +27,7 @@
 namespace Exodia {
 
     class GameObject;
+    class Prefabs;
 
     class Scene : public Asset {
 
@@ -83,6 +85,14 @@ namespace Exodia {
             _World->Subscribe<Event>(subscriber);
         }
 
+        void AddPrefab(Ref<Prefabs> prefab);
+        bool RemovePrefab(const std::string &name);
+
+        // -- Key Events ---------------------------------------------------
+
+        void OnKeyPressedEvent(int keyCode);
+        void OnKeyReleasedEvent(int keyCode);
+
       private:
         void RenderScene();
 
@@ -121,6 +131,8 @@ namespace Exodia {
         bool _IsPaused;
 
         std::vector<EntitySystem *> _Systems;
+
+        std::vector<Ref<Prefabs>> _Prefabs;
 
         std::unordered_map<UUID, Entity *> _EntityMap;
 

@@ -5,15 +5,15 @@
 ** GameLayer
 */
 
-#ifndef RTYPELAYER_HPP_
-#define RTYPELAYER_HPP_
+#ifndef GAMELAYER_HPP_
+#define GAMELAYER_HPP_
 
-#include "Exodia.hpp"
-#include "../FlappyBird.hpp"
-
-using namespace Exodia;
+#include "Game/FlappyBird.hpp"
+#include "Level/Level.hpp"
 
 namespace FlappyBird {
+
+    using namespace Exodia;
 
     enum class GameState { Play, Menu, GameOver };
 
@@ -31,23 +31,24 @@ namespace FlappyBird {
         /////////////
       public:
         void OnAttach() override;
-        void OnDetach() override;
         void OnUpdate(Timestep ts) override;
         void OnImGUIRender() override;
         void OnEvent(Event &event) override;
 
       private:
-        bool OnKeyReleasedEvent(KeyReleasedEvent &event);
         bool OnKeyPressedEvent(KeyPressedEvent &event);
-        bool OnWindowResizeEvent(WindowResizeEvent &event);
+        bool OnMouseButtonPressedEvent(MouseButtonPressedEvent &event);
 
         ////////////////
         // Attributes //
         ////////////////
-      public:
-        inline static std::map<GameState, Ref<Scene>> Scenes;
-        inline static GameState CurrentScene;
+      private:
+        GameState _State;
+        bool _Blink;
+        float _Time;
+
+        Level _Level;
     };
 }; // namespace FlappyBird
 
-#endif /* !RTYPELAYER_HPP_ */
+#endif /* !GAMELAYER_HPP_ */

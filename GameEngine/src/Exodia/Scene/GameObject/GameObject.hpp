@@ -16,6 +16,7 @@ namespace Exodia {
     class Scene;
 
     class GameObject {
+
         //////////////////////////////
         // Constructor & Destructor //
         //////////////////////////////
@@ -23,20 +24,10 @@ namespace Exodia {
         GameObject(Entity *handle = nullptr, Scene *scene = nullptr);
         GameObject(const GameObject &other) = default;
 
-        ///////////////////////
-        // Getters & Setters //
-        ///////////////////////
+        /////////////
+        // Methods //
+        /////////////
       public:
-        template <typename T, typename... Args> T &AddComponent(Args &&...args) {
-            if (HasComponent<T>()) {
-                EXODIA_CORE_WARN("Entity already has component !");
-
-                return GetComponent<T>();
-            }
-
-            return _EntityHandle->AddComponent<T>(std::forward<Args>(args)...).Get();
-        }
-
         void AddComponent(IComponentContainer *component);
 
         template <typename T, typename... Args> T &AddOrReplaceComponent(Args &&...args) {
@@ -50,6 +41,22 @@ namespace Exodia {
                 EXODIA_CORE_WARN("Entity does not have component !");
         }
 
+        template <typename T, typename... Args> T &AddComponent(Args &&...args) {
+            if (HasComponent<T>()) {
+                EXODIA_CORE_WARN("Entity already has component !");
+
+                return GetComponent<T>();
+            }
+
+            return _EntityHandle->AddComponent<T>(std::forward<Args>(args)...).Get();
+        }
+
+        GameObject Duplicate();
+
+        ///////////////////////
+        // Getters & Setters //
+        ///////////////////////
+      public:
         template <typename T> T &GetComponent() {
             ComponentHandle<T> component = _EntityHandle->GetComponent<T>();
 

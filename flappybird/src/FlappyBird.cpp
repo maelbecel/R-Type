@@ -5,11 +5,15 @@
 ** FlappyBird
 */
 
+// Exodia Entry Point
 #include "Exodia/EntryPoint.hpp"
-#include "Layer/GameLayer.hpp"
-#include "FlappyBird.hpp"
 
-namespace Exodia {
+// Game Layer
+#include "Layer/GameLayer.hpp"
+
+using namespace Exodia;
+
+namespace FlappyBird {
 
     class FlappyBirdClient : public Application {
 
@@ -17,27 +21,25 @@ namespace Exodia {
         // Constructor & Destructor //
         //////////////////////////////
       public:
-        FlappyBirdClient(const ApplicationSpecification &spec) : Application(spec) {
-            PushLayer(new FlappyBird::GameLayer());
-        }
+        FlappyBirdClient(const ApplicationSpecification &spec) : Application(spec) { PushLayer(new GameLayer()); }
 
         ~FlappyBirdClient() = default;
     };
+}; // namespace FlappyBird
 
-    /////////////////
-    // Entry Point //
-    /////////////////
+/////////////////
+// Entry Point //
+/////////////////
 
+namespace Exodia {
     Application *CreateApplication(ApplicationCommandLineArgs args) {
         EXODIA_PROFILE_FUNCTION();
-
-        FlappyBird::InitFlappyBird();
 
         ApplicationSpecification spec;
 
         spec.Name = "FlappyBird";
         spec.CommandLineArgs = args;
 
-        return new FlappyBirdClient(spec);
+        return new FlappyBird::FlappyBirdClient(spec);
     }
 }; // namespace Exodia
