@@ -43,7 +43,9 @@ class Connection {
 
     void RemovePacketNeedAck(uint64_t id) { _packetNeedAck.erase(id); }
 
-    std::unordered_map<uint64_t, std::shared_ptr<Exodia::Network::Packet>> &GetPacketNeedAck() { return _packetNeedAck; }
+    std::unordered_map<uint64_t, std::shared_ptr<Exodia::Network::Packet>> &GetPacketNeedAck() {
+        return _packetNeedAck;
+    }
 
     void SendPacket(Exodia::Network::UDPSocket &socket, std::shared_ptr<Exodia::Network::Packet> packet) {
         packet->GetHeader().setSize((unsigned long)packet->GetContent().size());
