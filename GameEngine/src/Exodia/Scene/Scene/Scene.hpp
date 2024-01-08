@@ -95,6 +95,7 @@ namespace Exodia {
 
       private:
         void RenderScene();
+        void RenderDebugScene();
 
         ///////////////////////
         // Getters & Setters //
