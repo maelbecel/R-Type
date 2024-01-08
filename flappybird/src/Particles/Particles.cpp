@@ -7,78 +7,82 @@
 
 #include "Particles.hpp"
 
-#include "Tools/Random.hpp"
+#include "../Tools/Random.hpp"
 
 #include <glm/gtx/compatibility.hpp>
 
-ParticlesSystem::ParticlesSystem() : _ParticleListIndex(999) { _ParticleList.resize(1000); }
+namespace FlappyBird {
 
-void ParticlesSystem::Emit(const ParticleProps &props) {
-    Particle &particle = _ParticleList[_ParticleListIndex];
+    ParticlesSystem::ParticlesSystem() : _ParticleListIndex(999) { _ParticleList.resize(1000); }
 
-    // Active
-    particle.Active = true;
+    void ParticlesSystem::Emit(const ParticleProps &props) {
+        Particle &particle = _ParticleList[_ParticleListIndex];
 
-    // Position
-    particle.Position = props.Position;
+        // Active
+        particle.Active = true;
 
-    // Rotation
-    particle.Rotation = Random::Float() * 2.0f * glm::pi<float>();
+        // Position
+        particle.Position = props.Position;
 
-    // Velocity
-    particle.Velocity = props.Velocity;
-    particle.Velocity.x += props.VelocityVariation.x * (Random::Float() - 0.5f);
-    particle.Velocity.y += props.VelocityVariation.y * (Random::Float() - 0.5f);
+        // Rotation
+        particle.Rotation = Random::Float() * 2.0f * glm::pi<float>();
 
-    // Color
-    particle.ColorBegin = props.ColorBegin;
-    particle.ColorEnd = props.ColorEnd;
+        // Velocity
+        particle.Velocity = props.Velocity;
+        particle.Velocity.x += props.VelocityVariation.x * (Random::Float() - 0.5f);
+        particle.Velocity.y += props.VelocityVariation.y * (Random::Float() - 0.5f);
 
-    // Size
-    particle.SizeBegin = props.SizeBegin + props.SizeVariation * (Random::Float() - 0.5f);
-    particle.SizeEnd = props.SizeEnd;
+        // Color
+        particle.ColorBegin = props.ColorBegin;
+        particle.ColorEnd = props.ColorEnd;
 
-    // Life
-    particle.LifeTime = props.LifeTime;
-    particle.LifeRemaining = props.LifeTime;
+        // Size
+        particle.SizeBegin = props.SizeBegin + props.SizeVariation * (Random::Float() - 0.5f);
+        particle.SizeEnd = props.SizeEnd;
 
-    _ParticleListIndex--;
-    _ParticleListIndex = _ParticleListIndex % _ParticleList.size();
-}
+        // Life
+        particle.LifeTime = props.LifeTime;
+        particle.LifeRemaining = props.LifeTime;
 
-void ParticlesSystem::OnUpdate(Exodia::Timestep ts) {
-    for (Particle &particle : _ParticleList) {
-        if (!particle.Active)
-            continue;
+        _ParticleListIndex--;
+        _ParticleListIndex = _ParticleListIndex % _ParticleList.size();
+    }
 
-        if (particle.LifeRemaining <= 0.0f) {
-            particle.Active = false;
-            continue;
+    void ParticlesSystem::OnUpdate(Exodia::Timestep ts) {
+        for (Particle &particle : _ParticleList) {
+            if (!particle.Active)
+                continue;
+
+            if (particle.LifeRemaining <= 0.0f) {
+                particle.Active = false;
+                continue;
+            }
+
+            particle.LifeRemaining -= ts;
+            particle.Position += particle.Velocity * (float)ts;
+            particle.Rotation += 0.01f * ts;
         }
-
-        particle.LifeRemaining -= ts;
-        particle.Position += particle.Velocity * (float)ts;
-        particle.Rotation += 0.01f * ts;
     }
-}
 
-void ParticlesSystem::OnRender() {
-    for (Particle &particle : _ParticleList) {
-        if (!particle.Active)
-            continue;
+    void ParticlesSystem::OnRender() {
+        for (Particle &particle : _ParticleList) {
+            if (!particle.Active)
+                continue;
 
-        float life = particle.LifeRemaining / particle.LifeTime;
+            float life = particle.LifeRemaining / particle.LifeTime;
 
-        glm::vec4 color = glm::lerp(particle.ColorEnd, particle.ColorBegin, life);
+            glm::vec4 color = glm::lerp(particle.ColorEnd, particle.ColorBegin, life);
 
-        color.a = color.a * life;
+            color.a = color.a * life;
 
-        float size = glm::lerp(particle.SizeEnd, particle.SizeBegin, life);
+            float size = glm::lerp(particle.SizeEnd, particle.SizeBegin, life);
 
-        Exodia::Renderer2D::DrawRotatedQuad(particle.Position, // Position
-                                            {size, size},      // Size
-                                            particle.Rotation, // Rotation
-                                            color              // Color
-        );
+            Exodia::Renderer2D::DrawRotatedQuad(particle.Position, // Position
+                                                {size, size},      // Size
+                                                particle.Rotation, // Rotation
+                                                color              // Color
+            );
+        }
     }
-}
+
+} // namespace FlappyBird

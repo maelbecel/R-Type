@@ -22,8 +22,10 @@ set(SOURCES
     src/Main.cpp
 
     src/Layer/GameLayer.cpp
+    src/Particles/Particles.cpp
 
     src/ECS/Scripts/Player.cpp
+    src/Tools/Random.cpp
 )
 
 # Set include directories for the SandBoxGames
