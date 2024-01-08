@@ -184,7 +184,7 @@ namespace Exodia {
         LayerStack _LayerStack;                  /*!< The layer stack of the application */
         float _LastTime;                         /*!< The last time of the last frame of the application */
         Timer _Timer;                            /*!< The timer of the application */
-        int   _Frames;
+        int _Frames;
         float _FPSTimer;
         ApplicationStatistics _Statistics;
 

@@ -157,8 +157,7 @@ namespace Exodia {
         return false;
     }
 
-    void Application::UpdateStatistics(Timestep ts)
-    {
+    void Application::UpdateStatistics(Timestep ts) {
         _Frames++;
         _FPSTimer += ts;
 
