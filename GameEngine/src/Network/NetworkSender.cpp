@@ -92,7 +92,8 @@ namespace Exodia::Network {
      * @return void
      */
     void Network::SendComponentOf(bool isImportant, Entity *entity, std::string component_name) {
-        std::shared_ptr<Exodia::Network::Packet> packet = std::make_shared<Exodia::Network::Packet>(COMPONENT_OF, isImportant);
+        std::shared_ptr<Exodia::Network::Packet> packet =
+            std::make_shared<Exodia::Network::Packet>(COMPONENT_OF, isImportant);
         Buffer buffer(1468, 0);
 
         if (entity == nullptr) {
@@ -135,7 +136,8 @@ namespace Exodia::Network {
             EXODIA_CORE_ERROR("Network::() - Entity is null !");
             return;
         }
-        std::shared_ptr<Exodia::Network::Packet> packet = std::make_shared<Exodia::Network::Packet>(DELETE_ENTITY, isImportant);
+        std::shared_ptr<Exodia::Network::Packet> packet =
+            std::make_shared<Exodia::Network::Packet>(DELETE_ENTITY, isImportant);
         Buffer buffer(sizeof(unsigned long));
         unsigned long entity_id = (unsigned long)entity->GetEntityID();
 
@@ -200,7 +202,8 @@ namespace Exodia::Network {
     }
 
     void Network::SendDeleteComponent(bool isImportant, Entity *entity, std::string component_name) {
-        std::shared_ptr<Exodia::Network::Packet> packet = std::make_shared<Exodia::Network::Packet>(DELETE_COMPONENT, isImportant);
+        std::shared_ptr<Exodia::Network::Packet> packet =
+            std::make_shared<Exodia::Network::Packet>(DELETE_COMPONENT, isImportant);
         Buffer buffer(1468, 0);
 
         if (entity == nullptr) {

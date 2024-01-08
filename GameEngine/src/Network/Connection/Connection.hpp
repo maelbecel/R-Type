@@ -96,7 +96,9 @@ class Connection {
 
     void SetLastPacketSent(std::shared_ptr<Exodia::Network::Packet> packet) { _networkInfo.lastPacketSent = packet; }
 
-    void SetLastPacketReceived(std::shared_ptr<Exodia::Network::Packet> packet) { _networkInfo.lastPacketReceived = packet; }
+    void SetLastPacketReceived(std::shared_ptr<Exodia::Network::Packet> packet) {
+        _networkInfo.lastPacketReceived = packet;
+    }
 
     void SetWorldId(uint64_t worldId) { _worldId = worldId; }
 
