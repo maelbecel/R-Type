@@ -12,49 +12,49 @@
 
 namespace FlappyBird {
 
-  struct ParticleProps {
-      glm::vec2 Position;
-      glm::vec2 Velocity;
-      glm::vec2 VelocityVariation;
-      glm::vec4 ColorBegin;
-      glm::vec4 ColorEnd;
-      float SizeBegin;
-      float SizeEnd;
-      float SizeVariation;
-      float LifeTime = 1.0f;
-  };
+    struct ParticleProps {
+        glm::vec2 Position;
+        glm::vec2 Velocity;
+        glm::vec2 VelocityVariation;
+        glm::vec4 ColorBegin;
+        glm::vec4 ColorEnd;
+        float SizeBegin;
+        float SizeEnd;
+        float SizeVariation;
+        float LifeTime = 1.0f;
+    };
 
-  struct Particle {
-      glm::vec2 Position;
-      glm::vec2 Velocity;
-      glm::vec4 ColorBegin;
-      glm::vec4 ColorEnd;
-      float Rotation = 0.0f;
-      float SizeBegin;
-      float SizeEnd;
-      float LifeTime = 1.0f;
-      float LifeRemaining = 0.0f;
-      bool Active = false;
-  };
+    struct Particle {
+        glm::vec2 Position;
+        glm::vec2 Velocity;
+        glm::vec4 ColorBegin;
+        glm::vec4 ColorEnd;
+        float Rotation = 0.0f;
+        float SizeBegin;
+        float SizeEnd;
+        float LifeTime = 1.0f;
+        float LifeRemaining = 0.0f;
+        bool Active = false;
+    };
 
-  class ParticlesSystem {
+    class ParticlesSystem {
 
-      // Constructor & Destructor (default)
-    public:
-      ParticlesSystem();
-      ~ParticlesSystem() = default;
+        // Constructor & Destructor (default)
+      public:
+        ParticlesSystem();
+        ~ParticlesSystem() = default;
 
-      // Methods
-    public:
-      void Emit(const ParticleProps &props);
-      void OnUpdate(Exodia::Timestep ts);
-      void OnRender();
+        // Methods
+      public:
+        void Emit(const ParticleProps &props);
+        void OnUpdate(Exodia::Timestep ts);
+        void OnRender();
 
-      // Attributes
-    private:
-      std::vector<Particle> _ParticleList;
-      uint32_t _ParticleListIndex;
-  };
-}
+        // Attributes
+      private:
+        std::vector<Particle> _ParticleList;
+        uint32_t _ParticleListIndex;
+    };
+} // namespace FlappyBird
 
 #endif /* !PARTICLES_HPP_ */
