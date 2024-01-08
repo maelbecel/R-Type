@@ -32,7 +32,7 @@ namespace FlappyBird {
         if (_Scene == nullptr)
             return;
 
-        if ( _Scene->GetEntityByName("SpaceShip").GetComponent<TransformComponent>().Translation.y < -10.0f) {
+        if (_Scene->GetEntityByName("SpaceShip").GetComponent<TransformComponent>().Translation.y < -10.0f) {
             _GameOver = true;
             return;
         }
@@ -47,14 +47,16 @@ namespace FlappyBird {
 
             auto &ts_h = spike_haut.GetComponent<TransformComponent>();
 
-            if (ts_h.Translation.x < _Scene->GetEntityByName("SpaceShip").GetComponent<TransformComponent>().Translation.x - 15.0f) {
+            if (ts_h.Translation.x <
+                _Scene->GetEntityByName("SpaceShip").GetComponent<TransformComponent>().Translation.x - 15.0f) {
                 ts_h.Translation.x += 40.0f;
                 ts_h.Translation.y = rand + diff;
             }
 
             auto &ts_b = spike_bas.GetComponent<TransformComponent>();
 
-            if (ts_b.Translation.x < _Scene->GetEntityByName("SpaceShip").GetComponent<TransformComponent>().Translation.x - 15.0f) {
+            if (ts_b.Translation.x <
+                _Scene->GetEntityByName("SpaceShip").GetComponent<TransformComponent>().Translation.x - 15.0f) {
                 ts_b.Translation.x += 40.0f;
                 ts_b.Translation.y = rand - diff - 3.0f;
             }
@@ -70,14 +72,16 @@ namespace FlappyBird {
 
             auto &ts_h2 = spike_haut2.GetComponent<TransformComponent>();
 
-            if (ts_h2.Translation.x < _Scene->GetEntityByName("SpaceShip").GetComponent<TransformComponent>().Translation.x - 15.0f) {
+            if (ts_h2.Translation.x <
+                _Scene->GetEntityByName("SpaceShip").GetComponent<TransformComponent>().Translation.x - 15.0f) {
                 ts_h2.Translation.x += 40.0f;
                 ts_h2.Translation.y = rand2 + diff2;
             }
 
             auto &ts_b2 = spike_bas2.GetComponent<TransformComponent>();
 
-            if (ts_b2.Translation.x < _Scene->GetEntityByName("SpaceShip").GetComponent<TransformComponent>().Translation.x - 15.0f) {
+            if (ts_b2.Translation.x <
+                _Scene->GetEntityByName("SpaceShip").GetComponent<TransformComponent>().Translation.x - 15.0f) {
                 ts_b2.Translation.x += 40.0f;
                 ts_b2.Translation.y = rand2 - diff2 - 3.0f;
             }
