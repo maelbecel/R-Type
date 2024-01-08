@@ -123,14 +123,14 @@ namespace Exodia {
             UDPSocket &GetSocket() { return _socket; }
 
             NetworkInfo GetNetworkInfo() { return _server_connection.GetLastNetworkInfo(); }
-            
+
             /**
              * @brief Use to disconnect a user
-             * 
+             *
              * @param connection (Type: Connection) The connection to disconnect
-             * 
+             *
              * @return void
-            */
+             */
             void Disconnect(Connection connection) {
                 auto it = _connections.find(STRING_FROM_ENDPOINT(connection.GetEndpoint()));
                 if (it != _connections.end()) {
