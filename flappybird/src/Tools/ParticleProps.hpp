@@ -6,9 +6,9 @@
 */
 
 #ifndef PARTICLEPROPS_HPP_
-    #define PARTICLEPROPS_HPP_
+#define PARTICLEPROPS_HPP_
 
-    #include <glm/glm.hpp>
+#include <glm/glm.hpp>
 
 namespace FlappyBird {
 
@@ -24,6 +24,6 @@ namespace FlappyBird {
         float LifeTime = 1.0f;
         int NumberOfParticles = 100;
     };
-};
+}; // namespace FlappyBird
 
 #endif /* !PARTICLEPROPS_HPP_ */

@@ -6,10 +6,10 @@
 */
 
 #ifndef PLAYER_HPP_
-    #define PLAYER_HPP_
+#define PLAYER_HPP_
 
-    #include "Exodia.hpp"
-    #include "Tools/ParticleProps.hpp"
+#include "Exodia.hpp"
+#include "Tools/ParticleProps.hpp"
 
 namespace FlappyBird {
 
@@ -18,31 +18,28 @@ namespace FlappyBird {
         /////////////
         // Methods //
         /////////////
-        public:
+      public:
+        void OnCreate() override;
+        void OnUpdate(Exodia::Timestep ts) override;
 
-            void OnCreate() override;
-            void OnUpdate(Exodia::Timestep ts) override;
+        void OnKeyPressed(int keyCode) override;
 
-            void OnKeyPressed(int keyCode) override;
-
-        private:
-
-            void Emit(const ParticleProps &particleProps);
+      private:
+        void Emit(const ParticleProps &particleProps);
 
         ////////////////
         // Attributes //
         ////////////////
-        private:
+      private:
+        float _Time;
+        float _EnginePower;
+        float _Gravity;
+        float _SmokeEmitInterval;
+        float _SmokeNextEmitTime;
 
-            float _Time;
-            float _EnginePower;
-            float _Gravity;
-            float _SmokeEmitInterval;
-            float _SmokeNextEmitTime;
-
-            ParticleProps _SmokeParticle;
-            ParticleProps _EngineParticle;
+        ParticleProps _SmokeParticle;
+        ParticleProps _EngineParticle;
     };
-};
+}; // namespace FlappyBird
 
 #endif /* !PLAYER_HPP_ */

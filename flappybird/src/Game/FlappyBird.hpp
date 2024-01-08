@@ -27,9 +27,7 @@ namespace FlappyBird {
         // -- Register FlappyBird components ---------------------------------------
 
         // -- Register FlappyBird scripts ------------------------------------------
-        project->RegisterScript("Player", []() -> Exodia::ScriptableEntity * {
-            return new FlappyBird::Player;
-        });
+        project->RegisterScript("Player", []() -> Exodia::ScriptableEntity * { return new FlappyBird::Player; });
 
         // -- Register FlappyBird systems ------------------------------------------
     }
