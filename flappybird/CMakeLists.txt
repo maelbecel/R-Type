@@ -24,6 +24,8 @@ set(SOURCES
     src/Layer/GameLayer.cpp
 
     src/ECS/Scripts/Player.cpp
+
+    src/ECS/System/AnimationSystem.cpp
 )
 
 # Set include directories for the SandBoxGames
@@ -31,6 +33,7 @@ set(INCLUDE_DIRS
     # SandBox include directories
     ${CMAKE_SOURCE_DIR}
     ${CMAKE_SOURCE_DIR}/src
+    ${CMAKE_SOURCE_DIR}/src/ECS/Event
 
     # GameEngine include directories
     ${GAME_ENGINE_DIR}/Tools

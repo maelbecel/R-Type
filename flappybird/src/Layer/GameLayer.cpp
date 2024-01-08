@@ -34,7 +34,7 @@ namespace FlappyBird {
         CollisionSystem *collisionSystem = new CollisionSystem();
 
         Scenes[CurrentScene] = CreateRef<Scene>();
-        // Scenes[CurrentScene]->RegisterSystem(new AnimationSystem());
+        Scenes[CurrentScene]->RegisterSystem(new AnimationSystem());
         Scenes[CurrentScene]->RegisterSystem(new MovingSystem(1.5f));
         Scenes[CurrentScene]->RegisterSystem(collisionSystem);
         Scenes[CurrentScene]->Subscribe<Exodia::Events::OnCollisionEntered>(collisionSystem);

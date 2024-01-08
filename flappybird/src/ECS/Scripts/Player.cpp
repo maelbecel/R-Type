@@ -70,8 +70,22 @@ namespace FlappyBird {
         // _EngineParticle.LifeTime = 1.0f;
 
         CreateAnimations();
+        EXODIA_INFO("Player Created");
     }
 
+    void Player::UpdateAnimations() {
+        SpriteRendererComponent &sprite = GetComponent<SpriteRendererComponent>();
+        ComponentHandle<AnimationComponent> anim = HandleEntity.GetEntity()->GetComponent<AnimationComponent>();
+
+        if (!anim) {
+            _Animations[0].IsPlaying = true;
+
+            anim = HandleEntity.GetEntity()->AddComponent<AnimationComponent>(_Animations[0]);
+
+            sprite.Texture = anim.Get().Frames[0];
+        } else {
+        }
+    }
     void Player::OnUpdate(Exodia::Timestep ts) {
         Clock &clock = GetComponent<Clock>();
         clock.ElapsedTime += ts;
@@ -107,6 +121,7 @@ namespace FlappyBird {
         //     _SmokeNextEmitTime += _SmokeEmitInterval;
         // }
         // _ParticleSystem.OnUpdate(ts);
+        UpdateAnimations();
     }
 
     void Player::OnKeyPressed(int keycode) {

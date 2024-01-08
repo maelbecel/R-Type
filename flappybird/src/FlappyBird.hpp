@@ -21,7 +21,9 @@
 
 #include "ECS/Scripts/Player.hpp"
 
-// #include "src/System/AnimationSystem.hpp"
+#include "ECS/System/AnimationSystem.hpp"
+
+#include "ECS/Event/AnimationEvent.hpp"
 
 namespace FlappyBird {
 
@@ -46,6 +48,8 @@ namespace FlappyBird {
         // -- Register FlappyBird scripts ------------------------------------------
 
         project->RegisterScript("Player", []() -> Exodia::ScriptableEntity * { return new FlappyBird::Player(); });
+
+        // -- Register FlappyBird systems ------------------------------------------
     }
 }; // namespace FlappyBird
 

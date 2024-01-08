@@ -39,6 +39,7 @@ namespace FlappyBird {
 
       public:
         void CreateAnimations();
+        void UpdateAnimations();
 
         // Getter
       public:

@@ -9,6 +9,7 @@
 #define RTYPELAYER_HPP_
 
 #include "Exodia.hpp"
+#include "../FlappyBird.hpp"
 
 using namespace Exodia;
 
