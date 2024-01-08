@@ -19,7 +19,7 @@ set(GAME_ENGINE_DIR  ${CMAKE_SOURCE_DIR}/GameEngine)
 
 # Set source files for the SandBoxGames
 set(SOURCES
-    src/Main.cpp
+    src/FlappyBird.cpp
 
     src/Layer/GameLayer.cpp
     src/Particles/Particles.cpp
@@ -32,10 +32,9 @@ set(SOURCES
 
 # Set include directories for the SandBoxGames
 set(INCLUDE_DIRS
-    # SandBox include directories
-    ${CMAKE_SOURCE_DIR}
-    ${CMAKE_SOURCE_DIR}/src
-    ${CMAKE_SOURCE_DIR}/src/ECS/Event
+
+    # Flappy include directories
+    src/
 
     # GameEngine include directories
     ${GAME_ENGINE_DIR}/Tools

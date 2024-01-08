@@ -5,49 +5,56 @@
 ** GameLayer
 */
 
-#ifndef RTYPELAYER_HPP_
-#define RTYPELAYER_HPP_
+#ifndef GAMELAYER_HPP_
+    #define GAMELAYER_HPP_
 
-#include "Exodia.hpp"
-#include "../FlappyBird.hpp"
+    #include "Game/FlappyBird.hpp"
 
-using namespace Exodia;
+    using namespace Exodia;
 
 namespace FlappyBird {
 
-    enum class GameState { Play, Menu, GameOver };
+    enum class GameState {
+        Play,
+        Menu,
+        GameOver
+    };
 
     class GameLayer : public Exodia::Layer {
 
         //////////////////////////////
         // Constructor & Destructor //
         //////////////////////////////
-      public:
-        GameLayer();
-        ~GameLayer() = default;
+        public:
+
+            GameLayer();
+            ~GameLayer() = default;
 
         /////////////
         // Methods //
         /////////////
-      public:
-        void OnAttach() override;
-        void OnDetach() override;
-        void OnUpdate(Timestep ts) override;
-        void OnImGUIRender() override;
-        void OnEvent(Event &event) override;
+        public:
 
-      private:
-        bool OnKeyReleasedEvent(KeyReleasedEvent &event);
-        bool OnKeyPressedEvent(KeyPressedEvent &event);
-        bool OnWindowResizeEvent(WindowResizeEvent &event);
+            void OnAttach() override;
+            void OnDetach() override;
+            void OnUpdate(Timestep ts) override;
+            void OnImGUIRender() override;
+            void OnEvent(Event &event) override;
+
+        private:
+
+            bool OnKeyReleasedEvent(KeyReleasedEvent &event);
+            bool OnKeyPressedEvent(KeyPressedEvent &event);
+            bool OnWindowResizeEvent(WindowResizeEvent &event);
 
         ////////////////
         // Attributes //
         ////////////////
-      public:
+        public:
+
         inline static std::map<GameState, Ref<Scene>> Scenes;
         inline static GameState CurrentScene;
     };
 }; // namespace FlappyBird
 
-#endif /* !RTYPELAYER_HPP_ */
+#endif /* !GAMELAYER_HPP_ */

@@ -19,7 +19,10 @@ namespace FlappyBird {
     // Constructor & Destructor //
     //////////////////////////////
 
-    GameLayer::GameLayer() : Layer("R-Type"){};
+    GameLayer::GameLayer() : Layer("R-Type")
+    {
+        FlappyBird::Init();
+    };
 
     /////////////
     // Methods //
@@ -31,15 +34,15 @@ namespace FlappyBird {
         // Create world
         CurrentScene = GameState::Menu;
 
-        CollisionSystem *collisionSystem = new CollisionSystem();
+        //CollisionSystem *collisionSystem = new CollisionSystem();
 
-        Scenes[CurrentScene] = CreateRef<Scene>();
+        /*Scenes[CurrentScene] = CreateRef<Scene>();
         Scenes[CurrentScene]->RegisterSystem(new AnimationSystem());
         Scenes[CurrentScene]->RegisterSystem(new MovingSystem(1.5f));
         Scenes[CurrentScene]->RegisterSystem(collisionSystem);
         Scenes[CurrentScene]->Subscribe<Exodia::Events::OnCollisionEntered>(collisionSystem);
         Scenes[CurrentScene]->OnViewportResize(Application::Get().GetWindow().GetWidth(),
-                                               Application::Get().GetWindow().GetHeight());
+                                               Application::Get().GetWindow().GetHeight());*/
 
         // Create the camera entity
         GameObject cameraEntity = Scenes[CurrentScene]->CreateEntity("Camera");
