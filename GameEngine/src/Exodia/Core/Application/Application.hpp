@@ -173,9 +173,8 @@ namespace Exodia {
          * @return (Type: Window &) The window of the application
          */
         inline Window &GetWindow() { return *_Window; }
-      
-      private:
 
+      private:
         uint64_t GetMemoryUsage();
 
         ////////////////

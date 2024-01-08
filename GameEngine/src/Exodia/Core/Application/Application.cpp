@@ -25,8 +25,8 @@
 #include <string>
 
 #ifdef WIN32
-    #include <windows.h>
-    #include <psapi.h>
+#include <windows.h>
+#include <psapi.h>
 #endif
 
 namespace Exodia {
@@ -197,15 +197,14 @@ namespace Exodia {
 
     ApplicationStatistics Application::GetStatistics() const { return _Statistics; }
 
-    uint64_t Application::GetMemoryUsage()
-    {
-    #ifdef WIN32
+    uint64_t Application::GetMemoryUsage() {
+#ifdef WIN32
         PROCESS_MEMORY_COUNTERS_EX pmc;
 
         GetProcessMemoryInfo(GetCurrentProcess(), (PROCESS_MEMORY_COUNTERS *)&pmc, sizeof(pmc));
 
         return pmc.PrivateUsage;
-    #else
+#else
         std::ifstream file("/proc/self/status");
         std::string line;
         uint64_t memoryUsage = 0;
@@ -226,6 +225,6 @@ namespace Exodia {
         }
 
         return memoryUsage;
-    #endif
+#endif
     }
 }; // namespace Exodia
