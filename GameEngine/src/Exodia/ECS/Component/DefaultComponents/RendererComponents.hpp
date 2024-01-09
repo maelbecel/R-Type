@@ -105,8 +105,6 @@ namespace Exodia {
                 bool hasTexture = (Texture != nullptr);
                 buffer.Write(&hasTexture, sizeof(bool));
 
-
-
                 if (Texture) {
                     buffer.Resize(buffer.Size + sizeof(Texture->GetAssetHandle()) + sizeof(Texture->GetCoords()) +
                                   sizeof(Texture->GetTextureCellSize()) + sizeof(Texture->GetTextureSpriteSize()));
@@ -118,8 +116,7 @@ namespace Exodia {
                     buffer.Write(&Texture->GetTextureCellSize(), sizeof(Texture->GetTextureCellSize()));
                     buffer.Write(&Texture->GetTextureSpriteSize(), sizeof(Texture->GetTextureSpriteSize()));
                 }
-                for (size_t i = 0; i < buffer.Size; i++)
-                {
+                for (size_t i = 0; i < buffer.Size; i++) {
                     std::cout << (int)buffer.Data[i] << " ";
                 }
                 std::cout << std::endl;
@@ -140,8 +137,7 @@ namespace Exodia {
                 Memcopy(&TilingFactor, data.Data + offset, sizeof(TilingFactor));
                 offset += sizeof(TilingFactor);
 
-                for (size_t i = offset; i < offset + sizeof(bool); i++)
-                {
+                for (size_t i = offset; i < offset + sizeof(bool); i++) {
                     std::cout << (int)data.Data[i] << " ";
                 }
                 std::cout << std::endl;

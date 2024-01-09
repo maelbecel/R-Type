@@ -41,7 +41,8 @@ namespace RType {
 
         ComponentHandle<SpriteRendererComponent> sprite = HandleEntity->AddComponent<SpriteRendererComponent>();
 
-        sprite.Get().Texture = SubTexture2D::CreateFromCoords(BULLET, {8, 9.0f}, {16.6666666667f, 17.0f}, {1.0f, 1.0f});//anim.Frames[0];
+        sprite.Get().Texture =
+            SubTexture2D::CreateFromCoords(BULLET, {8, 9.0f}, {16.6666666667f, 17.0f}, {1.0f, 1.0f}); // anim.Frames[0];
     }
 
     void BulletEnnemy::OnCreate() {
