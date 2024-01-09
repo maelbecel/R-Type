@@ -31,6 +31,8 @@ namespace RType {
         // -- Scene System -- //
         _Scene->RegisterSystem(new AnimationSystem());
         _Scene->RegisterSystem(new FadeSystem());
+        _Scene->RegisterSystem(new ParticleSystem());
+        _Scene->RegisterSystem(new MovingSystem());
 
         // -- Resizing the viewport -- //
         _Scene->OnViewportResize(Application::Get().GetWindow().GetWidth(), Application::Get().GetWindow().GetHeight());
@@ -70,17 +72,28 @@ namespace RType {
     }
 
     bool MenuScene::OnKeyPressedEvent(KeyPressedEvent &event) {
-        Entity *menuHandler = _Scene->GetEntityByName("MenuHandler");
+        /*GameObject menuHandler = _Scene->GetEntityByName("MenuHandler");
 
-        if (menuHandler) {
-            auto script = menuHandler->GetComponent<ScriptComponent>();
+        if (menuHandler.GetEntity()) {
+            auto &script = menuHandler.GetComponent<ScriptComponent>();
 
-            if (script && script.Get().Instance != nullptr) {
-                script.Get().Instance->OnKeyPressed(event.GetKeyCode());
+            if (script.Instance != nullptr) {
+                script.Instance->OnKeyPressed(event.GetKeyCode());
 
                 return true;
             }
         }
-        return false;
+        return false;*/
+
+        _Scene->GetWorldPtr()->ForEach<ScriptComponent>([&](Entity *entity, auto script) {
+            auto &sc = script.Get(); // sc = Script Component
+
+            if (sc.Instance != nullptr)
+                sc.Instance->OnKeyPressed(event.GetKeyCode());
+
+            (void)entity;
+        });
+
+        return true;
     }
 }; // namespace RType

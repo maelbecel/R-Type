@@ -9,7 +9,7 @@
 #include "OrthographicCameraController.hpp"
 
 // Exodia Debug
-#include "Debug/Profiling.hpp"
+#include "Exodia-Debug.hpp"
 
 // Exodia Core
 #include "Core/Application/Application.hpp"

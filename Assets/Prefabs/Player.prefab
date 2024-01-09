@@ -1,0 +1,40 @@
+Prefab: Player
+TransformComponent:
+    Translation: [0, 0, 0]
+    Rotation: [0, 0, 0]
+    Scale: [1, 1, 1]
+Entities:
+  - Entity: 87451251541121
+    TagComponent:
+      Tag: SpaceShip
+    TransformComponent:
+      Translation: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 0.5, 1]
+    Health:
+      MaxHealth: 1
+      CurrentHealth: 1
+    BoxCollider2DComponent:
+      Offset: [0, 0]
+      Size: [0.5, 0.5]
+      Mask: 0xFFFFFFFF
+    RigidBody2DComponent:
+      BodyType: Dynamic
+      Velocity: [0, 0]
+      GravityScale: 0
+      Mass: 0
+    ScriptComponent:
+      Name: Player
+  - Entity: 845120051210414
+    TagComponent:
+      Tag: PlayerID
+    TransformComponent:
+      Translation: [0, 1, 0]
+      Rotation: [0, 0, 0]
+      Scale: [0.25, 0.25, 1]
+    TextRendererComponent:
+      Text: Player
+      Color: [1, 1, 1, 1]
+      Font: 45121874124124
+      Kerning: 0
+      LineSpacing: 0

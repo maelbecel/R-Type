@@ -12,7 +12,7 @@
 #include "Renderer/Camera/OrthographicCamera.hpp"
 
 // Exodia Core
-#include "Core/Time/Timestep.hpp"
+#include "Exodia-Utils.hpp"
 
 // Exodia Events
 #include "Events/ApplicationEvent.hpp"

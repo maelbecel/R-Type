@@ -12,7 +12,7 @@
 #include "Renderer/Renderer/RendererAPI.hpp"
 
 // Exodia Utils
-#include "Utils/Memory.hpp"
+#include "Exodia-Utils.hpp"
 
 // GLM include
 #include <glm/glm.hpp>

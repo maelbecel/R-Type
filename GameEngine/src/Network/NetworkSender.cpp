@@ -6,7 +6,7 @@
 */
 
 #include "Network.hpp"
-#include "Utils/Memory.hpp"
+#include "Exodia-Utils.hpp"
 
 namespace Exodia::Network {
     /**

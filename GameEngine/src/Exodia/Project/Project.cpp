@@ -10,14 +10,14 @@
 #include "Project/ProjectSerializer.hpp"
 
 // Exodia ECS includes
-#include "ECS/Component/Components.hpp"
-#include "ECS/Component/ComponentContainer.hpp"
+#include "Scene/SceneHeaders.hpp"
+#include "Exodia-ECS.hpp"
 
 // Exodia Script includes
 #include "Script/Interface/ScriptableEntity.hpp"
 
 // Exodia Utils includes
-#include "Utils/Assert.hpp"
+#include "Exodia-Debug.hpp"
 
 namespace Exodia {
 
@@ -85,6 +85,10 @@ namespace Exodia {
 
         RegisterComponent("MusicComponent", [](Buffer data) -> IComponentContainer * {
             return new ComponentContainer<MusicComponent>(data);
+        });
+
+        RegisterComponent("ParticleComponent", [](Buffer data) -> IComponentContainer * {
+            return new ComponentContainer<ParticleComponent>(data);
         });
 
         // -- Registering the script factories -- //

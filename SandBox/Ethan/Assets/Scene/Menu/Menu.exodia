@@ -114,3 +114,13 @@ Entities:
       Font: 45121874124124
       Kerning: 0
       LineSpacing: 0
+
+  - Entity: 4512011102411212
+    TagComponent:
+      Tag: Particle
+    TransformComponent:
+      Translation: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    ScriptComponent:
+      Name: ParticleController

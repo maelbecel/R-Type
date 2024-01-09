@@ -11,11 +11,8 @@
 // Exodia Asset includes
 #include "Asset/Asset.hpp"
 
-// Exodia Core includes
-#include "Core/Buffer/Buffer.hpp"
-
 // Exodia Utils
-#include "Utils/Memory.hpp"
+#include "Exodia-Utils.hpp"
 
 // External includes
 #include <cstdint>

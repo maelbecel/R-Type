@@ -19,7 +19,7 @@
 #include "Core/Application/Application.hpp"
 
 // Exodia Debug
-#include "Debug/Profiling.hpp"
+#include "Exodia-Debug.hpp"
 
 // External includes
 #include <glad/glad.h>

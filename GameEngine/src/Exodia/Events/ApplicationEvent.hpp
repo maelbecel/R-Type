@@ -8,9 +8,6 @@
 #ifndef APPLICATIONEVENT_HPP_
 #define APPLICATIONEVENT_HPP_
 
-// Exodia Utils
-#include "Utils/CrossPlatform.hpp"
-
 // Exodia Events
 #include "Events/Event.hpp"
 

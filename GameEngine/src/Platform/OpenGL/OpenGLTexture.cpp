@@ -10,10 +10,10 @@
 #include "OpenGLTextureUtils.hpp"
 
 // Exodia Utils
-#include "Utils/Assert.hpp"
+#include "Exodia-Debug.hpp"
 
 // Exodia Debug
-#include "Debug/Profiling.hpp"
+#include "Exodia-Debug.hpp"
 
 namespace Exodia {
 

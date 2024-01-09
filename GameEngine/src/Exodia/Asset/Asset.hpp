@@ -31,5 +31,6 @@
 #include "Exodia/Asset/Importer/SceneImporter.hpp"
 #include "Exodia/Asset/Importer/SoundImporter.hpp"
 #include "Exodia/Asset/Importer/FontImporter.hpp"
+#include "Exodia/Asset/Importer/PrefabsImporter.hpp"
 
 #endif /* !ASSET_HPP_ */

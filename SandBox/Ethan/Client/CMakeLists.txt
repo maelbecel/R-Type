@@ -68,6 +68,10 @@ include_directories(${INCLUDE_DIRS})
 add_executable(r-type_game ${SOURCES})
 
 target_link_libraries(r-type_game PRIVATE
+    Exodia-Tools
+    Exodia-Debug
+    Exodia-ECS
+
     GameEngine
     Game
     glad::glad
@@ -85,6 +89,11 @@ target_link_libraries(r-type_game PRIVATE
     FreeALUT::alut
 )
 
+target_include_directories(r-type_game PRIVATE
+    ${CMAKE_BINARY_DIR}/../Library/Debug/src/
+    ${CMAKE_BINARY_DIR}/../Library/Tools/src/
+    ${CMAKE_BINARY_DIR}/../Library/Entity-Component-System/src
+)
 target_include_directories(r-type_game PRIVATE ${Stb_INCLUDE_DIR})
 target_include_directories(r-type_game PRIVATE ${CMAKE_BINARY_DIR}/_deps/imgui-src)
 

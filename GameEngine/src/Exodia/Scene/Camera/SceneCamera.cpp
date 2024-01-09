@@ -9,7 +9,7 @@
 #include "SceneCamera.hpp"
 
 // Exodia Utils includes
-#include "Utils/Assert.hpp"
+#include "Exodia-Debug.hpp"
 
 // External includes
 #include <glm/gtc/matrix_transform.hpp>

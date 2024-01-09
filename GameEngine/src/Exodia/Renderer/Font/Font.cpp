@@ -13,7 +13,7 @@
 #include "Platform/OpenGL/OpenGLFont.hpp"
 
 // Exodia Utils includes
-#include "Utils/Assert.hpp"
+#include "Exodia-Debug.hpp"
 
 namespace Exodia {
 

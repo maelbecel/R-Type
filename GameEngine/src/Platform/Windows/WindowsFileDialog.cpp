@@ -9,7 +9,7 @@
 #include "Utils/PlatformUtils.hpp"
 
 // Exodia Debug
-#include "Debug/Logs.hpp"
+#include "Exodia-Debug.hpp"
 
 // Native File Dialog include
 #include <nfd.h>

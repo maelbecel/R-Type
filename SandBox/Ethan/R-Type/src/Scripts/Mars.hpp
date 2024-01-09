@@ -28,7 +28,7 @@ namespace RType {
         void OnCreate() override;
 
       private:
-        void GenerateDebris(Exodia::World *world);
+        void GenerateDebris(Exodia::Scene *scene);
     };
 }; // namespace RType
 

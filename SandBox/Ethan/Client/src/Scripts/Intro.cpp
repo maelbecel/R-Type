@@ -59,17 +59,15 @@ namespace RType {
             _Time = 0.0f;
             _IsLoad = true;
 
-            auto anim = GetComponent<AnimationComponent>();
-            auto sprite = GetComponent<SpriteRendererComponent>();
+            auto anim = HandleEntity.GetEntity()->GetComponent<AnimationComponent>();
+            auto &sprite = GetComponent<SpriteRendererComponent>();
 
-            if (!sprite)
-                sprite = HandleEntity->AddComponent<SpriteRendererComponent>();
             if (!anim) {
                 _Animations[0].IsPlaying = true;
 
-                anim = HandleEntity->AddComponent<AnimationComponent>(_Animations[0]);
+                anim = HandleEntity.GetEntity()->AddComponent<AnimationComponent>(_Animations[0]);
 
-                sprite.Get().Texture = anim.Get().Frames[0];
+                sprite.Texture = anim.Get().Frames[0];
 
                 PressStartFactory();
             } else {
@@ -78,7 +76,7 @@ namespace RType {
                     _Animations[1].IsPlaying = true;
 
                     anim.Get() = _Animations[1];
-                    sprite.Get().Texture = anim.Get().Frames[0];
+                    sprite.Texture = anim.Get().Frames[0];
 
                     _IsLiftIn = false;
                 } else {
@@ -86,7 +84,7 @@ namespace RType {
                     _Animations[1].IsPlaying = false;
 
                     anim.Get() = _Animations[0];
-                    sprite.Get().Texture = anim.Get().Frames[0];
+                    sprite.Texture = anim.Get().Frames[0];
 
                     _IsLiftIn = true;
                 }
@@ -101,28 +99,28 @@ namespace RType {
 
         // If start is pressed, we fade out the background and the text for doing a transition to the menu
         if (keycode == Key::ENTER) {
-            auto fade = GetComponent<FadeComponent>();
+            auto fade = HandleEntity.GetEntity()->GetComponent<FadeComponent>();
 
             if (!fade)
-                fade = HandleEntity->AddComponent<FadeComponent>(0.0f, 0.4f, 0.4f);
+                fade = HandleEntity.GetEntity()->AddComponent<FadeComponent>(0.0f, 0.4f, 0.4f);
 
             fade.Get().ShouldFadeIn = false;
             fade.Get().ShouldFadeOut = true;
             fade.Get().Repeat = false;
 
-            World *world = HandleEntity->GetWorld();
+            Scene *scene = HandleEntity.GetScene();
 
-            if (!world)
+            if (!scene)
                 return;
-            Entity *entity = world->GetEntityByTag("Press Start");
+            GameObject entity = scene->GetEntityByName("Press Start");
 
-            if (!entity)
+            if (!entity.GetEntity())
                 return;
 
-            auto fadeText = entity->GetComponent<FadeComponent>();
+            auto fadeText = entity.GetEntity()->GetComponent<FadeComponent>();
 
             if (!fadeText)
-                fadeText = entity->AddComponent<FadeComponent>(0.0f, 0.4f, 0.4f);
+                fadeText = entity.GetEntity()->AddComponent<FadeComponent>(0.0f, 0.4f, 0.4f);
 
             fadeText.Get().ShouldFadeIn = false;
             fadeText.Get().ShouldFadeOut = true;
@@ -131,27 +129,24 @@ namespace RType {
     }
 
     void Intro::PressStartFactory() {
-        World *world = HandleEntity->GetWorld();
+        Scene *scene = HandleEntity.GetScene();
 
-        if (!world)
+        if (!scene)
             return;
-        Entity *entity = world->CreateNewEntity("Press Start");
+        GameObject entity = scene->CreateNewEntity("Press Start");
 
-        auto transform = entity->GetComponent<TransformComponent>();
+        TransformComponent &transform = entity.GetComponent<TransformComponent>();
 
-        if (!transform)
-            transform = entity->AddComponent<TransformComponent>();
+        transform.Translation = {-1.25f, 0.00f, 0.0f};
+        transform.Scale = {0.25f, 0.25f, 1.0f};
 
-        transform.Get().Translation = {-1.25f, 0.00f, 0.0f};
-        transform.Get().Scale = {0.25f, 0.25f, 1.0f};
+        TextRendererComponent &text = entity.AddComponent<TextRendererComponent>("PRESS START");
 
-        auto text = entity->AddComponent<TextRendererComponent>("PRESS START");
+        text.Font = CLASSIC;
 
-        text.Get().Font = CLASSIC;
+        FadeComponent &fade = entity.AddComponent<FadeComponent>(0.0f, 0.4f, 0.4f);
 
-        auto fade = entity->AddComponent<FadeComponent>(0.0f, 0.4f, 0.4f);
-
-        fade.Get().ShouldFadeIn = true;
-        fade.Get().Repeat = true;
+        fade.ShouldFadeIn = true;
+        fade.Repeat = true;
     }
-} // namespace RType
+}; // namespace RType
