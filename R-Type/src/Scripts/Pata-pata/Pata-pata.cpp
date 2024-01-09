@@ -192,7 +192,6 @@ namespace RType {
         float &mytime = clock.Get().ElapsedTime;
 
         if (_State == State::ALIVE) {
-            mytime += ts.GetSeconds();
             body.Get().Velocity.y = (float)(amplitude * sin(frequency * mytime * PI));
         }
     }

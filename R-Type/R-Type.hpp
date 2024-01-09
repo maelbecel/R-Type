@@ -27,6 +27,7 @@
 #include "src/Scripts/Star/Star.hpp"
 
 #include "src/System/AnimationSystem.hpp"
+#include "src/System/ClockSystem.hpp"
 
 #include "src/Event/EntityEventSubscriber.hpp"
 #include "src/Event/TakeDamage.hpp"

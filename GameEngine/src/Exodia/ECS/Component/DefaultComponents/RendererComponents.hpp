@@ -106,7 +106,6 @@ namespace Exodia {
                 buffer.Write(&hasTexture, sizeof(bool));
 
                 if (Texture) {
-                    EXODIA_CORE_ERROR("Has texture {0}", hasTexture);
                     buffer.Resize(buffer.Size + sizeof(Texture->GetAssetHandle()) + sizeof(Texture->GetCoords()) +
                                   sizeof(Texture->GetTextureCellSize()) + sizeof(Texture->GetTextureSpriteSize()));
 
@@ -147,10 +146,8 @@ namespace Exodia {
                 else
                     hasTexture = false;
                 offset += sizeof(bool);
-                std::cout << "Has texture " << hasTexture << std::endl;
 
                 if (!hasTexture) {
-                    EXODIA_CORE_ERROR("Hasnt texture");
                     return;
                 }
                 Exodia::AssetHandle assetHandle;
