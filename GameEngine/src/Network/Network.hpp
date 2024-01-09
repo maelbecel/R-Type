@@ -27,7 +27,8 @@ namespace Exodia {
 #define COMMAND_NETWORK(x)                                                                                             \
     std::bind(&x, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4);
 #define RECEIVE_ARG                                                                                                    \
-    const std::vector<char> message, size_t size, std::shared_ptr<Connection> senderConnection, Exodia::Network::Header header
+    const std::vector<char> message, size_t size, std::shared_ptr<Connection> senderConnection,                        \
+        Exodia::Network::Header header
 #define STRING_FROM_ENDPOINT(x) x.address().to_string() + ":" + std::to_string(x.port())
 
         enum class NetworkType { NONE, CLIENT, SERVER, SINGLEPLAYER };
@@ -164,7 +165,8 @@ namespace Exodia {
              * @return void
              */
             void connect(const std::string &ip, short port) {
-                _server_connection = std::make_shared<Connection>(asio::ip::udp::endpoint(asio::ip::address::from_string(ip), port));
+                _server_connection =
+                    std::make_shared<Connection>(asio::ip::udp::endpoint(asio::ip::address::from_string(ip), port));
             }
 
             int64_t GetIndexPacketNeedAck(std::shared_ptr<Connection> connection) {
@@ -175,9 +177,7 @@ namespace Exodia {
                 return -1;
             }
 
-            World *GetWorld() {
-                return _world;
-            }
+            World *GetWorld() { return _world; }
 
           private:
             uint64_t id = 0;

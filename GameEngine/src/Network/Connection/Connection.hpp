@@ -25,9 +25,7 @@ struct NetworkInfo {
 
 class Connection {
   public:
-    Connection(asio::ip::udp::endpoint endpoint) { 
-        _endpoint = endpoint; 
-    };
+    Connection(asio::ip::udp::endpoint endpoint) { _endpoint = endpoint; };
 
     Connection(asio::ip::udp::endpoint endpoint, uint64_t worldId) {
         _endpoint = endpoint;
