@@ -35,7 +35,7 @@ namespace FlappyBird {
 
         void OnKeyPressed(int keyCode);
 
-        int GetScore() const { return score;};
+        int GetScore() const { return score; };
 
         ///////////////////////
         // Getters & Setters //
