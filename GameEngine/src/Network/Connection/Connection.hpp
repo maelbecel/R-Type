@@ -44,9 +44,9 @@ class Connection {
         }
     }
 
-    void RemovePacketNeedAck(uint64_t id) { 
+    void RemovePacketNeedAck(uint64_t id) {
         try {
-            _packetNeedAck.erase(id); 
+            _packetNeedAck.erase(id);
         } catch (std::exception &e) {
             EXODIA_CORE_ERROR("Error: {0}", e.what());
         }
