@@ -78,7 +78,7 @@ namespace FlappyBird {
 
         switch (_State) {
         case GameState::Play: {
-            std::string score = std::string("Score : "); // + std::to_string(_Level.GetPlayer().GetScore());
+            std::string score = std::string("Score : " + std::to_string(_Level.GetScore()));
 
             ImGui::GetForegroundDrawList()->AddText(ImGui::GetFont(), 48.0f, ImGui::GetWindowPos(), IM_COL32_WHITE,
                                                     score.c_str());
@@ -113,7 +113,7 @@ namespace FlappyBird {
             pos.x += 200.0f;
             pos.y += 150.0f;
 
-            std::string score = std::string("Score : "); // + std::to_string(_Level.GetPlayer().GetScore());
+            std::string score = std::string("Score : " + std::to_string(_Level.GetScore()));
 
             ImGui::GetForegroundDrawList()->AddText(ImGui::GetFont(), 120.0f, pos, IM_COL32_WHITE, score.c_str());
             break;

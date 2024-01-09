@@ -37,6 +37,8 @@ namespace FlappyBird {
             return;
         }
 
+        score = (_Scene->GetEntityByName("SpaceShip").GetComponent<TransformComponent>().Translation.x) / 20.0f;
+
         auto spike_haut = _Scene->GetEntityByName("spike_haut");
         auto spike_bas = _Scene->GetEntityByName("spike_bas");
 

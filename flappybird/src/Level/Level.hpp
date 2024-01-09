@@ -35,6 +35,8 @@ namespace FlappyBird {
 
         void OnKeyPressed(int keyCode);
 
+        int GetScore() const { return score;};
+
         ///////////////////////
         // Getters & Setters //
         ///////////////////////
@@ -49,6 +51,8 @@ namespace FlappyBird {
         Ref<Exodia::Prefabs> _PrefabObstacle;
         bool _GameOver;
         float _mytime = 0.0f;
+
+        int score = 0;
 
         Exodia::EditorCamera _EditorCamera;
 
