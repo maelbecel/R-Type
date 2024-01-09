@@ -77,6 +77,7 @@ namespace RType {
         Scenes[GAME]->RegisterSystem(new AnimationSystem());
         Scenes[GAME]->RegisterSystem(new MovingSystem(1.5f));
         Scenes[GAME]->RegisterSystem(collisionSystem);
+        Scenes[GAME]->RegisterSystem(new ClockSystem());
         // Scenes[GAME]->Subscribe<Events::OnEntityCreated>(subscribe);
         // Scenes[GAME]->Subscribe<Events::OnEntityDestroyed>(subscribe);
         Scenes[GAME]->Subscribe<Exodia::Events::OnCollisionEntered>(collisionSystem);

@@ -132,8 +132,10 @@ namespace Exodia {
         RType::EntityEventSubscriber *subscribe = new RType::EntityEventSubscriber(_Network);
         CollisionSystem *collisionSystem = new CollisionSystem();
         RType::TakeDamageSubscriber *takeDamage = new RType::TakeDamageSubscriber();
+        ClockSystem *clockSystem = new ClockSystem();
 
         systems.push_back(collisionSystem);
+        systems.push_back(clockSystem);
 
         InitScene(GAME, systems);
 

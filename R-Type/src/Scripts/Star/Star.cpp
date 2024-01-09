@@ -64,16 +64,14 @@ namespace RType {
     }
 
     void Star::OnUpdate(Timestep ts) {
-        ComponentHandle<Clock> clock = GetComponent<Clock>();
         ComponentHandle<TransformComponent> transform = GetComponent<TransformComponent>();
         ComponentHandle<CircleRendererComponent> circle = GetComponent<CircleRendererComponent>();
         World *world = HandleEntity->GetWorld();
-        if (!transform || !circle || !clock || !world) {
-            EXODIA_WARN("No transform, circle, clock or world");
+        if (!transform || !circle || !world) {
+            EXODIA_WARN("No transform, circle or world");
             return;
         }
 
-        float &mytime = clock.Get().ElapsedTime;
         Entity *camera = world->GetEntityByTag("Camera");
         if (!camera) {
             EXODIA_WARN("No camera");
@@ -85,8 +83,6 @@ namespace RType {
             EXODIA_WARN("Camera has no TransformComponent");
             return;
         }
-
-        mytime += ts.GetMilliseconds();
 
         CircleRendererComponent &cc = circle.Get();
 
