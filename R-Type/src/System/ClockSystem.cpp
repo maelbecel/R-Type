@@ -19,9 +19,7 @@ namespace RType {
     void ClockSystem::Update(World *world, Timestep ts) {
 
         world->LockMutex();
-        world->ForEach<Clock>([&](Entity *entity, auto clock) {
-            clock->ElapsedTime += ts;
-        });
+        world->ForEach<Clock>([&](Entity *entity, auto clock) { clock->ElapsedTime += ts; });
         world->UnlockMutex();
     }
 }; // namespace RType
