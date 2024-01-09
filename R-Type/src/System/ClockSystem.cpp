@@ -21,8 +21,6 @@ namespace RType {
         world->LockMutex();
         world->ForEach<Clock>([&](Entity *entity, auto clock) {
             clock->ElapsedTime += ts;
-            EXODIA_INFO("ClockSystem: ElapsedTime: {0} from entity {1}", clock->ElapsedTime,
-                        entity->GetComponent<TagComponent>().Get().Tag);
         });
         world->UnlockMutex();
     }

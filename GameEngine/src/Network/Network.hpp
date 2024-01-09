@@ -167,7 +167,7 @@ namespace Exodia {
                 _server_connection = std::make_shared<Connection>(asio::ip::udp::endpoint(asio::ip::address::from_string(ip), port));
             }
 
-            int64_t GetIndexPacketNeedAck(Connection connection) {
+            int64_t GetIndexPacketNeedAck(std::shared_ptr<Connection> connection) {
                 for (size_t i = 0; i < _packetNeedAck.size(); i++) {
                     if (_packetNeedAck[i].first == connection)
                         return i;
@@ -188,7 +188,7 @@ namespace Exodia {
             NetworkType _networkType = NetworkType::NONE;
             IOContextManager &_ioContextManager;
             std::vector<std::pair<std::pair<uint32_t, bool>, asio::ip::udp::endpoint>> _events;
-            std::vector<std::pair<Connection, std::unordered_map<uint64_t, Packet>>> _packetNeedAck;
+            std::vector<std::pair<std::shared_ptr<Connection>, std::unordered_map<uint64_t, Packet>>> _packetNeedAck;
 
         }; // class Network
 

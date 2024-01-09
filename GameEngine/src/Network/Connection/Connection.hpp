@@ -46,7 +46,13 @@ class Connection {
         }
     }
 
-    void RemovePacketNeedAck(uint64_t id) { _packetNeedAck.erase(id); }
+    void RemovePacketNeedAck(uint64_t id) { 
+        try {
+            _packetNeedAck.erase(id); 
+        } catch (std::exception &e) {
+            EXODIA_CORE_ERROR("Error: {0}", e.what());
+        }
+    }
 
     std::unordered_map<uint64_t, std::shared_ptr<Exodia::Network::Packet>> &GetPacketNeedAck() {
         return _packetNeedAck;
