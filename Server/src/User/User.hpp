@@ -13,13 +13,13 @@
 namespace Exodia {
     class User {
       public:
-        User(Connection &connection);
-        User(Connection &connection, Entity *pawn);
+        User(std::shared_ptr<Connection> connection);
+        User(std::shared_ptr<Connection> connection, Entity *pawn);
         ~User();
 
-        Connection GetConnection() const { return _Connection; }
+        std::shared_ptr<Connection> GetConnection() const { return _Connection; }
 
-        void SetConnection(Connection connection) { _Connection = connection; }
+        void SetConnection(std::shared_ptr<Connection> connection) { _Connection = connection; }
 
         Entity *GetPawn() const { return _Pawn; }
 
@@ -27,7 +27,7 @@ namespace Exodia {
 
       protected:
       private:
-        Connection _Connection;
+        std::shared_ptr<Connection> _Connection;
         Entity *_Pawn;
     };
 };     // namespace Exodia

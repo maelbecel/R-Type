@@ -79,9 +79,9 @@ namespace Exodia {
             if (_Network.GetConnections().empty())
                 EXODIA_TRACE("\t-> No clients connected");
 
-            for (std::pair<const std::string, Connection> connection : _Network.GetConnections())
-                EXODIA_TRACE("\t-> IP '{0}' : Port '{1}'", connection.second.GetEndpoint().port(),
-                             connection.second.GetEndpoint().address().to_string());
+            for (std::pair<const std::string, std::shared_ptr<Connection>> connection : _Network.GetConnections())
+                EXODIA_TRACE("\t-> IP '{0}' : Port '{1}'", connection.second->GetEndpoint().port(),
+                             connection.second->GetEndpoint().address().to_string());
             EXODIA_TRACE("\nEntities '{0}'", _WorldNetwork->GetCount());
         } else if (command == "packet")
             _Network.SendPacketInfo();
@@ -304,7 +304,7 @@ namespace Exodia {
      *
      * @return a boolean value, which indicates whether the client is new or not.
      */
-    bool Server::IsClientNew(std::pair<const std::string, Connection> connection) {
+    bool Server::IsClientNew(std::pair<const std::string, std::shared_ptr<Connection>> connection) {
         bool newClient = true;
 
         for (User user : _Users) {
@@ -348,11 +348,11 @@ namespace Exodia {
      */
     void Server::CheckForNewClients() {
         Entity *player = nullptr;
-        std::map<std::string, Connection> connections = _Network.GetConnections();
+        std::map<std::string, std::shared_ptr<Connection>> connections = _Network.GetConnections();
 
         if (connections.empty())
             return;
-        for (std::pair<const std::string, Connection> connection : connections) {
+        for (std::pair<const std::string, std::shared_ptr<Connection>> connection : connections) {
             if (IsClientNew(connection)) {
                 uint32_t userID = (uint32_t)_Users.size();
                 Entity *entity = Scenes[GAME]->CreateEntity("Player_" + std::to_string(userID));
@@ -381,8 +381,8 @@ namespace Exodia {
         for (auto connection : _Network.GetConnections()) {
             for (auto user : _Users) {
                 if (user.GetConnection() == connection.second) {
-                    if (connection.second.GetNetworkInfo().lastPacketReceived->GetHeader().getTimestamp() <
-                        connection.second.GetNetworkInfo().lastPacketSent->GetHeader().getTimestamp() - 10000) {
+                    if (connection.second->GetNetworkInfo().lastPacketReceived->GetHeader().getTimestamp() <
+                        connection.second->GetNetworkInfo().lastPacketSent->GetHeader().getTimestamp() - 10000) {
                         EXODIA_CORE_INFO("Client disconnected");
                         _Network.SendDisconnect();
                         _Network.Disconnect(connection.second);

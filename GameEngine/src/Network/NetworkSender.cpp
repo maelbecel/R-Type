@@ -19,9 +19,9 @@ namespace Exodia::Network {
     void Network::SendPacket(std::shared_ptr<Packet> packet) {
         if (_networkType == NetworkType::SERVER) {
             for (auto &connection : _connections)
-                connection.second.SendPacket(_socket, packet);
+                connection.second->SendPacket(_socket, packet);
         } else {
-            _server_connection.SendPacket(_socket, packet);
+            _server_connection->SendPacket(_socket, packet);
         }
     }
 
@@ -46,7 +46,7 @@ namespace Exodia::Network {
         Buffer buffer(0);
 
         packet->SetContent(buffer);
-        _server_connection.SendPacket(_socket, packet);
+        _server_connection->SendPacket(_socket, packet);
     }
 
     /**
@@ -60,26 +60,26 @@ namespace Exodia::Network {
 
         if (_networkType == NetworkType::SERVER) {
             for (auto &connection : _connections) {
-                int32_t received = connection.second.GetReceivedPacket();
-                int32_t sent = connection.second.GetSendPacket();
+                int32_t received = connection.second->GetReceivedPacket();
+                int32_t sent = connection.second->GetSendPacket();
 
                 buffer.Write(&received, sizeof(int));
                 buffer.Write(&sent, sizeof(int));
                 packet->SetContent(buffer);
-                connection.second.SetReceivedPacket(0);
-                connection.second.SetSendPacket(0);
-                connection.second.SendPacket(_socket, packet);
+                connection.second->SetReceivedPacket(0);
+                connection.second->SetSendPacket(0);
+                connection.second->SendPacket(_socket, packet);
             }
         } else {
-            int32_t received = _server_connection.GetReceivedPacket();
-            int32_t sent = _server_connection.GetSendPacket();
+            int32_t received = _server_connection->GetReceivedPacket();
+            int32_t sent = _server_connection->GetSendPacket();
 
             buffer.Write(&received, sizeof(int));
             buffer.Write(&sent, sizeof(int));
             packet->SetContent(buffer);
-            _server_connection.SetReceivedPacket(0);
-            _server_connection.SetSendPacket(0);
-            _server_connection.SendPacket(_socket, packet);
+            _server_connection->SetReceivedPacket(0);
+            _server_connection->SetSendPacket(0);
+            _server_connection->SendPacket(_socket, packet);
         }
     }
 
@@ -240,8 +240,8 @@ namespace Exodia::Network {
     void Network::ResendNeedAck() {
         if (_networkType == NetworkType::SERVER) {
             for (auto &connection : _connections)
-                connection.second.ResendNeedAck(_socket);
+                connection.second->ResendNeedAck(_socket);
         } else
-            _server_connection.ResendNeedAck(_socket);
+            _server_connection->ResendNeedAck(_socket);
     }
 }; // namespace Exodia::Network

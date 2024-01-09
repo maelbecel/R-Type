@@ -40,7 +40,7 @@ namespace Exodia {
         void InitEntities();
         void WaitForClient();
         void HandleEvent(std::pair<std::pair<uint32_t, bool>, asio::ip::udp::endpoint> event);
-        bool IsClientNew(std::pair<const std::string, Connection> connection);
+        bool IsClientNew(std::pair<const std::string, std::shared_ptr<Connection>> connection);
         void SendComponents(SceneType scene);
 
         ////////////////

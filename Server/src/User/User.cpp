@@ -9,12 +9,12 @@
 
 namespace Exodia {
 
-    User::User(Connection &connection) {
+    User::User(std::shared_ptr<Connection> connection) {
         _Connection = connection;
         _Pawn = nullptr;
     }
 
-    User::User(Connection &connection, Entity *pawn) {
+    User::User(std::shared_ptr<Connection> connection, Entity *pawn) {
         _Connection = connection;
         _Pawn = pawn;
     }
