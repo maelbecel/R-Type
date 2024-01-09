@@ -352,7 +352,7 @@ namespace Exodia::Network {
         commands[DISCONNECT] = COMMAND_NETWORK(Network::ReceiveDisconnect); // Reject client connection
         commands[EVENT] = COMMAND_NETWORK(Network::ReceiveEvent);           // Send an event
 
-        std::shared_ptr<Connection>senderConnection = _server_connection;
+        std::shared_ptr<Connection> senderConnection = _server_connection;
 
         if (header.getCommand() == CONNECT) {
             senderConnection = std::make_shared<Connection>(senderEndpoint);
