@@ -39,7 +39,7 @@ class Connection {
     };
 
     void ResendNeedAck(Exodia::Network::UDPSocket &socket) {
-        for (auto &packet : _packetNeedAck) {
+        for (auto packet : _packetNeedAck) {
             SendPacketAck(socket, packet.second);
         }
     }

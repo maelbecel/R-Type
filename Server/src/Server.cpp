@@ -351,7 +351,6 @@ namespace Exodia {
     void Server::CheckForNewClients() {
         Entity *player = nullptr;
         std::map<std::string, std::shared_ptr<Connection>> connections = _Network.GetConnections();
-
         if (connections.empty())
             return;
         for (std::pair<const std::string, std::shared_ptr<Connection>> connection : connections) {
