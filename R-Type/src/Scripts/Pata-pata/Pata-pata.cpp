@@ -74,6 +74,7 @@ namespace RType {
         ComponentHandle<SpriteRendererComponent> sprite = GetComponent<SpriteRendererComponent>();
         ComponentHandle<AnimationComponent> anim = GetComponent<AnimationComponent>();
 
+
         if (!sprite)
             sprite = HandleEntity->AddComponent<SpriteRendererComponent>();
 
