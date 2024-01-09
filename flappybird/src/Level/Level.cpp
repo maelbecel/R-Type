@@ -44,6 +44,7 @@ namespace FlappyBird {
 
             float rand = Random::Float() * 7.0f - 4.0f;
             float diff = 7.0f;
+            glm::vec4 color = {Random::Float(), Random::Float(), Random::Float(), 1};
 
             auto &ts_h = spike_haut.GetComponent<TransformComponent>();
 
@@ -51,7 +52,10 @@ namespace FlappyBird {
                 _Scene->GetEntityByName("SpaceShip").GetComponent<TransformComponent>().Translation.x - 15.0f) {
                 ts_h.Translation.x += 40.0f;
                 ts_h.Translation.y = rand + diff;
+                auto &sp_h = spike_haut.GetComponent<SpriteRendererComponent>();
+                sp_h.Color = color;
             }
+
 
             auto &ts_b = spike_bas.GetComponent<TransformComponent>();
 
@@ -59,7 +63,10 @@ namespace FlappyBird {
                 _Scene->GetEntityByName("SpaceShip").GetComponent<TransformComponent>().Translation.x - 15.0f) {
                 ts_b.Translation.x += 40.0f;
                 ts_b.Translation.y = rand - diff - 3.0f;
+                auto &sp_b = spike_bas.GetComponent<SpriteRendererComponent>();
+                sp_b.Color = color;
             }
+
         }
 
         auto spike_haut2 = _Scene->GetEntityByName("spike_haut2");
@@ -67,8 +74,9 @@ namespace FlappyBird {
 
         if (spike_haut2 != nullptr && spike_bas2 != nullptr) {
 
-            float rand2 = Random::Float() * 7.0f - 4.0f;
+            float rand2 = Random::Float() * 8.0f - 4.0f;
             float diff2 = 7.0f;
+            glm::vec4 color = {Random::Float(), Random::Float(), Random::Float(), 1};
 
             auto &ts_h2 = spike_haut2.GetComponent<TransformComponent>();
 
@@ -76,7 +84,10 @@ namespace FlappyBird {
                 _Scene->GetEntityByName("SpaceShip").GetComponent<TransformComponent>().Translation.x - 15.0f) {
                 ts_h2.Translation.x += 40.0f;
                 ts_h2.Translation.y = rand2 + diff2;
+                auto &sp_h2 = spike_haut2.GetComponent<SpriteRendererComponent>();
+                sp_h2.Color = color;
             }
+
 
             auto &ts_b2 = spike_bas2.GetComponent<TransformComponent>();
 
@@ -84,7 +95,10 @@ namespace FlappyBird {
                 _Scene->GetEntityByName("SpaceShip").GetComponent<TransformComponent>().Translation.x - 15.0f) {
                 ts_b2.Translation.x += 40.0f;
                 ts_b2.Translation.y = rand2 - diff2 - 3.0f;
+                auto &sp_b2 = spike_bas2.GetComponent<SpriteRendererComponent>();
+                sp_b2.Color = color;
             }
+
         }
 
         _Scene->OnUpdateRuntime(ts);
@@ -111,6 +125,51 @@ namespace FlappyBird {
 
         PrefabsImporter::LoadPrefabs("Assets/Prefabs/FlappyBird.prefab", _Scene);
         PrefabsImporter::LoadPrefabs("Assets/Prefabs/obstacle.prefab", _Scene);
+
+        auto spike_haut = _Scene->GetEntityByName("spike_haut");
+        auto spike_bas = _Scene->GetEntityByName("spike_bas");
+
+        if (spike_haut != nullptr && spike_bas != nullptr) {
+
+            float rand = Random::Float() * 7.0f - 4.0f;
+            float diff = 7.0f;
+            glm::vec4 color = {Random::Float(), Random::Float(), Random::Float(), 1};
+
+            auto &ts_h = spike_haut.GetComponent<TransformComponent>();
+            ts_h.Translation.y = rand + diff;
+            auto &sp_h = spike_haut.GetComponent<SpriteRendererComponent>();
+            sp_h.Color = color;
+
+            auto &ts_b = spike_bas.GetComponent<TransformComponent>();
+            ts_b.Translation.y = rand - diff - 3.0f;
+            auto &sp_b = spike_bas.GetComponent<SpriteRendererComponent>();
+            sp_b.Color = color;
+
+        }
+
+        auto spike_haut2 = _Scene->GetEntityByName("spike_haut2");
+        auto spike_bas2 = _Scene->GetEntityByName("spike_bas2");
+
+        if (spike_haut2 != nullptr && spike_bas2 != nullptr) {
+
+            float rand2 = Random::Float() * 8.0f - 4.0f;
+            float diff2 = 7.0f;
+            glm::vec4 color = {Random::Float(), Random::Float(), Random::Float(), 1};
+
+            auto &ts_h2 = spike_haut2.GetComponent<TransformComponent>();
+
+            ts_h2.Translation.y = rand2 + diff2;
+            auto &sp_h2 = spike_haut2.GetComponent<SpriteRendererComponent>();
+            sp_h2.Color = color;
+
+
+
+            auto &ts_b2 = spike_bas2.GetComponent<TransformComponent>();
+            ts_b2.Translation.y = rand2 - diff2 - 3.0f;
+            auto &sp_b2 = spike_bas2.GetComponent<SpriteRendererComponent>();
+            sp_b2.Color = color;
+
+        }
 
         _Scene->OnViewportResize(Application::Get().GetWindow().GetWidth(), Application::Get().GetWindow().GetHeight());
     }
