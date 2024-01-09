@@ -56,7 +56,6 @@ namespace FlappyBird {
                 sp_h.Color = color;
             }
 
-
             auto &ts_b = spike_bas.GetComponent<TransformComponent>();
 
             if (ts_b.Translation.x <
@@ -66,7 +65,6 @@ namespace FlappyBird {
                 auto &sp_b = spike_bas.GetComponent<SpriteRendererComponent>();
                 sp_b.Color = color;
             }
-
         }
 
         auto spike_haut2 = _Scene->GetEntityByName("spike_haut2");
@@ -88,7 +86,6 @@ namespace FlappyBird {
                 sp_h2.Color = color;
             }
 
-
             auto &ts_b2 = spike_bas2.GetComponent<TransformComponent>();
 
             if (ts_b2.Translation.x <
@@ -98,7 +95,6 @@ namespace FlappyBird {
                 auto &sp_b2 = spike_bas2.GetComponent<SpriteRendererComponent>();
                 sp_b2.Color = color;
             }
-
         }
 
         _Scene->OnUpdateRuntime(ts);
@@ -144,7 +140,6 @@ namespace FlappyBird {
             ts_b.Translation.y = rand - diff - 3.0f;
             auto &sp_b = spike_bas.GetComponent<SpriteRendererComponent>();
             sp_b.Color = color;
-
         }
 
         auto spike_haut2 = _Scene->GetEntityByName("spike_haut2");
@@ -162,13 +157,10 @@ namespace FlappyBird {
             auto &sp_h2 = spike_haut2.GetComponent<SpriteRendererComponent>();
             sp_h2.Color = color;
 
-
-
             auto &ts_b2 = spike_bas2.GetComponent<TransformComponent>();
             ts_b2.Translation.y = rand2 - diff2 - 3.0f;
             auto &sp_b2 = spike_bas2.GetComponent<SpriteRendererComponent>();
             sp_b2.Color = color;
-
         }
 
         _Scene->OnViewportResize(Application::Get().GetWindow().GetWidth(), Application::Get().GetWindow().GetHeight());
