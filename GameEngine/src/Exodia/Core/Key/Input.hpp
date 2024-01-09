@@ -8,9 +8,6 @@
 #ifndef INPUT_HPP_
 #define INPUT_HPP_
 
-// Exodia Utils
-#include "Utils/CrossPlatform.hpp"
-
 // Exodia Key
 #include "Core/Key/KeyCodes.hpp"
 

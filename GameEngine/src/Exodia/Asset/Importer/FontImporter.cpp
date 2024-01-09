@@ -8,7 +8,7 @@
 #include "FontImporter.hpp"
 
 // Exodia Utils
-#include "Utils/Memory.hpp"
+#include "Exodia-Utils.hpp"
 
 // Exodia Project
 #include "Project/Project.hpp"
@@ -17,7 +17,7 @@
 #include "Renderer/Font/Font.hpp"
 
 // Exodia Debug
-#include "Debug/Profiling.hpp"
+#include "Exodia-Debug.hpp"
 
 namespace Exodia {
 

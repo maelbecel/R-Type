@@ -26,126 +26,106 @@ namespace RType {
 
         _Animations.push_back(anim);
 
-        ComponentHandle<SpriteRendererComponent> sprite = HandleEntity->AddComponent<SpriteRendererComponent>();
+        SpriteRendererComponent &sprite = HandleEntity.AddComponent<SpriteRendererComponent>();
 
-        sprite.Get().Texture = anim.Frames[0];
+        sprite.Texture = anim.Frames[0];
     }
 
     void BulletPlayer::OnCreate() {
-        ComponentHandle<TransformComponent> transform = GetComponent<TransformComponent>();
-        ComponentHandle<ParentComponent> parent = GetComponent<ParentComponent>();
-        World *world = HandleEntity->GetWorld();
+        TransformComponent &bullet_tc = GetComponent<TransformComponent>();
+        ParentComponent &parent = GetComponent<ParentComponent>();
+        Scene *scene = HandleEntity.GetScene();
 
-        if (!transform || !parent || !world)
+        if (!scene)
             return;
 
-        Entity *parent_entity = world->GetEntityByID(parent.Get().Parent);
-        TransformComponent &bullet_tc = transform.Get();
+        GameObject parent_entity = scene->GetEntityByUUID(parent.Parent);
 
-        if (parent_entity) {
-            ComponentHandle<TransformComponent> parent_transform = parent_entity->GetComponent<TransformComponent>();
+        if (parent_entity.GetEntity()) {
+            TransformComponent &tc = parent_entity.GetComponent<TransformComponent>();
 
-            if (parent_transform) {
-                TransformComponent &tc = parent_transform.Get();
-
-                bullet_tc.Translation.x = tc.Translation.x + 0.7f;
-                bullet_tc.Translation.y = tc.Translation.y - 0.05f;
-            }
+            bullet_tc.Translation.x = tc.Translation.x + 0.7f;
+            bullet_tc.Translation.y = tc.Translation.y - 0.05f;
         }
 
         bullet_tc.Scale = {0.5f, 0.5f, 0.0f};
 
-        HandleEntity->AddComponent<BoxCollider2DComponent>();
+        HandleEntity.AddComponent<BoxCollider2DComponent>();
 
-        ComponentHandle<RigidBody2DComponent> body = HandleEntity->AddComponent<RigidBody2DComponent>();
+        RigidBody2DComponent &rbc = HandleEntity.AddComponent<RigidBody2DComponent>();
 
-        if (body) {
-            RigidBody2DComponent &rbc = body.Get();
-
-            rbc.Type = RigidBody2DComponent::BodyType::Dynamic;
-            rbc.Mass = 0.0f;
-            rbc.GravityScale = 0.0f;
-            rbc.Velocity.x = _Speed;
-            rbc.Velocity.y = 0.0f;
-        }
+        rbc.Type = RigidBody2DComponent::BodyType::Dynamic;
+        rbc.Mass = 0.0f;
+        rbc.GravityScale = 0.0f;
+        rbc.Velocity.x = _Speed;
+        rbc.Velocity.y = 0.0f;
 
         CreateAnimations();
 
-        HandleEntity->GetWorld()->Emit<Exodia::Events::OnEntityCreated>({HandleEntity});
+        HandleEntity.GetScene()->GetWorldPtr()->Emit<Exodia::Events::OnEntityCreated>({HandleEntity.GetEntity()});
     }
 
     void BulletPlayer::UpdateAnimations() {
         if (_Animations.size() == 0)
             return;
 
-        ComponentHandle<SpriteRendererComponent> sprite = GetComponent<SpriteRendererComponent>();
-        ComponentHandle<AnimationComponent> anim = GetComponent<AnimationComponent>();
-
-        if (!sprite)
-            sprite = HandleEntity->AddComponent<SpriteRendererComponent>();
+        SpriteRendererComponent &sprite = GetComponent<SpriteRendererComponent>();
+        ComponentHandle<AnimationComponent> anim = HandleEntity.GetEntity()->GetComponent<AnimationComponent>();
 
         if (!anim) {
             _Animations[0].IsPlaying = true;
 
-            anim = HandleEntity->AddComponent<AnimationComponent>(_Animations[0]);
+            anim = HandleEntity.GetEntity()->AddComponent<AnimationComponent>(_Animations[0]);
 
-            sprite.Get().Texture = anim.Get().Frames[0];
+            sprite.Texture = anim.Get().Frames[0];
         } else {
             if (_Animations[0].IsPlaying && anim.Get().CurrentFrameIndex == anim.Get().Frames.size() - 1) {
                 _Animations[0].IsPlaying = false;
                 anim.Get() = _Animations[0];
 
-                ComponentHandle<RigidBody2DComponent> body = GetComponent<RigidBody2DComponent>();
+                RigidBody2DComponent &body = GetComponent<RigidBody2DComponent>();
 
-                if (!body)
-                    return;
-
-                body.Get().Velocity.x = _Speed;
+                body.Velocity.x = _Speed;
                 _NeedUpdate = false;
             }
         }
     }
 
     void BulletPlayer::OnUpdate(UNUSED(Timestep ts)) {
-        ComponentHandle<TransformComponent> transform = GetComponent<TransformComponent>();
-        ComponentHandle<ParentComponent> parent = GetComponent<ParentComponent>();
-        World *world = HandleEntity->GetWorld();
-        if (!transform || !parent || !world)
+        TransformComponent &transform = GetComponent<TransformComponent>();
+        ParentComponent &parent = GetComponent<ParentComponent>();
+        Scene *scene = HandleEntity.GetScene();
+
+        if (!scene)
             return;
 
-        Entity *parent_entity = world->GetEntityByID(parent.Get().Parent);
-        // if (!parent_entity) {
-        //     EXODIA_WARN("BulletPlayer has no parent");
-        // }
+        GameObject parent_entity = scene->GetEntityByUUID(parent.Parent);
+        GameObject camera = scene->GetPrimaryCamera();
 
-        Entity *camera = world->GetEntityByTag("Camera");
-        if (!camera)
+        if (!camera.GetEntity())
             return;
-
-        ComponentHandle<TransformComponent> camera_transform = camera->GetComponent<TransformComponent>();
-        if (!camera_transform)
-            return;
+        TransformComponent &camera_transform = camera.GetComponent<TransformComponent>();
 
         if (_NeedUpdate && parent_entity)
-            transform.Get().Translation.y = parent_entity->GetComponent<TransformComponent>().Get().Translation.y;
+            transform.Translation.y = parent_entity.GetComponent<TransformComponent>().Translation.y;
 
         UpdateAnimations();
 
         // Remove bullet if out of screen
-        if (transform.Get().Translation.x > camera_transform.Get().Translation.x + 10.0f) {
-            EXODIA_INFO("Bullet {0} destroyed", HandleEntity->GetComponent<TagComponent>().Get().Tag);
-            world->DestroyEntity(HandleEntity);
-        }
+        if (transform.Translation.x > camera_transform.Translation.x + 10.0f)
+            scene->DestroyEntity(HandleEntity);
     }
 
     void BulletPlayer::OnCollisionEnter(Entity *entity) {
-        ComponentHandle<ParentComponent> parent = GetComponent<ParentComponent>();
+        ParentComponent &parent = GetComponent<ParentComponent>();
         ComponentHandle<IDComponent> entity_id = entity->GetComponent<IDComponent>();
-        if (!parent || !entity_id)
+
+        if (!entity_id)
             return;
-        if (parent.Get().Parent == entity_id.Get().ID)
+        if (parent.Parent == entity_id.Get().ID)
             return;
 
-        HandleEntity->GetWorld()->DestroyEntity(HandleEntity);
+        if (HandleEntity.GetScene())
+            HandleEntity.GetScene()->DestroyEntity(HandleEntity);
     }
 }; // namespace RType

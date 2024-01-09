@@ -9,7 +9,7 @@
 #define SHADER_HPP_
 
 // Exodia Utils
-#include "Utils/Memory.hpp"
+#include "Exodia-Utils.hpp"
 
 // External include
 #include <unordered_map>

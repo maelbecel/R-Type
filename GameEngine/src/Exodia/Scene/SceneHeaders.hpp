@@ -18,9 +18,34 @@
 
 #include "Exodia/Scene/Camera/SceneCamera.hpp"
 
+// -- Components -----------------------------------------------------------
+
+#include "Exodia/Scene/Components/Component.hpp"
+#include "Exodia/Scene/Components/Components.hpp"
+
+// -- Systems --------------------------------------------------------------
+
+#include "Exodia/Scene/System/Collision/CollisionSystem.hpp"
+#include "Exodia/Scene/System/Script/ScriptSystem.hpp"
+#include "Exodia/Scene/System/Physics/GravitySystem.hpp"
+#include "Exodia/Scene/System/Physics/MovingSystem.hpp"
+#include "Exodia/Scene/System/Particle/ParticleSystem.hpp"
+
+// -- Event Subscribers ----------------------------------------------------
+
+#include "Exodia/Scene/EventSubscriber/EventHover.hpp"
+
+// -- Prefabs --------------------------------------------------------------
+
+#include "Exodia/Scene/Prefabs/Prefabs.hpp"
+
 // -- Scene ----------------------------------------------------------------
 
 #include "Exodia/Scene/Scene/Scene.hpp"
+
+// -- GameObject -----------------------------------------------------------
+
+#include "Exodia/Scene/GameObject/GameObject.hpp"
 
 // -- Serializer -----------------------------------------------------------
 

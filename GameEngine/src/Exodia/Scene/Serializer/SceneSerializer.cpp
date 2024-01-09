@@ -9,7 +9,7 @@
 #include "SceneSerializer.hpp"
 
 // Exodia ECS includes
-#include "ECS/Component/Components.hpp"
+#include "Scene/Components/Components.hpp"
 
 // External includes
 #include <yaml-cpp/yaml.h>
@@ -43,6 +43,13 @@ namespace Exodia {
             });
         }
         out << YAML::EndSeq;
+
+        out << YAML::Key << "Prefabs" << YAML::Value << YAML::BeginSeq;
+        {
+            for (auto &prefab : _Scene->_Prefabs)
+                prefab->Serialize(out);
+        }
+
         out << YAML::EndMap;
 
         std::ofstream fout(path);
@@ -67,17 +74,11 @@ namespace Exodia {
 
             _Scene->SetName(sceneName);
 
-            if (!data["Entities"])
-                return;
+            if (data["Entities"]) {
+                auto entities = data["Entities"];
 
-            auto entities = data["Entities"];
-
-            if (entities) {
                 for (YAML::detail::iterator_value entity : entities) {
-                    Entity *newEntity = _Scene->CreateEntityWithUUID(entity["Entity"].as<uint64_t>());
-
-                    if (!newEntity)
-                        return;
+                    GameObject newGameObject = _Scene->CreateEntityWithUUID(entity["Entity"].as<uint64_t>());
 
                     for (YAML::detail::iterator_value component : entity) {
                         std::string componentType = component.first.as<std::string>();
@@ -85,8 +86,20 @@ namespace Exodia {
                         if (componentType == "Entity" || componentType == "IDComponent")
                             continue;
 
-                        DeserializeComponent(componentType, entity, newEntity);
+                        SceneSerializer::DeserializeComponent(componentType, entity, newGameObject);
                     }
+                }
+            }
+
+            if (data["Prefabs"]) {
+                auto prefabs = data["Prefabs"];
+
+                for (YAML::detail::iterator_value prefab : prefabs) {
+                    Ref<Prefabs> newPrefab = CreateRef<Prefabs>();
+
+                    newPrefab->Deserialize(prefab, _Scene, false);
+
+                    _Scene->AddPrefab(newPrefab);
                 }
             }
         } catch (const YAML::BadConversion &e) {
@@ -104,7 +117,7 @@ namespace Exodia {
     }
 
     void SceneSerializer::DeserializeComponent(const std::string &componentType, const YAML::Node &componentNode,
-                                               Entity *entity) {
+                                               GameObject gameObject) {
         try {
             std::function<IComponentContainer *(Buffer)> func =
                 Project::GetActive()->GetComponentFactory(componentType);
@@ -118,7 +131,7 @@ namespace Exodia {
             IComponentContainer *container = func(Buffer());
 
             container->Deserialize(componentNode);
-            entity->AddComponent(container);
+            gameObject.AddComponent(container);
         } catch (const YAML::BadConversion &e) {
             EXODIA_CORE_ERROR("Error deserializing component '{0}': {1}", componentType, e.what());
         }

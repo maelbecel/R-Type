@@ -23,8 +23,6 @@ set(SOURCES_GAME_ENGINE
     src/Exodia/Core/Application/Application.cpp
     src/Exodia/Core/Layer/LayerStack.cpp
     src/Exodia/Core/Layer/Layer.cpp
-    src/Exodia/Core/Time/Timestep.cpp
-    src/Exodia/Core/ID/UUID.cpp
 
         # -- Renderer source files
 
@@ -47,29 +45,19 @@ set(SOURCES_GAME_ENGINE
     src/Exodia/Renderer/Sound/Sound.cpp
     src/Exodia/Renderer/Font/Font.cpp
 
-        # -- Debug source files
-
-    src/Exodia/Debug/Profiling/InstrumentorTimer.cpp
-    src/Exodia/Debug/Profiling/Instrumentor.cpp
-    src/Exodia/Debug/Logger/Log.cpp
-
-        # -- Entity Component System (ECS) source files
-
-    src/Exodia/ECS/Entity/EntityIterator.cpp
-    src/Exodia/ECS/Entity/EntityView.cpp
-    src/Exodia/ECS/Entity/Entity.cpp
-    src/Exodia/ECS/World/World.cpp
-    src/Exodia/ECS/System/Collision/CollisionSystem.cpp
-    src/Exodia/ECS/System/Script/ScriptSystem.cpp
-    src/Exodia/ECS/System/Physics/GravitySystem.cpp
-    src/Exodia/ECS/System/Physics/MovingSystem.cpp
-    src/Exodia/ECS/EventSubscriber/EventHover.cpp
-
         # -- Scene source files
 
     src/Exodia/Scene/Camera/SceneCamera.cpp
     src/Exodia/Scene/Serializer/SceneSerializer.cpp
     src/Exodia/Scene/Scene/Scene.cpp
+    src/Exodia/Scene/System/Collision/CollisionSystem.cpp
+    src/Exodia/Scene/System/Script/ScriptSystem.cpp
+    src/Exodia/Scene/System/Physics/GravitySystem.cpp
+    src/Exodia/Scene/System/Physics/MovingSystem.cpp
+    src/Exodia/Scene/System/Particle/ParticleSystem.cpp
+    src/Exodia/Scene/EventSubscriber/EventHover.cpp
+    src/Exodia/Scene/GameObject/GameObject.cpp
+    src/Exodia/Scene/Prefabs/Prefabs.cpp
 
         # -- Script source files
     
@@ -91,6 +79,7 @@ set(SOURCES_GAME_ENGINE
     src/Exodia/Asset/Importer/SceneImporter.cpp
     src/Exodia/Asset/Importer/SoundImporter.cpp
     src/Exodia/Asset/Importer/FontImporter.cpp
+    src/Exodia/Asset/Importer/PrefabsImporter.cpp
     src/Exodia/Asset/Manager/EditorAssetManager.cpp
 
         # -- Exodia Math source files
@@ -147,6 +136,10 @@ set(INCLUDE_DIRS_GAME_ENGINE
 add_library(GameEngine STATIC ${SOURCES_GAME_ENGINE})
 
 target_link_libraries(GameEngine PRIVATE
+    Exodia-Tools
+    Exodia-Debug
+    Exodia-ECS
+
     asio::asio
     glm::glm
     glfw
@@ -163,10 +156,14 @@ target_link_libraries(GameEngine PRIVATE
     Vorbis::vorbisfile
 )
 
+set(EXODIA_LIB_DIR ${CMAKE_BINARY_DIR}/../Library)
+
+target_include_directories(GameEngine PRIVATE
+    ${EXODIA_LIB_DIR}/Tools/src
+    ${EXODIA_LIB_DIR}/Debug/src
+    ${CMAKE_BINARY_DIR}/../Library/Entity-Component-System/src
+)
+
 target_include_directories(GameEngine PRIVATE ${INCLUDE_DIRS_GAME_ENGINE})
 target_include_directories(GameEngine PRIVATE ${Stb_INCLUDE_DIR})
 target_include_directories(GameEngine PRIVATE ${CMAKE_BINARY_DIR}/_deps/imgui-src)
-
-set_target_properties(GameEngine PROPERTIES
-    ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../lib
-)

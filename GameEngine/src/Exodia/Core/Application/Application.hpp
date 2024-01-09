@@ -13,19 +13,16 @@
 
 // Exodia Core
 #include "Core/Layer/LayerStack.hpp"
-#include "Core/Time/Timestep.hpp"
 #include "Core/Application/Window.hpp"
-#include "Core/Time/Timer.hpp"
 
 // Exodia Debug
-#include "Debug/Logs.hpp"
+#include "Exodia-Debug.hpp"
 
 // Exodia ImGUI
 #include "ImGui/ImGuiLayer.hpp"
 
 // Exodia Utils
-#include "Utils/Memory.hpp"
-#include "Utils/Assert.hpp"
+#include "Exodia-Utils.hpp"
 
 namespace Exodia {
 
@@ -48,6 +45,13 @@ namespace Exodia {
         std::string Name = "Exodia Application";
         std::string WorkingDirectory;
         ApplicationCommandLineArgs CommandLineArgs;
+    };
+
+    struct ApplicationStatistics {
+        float FPS = 0.0f;
+        float FrameTime = 0.0f;
+
+        uint64_t MemoryUsage = 0;
     };
 
 ////////////
@@ -136,6 +140,8 @@ namespace Exodia {
          */
         bool OnWindowResize(WindowResizeEvent &event);
 
+        void UpdateStatistics(Timestep ts);
+
         ///////////////////////
         // Getters & Setters //
         ///////////////////////
@@ -149,6 +155,8 @@ namespace Exodia {
         ImGuiLayer *GetImGuiLayer();
 
         ApplicationSpecification GetSpecification() const;
+
+        ApplicationStatistics GetStatistics() const;
 
         /**
          * @brief Get the Application object
@@ -166,6 +174,9 @@ namespace Exodia {
          */
         inline Window &GetWindow() { return *_Window; }
 
+      private:
+        uint64_t GetMemoryUsage();
+
         ////////////////
         // Attributes //
         ////////////////
@@ -178,6 +189,9 @@ namespace Exodia {
         LayerStack _LayerStack;                  /*!< The layer stack of the application */
         float _LastTime;                         /*!< The last time of the last frame of the application */
         Timer _Timer;                            /*!< The timer of the application */
+        int _Frames;
+        float _FPSTimer;
+        ApplicationStatistics _Statistics;
 
       private:
         static Application *_Instance; /*!< The instance of the application */
