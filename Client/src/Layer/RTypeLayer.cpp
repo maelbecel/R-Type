@@ -58,7 +58,7 @@ namespace RType {
         ApplicationCommandLineArgs commandLine = Application::Get().GetSpecification().CommandLineArgs;
 
         // TODO: Temp port ./r-type_client {port} {ip} {port}
-        int port = 8083; // Default port
+        int port = 8082; // Default port
         if (commandLine.Count > 3) {
             port = std::stoi(commandLine[3]);
 
