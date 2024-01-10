@@ -37,7 +37,7 @@ namespace FlappyBird {
 
         void OnKeyPressed(int keyCode);
 
-        int GetScore() const { return score;};
+        int GetScore() const { return score; };
 
         void Receive(UNUSED(World* world), const Events::OnEntityDestroyed &event) override
         {
