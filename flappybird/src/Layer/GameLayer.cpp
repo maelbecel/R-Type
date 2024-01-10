@@ -90,8 +90,8 @@ namespace FlappyBird {
 
             uint32_t width = Exodia::Application::Get().GetWindow().GetWidth();
 
-            pos.x += width / 2.0f - 300.0f;
-            pos.y += 50.0f;
+            pos.x += width / 2.0f - 400.0f;
+            pos.y += 100.0f;
 
             if (_Blink)
                 ImGui::GetForegroundDrawList()->AddText(ImGui::GetFont(), 120.0f, pos, IM_COL32_WHITE,
@@ -103,8 +103,8 @@ namespace FlappyBird {
 
             uint32_t width = Exodia::Application::Get().GetWindow().GetWidth();
 
-            pos.x += width / 2.0f - 300.0f;
-            pos.y += 50.0f;
+            pos.x += width / 2.0f - 400.0f;
+            pos.y += 100.0f;
 
             if (_Blink)
                 ImGui::GetForegroundDrawList()->AddText(ImGui::GetFont(), 120.0f, pos, IM_COL32_WHITE,

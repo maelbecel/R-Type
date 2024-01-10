@@ -19,6 +19,11 @@ Entities:
     SpriteRendererComponent:
       Color: [1, 1, 1, 1]
       TilingFactor: 1
+      Texture:
+        AssetHandle: 45120015123131
+        Coords: [0, 0]
+        CellSize: [1, 1]
+        SpriteSize: [225, 450]
     BoxCollider2DComponent:
       Offset: [0, 0]
       Size: [0.5, 0.5]
@@ -38,6 +43,11 @@ Entities:
     SpriteRendererComponent:
       Color: [1, 1, 1, 1]
       TilingFactor: 1
+      Texture:
+        AssetHandle: 45120015123131
+        Coords: [0, 0]
+        CellSize: [1, 1]
+        SpriteSize: [225, 450]
     BoxCollider2DComponent:
       Offset: [0, 0]
       Size: [0.5, 0.5]
@@ -57,6 +67,11 @@ Entities:
     SpriteRendererComponent:
       Color: [1, 1, 1, 1]
       TilingFactor: 1
+      Texture:
+        AssetHandle: 45120015123131
+        Coords: [0, 0]
+        CellSize: [1, 1]
+        SpriteSize: [225, 450]
     BoxCollider2DComponent:
       Offset: [0, 0]
       Size: [0.5, 0.5]
@@ -76,6 +91,11 @@ Entities:
     SpriteRendererComponent:
       Color: [1, 1, 1, 1]
       TilingFactor: 1
+      Texture:
+        AssetHandle: 45120015123131
+        Coords: [0, 0]
+        CellSize: [1, 1]
+        SpriteSize: [225, 450]
     BoxCollider2DComponent:
       Offset: [0, 0]
       Size: [0.5, 0.5]
