@@ -122,6 +122,9 @@ namespace Exodia::Network {
 
         packet->SetContent(buffer);
         SendPacket(packet);
+        if (component_name == "BoxCollider2DComponent" || component_name == "ScriptComponent") {
+            SendPacket(packet);
+        }
     }
 
     /**
