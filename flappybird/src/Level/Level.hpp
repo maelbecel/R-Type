@@ -14,7 +14,7 @@ using namespace Exodia;
 
 namespace FlappyBird {
 
-    class Level : public Exodia::EventSubscriber<Exodia::Events::OnEntityDestroyed>{
+    class Level : public Exodia::EventSubscriber<Exodia::Events::OnEntityDestroyed> {
 
         //////////////////////////////
         // Constructor & Destructor //
@@ -39,24 +39,23 @@ namespace FlappyBird {
 
         int GetScore() const { return score; };
 
-        void Receive(UNUSED(World* world), const Events::OnEntityDestroyed &event) override
-        {
-          auto tag = event.Entity->GetComponent<TagComponent>();
+        void Receive(UNUSED(World *world), const Events::OnEntityDestroyed &event) override {
+            auto tag = event.Entity->GetComponent<TagComponent>();
 
-          if (!tag) {
-            EXODIA_WARN("Entity destroyed without tag");
-            return;
-          }
+            if (!tag) {
+                EXODIA_WARN("Entity destroyed without tag");
+                return;
+            }
 
-          auto &tg = tag.Get();
+            auto &tg = tag.Get();
 
-          if(tg.Tag.find("Particle") != std::string::npos)
-            return;
+            if (tg.Tag.find("Particle") != std::string::npos)
+                return;
 
-          if(tg.Tag.find("SpaceShip") != std::string::npos)
-            _GameOver = true;
-          else
-            EXODIA_INFO("Entity destroyed: {0}", tg.Tag);
+            if (tg.Tag.find("SpaceShip") != std::string::npos)
+                _GameOver = true;
+            else
+                EXODIA_INFO("Entity destroyed: {0}", tg.Tag);
         }
 
         ///////////////////////

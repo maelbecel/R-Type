@@ -71,8 +71,7 @@ namespace FlappyBird {
             HandleEntity.GetScene()->DestroyEntity(HandleEntity);
     }
 
-    void Player::OnCollisionEnter(UNUSED(Exodia::Entity *entity))
-    {
+    void Player::OnCollisionEnter(UNUSED(Exodia::Entity *entity)) {
         EXODIA_INFO("Collision with {0}", entity->GetComponent<TagComponent>().Get().Tag);
         _dead = true;
         HandleEntity.GetScene()->DestroyEntity(HandleEntity);

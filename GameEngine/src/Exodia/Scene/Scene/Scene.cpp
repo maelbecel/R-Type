@@ -380,28 +380,25 @@ namespace Exodia {
         _World->UnlockMutex();
 
         _World->LockMutex();
-        _World->ForEach<TransformComponent, TriangleCollider2DComponent>(
-            [&](Entity *entity, auto transform, auto collider) {
+        _World->ForEach<TransformComponent, TriangleCollider2DComponent>([&](Entity *entity, auto transform,
+                                                                             auto collider) {
+            auto &tc = transform.Get();
+            auto &vertices = collider.Get().vertices;
 
-                auto &tc = transform.Get();
-                auto &vertices = collider.Get().vertices;
+            std::vector<glm::vec3> points;
 
-                std::vector<glm::vec3> points;
+            points.push_back(glm::vec3(vertices[0][0], vertices[0][1], 0) * tc.Translation);
+            points.push_back(glm::vec3(vertices[1][0], vertices[1][1], 0) * tc.Translation);
+            points.push_back(glm::vec3(vertices[2][0], vertices[2][1], 0) * tc.Translation);
 
-                points.push_back(glm::vec3(vertices[0][0], vertices[0][1], 0) * tc.Translation);
-                points.push_back(glm::vec3(vertices[1][0], vertices[1][1], 0) * tc.Translation);
-                points.push_back(glm::vec3(vertices[2][0], vertices[2][1], 0) * tc.Translation);
+            // Supposons que la taille de la ligne est 0.01
+            float lineSize = 0.01f;
 
-
-
-                // Supposons que la taille de la ligne est 0.01
-                float lineSize = 0.01f;
-
-                // Dessiner chaque ligne du triangle comme un rectangle fin
-                Renderer2D::DrawLine(points[1], points[2], glm::vec4(1.0f, 0.5f, 0.0f, 1.0f), (int)entity->GetEntityID());
-                Renderer2D::DrawLine(points[2], points[3], glm::vec4(1.0f, 0.5f, 0.0f, 1.0f), (int)entity->GetEntityID());
-                Renderer2D::DrawLine(points[3], points[1], glm::vec4(1.0f, 0.5f, 0.0f, 1.0f), (int)entity->GetEntityID());
-            });
+            // Dessiner chaque ligne du triangle comme un rectangle fin
+            Renderer2D::DrawLine(points[1], points[2], glm::vec4(1.0f, 0.5f, 0.0f, 1.0f), (int)entity->GetEntityID());
+            Renderer2D::DrawLine(points[2], points[3], glm::vec4(1.0f, 0.5f, 0.0f, 1.0f), (int)entity->GetEntityID());
+            Renderer2D::DrawLine(points[3], points[1], glm::vec4(1.0f, 0.5f, 0.0f, 1.0f), (int)entity->GetEntityID());
+        });
         _World->UnlockMutex();
     }
 
