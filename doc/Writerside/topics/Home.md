@@ -146,6 +146,8 @@ There is a folder ```/Examples``` to check for example
 
 Feel free to explore and learn more about each aspect of the RType game engine!
 
+You can also try the FlappyBird example in the folder ```/flappybird```
+
 ## Contributing
 
 If you are interested in contributing to the RType game engine, please read our [contributing guidelines](CONTRIBUTING.md) for more information.

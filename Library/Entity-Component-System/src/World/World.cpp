@@ -101,44 +101,48 @@ namespace Exodia {
 
                 _Entities.erase(std::remove(_Entities.begin(), _Entities.end(), entity), _Entities.end());
 
-                // std::allocator_traits<EntityAllocator>::destroy(_EntityAllocator, entity);
-                // std::allocator_traits<EntityAllocator>::deallocate(_EntityAllocator, entity, 1);
+                std::allocator_traits<EntityAllocator>::destroy(_EntityAllocator, entity);
+                std::allocator_traits<EntityAllocator>::deallocate(_EntityAllocator, entity, 1);
             }
             entity->SetPendingDestroy(true);
-
             Emit<Events::OnEntityDestroyed>({entity});
-            return;
-        }
-
-        if (immediate) {
+        } else {
             if (_IndexToUUIDMap.find(entity->GetEntityID()) != _IndexToUUIDMap.end())
                 _IndexToUUIDMap.erase(_IndexToUUIDMap.find(entity->GetEntityID()));
 
             _Entities.erase(std::remove(_Entities.begin(), _Entities.end(), entity), _Entities.end());
 
-            // std::allocator_traits<EntityAllocator>::destroy(_EntityAllocator, entity);
-            // std::allocator_traits<EntityAllocator>::deallocate(_EntityAllocator, entity, 1);
+            std::allocator_traits<EntityAllocator>::destroy(_EntityAllocator, entity);
+            std::allocator_traits<EntityAllocator>::deallocate(_EntityAllocator, entity, 1);
+        }
+
+        auto it = _IndexToUUIDMap.begin();
+
+        while (it != _IndexToUUIDMap.end()) {
+            if (it->second == entity->GetEntityID())
+                it = _IndexToUUIDMap.erase(it);
+            else
+                ++it;
         }
     }
 
     bool World::CleanUp() {
         uint64_t count = 0;
 
-        _Entities.erase(std::remove_if(_Entities.begin(), _Entities.end(),
-                                       [&, this](Entity *entity) {
-                                           if (entity->IsPendingDestroy()) {
-                                               // std::allocator_traits<EntityAllocator>::destroy(_EntityAllocator,
-                                               // entity);
-                                               // std::allocator_traits<EntityAllocator>::deallocate(_EntityAllocator,
-                                               // entity, 1);
+        _Entities.erase(
+            std::remove_if(_Entities.begin(), _Entities.end(),
+                           [&, this](Entity *entity) {
+                               if (entity->IsPendingDestroy()) {
+                                   std::allocator_traits<EntityAllocator>::destroy(_EntityAllocator, entity);
+                                   std::allocator_traits<EntityAllocator>::deallocate(_EntityAllocator, entity, 1);
 
-                                               count++;
+                                   count++;
 
-                                               return true;
-                                           }
-                                           return false;
-                                       }),
-                        _Entities.end());
+                                   return true;
+                               }
+                               return false;
+                           }),
+            _Entities.end());
 
         return count > 0;
     }
@@ -222,6 +226,15 @@ namespace Exodia {
             system->Update(this, ts);
     }
 
+    void World::DestroyPendingEntities() {
+        for (auto *entity : AllEntities(true)) {
+            if (!entity)
+                continue;
+            if (entity->IsPendingDestroy())
+                DestroyEntity(entity, true);
+        }
+    }
+
     void World::MergeEntities() {
         for (auto *entity : _MergedEntities)
             _Entities.push_back(entity);
@@ -237,7 +250,8 @@ namespace Exodia {
     Entity *World::GetEntityByIndex(uint64_t index) {
         auto it = _IndexToUUIDMap.find(index);
 
-        EXODIA_ASSERT(it != _IndexToUUIDMap.end(), "Entity not found for the given index");
+        if (it == _IndexToUUIDMap.end())
+            return nullptr;
 
         return GetEntityByID(it->second);
     }

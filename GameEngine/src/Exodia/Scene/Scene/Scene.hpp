@@ -54,6 +54,7 @@ namespace Exodia {
         GameObject DuplicateEntity(GameObject gameObject);
 
         void DestroyEntity(GameObject gameObject);
+        void DestroyAllEntities();
 
         // -- Runtime ------------------------------------------------------
 
@@ -88,8 +89,14 @@ namespace Exodia {
         void AddPrefab(Ref<Prefabs> prefab);
         bool RemovePrefab(const std::string &name);
 
+        // -- Key Events ---------------------------------------------------
+
+        void OnKeyPressedEvent(int keyCode);
+        void OnKeyReleasedEvent(int keyCode);
+
       private:
         void RenderScene();
+        void RenderDebugScene();
 
         ///////////////////////
         // Getters & Setters //

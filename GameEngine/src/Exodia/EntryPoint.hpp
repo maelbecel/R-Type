@@ -13,7 +13,7 @@
 extern Exodia::Application *Exodia::CreateApplication(ApplicationCommandLineArgs args);
 
 int main(int ac, char **av) {
-    Exodia::Log::Init("R-Type");
+    Exodia::Log::Init("Exodia Application");
 
     EXODIA_PROFILE_BEGIN_SESSION("Startup", "ExodiaProfile-Startup.json");
     Exodia::Application *App = Exodia::CreateApplication({ac, av});

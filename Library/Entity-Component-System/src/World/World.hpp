@@ -130,6 +130,7 @@ namespace Exodia {
             for (auto *entity : View<Entities...>(includePendingDestroy))
                 function(entity, entity->template GetComponent<Entities>()...);
             MergeEntities();
+            DestroyPendingEntities();
         }
 
         void ForAll(std::function<void(Entity *)> function, bool includePendingDestroy = false);
@@ -150,6 +151,7 @@ namespace Exodia {
 
       private:
         void MergeEntities();
+        void DestroyPendingEntities();
 
         ///////////////////////
         // Getters & Setters //

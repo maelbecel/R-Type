@@ -15,6 +15,7 @@ include(Libraries)
 # Project
 include(BuildEngine)
 include(BuildBinaries)
+include(BuildSandbox)
 
 # Compilation Flags
 include(CompileFlags)

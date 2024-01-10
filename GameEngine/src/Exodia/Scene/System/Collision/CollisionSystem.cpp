@@ -60,6 +60,17 @@ namespace Exodia {
                             if (CheckCollision(colliderA, transformA, colliderB, transformB))
                                 collisions.push_back(std::make_pair(entityA, entityB));
                         });
+
+                    world->ForEach<TriangleCollider2DComponent, TransformComponent>(
+                        [&](Entity *entityB, ComponentHandle<TriangleCollider2DComponent> colliderB,
+                            ComponentHandle<TransformComponent> transformB) {
+                            if (std::find(collisions.begin(), collisions.end(), std::make_pair(entityB, entityA)) !=
+                                collisions.end())
+                                return;
+
+                            if (CheckCollision(colliderA, transformA, colliderB, transformB))
+                                collisions.push_back(std::make_pair(entityA, entityB));
+                        });
                 });
             world->UnlockMutex();
         }
@@ -82,8 +93,40 @@ namespace Exodia {
                                 collisions.push_back(std::make_pair(entityA, entityB));
                         });
                 });
+
+            world->ForEach<BoxCollider2DComponent, TransformComponent>(
+                [&](Entity *entityA, ComponentHandle<BoxCollider2DComponent> colliderA,
+                    ComponentHandle<TransformComponent> transformA) {
+                    world->ForEach<CircleCollider2DComponent, TransformComponent>(
+                        [&](Entity *entityB, ComponentHandle<CircleCollider2DComponent> colliderB,
+                            ComponentHandle<TransformComponent> transformB) {
+                            if (std::find(collisions.begin(), collisions.end(), std::make_pair(entityB, entityA)) !=
+                                collisions.end())
+                                return;
+
+                            if (CheckCollision(colliderA, transformA, colliderB, transformB))
+                                collisions.push_back(std::make_pair(entityA, entityB));
+                        });
+                });
+
+            world->ForEach<TriangleCollider2DComponent, TransformComponent>(
+                [&](Entity *entityA, ComponentHandle<TriangleCollider2DComponent> colliderA,
+                    ComponentHandle<TransformComponent> transformA) {
+                    world->ForEach<CircleCollider2DComponent, TransformComponent>(
+                        [&](Entity *entityB, ComponentHandle<CircleCollider2DComponent> colliderB,
+                            ComponentHandle<TransformComponent> transformB) {
+                            if (std::find(collisions.begin(), collisions.end(), std::make_pair(entityB, entityA)) !=
+                                collisions.end())
+                                return;
+
+                            if (CheckCollision(colliderB, transformB, colliderA, transformA))
+                                collisions.push_back(std::make_pair(entityA, entityB));
+                        });
+                });
             world->UnlockMutex();
         }
+
+        { EXODIA_PROFILE_SCOPE("CollisionSystem::Update::TriangleCollider2D"); }
 
         CompareCollisions(collisions);
     }
@@ -225,6 +268,200 @@ namespace Exodia {
         }
 
         return false; // No collision
+    }
+
+    bool CollisionSystem::CheckCollision(ComponentHandle<CircleCollider2DComponent> circleCollider,
+                                         ComponentHandle<TransformComponent> circleTransform,
+                                         ComponentHandle<TriangleCollider2DComponent> triangleCollider,
+                                         ComponentHandle<TransformComponent> triangleTransform) {
+        // Get the components
+        auto &circle = circleCollider.Get();
+        auto &circlePos = circleTransform.Get();
+        auto &triangle = triangleCollider.Get();
+        auto &trianglePos = triangleTransform.Get();
+
+        // Check if the masks collide
+        uint32_t colliderMask1 = circle.ColliderMask;
+        uint32_t colliderMask2 = triangle.ColliderMask;
+
+        if ((colliderMask1 & colliderMask2) == 0)
+            return false;
+
+        // Check for collision using Separating Axis Theorem (SAT)
+        // This is a simplified version and assumes that the triangle and circle are defined in a 2D space
+        for (int i = 0; i < 3; i++) {
+            // Get the normal of the current edge
+            glm::vec2 edge = triangle.edges[i];
+            glm::vec2 normal(edge.y, -edge.x);
+
+            // Project the circle onto the normal
+            float circleProjection = glm::dot(normal, glm::vec2(circlePos.Translation.x, circlePos.Translation.y));
+
+            // Apply transformation to the triangle vertices
+            std::array<glm::vec2, 3> transformedVertices;
+            for (int i = 0; i < 3; i++) {
+                transformedVertices[i] = (glm::vec2){trianglePos.Scale.x, trianglePos.Scale.y} * triangle.vertices[i] +
+                                         (glm::vec2){trianglePos.Translation.x, trianglePos.Translation.y};
+            }
+
+            // Project the transformed vertices of the triangle onto the normal
+            float minTriangleProjection = glm::dot(normal, transformedVertices[0]);
+            float maxTriangleProjection = minTriangleProjection;
+            for (int j = 1; j < 3; j++) {
+                float projection = glm::dot(normal, transformedVertices[j]);
+                minTriangleProjection = std::min(minTriangleProjection, projection);
+                maxTriangleProjection = std::max(maxTriangleProjection, projection);
+            }
+
+            // Check if projections overlap
+            if (circleProjection + circle.Radius < minTriangleProjection ||
+                circleProjection - circle.Radius > maxTriangleProjection) {
+                // The projections do not overlap, so no collision
+                return false;
+            }
+        }
+
+        // If we get here, all projections overlapped so there is a collision
+        return true;
+    }
+
+    bool CollisionSystem::CheckCollision(ComponentHandle<TriangleCollider2DComponent> triangleCollider1,
+                                         ComponentHandle<TransformComponent> triangleTransform1,
+                                         ComponentHandle<TriangleCollider2DComponent> triangleCollider2,
+                                         ComponentHandle<TransformComponent> triangleTransform2) {
+        // Get the components
+        auto &triangle1 = triangleCollider1.Get();
+        auto &trianglePos1 = triangleTransform1.Get();
+        auto &triangle2 = triangleCollider2.Get();
+        auto &trianglePos2 = triangleTransform2.Get();
+
+        // Check if the masks collide
+        uint32_t colliderMask1 = triangle1.ColliderMask;
+        uint32_t colliderMask2 = triangle2.ColliderMask;
+
+        if ((colliderMask1 & colliderMask2) == 0)
+            return false;
+
+        // Check for collision using Separating Axis Theorem (SAT)
+        // This is a simplified version and assumes that the triangles are defined in a 2D space
+        for (int i = 0; i < 3; i++) {
+            // Get the normal of the current edge
+            glm::vec2 edge = triangle1.edges[i];
+            glm::vec2 normal(edge.y, -edge.x);
+
+            // Apply transformation to the first triangle vertices
+            std::array<glm::vec2, 3> transformedVertices1;
+            for (int i = 0; i < 3; i++) {
+                transformedVertices1[i] =
+                    (glm::vec2){trianglePos1.Scale.x, trianglePos1.Scale.y} * triangle1.vertices[i] +
+                    (glm::vec2){trianglePos1.Translation.x, trianglePos1.Translation.y};
+            }
+
+            // Project the transformed vertices of the first triangle onto the normal
+            float minTriangleProjection1 = glm::dot(normal, transformedVertices1[0]);
+            float maxTriangleProjection1 = minTriangleProjection1;
+            for (int j = 1; j < 3; j++) {
+                float projection = glm::dot(normal, transformedVertices1[j]);
+                minTriangleProjection1 = std::min(minTriangleProjection1, projection);
+                maxTriangleProjection1 = std::max(maxTriangleProjection1, projection);
+            }
+
+            // Apply transformation to the second triangle vertices
+            std::array<glm::vec2, 3> transformedVertices2;
+            for (int i = 0; i < 3; i++) {
+                transformedVertices2[i] =
+                    (glm::vec2){trianglePos2.Scale.x, trianglePos2.Scale.y} * triangle2.vertices[i] +
+                    (glm::vec2){trianglePos2.Translation.x, trianglePos2.Translation.y};
+            }
+
+            // Project the transformed vertices of the second triangle onto the normal
+            float minTriangleProjection2 = glm::dot(normal, transformedVertices2[0]);
+            float maxTriangleProjection2 = minTriangleProjection2;
+            for (int j = 1; j < 3; j++) {
+                float projection = glm::dot(normal, transformedVertices2[j]);
+                minTriangleProjection2 = std::min(minTriangleProjection2, projection);
+                maxTriangleProjection2 = std::max(maxTriangleProjection2, projection);
+            }
+
+            // Check if projections overlap
+            if (maxTriangleProjection1 < minTriangleProjection2 || maxTriangleProjection2 < minTriangleProjection1) {
+                // The projections do not overlap, so no collision
+                return false;
+            }
+        }
+
+        // If we get here, all projections overlapped so there is a collision
+        return true;
+    }
+
+    bool CollisionSystem::CheckCollision(ComponentHandle<BoxCollider2DComponent> boxCollider,
+                                         ComponentHandle<TransformComponent> boxTransform,
+                                         ComponentHandle<TriangleCollider2DComponent> triangleCollider,
+                                         ComponentHandle<TransformComponent> triangleTransform) {
+        // Get the components
+        auto &box = boxCollider.Get();
+        auto &boxPos = boxTransform.Get();
+        auto &triangle = triangleCollider.Get();
+        auto &trianglePos = triangleTransform.Get();
+
+        // Check if the masks collide
+        uint32_t colliderMask1 = box.ColliderMask;
+        uint32_t colliderMask2 = triangle.ColliderMask;
+
+        if ((colliderMask1 & colliderMask2) == 0)
+            return false;
+
+        // Calculate the vertices of the box
+        std::array<glm::vec2, 4> boxVertices;
+        boxVertices[0] = glm::vec2(boxPos.Translation.x - boxPos.Scale.x / 2,
+                                   boxPos.Translation.y - boxPos.Scale.y / 2); // Bottom-left
+        boxVertices[1] = glm::vec2(boxPos.Translation.x + boxPos.Scale.x / 2,
+                                   boxPos.Translation.y - boxPos.Scale.y / 2); // Bottom-right
+        boxVertices[2] = glm::vec2(boxPos.Translation.x + boxPos.Scale.x / 2,
+                                   boxPos.Translation.y + boxPos.Scale.y / 2); // Top-right
+        boxVertices[3] =
+            glm::vec2(boxPos.Translation.x - boxPos.Scale.x / 2, boxPos.Translation.y + boxPos.Scale.y / 2); // Top-left
+
+        // Check for collision using Separating Axis Theorem (SAT)
+        // This is a simplified version and assumes that the box and triangle are defined in a 2D space
+        for (int i = 0; i < 3; i++) {
+            // Get the normal of the current edge
+            glm::vec2 edge = triangle.edges[i];
+            glm::vec2 normal(edge.y, -edge.x);
+
+            // Project the vertices of the box onto the normal
+            float minBoxProjection = glm::dot(normal, boxVertices[0]);
+            float maxBoxProjection = minBoxProjection;
+            for (int j = 1; j < 4; j++) {
+                float projection = glm::dot(normal, boxVertices[j]);
+                minBoxProjection = std::min(minBoxProjection, projection);
+                maxBoxProjection = std::max(maxBoxProjection, projection);
+            }
+
+            std::array<glm::vec2, 3> transformedVertices;
+            for (int i = 0; i < 3; i++) {
+                transformedVertices[i] = (glm::vec2){trianglePos.Scale.x, trianglePos.Scale.y} * triangle.vertices[i] +
+                                         (glm::vec2){trianglePos.Translation.x, trianglePos.Translation.y};
+            }
+
+            // Project the vertices of the triangle onto the normal
+            float minTriangleProjection = glm::dot(normal, transformedVertices[0]);
+            float maxTriangleProjection = minTriangleProjection;
+            for (int j = 1; j < 3; j++) {
+                float projection = glm::dot(normal, transformedVertices[j]);
+                minTriangleProjection = std::min(minTriangleProjection, projection);
+                maxTriangleProjection = std::max(maxTriangleProjection, projection);
+            }
+
+            // Check if projections overlap
+            if (maxBoxProjection < minTriangleProjection || maxTriangleProjection < minBoxProjection) {
+                // The projections do not overlap, so no collision
+                return false;
+            }
+        }
+
+        // If we get here, all projections overlapped so there is a collision
+        return true;
     }
 
     CollisionSystem::BoundingBox
