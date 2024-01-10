@@ -21,7 +21,7 @@ namespace FlappyBird {
 
     /**
      * The function emits a particle with specified properties and updates the particle list index.
-     * 
+     *
      * @param props The "props" parameter is of type ParticleProps, which is a struct or class that
      * contains various properties of a particle. These properties include:
      */
@@ -61,7 +61,7 @@ namespace FlappyBird {
     /**
      * The function updates the position, rotation, and remaining life of each active particle in a
      * particle system.
-     * 
+     *
      * @param ts The parameter "ts" is of type "Exodia::Timestep" and is used to represent the time
      * elapsed since the last update. It is likely a custom data type defined in the Exodia namespace
      * specifically for handling time-related calculations.

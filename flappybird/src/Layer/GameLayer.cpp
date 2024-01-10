@@ -161,7 +161,7 @@ namespace FlappyBird {
     /**
      * The function `OnEvent` in the `GameLayer` class dispatches events to their corresponding event
      * handlers.
-     * 
+     *
      * @param event The "event" parameter is a reference to an Event object. It is passed to the
      * OnEvent function to handle different types of events.
      */
@@ -181,7 +181,7 @@ namespace FlappyBird {
      *
      * @return a boolean value of true.
      */
-        bool GameLayer::OnKeyPressedEvent(KeyPressedEvent &event) {
+    bool GameLayer::OnKeyPressedEvent(KeyPressedEvent &event) {
         _Level.OnKeyPressed(event.GetKeyCode());
         return true;
     }

@@ -53,7 +53,7 @@ namespace FlappyBird {
     /**
      * The function updates the player's position, emits smoke particles, rotates the player based on
      * velocity, and destroys the player if it goes out of bounds.
-     * 
+     *
      * @param ts Timestep is a time interval that represents the elapsed time since the last frame
      * update. It is used to control the timing of various game events and animations.
      */
@@ -84,7 +84,7 @@ namespace FlappyBird {
     /**
      * The OnCollisionEnter function logs a collision with an entity and sets the player's "dead" flag
      * to true, then destroys the entity.
-     * 
+     *
      * @param entity The "entity" parameter is a pointer to an instance of the Exodia::Entity class.
      */
     void Player::OnCollisionEnter(UNUSED(Exodia::Entity *entity)) {
@@ -96,7 +96,7 @@ namespace FlappyBird {
     /**
      * The function `OnKeyPressed` increases the velocity of the player's rigid body and emits engine
      * particles when the space key is pressed.
-     * 
+     *
      * @param keyCode The `keyCode` parameter represents the key code of the key that was pressed. It
      * is used to check if the SPACE key was pressed.
      */
@@ -126,7 +126,7 @@ namespace FlappyBird {
     /**
      * The function emits a specified number of particles with various properties such as position,
      * rotation, size, color, lifetime, velocity, and gravity.
-     * 
+     *
      * @param props The "props" parameter is of type "ParticleProps", which is a user-defined struct or
      * class that contains properties for creating particles. It likely includes information such as
      * the number of particles to create, the position of the particles, their size, color, lifetime,

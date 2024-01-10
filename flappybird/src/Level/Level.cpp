@@ -33,11 +33,11 @@ namespace FlappyBird {
     /**
      * The function updates the game level by moving spikes and updating the score based on the
      * position of the spaceship.
-     * 
+     *
      * @param ts The parameter "ts" in the above code represents the timestep, which is the amount of
      * time that has passed since the last update. It is used to update the game logic and perform
      * calculations based on the elapsed time.
-     * 
+     *
      * @return In this code, nothing is being returned. The return statement is used to exit the
      * function early if certain conditions are met, but it does not return any value.
      */
@@ -119,11 +119,11 @@ namespace FlappyBird {
     /**
      * The function `OnRender` updates the editor camera and calls the `OnUpdateEditor` function of the
      * scene with the given timestep and editor camera.
-     * 
+     *
      * @param ts The parameter "ts" is of type "Timestep". It is likely a time step value that
      * represents the elapsed time since the last frame. It is used to update the editor camera and the
      * scene in the OnUpdateEditor function.
-     * 
+     *
      * @return If the `_Scene` is `nullptr`, then the function will return and no further code will be
      * executed.
      */
@@ -208,7 +208,7 @@ namespace FlappyBird {
     /**
      * The Play function sets up and initializes various systems and event subscriptions for a game
      * level.
-     * 
+     *
      * @return In the given code, if `_Scene` is `nullptr`, the function will return without executing
      * the rest of the code.
      */
@@ -234,10 +234,10 @@ namespace FlappyBird {
     /**
      * The function OnKeyPressed in the Level class checks if the scene is not null and then calls the
      * OnKeyPressedEvent function of the scene with the provided keyCode.
-     * 
+     *
      * @param keyCode The keyCode parameter represents the code of the key that was pressed on the
      * keyboard. It is an integer value that uniquely identifies each key on the keyboard.
-     * 
+     *
      * @return nothing (void).
      */
     void Level::OnKeyPressed(int keyCode) {
@@ -252,7 +252,7 @@ namespace FlappyBird {
 
     /**
      * The function returns a boolean value indicating whether the game is over or not.
-     * 
+     *
      * @return The IsGameOver() function returns the value of the _GameOver variable.
      */
     bool Level::IsGameOver() { return _GameOver; }
