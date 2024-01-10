@@ -21,8 +21,11 @@ namespace FlappyBird {
       public:
         void OnCreate() override;
         void OnUpdate(Exodia::Timestep ts) override;
+        void OnCollisionEnter(Exodia::Entity *entity) override;
 
         void OnKeyPressed(int keyCode) override;
+
+        bool IsDead() {return _dead;};
 
       private:
         void Emit(const ParticleProps &particleProps);
@@ -36,6 +39,7 @@ namespace FlappyBird {
         float _Gravity;
         float _SmokeEmitInterval;
         float _SmokeNextEmitTime;
+        bool _dead = false;
 
         ParticleProps _SmokeParticle;
         ParticleProps _EngineParticle;

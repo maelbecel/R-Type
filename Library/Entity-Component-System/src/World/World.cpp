@@ -105,8 +105,6 @@ namespace Exodia {
                 std::allocator_traits<EntityAllocator>::deallocate(_EntityAllocator, entity, 1);
             }
             entity->SetPendingDestroy(true);
-            entity->RemoveAllComponents();
-
             Emit<Events::OnEntityDestroyed>({entity});
         } else {
             if (_IndexToUUIDMap.find(entity->GetEntityID()) != _IndexToUUIDMap.end())

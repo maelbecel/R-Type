@@ -10,11 +10,7 @@ Entities:
     TransformComponent:
       Translation: [20, -8, 0]
       Rotation: [0, 0, 0]
-      Scale: [15, 15, 15]
-    BoxCollider2DComponent:
-      Offset: [0, 0]
-      Size: [0.5, 0.5]
-      Mask: 0xFFFFFFFF
+      Scale: [5, 15, 15]
     RigidBody2DComponent:
       BodyType: Dynamic
       Velocity: [0, 0]
@@ -23,22 +19,17 @@ Entities:
     SpriteRendererComponent:
       Color: [1, 1, 1, 1]
       TilingFactor: 1
-      Texture:
-        AssetHandle: 45120015123131
-        Coords: [0, 0]
-        CellSize: [1, 1]
-        SpriteSize: [1024, 1024]
+    BoxCollider2DComponent:
+      Offset: [0, 0]
+      Size: [0.5, 0.5]
+      Mask: 0xFFFFFFFF
   - Entity: 87451251542122
     TagComponent:
       Tag: spike_haut
     TransformComponent:
       Translation: [20, 8, 0]
       Rotation: [0, 0, 0]
-      Scale: [15, 15, 15]
-    BoxCollider2DComponent:
-      Offset: [0, 0]
-      Size: [0.5, 0.5]
-      Mask: 0xFFFFFFFF
+      Scale: [5, 15, 15]
     RigidBody2DComponent:
       BodyType: Dynamic
       Velocity: [0, 0]
@@ -47,22 +38,17 @@ Entities:
     SpriteRendererComponent:
       Color: [1, 1, 1, 1]
       TilingFactor: 1
-      Texture:
-        AssetHandle: 45120015123142
-        Coords: [0, 0]
-        CellSize: [1, 1]
-        SpriteSize: [1024, 1024]
+    BoxCollider2DComponent:
+      Offset: [0, 0]
+      Size: [0.5, 0.5]
+      Mask: 0xFFFFFFFF
   - Entity: 87451251542129
     TagComponent:
       Tag: spike_bas2
     TransformComponent:
       Translation: [40, -8, 0]
       Rotation: [0, 0, 0]
-      Scale: [15, 15, 15]
-    BoxCollider2DComponent:
-      Offset: [0, 0]
-      Size: [0.5, 0.5]
-      Mask: 0xFFFFFFFF
+      Scale: [5, 15, 15]
     RigidBody2DComponent:
       BodyType: Dynamic
       Velocity: [0, 0]
@@ -71,22 +57,17 @@ Entities:
     SpriteRendererComponent:
       Color: [1, 1, 1, 1]
       TilingFactor: 1
-      Texture:
-        AssetHandle: 45120015123131
-        Coords: [0, 0]
-        CellSize: [1, 1]
-        SpriteSize: [1024, 1024]
+    BoxCollider2DComponent:
+      Offset: [0, 0]
+      Size: [0.5, 0.5]
+      Mask: 0xFFFFFFFF
   - Entity: 87451251592122
     TagComponent:
       Tag: spike_haut2
     TransformComponent:
       Translation: [40, 8, 0]
       Rotation: [0, 0, 0]
-      Scale: [15, 15, 15]
-    BoxCollider2DComponent:
-      Offset: [0, 0]
-      Size: [0.5, 0.5]
-      Mask: 0xFFFFFFFF
+      Scale: [5, 15, 15]
     RigidBody2DComponent:
       BodyType: Dynamic
       Velocity: [0, 0]
@@ -95,8 +76,7 @@ Entities:
     SpriteRendererComponent:
       Color: [1, 1, 1, 1]
       TilingFactor: 1
-      Texture:
-        AssetHandle: 45120015123142
-        Coords: [0, 0]
-        CellSize: [1, 1]
-        SpriteSize: [1024, 1024]
+    BoxCollider2DComponent:
+      Offset: [0, 0]
+      Size: [0.5, 0.5]
+      Mask: 0xFFFFFFFF

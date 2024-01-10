@@ -91,7 +91,7 @@ namespace Exodia {
         void SetTexture(const AssetHandle &handle);
 
         ///////////////
-        // Operators //
+        // Operators //vertices
         ///////////////
       public:
         SubTexture2D &operator=(const SubTexture2D &other);

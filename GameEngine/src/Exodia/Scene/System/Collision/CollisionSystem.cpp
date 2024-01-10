@@ -60,6 +60,17 @@ namespace Exodia {
                             if (CheckCollision(colliderA, transformA, colliderB, transformB))
                                 collisions.push_back(std::make_pair(entityA, entityB));
                         });
+
+                    world->ForEach<TriangleCollider2DComponent, TransformComponent>(
+                        [&](Entity *entityB, ComponentHandle<TriangleCollider2DComponent> colliderB,
+                            ComponentHandle<TransformComponent> transformB) {
+                            if (std::find(collisions.begin(), collisions.end(), std::make_pair(entityB, entityA)) !=
+                                collisions.end())
+                                return;
+
+                            if (CheckCollision(colliderA, transformA, colliderB, transformB))
+                                collisions.push_back(std::make_pair(entityA, entityB));
+                        });
                 });
             world->UnlockMutex();
         }
@@ -82,7 +93,41 @@ namespace Exodia {
                                 collisions.push_back(std::make_pair(entityA, entityB));
                         });
                 });
+
+            world->ForEach<BoxCollider2DComponent, TransformComponent>(
+                [&](Entity *entityA, ComponentHandle<BoxCollider2DComponent> colliderA,
+                    ComponentHandle<TransformComponent> transformA) {
+                    world->ForEach<CircleCollider2DComponent, TransformComponent>(
+                        [&](Entity *entityB, ComponentHandle<CircleCollider2DComponent> colliderB,
+                            ComponentHandle<TransformComponent> transformB) {
+                            if (std::find(collisions.begin(), collisions.end(), std::make_pair(entityB, entityA)) !=
+                                collisions.end())
+                                return;
+
+                            if (CheckCollision(colliderA, transformA, colliderB, transformB))
+                                collisions.push_back(std::make_pair(entityA, entityB));
+                        });
+                });
+
+            world->ForEach<TriangleCollider2DComponent, TransformComponent>(
+                [&](Entity *entityA, ComponentHandle<TriangleCollider2DComponent> colliderA,
+                    ComponentHandle<TransformComponent> transformA) {
+                    world->ForEach<CircleCollider2DComponent, TransformComponent>(
+                        [&](Entity *entityB, ComponentHandle<CircleCollider2DComponent> colliderB,
+                            ComponentHandle<TransformComponent> transformB) {
+                            if (std::find(collisions.begin(), collisions.end(), std::make_pair(entityB, entityA)) !=
+                                collisions.end())
+                                return;
+
+                            if (CheckCollision(colliderB, transformB, colliderA, transformA))
+                                collisions.push_back(std::make_pair(entityA, entityB));
+                        });
+                });
             world->UnlockMutex();
+        }
+
+        {
+            EXODIA_PROFILE_SCOPE("CollisionSystem::Update::TriangleCollider2D");
         }
 
         CompareCollisions(collisions);

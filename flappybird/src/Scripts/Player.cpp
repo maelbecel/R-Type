@@ -64,6 +64,18 @@ namespace FlappyBird {
         RigidBody2DComponent &rbc = GetComponent<RigidBody2DComponent>();
 
         tc.Rotation.z = rbc.Velocity.y * 0.1f;
+
+        auto &pos = GetComponent<TransformComponent>().Translation;
+
+        if (pos.y < -10.0f || pos.y > 10.0f)
+            HandleEntity.GetScene()->DestroyEntity(HandleEntity);
+    }
+
+    void Player::OnCollisionEnter(UNUSED(Exodia::Entity *entity))
+    {
+        EXODIA_INFO("Collision with {0}", entity->GetComponent<TagComponent>().Get().Tag);
+        _dead = true;
+        HandleEntity.GetScene()->DestroyEntity(HandleEntity);
     }
 
     void Player::OnKeyPressed(int keyCode) {

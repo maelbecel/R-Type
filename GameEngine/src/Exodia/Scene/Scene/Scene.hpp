@@ -54,6 +54,7 @@ namespace Exodia {
         GameObject DuplicateEntity(GameObject gameObject);
 
         void DestroyEntity(GameObject gameObject);
+        void DestroyAllEntities();
 
         // -- Runtime ------------------------------------------------------
 

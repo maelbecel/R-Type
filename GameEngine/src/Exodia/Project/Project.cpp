@@ -55,6 +55,10 @@ namespace Exodia {
             return new ComponentContainer<CircleCollider2DComponent>(data);
         });
 
+        RegisterComponent("TriangleCollider2DComponent", [](Buffer data) -> IComponentContainer * {
+            return new ComponentContainer<TriangleCollider2DComponent>(data);
+        });
+
         RegisterComponent("ChildrenComponent", [](Buffer data) -> IComponentContainer * {
             return new ComponentContainer<ChildrenComponent>(data);
         });

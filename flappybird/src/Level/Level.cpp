@@ -32,20 +32,20 @@ namespace FlappyBird {
         if (_Scene == nullptr)
             return;
 
-        if (_Scene->GetEntityByName("SpaceShip").GetComponent<TransformComponent>().Translation.y < -10.0f) {
-            _GameOver = true;
+        Exodia::GameObject ship = nullptr;
+        ship = _Scene->GetEntityByName("SpaceShip");
+        if (ship == nullptr)
             return;
-        }
 
-        score = (_Scene->GetEntityByName("SpaceShip").GetComponent<TransformComponent>().Translation.x) / 20.0f;
+        score = (ship.GetComponent<TransformComponent>().Translation.x) / 20.0f;
 
         auto spike_haut = _Scene->GetEntityByName("spike_haut");
         auto spike_bas = _Scene->GetEntityByName("spike_bas");
 
         if (spike_haut != nullptr && spike_bas != nullptr) {
 
-            float rand = Random::Float() * 7.0f - 4.0f;
-            float diff = 7.0f;
+            float rand = Random::Float() * 8.0f - 4.0f;
+            float diff = 8.5f;
             glm::vec4 color = {Random::Float(), Random::Float(), Random::Float(), 1};
 
             auto &ts_h = spike_haut.GetComponent<TransformComponent>();
@@ -75,7 +75,7 @@ namespace FlappyBird {
         if (spike_haut2 != nullptr && spike_bas2 != nullptr) {
 
             float rand2 = Random::Float() * 8.0f - 4.0f;
-            float diff2 = 7.0f;
+            float diff2 = 8.5f;
             glm::vec4 color = {Random::Float(), Random::Float(), Random::Float(), 1};
 
             auto &ts_h2 = spike_haut2.GetComponent<TransformComponent>();
@@ -114,6 +114,8 @@ namespace FlappyBird {
 
         if (_Scene != nullptr) {
             _Scene->OnRuntimeStop();
+            _Scene->DestroyAllEntities();
+            this->Init();
             _Scene->OnRuntimeStart();
         }
     }
@@ -122,6 +124,7 @@ namespace FlappyBird {
         _Scene = CreateRef<Scene>();
 
         PrefabsImporter::LoadPrefabs("Assets/Prefabs/FlappyBird.prefab", _Scene);
+        PrefabsImporter::LoadPrefabs("Assets/Prefabs/Camera.prefab", _Scene);
         PrefabsImporter::LoadPrefabs("Assets/Prefabs/obstacle.prefab", _Scene);
 
         auto spike_haut = _Scene->GetEntityByName("spike_haut");
@@ -129,8 +132,8 @@ namespace FlappyBird {
 
         if (spike_haut != nullptr && spike_bas != nullptr) {
 
-            float rand = Random::Float() * 7.0f - 4.0f;
-            float diff = 7.0f;
+            float rand = Random::Float() * 8.0f - 4.0f;
+            float diff = 8.5f;
             glm::vec4 color = {Random::Float(), Random::Float(), Random::Float(), 1};
 
             auto &ts_h = spike_haut.GetComponent<TransformComponent>();
@@ -150,7 +153,7 @@ namespace FlappyBird {
         if (spike_haut2 != nullptr && spike_bas2 != nullptr) {
 
             float rand2 = Random::Float() * 8.0f - 4.0f;
-            float diff2 = 7.0f;
+            float diff2 = 8.5f;
             glm::vec4 color = {Random::Float(), Random::Float(), Random::Float(), 1};
 
             auto &ts_h2 = spike_haut2.GetComponent<TransformComponent>();
@@ -171,9 +174,16 @@ namespace FlappyBird {
     void Level::Play() {
         if (_Scene == nullptr)
             return;
+
+        auto colision = new CollisionSystem();
+
         _Scene->RegisterSystem(new ParticleSystem());
         _Scene->RegisterSystem(new GravitySystem());
         _Scene->RegisterSystem(new MovingSystem());
+        _Scene->RegisterSystem(colision);
+
+        _Scene->Subscribe<Events::OnCollisionEntered>(colision);
+        _Scene->Subscribe<Events::OnEntityDestroyed>(this);
 
         // TODO: Flappy Collision System
 
