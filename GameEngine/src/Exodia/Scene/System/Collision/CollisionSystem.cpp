@@ -126,9 +126,7 @@ namespace Exodia {
             world->UnlockMutex();
         }
 
-        {
-            EXODIA_PROFILE_SCOPE("CollisionSystem::Update::TriangleCollider2D");
-        }
+        { EXODIA_PROFILE_SCOPE("CollisionSystem::Update::TriangleCollider2D"); }
 
         CompareCollisions(collisions);
     }

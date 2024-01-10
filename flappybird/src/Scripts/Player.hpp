@@ -25,7 +25,7 @@ namespace FlappyBird {
 
         void OnKeyPressed(int keyCode) override;
 
-        bool IsDead() {return _dead;};
+        bool IsDead() { return _dead; };
 
       private:
         void Emit(const ParticleProps &particleProps);
