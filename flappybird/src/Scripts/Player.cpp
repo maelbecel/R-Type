@@ -16,6 +16,9 @@ namespace FlappyBird {
     // Methods //
     /////////////
 
+    /**
+     * The function initializes the properties of the player's smoke and engine particles.
+     */
     void Player::OnCreate() {
         _Time = 0.0f;
         _EnginePower = 1.0f;
@@ -47,6 +50,13 @@ namespace FlappyBird {
         _EngineParticle.NumberOfParticles = 10;
     }
 
+    /**
+     * The function updates the player's position, emits smoke particles, rotates the player based on
+     * velocity, and destroys the player if it goes out of bounds.
+     * 
+     * @param ts Timestep is a time interval that represents the elapsed time since the last frame
+     * update. It is used to control the timing of various game events and animations.
+     */
     void Player::OnUpdate(Timestep ts) {
         _Time += ts;
 
@@ -71,12 +81,25 @@ namespace FlappyBird {
             HandleEntity.GetScene()->DestroyEntity(HandleEntity);
     }
 
+    /**
+     * The OnCollisionEnter function logs a collision with an entity and sets the player's "dead" flag
+     * to true, then destroys the entity.
+     * 
+     * @param entity The "entity" parameter is a pointer to an instance of the Exodia::Entity class.
+     */
     void Player::OnCollisionEnter(UNUSED(Exodia::Entity *entity)) {
         EXODIA_INFO("Collision with {0}", entity->GetComponent<TagComponent>().Get().Tag);
         _dead = true;
         HandleEntity.GetScene()->DestroyEntity(HandleEntity);
     }
 
+    /**
+     * The function `OnKeyPressed` increases the velocity of the player's rigid body and emits engine
+     * particles when the space key is pressed.
+     * 
+     * @param keyCode The `keyCode` parameter represents the key code of the key that was pressed. It
+     * is used to check if the SPACE key was pressed.
+     */
     void Player::OnKeyPressed(int keyCode) {
         if (keyCode == Key::SPACE) {
             RigidBody2DComponent &rbc = GetComponent<RigidBody2DComponent>();
@@ -100,6 +123,15 @@ namespace FlappyBird {
         }
     }
 
+    /**
+     * The function emits a specified number of particles with various properties such as position,
+     * rotation, size, color, lifetime, velocity, and gravity.
+     * 
+     * @param props The "props" parameter is of type "ParticleProps", which is a user-defined struct or
+     * class that contains properties for creating particles. It likely includes information such as
+     * the number of particles to create, the position of the particles, their size, color, lifetime,
+     * velocity, and other relevant attributes.
+     */
     void Player::Emit(const ParticleProps &props) {
         for (int i = 0; i < props.NumberOfParticles; i++) {
             GameObject particle = HandleEntity.GetScene()->CreateNewEntity("Particle #" + std::to_string(i));

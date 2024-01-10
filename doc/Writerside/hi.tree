@@ -8,6 +8,9 @@
 
     <toc-element topic="Home.md">
         <toc-element topic="Examples.md">
+            <toc-element topic="example-flappybird.md">
+                <toc-element topic="tuto-flappy.md"/>
+            </toc-element>
             <toc-element topic="Application.md"/>
             <toc-element topic="Application-with-a-sprite-renderer.md"/>
             <toc-element topic="Default-System.md"/>

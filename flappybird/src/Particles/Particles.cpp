@@ -13,8 +13,18 @@
 
 namespace FlappyBird {
 
+    /**
+     * The above function is a constructor for the ParticlesSystem class that initializes the
+     * _ParticleListIndex to 999 and resizes the _ParticleList vector to 1000.
+     */
     ParticlesSystem::ParticlesSystem() : _ParticleListIndex(999) { _ParticleList.resize(1000); }
 
+    /**
+     * The function emits a particle with specified properties and updates the particle list index.
+     * 
+     * @param props The "props" parameter is of type ParticleProps, which is a struct or class that
+     * contains various properties of a particle. These properties include:
+     */
     void ParticlesSystem::Emit(const ParticleProps &props) {
         Particle &particle = _ParticleList[_ParticleListIndex];
 
@@ -48,6 +58,14 @@ namespace FlappyBird {
         _ParticleListIndex = _ParticleListIndex % _ParticleList.size();
     }
 
+    /**
+     * The function updates the position, rotation, and remaining life of each active particle in a
+     * particle system.
+     * 
+     * @param ts The parameter "ts" is of type "Exodia::Timestep" and is used to represent the time
+     * elapsed since the last update. It is likely a custom data type defined in the Exodia namespace
+     * specifically for handling time-related calculations.
+     */
     void ParticlesSystem::OnUpdate(Exodia::Timestep ts) {
         for (Particle &particle : _ParticleList) {
             if (!particle.Active)
@@ -64,6 +82,10 @@ namespace FlappyBird {
         }
     }
 
+    /**
+     * The function iterates through a list of particles and renders them with their respective
+     * position, size, rotation, and color.
+     */
     void ParticlesSystem::OnRender() {
         for (Particle &particle : _ParticleList) {
             if (!particle.Active)

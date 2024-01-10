@@ -19,6 +19,10 @@ namespace FlappyBird {
     // Constructor & Destructor //
     //////////////////////////////
 
+    /**
+     * The GameLayer constructor initializes the Flappy Bird game and sets the initial state, blink
+     * status, and time.
+     */
     GameLayer::GameLayer() : Layer("Flappy Bird"), _State(GameState::Menu), _Blink(false), _Time(0.0f) {
         FlappyBird::Init();
         Random::Init();
@@ -28,12 +32,24 @@ namespace FlappyBird {
     // Methods //
     /////////////
 
+    /**
+     * The function initializes the game level.
+     */
     void GameLayer::OnAttach() {
         EXODIA_PROFILE_FUNCTION();
 
         _Level.Init();
     }
 
+    /**
+     * The function `OnUpdate` updates the game state, prepares the renderer, and updates the scene
+     * based on the current game state.
+     *
+     * @param ts Timestep is a class that represents the time elapsed since the last frame. It is used
+     * to control the speed of the game and ensure consistent gameplay across different hardware. In
+     * this code, it is passed as a parameter to the OnUpdate function to update the game logic and
+     * scene based on the elapsed time
+     */
     void GameLayer::OnUpdate(Timestep ts) {
         EXODIA_PROFILE_FUNCTION();
 
@@ -73,6 +89,10 @@ namespace FlappyBird {
         }
     }
 
+    /**
+     * The function `OnImGUIRender()` is responsible for rendering the user interface elements in the
+     * game, including the score, menu, game over screen, and debug statistics.
+     */
     void GameLayer::OnImGUIRender() {
         // -- ImGui Render -----------------------------------------------------
 
@@ -138,6 +158,13 @@ namespace FlappyBird {
 #endif
     }
 
+    /**
+     * The function `OnEvent` in the `GameLayer` class dispatches events to their corresponding event
+     * handlers.
+     * 
+     * @param event The "event" parameter is a reference to an Event object. It is passed to the
+     * OnEvent function to handle different types of events.
+     */
     void GameLayer::OnEvent(Event &event) {
         EventDispatcher dispatcher(event);
 
@@ -145,11 +172,29 @@ namespace FlappyBird {
         dispatcher.Dispatch<MouseButtonPressedEvent>(BIND_EVENT_FN(GameLayer::OnMouseButtonPressedEvent));
     }
 
-    bool GameLayer::OnKeyPressedEvent(KeyPressedEvent &event) {
+    /**
+     * The function `OnKeyPressedEvent` in the `GameLayer` class handles key pressed events by passing the
+     * key code to the `_Level` object and returns true.
+     *
+     * @param event The event parameter is an object of type KeyPressedEvent. It represents the event that
+     * occurred when a key was pressed.
+     *
+     * @return a boolean value of true.
+     */
+        bool GameLayer::OnKeyPressedEvent(KeyPressedEvent &event) {
         _Level.OnKeyPressed(event.GetKeyCode());
         return true;
     }
 
+    /**
+     * The function checks if the game state is "GameOver" and if so, resets the level and changes the
+     * state to "Play", then starts playing the level.
+     *
+     * @param event The parameter "event" is of type MouseButtonPressedEvent, which is an event that is
+     * triggered when a mouse button is pressed.
+     *
+     * @return a boolean value of true.
+     */
     bool GameLayer::OnMouseButtonPressedEvent(UNUSED(MouseButtonPressedEvent &event)) {
         if (_State == GameState::GameOver)
             _Level.Reset();
