@@ -277,7 +277,8 @@ namespace Exodia {
         _World->UnlockMutex();
 
         // _World->LockMutex();
-        // _World->ForEach<TransformComponent, BoxCollider2DComponent>([&](Entity *entity, auto transform, auto collider) {
+        // _World->ForEach<TransformComponent, BoxCollider2DComponent>([&](Entity *entity, auto transform, auto
+        // collider) {
         //     auto &tc = transform.Get();
         //     auto &cc = collider.Get();
 
@@ -300,10 +301,9 @@ namespace Exodia {
         // });
         // _World->UnlockMutex();
 
-
-
         // _World->LockMutex();
-        // _World->ForEach<TransformComponent, CircleCollider2DComponent>([&](Entity *entity, auto transform, auto collider) {
+        // _World->ForEach<TransformComponent, CircleCollider2DComponent>([&](Entity *entity, auto transform, auto
+        // collider) {
         //     auto &tc = transform.Get();
         //     auto &cc = collider.Get();
 
