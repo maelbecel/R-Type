@@ -83,7 +83,9 @@ namespace RType {
             anim = HandleEntity->AddComponent<AnimationComponent>(_Animations[0]);
 
             sprite.Get().Texture = anim.Get().Frames[0];
-        } else {
+        }
+
+        if (anim && sprite) {
             SpriteRendererComponent &sr = sprite.Get();
             AnimationComponent &ac = anim.Get();
 
@@ -140,6 +142,7 @@ namespace RType {
 
     void PataPata::Shoot() {
         ComponentHandle<TransformComponent> transform = GetComponent<TransformComponent>();
+        ComponentHandle<Clock> clock = GetComponent<Clock>();
 
         if (_State == State::DEAD)
             return;
@@ -148,7 +151,7 @@ namespace RType {
 
         TransformComponent tc = transform.Get();
 
-        if (_AttackTimer > _AttackCooldown) {
+        if (clock.Get().ElapsedTime > numOfShoot * _AttackCooldown) {
             World *world = HandleEntity->GetWorld();
             if (!world)
                 return;
@@ -162,12 +165,16 @@ namespace RType {
                 return;
             script.Get().Bind("BulletEnnemy");
 
+            ComponentHandle<SpriteRendererComponent> sprite = bullet->AddComponent<SpriteRendererComponent>();
+            if (!sprite)
+                return;
+
             ComponentHandle<ParentComponent> parent = bullet->AddComponent<ParentComponent>();
             ComponentHandle<IDComponent> ID = HandleEntity->GetComponent<IDComponent>();
             if (!parent || !ID)
                 return;
             parent.Get().Parent = ID.Get().ID;
-            _AttackTimer = 0.0f;
+            numOfShoot++;
         }
     }
 
@@ -186,7 +193,6 @@ namespace RType {
         float &mytime = clock.Get().ElapsedTime;
 
         if (_State == State::ALIVE) {
-            mytime += ts.GetSeconds();
             body.Get().Velocity.y = (float)(amplitude * sin(frequency * mytime * PI));
         }
     }

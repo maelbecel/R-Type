@@ -29,6 +29,21 @@ template <typename T> T swapEndianness(T value) {
 
 namespace Exodia {
     namespace Network {
+        typedef enum {
+            PACKET_INFO = 0x00,
+            ACK = 0x01,
+            CONNECT_ACCEPT = 0x02,
+            CONNECT_REJECT = 0x03,
+            SYSTEM_LOAD = 0x0b,
+            COMPONENT_OF = 0x0c,
+            GAME_EVENT = 0x0d,
+            DELETE_ENTITY = 0x0e,
+            DELETE_COMPONENT = 0x0f,
+            IMPORTANT_EVENT = 0x10,
+            CONNECT = 0x81,
+            DISCONNECT = 0x82,
+            EVENT = 0x8b
+        } Command;
         class Header {
           public:
             Header(uint8_t command, bool isImportant)
@@ -38,8 +53,7 @@ namespace Exodia {
                 MillisecondsType timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(
                                                  std::chrono::system_clock::now().time_since_epoch())
                                                  .count();
-
-                _timestamp = static_cast<float>(timestamp);
+                _timestamp = static_cast<double>(timestamp);
             };
             /**
              * @brief Construct a new Header object
@@ -50,7 +64,7 @@ namespace Exodia {
              * @param size (Type: unsigned long) The size of the packet
              * @param isImportant (Type: bool) If the packet is important or not
              */
-            Header(unsigned char command, unsigned long id, unsigned long size, bool isImportant = false)
+            Header(unsigned char command, unsigned long id, unsigned long size, bool isImportant)
                 : _command(command), _id(id), _size(size), _isImportant(isImportant) {
                 using MillisecondsType = std::chrono::milliseconds::rep;
 
@@ -58,7 +72,7 @@ namespace Exodia {
                                                  std::chrono::system_clock::now().time_since_epoch())
                                                  .count();
 
-                _timestamp = static_cast<float>(timestamp);
+                _timestamp = static_cast<double>(timestamp);
             }
 
             Header(const Header &header)
@@ -74,9 +88,9 @@ namespace Exodia {
                 std::memcpy(buffer.data(), &swappedCommand, sizeof(char));
                 index += sizeof(char);
 
-                float swappedTimestamp = swapEndianness(_timestamp);
-                std::memcpy(buffer.data() + index, &swappedTimestamp, sizeof(float));
-                index += sizeof(float);
+                double swappedTimestamp = swapEndianness(_timestamp);
+                std::memcpy(buffer.data() + index, &swappedTimestamp, sizeof(double));
+                index += sizeof(double);
 
                 unsigned long swappedId = swapEndianness(_id);
                 std::memcpy(buffer.data() + index, &swappedId, sizeof(unsigned long));
@@ -95,17 +109,17 @@ namespace Exodia {
                 size_t index = 0;
 
                 if (buffer.size() < GetSize())
-                    return Header(0, 0, 0);
+                    return Header(0, 0, 0, 0);
 
                 char swappedCommand;
                 std::memcpy(&swappedCommand, buffer.data(), sizeof(char));
                 index += sizeof(char);
                 char command = swapEndianness(swappedCommand);
 
-                float swappedTimestamp;
-                std::memcpy(&swappedTimestamp, buffer.data() + index, sizeof(float));
-                index += sizeof(float);
-                float timestamp = swapEndianness(swappedTimestamp);
+                double swappedTimestamp;
+                std::memcpy(&swappedTimestamp, buffer.data() + index, sizeof(double));
+                index += sizeof(double);
+                double timestamp = swapEndianness(swappedTimestamp);
 
                 unsigned long swappedId;
                 std::memcpy(&swappedId, buffer.data() + index, sizeof(unsigned long));
@@ -130,7 +144,7 @@ namespace Exodia {
 
             uint64_t GetRealId() { return _id; }
 
-            static unsigned long GetSize() { return 22; }
+            static unsigned long GetSize() { return 26; }
 
             void setSize(unsigned long size) { _size = size; }
 
@@ -141,7 +155,7 @@ namespace Exodia {
             bool GetIsImportant() const { return _isImportant; }
 
             unsigned char getCommand() const { return _command; };
-            float getTimestamp() const { return _timestamp; };
+            double getTimestamp() const { return _timestamp; };
             unsigned long getId() const { return _id; };
             unsigned long getSize() const { return _size; };
 
@@ -154,20 +168,20 @@ namespace Exodia {
                 std::unordered_map<unsigned char, std::string> commands;
                 std::string command;
 
-                commands[0x00] = "Packet info";
-                commands[0x01] = "Acknowledgement";
-                commands[0x02] = "Accept client connection";
-                commands[0x03] = "Reject client connection";
-                commands[0x0b] = "System load";
-                commands[0x0c] = "Create component";
-                commands[0x0d] = "Game event";
-                commands[0x0e] = "Delete entity";
-                commands[0x0f] = "Delete component";
-                commands[0x10] = "Important event";
+                commands[PACKET_INFO] = "Packet info";
+                commands[ACK] = "Acknowledgement";
+                commands[CONNECT_ACCEPT] = "Accept client connection";
+                commands[CONNECT_REJECT] = "Reject client connection";
+                commands[SYSTEM_LOAD] = "System load";
+                commands[COMPONENT_OF] = "Create component";
+                commands[GAME_EVENT] = "Game event";
+                commands[DELETE_ENTITY] = "Delete entity";
+                commands[DELETE_COMPONENT] = "Delete component";
+                commands[IMPORTANT_EVENT] = "Important event";
 
-                commands[0x81] = "Ask for connection";
-                commands[0x82] = "Disconnect";
-                commands[0x8b] = "Event";
+                commands[CONNECT] = "Ask for connection";
+                commands[DISCONNECT] = "Disconnect";
+                commands[EVENT] = "Event";
                 command = commands[getCommand()];
 
                 if (command.empty())
@@ -184,6 +198,7 @@ namespace Exodia {
                 str += " ID: " + std::to_string(_id);
                 str += " Size: " + std::to_string(_size);
                 str += " Is important: " + std::to_string(_isImportant);
+                str += " Timestamp: " + std::to_string(_timestamp);
 
                 return str;
             }
@@ -203,15 +218,16 @@ namespace Exodia {
                 _timestamp = header._timestamp;
                 _id = header._id;
                 _size = header._size;
+                _isImportant = header._isImportant;
                 return *this;
             }
 
           private:
-            unsigned char _command;
-            float _timestamp;
+            unsigned char _command = 0x01;
+            double _timestamp;
             unsigned long _id;
             unsigned long _size;
-            bool _isImportant;
+            bool _isImportant = false;
         };
     }; // namespace Network
 };     // namespace Exodia

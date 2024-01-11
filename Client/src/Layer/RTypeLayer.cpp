@@ -47,6 +47,7 @@ namespace RType {
 
         _Network->Loop();
         _Network->SendAskConnect("127.0.0.1", 8082);
+        _Network->SetNetworkType(Network::NetworkType::CLIENT);
         // TODO: change ip and port when the server is on a different machine
     }
 
@@ -76,6 +77,7 @@ namespace RType {
         Scenes[GAME]->RegisterSystem(new AnimationSystem());
         Scenes[GAME]->RegisterSystem(new MovingSystem(1.5f));
         Scenes[GAME]->RegisterSystem(collisionSystem);
+        Scenes[GAME]->RegisterSystem(new ClockSystem());
         // Scenes[GAME]->Subscribe<Events::OnEntityCreated>(subscribe);
         // Scenes[GAME]->Subscribe<Events::OnEntityDestroyed>(subscribe);
         Scenes[GAME]->Subscribe<Exodia::Events::OnCollisionEntered>(collisionSystem);
@@ -198,6 +200,17 @@ namespace RType {
                 }
                 (void)entity;
             });
+        if (key == Key::ESCAPE) {
+            NetworkInfo info = _Network->GetNetworkInfo();
+            EXODIA_CORE_ERROR("PACKET info");
+            EXODIA_CORE_ERROR("Send packet: {0}", info.sendPacket);
+            EXODIA_CORE_ERROR("Received packet: {0}", info.receivedPacket);
+            EXODIA_CORE_ERROR("KiloByte sent: {0}", info.kiloByteSent);
+            EXODIA_CORE_ERROR("KiloByte received: {0}", info.kiloByteReceived);
+            EXODIA_CORE_ERROR("Packet loss sent: {0}", info.sendPacketLost);
+            EXODIA_CORE_ERROR("Packet loss received: {0}", info.receivePacketLost);
+            EXODIA_CORE_ERROR("PING sent: {0}", info.ping);
+        }
         Scenes[CurrentScene]->GetWorld().UnlockMutex();
 
         return true;

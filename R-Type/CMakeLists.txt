@@ -22,6 +22,7 @@ set(SOURCES_GAME_ENGINE
         # -- System source files
 
         src/System/AnimationSystem.cpp
+        src/System/ClockSystem.cpp
 
         # -- Script source files
 
