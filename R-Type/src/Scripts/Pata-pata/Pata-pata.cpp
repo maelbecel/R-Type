@@ -142,6 +142,7 @@ namespace RType {
 
     void PataPata::Shoot() {
         ComponentHandle<TransformComponent> transform = GetComponent<TransformComponent>();
+        ComponentHandle<Clock> clock = GetComponent<Clock>();
 
         if (_State == State::DEAD)
             return;
@@ -150,7 +151,7 @@ namespace RType {
 
         TransformComponent tc = transform.Get();
 
-        if (_AttackTimer > _AttackCooldown) {
+        if (clock.Get().ElapsedTime > numOfShoot * _AttackCooldown) {
             World *world = HandleEntity->GetWorld();
             if (!world)
                 return;
@@ -173,7 +174,7 @@ namespace RType {
             if (!parent || !ID)
                 return;
             parent.Get().Parent = ID.Get().ID;
-            _AttackTimer = 0.0f;
+            numOfShoot++;
         }
     }
 

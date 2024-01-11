@@ -329,8 +329,8 @@ namespace Exodia::Network {
             content = std::vector<char>(message.begin() + int(Header::GetSize()), message.end());
 
         if (header.getSize() != content.size()) {
-            EXODIA_CORE_WARN("Network::Splitter() - Packet size is not the one indicated got {0} instead of {1} !",
-                             message.size(), header.getSize());
+            EXODIA_CORE_WARN("Network::Splitter() - Packet size is not the one indicated got {0} instead of {1} for packet {2}",
+                             message.size(), header.getSize(), header.getId());
             return;
         }
 

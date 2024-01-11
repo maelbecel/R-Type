@@ -66,6 +66,7 @@ namespace RType {
         State _PreviousState = State::DEAD;
         float _AttackTimer;
         float _AttackCooldown = 5.0f;
+        int numOfShoot = 0;
         std::vector<AnimationComponent> _Animations;
     };
 }; // namespace RType

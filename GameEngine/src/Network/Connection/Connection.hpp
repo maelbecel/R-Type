@@ -39,8 +39,12 @@ class Connection {
     };
 
     void ResendNeedAck(Exodia::Network::UDPSocket &socket) {
+        std::vector<std::shared_ptr<Exodia::Network::Packet>> packetsDuplicate;
         for (auto packet : _packetNeedAck) {
-            SendPacketAck(socket, packet.second);
+            packetsDuplicate.push_back(std::make_shared<Exodia::Network::Packet>(*packet.second));
+        }
+        for (auto packet : packetsDuplicate) {
+            SendPacketAck(socket, packet);
         }
     }
 
@@ -69,7 +73,7 @@ class Connection {
         _id++;
         _networkInfo.kiloByteSent += packet->GetBuffer().size() / 1024.0f;
         _networkInfo.sendPacket++;
-        _networkInfo.lastPacketSent = packet;
+        _networkInfo.lastPacketSent = std::make_shared<Exodia::Network::Packet>(*packet);
     }
 
     void SendPacketAck(Exodia::Network::UDPSocket &socket, std::shared_ptr<Exodia::Network::Packet> packet) {
@@ -82,8 +86,7 @@ class Connection {
         _id++;
         _networkInfo.kiloByteSent += packet->GetBuffer().size() / 1024.0f;
         _networkInfo.sendPacket++;
-        _networkInfo.lastPacketSent = packet;
-        RemovePacketNeedAck(_id);
+        _networkInfo.lastPacketSent = std::make_shared<Exodia::Network::Packet>(*packet);
     }
 
     NetworkInfo GetLastNetworkInfo() { return _lastNetworkInfo; }
@@ -106,7 +109,7 @@ class Connection {
     void SetLastPacketSent(std::shared_ptr<Exodia::Network::Packet> packet) { _networkInfo.lastPacketSent = packet; }
 
     void SetLastPacketReceived(std::shared_ptr<Exodia::Network::Packet> packet) {
-        _networkInfo.lastPacketReceived = packet;
+        _networkInfo.lastPacketReceived = std::make_shared<Exodia::Network::Packet>(*packet);
     }
 
     void SetWorldId(uint64_t worldId) { _worldId = worldId; }

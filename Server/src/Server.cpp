@@ -266,10 +266,10 @@ namespace Exodia {
             if (my_Timer > 1.0f) {
                 my_Timer = 0.0f;
 
-                // _Network.SendPacketInfo();
+                _Network.SendPacketInfo();
             }
 
-            if (count % 50 == 0) {
+            if (count % 200 == 0) {
                 EXODIA_CORE_WARN("Syncing components");
                 Scenes[CurrentScene]->GetWorld().ForEach<TransformComponent>(
                     [&](Entity *entity, ComponentHandle<TransformComponent> transform) {

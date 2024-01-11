@@ -46,7 +46,7 @@ namespace RType {
     }
 
     void BulletEnnemy::OnCreate() {
-        EXODIA_INFO("BulletEnnemy created");
+        EXODIA_CORE_ERROR("BulletEnnemy created");
 
         ComponentHandle<TransformComponent> transform = HandleEntity->GetComponent<TransformComponent>();
         ComponentHandle<ParentComponent> parent = HandleEntity->GetComponent<ParentComponent>();
@@ -55,10 +55,12 @@ namespace RType {
         if (!transform || !parent || !world)
             return;
 
+        EXODIA_ERROR("PASSED 1");
         Entity *parent_entity = world->GetEntityByID(parent.Get().Parent);
 
         if (!parent_entity)
             return;
+
 
         ComponentHandle<TransformComponent> parent_transform = parent_entity->GetComponent<TransformComponent>();
 
@@ -115,11 +117,13 @@ namespace RType {
     }
 
     void BulletEnnemy::UpdateAnimations() {
+        ComponentHandle<TagComponent> tag = GetComponent<TagComponent>();
         if (_Animations.size() == 0)
             return;
 
         ComponentHandle<SpriteRendererComponent> sprite = GetComponent<SpriteRendererComponent>();
         ComponentHandle<AnimationComponent> anim = GetComponent<AnimationComponent>();
+
 
         if (!sprite)
             sprite = HandleEntity->AddComponent<SpriteRendererComponent>();
@@ -183,14 +187,22 @@ namespace RType {
     }
 
     void BulletEnnemy::OnCollisionEnter(Entity *entity) {
-        ComponentHandle<ParentComponent> parent = GetComponent<ParentComponent>();
-        ComponentHandle<IDComponent> entity_id = entity->GetComponent<IDComponent>();
-
-        if (!parent || !entity_id)
-            return;
-        if (parent.Get().Parent == entity_id.Get().ID)
+        EXODIA_CORE_ERROR("COLLISION");
+        ComponentHandle<TagComponent> tag_entity = entity->GetComponent<TagComponent>();
+        if (!tag_entity)
             return;
 
-        _IsColliding = true;
+        if (tag_entity.Get().Tag.rfind("Pata", 0) == 0 || tag_entity.Get().Tag.rfind("BE", 0) == 0) {
+            EXODIA_CORE_ERROR("COLLISION With PARENT or other enemy bullet");
+        } else {
+            EXODIA_CORE_ERROR("COLLISION With {0}", tag_entity.Get().Tag);
+            ComponentHandle<RigidBody2DComponent> body = GetComponent<RigidBody2DComponent>();
+            if (!body)
+                return;
+            body.Get().Velocity = {0.0f, 0.0f};
+            _IsColliding = true;
+
+        }
+
     }
 }; // namespace RType

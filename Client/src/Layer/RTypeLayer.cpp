@@ -200,6 +200,18 @@ namespace RType {
                 }
                 (void)entity;
             });
+        if (key == Key::ESCAPE)
+        {
+            NetworkInfo info = _Network->GetNetworkInfo();
+            EXODIA_CORE_ERROR("PACKET info");
+            EXODIA_CORE_ERROR("Send packet: {0}", info.sendPacket);
+            EXODIA_CORE_ERROR("Received packet: {0}", info.receivedPacket);
+            EXODIA_CORE_ERROR("KiloByte sent: {0}", info.kiloByteSent);
+            EXODIA_CORE_ERROR("KiloByte received: {0}", info.kiloByteReceived);
+            EXODIA_CORE_ERROR("Packet loss sent: {0}", info.sendPacketLost);
+            EXODIA_CORE_ERROR("Packet loss received: {0}", info.receivePacketLost);
+            EXODIA_CORE_ERROR("PING sent: {0}", info.ping);
+        }
         Scenes[CurrentScene]->GetWorld().UnlockMutex();
 
         return true;
