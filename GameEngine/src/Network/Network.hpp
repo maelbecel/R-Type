@@ -84,6 +84,7 @@ namespace Exodia {
             void SendAskConnect(const std::string &ip, short port);                                 // 0x81
             void SendDisconnect();                                                                  // 0x82
             void SendEvent(bool isImportant, uint32_t event, bool isPressed);                       // 0x8b
+
             void Splitter(const std::vector<char> &message, size_t size, asio::ip::udp::endpoint senderEndpoint);
 
             void ResendNeedAck();
