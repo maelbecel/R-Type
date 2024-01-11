@@ -176,8 +176,7 @@ namespace RType {
 
     void RTypeLayer::OnImGUIRender() { EXODIA_PROFILE_FUNCTION(); }
 
-    bool RTypeLayer::OnWindowClose(Exodia::WindowCloseEvent &event)
-    {
+    bool RTypeLayer::OnWindowClose(Exodia::WindowCloseEvent &event) {
         (void)event;
         EXODIA_PROFILE_FUNCTION();
 
