@@ -165,11 +165,25 @@ namespace RType {
         if (CurrentScene == GAME) {
         };
 
+        _packetTimer += ts;
+        if (_packetTimer >= 1) {
+            _Network->SendPacketInfo();
+            _packetTimer = 0;
+        }
         // Update the world
         Scenes[CurrentScene]->OnUpdateRuntime(ts);
     }
 
     void RTypeLayer::OnImGUIRender() { EXODIA_PROFILE_FUNCTION(); }
+
+    bool RTypeLayer::OnWindowClose(Exodia::WindowCloseEvent &event)
+    {
+        (void)event;
+        EXODIA_PROFILE_FUNCTION();
+
+        _Network->SendDisconnect();
+        return true;
+    }
 
     void RTypeLayer::OnEvent(Exodia::Event &event) {
         EventDispatcher dispatcher(event);
@@ -177,6 +191,7 @@ namespace RType {
         dispatcher.Dispatch<KeyPressedEvent>(BIND_EVENT_FN(RTypeLayer::OnKeyPressedEvent));
         dispatcher.Dispatch<KeyReleasedEvent>(BIND_EVENT_FN(RTypeLayer::OnKeyReleasedEvent));
         dispatcher.Dispatch<WindowResizeEvent>(BIND_EVENT_FN(RTypeLayer::OnWindowResizeEvent));
+        dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(RTypeLayer::OnWindowClose));
     }
 
     bool RTypeLayer::OnKeyPressedEvent(KeyPressedEvent &event) {
@@ -194,7 +209,7 @@ namespace RType {
                 std::string player = "Player_" + oss.str();
 
                 if ((tc.Tag.compare(player) == 0) && sc.Instance != nullptr) {
-                    // sc.Instance->OnKeyPressed(key);
+                    sc.Instance->OnKeyPressed(key);
 
                     _Network->SendEvent(false, key, true);
                 }

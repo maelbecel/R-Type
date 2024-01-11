@@ -55,7 +55,6 @@ namespace RType {
         if (!transform || !parent || !world)
             return;
 
-        EXODIA_ERROR("PASSED 1");
         Entity *parent_entity = world->GetEntityByID(parent.Get().Parent);
 
         if (!parent_entity)
@@ -187,7 +186,6 @@ namespace RType {
     }
 
     void BulletEnnemy::OnCollisionEnter(Entity *entity) {
-        EXODIA_CORE_ERROR("COLLISION");
         ComponentHandle<TagComponent> tag_entity = entity->GetComponent<TagComponent>();
         if (!tag_entity)
             return;

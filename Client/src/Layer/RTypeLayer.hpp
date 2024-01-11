@@ -38,6 +38,7 @@ namespace RType {
         bool OnKeyReleasedEvent(KeyReleasedEvent &event);
         bool OnKeyPressedEvent(KeyPressedEvent &event);
         bool OnWindowResizeEvent(WindowResizeEvent &event);
+        bool OnWindowClose(Exodia::WindowCloseEvent &event);
 
       private:
         int GetPort();
@@ -53,7 +54,7 @@ namespace RType {
       private:
         // TODO: WARNING: This is a temporary solution
         World *_WorldNetwork;
-
+        float _packetTimer = 0;
         Network::IOContextManager _IOContextManager;
         Scope<Network::Network> _Network;
     };
