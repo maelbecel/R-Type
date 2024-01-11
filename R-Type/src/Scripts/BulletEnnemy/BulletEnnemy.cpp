@@ -61,7 +61,6 @@ namespace RType {
         if (!parent_entity)
             return;
 
-
         ComponentHandle<TransformComponent> parent_transform = parent_entity->GetComponent<TransformComponent>();
 
         if (!parent_transform)
@@ -123,7 +122,6 @@ namespace RType {
 
         ComponentHandle<SpriteRendererComponent> sprite = GetComponent<SpriteRendererComponent>();
         ComponentHandle<AnimationComponent> anim = GetComponent<AnimationComponent>();
-
 
         if (!sprite)
             sprite = HandleEntity->AddComponent<SpriteRendererComponent>();
@@ -201,8 +199,6 @@ namespace RType {
                 return;
             body.Get().Velocity = {0.0f, 0.0f};
             _IsColliding = true;
-
         }
-
     }
 }; // namespace RType

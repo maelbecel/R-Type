@@ -200,8 +200,7 @@ namespace RType {
                 }
                 (void)entity;
             });
-        if (key == Key::ESCAPE)
-        {
+        if (key == Key::ESCAPE) {
             NetworkInfo info = _Network->GetNetworkInfo();
             EXODIA_CORE_ERROR("PACKET info");
             EXODIA_CORE_ERROR("Send packet: {0}", info.sendPacket);
