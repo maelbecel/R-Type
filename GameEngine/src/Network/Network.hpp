@@ -125,7 +125,9 @@ namespace Exodia {
                 return -1;
             }
 
-            uint64_t GetId() { return id; }
+            uint64_t GetIdPlayer() { return _id_player; }
+
+            bool IsConnected() { return _isConnected; }
 
             UDPSocket &GetSocket() { return _socket; }
 
@@ -182,7 +184,7 @@ namespace Exodia {
             World *GetWorld() { return _world; }
 
           private:
-            uint64_t id = 0;
+            uint64_t _id_player = 0;
             bool _isConnected = false;
             World *_world;
             UDPSocket _socket;

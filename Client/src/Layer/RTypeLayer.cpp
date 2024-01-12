@@ -71,11 +71,12 @@ namespace RType {
     }
 
     void RTypeLayer::ConnectToServer(int port, std::string ip, int serverPort) {
-        _Network = CreateScope<Network::Network>(_WorldNetwork, _IOContextManager, port);
-
+        (void)port;
         _Network->Loop();
-        _Network->SendAskConnect(ip, (short)serverPort);
-        // TODO: change ip and port when the server is on a different machine
+        while (!_Network->IsConnected()) {
+            _Network->SendAskConnect(ip, (short)serverPort);
+            std::this_thread::sleep_for(std::chrono::milliseconds(3000));
+        }
     }
 
     void RTypeLayer::OnAttach() {
@@ -84,22 +85,16 @@ namespace RType {
         int port = GetPort();
         std::string ip = GetIp();
         int serverPort = GetServerPort();
+        _Network = CreateScope<Network::Network>(_WorldNetwork, _IOContextManager, port);
+
 
         if (port == -1)
             return;
 
-        ConnectToServer(port, ip, serverPort);
 
         // Create world
         CurrentScene = GAME;
 
-        // Scenes[MENU] = CreateRef<Scene>();
-        // Scenes[MENU]->RegisterSystem(new AnimationSystem());
-        // Scenes[MENU]->RegisterSystem(new MovingSystem(1.5f));
-        // Scenes[MENU]->OnViewportResize(Application::Get().GetWindow().GetWidth(),
-        //                                Application::Get().GetWindow().GetHeight());
-
-        // RType::EntityEventSubscriber *subscribe = new RType::EntityEventSubscriber(_Network);
         CollisionSystem *collisionSystem = new CollisionSystem();
 
         Scenes[GAME] = CreateRef<Scene>();
@@ -107,29 +102,11 @@ namespace RType {
         Scenes[GAME]->RegisterSystem(new MovingSystem(1.5f));
         Scenes[GAME]->RegisterSystem(collisionSystem);
         Scenes[GAME]->RegisterSystem(new ClockSystem());
-        // Scenes[GAME]->Subscribe<Events::OnEntityCreated>(subscribe);
-        // Scenes[GAME]->Subscribe<Events::OnEntityDestroyed>(subscribe);
+
         Scenes[GAME]->Subscribe<Exodia::Events::OnCollisionEntered>(collisionSystem);
         Scenes[GAME]->OnViewportResize(Application::Get().GetWindow().GetWidth(),
                                        Application::Get().GetWindow().GetHeight());
 
-        // Entity *music = Scenes[GAME]->CreateEntity("Background");
-
-        // music->AddComponent<MusicComponent>(124013371145915, 0.5f, true);
-
-        // Entity *text = Scenes[GAME]->CreateEntity("Text");
-
-        // auto txt = text->AddComponent<TextRendererComponent>("\"From   the dark regions of space they\n came...Waging
-        // war upon us.\n One saviour stood his ground while all\n others were crushed under the alien\n assaul t...\n\n
-        // The Prototype Markl .\"");
-
-        // txt.Get().Font = UUID(4521854574125);
-        // txt.Get().Font = UUID(45121874124124);
-
-        // auto transform = text->GetComponent<TransformComponent>();
-
-        // transform.Get().Translation = {-10.0f, 3.0f, 0.0f};
-        // transform.Get().Scale = {0.50f, 0.50f, 1.0f};
 
         _Network->SetWorld(Scenes[CurrentScene]->GetWorldPtr());
 
@@ -144,31 +121,6 @@ namespace RType {
         camera.Camera.SetViewportSize(Application::Get().GetWindow().GetWidth(),
                                       Application::Get().GetWindow().GetHeight());
 
-        /*RType::EntityEventSubscriber *subscribe = new RType::EntityEventSubscriber(*_Network);
-
-        Scenes[GAME]->Subscribe<Events::OnEntityCreated>(subscribe);
-        Scenes[GAME]->Subscribe<Events::OnEntityDestroyed>(subscribe);*/
-
-        /* Removing rigid body for static camera
-        auto body_camera = cameraEntity->AddComponent<RigidBody2DComponent>();
-        body_camera.Get().Type = RigidBody2DComponent::BodyType::Dynamic;
-        body_camera.Get().Mass = 0.0f;
-        body_camera.Get().GravityScale = 0.0f;
-        body_camera.Get().Velocity = glm::vec2{ 1.5f, 0.0f };
-        */
-
-        // Create the entities
-        // TODO: Ask server for playerID
-        // int playerID = 0;
-        // Entity *entity = Scenes[GAME]->CreateEntity("Player_" + std::to_string(playerID));
-        // entity->AddComponent<ScriptComponent>().Get().Bind("Player");
-
-        // Create pata-pata
-        // Entity *patata = Scenes[GAME]->CreateEntity("Pata-pata");
-        // patata->AddComponent<ScriptComponent>().Get().Bind("PataPata");
-
-        // Create stars
-        // CreateStars(Scenes);
         for (int i = 0; i < 60; i++) {
             Entity *star = Scenes[GAME]->CreateEntity("Star" + std::to_string(i));
             star->AddComponent<ScriptComponent>().Get().Bind("Star");
@@ -176,6 +128,8 @@ namespace RType {
 
         // Create the camera
         Scenes[CurrentScene]->OnRuntimeStart();
+
+        ConnectToServer(port, ip, serverPort);
     }
 
     void RTypeLayer::OnDetach() { EXODIA_PROFILE_FUNCTION(); }
@@ -233,7 +187,7 @@ namespace RType {
                 TagComponent &tc = tag.Get();
 
                 std::ostringstream oss;
-                oss << _Network->GetId();
+                oss << _Network->GetIdPlayer();
                 std::string player = "Player_" + oss.str();
 
                 if ((tc.Tag.compare(player) == 0) && sc.Instance != nullptr) {
@@ -269,7 +223,7 @@ namespace RType {
                 TagComponent &tc = tag.Get();
 
                 std::ostringstream oss;
-                oss << _Network->GetId();
+                oss << _Network->GetIdPlayer();
                 std::string player = "Player_" + oss.str();
 
                 if ((tc.Tag.compare(player) == 0) && sc.Instance != nullptr) {

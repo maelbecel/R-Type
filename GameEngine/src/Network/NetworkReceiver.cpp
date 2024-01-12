@@ -98,9 +98,9 @@ namespace Exodia::Network {
      */
     void Network::ReceiveConnectAccept(RECEIVE_ARG) {
         (void)senderConnection;
-        std::memcpy(&this->id, message.data(), sizeof(unsigned long));
+        std::memcpy(&this->_id_player, message.data(), sizeof(unsigned long));
         this->_isConnected = true;
-        std::cout << "Receive accept connect with id :" << id << std::endl;
+        std::cout << "Receive accept connect with id :" << _id_player << std::endl;
     }
 
     void Network::ReceiveConnectReject(RECEIVE_ARG) {
@@ -276,7 +276,6 @@ namespace Exodia::Network {
         packet->SetContent(buffer.ToVector());
         std::cout << "Send accept connect" << std::endl;
         connection->SendPacket(_socket, packet);
-        SendAcceptConnect(connection);
     }
 
     /**
