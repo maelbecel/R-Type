@@ -35,12 +35,14 @@ namespace Exodia {
         out << YAML::Key << "Scene" << YAML::Value << _Scene->GetName();
         out << YAML::Key << "Entities" << YAML::Value << YAML::BeginSeq;
         {
-            _Scene->GetWorld().ForEach<IDComponent>([&](Entity *entity, auto id) {
-                out << YAML::BeginMap;
-                out << YAML::Key << "Entity" << YAML::Value << id.Get().ID;
-                { SerializeEntity(out, entity); }
-                out << YAML::EndMap;
-            }, false);
+            _Scene->GetWorld().ForEach<IDComponent>(
+                [&](Entity *entity, auto id) {
+                    out << YAML::BeginMap;
+                    out << YAML::Key << "Entity" << YAML::Value << id.Get().ID;
+                    { SerializeEntity(out, entity); }
+                    out << YAML::EndMap;
+                },
+                false);
         }
         out << YAML::EndSeq;
 

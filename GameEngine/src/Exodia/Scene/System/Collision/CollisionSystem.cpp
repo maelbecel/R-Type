@@ -47,7 +47,8 @@ namespace Exodia {
 
                             if (entityA != entityB && CheckCollision(colliderA, transformA, colliderB, transformB))
                                 collisions.push_back(std::make_pair(entityA, entityB));
-                        }, false);
+                        },
+                        false);
 
                     world->ForEach<CircleCollider2DComponent, TransformComponent>(
                         [&](Entity *entityB, ComponentHandle<CircleCollider2DComponent> colliderB,
@@ -58,8 +59,10 @@ namespace Exodia {
 
                             if (CheckCollision(colliderA, transformA, colliderB, transformB))
                                 collisions.push_back(std::make_pair(entityA, entityB));
-                        }, false);
-                }, false);
+                        },
+                        false);
+                },
+                false);
         }
 
         {
@@ -77,8 +80,10 @@ namespace Exodia {
 
                             if (entityA != entityB && CheckCollision(colliderA, transformA, colliderB, transformB))
                                 collisions.push_back(std::make_pair(entityA, entityB));
-                        }, false);
-                }, false);
+                        },
+                        false);
+                },
+                false);
         }
 
         CompareCollisions(collisions);

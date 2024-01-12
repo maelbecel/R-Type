@@ -122,14 +122,18 @@ namespace Exodia {
         }
 
         template <typename... Entities>
-        void AsyncForEach(typename std::common_type<std::function<void(Entity *, ComponentHandle<Entities>...)>>::type function, bool mergeEntities = true, bool includePendingDestroy = false) {
+        void AsyncForEach(
+            typename std::common_type<std::function<void(Entity *, ComponentHandle<Entities>...)>>::type function,
+            bool mergeEntities = true, bool includePendingDestroy = false) {
             LockMutex();
             ForEach<Entities...>(function, mergeEntities, includePendingDestroy);
             UnlockMutex();
         }
 
         template <typename... Entities>
-        void ForEach(typename std::common_type<std::function<void(Entity *, ComponentHandle<Entities>...)>>::type function, bool mergeEntities = true, bool includePendingDestroy = false) {
+        void
+        ForEach(typename std::common_type<std::function<void(Entity *, ComponentHandle<Entities>...)>>::type function,
+                bool mergeEntities = true, bool includePendingDestroy = false) {
             if (GetCount() == 0)
                 return;
             for (auto *entity : View<Entities...>(includePendingDestroy))

@@ -123,12 +123,14 @@ namespace Exodia {
         for (auto &prefab : _Prefabs)
             prefab->OnRuntimeStart();
 
-        _World->AsyncForEach<CameraComponent>([&](Entity *entity, auto camera) {
-            auto &cc = camera.Get();
+        _World->AsyncForEach<CameraComponent>(
+            [&](Entity *entity, auto camera) {
+                auto &cc = camera.Get();
 
-            if (_ViewportWidth > 0 && _ViewportHeight > 0)
-                cc.Camera.SetViewportSize(_ViewportWidth, _ViewportHeight);
-        }, false);
+                if (_ViewportWidth > 0 && _ViewportHeight > 0)
+                    cc.Camera.SetViewportSize(_ViewportWidth, _ViewportHeight);
+            },
+            false);
 
         _World->AsyncForEach<ScriptComponent>([&](Entity *entity, auto script) {
             auto &sc = script.Get();
@@ -146,19 +148,21 @@ namespace Exodia {
         if (Renderer::GetAPI() == RendererAPI::API::None)
             return;
 
-        _World->AsyncForEach<MusicComponent>([&](Entity *entity, ComponentHandle<MusicComponent> music) {
-            MusicComponent &sc = music.Get();
-            Ref<Sound2D> sound = AssetManager::GetAsset<Sound2D>(sc.Handle);
+        _World->AsyncForEach<MusicComponent>(
+            [&](Entity *entity, ComponentHandle<MusicComponent> music) {
+                MusicComponent &sc = music.Get();
+                Ref<Sound2D> sound = AssetManager::GetAsset<Sound2D>(sc.Handle);
 
-            if (sound == nullptr)
-                return;
-            if (sc.Play) {
-                sound->SetVolume(sc.Volume);
-                sound->SetLoop(true);
+                if (sound == nullptr)
+                    return;
+                if (sc.Play) {
+                    sound->SetVolume(sc.Volume);
+                    sound->SetLoop(true);
 
-                Renderer2D::PlaySound(sc.Handle);
-            }
-        }, false);
+                    Renderer2D::PlaySound(sc.Handle);
+                }
+            },
+            false);
     }
 
     void Scene::OnRuntimeStop() {
@@ -185,16 +189,18 @@ namespace Exodia {
         if (Renderer::GetAPI() == RendererAPI::API::None)
             return;
 
-        _World->AsyncForEach<MusicComponent>([&](Entity *entity, auto music) {
-            auto &sc = music.Get();
+        _World->AsyncForEach<MusicComponent>(
+            [&](Entity *entity, auto music) {
+                auto &sc = music.Get();
 
-            Ref<Sound2D> sound = AssetManager::GetAsset<Sound2D>(sc.Handle);
+                Ref<Sound2D> sound = AssetManager::GetAsset<Sound2D>(sc.Handle);
 
-            if (sound == nullptr)
-                return;
-            if (sc.Play)
-                sound->Pause();
-        }, false);
+                if (sound == nullptr)
+                    return;
+                if (sc.Play)
+                    sound->Pause();
+            },
+            false);
     }
 
     void Scene::OnUpdateRuntime(Timestep ts) {
@@ -224,16 +230,18 @@ namespace Exodia {
             Camera *mainCamera = nullptr;
             glm::mat4 cameraTransform;
 
-            _World->ForEach<TransformComponent, CameraComponent>([&](Entity *entity, auto transform, auto camera) {
-                auto &cc = camera.Get();
-                auto &tc = transform.Get();
+            _World->ForEach<TransformComponent, CameraComponent>(
+                [&](Entity *entity, auto transform, auto camera) {
+                    auto &cc = camera.Get();
+                    auto &tc = transform.Get();
 
-                if (cc.Primary) {
-                    mainCamera = &cc.Camera;
-                    cameraTransform = tc.GetTransform();
-                    return;
-                }
-            }, false);
+                    if (cc.Primary) {
+                        mainCamera = &cc.Camera;
+                        cameraTransform = tc.GetTransform();
+                        return;
+                    }
+                },
+                false);
 
             // -- Update and draw -- //
             if (mainCamera) {
@@ -260,13 +268,15 @@ namespace Exodia {
         _ViewportWidth = width;
         _ViewportHeight = height;
 
-        _World->AsyncForEach<CameraComponent>([&](Entity *entity, auto camera) {
-            auto &cc = camera.Get();
+        _World->AsyncForEach<CameraComponent>(
+            [&](Entity *entity, auto camera) {
+                auto &cc = camera.Get();
 
-            if (!cc.FixedAspectRatio) {
-                cc.Camera.SetViewportSize(width, height);
-            }
-        }, false);
+                if (!cc.FixedAspectRatio) {
+                    cc.Camera.SetViewportSize(width, height);
+                }
+            },
+            false);
     }
 
     void Scene::RegisterSystem(EntitySystem *system) {
@@ -287,7 +297,8 @@ namespace Exodia {
                 auto &ic = id.Get();
 
                 Renderer2D::DrawSprite(tc.GetTransform(), sc, (int)ic.ID);
-            }, false);
+            },
+            false);
 
         _World->AsyncForEach<TransformComponent, CircleRendererComponent, IDComponent>(
             [&](Entity *entity, auto transform, auto circle, auto id) {
@@ -296,7 +307,8 @@ namespace Exodia {
                 auto &ic = id.Get();
 
                 Renderer2D::DrawCircle(tc.GetTransform(), cc.Color, cc.Thickness, cc.Fade, (int)ic.ID);
-            }, false);
+            },
+            false);
 
         _World->AsyncForEach<TransformComponent, TextRendererComponent, IDComponent>(
             [&](Entity *entity, auto transform, auto text, auto id) {
@@ -305,22 +317,25 @@ namespace Exodia {
                 auto &ic = id.Get();
 
                 Renderer2D::DrawText(tc.GetTransform(), txtc.Text, txtc, (int)ic.ID);
-            }, false);
+            },
+            false);
 
-        _World->AsyncForEach<SoundComponent>([&](Entity *entity, auto sound) {
-            auto &sc = sound.Get();
+        _World->AsyncForEach<SoundComponent>(
+            [&](Entity *entity, auto sound) {
+                auto &sc = sound.Get();
 
-            Ref<Sound2D> soundRef = AssetManager::GetAsset<Sound2D>(sc.Handle);
+                Ref<Sound2D> soundRef = AssetManager::GetAsset<Sound2D>(sc.Handle);
 
-            if (soundRef == nullptr)
-                return;
-            if (sc.Play && !soundRef->IsPlaying()) {
-                soundRef->SetVolume(sc.Volume);
-                soundRef->SetLoop(false);
+                if (soundRef == nullptr)
+                    return;
+                if (sc.Play && !soundRef->IsPlaying()) {
+                    soundRef->SetVolume(sc.Volume);
+                    soundRef->SetLoop(false);
 
-                Renderer2D::PlaySound(sc.Handle);
-            }
-        }, false);
+                    Renderer2D::PlaySound(sc.Handle);
+                }
+            },
+            false);
     }
 
     void Scene::AddPrefab(Ref<Prefabs> prefab) {
@@ -355,12 +370,14 @@ namespace Exodia {
     GameObject Scene::GetPrimaryCamera() {
         Entity *primaryCamera = nullptr;
 
-        _World->ForEach<CameraComponent>([&](Entity *entity, auto camera) {
-            auto &cc = camera.Get();
+        _World->ForEach<CameraComponent>(
+            [&](Entity *entity, auto camera) {
+                auto &cc = camera.Get();
 
-            if (cc.Primary)
-                primaryCamera = entity;
-        }, false);
+                if (cc.Primary)
+                    primaryCamera = entity;
+            },
+            false);
 
         return GameObject(primaryCamera, this);
     }
@@ -368,12 +385,14 @@ namespace Exodia {
     GameObject Scene::GetEntityByName(const std::string &name) {
         Entity *entity = nullptr;
 
-        _World->ForEach<TagComponent>([&](Entity *entt, auto tag) {
-            auto &tc = tag.Get();
+        _World->ForEach<TagComponent>(
+            [&](Entity *entt, auto tag) {
+                auto &tc = tag.Get();
 
-            if (tc.Tag == name)
-                entity = entt;
-        }, false);
+                if (tc.Tag == name)
+                    entity = entt;
+            },
+            false);
 
         return GameObject(entity, this);
     }
@@ -381,14 +400,16 @@ namespace Exodia {
     GameObject Scene::GetEntityByUUID(UUID uuid) {
         Entity *entity = nullptr;
 
-        _World->ForEach<IDComponent>([&](Entity *entt, auto id) {
-            auto &ic = id.Get();
+        _World->ForEach<IDComponent>(
+            [&](Entity *entt, auto id) {
+                auto &ic = id.Get();
 
-            if (ic.ID == uuid) {
-                entity = entt;
-                return;
-            }
-        }, false);
+                if (ic.ID == uuid) {
+                    entity = entt;
+                    return;
+                }
+            },
+            false);
 
         return GameObject(entity, this);
     }

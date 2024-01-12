@@ -73,7 +73,8 @@ namespace Exodia {
 
         template <typename... Components>
         void
-        ForEach(typename std::common_type<std::function<void(Entity *, ComponentHandle<Components>...)>>::type function, bool mergeEntities = true, bool includePendingDestroy = false) {
+        ForEach(typename std::common_type<std::function<void(Entity *, ComponentHandle<Components>...)>>::type function,
+                bool mergeEntities = true, bool includePendingDestroy = false) {
             if (_World)
                 _World->ForEach<Components...>(function, mergeEntities, includePendingDestroy);
         }
