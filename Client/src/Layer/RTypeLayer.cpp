@@ -25,7 +25,7 @@ namespace RType {
     // Methods //
     /////////////
 
-     int RTypeLayer::GetPort() {
+    int RTypeLayer::GetPort() {
 
         ApplicationCommandLineArgs commandLine = Application::Get().GetSpecification().CommandLineArgs;
 
@@ -89,7 +89,7 @@ namespace RType {
             return;
 
         ConnectToServer(port, ip, serverPort);
-    
+
         // Create world
         CurrentScene = GAME;
 
