@@ -53,7 +53,10 @@ namespace Exodia::Network {
         Buffer buffer(0);
 
         packet->SetContent(buffer);
-        _server_connection->SendPacket(_socket, packet);
+        while (!this->_isConnected) {
+            _server_connection->SendPacket(_socket, packet);
+            std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+        }
     }
 
     /**

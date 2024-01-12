@@ -183,6 +183,7 @@ namespace Exodia {
 
           private:
             uint64_t id = 0;
+            bool _isConnected = false;
             World *_world;
             UDPSocket _socket;
             std::map<std::string, std::shared_ptr<Connection>> _connections;
