@@ -71,10 +71,11 @@ namespace Exodia {
             void Loop();
 
             void SendPacket(std::shared_ptr<Exodia::Network::Packet> packet);
+            void SendTo(std::shared_ptr<Packet> packet, std::shared_ptr<Connection> connection);
             void SendImportantPacket(std::shared_ptr<Exodia::Network::Packet> packet);
             void SendPacketInfo();                                                                  // 0x00
             void SendAck(uint64_t command_id);                                                      // 0x01
-            void SendAcceptConnect();                                                               // 0x02
+            void SendAcceptConnect(std::shared_ptr<Connection> connection);                         // 0x02
             void SendRejectConnect();                                                               // 0x03
             void SendSystemLoad(bool isImportant);                                                  // 0x0b
             void SendComponentOf(bool isImportant, Entity *entity, std::string component_name);     // 0x0c
@@ -124,7 +125,9 @@ namespace Exodia {
                 return -1;
             }
 
-            uint64_t GetId() { return id; }
+            uint64_t GetIdPlayer() { return _id_player; }
+
+            bool IsConnected() { return _isConnected; }
 
             UDPSocket &GetSocket() { return _socket; }
 
@@ -181,7 +184,8 @@ namespace Exodia {
             World *GetWorld() { return _world; }
 
           private:
-            uint64_t id = 0;
+            uint64_t _id_player = 0;
+            bool _isConnected = false;
             World *_world;
             UDPSocket _socket;
             std::map<std::string, std::shared_ptr<Connection>> _connections;

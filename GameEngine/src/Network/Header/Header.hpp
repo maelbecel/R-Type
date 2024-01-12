@@ -105,7 +105,6 @@ namespace Exodia {
 
             // Static function to fill a Header from a buffer
             static Header fillHeader(const std::vector<char> buffer) {
-                std::cout << "Size: " << buffer.size() << std::endl;
                 size_t index = 0;
 
                 if (buffer.size() < GetSize())

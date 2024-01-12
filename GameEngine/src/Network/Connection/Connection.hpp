@@ -33,10 +33,7 @@ class Connection {
     };
 
     Connection() = default;
-    ~Connection() {
-        _packetNeedAck.clear();
-        std::cout << "Connection destroyed in destructor" << std::endl;
-    };
+    ~Connection() { _packetNeedAck.clear(); };
 
     void ResendNeedAck(Exodia::Network::UDPSocket &socket) {
         std::vector<std::shared_ptr<Exodia::Network::Packet>> packetsDuplicate;
@@ -64,7 +61,7 @@ class Connection {
         packet->GetHeader().setSize((unsigned long)packet->GetContent().size());
         packet->GetHeader().SetId(_id);
         EXODIA_CORE_TRACE("Send packet id: {0}", _id);
-        std::cout << "Send packet header: " << packet->GetHeader() << std::endl;
+        EXODIA_CORE_TRACE("Send packet {0}", packet->GetHeader().toString());
         std::cout << packet->GetBuffer().size() << std::endl;
         socket.Send(packet, _endpoint);
         if (packet->GetHeader().GetIsImportant()) {

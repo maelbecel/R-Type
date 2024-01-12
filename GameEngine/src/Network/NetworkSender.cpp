@@ -25,6 +25,13 @@ namespace Exodia::Network {
         }
     }
 
+    void Network::SendTo(std::shared_ptr<Packet> packet, std::shared_ptr<Connection> connection) {
+        Buffer buffer(0);
+
+        packet->SetContent(buffer);
+        connection->SendPacket(_socket, packet);
+    }
+
     /**
      * @brief Send an important packet wheter we are the server or the client so it will be resend if not ack
      *
@@ -46,7 +53,10 @@ namespace Exodia::Network {
         Buffer buffer(0);
 
         packet->SetContent(buffer);
-        _server_connection->SendPacket(_socket, packet);
+        while (!this->_isConnected) {
+            _server_connection->SendPacket(_socket, packet);
+            std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+        }
     }
 
     /**
@@ -165,12 +175,12 @@ namespace Exodia::Network {
         SendPacket(packet);
     }
 
-    void Network::SendAcceptConnect() {
+    void Network::SendAcceptConnect(std::shared_ptr<Connection> connection) {
         std::shared_ptr<Exodia::Network::Packet> packet = std::make_shared<Exodia::Network::Packet>(CONNECT_ACCEPT);
         Buffer buffer(0);
 
         packet->SetContent(buffer);
-        SendPacket(packet);
+        SendTo(packet, connection);
     }
 
     /**

@@ -98,8 +98,9 @@ namespace Exodia::Network {
      */
     void Network::ReceiveConnectAccept(RECEIVE_ARG) {
         (void)senderConnection;
-        std::memcpy(&this->id, message.data(), sizeof(unsigned long));
-        std::cout << "Receive accept connect with id :" << id << std::endl;
+        std::memcpy(&this->_id_player, message.data(), sizeof(unsigned long));
+        this->_isConnected = true;
+        std::cout << "Receive accept connect with id :" << _id_player << std::endl;
     }
 
     void Network::ReceiveConnectReject(RECEIVE_ARG) {
@@ -166,7 +167,7 @@ namespace Exodia::Network {
         (void)header;
         (void)message;
         (void)size;
-        // TODO: Handle disconnect
+        Disconnect(senderConnection);
     }
 
     /**

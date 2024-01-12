@@ -41,7 +41,9 @@ namespace RType {
 
       private:
         int GetPort();
-        void ConnectToServer(int port);
+        std::string GetIp();
+        int GetServerPort();
+        void ConnectToServer(int port, std::string ip, int serverPort);
 
         ////////////////
         // Attributes //
@@ -53,7 +55,7 @@ namespace RType {
       private:
         // TODO: WARNING: This is a temporary solution
         World *_WorldNetwork;
-
+        float _packetTimer = 0;
         Network::IOContextManager _IOContextManager;
         Scope<Network::Network> _Network;
     };

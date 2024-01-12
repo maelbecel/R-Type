@@ -383,10 +383,9 @@ namespace Exodia {
             for (auto user : _Users) {
                 if (user.GetConnection() == connection.second) {
                     if (connection.second->GetNetworkInfo().lastPacketReceived->GetHeader().getTimestamp() <
-                        connection.second->GetNetworkInfo().lastPacketSent->GetHeader().getTimestamp() - 10000) {
+                        connection.second->GetNetworkInfo().lastPacketSent->GetHeader().getTimestamp() - 5000) {
                         EXODIA_CORE_INFO("Client disconnected");
                         _Network.SendDisconnect();
-                        _Network.Disconnect(connection.second);
                         _Users.erase(_Users.begin() + i);
                         i--;
                     }

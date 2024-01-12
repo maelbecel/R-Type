@@ -55,7 +55,6 @@ namespace RType {
         if (!transform || !parent || !world)
             return;
 
-        EXODIA_ERROR("PASSED 1");
         Entity *parent_entity = world->GetEntityByID(parent.Get().Parent);
 
         if (!parent_entity)
@@ -185,15 +184,12 @@ namespace RType {
     }
 
     void BulletEnnemy::OnCollisionEnter(Entity *entity) {
-        EXODIA_CORE_ERROR("COLLISION");
         ComponentHandle<TagComponent> tag_entity = entity->GetComponent<TagComponent>();
         if (!tag_entity)
             return;
 
         if (tag_entity.Get().Tag.rfind("Pata", 0) == 0 || tag_entity.Get().Tag.rfind("BE", 0) == 0) {
-            EXODIA_CORE_ERROR("COLLISION With PARENT or other enemy bullet");
         } else {
-            EXODIA_CORE_ERROR("COLLISION With {0}", tag_entity.Get().Tag);
             ComponentHandle<RigidBody2DComponent> body = GetComponent<RigidBody2DComponent>();
             if (!body)
                 return;
