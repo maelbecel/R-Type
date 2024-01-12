@@ -72,17 +72,19 @@ namespace Exodia {
 
         Renderer2D::BeginScene(_CameraController.GetCamera());
 
-        _World->ForEach<SpriteRendererComponent>([&](Entity *entity, ComponentHandle<SpriteRendererComponent> sprite) {
-            auto transform = entity->GetComponent<TransformComponent>();
-            auto id = entity->GetComponent<IDComponent>();
+        _World->ForEach<SpriteRendererComponent>(
+            [&](Entity *entity, ComponentHandle<SpriteRendererComponent> sprite) {
+                auto transform = entity->GetComponent<TransformComponent>();
+                auto id = entity->GetComponent<IDComponent>();
 
-            if (transform && id) {
-                Renderer2D::DrawSprite(transform.Get().GetTransform(), // Transform
-                                       sprite.Get(),                   // SpriteRendererComponent
-                                       (int)id.Get().ID                // Entity ID
-                );
-            }
-        });
+                if (transform && id) {
+                    Renderer2D::DrawSprite(transform.Get().GetTransform(), // Transform
+                                           sprite.Get(),                   // SpriteRendererComponent
+                                           (int)id.Get().ID                // Entity ID
+                    );
+                }
+            },
+            false);
 
         Renderer2D::EndScene();
     }

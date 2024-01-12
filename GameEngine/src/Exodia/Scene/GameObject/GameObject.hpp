@@ -80,7 +80,7 @@ namespace Exodia {
         ///////////////
       public:
         operator bool() const;
-        operator uint32_t() const;
+        operator uint64_t() const;
 
         bool operator==(const GameObject &other) const;
         bool operator!=(const GameObject &other) const;

@@ -26,15 +26,14 @@ namespace Exodia {
     void MovingSystem::Update(World *world, Timestep ts) {
         EXODIA_PROFILE_FUNCTION();
 
-        world->LockMutex();
-        world->ForEach<RigidBody2DComponent, TransformComponent>([&](Entity *entity,
-                                                                     ComponentHandle<RigidBody2DComponent> rigidBody,
-                                                                     ComponentHandle<TransformComponent> transform) {
-            if (rigidBody.Get().Type == RigidBody2DComponent::BodyType::Static)
-                return;
-            ApplyVelocity(rigidBody, transform, ts);
-        });
-        world->UnlockMutex();
+        world->AsyncForEach<RigidBody2DComponent, TransformComponent>(
+            [&](Entity *entity, ComponentHandle<RigidBody2DComponent> rigidBody,
+                ComponentHandle<TransformComponent> transform) {
+                if (rigidBody.Get().Type == RigidBody2DComponent::BodyType::Static)
+                    return;
+                ApplyVelocity(rigidBody, transform, ts);
+            },
+            false);
     }
 
     void MovingSystem::ApplyVelocity(ComponentHandle<RigidBody2DComponent> rigidBody,

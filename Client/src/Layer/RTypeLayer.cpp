@@ -235,8 +235,7 @@ namespace RType {
 
         int key = event.GetKeyCode();
 
-        Scenes[CurrentScene]->GetWorld().LockMutex();
-        Scenes[CurrentScene]->GetWorld().ForEach<ScriptComponent, TagComponent>(
+        Scenes[CurrentScene]->GetWorld().AsyncForEach<ScriptComponent, TagComponent>(
             [&](Entity *entity, ComponentHandle<ScriptComponent> script, ComponentHandle<TagComponent> tag) {
                 ScriptComponent &sc = script.Get();
                 TagComponent &tc = tag.Get();
@@ -252,7 +251,6 @@ namespace RType {
                 }
                 (void)entity;
             });
-        Scenes[CurrentScene]->GetWorld().UnlockMutex();
 
         return true;
     };
@@ -260,8 +258,7 @@ namespace RType {
     bool RTypeLayer::OnKeyReleasedEvent(KeyReleasedEvent &event) {
         int key = event.GetKeyCode();
 
-        Scenes[CurrentScene]->GetWorld().LockMutex();
-        Scenes[CurrentScene]->GetWorld().ForEach<ScriptComponent, TagComponent>(
+        Scenes[CurrentScene]->GetWorld().AsyncForEach<ScriptComponent, TagComponent>(
             [&](Entity *entity, ComponentHandle<ScriptComponent> script, ComponentHandle<TagComponent> tag) {
                 ScriptComponent &sc = script.Get();
                 TagComponent &tc = tag.Get();
@@ -277,7 +274,6 @@ namespace RType {
 
                 (void)entity;
             });
-        Scenes[CurrentScene]->GetWorld().UnlockMutex();
 
         return false;
     };

@@ -80,7 +80,7 @@ namespace Exodia {
 
             if (opened) {
                 for (auto &child : children.Children)
-                    DrawEntityNode(_Context->GetEntityByUUID(child));
+                    DrawEntityNode(_Context->GetEntityByUUID(child).GetEntity());
                 ImGui::TreePop();
             }
         } else {
