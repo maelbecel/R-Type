@@ -87,10 +87,8 @@ namespace RType {
         int serverPort = GetServerPort();
         _Network = CreateScope<Network::Network>(_WorldNetwork, _IOContextManager, port);
 
-
         if (port == -1)
             return;
-
 
         // Create world
         CurrentScene = GAME;
@@ -106,7 +104,6 @@ namespace RType {
         Scenes[GAME]->Subscribe<Exodia::Events::OnCollisionEntered>(collisionSystem);
         Scenes[GAME]->OnViewportResize(Application::Get().GetWindow().GetWidth(),
                                        Application::Get().GetWindow().GetHeight());
-
 
         _Network->SetWorld(Scenes[CurrentScene]->GetWorldPtr());
 
