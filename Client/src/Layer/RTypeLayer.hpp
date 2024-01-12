@@ -38,7 +38,6 @@ namespace RType {
         bool OnKeyReleasedEvent(KeyReleasedEvent &event);
         bool OnKeyPressedEvent(KeyPressedEvent &event);
         bool OnWindowResizeEvent(WindowResizeEvent &event);
-        bool OnWindowClose(Exodia::WindowCloseEvent &event);
 
       private:
         int GetPort();

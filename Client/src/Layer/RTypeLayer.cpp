@@ -132,7 +132,11 @@ namespace RType {
         ConnectToServer(port, ip, serverPort);
     }
 
-    void RTypeLayer::OnDetach() { EXODIA_PROFILE_FUNCTION(); }
+    void RTypeLayer::OnDetach() {
+        EXODIA_PROFILE_FUNCTION();
+        _Network->SendDisconnect();
+        EXODIA_CORE_ERROR("RTypeLayer::OnDetach()");
+    }
 
     void RTypeLayer::OnUpdate(Exodia::Timestep ts) {
         EXODIA_PROFILE_FUNCTION();
@@ -159,21 +163,12 @@ namespace RType {
 
     void RTypeLayer::OnImGUIRender() { EXODIA_PROFILE_FUNCTION(); }
 
-    bool RTypeLayer::OnWindowClose(Exodia::WindowCloseEvent &event) {
-        (void)event;
-        EXODIA_PROFILE_FUNCTION();
-        EXODIA_CORE_ERROR("DIIIIIIISCONENT");
-        _Network->SendDisconnect();
-        return true;
-    }
-
     void RTypeLayer::OnEvent(Exodia::Event &event) {
         EventDispatcher dispatcher(event);
 
         dispatcher.Dispatch<KeyPressedEvent>(BIND_EVENT_FN(RTypeLayer::OnKeyPressedEvent));
         dispatcher.Dispatch<KeyReleasedEvent>(BIND_EVENT_FN(RTypeLayer::OnKeyReleasedEvent));
         dispatcher.Dispatch<WindowResizeEvent>(BIND_EVENT_FN(RTypeLayer::OnWindowResizeEvent));
-        dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(RTypeLayer::OnWindowClose));
     }
 
     bool RTypeLayer::OnKeyPressedEvent(KeyPressedEvent &event) {
