@@ -82,7 +82,7 @@ namespace Exodia {
                                        (int)id.Get().ID                // Entity ID
                 );
             }
-        });
+        }, false);
 
         Renderer2D::EndScene();
     }

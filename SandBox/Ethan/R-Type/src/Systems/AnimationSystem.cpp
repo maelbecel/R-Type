@@ -48,7 +48,7 @@ namespace RType {
                         world->Emit<Events::AnimationEndingEvent>({entity});
                     }
                 }
-            });
+            }, false);
     }
 
     void AnimationSystem::Receive(UNUSED(World *world), UNUSED(const Events::AnimationEndingEvent &event)) {

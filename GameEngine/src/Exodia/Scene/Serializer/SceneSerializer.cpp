@@ -40,7 +40,7 @@ namespace Exodia {
                 out << YAML::Key << "Entity" << YAML::Value << id.Get().ID;
                 { SerializeEntity(out, entity); }
                 out << YAML::EndMap;
-            });
+            }, false);
         }
         out << YAML::EndSeq;
 

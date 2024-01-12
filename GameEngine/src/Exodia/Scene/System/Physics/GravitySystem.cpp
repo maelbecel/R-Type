@@ -26,11 +26,11 @@ namespace Exodia {
     void GravitySystem::Update(World *world, Timestep ts) {
         EXODIA_PROFILE_FUNCTION();
 
-        world->ForEach<RigidBody2DComponent>([&](Entity *entity, ComponentHandle<RigidBody2DComponent> rigidBody) {
+        world->AsyncForEach<RigidBody2DComponent>([&](Entity *entity, ComponentHandle<RigidBody2DComponent> rigidBody) {
             if (rigidBody.Get().Type == RigidBody2DComponent::BodyType::Static)
                 return;
             ApplyGravity(rigidBody, ts);
-        });
+        }, false);
     }
 
     void GravitySystem::ApplyGravity(ComponentHandle<RigidBody2DComponent> rigidBody, Timestep ts) {

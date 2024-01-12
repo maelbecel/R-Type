@@ -85,7 +85,7 @@ namespace RType {
         }
         return false;*/
 
-        _Scene->GetWorldPtr()->ForEach<ScriptComponent>([&](Entity *entity, auto script) {
+        _Scene->ForEach<ScriptComponent>([&](Entity *entity, auto script) {
             auto &sc = script.Get(); // sc = Script Component
 
             if (sc.Instance != nullptr)

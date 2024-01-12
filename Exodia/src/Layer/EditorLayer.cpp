@@ -481,13 +481,13 @@ namespace Exodia {
 
     void EditorLayer::OnOverlayRender() {
         if (_SceneState == SceneState::Play) {
-            Entity *camera = _ActiveScene->GetPrimaryCamera();
+            GameObject camera = _ActiveScene->GetPrimaryCamera();
 
             if (!camera)
                 return;
 
-            Renderer2D::BeginScene(camera->GetComponent<CameraComponent>().Get().Camera,
-                                   camera->GetComponent<TransformComponent>().Get().GetTransform());
+            Renderer2D::BeginScene(camera.GetComponent<CameraComponent>().Camera,
+                                   camera.GetComponent<TransformComponent>().GetTransform());
         } else
             Renderer2D::BeginScene(_EditorCamera);
 

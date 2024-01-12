@@ -35,8 +35,7 @@ namespace Exodia {
         {
             EXODIA_PROFILE_SCOPE("CollisionSystem::Update::BoxCollider2D");
 
-            world->LockMutex();
-            world->ForEach<BoxCollider2DComponent, TransformComponent>(
+            world->AsyncForEach<BoxCollider2DComponent, TransformComponent>(
                 [&](Entity *entityA, ComponentHandle<BoxCollider2DComponent> colliderA,
                     ComponentHandle<TransformComponent> transformA) {
                     world->ForEach<BoxCollider2DComponent, TransformComponent>(
@@ -48,7 +47,7 @@ namespace Exodia {
 
                             if (entityA != entityB && CheckCollision(colliderA, transformA, colliderB, transformB))
                                 collisions.push_back(std::make_pair(entityA, entityB));
-                        });
+                        }, false);
 
                     world->ForEach<CircleCollider2DComponent, TransformComponent>(
                         [&](Entity *entityB, ComponentHandle<CircleCollider2DComponent> colliderB,
@@ -59,15 +58,13 @@ namespace Exodia {
 
                             if (CheckCollision(colliderA, transformA, colliderB, transformB))
                                 collisions.push_back(std::make_pair(entityA, entityB));
-                        });
-                });
-            world->UnlockMutex();
+                        }, false);
+                }, false);
         }
 
         {
             EXODIA_PROFILE_SCOPE("CollisionSystem::Update::CircleCollider2D");
 
-            world->LockMutex();
             world->ForEach<CircleCollider2DComponent, TransformComponent>(
                 [&](Entity *entityA, ComponentHandle<CircleCollider2DComponent> colliderA,
                     ComponentHandle<TransformComponent> transformA) {
@@ -80,9 +77,8 @@ namespace Exodia {
 
                             if (entityA != entityB && CheckCollision(colliderA, transformA, colliderB, transformB))
                                 collisions.push_back(std::make_pair(entityA, entityB));
-                        });
-                });
-            world->UnlockMutex();
+                        }, false);
+                }, false);
         }
 
         CompareCollisions(collisions);

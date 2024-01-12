@@ -50,7 +50,7 @@ namespace Exodia {
 
     GameObject::operator bool() const { return (bool)_EntityHandle; }
 
-    GameObject::operator uint32_t() const { return (uint32_t)_EntityHandle->GetEntityID(); }
+    GameObject::operator uint64_t() const { return (uint64_t)_EntityHandle->GetEntityID(); }
 
     bool GameObject::operator==(const GameObject &other) const {
         return _EntityHandle == other._EntityHandle && _Scene == other._Scene;

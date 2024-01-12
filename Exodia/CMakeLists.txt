@@ -55,6 +55,10 @@ include_directories(${INCLUDE_DIRS})
 add_executable(exodia ${SOURCES})
 
 target_link_libraries(exodia PRIVATE
+    Exodia-Tools
+    Exodia-Debug
+    Exodia-ECS
+
     GameEngine
     glad::glad
     glfw
@@ -70,6 +74,11 @@ target_link_libraries(exodia PRIVATE
     imguizmo::imguizmo
 )
 
+target_include_directories(exodia PRIVATE
+    ${CMAKE_BINARY_DIR}/../Library/Debug/src/
+    ${CMAKE_BINARY_DIR}/../Library/Tools/src/
+    ${CMAKE_BINARY_DIR}/../Library/Entity-Component-System/src/
+)
 target_include_directories(exodia PRIVATE ${Stb_INCLUDE_DIR})
 target_include_directories(exodia PRIVATE ${CMAKE_BINARY_DIR}/_deps/imgui-src)
 

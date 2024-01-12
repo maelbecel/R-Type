@@ -209,7 +209,7 @@ namespace Exodia {
                 tag) { (void)entity;
 
                     EXODIA_INFO("Entity '{0}': {1}", (uint64_t)id.Get().ID, tag.Get().Tag);
-                });
+                }, false);
                 */
                 count += 1;
                 std::this_thread::sleep_for(std::chrono::milliseconds(16)); // Sleep for 32 milliseconds (30 FPS)
@@ -235,7 +235,7 @@ namespace Exodia {
     void Server::HandleEvent(std::pair<std::pair<uint32_t, bool>, asio::ip::udp::endpoint> event) {
         int32_t player_id = _Network.ConnectionPlace(event.second);
 
-        Scenes[CurrentScene]->GetWorld().ForEach<ScriptComponent, TagComponent, TransformComponent>(
+        Scenes[CurrentScene]->ForEach<ScriptComponent, TagComponent, TransformComponent>(
             [&](Entity *entity, ComponentHandle<ScriptComponent> script, ComponentHandle<TagComponent> tag,
                 ComponentHandle<TransformComponent> transform) {
                 (void)transform;
@@ -276,12 +276,12 @@ namespace Exodia {
 
             if (count % 50 == 0) {
                 EXODIA_CORE_WARN("Syncing components");
-                Scenes[CurrentScene]->GetWorld().ForEach<TransformComponent>(
+                Scenes[CurrentScene]->ForEach<TransformComponent>(
                     [&](Entity *entity, ComponentHandle<TransformComponent> transform) {
                         (void)transform;
                         _Network.SendComponentOf(false, entity, "TransformComponent");
                     });
-                Scenes[CurrentScene]->GetWorld().ForEach<Clock>([&](Entity *entity, ComponentHandle<Clock> clock) {
+                Scenes[CurrentScene]->ForEach<Clock>([&](Entity *entity, ComponentHandle<Clock> clock) {
                     (void)clock;
                     _Network.SendComponentOf(false, entity, "Clock");
                 });
@@ -322,7 +322,7 @@ namespace Exodia {
     }
 
     void Server::SendComponents(SceneType scene) {
-        Scenes[scene]->GetWorld().ForEach<TagComponent>([&](Entity *entity, ComponentHandle<TagComponent> tag) {
+        Scenes[scene]->ForEach<TagComponent>([&](Entity *entity, ComponentHandle<TagComponent> tag) {
             if (tag.Get().Tag.rfind("Player_") != std::string::npos) {
                 _Network.SendComponentOf(true, entity, "TagComponent");
                 _Network.SendComponentOf(true, entity, "TransformComponent");

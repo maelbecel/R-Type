@@ -29,7 +29,7 @@ namespace Exodia {
                 std::cout << "I took " << event.Damage << " damage !" << std::endl;
 
                 health->CurrentHealth -= event.Damage;
-            });
+            }, false);
         }
     };
 
@@ -45,7 +45,7 @@ namespace Exodia {
         virtual void Update(World *world, Timestep ts) override {
             world->ForEach<Health>([&](UNUSED(Entity * entity), ComponentHandle<Health> health) {
                 health.Get().CurrentHealth -= _DamagePerSecond * ts;
-            });
+            }, false);
         }
 
         virtual void Configure(World *world) override { world->Subscribe<TakeDamageEvent>(this); }

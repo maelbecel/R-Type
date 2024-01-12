@@ -21,7 +21,7 @@ namespace Exodia {
     void ScriptSystem::Update(World *world, Timestep ts) {
         EXODIA_PROFILE_FUNCTION();
 
-        world->ForEach<ScriptComponent>([&](Entity *entity, auto script) {
+        world->AsyncForEach<ScriptComponent>([&](Entity *entity, auto script) {
             auto &sc = script.Get();
 
             if (!sc.Instance && !sc.Name.empty() && sc.InstantiateScript) {

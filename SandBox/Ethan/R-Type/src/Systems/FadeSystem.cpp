@@ -58,7 +58,7 @@ namespace RType {
 
             auto sprite = entity->GetComponent<SpriteRendererComponent>();
             auto circle = entity->GetComponent<CircleRendererComponent>();
-            auto text = entity->GetComponent<TextRendererComponent>();
+            auto text   = entity->GetComponent<TextRendererComponent>();
 
             if (sprite)
                 sprite.Get().Color.w = fc.Opacity;
@@ -66,6 +66,6 @@ namespace RType {
                 circle.Get().Color.w = fc.Opacity;
             if (text)
                 text.Get().Color.w = fc.Opacity;
-        });
+        }, false);
     }
 }; // namespace RType
