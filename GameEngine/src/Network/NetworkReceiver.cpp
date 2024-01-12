@@ -275,6 +275,7 @@ namespace Exodia::Network {
         packet->SetContent(buffer.ToVector());
         std::cout << "Send accept connect" << std::endl;
         connection->SendPacket(_socket, packet);
+        SendAcceptConnect(connection);
     }
 
     /**
