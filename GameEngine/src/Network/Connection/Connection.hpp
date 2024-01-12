@@ -33,9 +33,7 @@ class Connection {
     };
 
     Connection() = default;
-    ~Connection() {
-        _packetNeedAck.clear();
-    };
+    ~Connection() { _packetNeedAck.clear(); };
 
     void ResendNeedAck(Exodia::Network::UDPSocket &socket) {
         std::vector<std::shared_ptr<Exodia::Network::Packet>> packetsDuplicate;
