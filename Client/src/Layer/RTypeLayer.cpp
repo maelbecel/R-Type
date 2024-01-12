@@ -73,10 +73,7 @@ namespace RType {
     void RTypeLayer::ConnectToServer(int port, std::string ip, int serverPort) {
         (void)port;
         _Network->Loop();
-        while (!_Network->IsConnected()) {
-            _Network->SendAskConnect(ip, (short)serverPort);
-            std::this_thread::sleep_for(std::chrono::milliseconds(3000));
-        }
+        _Network->SendAskConnect(ip, (short)serverPort);
     }
 
     void RTypeLayer::OnAttach() {
