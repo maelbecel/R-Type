@@ -180,7 +180,7 @@ namespace RType {
     {
         (void)event;
         EXODIA_PROFILE_FUNCTION();
-
+        EXODIA_CORE_ERROR("DIIIIIIISCONENT");
         _Network->SendDisconnect();
         return true;
     }

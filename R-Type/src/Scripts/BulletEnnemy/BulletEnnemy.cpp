@@ -189,9 +189,7 @@ namespace RType {
             return;
 
         if (tag_entity.Get().Tag.rfind("Pata", 0) == 0 || tag_entity.Get().Tag.rfind("BE", 0) == 0) {
-            EXODIA_CORE_ERROR("COLLISION With PARENT or other enemy bullet");
         } else {
-            EXODIA_CORE_ERROR("COLLISION With {0}", tag_entity.Get().Tag);
             ComponentHandle<RigidBody2DComponent> body = GetComponent<RigidBody2DComponent>();
             if (!body)
                 return;

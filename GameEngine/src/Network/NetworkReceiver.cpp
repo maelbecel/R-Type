@@ -166,7 +166,7 @@ namespace Exodia::Network {
         (void)header;
         (void)message;
         (void)size;
-        // TODO: Handle disconnect
+        Disconnect(senderConnection);
     }
 
     /**
