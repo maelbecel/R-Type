@@ -25,6 +25,7 @@
 #include "src/Scripts/Player/Player.hpp"
 #include "src/Scripts/Player/Module.hpp"
 #include "src/Scripts/Player/PowerUp.hpp"
+#include "src/Scripts/Player/SuperBullet.hpp"
 
 #include "src/Scripts/Enemies/PataPata/Pata-pata.hpp"
 #include "src/Scripts/Enemies/BulletEnemy.hpp"
@@ -73,6 +74,9 @@ namespace RType {
 
         project->RegisterScript("BulletPlayer",
                                 []() -> Exodia::ScriptableEntity * { return new RType::BulletPlayer(); });
+
+        project->RegisterScript("SuperBullet",
+                                []() -> Exodia::ScriptableEntity * { return new RType::SuperBullet(); });
 
         project->RegisterScript("BulletEnemy", []() -> Exodia::ScriptableEntity * { return new RType::BulletEnemy(); });
 

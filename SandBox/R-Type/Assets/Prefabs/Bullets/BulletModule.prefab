@@ -5,12 +5,12 @@ Entities:
     TransformComponent:
       Translation: [0, 0, 0]
       Rotation: [0, 0, 0]
-      Scale: [0.75, 0.35, 1]
+      Scale: [0.5, 0.25, 1]
     ScriptComponent:
-      Name: SuperBullet
+      Name: BulletPlayer
     RigidBody2DComponent:
       BodyType: Dynamic
-      Velocity: [10.0, 0]
+      Velocity: [0, 0]
       GravityScale: 0
       Mass: 0
     SpriteRendererComponent:
@@ -18,24 +18,28 @@ Entities:
       TilingFactor: 1
       Texture:
         AssetHandle: 3456789012345678901
-        Coords: [104, 187]
+        Coords: [0, 0]
         CellSize: [1, 1]
-        SpriteSize: [80, 14]
+        SpriteSize: [0, 0]
     Animation:
       IsPlaying: true
-      Repeat: true
+      Repeat: false
       FrameRate: 8
       FrameTimer: 0
       CurrentFrameIndex: 0
       Frames:
         - AssetHandle: 3456789012345678901
-          Coords: [104, 187]
+          Coords: [0, 0]
           CellSize: [1, 1]
-          SpriteSize: [80, 14]
+          SpriteSize: [0, 0]
         - AssetHandle: 3456789012345678901
-          Coords: [185, 187]
+          Coords: [0, 0]
           CellSize: [1, 1]
-          SpriteSize: [80, 14]
+          SpriteSize: [0, 0]
+        - AssetHandle: 3456789012345678901
+          Coords: [337, 113]
+          CellSize: [1, 1]
+          SpriteSize: [12, 4]
     BoxCollider2DComponent:
       Offset: [0, 0]
       Size: [0.5, 0.5]

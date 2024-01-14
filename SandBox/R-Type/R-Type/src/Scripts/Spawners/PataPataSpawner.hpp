@@ -52,8 +52,16 @@ namespace RType {
             timer += ts;
 
             if (nbPataPata < 5 && timer > 0.5f) {
-                scene->LoadPrefabs((Project::GetActiveAssetDirectory() / "Prefabs/Mobs/Pata-Pata.prefab").string(),
-                                   true);
+                GameObject pata = scene->LoadPrefabs(
+                    (Project::GetActiveAssetDirectory() / "Prefabs/Mobs/Pata-Pata.prefab").string(), true);
+
+                if (!pata) {
+                    EXODIA_ERROR("Pata-Pata prefab not found");
+                    return;
+                }
+
+                TransformComponent &tc = pata.GetComponent<TransformComponent>();
+                tc.Translation.x = 12.0f;
 
                 timer = 0.0f;
                 EXODIA_TRACE("Pata-Pata spawned");

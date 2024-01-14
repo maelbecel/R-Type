@@ -112,6 +112,9 @@ namespace RType {
 
         UpdateAnimations();
 
+        if (_State == PlayerState::DEAD)
+            return;
+
         TransformComponent &tc = GetComponent<TransformComponent>();
         Health &health = GetComponent<Health>();
 
@@ -181,32 +184,7 @@ namespace RType {
         }
 
         if (keycode == Key::Q && _IsCharging) {
-            EXODIA_INFO("Attack charged for '{0}' seconds", _AttackTimer);
-
-            Scene *scene = HandleEntity.GetScene();
-
-            if (!scene)
-                return;
-            GameObject bullet = scene->LoadPrefabs(
-                (Project::GetActiveAssetDirectory() / "Prefabs/Bullets/SuperBullet.prefab").string(), true);
-
-            bullet.GetComponent<TagComponent>().Tag = "BP";
-            auto &bulletID = bullet.GetComponent<IDComponent>();
-
-            bullet.AddComponent<ParentComponent>().Parent = GetComponent<IDComponent>().ID;
-            GetComponent<ChildrenComponent>().Children.push_back(bulletID.ID);
-
-            auto &bulletTC = bullet.GetComponent<TransformComponent>();
-            auto &tc = GetComponent<TransformComponent>();
-
-            bulletTC.Translation.x = tc.Translation.x + 0.7f;
-            bulletTC.Translation.y = tc.Translation.y - 0.05f;
-
-            auto &health = bullet.GetComponent<Health>();
-            health.CurrentHealth = std::ceil(_AttackTimer);
-
-            _AttackTimer = 0.0f;
-            _IsCharging = false;
+            Charge();
         }
     }
 
@@ -309,7 +287,38 @@ namespace RType {
         bulletTC.Translation.x = tc.Translation.x + 0.7f;
         bulletTC.Translation.y = tc.Translation.y - 0.05f;
 
+        bullet.AddComponent<Health>(1);
+
         _IsAttacking = true;
+    }
+
+    void Player::Charge() {
+        EXODIA_INFO("Attack charged for '{0}' seconds", _AttackTimer);
+
+        Scene *scene = HandleEntity.GetScene();
+
+        if (!scene)
+            return;
+        GameObject bullet = scene->LoadPrefabs(
+            (Project::GetActiveAssetDirectory() / "Prefabs/Bullets/SuperBullet.prefab").string(), true);
+
+        bullet.GetComponent<TagComponent>().Tag = "BP";
+        auto &bulletID = bullet.GetComponent<IDComponent>();
+
+        bullet.AddComponent<ParentComponent>().Parent = GetComponent<IDComponent>().ID;
+        GetComponent<ChildrenComponent>().Children.push_back(bulletID.ID);
+
+        auto &bulletTC = bullet.GetComponent<TransformComponent>();
+        auto &tc = GetComponent<TransformComponent>();
+
+        bulletTC.Translation.x = tc.Translation.x + 1.0f;
+        bulletTC.Translation.y = tc.Translation.y;
+
+        auto &health = bullet.AddComponent<Health>();
+        health.CurrentHealth = std::ceil(_AttackTimer);
+
+        _AttackTimer = 0.0f;
+        _IsCharging = false;
     }
 
     ///////////////////////

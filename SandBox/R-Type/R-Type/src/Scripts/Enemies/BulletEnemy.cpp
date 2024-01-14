@@ -6,6 +6,8 @@
 */
 
 #include "BulletEnemy.hpp"
+#include "Component/Health.hpp"
+#include "Event/TakeDamage.hpp"
 
 using namespace Exodia;
 
@@ -163,7 +165,13 @@ namespace RType {
             return;
 
         // -- If Entity have a life component, remove life
-        // TODO: ...
+        // if (entity->HasComponent<Health>()) {
+        //     Scene *scene = HandleEntity.GetScene();
+
+        //     if (!scene)
+        //         return;
+        //     scene->GetWorldPtr()->Emit<Events::TakeDamage>({entity, 1});
+        // }
 
         // -- Stop the bullet and launch the destroy animation
         RigidBody2DComponent &body = GetComponent<RigidBody2DComponent>();
