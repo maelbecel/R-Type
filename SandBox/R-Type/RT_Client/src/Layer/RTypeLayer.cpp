@@ -92,7 +92,6 @@ namespace RType {
         // GameObject powerUp = scene->CreateNewEntity("Module");
         // powerUp.AddComponent<ScriptComponent>().Bind("PowerUp");
 
-
         // Create stars
         for (int i = 0; i < 60; i++) {
             GameObject star = scene->CreateNewEntity("Star" + std::to_string(i));

@@ -105,7 +105,6 @@ namespace RType {
         auto &bulletTC = bullet.GetComponent<TransformComponent>();
         auto &tc = GetComponent<TransformComponent>();
 
-
         bullet.AddComponent<Health>(1);
 
         bulletTC.Translation.x = tc.Translation.x + 0.7f;

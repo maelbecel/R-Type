@@ -75,8 +75,7 @@ namespace RType {
         project->RegisterScript("BulletPlayer",
                                 []() -> Exodia::ScriptableEntity * { return new RType::BulletPlayer(); });
 
-        project->RegisterScript("SuperBullet",
-                                []() -> Exodia::ScriptableEntity * { return new RType::SuperBullet(); });
+        project->RegisterScript("SuperBullet", []() -> Exodia::ScriptableEntity * { return new RType::SuperBullet(); });
 
         project->RegisterScript("BulletEnemy", []() -> Exodia::ScriptableEntity * { return new RType::BulletEnemy(); });
 
