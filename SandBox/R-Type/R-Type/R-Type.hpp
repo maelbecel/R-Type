@@ -35,6 +35,7 @@
 #include "src/Scripts/Mid/Mid.hpp"
 #include "src/Scripts/Bug/Bug.hpp"
 #include "src/Scripts/Spawners/PataPataSpawner.hpp"
+#include "src/Scripts/Spawners/MidSpawner.hpp"
 
 #include "src/System/AnimationSystem.hpp"
 
@@ -94,6 +95,9 @@ namespace RType {
 
         project->RegisterScript("PataPataSpawner",
                                 []() -> Exodia::ScriptableEntity * { return new RType::PataPataSpawner(); });
+
+        project->RegisterScript("MidSpawner",
+                                []() -> Exodia::ScriptableEntity * { return new RType::MidSpawner(); });
         // -- Register R-Type systems ------------------------------------------
 
         project->RegisterSystem("AnimationSystem", []() -> Exodia::EntitySystem * { return new AnimationSystem(); });

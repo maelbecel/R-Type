@@ -76,7 +76,7 @@ namespace RType {
 
         // Create spawner patata
         GameObject spawner = scene->CreateNewEntity("Spawner");
-        spawner.AddComponent<ScriptComponent>().Bind("PataPataSpawner");
+        spawner.AddComponent<ScriptComponent>().Bind("MidSpawner");
 
         // Create tabrok
 

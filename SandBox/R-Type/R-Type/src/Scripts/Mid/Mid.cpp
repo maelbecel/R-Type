@@ -39,6 +39,11 @@ namespace RType {
     }
 
     void Mid::OnCreate() {
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        // a random number between -5 and 5:
+        std::uniform_real_distribution<> dis(0.0f, 5.0f);
+
         HandleEntity.AddComponent<Health>(1);
         HandleEntity.AddComponent<Clock>();
         HandleEntity.AddComponent<BoxCollider2DComponent>();
@@ -54,8 +59,8 @@ namespace RType {
 
         TransformComponent &tc = GetComponent<TransformComponent>();
 
-        tc.Translation.x = 7.0f;
-        tc.Translation.y = -1.5f;
+        tc.Translation.x = 12.0f;
+        tc.Translation.y = dis(gen);
 
         EXODIA_INFO("Mid created at pos {0}, {1}", tc.Translation.x, tc.Translation.y);
     }
