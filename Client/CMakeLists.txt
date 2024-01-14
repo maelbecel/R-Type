@@ -60,11 +60,9 @@ target_link_libraries(r-type_client PRIVATE
     asio::asio
     OpenAL::OpenAL
     spdlog::spdlog
-    Catch2::Catch2 Catch2::Catch2WithMain
-    sol2
+
     unofficial::nativefiledialog::nfd
     yaml-cpp::yaml-cpp
-    imguizmo::imguizmo
     FreeALUT::alut
     Vorbis::vorbisfile
 )

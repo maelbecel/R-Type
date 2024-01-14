@@ -2,7 +2,7 @@
 
 ## What is SandBox ?
 
-The Sandbox directory within this game engine is a dedicated space designed for experimentation, {{PROJECT_NAME}}ing, and honing one's skills with the game engine's functionalities. It's an open area where developers, enthusiasts, and learners can experiment freely to understand and leverage the game engine's capabilities to create game components, prototype game mechanics, or craft entirely new games.
+The Sandbox directory within this game engine is a dedicated space designed for experimentation, and honing one's skills with the game engine's functionalities. It's an open area where developers, enthusiasts, and learners can experiment freely to understand and leverage the game engine's capabilities to create game components, prototype game mechanics, or craft entirely new games.
 
 ## How to use Sandbox ?
 

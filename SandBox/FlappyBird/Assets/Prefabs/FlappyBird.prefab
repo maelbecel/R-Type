@@ -1,0 +1,27 @@
+Entities:
+  - Entity: 87451251541121
+    TagComponent:
+      Tag: SpaceShip
+    TransformComponent:
+      Translation: [-5, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    ScriptComponent:
+      Name: Player
+    BoxCollider2DComponent:
+      Offset: [0, 0]
+      Size: [0.5, 0.5]
+      Mask: 0xFFFFFFFF
+    RigidBody2DComponent:
+      BodyType: Dynamic
+      Velocity: [5, 0]
+      GravityScale: 0.4
+      Mass: 0.4
+    SpriteRendererComponent:
+      Color: [1, 1, 1, 1]
+      TilingFactor: 1
+      Texture:
+        AssetHandle: 14815285158415
+        Coords: [0, 0]
+        CellSize: [1, 1]
+        SpriteSize: [10, 13]

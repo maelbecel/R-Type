@@ -1,0 +1,25 @@
+Entities:
+  - Entity: 87451251542122
+    TagComponent:
+      Tag: spike_haut
+    TransformComponent:
+      Translation: [20, 8, 0]
+      Rotation: [0, 0, 0]
+      Scale: [5, 15, 15]
+    RigidBody2DComponent:
+      BodyType: Static
+      Velocity: [0, 0]
+      GravityScale: 0.0
+      Mass: 0.0
+    SpriteRendererComponent:
+      Color: [1, 1, 1, 1]
+      TilingFactor: 1
+      Texture:
+        AssetHandle: 45120015123131
+        Coords: [0, 0]
+        CellSize: [1, 1]
+        SpriteSize: [225, 450]
+    BoxCollider2DComponent:
+      Offset: [0, 0]
+      Size: [0.5, 0.5]
+      Mask: 0xFFFFFFFF

@@ -10,10 +10,7 @@
         "freealut",
         "libvorbis",
         "spdlog",
-        "catch2",
-        "sol2",
         "nativefiledialog",
-        "yaml-cpp",
-        "imguizmo"
+        "yaml-cpp"
     ]
 }

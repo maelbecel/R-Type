@@ -25,22 +25,14 @@ if(COMPILE_EXAMPLES)
     add_subdirectory(Examples)
 endif()
 
-    # -- SandBox ---------------------------------------------------------------
+    # -- Flappy Bird -----------------------------------------------------------
 # Option for compiling sandbox
-option(COMPILE_SANDBOX "Compile sandbox" OFF)
+option(COMPILE_FLAPPYBIRD "Compile flappy bird" OFF)
 
-if(COMPILE_SANDBOX)
+if(COMPILE_FLAPPYBIRD)
     message(STATUS "Sandbox enabled")
 
-    add_subdirectory(SandBox)
-endif()
-
-    # -- Editor ----------------------------------------------------------------
-# Option for compiling editor
-option(COMPILE_EDITOR "Compile editor" OFF)
-
-if(COMPILE_EDITOR)
-    message(STATUS "Editor enabled")
-
-    add_subdirectory(Exodia)
+    add_subdirectory(SandBox/Library)
+    add_subdirectory(SandBox/GameEngine)
+    add_subdirectory(SandBox/FlappyBird)
 endif()

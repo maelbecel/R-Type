@@ -22,15 +22,8 @@ find_package(yaml-cpp CONFIG REQUIRED) # yaml-cpp::yaml-cpp
     # -- Debugging Library -----------------------------------------------------
 find_package(spdlog   CONFIG REQUIRED) # spdlog::spdlog
 
-    # -- Unit Testing Library --------------------------------------------------
-find_package(Catch2   CONFIG REQUIRED) # Catch2::Catch2 Catch2::Catch2WithMain
-
-    # -- Scripting Library -----------------------------------------------------
-find_package(sol2     CONFIG REQUIRED) # sol2
-
     # -- Game Editor Library ---------------------------------------------------
 find_package(unofficial-nativefiledialog CONFIG REQUIRED) # unofficial::nativefiledialog::nfd
-find_package(imguizmo                    CONFIG REQUIRED) # imguizmo::imguizmo
 
 message(STATUS "Searching for packages with vcpkg... done")
 message(STATUS "Searching for 3rd-party libraries with FetchContent...")
