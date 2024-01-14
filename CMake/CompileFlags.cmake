@@ -25,9 +25,14 @@ if (COMPILE_EXAMPLES)
     add_subdirectory(Examples)
 endif()
 
-    # -- Flappy Bird -----------------------------------------------------------
-# Option for compiling sandbox
 option(COMPILE_FLAPPYBIRD "Compile flappy bird" OFF)
+option(COMPILE_SOLORTYPE  "Compile solo r-type" OFF)
+option(COMPILE_EDITOR "Compile editor" OFF)
+
+if (COMPILE_EDITOR)
+    set(COMPILE_FLAPPYBIRD ON)
+    set(COMPILE_SOLORTYPE  ON)
+endif()
 
 if (COMPILE_FLAPPYBIRD)
     message(STATUS "Sandbox enabled")
@@ -35,13 +40,15 @@ if (COMPILE_FLAPPYBIRD)
     add_subdirectory(SandBox/FlappyBird)
 endif()
 
-    # -- Solo R-Type -----------------------------------------------------------
-# Option for compiling solo r-type
-option(COMPILE_SOLORTYPE "Compile solo r-type" OFF)
-
 if (COMPILE_SOLORTYPE)
     message(STATUS "Solo R-Type enabled")
 
     add_subdirectory(SandBox/R-Type/R-Type)
     add_subdirectory(SandBox/R-Type/RT_Client)
+endif()
+
+if (COMPILE_EDITOR)
+    message(STATUS "Editor enabled")
+
+    add_subdirectory(SandBox/Editor)
 endif()
