@@ -9,7 +9,7 @@ In this guide we will learn how to use the Exodia Game Engine scripting API to c
 Know that this abstraction can evolved in the future, it's currently a simple script abstraction.
 If you want to upgrade it, ask to `PharaEthan` the owner of the game engine.
 
-```cpp
+```c++
 class ScriptableEntity {
     public:
         virtual ~ScriptableEntity() = default; 
@@ -48,7 +48,7 @@ We can see that the scriptable entity is a simple class that can be inherited to
 
 So let's create a simple script that will print a message when the scriptable entity is created and a player controller that will move the entity.
 
-```cpp
+```c++
 class ExampleScript : public ScriptableEntity {
     public:
         void OnCreate() override
@@ -91,7 +91,7 @@ class Player : public ScriptableEntity {
 How to bind it to the current world for use it ?
 We have to use the `ScriptComponent` struct.
 
-```cpp
+```c++
 // -- Example 1 --
 Entity *entity = _World->CreateEntity("Player");
 
@@ -109,7 +109,7 @@ hello->AddComponent<ScriptComponent>().Get().Bind<ExampleScript>();
 
 Don't forget when you will update your system that run the script to initialize the scriptable entity.
 
-```cpp
+```c++
 _World->ForEach<ScriptComponent>([&](Entity *entity, ComponentHandle<ScriptComponent> script)
 {
     auto &sc = script.Get();
@@ -125,10 +125,10 @@ _World->ForEach<ScriptComponent>([&](Entity *entity, ComponentHandle<ScriptCompo
 ```
 
 Note this code is a system that run the scriptable entity, you can create your own system.
-Currently this system already exist in the game engine. It's the `ScriptSystem`.
+Currently, this system already exist in the game engine. It's the `ScriptSystem`.
 If you want to use it, you have to add it to the world.
 
-```cpp
+```c++
 _World->RegisterSystem(new ScriptSystem());
 
 _World->Update(ts);
