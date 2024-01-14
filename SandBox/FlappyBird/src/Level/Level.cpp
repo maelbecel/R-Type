@@ -53,7 +53,7 @@ namespace FlappyBird {
         score = (ship.GetComponent<TransformComponent>().Translation.x) / 20.0f;
 
         GameObject spike_haut = _Scene->GetEntityByName("spike_haut");
-        GameObject spike_bas  = _Scene->GetEntityByName("spike_bas");
+        GameObject spike_bas = _Scene->GetEntityByName("spike_bas");
 
         if (spike_haut && spike_bas) {
             float rand = Random::Float() * 8.0f - 4.0f;
@@ -81,7 +81,7 @@ namespace FlappyBird {
         }
 
         GameObject spike_haut2 = _Scene->GetEntityByName("spike_haut2");
-        GameObject spike_bas2  = _Scene->GetEntityByName("spike_bas2");
+        GameObject spike_bas2 = _Scene->GetEntityByName("spike_bas2");
 
         if (spike_haut2 && spike_bas2) {
             float rand2 = Random::Float() * 8.0f - 4.0f;
@@ -159,7 +159,7 @@ namespace FlappyBird {
         _Scene->LoadPrefabs("Assets/Prefabs/spike_haut2.prefab");
 
         GameObject spike_haut = _Scene->GetEntityByName("spike_haut");
-        GameObject spike_bas  = _Scene->GetEntityByName("spike_bas");
+        GameObject spike_bas = _Scene->GetEntityByName("spike_bas");
 
         if (spike_haut && spike_bas) {
             float rand = Random::Float() * 8.0f - 4.0f;
@@ -178,7 +178,7 @@ namespace FlappyBird {
         }
 
         GameObject spike_haut2 = _Scene->GetEntityByName("spike_haut2");
-        GameObject spike_bas2  = _Scene->GetEntityByName("spike_bas2");
+        GameObject spike_bas2 = _Scene->GetEntityByName("spike_bas2");
 
         if (spike_haut2 && spike_bas2) {
             float rand2 = Random::Float() * 8.0f - 4.0f;
@@ -249,4 +249,4 @@ namespace FlappyBird {
      * @return The IsGameOver() function returns the value of the _GameOver variable.
      */
     bool Level::IsGameOver() { return _GameOver; }
-};
+}; // namespace FlappyBird
