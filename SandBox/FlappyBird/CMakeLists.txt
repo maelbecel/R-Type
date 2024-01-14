@@ -80,3 +80,6 @@ target_include_directories(FlappyBird PRIVATE
 target_include_directories(FlappyBird PRIVATE ${Stb_INCLUDE_DIR})
 target_include_directories(FlappyBird PRIVATE ${CMAKE_BINARY_DIR}/_deps/imgui-src)
 
+set_target_properties(FlappyBird PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../Release/FlappyBird/
+)

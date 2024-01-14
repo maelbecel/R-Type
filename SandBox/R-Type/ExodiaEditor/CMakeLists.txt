@@ -84,3 +84,7 @@ target_include_directories(Editor PRIVATE
 )
 target_include_directories(Editor PRIVATE ${Stb_INCLUDE_DIR})
 target_include_directories(Editor PRIVATE ${CMAKE_BINARY_DIR}/_deps/imgui-src)
+
+set_target_properties(Editor PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../Release/R-Type/
+)

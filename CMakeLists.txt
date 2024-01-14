@@ -16,7 +16,7 @@ include(BuildBinaries)
 # Compilation Flags
 include(CompileFlags)
 
-if (MSVC)
-    file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/Assets DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/../Debug)
-    file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/Assets DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/../Release)
-endif()
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/Assets                    DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/../Release)
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/SandBox/FlappyBird/Assets DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/../Release/FlappyBird/)
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/SandBox/R-Type/Assets     DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/../Release/R-Type/)
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/SandBox/R-Type/imgui.ini  DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/../Release/R-Type/)

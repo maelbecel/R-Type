@@ -50,5 +50,5 @@ endif()
 if (COMPILE_EDITOR)
     message(STATUS "Editor enabled")
 
-    add_subdirectory(SandBox/Editor)
+    add_subdirectory(SandBox/R-Type/ExodiaEditor)
 endif()

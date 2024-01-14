@@ -77,3 +77,7 @@ target_include_directories(client PRIVATE
 
 target_include_directories(client PRIVATE ${Stb_INCLUDE_DIR})
 target_include_directories(client PRIVATE ${CMAKE_BINARY_DIR}/_deps/imgui-src)
+
+set_target_properties(client PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../Release/R-Type/
+)

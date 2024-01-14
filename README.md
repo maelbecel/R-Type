@@ -62,7 +62,6 @@ cmake ..
 cmake --build .
 ```
 
-
 ### Windows :
 ```bash
 ./vcpkg/bootstrap-vcpkg.bat
@@ -75,10 +74,20 @@ cmake ..
 cmake --build .
 ```
 
+### Flags :
+
+- `-DCOMPILE_DEBUG=ON`: Compile the project in debug mode.
+- `-DCOMPILE_EXAMPLES=ON`: Compile the examples.
+- `-DCOMPILE_FLAPPYBIRD=ON`: Compile the flappy bird game.
+- `-DCOMPILE_SOLORTYPE=ON`: Compile the solo r-type game.
+- `-DCOMPILE_EDITOR=ON`: Compile the editor.
+All the flags can be combined.
+For found executable, just go into the `Release` folder. They are classified by folder.
+
 ## Usage & Examples
 
 **Products to be delivered**
-`r-type_server` `r-type_client`
+`r-type_server` `r-type_client` # They are all located in the Release folder
 
 **In Terminal**
 ```bash
