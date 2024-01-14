@@ -127,6 +127,9 @@ namespace Exodia {
                 float orthographicNearClip;
                 float orthographicFarClip;
 
+                if (!buffer || buffer.Size == 0)
+                    return;
+
                 std::memcpy(&projectionType, buffer.Data, sizeof(SceneCamera::ProjectionType));
                 std::memcpy(&perspectiveVerticalFOV, buffer.Data + sizeof(SceneCamera::ProjectionType), sizeof(float));
                 std::memcpy(&perspectiveNearClip, buffer.Data + sizeof(SceneCamera::ProjectionType) + sizeof(float),

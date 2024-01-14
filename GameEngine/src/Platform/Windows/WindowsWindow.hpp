@@ -112,6 +112,13 @@ namespace Exodia {
          */
         inline unsigned int GetHeight() const override { return _Data.Height; }
 
+        inline void Resize(unsigned int width, unsigned int height) override {
+            _Data.Width = width;
+            _Data.Height = height;
+
+            glfwSetWindowSize(_Window, width, height);
+        }
+
         /**
          * @brief Set the event callback function.
          * This method is used to set the callback function that will be called when events occur in the window.

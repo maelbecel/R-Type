@@ -76,13 +76,16 @@ namespace Exodia {
         for (auto &system : _Systems)
             _World->RegisterSystem(system);
 
+        _World->LockMutex();
         _World->ForEach<CameraComponent>([&](Entity *entity, auto camera) {
             auto &cc = camera.Get();
 
             if (_ViewportWidth > 0 && _ViewportHeight > 0)
                 cc.Camera.SetViewportSize(_ViewportWidth, _ViewportHeight);
         });
+        _World->UnlockMutex();
 
+        _World->LockMutex();
         _World->ForEach<ScriptComponent>([&](Entity *entity, auto script) {
             auto &sc = script.Get();
 
@@ -95,13 +98,14 @@ namespace Exodia {
                 }
             }
         });
+        _World->UnlockMutex();
 
         if (Renderer::GetAPI() == RendererAPI::API::None)
             return;
 
-        _World->ForEach<MusicComponent>([&](Entity *entity, auto music) {
-            auto &sc = music.Get();
-
+        _World->LockMutex();
+        _World->ForEach<MusicComponent>([&](Entity *entity, ComponentHandle<MusicComponent> music) {
+            MusicComponent &sc = music.Get();
             Ref<Sound2D> sound = AssetManager::GetAsset<Sound2D>(sc.Handle);
 
             if (sound == nullptr)
@@ -113,6 +117,7 @@ namespace Exodia {
                 Renderer2D::PlaySound(sc.Handle);
             }
         });
+        _World->UnlockMutex();
     }
 
     void Scene::OnRuntimeStop() {
@@ -132,10 +137,24 @@ namespace Exodia {
                 sc.DestroyScript(&sc);
             }
         });
+
+        if (Renderer::GetAPI() == RendererAPI::API::None)
+            return;
+
+        _World->ForEach<MusicComponent>([&](Entity *entity, auto music) {
+            auto &sc = music.Get();
+
+            Ref<Sound2D> sound = AssetManager::GetAsset<Sound2D>(sc.Handle);
+
+            if (sound == nullptr)
+                return;
+            if (sc.Play)
+                sound->Pause();
+        });
     }
 
     void Scene::OnUpdateRuntime(Timestep ts) {
-        if (!_IsPaused) {
+        if (!_IsRunning || !_IsPaused) {
 
             // -- Update the Scripts -- //
             _World->LockMutex();
@@ -243,8 +262,18 @@ namespace Exodia {
             });
         _World->UnlockMutex();
 
-        // TODO: When text rendering will be implemented (in Renderer2D);
+        _World->LockMutex();
+        _World->ForEach<TransformComponent, TextRendererComponent, IDComponent>(
+            [&](Entity *entity, auto transform, auto text, auto id) {
+                auto &tc = transform.Get();
+                auto &txtc = text.Get();
+                auto &ic = id.Get();
 
+                Renderer2D::DrawText(tc.GetTransform(), txtc.Text, txtc, (int)ic.ID);
+            });
+        _World->UnlockMutex();
+
+        _World->LockMutex();
         _World->ForEach<SoundComponent>([&](Entity *entity, auto sound) {
             auto &sc = sound.Get();
 
@@ -259,6 +288,45 @@ namespace Exodia {
                 Renderer2D::PlaySound(sc.Handle);
             }
         });
+        _World->UnlockMutex();
+
+        // _World->LockMutex();
+        // _World->ForEach<TransformComponent, BoxCollider2DComponent>([&](Entity *entity, auto transform, auto
+        // collider) {
+        //     auto &tc = transform.Get();
+        //     auto &cc = collider.Get();
+
+        //     Renderer2D::DrawRect(tc.GetTransform(), glm::vec4(1.0f, 0.5f, 0.0f, 1.0f));
+
+        //     (void)cc;
+        //     (void)entity;
+        // });
+        // _World->UnlockMutex();
+
+        // _World->LockMutex();
+        // _World->ForEach<TransformComponent, ParentComponent>([&](Entity *entity, auto transform, auto script) {
+        //     auto &tc = transform.Get();
+        //     auto &cc = script.Get();
+
+        //     Renderer2D::DrawCircle(tc.GetTransform(), glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), 0.1f, 0.005f);
+
+        //     (void)cc;
+        //     (void)entity;
+        // });
+        // _World->UnlockMutex();
+
+        // _World->LockMutex();
+        // _World->ForEach<TransformComponent, CircleCollider2DComponent>([&](Entity *entity, auto transform, auto
+        // collider) {
+        //     auto &tc = transform.Get();
+        //     auto &cc = collider.Get();
+
+        //     Renderer2D::DrawCircle(tc.GetTransform(), glm::vec4(1.0f, 0.5f, 0.0f, 1.0f), 0.1f, 0.005f);
+
+        //     (void)cc;
+        //     (void)entity;
+        // });
+        // _World->UnlockMutex();
     }
 
     ///////////////////////

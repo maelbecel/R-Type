@@ -48,7 +48,7 @@ namespace Exodia {
              */
             void Send(const std::vector<char> message, size_t size, const asio::ip::udp::endpoint &endpoint);
 
-            void Send(Exodia::Network::Packet &packet, const asio::ip::udp::endpoint &endpoint);
+            void Send(std::shared_ptr<Exodia::Network::Packet> packet, const asio::ip::udp::endpoint &endpoint);
 
             /**
              * @brief Receive data asynchronously
@@ -75,11 +75,11 @@ namespace Exodia {
             asio::ip::udp::socket &getSocket() { return _socket; }
 
           protected:
-            std::mutex _receive_mutex;
             asio::ip::udp::socket _socket;           /*!< The UDP socket */
             asio::ip::udp::endpoint _senderEndpoint; /*!< The sender endpoint */
             std::size_t _packets_received = 0;       /*!< The number of packets received */
             std::array<char, MTU> _receiveBuffer;    /*!< The receive buffer */
+            asio::io_context::strand _receiveStrand;
 
           private:
         };

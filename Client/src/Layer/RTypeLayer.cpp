@@ -9,8 +9,11 @@
 #include <imgui.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <sstream>
 
-namespace Exodia {
+using namespace Exodia;
+
+namespace RType {
 
     //////////////////////////////
     // Constructor & Destructor //
@@ -22,52 +25,82 @@ namespace Exodia {
     // Methods //
     /////////////
 
-    void RTypeLayer::OnAttach() {
-        EXODIA_PROFILE_FUNCTION();
+    int RTypeLayer::GetPort() {
 
-        auto commandLine = Application::Get().GetSpecification().CommandLineArgs;
+        ApplicationCommandLineArgs commandLine = Application::Get().GetSpecification().CommandLineArgs;
 
-        // TODO: Temp port ./r-type_client -p {port}
+        // TODO: Temp port ./r-type_client {port} {ip} {port}
         int port = 8083; // Default port
         if (commandLine.Count > 1) {
             port = std::stoi(commandLine[1]);
 
             if (port < 1024 || port > 65535) {
                 Application::Get().Close();
-                return;
+                return -1;
             }
         }
+        return port;
+    }
 
+    std::string RTypeLayer::GetIp() {
+
+        ApplicationCommandLineArgs commandLine = Application::Get().GetSpecification().CommandLineArgs;
+
+        // TODO: Temp ip ./r-type_client {port} {ip} {port}
+        std::string ip = "127.0.0.1"; // Default ip
+        if (commandLine.Count > 2) {
+            ip = commandLine[2];
+        }
+        return ip;
+    }
+
+    int RTypeLayer::GetServerPort() {
+        ApplicationCommandLineArgs commandLine = Application::Get().GetSpecification().CommandLineArgs;
+
+        // TODO: Temp port ./r-type_client {port} {ip} {port}
+        int port = 8082; // Default port
+        if (commandLine.Count > 3) {
+            port = std::stoi(commandLine[3]);
+
+            if (port < 1024 || port > 65535) {
+                Application::Get().Close();
+                return -1;
+            }
+        }
+        return port;
+    }
+
+    void RTypeLayer::ConnectToServer(int port, std::string ip, int serverPort) {
+        (void)port;
+        _Network->Loop();
+        _Network->SendAskConnect(ip, (short)serverPort);
+    }
+
+    void RTypeLayer::OnAttach() {
+        EXODIA_PROFILE_FUNCTION();
+
+        int port = GetPort();
+        std::string ip = GetIp();
+        int serverPort = GetServerPort();
         _Network = CreateScope<Network::Network>(_WorldNetwork, _IOContextManager, port);
 
-        _Network->Loop();
-        _Network->SendAskConnect("127.0.0.1",
-                                 8082); // TODO: change ip and port when the server is on a different machine
+        if (port == -1)
+            return;
+
         // Create world
         CurrentScene = GAME;
 
-        Scenes[MENU] = CreateRef<Scene>();
-        Scenes[MENU]->RegisterSystem(new AnimationSystem());
-        Scenes[MENU]->RegisterSystem(new MovingSystem(1.5f));
-        Scenes[MENU]->OnViewportResize(Application::Get().GetWindow().GetWidth(),
-                                       Application::Get().GetWindow().GetHeight());
-
-        // RType::EntityEventSubscriber *subscribe = new RType::EntityEventSubscriber(_Network);
         CollisionSystem *collisionSystem = new CollisionSystem();
 
         Scenes[GAME] = CreateRef<Scene>();
         Scenes[GAME]->RegisterSystem(new AnimationSystem());
         Scenes[GAME]->RegisterSystem(new MovingSystem(1.5f));
         Scenes[GAME]->RegisterSystem(collisionSystem);
-        // Scenes[GAME]->Subscribe<Events::OnEntityCreated>(subscribe);
-        // Scenes[GAME]->Subscribe<Events::OnEntityDestroyed>(subscribe);
-        Scenes[GAME]->Subscribe<Events::OnCollisionEntered>(collisionSystem);
+        Scenes[GAME]->RegisterSystem(new ClockSystem());
+
+        Scenes[GAME]->Subscribe<Exodia::Events::OnCollisionEntered>(collisionSystem);
         Scenes[GAME]->OnViewportResize(Application::Get().GetWindow().GetWidth(),
                                        Application::Get().GetWindow().GetHeight());
-
-        Entity *music = Scenes[GAME]->CreateEntity("Background");
-
-        music->AddComponent<MusicComponent>(124013371145915, 0.5f, true);
 
         _Network->SetWorld(Scenes[CurrentScene]->GetWorldPtr());
 
@@ -76,42 +109,28 @@ namespace Exodia {
         // Create the camera entity
         Entity *cameraEntity = Scenes[GAME]->CreateEntity("Camera");
 
-        auto &camera = cameraEntity->AddComponent<CameraComponent>().Get();
+        CameraComponent &camera = cameraEntity->AddComponent<CameraComponent>().Get();
         cameraEntity->GetComponent<TransformComponent>().Get().Translation = {0.0f, 0.0f, 15.0f};
         camera.Camera.SetProjectionType(SceneCamera::ProjectionType::Perspective);
         camera.Camera.SetViewportSize(Application::Get().GetWindow().GetWidth(),
                                       Application::Get().GetWindow().GetHeight());
 
-        /* Removing rigid body for static camera
-        auto body_camera = cameraEntity->AddComponent<RigidBody2DComponent>();
-        body_camera.Get().Type = RigidBody2DComponent::BodyType::Dynamic;
-        body_camera.Get().Mass = 0.0f;
-        body_camera.Get().GravityScale = 0.0f;
-        body_camera.Get().Velocity = glm::vec2{ 1.5f, 0.0f };
-        */
-
-        // Create the entities
-        // CreatePlayer(Scenes, 0);
-
-        // Create pata-pata
-        // CreatePataPata(Scenes);
-
-        Entity *cameraMenu = Scenes[MENU]->CreateEntity("Camera");
-
-        auto &camera_ = cameraMenu->AddComponent<CameraComponent>().Get();
-        cameraMenu->GetComponent<TransformComponent>().Get().Translation = {0.0f, 0.0f, 15.0f};
-        camera_.Camera.SetProjectionType(SceneCamera::ProjectionType::Perspective);
-        camera_.Camera.SetViewportSize(1600, 900);
-        cameraMenu->AddComponent<RigidBody2DComponent>().Get().Type = RigidBody2DComponent::BodyType::Static;
-
-        // Create stars
-        // CreateStars(Scenes);
+        for (int i = 0; i < 60; i++) {
+            Entity *star = Scenes[GAME]->CreateEntity("Star" + std::to_string(i));
+            star->AddComponent<ScriptComponent>().Get().Bind("Star");
+        }
 
         // Create the camera
         Scenes[CurrentScene]->OnRuntimeStart();
+
+        ConnectToServer(port, ip, serverPort);
     }
 
-    void RTypeLayer::OnDetach() { EXODIA_PROFILE_FUNCTION(); }
+    void RTypeLayer::OnDetach() {
+        EXODIA_PROFILE_FUNCTION();
+        _Network->SendDisconnect();
+        EXODIA_CORE_ERROR("RTypeLayer::OnDetach()");
+    }
 
     void RTypeLayer::OnUpdate(Exodia::Timestep ts) {
         EXODIA_PROFILE_FUNCTION();
@@ -127,6 +146,11 @@ namespace Exodia {
         if (CurrentScene == GAME) {
         };
 
+        _packetTimer += ts;
+        if (_packetTimer >= 1) {
+            _Network->SendPacketInfo();
+            _packetTimer = 0;
+        }
         // Update the world
         Scenes[CurrentScene]->OnUpdateRuntime(ts);
     }
@@ -147,37 +171,53 @@ namespace Exodia {
 
         Scenes[CurrentScene]->GetWorld().LockMutex();
         Scenes[CurrentScene]->GetWorld().ForEach<ScriptComponent, TagComponent>(
-            [&](Entity *entity, auto script, auto tag) {
-                auto &sc = script.Get();
-                auto &tc = tag.Get();
+            [&](Entity *entity, ComponentHandle<ScriptComponent> script, ComponentHandle<TagComponent> tag) {
+                ScriptComponent &sc = script.Get();
+                TagComponent &tc = tag.Get();
 
-                if ((tc.Tag.compare("Player_" + _Network->id) == 0) && sc.Instance != nullptr) {
+                std::ostringstream oss;
+                oss << _Network->GetIdPlayer();
+                std::string player = "Player_" + oss.str();
+
+                if ((tc.Tag.compare(player) == 0) && sc.Instance != nullptr) {
                     sc.Instance->OnKeyPressed(key);
 
-                    _Network->SendEvent(key, true);
+                    _Network->SendEvent(false, key, true);
                 }
-
                 (void)entity;
             });
+        if (key == Key::ESCAPE) {
+            NetworkInfo info = _Network->GetNetworkInfo();
+            EXODIA_CORE_ERROR("PACKET info");
+            EXODIA_CORE_ERROR("Send packet: {0}", info.sendPacket);
+            EXODIA_CORE_ERROR("Received packet: {0}", info.receivedPacket);
+            EXODIA_CORE_ERROR("KiloByte sent: {0}", info.kiloByteSent);
+            EXODIA_CORE_ERROR("KiloByte received: {0}", info.kiloByteReceived);
+            EXODIA_CORE_ERROR("Packet loss sent: {0}", info.sendPacketLost);
+            EXODIA_CORE_ERROR("Packet loss received: {0}", info.receivePacketLost);
+            EXODIA_CORE_ERROR("PING sent: {0}", info.ping);
+        }
         Scenes[CurrentScene]->GetWorld().UnlockMutex();
 
         return true;
     };
 
     bool RTypeLayer::OnKeyReleasedEvent(KeyReleasedEvent &event) {
-
         int key = event.GetKeyCode();
 
         Scenes[CurrentScene]->GetWorld().LockMutex();
         Scenes[CurrentScene]->GetWorld().ForEach<ScriptComponent, TagComponent>(
-            [&](Entity *entity, auto script, auto tag) {
-                auto &sc = script.Get();
-                auto &tc = tag.Get();
+            [&](Entity *entity, ComponentHandle<ScriptComponent> script, ComponentHandle<TagComponent> tag) {
+                ScriptComponent &sc = script.Get();
+                TagComponent &tc = tag.Get();
 
-                if ((tc.Tag.compare("Player_" + _Network->id) == 0) && sc.Instance != nullptr) {
+                std::ostringstream oss;
+                oss << _Network->GetIdPlayer();
+                std::string player = "Player_" + oss.str();
+
+                if ((tc.Tag.compare(player) == 0) && sc.Instance != nullptr) {
                     sc.Instance->OnKeyReleased(key);
-
-                    _Network->SendEvent(key, false);
+                    _Network->SendEvent(false, key, false);
                 }
 
                 (void)entity;
@@ -193,4 +233,4 @@ namespace Exodia {
 
         return true;
     }
-}; // namespace Exodia
+}; // namespace RType

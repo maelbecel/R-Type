@@ -11,6 +11,7 @@
 #include "Exodia.hpp"
 #include "SceneType.hpp"
 #include "User/User.hpp"
+#include <optional>
 
 namespace Exodia {
 
@@ -33,6 +34,15 @@ namespace Exodia {
         void Update();
         void Stop();
 
+      private:
+        void InitScene(SceneType scene, std::optional<std::vector<Exodia::EntitySystem *>> systems);
+        void InitScenes();
+        void InitEntities();
+        void WaitForClient();
+        void HandleEvent(std::pair<std::pair<uint32_t, bool>, asio::ip::udp::endpoint> event);
+        bool IsClientNew(std::pair<const std::string, std::shared_ptr<Connection>> connection);
+        void SendComponents(SceneType scene);
+
         ////////////////
         // Attributes //
         ////////////////
@@ -52,12 +62,14 @@ namespace Exodia {
         // Timestep is used to manage the time
         Timer _Timer;
         float _LastTime;
+        float my_Timer;
 
         bool _Running;
 
         std::thread _InputThread;
 
         void CheckForNewClients();
+        void CheckConnectedClients();
         std::vector<Exodia::User> _Users;
     };
 }; // namespace Exodia
