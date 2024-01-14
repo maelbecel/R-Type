@@ -19,7 +19,7 @@ namespace RType {
     // Constructor & Destructor //
     //////////////////////////////
 
-    RTypeLayer::RTypeLayer() : Layer("R-Type") {};
+    RTypeLayer::RTypeLayer() : Layer("R-Type"){};
 
     /////////////
     // Methods //
