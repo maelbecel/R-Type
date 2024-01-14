@@ -52,7 +52,7 @@ namespace RType {
             timer += ts;
 
             if (nbMid < 5 && timer > 0.5f) {
-                GameObject mid = scene->CreateNewEntity("Mid");
+                GameObject mid = scene->CreateNewEntity("Pata");
                 mid.AddComponent<ScriptComponent>().Bind("Mid");
 
                 timer = 0.0f;
