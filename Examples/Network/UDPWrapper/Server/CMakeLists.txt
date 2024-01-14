@@ -47,11 +47,11 @@ target_link_libraries(UDPWrapper_server PRIVATE
     imgui
     OpenAL::OpenAL
     spdlog::spdlog
-    Catch2::Catch2 Catch2::Catch2WithMain
-    sol2
+    
+    
     unofficial::nativefiledialog::nfd
     yaml-cpp::yaml-cpp
-    imguizmo::imguizmo
+    
 )
 
 target_include_directories(UDPWrapper_server PRIVATE ${Stb_INCLUDE_DIR})

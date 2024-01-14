@@ -39,10 +39,15 @@ namespace RType {
     inline static void InitRType() {
         // -- Init the R-Type project ------------------------------------------
 #ifdef _WIN32
-        Ref<Exodia::Project> project = Exodia::Project::Load("../Client/R-Type.proj");
+        Ref<Exodia::Project> project = Exodia::Project::Load("../Assets/R-Type.proj");
 #else
-        Ref<Exodia::Project> project = Exodia::Project::Load("./Client/R-Type.proj");
+        Ref<Exodia::Project> project = Exodia::Project::Load("./Assets/R-Type.proj");
 #endif
+
+        if (!project) {
+            EXODIA_ERROR("Failed to load R-Type project");
+            throw std::runtime_error("Failed to load R-Type project");
+        }
 
         // -- Register R-Type components ---------------------------------------
 

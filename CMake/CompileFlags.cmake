@@ -19,28 +19,36 @@ endif()
 # Option for compiling examples
 option(COMPILE_EXAMPLES "Compile examples" OFF)
 
-if(COMPILE_EXAMPLES)
+if (COMPILE_EXAMPLES)
     message(STATUS "Examples enabled")
 
     add_subdirectory(Examples)
 endif()
 
-    # -- SandBox ---------------------------------------------------------------
-# Option for compiling sandbox
-option(COMPILE_SANDBOX "Compile sandbox" OFF)
-
-if(COMPILE_SANDBOX)
-    message(STATUS "Sandbox enabled")
-
-    add_subdirectory(SandBox)
-endif()
-
-    # -- Editor ----------------------------------------------------------------
-# Option for compiling editor
+option(COMPILE_FLAPPYBIRD "Compile flappy bird" OFF)
+option(COMPILE_SOLORTYPE  "Compile solo r-type" OFF)
 option(COMPILE_EDITOR "Compile editor" OFF)
 
-if(COMPILE_EDITOR)
+if (COMPILE_EDITOR)
+    set(COMPILE_FLAPPYBIRD ON)
+    set(COMPILE_SOLORTYPE  ON)
+endif()
+
+if (COMPILE_FLAPPYBIRD)
+    message(STATUS "Sandbox enabled")
+
+    add_subdirectory(SandBox/FlappyBird)
+endif()
+
+if (COMPILE_SOLORTYPE)
+    message(STATUS "Solo R-Type enabled")
+
+    add_subdirectory(SandBox/R-Type/R-Type)
+    add_subdirectory(SandBox/R-Type/RT_Client)
+endif()
+
+if (COMPILE_EDITOR)
     message(STATUS "Editor enabled")
 
-    add_subdirectory(Exodia)
+    add_subdirectory(SandBox/R-Type/ExodiaEditor)
 endif()

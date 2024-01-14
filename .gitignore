@@ -43,9 +43,7 @@ ExodiaProfile-*.json
 # Binaries for programs and plugins
 r-type_*
 exodia
-
-# ImGui
-imgui.ini
+editor
 
 # Segfault error files
 vgcore.*
@@ -60,3 +58,5 @@ Debug/Assets/
 
 # R-Type
 .rtype
+
+SandBoxGames

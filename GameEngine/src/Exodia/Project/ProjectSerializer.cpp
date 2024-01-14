@@ -64,6 +64,10 @@ namespace Exodia {
             EXODIA_CORE_ERROR("Failed to parse project file `{0}`:\n\t{1}", path.string(), e.what());
 
             return false;
+        } catch (const YAML::BadFile &e) {
+            EXODIA_CORE_ERROR("Failed to parse project file `{0}`:\n\t{1}", path.string(), e.what());
+
+            return false;
         }
 
         auto project = data["Project"];

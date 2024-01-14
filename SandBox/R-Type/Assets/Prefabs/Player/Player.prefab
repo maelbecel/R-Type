@@ -1,0 +1,63 @@
+Entities:
+  - Entity: 956230123451
+    TagComponent:
+      Tag: PlayerController
+    TransformComponent:
+      Translation: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    ScriptComponent:
+      Name: PlayerController
+    ChildrenComponent:
+      Children:
+        - Entity: 87451251541121
+          TagComponent:
+            Tag: Player
+          TransformComponent:
+            Translation: [0, 0, 0]
+            Rotation: [0, 0, 0]
+            Scale: [1, 0.5, 1]
+          Health:
+            MaxHealth: 3
+            CurrentHealth: 3
+          BoxCollider2DComponent:
+            Offset: [0, 0]
+            Size: [0.5, 0.5]
+            Mask: 0xFFFFFFFF
+          RigidBody2DComponent:
+            BodyType: Dynamic
+            Velocity: [0, 0]
+            GravityScale: 0
+            Mass: 0
+          ParentComponent:
+            Parent: 956230123451
+          SpriteRendererComponent:
+            Color: [1, 1, 1, 1]
+            TilingFactor: 1
+            Texture:
+              AssetHandle: 12345678901234578
+              Coords: [2, 4]
+              CellSize: [33.2, 17.2]
+              SpriteSize: [1, 1]
+          ScriptComponent:
+            Name: Player
+        - Entity: 845120051210414
+          TagComponent:
+            Tag: PlayerID
+          TransformComponent:
+            Translation: [-0.65, 0.3, 0]
+            Rotation: [0, 0, 0]
+            Scale: [0.15, 0.20, 1]
+          RigidBody2DComponent:
+            BodyType: Dynamic
+            Velocity: [0, 0]
+            GravityScale: 0
+            Mass: 0
+          TextRendererComponent:
+            Text: Player 1
+            Color: [1, 1, 1, 1]
+            Font: 4521854574125
+            Kerning: 0
+            LineSpacing: 0
+          ParentComponent:
+            Parent: 956230123451

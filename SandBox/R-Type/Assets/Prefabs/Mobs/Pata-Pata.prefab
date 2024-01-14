@@ -1,0 +1,32 @@
+Entities:
+  - Entity: 956230123451
+    TagComponent:
+      Tag: Pata-Pata
+    TransformComponent:
+      Translation: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    ScriptComponent:
+      Name: PataPata
+    RigidBody2DComponent:
+      BodyType: Dynamic
+      Velocity: [-2.0, 0]
+      GravityScale: 0
+      Mass: 0
+    BoxCollider2DComponent:
+      Offset: [0, 0]
+      Size: [0.5, 0.5]
+      Mask: 0xFFFFFFFF
+    Clock:
+        ElapsedTime: 0
+    Health:
+      MaxHealth: 1
+      CurrentHealth: 1
+    SpriteRendererComponent:
+      Color: [1, 1, 1, 1]
+      TilingFactor: 1
+      Texture:
+        AssetHandle: 90123456789012678
+        Coords: [0, 0]
+        CellSize: [33.3125, 36]
+        SpriteSize: [1, 1]

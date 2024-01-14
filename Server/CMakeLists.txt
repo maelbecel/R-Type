@@ -58,11 +58,10 @@ target_link_libraries(r-type_server PRIVATE
     asio::asio
     OpenAL::OpenAL
     spdlog::spdlog
-    Catch2::Catch2 Catch2::Catch2WithMain
-    sol2
+    
+    
     unofficial::nativefiledialog::nfd
     yaml-cpp::yaml-cpp
-    imguizmo::imguizmo
     FreeALUT::alut
     Vorbis::vorbisfile
 )
@@ -71,5 +70,5 @@ target_include_directories(r-type_server PRIVATE ${Stb_INCLUDE_DIR})
 target_include_directories(r-type_server PRIVATE ${CMAKE_BINARY_DIR}/_deps/imgui-src)
 
 set_target_properties(r-type_server PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../Release/
 )

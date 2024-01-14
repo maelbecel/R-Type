@@ -1,0 +1,7 @@
+AssetRegistry:
+  - Handle: 14815285158415
+    Path: Texture/Characters/SpaceShip.png
+    Type: AssetType::Texture2D
+  - Handle: 45120015123131
+    Path: Texture/Tiles/Wall.png
+    Type: AssetType::Texture2D

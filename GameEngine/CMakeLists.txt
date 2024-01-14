@@ -154,11 +154,10 @@ target_link_libraries(GameEngine PRIVATE
     imgui
     OpenAL::OpenAL
     spdlog::spdlog
-    Catch2::Catch2 Catch2::Catch2WithMain
-    sol2
+    
+    
     unofficial::nativefiledialog::nfd
     yaml-cpp::yaml-cpp
-    imguizmo::imguizmo
     FreeALUT::alut
     Vorbis::vorbisfile
 )
@@ -166,7 +165,3 @@ target_link_libraries(GameEngine PRIVATE
 target_include_directories(GameEngine PRIVATE ${INCLUDE_DIRS_GAME_ENGINE})
 target_include_directories(GameEngine PRIVATE ${Stb_INCLUDE_DIR})
 target_include_directories(GameEngine PRIVATE ${CMAKE_BINARY_DIR}/_deps/imgui-src)
-
-set_target_properties(GameEngine PROPERTIES
-    ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../lib
-)

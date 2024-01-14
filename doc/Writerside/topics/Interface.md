@@ -105,8 +105,6 @@ virtual void DrawComponent()
 
 It draws the component.
 
-If it is not overriden, it does nothing.ImGuizmo.h
-
 ## EntitySystem
 
 The EntitySystem interface of the ECS. It contains the classes that will be used to manage entity systems.
