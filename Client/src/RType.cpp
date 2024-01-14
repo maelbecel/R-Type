@@ -32,6 +32,7 @@ namespace Exodia {
         try {
             RType::InitRType();
         } catch (std::exception &error) {
+            EXODIA_CORE_ERROR("Failed to initialize RType: {0}", error.what());
             return nullptr;
         }
 
