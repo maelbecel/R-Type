@@ -71,7 +71,7 @@ cmake --build .
 
 ```bash
 cmake ..
-cmake --build .
+cmake --build . --config Release
 ```
 
 ### Flags :

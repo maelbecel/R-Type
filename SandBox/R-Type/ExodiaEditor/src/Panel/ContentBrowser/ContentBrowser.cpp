@@ -64,7 +64,11 @@ namespace Exodia {
         if (_CurrentDirectory != std::filesystem::path(_BaseDirectory)) {
             ImGui::SameLine();
 
+        #ifdef _WIN32
+            if (ImGui::ImageButton((ImTextureID)(uint64_t)_GoBack->GetRendererID(), {15, 15}, ImVec2(0, 1), ImVec2(1, 0))) {
+        #else
             if (ImGui::ImageButton(reinterpret_cast<ImTextureID>(_GoBack->GetRendererID()), {15, 15}, {0, 1}, {1, 0})) {
+        #endif
                 _LastDirectory = _CurrentDirectory;
                 _CurrentDirectory = _CurrentDirectory.parent_path();
             }
@@ -73,8 +77,11 @@ namespace Exodia {
         if (_LastDirectory != _CurrentDirectory) {
             ImGui::SameLine();
 
-            if (ImGui::ImageButton(reinterpret_cast<ImTextureID>(_GoForward->GetRendererID()), {15, 15}, {0, 1},
-                                   {1, 0}))
+        #ifdef _WIN32
+            if (ImGui::ImageButton((ImTextureID)(uint64_t)_GoForward->GetRendererID(), {15, 15}, ImVec2(0, 1), ImVec2(1, 0)))
+        #else
+            if (ImGui::ImageButton(reinterpret_cast<ImTextureID>(_GoForward->GetRendererID()), {15, 15}, {0, 1}, {1, 0}))
+        #endif
                 _CurrentDirectory = _LastDirectory;
         }
 
@@ -110,9 +117,12 @@ namespace Exodia {
             }
 
             ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
-            ImGui::ImageButton(reinterpret_cast<ImTextureID>(thumbnail->GetRendererID()),
-                               {thumbnailSize, thumbnailSize}, {0, 1}, {1, 0});
-
+        
+    #ifdef _WIN32
+        if (ImGui::ImageButton((ImTextureID)(uint64_t)thumbnail->GetRendererID(), {thumbnailSize, thumbnailSize}, ImVec2(0, 1), ImVec2(1, 0)))
+    #else
+        if (ImGui::ImageButton(reinterpret_cast<ImTextureID>(thumbnail->GetRendererID()), {thumbnailSize, thumbnailSize}, {0, 1}, {1, 0}))
+    #endif
             if (!isDirectory && ImGui::BeginPopupContextItem()) {
                 if (ImGui::MenuItem("Import")) {
                     Project::GetActive()->GetEditorAssetManager()->ImportAsset(relativePath);
@@ -161,9 +171,9 @@ namespace Exodia {
                     node.Parent = currentNodeIndex;
 
                     _TreeNodes.push_back(node);
-                    _TreeNodes[currentNodeIndex].Children[path] = _TreeNodes.size() - 1;
+                    _TreeNodes[currentNodeIndex].Children[path] = (unsigned int)(_TreeNodes.size() - 1);
 
-                    currentNodeIndex = _TreeNodes.size() - 1;
+                    currentNodeIndex = (unsigned int)(_TreeNodes.size() - 1);
                 }
             }
         }

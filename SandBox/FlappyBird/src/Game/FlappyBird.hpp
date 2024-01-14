@@ -22,7 +22,11 @@ namespace FlappyBird {
 
     inline static void Init() {
         // -- Init the FlappyBird project ------------------------------------------
+    #ifdef _WIN32
+        Ref<Exodia::Project> project = Exodia::Project::Load("../Assets/FlappyBird.proj");
+    #else
         Ref<Exodia::Project> project = Exodia::Project::Load("./Assets/FlappyBird.proj");
+    #endif
 
         // -- Register FlappyBird scripts ------------------------------------------
         project->RegisterScript("Player", []() -> Exodia::ScriptableEntity * { return new FlappyBird::Player; });

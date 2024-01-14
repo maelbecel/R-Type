@@ -442,7 +442,7 @@ namespace Exodia {
                 glm::mat4 transformMatrix =
                     glm::translate(glm::mat4(1.0f), translation) * glm::scale(glm::mat4(1.0f), scale);
 
-                Renderer2D::DrawCircle(transformMatrix, glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), 0.05);
+                Renderer2D::DrawCircle(transformMatrix, glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), 0.05f);
 
                 (void)entity;
             });

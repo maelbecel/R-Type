@@ -50,7 +50,7 @@ namespace FlappyBird {
 
         if (!ship)
             return;
-        score = (ship.GetComponent<TransformComponent>().Translation.x) / 20.0f;
+        score = (int)((ship.GetComponent<TransformComponent>().Translation.x) / 20.0f);
 
         GameObject spike_haut = _Scene->GetEntityByName("spike_haut");
         GameObject spike_bas = _Scene->GetEntityByName("spike_bas");

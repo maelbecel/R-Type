@@ -38,7 +38,11 @@ namespace RType {
 
     inline static void InitRType() {
         // -- Init the R-Type project ------------------------------------------
+    #ifdef _WIN32
+        Ref<Exodia::Project> project = Exodia::Project::Load("../Assets/R-Type.proj");
+    #else
         Ref<Exodia::Project> project = Exodia::Project::Load("./Assets/R-Type.proj");
+    #endif
 
         // -- Register R-Type components ---------------------------------------
 
