@@ -8,7 +8,8 @@ The **`UDPSocket`** class encapsulates UDP socket functionality for network comm
 - Enables flexible handling of data transmission between game clients.
 
 ### Usage
-```cpp
+
+```c++
 class UDPSocket {
 public:
     // Constructor

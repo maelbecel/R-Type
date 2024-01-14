@@ -11,7 +11,7 @@ Welcome to the RType Game Engine documentation! RType is an exciting game engine
 4. [Architecture](#architecture)
     1. [Entity-Component-System (ECS)](#entity-component-system-ecs)
     2. [Modules](#modules)
-5. [Example](#example)
+5. [Example](#examples)
 6. [Contributing](#contributing)
 7. [Contact](#contact)
 

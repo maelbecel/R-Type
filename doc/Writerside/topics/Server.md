@@ -7,6 +7,7 @@ The server is the core of the game. It manages the game logic and the network.
 1. [RFC](#rfc)
     - [What is an RFC?](#what-is-an-rfc)
     - [Actual RFC for the Server](#actual-rfc-for-the-server)
+2. [Actual server](#actual-server)
 
 ## RFC
 
@@ -21,7 +22,7 @@ The RFC for the Server is :
 ```text
 Exodia
 Request for comments: 1
-29 november 2023
+31 december 2023
 Author: Axel Rohee
 
 
@@ -65,11 +66,11 @@ Content_of_a_component - 32 bit (4 bytes) unsigned integer representing the
     length of the content followed by the content.
 System - Null terminated string prefixed with a 32 bit (4 bytes) unsigned
     integer representing the length of the string.
-Timestamp - 32 bit (4 bytes) float representing the time in seconds.
+Timestamp - 64 bit (8 bytes) float representing the time in seconds.
 Event - 32 bit (4 bytes) unsigned integer representing the event type.
 Id - 64 bit (8 bytes) unsigned integer representing the id of the command
     use for implementing acknoledgement.
-GameEvents - - Null terminated string prefixed with a 32 bit (4 bytes) unsigned
+GameEvents - Null terminated string prefixed with a 32 bit (4 bytes) unsigned
     integer representing the length of the string.
 Size - 64 bit (8 bytes) unsigned integer representing the size of the content
     of the packet.
@@ -79,8 +80,16 @@ Commands
 Each command is prefixed with a header define below representing the command. There are the
 following commands command inferior to 0x80 are server commands and superior
 to 0x80 are client commands.
+The header is composed of the following:
+    Command - 8 bits (1 byte) bitfield representing the command number.
+    Timestamp - 32 bit (4 bytes) float representing the time in seconds.
+    Id - 64 bit (8 bytes) unsigned integer representing the id of the command.
+    Size - 64 bit (8 bytes) unsigned integer representing the size of the content
+        of the packet.
+    Bool - 1 bit represnting if the command is important or not.If it needs an acknowledge or not.
+
 Header
-    Content: [Command][Timestamp][Id][Size]
+    Content: [Command][Timestamp][Id][Bool][Size]
 
 Special commands
     0x00 - Send number of packets received and send since last second
@@ -89,33 +98,84 @@ Special commands
         Content: [Id]
 ServerCommand
     0x02 - Accept client connection
+        Content: [Id]
     0x03 - Reject client connection
-    0x0b - Send system to load MUST get an acknowledge
-        Content: [System][System]...
-    0x0c - Send entities with their components MUST get an acknowledge
+    0x0b - Send system to load
+        Content: [System]
+    0x0c - Send entities with their components
         Content: [Entity][Component][Content_of_a_component]
-    0x0d - Send GameEvents MUST get an acknowledge
-        Content: [GameEvents][GameEvents]...
-    0x0e - Send deleted entities MUST get an acknowledge
+    0x0d - Send GameEvents
+        Content: [GameEvents]
+    0x0e - Send deleted entities
         Content: [Entity]
-    0x10 - Send deleted components on entities MUST get an acknowledge
+    0x0f - Send deleted components on entities
         Content: [Entity][Component][Content_of_a_component]
-    0x11 - Send events
-        Content: [Event]
 ClientCommand
-    0x81 - Connect MUST get an acknowledge
+    0x81 - Connect
+        Content: [Timestamp][Id]
     0x82 - Disconnect
-    0x8a - Send events
-        Content: [Event]
-    0x8b - Send important events MUST get an acknowledge
-        Content: [Event]
+    0x8b - Send events release the bool is true if the event is a key press false if it is a key release
+        Content: [Event][Bool]
+
+Details
+
+0x00 - Packet info
+    This command is used to send the number of packets received and send since
+    last call of this command. This command is used to calculate the packet loss
+    It's content is [Int][Int] the first int is the number of packets received
+    and the second int is the number of packets send.
+
+0x01 - Acknowledge
+    This command is used to acknowledge a command. It's content is [Id] the id
+    of the command to acknowledge.
+
+0x02 - Accept client connection
+    This command is used to accept a client connection.
+    It's content is [Id] the id of the client.
+
+0x03 - Reject client connection
+    This command is used to reject a client connection. It's content is empty.
+
+0x0b - Send system to load
+    This command is used to send the systems to load. It's content is
+    [System] the system to load.
+
+0x0c - Send entities with their components
+    This command is used to send the entities with one components. It's
+    content is [Entity][Component][Content_of_a_component] the entity to load
+    the component to load and the content of the component.
+
+0x0d - Send GameEvent
+    This command is used to send the GameEvents. It's content is
+    [GameEvents] the GameEvents to load.
+
+0x0e - Send deleted entities
+    This command is used to send the deleted entities. It's content is
+    [Entity] the entity to delete.
+
+0x0f - Send deleted components on entities
+    This command is used to send the deleted components on entities. It's
+    content is [Entity][Component] the entity to delete
+    the component to delete and the content of the component to delete.
+
+0x81 - Connect
+    This command is used to connect to the server. It's content is
+    [Timestamp][Id] the timestamp of the client and the id of the server to
+    connect to.
+
+0x82 - Disconnect
+    This command is used to disconnect from the server. It's content is empty.
+
+0x8b - Send events
+    This command is used to send the events. It's content is [Event][Bool] the event
+    to send and a bool representing if the event is a key press or a key release.
 
 Usage
 
 The protocol is designed to be used in a certain way.
 this section will show an example of how to use the protocol.
 
-Initiation:events
+Initiation:
     Client -> [0x81][Timestamp][Id]
     Server -> [0x02][Timestamp][Id]
     Server -> [0x0b][Timestamp][Id][System][System]...
@@ -136,4 +196,13 @@ End:
     one or the other:
         Client -> [0x82][Timestamp][Id][Id] and Server -> [0x11][Timestamp][Id][Id]
         Server -> [0x03][Timestamp][Id]
+
 ```
+
+## Actual server
+
+The R-Type server is divide in 3 parts : 
+- [Main](server-main.md) : The main of the server.
+- [Server](server-server.md) : The part that allow to create a server.
+- [User](server-user.md) : The part to handle the users.
+

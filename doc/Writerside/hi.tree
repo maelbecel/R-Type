@@ -22,8 +22,34 @@
         <toc-element topic="CONTRIBUTING.md">
             <toc-element topic="CODE-OF-CONDUCT.md"/>
         </toc-element>
-        <toc-element topic="Server.md"/>
-        <toc-element topic="Client.md"/>
+        <toc-element topic="Server.md">
+            <toc-element topic="server-user.md"/>
+            <toc-element topic="server-server.md"/>
+            <toc-element topic="server-main.md"/>
+        </toc-element>
+        <toc-element topic="Client.md">
+            <toc-element topic="client-rtype.md">
+                <toc-element topic="client-system.md"/>
+                <toc-element topic="client-scripts.md">
+                    <toc-element topic="client-scripts-star.md"/>
+                    <toc-element topic="client-scripts-player.md"/>
+                    <toc-element topic="client-scripts-pata-pata.md"/>
+                    <toc-element topic="client-scripts-bullet-ennemy.md"/>
+                    <toc-element topic="client-scripts-bullet-player.md"/>
+                </toc-element>
+                <toc-element topic="client-event.md"/>
+                <toc-element topic="client-component.md">
+                    <toc-element topic="client-health.md"/>
+                    <toc-element topic="client-clock.md"/>
+                    <toc-element topic="client-animation.md"/>
+                </toc-element>
+                <toc-element topic="client-scene-type.md"/>
+                <toc-element topic="client-r-type.md"/>
+            </toc-element>
+            <toc-element topic="client-client.md">
+                <toc-element topic="client-layer.md"/>
+            </toc-element>
+        </toc-element>
         <toc-element topic="Game-Engine.md">
             <toc-element topic="Exodia.md">
                 <toc-element topic="Script.md">
