@@ -95,8 +95,7 @@ namespace RType {
         project->RegisterScript("PataPataSpawner",
                                 []() -> Exodia::ScriptableEntity * { return new RType::PataPataSpawner(); });
 
-        project->RegisterScript("MidSpawner",
-                                []() -> Exodia::ScriptableEntity * { return new RType::MidSpawner(); });
+        project->RegisterScript("MidSpawner", []() -> Exodia::ScriptableEntity * { return new RType::MidSpawner(); });
         // -- Register R-Type systems ------------------------------------------
 
         project->RegisterSystem("AnimationSystem", []() -> Exodia::EntitySystem * { return new AnimationSystem(); });
