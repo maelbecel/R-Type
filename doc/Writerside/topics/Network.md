@@ -11,6 +11,19 @@ He is divided in 5 parts:
 
 The Network class is the main class of the Network module. It contains the methods that will be used to initialize the Network module.
 
+### NetworkType
+
+```c++
+enum NetworkType {
+    NONE,
+    CLIENT,
+    SERVER,
+    SINGLEPLAYER
+};
+```
+
+It's an enum that contains the different types of network.
+
 ### Constructor
 
 ```c++

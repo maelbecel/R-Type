@@ -22,6 +22,26 @@ value = swapEndianness(value);
 std::cout << std::hex << value << std::endl;
 ```
 
+## Command
+
+The commands from the server to the client are the following:
+
+| Code | Command          | Description                                    |
+|------|------------------|------------------------------------------------|
+| 0x00 | PACKET_INFO      | Used to send the information about the packet. |
+| 0x01 | ACK              | Used to acknowledge a packet.                  |
+| 0x02 | CONNECT_ACCEPT   | Used to accept a connection.                   |
+| 0x03 | CONNECT_REJECT   | Used to refuse a connection.                   |
+| 0x0B | SYSTEM_LOAD      | Used to load a system.                         |
+| 0x0C | COMPONENT_OF     | Used to get the components of an entity.       |
+| 0x0D | GAME_EVENT       | Used to send game events                       |
+| 0x0E | DELETE_ENTITY    | Used to delete an entity.                      |
+| 0x0F | DELETE_COMPONENT | Used to delete a component.                    |
+| 0x10 | IMPORTANT_EVENT  | Used to send important events.                 |
+| 0x81 | CONNECT          | Used to connect to the server.                 |
+| 0x82 | DISCONNECT       | Used to disconnect from the server.            |
+| 0x8B | EVENT            | Used to send events.                           |
+
 ## Constructor
 
 ```c++
