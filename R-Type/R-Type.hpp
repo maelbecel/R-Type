@@ -44,6 +44,11 @@ namespace RType {
         Ref<Exodia::Project> project = Exodia::Project::Load("./Assets/R-Type.proj");
 #endif
 
+        if (!project) {
+            EXODIA_ERROR("Failed to load R-Type project");
+            throw std::runtime_error("Failed to load R-Type project");
+        }
+
         // -- Register R-Type components ---------------------------------------
 
         project->RegisterComponent("Health", [](Exodia::Buffer data) -> Exodia::IComponentContainer * {

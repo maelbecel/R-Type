@@ -19,6 +19,11 @@ int main(int ac, char **av) {
     Exodia::Application *App = Exodia::CreateApplication({ac, av});
     EXODIA_PROFILE_END_SESSION();
 
+    if (!App) {
+        EXODIA_ERROR("Failed to create application");
+        return 84;
+    }
+
     EXODIA_PROFILE_BEGIN_SESSION("Runtime", "ExodiaProfile-Runtime.json");
     App->Run();
     EXODIA_PROFILE_END_SESSION();

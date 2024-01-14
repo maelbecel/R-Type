@@ -29,7 +29,11 @@ namespace Exodia {
     Application *CreateApplication(ApplicationCommandLineArgs args) {
         EXODIA_PROFILE_FUNCTION();
 
-        RType::InitRType();
+        try {
+            RType::InitRType();
+        } catch (std::exception &error) {
+            return nullptr;
+        }
 
         ApplicationSpecification spec;
 
