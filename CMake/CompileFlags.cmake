@@ -19,7 +19,7 @@ endif()
 # Option for compiling examples
 option(COMPILE_EXAMPLES "Compile examples" OFF)
 
-if(COMPILE_EXAMPLES)
+if (COMPILE_EXAMPLES)
     message(STATUS "Examples enabled")
 
     add_subdirectory(Examples)
@@ -29,10 +29,19 @@ endif()
 # Option for compiling sandbox
 option(COMPILE_FLAPPYBIRD "Compile flappy bird" OFF)
 
-if(COMPILE_FLAPPYBIRD)
+if (COMPILE_FLAPPYBIRD)
     message(STATUS "Sandbox enabled")
 
-    add_subdirectory(SandBox/Library)
-    add_subdirectory(SandBox/GameEngine)
     add_subdirectory(SandBox/FlappyBird)
+endif()
+
+    # -- Solo R-Type -----------------------------------------------------------
+# Option for compiling solo r-type
+option(COMPILE_SOLORTYPE "Compile solo r-type" OFF)
+
+if (COMPILE_SOLORTYPE)
+    message(STATUS "Solo R-Type enabled")
+
+    add_subdirectory(SandBox/R-Type/R-Type)
+    add_subdirectory(SandBox/R-Type/RT_Client)
 endif()

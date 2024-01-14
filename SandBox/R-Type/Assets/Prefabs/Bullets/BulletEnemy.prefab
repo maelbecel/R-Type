@@ -1,0 +1,27 @@
+Entities:
+  - Entity: 956230123451
+    TagComponent:
+      Tag: BE
+    TransformComponent:
+      Translation: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [0.5, 0.5, 1]
+    ScriptComponent:
+      Name: BulletEnemy
+    RigidBody2DComponent:
+      BodyType: Dynamic
+      Velocity: [-10, 0]
+      GravityScale: 0
+      Mass: 0
+    SpriteRendererComponent:
+      Color: [1, 1, 1, 1]
+      TilingFactor: 1
+      Texture:
+        AssetHandle: 1837501318005432356
+        Coords: [8, 9]
+        CellSize: [16.6666666667, 17.0]
+        SpriteSize: [1, 1]
+    BoxCollider2DComponent:
+      Offset: [0, 0]
+      Size: [0.5, 0.5]
+      Mask: 0xFFFFFFFF

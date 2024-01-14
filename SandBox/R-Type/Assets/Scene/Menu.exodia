@@ -1,0 +1,37 @@
+Scene: Menu
+Entities:
+  - Entity: 15835038643471288681
+    TransformComponent:
+      Translation: [0, 0, 15]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    TagComponent:
+      Tag: Camera
+    CameraComponent:
+      Camera:
+        ProjectionType: 0
+        PerspectiveFOV: 0.785398185
+        PerspectiveNear: 0.00999999978
+        PerspectiveFar: 1000
+        OrthographicSize: 10
+        OrthographicNear: -1
+        OrthographicFar: 1
+      Primary: true
+      FixedAspectRatio: false
+  - Entity: 13934990193259798511
+    TransformComponent:
+      Translation: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    TagComponent:
+      Tag: Pata-Pata
+    ScriptComponent:
+      Name: PataPata
+    RigidBody2DComponent:
+      BodyType: Dynamic
+      Velocity: [0, 0]
+      GravityScale: 1
+      Mass: 1
+Systems:
+  - System: AnimationSystem
+  - System: MovingSystem

@@ -21,6 +21,8 @@ make() {
         cmake .. -G Ninja -DCOMPILE_EXAMPLES=ON
     elif [ "$compile_type" == "flappybird" ]; then
         cmake .. -G Ninja -DCOMPILE_FLAPPYBIRD=ON
+    elif [ "$compile_type" == "solortype" ]; then
+        cmake .. -G Ninja -DCOMPILE_SOLORTYPE=ON
     else
         cmake .. -G Ninja
     fi
@@ -41,6 +43,10 @@ makedebug() {
 
 makeflappybird() {
     make "flappybird"
+}
+
+makesolortype() {
+    make "solortype"
 }
 
 makeclean() {
@@ -73,6 +79,7 @@ display_menu() {
     echo "5. make fclean"
     echo "6. Examples"
     echo "7. FlappyBird"
+    echo "8. Solo R-Type"
     echo "0. Quitter"
 }
 
@@ -90,6 +97,17 @@ display_examples_menu() {
 # Fonction pour afficher le menu FlappyBird
 display_flappybird_menu() {
     echo "Menu FlappyBird:"
+    echo "1. make"
+    echo "2. make re"
+    echo "3. make clean"
+    echo "4. make fclean"
+    echo "0. Retour au menu principal"
+    echo "00. Quitter"
+}
+
+# Fonction pour afficher le menu Solo R-Type
+display_solo_rtype_menu() {
+    echo "Menu Solo R-Type:"
     echo "1. make"
     echo "2. make re"
     echo "3. make clean"
@@ -176,6 +194,39 @@ while true; do
                         ;;
                     2)
                         makere "flappybird"
+                        exit
+                        ;;
+                    3)
+                        makeclean
+                        ;;
+                    4)
+                        makefclean
+                        ;;
+                    00)
+                        exit
+                        ;;
+                    *)
+                        echo "Option invalide. Veuillez choisir une option valide."
+                        ;;
+                esac
+            done
+            ;;
+        8)
+            # Menu Solo R-Type
+            while true; do
+                display_solo_rtype_menu
+                read -p "Choisissez une option (0-4): " sandbox_choice
+
+                case $sandbox_choice in
+                    0)
+                        break
+                        ;;
+                    1)
+                        makesolortype
+                        exit
+                        ;;
+                    2)
+                        makere "solortype"
                         exit
                         ;;
                     3)
