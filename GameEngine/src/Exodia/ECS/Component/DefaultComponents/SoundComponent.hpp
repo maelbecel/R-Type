@@ -70,6 +70,9 @@ namespace Exodia {
         }
 
         virtual void DeserializeData(Buffer data) override {
+            if (!data || data.Size == 0)
+                return;
+
             try {
                 size_t offset = 0;
 
@@ -114,7 +117,7 @@ namespace Exodia {
 
                 Handle = music["Handle"].as<uint64_t>();
                 Volume = music["Volume"].as<float>();
-                Play = music["Loop"].as<bool>();
+                Play = music["Play"].as<bool>();
             } catch (YAML::BadConversion &error) {
                 EXODIA_CORE_WARN("MusicComponent deserialization failed:\n\t{0}", error.what());
             }
@@ -142,6 +145,9 @@ namespace Exodia {
         }
 
         virtual void DeserializeData(Buffer data) override {
+            if (!data || data.Size == 0)
+                return;
+
             try {
                 size_t offset = 0;
 

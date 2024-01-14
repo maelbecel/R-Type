@@ -23,7 +23,7 @@ namespace Exodia {
         // Constructors & Destructor //
         ///////////////////////////////
       public:
-        OpenGLSound(const std::string &path);
+        OpenGLSound(const std::filesystem::path &path);
         ~OpenGLSound() override;
 
         /////////////

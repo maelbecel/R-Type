@@ -137,10 +137,24 @@ namespace Exodia {
                 sc.DestroyScript(&sc);
             }
         });
+
+        if (Renderer::GetAPI() == RendererAPI::API::None)
+            return;
+
+        _World->ForEach<MusicComponent>([&](Entity *entity, auto music) {
+            auto &sc = music.Get();
+
+            Ref<Sound2D> sound = AssetManager::GetAsset<Sound2D>(sc.Handle);
+
+            if (sound == nullptr)
+                return;
+            if (sc.Play)
+                sound->Pause();
+        });
     }
 
     void Scene::OnUpdateRuntime(Timestep ts) {
-        if (!_IsPaused) {
+        if (!_IsRunning || !_IsPaused) {
 
             // -- Update the Scripts -- //
             _World->LockMutex();

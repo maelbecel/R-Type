@@ -89,7 +89,7 @@ namespace Exodia {
 
                     AssetHandle assetHandle = texture["AssetHandle"].as<uint64_t>();
 
-                    Texture = CreateRef<SubTexture2D>(assetHandle, coords, cellSize, spriteSize);
+                    Texture = SubTexture2D::CreateFromCoords(assetHandle, coords, cellSize, spriteSize);
                 }
             } catch (YAML::BadConversion &error) {
                 EXODIA_CORE_WARN("SpriteRendererComponent has invalid data !\n\t{0}", error.what());
@@ -129,6 +129,9 @@ namespace Exodia {
 
         virtual void DeserializeData(Buffer data) override {
             try {
+                if (!data || data.Size == 0)
+                    return;
+
                 size_t offset = 0;
                 bool hasTexture = false;
 
@@ -290,6 +293,9 @@ namespace Exodia {
         }
 
         virtual void DeserializeData(Buffer data) override {
+            if (!data || data.Size == 0)
+                return;
+
             try {
                 size_t offset = 0;
 
@@ -379,6 +385,9 @@ namespace Exodia {
         }
 
         virtual void DeserializeData(Buffer data) override {
+            if (!data || data.Size == 0)
+                return;
+
             try {
                 size_t offset = 0;
                 bool hasText = false;
