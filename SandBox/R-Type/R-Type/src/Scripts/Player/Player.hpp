@@ -55,6 +55,7 @@ namespace RType {
         void MoveDown(AnimationComponent &anim, SpriteRendererComponent &sprite);
 
         void Shoot();
+        void Charge();
 
         ////////////////////////
         // Getters && Setters //

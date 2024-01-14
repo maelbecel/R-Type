@@ -29,6 +29,7 @@ set(SOURCES_GAME_ENGINE
         src/Scripts/Player/Module.cpp
         src/Scripts/Player/PowerUp.cpp
         src/Scripts/Player/BulletPlayer.cpp
+        src/Scripts/Player/SuperBullet.cpp
         src/Scripts/Player/Player.cpp
         src/Scripts/Enemies/PataPata/Pata-pata.cpp
         src/Scripts/Enemies/BulletEnemy.cpp

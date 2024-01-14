@@ -19,7 +19,12 @@ namespace RType {
     // Constructor & Destructor //
     //////////////////////////////
 
-    RTypeLayer::RTypeLayer() : Layer("R-Type"){};
+    RTypeLayer::RTypeLayer() : Layer("R-Type") {
+        EXODIA_PROFILE_FUNCTION();
+
+        _DeltaTime = 0.0f;
+        _PoweredUp = false;
+    }
 
     /////////////
     // Methods //
@@ -70,6 +75,9 @@ namespace RType {
         // Create pata-pata
 
         // Create spawner patata
+        GameObject mspawner = scene->CreateNewEntity("Spawner");
+        mspawner.AddComponent<ScriptComponent>().Bind("MidSpawner");
+
         GameObject spawner = scene->CreateNewEntity("Spawner");
         spawner.AddComponent<ScriptComponent>().Bind("PataPataSpawner");
 
@@ -88,11 +96,11 @@ namespace RType {
         // powerUp.AddComponent<ScriptComponent>().Bind("PowerUp");
 
         // Create stars
-        // for (int i = 0; i < 60; i++) {
-        //     GameObject star = scene->CreateEntity("Star" + std::to_string(i));
+        for (int i = 0; i < 60; i++) {
+            GameObject star = scene->CreateNewEntity("Star" + std::to_string(i));
 
-        //     star.AddComponent<ScriptComponent>().Bind("Star");
-        // }
+            star.AddComponent<ScriptComponent>().Bind("Star");
+        }
 
         Scenes[CurrentScene] = scene;
 
@@ -117,14 +125,14 @@ namespace RType {
         _DeltaTime += ts;
 
         // Update the world
-        if (_DeltaTime > 10.0 && _PoweredUp == false) {
-            _PoweredUp = true;
-            GameObject powerUp = Scenes[CurrentScene]->GetEntityByName("Module");
-            Scenes[CurrentScene]->DestroyEntity(powerUp);
+        // if (_DeltaTime > 10.0 && _PoweredUp == false) {
+        //     _PoweredUp = true;
+        //     GameObject powerUp = Scenes[CurrentScene]->GetEntityByName("Module");
+        //     Scenes[CurrentScene]->DestroyEntity(powerUp);
 
-            GameObject powerUp2 = Scenes[CurrentScene]->CreateNewEntity("Module");
-            powerUp2.GetComponent<ScriptComponent>().Bind("PowerUp");
-        }
+        //     GameObject powerUp2 = Scenes[CurrentScene]->CreateNewEntity("Module");
+        //     powerUp2.GetComponent<ScriptComponent>().Bind("PowerUp");
+        // }
         Scenes[CurrentScene]->OnUpdateRuntime(ts);
     }
 

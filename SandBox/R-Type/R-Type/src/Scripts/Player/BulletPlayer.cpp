@@ -34,11 +34,18 @@ namespace RType {
 
     void BulletPlayer::OnUpdate(UNUSED(Timestep ts)) {
         Scene *scene = HandleEntity.GetScene();
+        Health &health = GetComponent<Health>();
 
         if (!scene)
             return;
-        GameObject camera = scene->GetPrimaryCamera();
 
+        if (health.CurrentHealth <= 0) {
+            scene->DestroyEntity(HandleEntity);
+            EXODIA_INFO("Bullet destroyed");
+            return;
+        }
+
+        GameObject camera = scene->GetPrimaryCamera();
         if (!camera)
             return;
         TransformComponent &cameraTC = camera.GetComponent<TransformComponent>();
@@ -61,12 +68,15 @@ namespace RType {
         }
 
         // -- Bullet out of screen (Destroy it)
-        if (tc.Translation.x > cameraTC.Translation.x + 10.0f)
+        if (tc.Translation.x > cameraTC.Translation.x + 12.0f) {
             scene->DestroyEntity(HandleEntity);
+            EXODIA_INFO("Bullet destroyed");
+        }
     }
 
     void BulletPlayer::OnCollisionEnter(Entity *entity) {
         ComponentHandle<TagComponent> tag = entity->GetComponent<TagComponent>();
+        Health &health = GetComponent<Health>();
 
         if (!tag)
             return;
@@ -86,8 +96,6 @@ namespace RType {
             scene->GetWorldPtr()->Emit<Events::TakeDamage>({entity, 1});
         }
 
-        // -- Destroy bullet
-        if (HandleEntity.GetScene())
-            HandleEntity.GetScene()->DestroyEntity(HandleEntity.GetEntity());
+        health.CurrentHealth--;
     }
 }; // namespace RType

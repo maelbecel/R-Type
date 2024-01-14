@@ -25,6 +25,7 @@
 #include "src/Scripts/Player/Player.hpp"
 #include "src/Scripts/Player/Module.hpp"
 #include "src/Scripts/Player/PowerUp.hpp"
+#include "src/Scripts/Player/SuperBullet.hpp"
 
 #include "src/Scripts/Enemies/PataPata/Pata-pata.hpp"
 #include "src/Scripts/Enemies/BulletEnemy.hpp"
@@ -34,6 +35,7 @@
 #include "src/Scripts/Mid/Mid.hpp"
 #include "src/Scripts/Bug/Bug.hpp"
 #include "src/Scripts/Spawners/PataPataSpawner.hpp"
+#include "src/Scripts/Spawners/MidSpawner.hpp"
 
 #include "src/System/AnimationSystem.hpp"
 
@@ -79,6 +81,8 @@ namespace RType {
         project->RegisterScript("BulletPlayer",
                                 []() -> Exodia::ScriptableEntity * { return new RType::BulletPlayer(); });
 
+        project->RegisterScript("SuperBullet", []() -> Exodia::ScriptableEntity * { return new RType::SuperBullet(); });
+
         project->RegisterScript("BulletEnemy", []() -> Exodia::ScriptableEntity * { return new RType::BulletEnemy(); });
 
         project->RegisterScript("Player", []() -> Exodia::ScriptableEntity * { return new RType::Player(); });
@@ -95,6 +99,8 @@ namespace RType {
 
         project->RegisterScript("PataPataSpawner",
                                 []() -> Exodia::ScriptableEntity * { return new RType::PataPataSpawner(); });
+
+        project->RegisterScript("MidSpawner", []() -> Exodia::ScriptableEntity * { return new RType::MidSpawner(); });
         // -- Register R-Type systems ------------------------------------------
 
         project->RegisterSystem("AnimationSystem", []() -> Exodia::EntitySystem * { return new AnimationSystem(); });

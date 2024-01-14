@@ -52,7 +52,8 @@ namespace RType {
             timer += ts;
 
             if (nbMid < 5 && timer > 0.5f) {
-                scene->LoadPrefabs((Project::GetActiveAssetDirectory() / "Prefabs/Mobs/Mid.prefab").string(), true);
+                GameObject mid = scene->CreateNewEntity("Pata");
+                mid.AddComponent<ScriptComponent>().Bind("Mid");
 
                 timer = 0.0f;
                 EXODIA_TRACE("Mid spawned");
