@@ -22,7 +22,11 @@
         <toc-element topic="CONTRIBUTING.md">
             <toc-element topic="CODE-OF-CONDUCT.md"/>
         </toc-element>
-        <toc-element topic="Server.md"/>
+        <toc-element topic="Server.md">
+            <toc-element topic="server-user.md"/>
+            <toc-element topic="server-server.md"/>
+            <toc-element topic="server-main.md"/>
+        </toc-element>
         <toc-element topic="Client.md"/>
         <toc-element topic="Game-Engine.md">
             <toc-element topic="Exodia.md">

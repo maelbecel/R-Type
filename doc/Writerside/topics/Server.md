@@ -7,6 +7,7 @@ The server is the core of the game. It manages the game logic and the network.
 1. [RFC](#rfc)
     - [What is an RFC?](#what-is-an-rfc)
     - [Actual RFC for the Server](#actual-rfc-for-the-server)
+2. [Actual server](#actual-server)
 
 ## RFC
 
@@ -137,3 +138,11 @@ End:
         Client -> [0x82][Timestamp][Id][Id] and Server -> [0x11][Timestamp][Id][Id]
         Server -> [0x03][Timestamp][Id]
 ```
+
+## Actual server
+
+The R-Type server is divide in 3 parts : 
+- [Main](server-main.md) : The main of the server.
+- [Server](server-server.md) : The part that allow to create a server.
+- [User](server-user.md) : The part to handle the users.
+
