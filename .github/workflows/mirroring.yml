@@ -36,7 +36,7 @@ jobs:
           mkdir build && cd build && cmake .. -G Ninja && ninja && cd ..
       - name: Check if the executable exists
         run: |
-          if [ -f r-type_client ] && [ -f r-type_server ]; then exit 0; else exit 1; fi
+          if [ -f ./Release/r-type_client ] && [ -f ./Release/r-type_server ]; then exit 0; else exit 1; fi
         shell: bash
 
   windows-compilation:
