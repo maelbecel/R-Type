@@ -32,7 +32,7 @@ jobs:
         mkdir build && cd build && cmake .. -G Ninja && ninja && cd ..
     - name: Check if the executable exists
       run: |
-        if [ -f r-type_client ] && [ -f r-type_server ]; then exit 0; else exit 1; fi
+        if [ -f ./Release/r-type_client ] && [ -f ./Release/r-type_server ]; then exit 0; else exit 1; fi
       shell: bash
 
     - name: Upload binaries to release
@@ -40,8 +40,8 @@ jobs:
       with:
         name: binaries
         path: |
-          r-type_server
-          r-type_client
+          ./Release/r-type_server
+          ./Release/r-type_client
 
   release:
     needs: build
@@ -77,6 +77,12 @@ jobs:
         gh release create "$tag" \
             --repo="$GITHUB_REPOSITORY" \
             --title="${GITHUB_REPOSITORY#*/} ${tag#v}" \
-            --generate-notes && \
-        gh release upload "$tag" ./r-type_client && \
-        gh release upload "$tag" ./r-type_server
+            --generate-notes
+
+        if [ -f ./Release/r-type_client ] && [ -f ./Release/r-type_server ]; then 
+          gh release upload "$tag" ./Release/r-type_client && \
+          gh release upload "$tag" ./Release/r-type_server;
+        else
+          gh release upload "$tag" ./r-type_client && \
+          gh release upload "$tag" ./r-type_server;
+        fi
