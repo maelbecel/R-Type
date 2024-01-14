@@ -16,7 +16,7 @@
 #include <cstring>
 
 #ifdef _WIN32
-    #include <string.h>
+#include <string.h>
 #endif
 
 namespace Exodia {
@@ -178,11 +178,11 @@ namespace Exodia {
             char buffer[256];
 
             std::memset(buffer, 0, sizeof(buffer));
-            #ifdef _WIN32
-                strncpy_s(buffer, tag.c_str(), sizeof(buffer));
-            #else
-                std::strncpy(buffer, tag.c_str(), sizeof(buffer));
-            #endif
+#ifdef _WIN32
+            strncpy_s(buffer, tag.c_str(), sizeof(buffer));
+#else
+            std::strncpy(buffer, tag.c_str(), sizeof(buffer));
+#endif
 
             if (ImGui::InputText("Tag", buffer, sizeof(buffer)))
                 tag = std::string(buffer);

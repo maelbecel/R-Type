@@ -64,11 +64,12 @@ namespace Exodia {
         if (_CurrentDirectory != std::filesystem::path(_BaseDirectory)) {
             ImGui::SameLine();
 
-        #ifdef _WIN32
-            if (ImGui::ImageButton((ImTextureID)(uint64_t)_GoBack->GetRendererID(), {15, 15}, ImVec2(0, 1), ImVec2(1, 0))) {
-        #else
+#ifdef _WIN32
+            if (ImGui::ImageButton((ImTextureID)(uint64_t)_GoBack->GetRendererID(), {15, 15}, ImVec2(0, 1),
+                                   ImVec2(1, 0))) {
+#else
             if (ImGui::ImageButton(reinterpret_cast<ImTextureID>(_GoBack->GetRendererID()), {15, 15}, {0, 1}, {1, 0})) {
-        #endif
+#endif
                 _LastDirectory = _CurrentDirectory;
                 _CurrentDirectory = _CurrentDirectory.parent_path();
             }
@@ -77,11 +78,13 @@ namespace Exodia {
         if (_LastDirectory != _CurrentDirectory) {
             ImGui::SameLine();
 
-        #ifdef _WIN32
-            if (ImGui::ImageButton((ImTextureID)(uint64_t)_GoForward->GetRendererID(), {15, 15}, ImVec2(0, 1), ImVec2(1, 0)))
-        #else
-            if (ImGui::ImageButton(reinterpret_cast<ImTextureID>(_GoForward->GetRendererID()), {15, 15}, {0, 1}, {1, 0}))
-        #endif
+#ifdef _WIN32
+            if (ImGui::ImageButton((ImTextureID)(uint64_t)_GoForward->GetRendererID(), {15, 15}, ImVec2(0, 1),
+                                   ImVec2(1, 0)))
+#else
+            if (ImGui::ImageButton(reinterpret_cast<ImTextureID>(_GoForward->GetRendererID()), {15, 15}, {0, 1},
+                                   {1, 0}))
+#endif
                 _CurrentDirectory = _LastDirectory;
         }
 
@@ -117,20 +120,22 @@ namespace Exodia {
             }
 
             ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
-        
-    #ifdef _WIN32
-        if (ImGui::ImageButton((ImTextureID)(uint64_t)thumbnail->GetRendererID(), {thumbnailSize, thumbnailSize}, ImVec2(0, 1), ImVec2(1, 0)))
-    #else
-        if (ImGui::ImageButton(reinterpret_cast<ImTextureID>(thumbnail->GetRendererID()), {thumbnailSize, thumbnailSize}, {0, 1}, {1, 0}))
-    #endif
-            if (!isDirectory && ImGui::BeginPopupContextItem()) {
-                if (ImGui::MenuItem("Import")) {
-                    Project::GetActive()->GetEditorAssetManager()->ImportAsset(relativePath);
 
-                    RefreshTreeAsset();
+#ifdef _WIN32
+            if (ImGui::ImageButton((ImTextureID)(uint64_t)thumbnail->GetRendererID(), {thumbnailSize, thumbnailSize},
+                                   ImVec2(0, 1), ImVec2(1, 0)))
+#else
+            if (ImGui::ImageButton(reinterpret_cast<ImTextureID>(thumbnail->GetRendererID()),
+                                   {thumbnailSize, thumbnailSize}, {0, 1}, {1, 0}))
+#endif
+                if (!isDirectory && ImGui::BeginPopupContextItem()) {
+                    if (ImGui::MenuItem("Import")) {
+                        Project::GetActive()->GetEditorAssetManager()->ImportAsset(relativePath);
+
+                        RefreshTreeAsset();
+                    }
+                    ImGui::EndPopup();
                 }
-                ImGui::EndPopup();
-            }
 
             if (ImGui::BeginDragDropSource() && !isDirectory) {
                 AssetHandle handle = GetAssetFromPathInTree(relativePath);

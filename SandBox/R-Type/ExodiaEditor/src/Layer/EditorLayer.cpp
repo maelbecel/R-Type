@@ -242,7 +242,8 @@ namespace Exodia {
 
         uint64_t textureID = _Framebuffer->GetColorAttachmentRendererID();
 
-        ImGui::Image(reinterpret_cast<void *>(textureID), ImVec2{viewportPanelSize.x, viewportPanelSize.y}, ImVec2{0, 1}, ImVec2{1, 0});
+        ImGui::Image(reinterpret_cast<void *>(textureID), ImVec2{viewportPanelSize.x, viewportPanelSize.y},
+                     ImVec2{0, 1}, ImVec2{1, 0});
 
         // 1. Drag and Drop
         if (ImGui::BeginDragDropTarget()) {
@@ -472,11 +473,15 @@ namespace Exodia {
         if (hasPlayButton) {
             Ref<Texture2D> icon = (_SceneState == SceneState::Edit) ? _PlayButton : _StopButton;
 
-        #ifdef _WIN32
-            if (ImGui::ImageButton((ImTextureID)(uint64_t)icon->GetRendererID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0, ImVec4(0.0f, 0.0f, 0.0f, 0.0f), tintColor) && toolbarEnabled) {
-        #else
-            if (ImGui::ImageButton(reinterpret_cast<ImTextureID>(icon->GetRendererID()), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0, ImVec4(0, 0, 0, 0), tintColor) && toolbarEnabled) {
-        #endif
+#ifdef _WIN32
+            if (ImGui::ImageButton((ImTextureID)(uint64_t)icon->GetRendererID(), ImVec2(size, size), ImVec2(0, 0),
+                                   ImVec2(1, 1), 0, ImVec4(0.0f, 0.0f, 0.0f, 0.0f), tintColor) &&
+                toolbarEnabled) {
+#else
+            if (ImGui::ImageButton(reinterpret_cast<ImTextureID>(icon->GetRendererID()), ImVec2(size, size),
+                                   ImVec2(0, 0), ImVec2(1, 1), 0, ImVec4(0, 0, 0, 0), tintColor) &&
+                toolbarEnabled) {
+#endif
                 if (_SceneState == SceneState::Edit)
                     OnSceneStart();
                 else if (_SceneState == SceneState::Play)
@@ -491,11 +496,15 @@ namespace Exodia {
             {
                 Ref<Texture2D> icon = _PauseButton;
 
-            #ifdef _WIN32
-                if (ImGui::ImageButton((ImTextureID)(uint64_t)icon->GetRendererID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0, ImVec4(0.0f, 0.0f, 0.0f, 0.0f), tintColor) && toolbarEnabled)
-            #else
-                if (ImGui::ImageButton(reinterpret_cast<ImTextureID>(icon->GetRendererID()), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0, ImVec4(0, 0, 0, 0), tintColor) && toolbarEnabled)
-            #endif
+#ifdef _WIN32
+                if (ImGui::ImageButton((ImTextureID)(uint64_t)icon->GetRendererID(), ImVec2(size, size), ImVec2(0, 0),
+                                       ImVec2(1, 1), 0, ImVec4(0.0f, 0.0f, 0.0f, 0.0f), tintColor) &&
+                    toolbarEnabled)
+#else
+                if (ImGui::ImageButton(reinterpret_cast<ImTextureID>(icon->GetRendererID()), ImVec2(size, size),
+                                       ImVec2(0, 0), ImVec2(1, 1), 0, ImVec4(0, 0, 0, 0), tintColor) &&
+                    toolbarEnabled)
+#endif
                     _ActiveScene->SetPaused(!isPaused);
             }
         }
