@@ -113,6 +113,14 @@ namespace Exodia {
             delete[] _Data->QuadVertexBufferBase;
             _Data->QuadVertexBufferBase = nullptr;
         }
+        if (_Data && _Data->CircleVertexBufferBase != nullptr) {
+            delete[] _Data->CircleVertexBufferBase;
+            _Data->CircleVertexBufferBase = nullptr;
+        }
+        if (_Data && _Data->LineVertexBufferBase != nullptr) {
+            delete[] _Data->LineVertexBufferBase;
+            _Data->LineVertexBufferBase = nullptr;
+        }
 
         _Data = nullptr;
     }

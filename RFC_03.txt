@@ -44,7 +44,7 @@ Content_of_a_component - 32 bit (4 bytes) unsigned integer representing the
     length of the content followed by the content.
 System - Null terminated string prefixed with a 32 bit (4 bytes) unsigned
     integer representing the length of the string.
-Timestamp - 32 bit (4 bytes) float representing the time in seconds.
+Timestamp - 64 bit (8 bytes) float representing the time in seconds.
 Event - 32 bit (4 bytes) unsigned integer representing the event type.
 Id - 64 bit (8 bytes) unsigned integer representing the id of the command
     use for implementing acknoledgement.

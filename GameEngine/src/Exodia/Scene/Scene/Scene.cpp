@@ -289,6 +289,44 @@ namespace Exodia {
             }
         });
         _World->UnlockMutex();
+
+        // _World->LockMutex();
+        // _World->ForEach<TransformComponent, BoxCollider2DComponent>([&](Entity *entity, auto transform, auto
+        // collider) {
+        //     auto &tc = transform.Get();
+        //     auto &cc = collider.Get();
+
+        //     Renderer2D::DrawRect(tc.GetTransform(), glm::vec4(1.0f, 0.5f, 0.0f, 1.0f));
+
+        //     (void)cc;
+        //     (void)entity;
+        // });
+        // _World->UnlockMutex();
+
+        // _World->LockMutex();
+        // _World->ForEach<TransformComponent, ParentComponent>([&](Entity *entity, auto transform, auto script) {
+        //     auto &tc = transform.Get();
+        //     auto &cc = script.Get();
+
+        //     Renderer2D::DrawCircle(tc.GetTransform(), glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), 0.1f, 0.005f);
+
+        //     (void)cc;
+        //     (void)entity;
+        // });
+        // _World->UnlockMutex();
+
+        // _World->LockMutex();
+        // _World->ForEach<TransformComponent, CircleCollider2DComponent>([&](Entity *entity, auto transform, auto
+        // collider) {
+        //     auto &tc = transform.Get();
+        //     auto &cc = collider.Get();
+
+        //     Renderer2D::DrawCircle(tc.GetTransform(), glm::vec4(1.0f, 0.5f, 0.0f, 1.0f), 0.1f, 0.005f);
+
+        //     (void)cc;
+        //     (void)entity;
+        // });
+        // _World->UnlockMutex();
     }
 
     ///////////////////////

@@ -27,8 +27,11 @@ namespace Exodia {
 #define COMMAND_NETWORK(x)                                                                                             \
     std::bind(&x, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4);
 #define RECEIVE_ARG                                                                                                    \
-    const std::vector<char> message, size_t size, Connection &senderConnection, Exodia::Network::Header header
+    const std::vector<char> message, size_t size, std::shared_ptr<Connection> senderConnection,                        \
+        Exodia::Network::Header header
 #define STRING_FROM_ENDPOINT(x) x.address().to_string() + ":" + std::to_string(x.port())
+
+        enum class NetworkType { NONE, CLIENT, SERVER, SINGLEPLAYER };
 
         class Network {
           public:
@@ -67,11 +70,12 @@ namespace Exodia {
             /////////////
             void Loop();
 
-            void SendPacket(Exodia::Network::Packet packet);
-            void SendImportantPacket(Exodia::Network::Packet packet);
+            void SendPacket(std::shared_ptr<Exodia::Network::Packet> packet);
+            void SendTo(std::shared_ptr<Packet> packet, std::shared_ptr<Connection> connection);
+            void SendImportantPacket(std::shared_ptr<Exodia::Network::Packet> packet);
             void SendPacketInfo();                                                                  // 0x00
             void SendAck(uint64_t command_id);                                                      // 0x01
-            void SendAcceptConnect();                                                               // 0x02
+            void SendAcceptConnect(std::shared_ptr<Connection> connection);                         // 0x02
             void SendRejectConnect();                                                               // 0x03
             void SendSystemLoad(bool isImportant);                                                  // 0x0b
             void SendComponentOf(bool isImportant, Entity *entity, std::string component_name);     // 0x0c
@@ -86,6 +90,8 @@ namespace Exodia {
 
             void ResendNeedAck();
 
+            void SetNetworkType(NetworkType networkType) { _networkType = networkType; }
+
             /**
              * @brief Return an unordered map of pair of string and Connection
              *
@@ -93,7 +99,7 @@ namespace Exodia {
              *
              * @return std::unordered_map<std::string, Connection> Unordered map of pair of string and Connection
              */
-            std::map<std::string, Connection> &GetConnections() { return _connections; }
+            std::map<std::string, std::shared_ptr<Connection>> &GetConnections() { return _connections; }
 
             /**
              * @brief Return a queue of uint32_t representing the events received
@@ -111,19 +117,35 @@ namespace Exodia {
                 int32_t i = 0;
 
                 for (auto &connection : _connections) {
-                    std::cout << connection.second.GetEndpoint() << ", " << i << std::endl;
-                    if (connection.second.GetEndpoint() == endpoint)
+                    std::cout << connection.second->GetEndpoint() << ", " << i << std::endl;
+                    if (connection.second->GetEndpoint() == endpoint)
                         return i;
                     i++;
                 }
                 return -1;
             }
 
-            uint64_t GetId() { return id; }
+            uint64_t GetIdPlayer() { return _id_player; }
+
+            bool IsConnected() { return _isConnected; }
 
             UDPSocket &GetSocket() { return _socket; }
 
-            NetworkInfo GetNetworkInfo() { return _server_connection.GetLastNetworkInfo(); }
+            NetworkInfo GetNetworkInfo() { return _server_connection->GetLastNetworkInfo(); }
+
+            /**
+             * @brief Use to disconnect a user
+             *
+             * @param connection (Type: Connection) The connection to disconnect
+             *
+             * @return void
+             */
+            void Disconnect(std::shared_ptr<Connection> connection) {
+                auto it = _connections.find(STRING_FROM_ENDPOINT(connection->GetEndpoint()));
+                if (it != _connections.end()) {
+                    _connections.erase(it);
+                }
+            }
 
           private:
             void ReceivePacketInfo(RECEIVE_ARG);        // 0x00
@@ -147,10 +169,11 @@ namespace Exodia {
              * @return void
              */
             void connect(const std::string &ip, short port) {
-                _server_connection = Connection(asio::ip::udp::endpoint(asio::ip::address::from_string(ip), port));
+                _server_connection =
+                    std::make_shared<Connection>(asio::ip::udp::endpoint(asio::ip::address::from_string(ip), port));
             }
 
-            int64_t GetIndexPacketNeedAck(Connection connection) {
+            int64_t GetIndexPacketNeedAck(std::shared_ptr<Connection> connection) {
                 for (size_t i = 0; i < _packetNeedAck.size(); i++) {
                     if (_packetNeedAck[i].first == connection)
                         return i;
@@ -158,20 +181,19 @@ namespace Exodia {
                 return -1;
             }
 
-            World *GetWorld(Connection connection) {
-                (void)connection;
-                return _world;
-            }
+            World *GetWorld() { return _world; }
 
           private:
-            uint64_t id = 0;
+            uint64_t _id_player = 0;
+            bool _isConnected = false;
             World *_world;
             UDPSocket _socket;
-            std::map<std::string, Connection> _connections;
-            Connection _server_connection;
+            std::map<std::string, std::shared_ptr<Connection>> _connections;
+            std::shared_ptr<Connection> _server_connection;
+            NetworkType _networkType = NetworkType::NONE;
             IOContextManager &_ioContextManager;
             std::vector<std::pair<std::pair<uint32_t, bool>, asio::ip::udp::endpoint>> _events;
-            std::vector<std::pair<Connection, std::unordered_map<uint64_t, Packet>>> _packetNeedAck;
+            std::vector<std::pair<std::shared_ptr<Connection>, std::unordered_map<uint64_t, Packet>>> _packetNeedAck;
 
         }; // class Network
 

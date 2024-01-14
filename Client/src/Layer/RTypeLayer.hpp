@@ -55,7 +55,7 @@ namespace RType {
       private:
         // TODO: WARNING: This is a temporary solution
         World *_WorldNetwork;
-
+        float _packetTimer = 0;
         Network::IOContextManager _IOContextManager;
         Scope<Network::Network> _Network;
     };

@@ -284,7 +284,13 @@ namespace RType {
                 block = true;
             }
             */
-
+            if (keycode == Key::W) {
+                _State = State::MOVE_UP;
+            } else if (keycode == Key::S) {
+                _State = State::MOVE_DOWN;
+            }
+            if (RendererAPI::GetAPI() != RendererAPI::API::None)
+                return;
             if (!block) {
                 // Move player with keyboard
                 if (keycode == Key::A) { // Left

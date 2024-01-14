@@ -87,7 +87,7 @@ cmake --build .
 
 **In another terminal**
 ```bash
-./r-type_client [PORT]
+./r-type_client [PORT] [IP SERVER] [PORT]
 ```
 
 ## UML

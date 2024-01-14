@@ -29,6 +29,7 @@ namespace Exodia {
           my_Timer(0.0f), _Running(true) {
         EXODIA_INFO("Server is starting...");
 
+        _Network.SetNetworkType(Network::NetworkType::SERVER);
         _InputThread = std::thread([&] {
             while (_Running) {
                 if (std::cin.peek() != EOF) {
@@ -78,9 +79,9 @@ namespace Exodia {
             if (_Network.GetConnections().empty())
                 EXODIA_TRACE("\t-> No clients connected");
 
-            for (std::pair<const std::string, Connection> connection : _Network.GetConnections())
-                EXODIA_TRACE("\t-> IP '{0}' : Port '{1}'", connection.second.GetEndpoint().port(),
-                             connection.second.GetEndpoint().address().to_string());
+            for (std::pair<const std::string, std::shared_ptr<Connection>> connection : _Network.GetConnections())
+                EXODIA_TRACE("\t-> IP '{0}' : Port '{1}'", connection.second->GetEndpoint().port(),
+                             connection.second->GetEndpoint().address().to_string());
             EXODIA_TRACE("\nEntities '{0}'", _WorldNetwork->GetCount());
         } else if (command == "packet")
             _Network.SendPacketInfo();
@@ -131,8 +132,10 @@ namespace Exodia {
         RType::EntityEventSubscriber *subscribe = new RType::EntityEventSubscriber(_Network);
         CollisionSystem *collisionSystem = new CollisionSystem();
         RType::TakeDamageSubscriber *takeDamage = new RType::TakeDamageSubscriber();
+        ClockSystem *clockSystem = new ClockSystem();
 
         systems.push_back(collisionSystem);
+        systems.push_back(clockSystem);
 
         InitScene(GAME, systems);
 
@@ -168,13 +171,12 @@ namespace Exodia {
      */
     void Server::Init() {
 
-        WaitForClient();
-
         EXODIA_INFO("Server initialisation...");
 
         try {
             InitScenes();
             InitEntities();
+            WaitForClient();
             /* Removing rigid body for static camera
             auto body_camera = cameraEntity->AddComponent<RigidBody2DComponent>();
             body_camera.Get().Type = RigidBody2DComponent::BodyType::Dynamic;
@@ -203,13 +205,7 @@ namespace Exodia {
                 CheckForNewClients();
 
                 this->Update();
-                /*
-                Scenes[CurrentScene]->GetWorld().ForEach<IDComponent, TagComponent>([&](Entity *entity, auto id, auto
-                tag) { (void)entity;
-
-                    EXODIA_INFO("Entity '{0}': {1}", (uint64_t)id.Get().ID, tag.Get().Tag);
-                });
-                */
+                CheckConnectedClients();
                 count += 1;
                 std::this_thread::sleep_for(std::chrono::milliseconds(16)); // Sleep for 32 milliseconds (30 FPS)
             }
@@ -270,10 +266,10 @@ namespace Exodia {
             if (my_Timer > 1.0f) {
                 my_Timer = 0.0f;
 
-                // _Network.SendPacketInfo();
+                _Network.SendPacketInfo();
             }
 
-            if (count % 50 == 0) {
+            if (count % 200 == 0) {
                 EXODIA_CORE_WARN("Syncing components");
                 Scenes[CurrentScene]->GetWorld().ForEach<TransformComponent>(
                     [&](Entity *entity, ComponentHandle<TransformComponent> transform) {
@@ -309,7 +305,7 @@ namespace Exodia {
      *
      * @return a boolean value, which indicates whether the client is new or not.
      */
-    bool Server::IsClientNew(std::pair<const std::string, Connection> connection) {
+    bool Server::IsClientNew(std::pair<const std::string, std::shared_ptr<Connection>> connection) {
         bool newClient = true;
 
         for (User user : _Users) {
@@ -353,11 +349,10 @@ namespace Exodia {
      */
     void Server::CheckForNewClients() {
         Entity *player = nullptr;
-        std::map<std::string, Connection> connections = _Network.GetConnections();
-
+        std::map<std::string, std::shared_ptr<Connection>> connections = _Network.GetConnections();
         if (connections.empty())
             return;
-        for (std::pair<const std::string, Connection> connection : connections) {
+        for (std::pair<const std::string, std::shared_ptr<Connection>> connection : connections) {
             if (IsClientNew(connection)) {
                 uint32_t userID = (uint32_t)_Users.size();
                 Entity *entity = Scenes[GAME]->CreateEntity("Player_" + std::to_string(userID));
@@ -367,6 +362,34 @@ namespace Exodia {
                 _Users.push_back(User(connection.second, player));
                 SendComponents(GAME);
                 EXODIA_INFO("New client connected");
+            }
+        }
+    }
+
+    /**
+     * The function checks for connected clients.
+     *
+     * @details The function checks for connected clients by iterating through the server's users and
+     * checking if the user's last ping is greater than 10 seconds. If the user's
+     * last ping is greater than 10 seconds, the user is disconnected from the server.
+     *
+     * @return void
+     *
+     */
+    void Server::CheckConnectedClients() {
+        int16_t i = 0;
+        for (auto connection : _Network.GetConnections()) {
+            for (auto user : _Users) {
+                if (user.GetConnection() == connection.second) {
+                    if (connection.second->GetNetworkInfo().lastPacketReceived->GetHeader().getTimestamp() <
+                        connection.second->GetNetworkInfo().lastPacketSent->GetHeader().getTimestamp() - 5000) {
+                        EXODIA_CORE_INFO("Client disconnected");
+                        _Network.SendDisconnect();
+                        _Users.erase(_Users.begin() + i);
+                        i--;
+                    }
+                }
+                i++;
             }
         }
     }
