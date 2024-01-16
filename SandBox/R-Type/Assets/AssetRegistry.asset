@@ -197,3 +197,6 @@ AssetRegistry:
   - Handle: 852521452145214521
     Path: Prefabs/Camera/MovingCamera.prefab
     Type: AssetType::Prefabs
+  - Handle: 13478283638931620751
+    Path: Scene/Stage_1.exodia
+    Type: AssetType::Scene
