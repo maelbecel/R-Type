@@ -43,7 +43,11 @@ set(SOURCES_GAME_ENGINE
 
         # -- Entity source files
 
-    src/Entity/CreateBackground.cpp
+        src/Entity/CreateBackground.cpp
+
+        # -- Event source files
+
+        src/Event/Transition.cpp
 )
 
 # Set the include directories for the Game Engine Library

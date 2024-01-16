@@ -173,9 +173,6 @@ AssetRegistry:
   - Handle: 1837501318005432356
     Path: Textures/Explosion.png
     Type: AssetType::Texture2D
-  - Handle: 13478283638931620751
-    Path: Scene/Stage_1.exodia
-    Type: AssetType::Scene
   - Handle: 8901234567890241216
     Path: Textures/Tile.png
     Type: AssetType::Texture2D
@@ -196,4 +193,7 @@ AssetRegistry:
     Type: AssetType::Texture2D
   - Handle: 52041201510120120
     Path: Prefabs/Menu/PressStart.prefab
+    Type: AssetType::Prefabs
+  - Handle: 852521452145214521
+    Path: Prefabs/Camera/MovingCamera.prefab
     Type: AssetType::Prefabs
