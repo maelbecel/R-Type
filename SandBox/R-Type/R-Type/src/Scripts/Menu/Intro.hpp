@@ -6,13 +6,13 @@
 */
 
 #ifndef INTRO_HPP_
-    #define INTRO_HPP_
+#define INTRO_HPP_
 
-    // Exodia includes
-    #include "Exodia.hpp"
+// Exodia includes
+#include "Exodia.hpp"
 
-    // R-Type Components includes
-    #include "Component/Animation.hpp"
+// R-Type Components includes
+#include "Component/Animation.hpp"
 
 namespace RType {
 
@@ -21,59 +21,55 @@ namespace RType {
         /////////////
         // Defines //
         /////////////
-        private:
+      private:
+        static const uint64_t LIFTIN = 845124412025481521;
+        static const uint64_t LIFTOUT = 8451244120254815211;
 
-            static const uint64_t LIFTIN  = 845124412025481521;
-            static const uint64_t LIFTOUT = 8451244120254815211;
-
-            const float TimeBetweenAnimations = 5.0f;
+        const float TimeBetweenAnimations = 5.0f;
 
         //////////////////////////////
         // Constructor & Destructor //
         //////////////////////////////
-        public:
-
-            Intro() : _Time(0.0f), _IsLiftIn(true), _IsLoad(false) {};
+      public:
+        Intro() : _Time(0.0f), _IsLiftIn(true), _IsLoad(false){};
 
         /////////////
         // Methods //
         /////////////
-        public:
+      public:
+        /**
+         * @brief OnCreate function of the Intro script that will be called when the entity is created.
+         *
+         * In this script we will create the animations LiftIn and LiftOut.
+         */
+        void OnCreate() override;
 
-            /**
-             * @brief OnCreate function of the Intro script that will be called when the entity is created.
-             * 
-             * In this script we will create the animations LiftIn and LiftOut.
-             */
-            void OnCreate() override;
+        /**
+         * @brief OnUpdate function of the Intro script that will be called when the entity is updated.
+         *
+         * In this script we will update the animations LiftIn and LiftOut. Every 5 seconds we will switch between the
+         * two animations.
+         *
+         * @param ts Delta time between two frames.
+         */
+        void OnUpdate(Exodia::Timestep ts) override;
 
-            /**
-             * @brief OnUpdate function of the Intro script that will be called when the entity is updated.
-             * 
-             * In this script we will update the animations LiftIn and LiftOut. Every 5 seconds we will switch between the two animations.
-             * 
-             * @param ts Delta time between two frames.
-             */
-            void OnUpdate(Exodia::Timestep ts) override;
+        void OnKeyPressed(int keycode) override;
 
-            void OnKeyPressed(int keycode) override;
-
-        private:
-
-            void PressStartFactory();
+      private:
+        void PressStartFactory();
 
         ////////////////
         // Attributes //
         ////////////////
-        private:
+      private:
+        float _Time;
+        bool _IsLiftIn;
 
-            float _Time;
-            bool  _IsLiftIn;
+        bool _IsLoad;
 
-            bool _IsLoad;
-
-            std::vector<AnimationComponent> _Animations;
+        std::vector<AnimationComponent> _Animations;
     };
-};
+}; // namespace RType
 
 #endif /* !INTRO_HPP_ */

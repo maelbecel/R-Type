@@ -21,10 +21,9 @@ namespace RType {
     // Methods //
     /////////////
 
-    void FadeSystem::Update(World *world, Timestep ts)
-    {
+    void FadeSystem::Update(World *world, Timestep ts) {
         world->ForEach<FadeComponent>([&](Entity *entity, ComponentHandle<FadeComponent> fade) {
-            FadeComponent  &fc = fade.Get(); // fc = Fade Component
+            FadeComponent &fc = fade.Get(); // fc = Fade Component
 
             if (fc.ShouldFadeIn) {
                 fc.Opacity += fc.FadeInSpeed * ts;
@@ -50,7 +49,7 @@ namespace RType {
                         fc.ShouldFadeIn = false;
                         fc.ShouldFadeOut = false;
 
-                        world->Emit<Events::FadeOutEndEvent>({ entity });
+                        world->Emit<Events::FadeOutEndEvent>({entity});
                     } else {
                         fc.ShouldFadeOut = false;
                         fc.ShouldFadeIn = true;
@@ -60,7 +59,7 @@ namespace RType {
 
             auto sprite = entity->GetComponent<SpriteRendererComponent>();
             auto circle = entity->GetComponent<CircleRendererComponent>();
-            auto text   = entity->GetComponent<TextRendererComponent>();
+            auto text = entity->GetComponent<TextRendererComponent>();
 
             if (sprite)
                 sprite.Get().Color.w = fc.Opacity;
@@ -70,4 +69,4 @@ namespace RType {
                 text.Get().Color.w = fc.Opacity;
         });
     }
-};
+}; // namespace RType
