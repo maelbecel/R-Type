@@ -19,6 +19,7 @@
 #include "src/Component/Animation.hpp"
 #include "src/Component/Clock.hpp"
 #include "src/Component/Health.hpp"
+#include "src/Component/Fade.hpp"
 
 #include "src/Scripts/Player/PlayerController.hpp"
 #include "src/Scripts/Player/BulletPlayer.hpp"
@@ -37,9 +38,13 @@
 #include "src/Scripts/Spawners/PataPataSpawner.hpp"
 #include "src/Scripts/Spawners/MidSpawner.hpp"
 
+#include "src/Scripts/Menu/Intro.hpp"
+
 #include "src/System/AnimationSystem.hpp"
+#include "src/System/FadeSystem.hpp"
 
 #include "src/Event/TakeDamage.hpp"
+#include "src/Event/FadeEvent.hpp"
 
 #include "src/Entity/CreateBackground.hpp"
 
@@ -57,6 +62,7 @@ namespace RType {
 
         if (!project) {
             EXODIA_ERROR("Failed to load R-Type project");
+
             throw std::runtime_error("Failed to load R-Type project");
         }
 
@@ -72,6 +78,10 @@ namespace RType {
 
         project->RegisterComponent("Clock", [](Exodia::Buffer data) -> Exodia::IComponentContainer * {
             return new Exodia::ComponentContainer<Exodia::Clock>(data);
+        });
+
+        project->RegisterComponent("FadeComponent", [](Exodia::Buffer data) -> Exodia::IComponentContainer * {
+            return new Exodia::ComponentContainer<RType::FadeComponent>(data);
         });
 
         // -- Register R-Type scripts ------------------------------------------
@@ -106,9 +116,14 @@ namespace RType {
                                 []() -> Exodia::ScriptableEntity * { return new RType::PataPataSpawner(); });
 
         project->RegisterScript("MidSpawner", []() -> Exodia::ScriptableEntity * { return new RType::MidSpawner(); });
+
+        project->RegisterScript("Intro", []() -> Exodia::ScriptableEntity * { return new RType::Intro(); });
+
         // -- Register R-Type systems ------------------------------------------
 
         project->RegisterSystem("AnimationSystem", []() -> Exodia::EntitySystem * { return new AnimationSystem(); });
+
+        project->RegisterSystem("FadeSystem", []() -> Exodia::EntitySystem * { return new FadeSystem(); });
     }
 }; // namespace RType
 

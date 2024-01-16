@@ -22,6 +22,7 @@ set(SOURCES_GAME_ENGINE
         # -- System source files
 
         src/System/AnimationSystem.cpp
+        src/System/FadeSystem.cpp
 
         # -- Script source files
 
@@ -37,6 +38,8 @@ set(SOURCES_GAME_ENGINE
         src/Scripts/Tabrok/Tabrok.cpp
         src/Scripts/Mid/Mid.cpp
         src/Scripts/Bug/Bug.cpp
+
+        src/Scripts/Menu/Intro.cpp
 
         # -- Entity source files
 

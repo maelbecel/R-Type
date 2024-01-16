@@ -185,3 +185,15 @@ AssetRegistry:
   - Handle: 845124784512548152
     Path: Prefabs/Bullets/SuperBullet.prefab
     Type: AssetType::Prefabs
+  - Handle: 845124412025481521
+    Path: Textures/Menu/LiftIn.png
+    Type: AssetType::Texture2D
+  - Handle: 8451244120254815211
+    Path: Textures/Menu/LiftOut.png
+    Type: AssetType::Texture2D
+  - Handle: 8451244120254815212
+    Path: Textures/Menu/LoadingScreen.png
+    Type: AssetType::Texture2D
+  - Handle: 52041201510120120
+    Path: Prefabs/Menu/PressStart.prefab
+    Type: AssetType::Prefabs

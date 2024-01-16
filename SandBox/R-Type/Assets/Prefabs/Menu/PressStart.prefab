@@ -1,0 +1,21 @@
+Entities:
+  - Entity: 956230123451
+    TagComponent:
+      Tag: Press Start
+    TransformComponent:
+      Translation: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [0.25, 0.25, 1]
+    TextRendererComponent:
+      Text: PRESS START
+      Color: [1, 1, 1, 1]
+      Font: 45121874124124
+      Kerning: 0
+      LineSpacing: 0
+    FadeComponent:
+      Opacity: 0
+      FadeInSpeed: 0.4
+      FadeOutSpeed: 0.4
+      ShouldFadeIn: true
+      ShouldFadeOut: false
+      Repeat: true
