@@ -6,13 +6,13 @@
 */
 
 #ifndef TRANSITION_HPP_
-    #define TRANSITION_HPP_
+#define TRANSITION_HPP_
 
-    // Exodia includes
-    #include "Exodia.hpp"
+// Exodia includes
+#include "Exodia.hpp"
 
-    // R-Type includes
-    #include "Event/FadeEvent.hpp"
+// R-Type includes
+#include "Event/FadeEvent.hpp"
 
 namespace RType {
 
@@ -21,18 +21,16 @@ namespace RType {
         //////////////////////////////
         // Constructor & Destructor //
         //////////////////////////////
-        public:
-
-            Transition() = default;
-            ~Transition() = default;
+      public:
+        Transition() = default;
+        ~Transition() = default;
 
         /////////////
         // Methods //
         /////////////
-        public:
-
-            void Receive(Exodia::World *world, const Events::FadeOutEndEvent &event) override;
+      public:
+        void Receive(Exodia::World *world, const Events::FadeOutEndEvent &event) override;
     };
-};
+}; // namespace RType
 
 #endif /* !TRANSITION_HPP_ */

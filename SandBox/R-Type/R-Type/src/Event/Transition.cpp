@@ -15,14 +15,14 @@ namespace RType {
     // Methods //
     /////////////
 
-    void Transition::Receive(UNUSED(World *world), UNUSED(const Events::FadeOutEndEvent &event))
-    {
+    void Transition::Receive(UNUSED(World *world), UNUSED(const Events::FadeOutEndEvent &event)) {
         auto tag = event.Entity->GetComponent<TagComponent>();
 
         if (!tag)
             return;
         auto &tc = tag.Get(); // tc = Tag component
 
-        if (tc.Tag == "LoadingBackground") {};
+        if (tc.Tag == "LoadingBackground") {
+        };
     }
-};
+}; // namespace RType
